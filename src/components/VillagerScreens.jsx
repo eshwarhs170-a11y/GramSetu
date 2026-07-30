@@ -5,12 +5,14 @@ import {
   Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2, MapPin,
   Camera, Phone, Home, Map,
   Building2, Wheat, ArrowUp, ArrowDown, Minus,
-  Bell, ShieldCheck
+  Bell, ShieldCheck, RefreshCw
 } from 'lucide-react'
+import { db } from '../firebase'
+import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
 
 // ===================== KARNATAKA DATA =====================
 
-const kaSchemes = [
+export const kaSchemes = [
   {
     id: 'raitha-siri',
     category: 'Agriculture',
@@ -244,7 +246,7 @@ const kaSchemes = [
   }
 ]
 
-const kaPrices = [
+export const kaPrices = [
   { crop: 'Ragi (ರಾಗಿ)', unit: 'per quintal', price: '₹3,846', change: '+₹54', trend: 'up', market: 'APMC Bengaluru', img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=150&q=80' },
   { crop: 'Areca Nut (ಅಡಿಕೆ)', unit: 'per quintal', price: '₹42,000', change: '+₹1,200', trend: 'up', market: 'APMC Shimoga', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&q=80' },
   { crop: 'Coffee (ಕಾಫಿ)', unit: 'per quintal', price: '₹28,500', change: '-₹500', trend: 'down', market: 'APMC Chikkamagaluru', img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=150&q=80' },
@@ -259,7 +261,7 @@ const kaPrices = [
   { crop: 'Groundnut (ಕಡಲೆಕಾಯಿ)', unit: 'per quintal', price: '₹6,200', change: '-₹100', trend: 'down', market: 'APMC Chitradurga', img: 'https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=150&q=80' },
 ]
 
-const kaAnnouncements = [
+export const kaAnnouncements = [
   {
     id: 1,
     title: { en: 'Free Krishi Mela — Mysuru GKVK', kn: 'ಉಚಿತ ಕೃಷಿ ಮೇಳ — ಮೈಸೂರು GKVK', hi: 'मुफ्त कृषि मेला — मैसूर GKVK' },
@@ -286,7 +288,7 @@ const kaAnnouncements = [
   },
 ]
 
-const initialComplaints = [
+export const initialComplaints = [
   { id: 'GS-KA-0456', title: 'Hand Pump Not Working — Ward 3', status: 'inprogress', date: '2 Aug 2026', category: 'Water Supply', assignedTo: 'Gram Panchayat, Ramanagar', lastUpdate: 'Inspection scheduled for 10 Aug by AEE', photo: null },
   { id: 'GS-KA-0389', title: 'Street Light Broken — Mysuru Road', status: 'resolved', date: '20 Jul 2026', category: 'Electricity / BESCOM', assignedTo: 'BESCOM', lastUpdate: 'Resolved on 28 Jul 2026', photo: null },
   { id: 'GS-KA-0312', title: 'School Building Roof Leaking — GPS Ramanagar', status: 'pending', date: '15 Jul 2026', category: 'Schools / DDPI', assignedTo: 'DDPI Office, Mysuru', lastUpdate: 'Pending review', photo: null },
@@ -540,12 +542,27 @@ export function SchemesScreen() {
   const [categoryFilter, setCategoryFilter] = useState('All')
   const [applyModalOpen, setApplyModalOpen] = useState(false)
   const [appliedSchemes, setAppliedSchemes] = useState({})
+  const [schemes, setSchemes] = useState(kaSchemes)
+  const [loadingSchemes, setLoadingSchemes] = useState(true)
+
+  // Fetch from Firestore, fall back to static data
+  useEffect(() => {
+    const q = query(collection(db, 'schemes'))
+    getDocs(q)
+      .then(snap => {
+        if (!snap.empty) {
+          setSchemes(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+        }
+      })
+      .catch(() => {/* silent fallback to static data */})
+      .finally(() => setLoadingSchemes(false))
+  }, [])
 
   const categories = ['All', 'Agriculture', 'Finance', 'Health', 'Women', 'Scholarship']
 
   const filteredSchemes = categoryFilter === 'All' 
-    ? kaSchemes 
-    : kaSchemes.filter(s => s.category === categoryFilter)
+    ? schemes 
+    : schemes.filter(s => s.category === categoryFilter)
 
   const handleApplySubmit = (e) => {
     e.preventDefault()
@@ -759,14 +776,30 @@ export function MarketScreen() {
   const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
   const [marketFilter, setMarketFilter] = useState('All')
+  const [prices, setPrices] = useState(kaPrices)
+  const [loadingPrices, setLoadingPrices] = useState(true)
+  const [lastUpdated, setLastUpdated] = useState(null)
   
   const [landArea, setLandArea] = useState('')
   const [selectedCrop, setSelectedCrop] = useState('Ragi (ರಾಗಿ)')
   const [calcResult, setCalcResult] = useState(null)
 
+  // Fetch live prices from Firestore, fall back to static
+  useEffect(() => {
+    getDocs(collection(db, 'prices'))
+      .then(snap => {
+        if (!snap.empty) {
+          setPrices(snap.docs.map(d => ({ ...d.data() })))
+          setLastUpdated(new Date().toLocaleTimeString('en-IN'))
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingPrices(false))
+  }, [])
+
   const markets = ['All', 'APMC Bengaluru', 'APMC Shimoga', 'APMC Chikkamagaluru', 'APMC Dharwad', 'APMC Tumkuru', 'APMC Mandya']
 
-  const filteredPrices = kaPrices.filter(p => {
+  const filteredPrices = prices.filter(p => {
     const matchesSearch = p.crop.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           p.market.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesMarket = marketFilter === 'All' || p.market === marketFilter
@@ -938,12 +971,24 @@ export function AnnouncementsScreen() {
   const [selectedAnnounce, setSelectedAnnounce] = useState(null)
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [phoneSub, setPhoneSub] = useState('')
+  const [announcements, setAnnouncements] = useState(kaAnnouncements)
+
+  // Fetch live announcements from Firestore, fall back to static
+  useEffect(() => {
+    getDocs(collection(db, 'announcements'))
+      .then(snap => {
+        if (!snap.empty) {
+          setAnnouncements(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   const getFilteredAnnouncements = () => {
-    if (active === 'filterUrgent') return kaAnnouncements.filter(a => a.urgent)
-    if (active === 'filterAgriculture') return kaAnnouncements.filter(a => a.category === 'Agriculture')
-    if (active === 'filterGovt') return kaAnnouncements.filter(a => a.category === 'Government')
-    return kaAnnouncements
+    if (active === 'filterUrgent') return announcements.filter(a => a.urgent)
+    if (active === 'filterAgriculture') return announcements.filter(a => a.category === 'Agriculture')
+    if (active === 'filterGovt') return announcements.filter(a => a.category === 'Government')
+    return announcements
   }
 
   const handleSubscribeSubmit = (e) => {
@@ -1182,7 +1227,7 @@ export function ComplaintScreen() {
     setCameraMode('idle')
   }
 
-  const handleComplaintSubmit = (e) => {
+  const handleComplaintSubmit = async (e) => {
     e.preventDefault()
     if (!selected || !subject || !description) return
 
@@ -1195,10 +1240,21 @@ export function ComplaintScreen() {
       category: selected,
       assignedTo: `Taluk Office, ${taluk}`,
       lastUpdate: 'Assigned to nodal officer',
-      photo: photoUri
+      submittedBy: userName || 'Anonymous',
+      district: userDistrict,
+      taluk,
+      createdAt: serverTimestamp()
     }
 
-    globalComplaints = [newComplaintObj, ...globalComplaints]
+    // Save to Firestore (skip photo as it's base64 and too large)
+    try {
+      await addDoc(collection(db, 'complaints'), { ...newComplaintObj, photo: null })
+    } catch (err) {
+      console.warn('Firestore write failed, saving locally:', err)
+    }
+
+    // Also update local state
+    globalComplaints = [{ ...newComplaintObj, photo: photoUri }, ...globalComplaints]
     notifyComplaintListeners()
     stopCamera()
     setNewComplaintId(randomId)
@@ -1453,19 +1509,41 @@ export function ComplaintStatusScreen() {
   const [complaints, setComplaints] = useState([...globalComplaints])
   const [search, setSearch] = useState('')
 
-  useState(() => {
+  useEffect(() => {
+    // Listen to Firestore complaints in real-time
+    const q = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
+    const unsubscribe = onSnapshot(q, (snap) => {
+      if (!snap.empty) {
+        const firestoreComplaints = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        // Merge with local (local ones have photos which are not stored in Firestore)
+        const localIds = new Set(firestoreComplaints.map(c => c.id))
+        const localOnly = globalComplaints.filter(c => !localIds.has(c.id))
+        setComplaints([...localOnly, ...firestoreComplaints])
+      }
+    }, () => {
+      // On error, just show local complaints
+      setComplaints([...globalComplaints])
+    })
+
+    // Also listen to local updates
     window.onComplaintsUpdated = (updatedList) => {
-      setComplaints(updatedList)
+      setComplaints(prev => {
+        const fsIds = new Set(prev.filter(c => c.createdAt).map(c => c.id))
+        const newLocal = updatedList.filter(c => !fsIds.has(c.id))
+        return [...newLocal, ...prev.filter(c => c.createdAt)]
+      })
     }
+
     return () => {
+      unsubscribe()
       window.onComplaintsUpdated = null
     }
   }, [])
 
   const filteredComplaints = complaints.filter(c => 
-    c.title.toLowerCase().includes(search.toLowerCase()) ||
-    c.id.toLowerCase().includes(search.toLowerCase()) ||
-    c.category.toLowerCase().includes(search.toLowerCase())
+    c.title?.toLowerCase().includes(search.toLowerCase()) ||
+    c.id?.toLowerCase().includes(search.toLowerCase()) ||
+    c.category?.toLowerCase().includes(search.toLowerCase())
   )
 
   return (
