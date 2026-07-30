@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GramSetu — Connecting Villages to Government Services</title>
+    <meta name="description" content="GramSetu is a digital platform connecting rural citizens to government schemes, market prices, announcements and a complaint portal. Built for India's villages." />
+    <meta property="og:title" content="GramSetu — Village Bridge" />
+    <meta property="og:description" content="Digital platform connecting villagers with government services. Track crop prices, file complaints with auto-escalation, and check eligibility for government schemes." />
+
+    <!-- ═══════════════════════════════════════════════════
+         SECURITY HEADERS (client-side defence-in-depth)
+         Primary enforcement must be done at the web server
+         (Nginx / Apache / Firebase Hosting / Vercel etc.)
+         ═══════════════════════════════════════════════════ -->
+
+    <!-- 1. Content Security Policy — restrict script / style / image sources -->
+    <meta http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self';
+        script-src  'self' 'unsafe-inline' 'unsafe-eval';
+        style-src   'self' 'unsafe-inline' https://fonts.googleapis.com;
+        img-src     'self' data: https://images.unsplash.com;
+        font-src    'self' data: https://fonts.gstatic.com;
+        connect-src 'self' ws: wss: http: https:;
+        frame-src   'none';
+        object-src  'none';
+        base-uri    'self';
+        form-action 'self';
+      " />
+
+    <!-- 2. Anti-Clickjacking — deny embedding in iframes -->
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+
+    <!-- 3. MIME-type sniffing protection -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+
+    <!-- 4. Referrer policy — don't leak URL in referrer headers -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- 5. Permissions policy — disable unnecessary browser APIs -->
+    <meta http-equiv="Permissions-Policy"
+      content="camera=(), microphone=(), geolocation=(), payment=()" />
+
+    <!-- 6. Cache-Control — prevent caching of sensitive pages -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
