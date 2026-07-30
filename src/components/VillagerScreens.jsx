@@ -156,7 +156,7 @@ const kaSchemes = [
       kn: 'ಸರ್ವೆ ನಂಬರ್, ಹಿಸ್ಸಾ ನಂಬರ್, ಮಾಲೀಕರ ಹೆಸರು.',
       hi: 'ಸರ್ವೆ ನಂಬರ್, ಮಾಲೀಕರ ಹೆಸರು.'
     },
-    img: 'https://images.unsplash.com/photo-1541829019-2188d558b297?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80',
     badge: { en: 'Digital Service', kn: 'ಡಿಜಿಟಲ್ ಸೇವೆ', hi: 'डिजिटल सेवा' },
     badgeClass: 'badge-primary',
     ministry: { en: 'Revenue Department, Karnataka', kn: 'ಕಂದಾಯ ಇಲಾಖೆ, ಕರ್ನಾಟಕ', hi: 'राजस्व विभाग, कर्नाटक' },
@@ -181,7 +181,7 @@ const kaSchemes = [
       kn: 'ಆಧಾರ್ ಕಾರ್ಡ್, ತಂದೆ/ತಾಯಿಯ FRUITS ID, ಕಾಲೇಜು ಶುಲ್ಕದ ರಶೀದಿ, ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್.',
       hi: 'आधार, माता-पिता की FRUITS ID, कॉलेज रसीद, बैंक पासबुक।'
     },
-    img: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1427504494785-319cecb4ce79?w=600&q=80',
     badge: { en: 'Open', kn: 'ತೆರೆದಿದೆ', hi: 'सक्रिय' },
     badgeClass: 'badge-success',
     ministry: { en: 'State Scholarship Portal (SSP), Karnataka', kn: 'ರಾಜ್ಯ ವಿದ್ಯಾರ್ಥಿವೇತನ ತಂತ್ರಾಂಶ (SSP), ಕರ್ನಾಟಕ', hi: 'राज्य छात्रवृत्ति पोर्टल, कर्नाटक' },
@@ -475,13 +475,15 @@ export function HomeScreen() {
       <div className="content-grid">
         <div>
           <div className="section-title">
-            <h3>{t('todayPrices')}</h3>
+            <h3>{t('todayPrices')} {lang === 'kn' ? `(${userDistrict} APMC)` : `(${userDistrict} APMC)`}</h3>
           </div>
           <div className="card" style={{ padding: 0 }}>
             <table className="market-table">
               <thead><tr><th>{t('cropCol')}</th><th>{t('priceCol')}</th><th>{t('changeCol')}</th></tr></thead>
               <tbody>
-                {kaPrices.slice(0, 5).map((p, i) => (
+                {(kaPrices.filter(p => p.market.includes(userDistrict)).length > 0 
+                  ? kaPrices.filter(p => p.market.includes(userDistrict)) 
+                  : kaPrices.slice(0, 5)).map((p, i) => (
                   <tr key={i}>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -507,10 +509,12 @@ export function HomeScreen() {
 
         <div>
           <div className="section-title">
-            <h3>{t('recentAnnounce')}</h3>
+            <h3>{t('recentAnnounce')} {lang === 'kn' ? `(${userDistrict})` : `(${userDistrict})`}</h3>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {kaAnnouncements.slice(0, 2).map((a, i) => (
+            {(kaAnnouncements.filter(a => a.targetDistrict === userDistrict || a.targetDistrict === 'All' || !a.targetDistrict).length > 0
+              ? kaAnnouncements.filter(a => a.targetDistrict === userDistrict || a.targetDistrict === 'All' || !a.targetDistrict).slice(0, 2)
+              : kaAnnouncements.slice(0, 2)).map((a, i) => (
               <div className="card" key={i} style={{ padding: 16, display: 'flex', gap: 14 }}>
                 <img src={a.img} alt="" style={{ width: 80, height: 60, borderRadius: 8, objectFit: 'cover', flexShrink: 0 }} />
                 <div>

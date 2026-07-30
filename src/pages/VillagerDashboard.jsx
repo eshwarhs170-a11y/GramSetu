@@ -6,11 +6,13 @@ import {
   HomeScreen, SchemesScreen, MarketScreen, AnnouncementsScreen,
   ComplaintScreen, ComplaintStatusScreen, ProfileScreen,
 } from '../components/VillagerScreens'
-import { Menu, Search, Bell } from 'lucide-react'
+import { Menu, Search, Bell, X } from 'lucide-react'
 
 export default function VillagerDashboard() {
   const [active, setActive] = useState('home')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [notifOpen, setNotifOpen] = useState(false)
   const { t } = useLanguage()
 
   const pageMeta = {
@@ -82,13 +84,40 @@ export default function VillagerDashboard() {
 
           <div className="topbar-right">
             <LanguageSwitcher variant="topbar-style" />
-            <button className="topbar-icon-btn" title="Search">
+            <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
               <Search size={18} strokeWidth={2} />
             </button>
-            <button className="topbar-icon-btn" title="Notifications" style={{ position: 'relative' }}>
-              <Bell size={18} strokeWidth={2} />
-              <div className="notif-dot" />
-            </button>
+            <div style={{ position: 'relative' }}>
+              <button className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
+                <Bell size={18} strokeWidth={2} />
+                <div className="notif-dot" />
+              </button>
+              {notifOpen && (
+                <div className="notif-dropdown animate-fadeInUp">
+                  <div className="notif-header">
+                    <h4>Notifications</h4>
+                    <button onClick={() => setNotifOpen(false)}><X size={14} /></button>
+                  </div>
+                  <div className="notif-list">
+                    <div className="notif-item unread">
+                      <div className="notif-icon bg-warning">⚠️</div>
+                      <div>
+                        <p>Crop Alert: Heavy rain expected tomorrow in your district.</p>
+                        <span>2 hours ago</span>
+                      </div>
+                    </div>
+                    <div className="notif-item unread">
+                      <div className="notif-icon bg-success">₹</div>
+                      <div>
+                        <p>PM Kisan: ₹2,000 credited to your account ending in 4521.</p>
+                        <span>1 day ago</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="notif-view-all" onClick={() => { setActive('announcements'); setNotifOpen(false) }}>View All Alerts</button>
+                </div>
+              )}
+            </div>
             <button className="topbar-icon-btn" onClick={() => setActive('profile')}>
               <div style={{
                 width: 30, height: 30, borderRadius: '50%',
@@ -106,6 +135,32 @@ export default function VillagerDashboard() {
           {renderScreen()}
         </main>
       </div>
+
+      {/* Search Modal */}
+      {searchOpen && (
+        <div className="modal-overlay" onClick={() => setSearchOpen(false)}>
+          <div className="modal-content animate-fadeInUp" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, padding: '20px 24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h3 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Search</h3>
+              <button onClick={() => setSearchOpen(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
+                <X size={20} />
+              </button>
+            </div>
+            <div className="input-group">
+              <Search size={18} className="input-icon" />
+              <input type="text" placeholder="Search schemes, crops, or announcements..." autoFocus />
+            </div>
+            <div style={{ marginTop: 20 }}>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', marginBottom: 12 }}>Suggested</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {['PM Kisan', 'Ragi Price', 'Rytha Vidyanidhi', 'Crop Insurance'].map(tag => (
+                  <button key={tag} className="btn btn-outline btn-sm" onClick={() => setSearchOpen(false)}>{tag}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

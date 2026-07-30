@@ -354,6 +354,60 @@ input, textarea, select { font-family: inherit; outline: none; }
   border: 1.5px solid #fff;
 }
 
+/* ===== MODALS & DROPDOWNS ===== */
+.notif-dropdown {
+  position: absolute; top: 50px; right: 0;
+  width: 320px; background: #fff; border-radius: var(--radius-lg);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  border: 1px solid var(--border-light); z-index: 100;
+  overflow: hidden;
+}
+.notif-header {
+  padding: 14px 16px; border-bottom: 1px solid var(--border-light);
+  display: flex; justify-content: space-between; align-items: center; background: #f8fafc;
+}
+.notif-header h4 { margin: 0; font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.notif-header button { background: none; border: none; cursor: pointer; color: var(--text-muted); }
+.notif-list { max-height: 300px; overflow-y: auto; }
+.notif-item {
+  padding: 14px 16px; display: flex; gap: 12px;
+  border-bottom: 1px solid var(--border-light); transition: background 0.2s;
+}
+.notif-item:hover { background: #f8fafc; }
+.notif-item.unread { background: #f0fdf4; }
+.notif-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+}
+.notif-item p { margin: 0 0 4px 0; font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
+.notif-item span { font-size: 11px; color: var(--text-muted); }
+.notif-view-all {
+  width: 100%; padding: 12px; background: #fff; border: none;
+  font-size: 13px; font-weight: 600; color: var(--primary);
+  cursor: pointer; transition: background 0.2s; text-align: center;
+}
+.notif-view-all:hover { background: #f8fafc; }
+
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px); z-index: 200;
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 10vh;
+}
+.modal-content {
+  background: #fff; border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2); width: 100%;
+}
+.input-group {
+  position: relative; display: flex; align-items: center;
+}
+.input-group .input-icon { position: absolute; left: 16px; color: var(--text-muted); }
+.input-group input {
+  width: 100%; padding: 14px 16px 14px 44px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-md);
+  font-size: 15px; outline: none; transition: border 0.2s;
+}
+.input-group input:focus { border-color: var(--primary); }
+
 /* ===== PAGE CONTENT ===== */
 .page-content { padding: 28px; flex: 1; }
 
@@ -907,6 +961,12 @@ input, textarea, select { font-family: inherit; outline: none; }
   .content-grid-3 { grid-template-columns: 1fr; }
   .complaint-category-grid { grid-template-columns: repeat(2, 1fr); }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .topbar { padding: 0 16px; }
+  .topbar-title { font-size: 16px; }
+  .topbar-subtitle { display: none; }
+  .topbar-right { gap: 8px; }
+  .topbar-icon-btn { width: 34px; height: 34px; }
+  .notif-dropdown { width: 280px; top: 46px; right: -20px; }
 }
 
 /* ── District Explorer animation ── */
