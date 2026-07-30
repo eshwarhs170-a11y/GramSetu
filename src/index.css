@@ -974,3 +974,206 @@ input, textarea, select { font-family: inherit; outline: none; }
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — TABLET (≤ 1024px)
+══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  /* Landing hero */
+  .landing-hero { grid-template-columns: 1fr; gap: 40px; padding: 40px 24px; }
+  .landing-hero h2 { font-size: 36px; }
+  .hero-image-stack { height: 280px; }
+
+  /* Login */
+  .login-page { grid-template-columns: 1fr; }
+  .login-visual { display: none; }
+
+  /* Grids */
+  .content-grid { grid-template-columns: 1fr; }
+  .content-grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 768px)
+══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── Dashboard Sidebar ── */
+  .hamburger-btn { display: block; }
+  .sidebar-close-btn { display: block; }
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    z-index: 500;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-logo { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+  .main-content { margin-left: 0; width: 100%; }
+  .page-content { padding: 16px; }
+
+  /* ── Topbar ── */
+  .topbar { padding: 0 16px; }
+  .topbar-title { font-size: 16px; }
+  .topbar-subtitle { display: none; }
+  .topbar-right { gap: 8px; }
+  .topbar-icon-btn { width: 34px; height: 34px; }
+  .notif-dropdown { width: 280px; top: 46px; right: -20px; }
+
+  /* ── Grids ── */
+  .features-grid { grid-template-columns: 1fr; }
+  .content-grid-3 { grid-template-columns: 1fr; }
+  .complaint-category-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* ── Landing Nav ── */
+  .landing-nav { padding: 16px 24px; }
+  .landing-features { padding: 48px 24px; }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — SMALL MOBILE (≤ 480px)
+══════════════════════════════════════════ */
+@media (max-width: 480px) {
+  /* ── Landing Hero ── */
+  .landing-hero-section {
+    padding: 48px 20px !important;
+    min-height: auto !important;
+  }
+  .landing-hero-section h2 {
+    font-size: 32px !important;
+    letter-spacing: -0.5px !important;
+  }
+  .landing-hero-section p {
+    font-size: 15px !important;
+  }
+  .landing-hero-section .hero-right-img {
+    display: none !important;
+  }
+
+  /* ── Landing Nav ── */
+  .landing-nav-inner {
+    padding: 12px 16px !important;
+  }
+  .landing-nav-inner .nav-login-btn {
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+  }
+  .landing-nav-inner .nav-subtitle {
+    display: none !important;
+  }
+
+  /* ── Government Banner ── */
+  .gov-banner {
+    font-size: 11px !important;
+    padding: 6px 12px !important;
+  }
+
+  /* ── District Explorer ── */
+  .district-explorer-section {
+    padding: 40px 16px !important;
+  }
+  .district-explorer-section h2 {
+    font-size: 26px !important;
+  }
+  .district-pill-grid {
+    gap: 8px !important;
+  }
+  .district-pill-grid a {
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+  }
+
+  /* ── Feature Cards ── */
+  .features-section {
+    padding: 48px 16px !important;
+  }
+  .features-section h2 {
+    font-size: 26px !important;
+  }
+  .features-card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .features-card-grid img {
+    height: 160px !important;
+  }
+
+  /* ── Testimonials ── */
+  .testimonials-section {
+    padding: 48px 16px !important;
+  }
+
+  /* ── District Page ── */
+  .district-page-hero {
+    padding: 48px 20px !important;
+  }
+  .district-page-hero h1 {
+    font-size: 32px !important;
+  }
+  .district-hero-inner {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  .district-hero-emoji {
+    width: 80px !important;
+    height: 80px !important;
+    font-size: 48px !important;
+  }
+  .district-info-tape {
+    padding: 16px 20px !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .district-highlights-grid {
+    padding: 0 20px !important;
+    margin-top: 40px !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .district-highlights-grid img {
+    height: 180px !important;
+  }
+
+  /* ── Login Page ── */
+  .login-form-card {
+    padding: 24px 20px !important;
+    border-radius: 0 !important;
+    min-height: 100vh !important;
+  }
+  .login-form-side {
+    padding: 0 !important;
+  }
+
+  /* ── Welcome Banner ── */
+  .welcome-banner {
+    padding: 20px !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .welcome-banner-img { display: none !important; }
+  .welcome-banner h2 { font-size: 20px !important; }
+
+  /* ── Cards & Prices Table ── */
+  .price-table th, .price-table td {
+    padding: 10px 8px !important;
+    font-size: 12px !important;
+  }
+  .price-table .crop-img { display: none !important; }
+
+  /* ── Complaint Categories ── */
+  .complaint-category-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  /* ── Stats Row on Home Screen ── */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* ── Schemes Grid ── */
+  .schemes-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

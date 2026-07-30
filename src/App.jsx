@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
+import DistrictPage from './pages/DistrictPage'
 import VillagerLogin from './pages/VillagerLogin'
 import OfficialLogin from './pages/OfficialLogin'
 import VillagerDashboard from './pages/VillagerDashboard'
@@ -9,6 +10,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/district/:id" element={<DistrictPage />} />
       <Route path="/login/villager" element={<VillagerLogin />} />
       <Route path="/login/official" element={<OfficialLogin />} />
       <Route path="/dashboard/villager/*" element={<VillagerDashboard />} />

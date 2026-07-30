@@ -1,53 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
-import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, MessageSquare, CheckCircle2, ShieldCheck, Settings } from 'lucide-react'
-
-// ── SMS Gateway Helper ──
-async function sendSmsOtp(phone, otpCode) {
-  const gateway = localStorage.getItem('sms_gateway') || 'textbelt'
-  const apiKey = localStorage.getItem('sms_api_key') || ''
-
-  if (gateway === 'textbelt') {
-    try {
-      const res = await fetch('https://textbelt.com/text', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone: '+91' + phone,
-          message: `Your GramSetu OTP is: ${otpCode}. Do not share this code.`,
-          key: apiKey || 'textbelt',  // 'textbelt' = 1 free SMS/day
-        }),
-      })
-      const data = await res.json()
-      return { success: data.success, message: data.success ? 'SMS sent via Textbelt' : (data.error || 'Textbelt limit reached. Falling back to demo mode.') }
-    } catch (err) {
-      return { success: false, message: 'Network error. Using demo OTP mode.' }
-    }
-  }
-
-  if (gateway === 'fast2sms') {
-    if (!apiKey) return { success: false, message: 'Fast2SMS API key not set. Using demo OTP mode.' }
-    try {
-      const res = await fetch('https://www.fast2sms.com/dev/bulkV2', {
-        method: 'POST',
-        headers: { 'authorization': apiKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          variables_values: otpCode,
-          route: 'otp',
-          numbers: phone,
-        }),
-      })
-      const data = await res.json()
-      return { success: data.return, message: data.return ? 'SMS sent via Fast2SMS' : (data.message?.[0] || 'Fast2SMS failed. Using demo OTP mode.') }
-    } catch (err) {
-      return { success: false, message: 'Network error. Using demo OTP mode.' }
-    }
-  }
-
-  return { success: false, message: 'Unknown gateway. Using demo OTP mode.' }
-}
+import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2 } from 'lucide-react'
+import { auth, db } from '../firebase'
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 
 export default function VillagerLogin() {
   const navigate = useNavigate()
@@ -58,17 +16,9 @@ export default function VillagerLogin() {
   const [district, setDistrict] = useState('Mysuru')
   const [taluk, setTaluk] = useState('Mysuru Taluk')
   const [otp, setOtp] = useState('')
-  const [generatedOtp, setGeneratedOtp] = useState('')
   const [otpSentAlert, setOtpSentAlert] = useState(false)
-  const [smsMode, setSmsMode] = useState('real')  // 'real' or 'mock'
-  const [smsStatusMsg, setSmsStatusMsg] = useState('')
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
-
-  // SMS Settings modal
-  const [showSettings, setShowSettings] = useState(false)
-  const [settingsGateway, setSettingsGateway] = useState(localStorage.getItem('sms_gateway') || 'textbelt')
-  const [settingsApiKey, setSettingsApiKey] = useState(localStorage.getItem('sms_api_key') || '')
 
   const districtsOfKarnataka = [
     { name: 'Mysuru', taluks: ['Mysuru Taluk', 'Nanjangud Taluk', 'Hunsur Taluk', 'T.Narasipura Taluk'] },
@@ -86,56 +36,89 @@ export default function VillagerLogin() {
     }
   }
 
+  const setupRecaptcha = () => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        'size': 'invisible',
+      })
+    }
+  }
+
   const handleSendOtp = async (e) => {
     e.preventDefault()
     if (phone.length === 10 && name.trim().length > 0) {
       setLoading(true)
       setErrorMsg('')
-      setSmsStatusMsg('')
-      const mockOtp = Math.floor(100000 + Math.random() * 900000).toString()
-      setGeneratedOtp(mockOtp)
-
-      // Try sending real SMS
-      const result = await sendSmsOtp(phone, mockOtp)
-
-      setLoading(false)
-      if (result.success) {
-        setSmsMode('real')
-        setSmsStatusMsg('✅ ' + result.message)
-      } else {
-        setSmsMode('mock')
-        setSmsStatusMsg('⚠️ ' + result.message)
+      
+      try {
+        setupRecaptcha()
+        const appVerifier = window.recaptchaVerifier
+        const phoneNumber = '+91' + phone
+        
+        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+        window.confirmationResult = confirmationResult
+        
+        setOtpSentAlert(true)
+        setStep(2)
+      } catch (error) {
+        console.error("Error sending OTP:", error)
+        setErrorMsg(error.message || 'Failed to send OTP. Please try again.')
+        if (window.recaptchaVerifier) {
+          window.recaptchaVerifier.clear()
+          window.recaptchaVerifier = null
+        }
+      } finally {
+        setLoading(false)
       }
-      setOtpSentAlert(true)
-      setStep(2)
     } else {
       setErrorMsg('Please enter a valid name and 10-digit mobile number')
     }
   }
 
-  const handleVerifyOtp = (e) => {
+  const handleVerifyOtp = async (e) => {
     e.preventDefault()
     setLoading(true)
     setErrorMsg('')
-    setTimeout(() => {
+    
+    try {
+      const result = await window.confirmationResult.confirm(otp)
+      const user = result.user
+
+      // Save user profile to Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        name,
+        phone: user.phoneNumber,
+        district,
+        taluk,
+        role: 'villager',
+        createdAt: serverTimestamp()
+      }, { merge: true })
+
+      // Save session info
+      window.sessionStorage.setItem('citizen_name', name)
+      window.sessionStorage.setItem('citizen_district', district)
+      window.sessionStorage.setItem('citizen_taluk', taluk)
+      window.sessionStorage.setItem('citizen_phone', user.phoneNumber)
+      
+      navigate('/dashboard/villager')
+    } catch (error) {
+      console.error("Error verifying OTP:", error)
+      setErrorMsg('Invalid OTP. Please enter the correct OTP sent to your phone.')
+    } finally {
       setLoading(false)
-      if (otp === generatedOtp) {
-        window.sessionStorage.setItem('citizen_name', name)
-        window.sessionStorage.setItem('citizen_district', district)
-        window.sessionStorage.setItem('citizen_taluk', taluk)
-        window.sessionStorage.setItem('citizen_phone', phone)
-        navigate('/dashboard/villager')
-      } else {
-        setErrorMsg('Invalid OTP. Please enter the correct OTP sent to your phone.')
-      }
-    }, 1200)
+    }
   }
 
-  const saveSettings = () => {
-    localStorage.setItem('sms_gateway', settingsGateway)
-    localStorage.setItem('sms_api_key', settingsApiKey)
-    setShowSettings(false)
-  }
+  // Cleanup recaptcha on unmount
+  useEffect(() => {
+    return () => {
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear()
+        window.recaptchaVerifier = null
+      }
+    }
+  }, [])
 
   const activeDistrictObj = districtsOfKarnataka.find(d => d.name === district) || districtsOfKarnataka[0]
 
@@ -191,19 +174,6 @@ export default function VillagerLogin() {
             </button>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <LanguageSwitcher variant="topbar-style" />
-              <button
-                type="button"
-                onClick={() => setShowSettings(true)}
-                style={{
-                  width: 36, height: 36, borderRadius: 8,
-                  border: '1px solid var(--border)', background: 'var(--bg-card)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  cursor: 'pointer', color: 'var(--text-secondary)', transition: 'all 0.2s'
-                }}
-                title="SMS Gateway Settings"
-              >
-                <Settings size={16} strokeWidth={2} />
-              </button>
             </div>
           </div>
 
@@ -224,32 +194,11 @@ export default function VillagerLogin() {
           )}
 
           {otpSentAlert && step === 2 && (
-            <>
-              {smsStatusMsg && (
-                <div style={{
-                  padding: 12, borderRadius: 'var(--radius-md)', fontSize: 13, fontWeight: 500, marginBottom: 12,
-                  background: smsMode === 'real' ? '#d1fae5' : '#fef3c7',
-                  color: smsMode === 'real' ? '#065f46' : '#92400e',
-                  border: smsMode === 'real' ? '1px solid #6ee7b7' : '1px solid #fcd34d'
-                }}>
-                  {smsStatusMsg}
-                </div>
-              )}
-              {smsMode === 'mock' && (
-                <div style={{ padding: 16, background: '#e0f2fe', border: '1px solid #7dd3fc', color: '#0369a1', borderRadius: 'var(--radius-md)', fontSize: 14, marginBottom: 16, textAlign: 'center' }}>
-                  <MessageSquare size={16} style={{ verticalAlign: 'middle', marginRight: 6 }} />
-                  <strong style={{ color: '#0284c7' }}>Demo OTP (SMS gateway unavailable):</strong><br />
-                  Your OTP is <strong style={{ fontSize: 20, color: '#0369a1', letterSpacing: 4, display: 'inline-block', marginTop: 6 }}>{generatedOtp}</strong>
-                </div>
-              )}
-              {smsMode === 'real' && (
-                <div style={{ padding: 16, background: '#d1fae5', border: '1px solid #6ee7b7', color: '#065f46', borderRadius: 'var(--radius-md)', fontSize: 14, marginBottom: 16, textAlign: 'center' }}>
-                  <CheckCircle2 size={16} style={{ verticalAlign: 'middle', marginRight: 6 }} />
-                  <strong>Real SMS sent to +91 {phone}!</strong><br />
-                  <span style={{ fontSize: 12 }}>Check your phone for the 6-digit OTP.</span>
-                </div>
-              )}
-            </>
+            <div style={{ padding: 16, background: '#d1fae5', border: '1px solid #6ee7b7', color: '#065f46', borderRadius: 'var(--radius-md)', fontSize: 14, marginBottom: 16, textAlign: 'center' }}>
+              <CheckCircle2 size={16} style={{ verticalAlign: 'middle', marginRight: 6 }} />
+              <strong>Official OTP sent via Firebase to +91 {phone}!</strong><br />
+              <span style={{ fontSize: 12 }}>Check your phone for the 6-digit code.</span>
+            </div>
           )}
 
           {step === 1 ? (
@@ -311,6 +260,7 @@ export default function VillagerLogin() {
                 <label className="form-label">{t('aadhaarLabel')}</label>
                 <input className="form-input" type="text" placeholder="XXXX XXXX XXXX" maxLength={12} />
               </div>
+              <div id="recaptcha-container"></div>
               <button
                 className="btn btn-primary w-full"
                 style={{ justifyContent: 'center', padding: '14px' }}
@@ -333,25 +283,20 @@ export default function VillagerLogin() {
                   style={{ fontSize: 24, letterSpacing: 12, textAlign: 'center' }}
                   required
                 />
-                {smsMode === 'real' && (
-                  <div className="otp-hint" style={{ color: '#065f46' }}>📱 Enter the OTP sent to your phone via SMS</div>
-                )}
-                {smsMode === 'mock' && (
-                  <div className="otp-hint">💡 Enter the demo OTP shown above</div>
-                )}
+                <div className="otp-hint" style={{ color: '#065f46' }}>📱 Enter the OTP sent to your phone</div>
               </div>
               <button
                 className="btn btn-primary w-full"
                 style={{ justifyContent: 'center', padding: '14px' }}
                 type="submit"
-                disabled={loading || otp.length < 4}
+                disabled={loading || otp.length < 6}
               >
                 {loading ? t('verifying') : t('verifyLogin')}
               </button>
               <button
                 type="button"
-                style={{ textAlign: 'center', color: 'var(--primary)', fontSize: 14, fontWeight: 600 }}
-                onClick={() => { setStep(1); setOtpSentAlert(false); }}
+                style={{ textAlign: 'center', color: 'var(--primary)', fontSize: 14, fontWeight: 600, display: 'block', width: '100%', marginTop: 12 }}
+                onClick={() => { setStep(1); setOtpSentAlert(false); setOtp(''); }}
               >
                 {t('changeNumber')}
               </button>
@@ -361,7 +306,7 @@ export default function VillagerLogin() {
           <div style={{ marginTop: 24, padding: 16, background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
             <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>{t('officialQ')}</p>
             <button
-              style={{ color: 'var(--primary)', fontWeight: 600, fontSize: 13, marginTop: 4 }}
+              style={{ color: 'var(--primary)', fontWeight: 600, fontSize: 13, marginTop: 4, background: 'transparent', border: 'none', cursor: 'pointer' }}
               onClick={() => navigate('/login/official')}
             >
               {t('officialLink')}
@@ -369,57 +314,6 @@ export default function VillagerLogin() {
           </div>
         </div>
       </div>
-
-      {/* SMS Settings Modal */}
-      {showSettings && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }}>
-          <div className="card" style={{ maxWidth: 460, width: '100%', padding: 24, position: 'relative' }}>
-            <button
-              onClick={() => setShowSettings(false)}
-              style={{ position: 'absolute', top: 16, right: 16, fontSize: 20, cursor: 'pointer', fontWeight: 'bold' }}
-            >✕</button>
-            <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 4, color: 'var(--primary)' }}>⚙️ SMS Gateway Settings</h3>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 20 }}>Configure how OTPs are sent to real phone numbers.</p>
-
-            <div className="form-group" style={{ marginBottom: 14 }}>
-              <label className="form-label">Gateway Provider</label>
-              <select
-                className="form-input"
-                value={settingsGateway}
-                onChange={e => setSettingsGateway(e.target.value)}
-              >
-                <option value="textbelt">Textbelt (1 free SMS/day, no sign-up)</option>
-                <option value="fast2sms">Fast2SMS (free trial, needs API key)</option>
-              </select>
-            </div>
-
-            <div className="form-group" style={{ marginBottom: 20 }}>
-              <label className="form-label">API Key {settingsGateway === 'textbelt' ? '(optional — leave blank for free tier)' : '(required)'}</label>
-              <input
-                className="form-input"
-                type="text"
-                placeholder={settingsGateway === 'textbelt' ? 'Leave blank for 1 free SMS/day' : 'Paste your Fast2SMS API key'}
-                value={settingsApiKey}
-                onChange={e => setSettingsApiKey(e.target.value)}
-              />
-            </div>
-
-            <div style={{ padding: 12, background: '#f0fdf4', borderRadius: 'var(--radius-sm)', fontSize: 12, color: '#065f46', marginBottom: 20 }}>
-              <strong>How it works:</strong><br />
-              • <strong>Textbelt:</strong> Free 1 SMS/day without API key. Get more at textbelt.com.<br />
-              • <strong>Fast2SMS:</strong> Sign up at fast2sms.com to get a free API key with test credits.<br />
-              • If the SMS fails, the app falls back to demo OTP mode automatically.
-            </div>
-
-            <div style={{ display: 'flex', gap: 12 }}>
-              <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }} onClick={saveSettings}>
-                Save Settings
-              </button>
-              <button className="btn btn-outline" onClick={() => setShowSettings(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
