@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, MapPin } from 'lucide-react'
 import { districtData } from '../data/districtsData'
+import districtImages from '../data/districtImages.json'
 
 // Helper function to map icons to rich Unsplash images
 const getTopicImage = (icon) => {
@@ -204,7 +205,7 @@ export default function DistrictPage() {
               {/* Productive Real Image mapped from icon */}
               <div style={{ height: 220, overflow: 'hidden', position: 'relative' }}>
                 <img 
-                  src={getTopicImage(h.icon)} 
+                  src={(districtImages[id] && districtImages[id][h.title]) || getTopicImage(h.icon)} 
                   alt={h.title}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
