@@ -243,6 +243,33 @@ export const kaSchemes = [
     ministry: { en: 'SBI Foundation & Buddy4Study.com', kn: 'ಎಸ್‌ಬಿಐ ಫೌಂಡೇಶನ್ ಮತ್ತು ಬಡ್ಡಿ4ಸ್ಟಡಿ', hi: 'एसबीआई फाउंडेशन एवं बडी4स्टडी' },
     buddyUrl: 'https://www.buddy4study.com/page/sbi-asha-scholarship-program',
     source: 'https://www.buddy4study.com/'
+  },
+  {
+    id: 'vidyasiri-scholarship',
+    category: 'Scholarship',
+    districtSpecific: ['All'],
+    title: { en: 'Vidyasiri Scholarship', kn: 'ವಿದ್ಯಾಸಿರಿ ವಿದ್ಯಾರ್ಥಿವೇತನ', hi: 'विद्यासिरी छात्रवृत्ति' },
+    desc: { 
+      en: 'Provides boarding and lodging assistance to students from backward classes pursuing post-matric courses who are residents of rural areas.', 
+      kn: 'ಗ್ರಾಮೀಣ ಪ್ರದೇಶದ ಹಿಂದುಳಿದ ವರ್ಗಗಳ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಮೆಟ್ರಿಕ್ ನಂತರದ ವ್ಯಾಸಂಗಕ್ಕಾಗಿ ಊಟ ಮತ್ತು ವಸತಿ ಸೌಲಭ್ಯ ಒದಗಿಸುವ ಯೋಜನೆ.', 
+      hi: 'ग्रामीण क्षेत्रों के पिछड़े वर्ग के छात्रों को मैट्रिक के बाद के पाठ्यक्रमों के लिए भोजन और आवास सहायता।' 
+    },
+    eligibility: {
+      en: 'OBC students (Cat 1, 2A, 3A, 3B) studying at least 5 km away from their native place.',
+      kn: 'ತಮ್ಮ ಸ್ವಂತ ಊರಿನಿಂದ ಕನಿಷ್ಠ 5 ಕಿ.ಮೀ ದೂರದಲ್ಲಿ ವ್ಯಾಸಂಗ ಮಾಡುತ್ತಿರುವ ಒಬಿಸಿ (ಪ್ರವರ್ಗ 1, 2ಎ, 3ಎ, 3ಬಿ) ವಿದ್ಯಾರ್ಥಿಗಳು.',
+      hi: 'ओबीसी छात्र जो अपने मूल स्थान से कम से कम 5 किमी दूर पढ़ रहे हैं।'
+    },
+    documents: {
+      en: 'Aadhaar, Caste & Income Certificate, SSLC Marks Card, College Admission Details.',
+      kn: 'ಆಧಾರ್ ಕಾರ್ಡ್, ಜಾತಿ ಮತ್ತು ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ, ಎಸ್‌ಎಸ್‌ಎಲ್‌ಸಿ ಅಂಕಪಟ್ಟಿ, ಕಾಲೇಜು ದಾಖಲಾತಿ.',
+      hi: 'आधार, जाति और आय प्रमाण पत्र, एसएसएलसी अंकतालिका, कॉलेज प्रवेश विवरण।'
+    },
+    img: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&q=80',
+    badge: { en: 'Open on SSP', kn: 'SSP ನಲ್ಲಿ ಲಭ್ಯ', hi: 'SSP पर सक्रिय' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Backward Classes Welfare Dept, Karnataka', kn: 'ಹಿಂದುಳಿದ ವರ್ಗಗಳ ಕಲ್ಯಾಣ ಇಲಾಖೆ, ಕರ್ನಾಟಕ', hi: 'पिछड़ा वर्ग कल्याण विभाग, कर्नाटक' },
+    buddyUrl: 'https://bcwd.karnataka.gov.in/',
+    source: 'https://ssp.postmatric.karnataka.gov.in/'
   }
 ]
 
