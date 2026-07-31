@@ -4,7 +4,7 @@ import { districtData } from '../data/districtsData'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import {
-  ArrowRight, Wheat, Users, Star, MapPin
+  ArrowRight, Wheat, Users, Star, MapPin, Landmark
 } from 'lucide-react'
 
 // ── District Knowledge Base ──────────────────────────────────
