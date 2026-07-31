@@ -42,6 +42,7 @@ const securityHeaders = {
 }
 
 export default defineConfig({
+  base: '/GramSetu/',
   plugins: [react()],
 
   server: {
