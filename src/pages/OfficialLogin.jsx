@@ -23,6 +23,7 @@ export default function OfficialLogin() {
   
   const [step, setStep] = useState(1)
   const [name, setName] = useState('')
+  const [officerId, setOfficerId] = useState('')
   const [email, setEmail] = useState('')
   const [department, setDepartment] = useState('Agriculture (RSK)')
   const [otp, setOtp] = useState('')
@@ -44,8 +45,8 @@ export default function OfficialLogin() {
 
   const handleSendOtp = async (e) => {
     e.preventDefault()
-    if (!name.trim() || !email.includes('@')) {
-      setErrorMsg('Please enter a valid name and official email address.')
+    if (!name.trim() || !officerId.trim() || !email.includes('@')) {
+      setErrorMsg('Please enter a valid Name, Officer ID, and Official Email.')
       return
     }
     setLoading(true)
@@ -87,7 +88,7 @@ export default function OfficialLogin() {
       const uid = 'official-' + email.replace(/[^a-z0-9]/gi, '-')
       try {
         await setDoc(doc(db, 'users', uid), {
-          uid, name, email, department,
+          uid, name, officerId, email, department,
           role: 'official',
           createdAt: serverTimestamp()
         }, { merge: true })
@@ -96,6 +97,7 @@ export default function OfficialLogin() {
       }
 
       window.sessionStorage.setItem('official_name', name)
+      window.sessionStorage.setItem('official_id', officerId)
       window.sessionStorage.setItem('official_email', email)
       window.sessionStorage.setItem('official_department', department)
 
@@ -192,6 +194,17 @@ export default function OfficialLogin() {
               </div>
 
               <div className="form-group">
+                <label className="form-label">Govt ID / ಅಧಿಕಾರಿ ಗುರುತಿನ ಚೀಟಿ *</label>
+                <input
+                  className="form-input"
+                  placeholder="e.g. KA-GOV-2026-001"
+                  value={officerId}
+                  onChange={e => setOfficerId(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
                 <label className="form-label">Official Email / ಇಮೇಲ್ *</label>
                 <input
                   className="form-input"
@@ -221,7 +234,7 @@ export default function OfficialLogin() {
               <button
                 className="btn w-full"
                 type="submit"
-                disabled={loading || !name || !email}
+                disabled={loading || !name || !officerId || !email}
                 style={{ background: '#3b82f6', color: '#fff', padding: '14px', justifyContent: 'center' }}
               >
                 {loading ? 'Sending OTP...' : 'Send OTP to Email'}
