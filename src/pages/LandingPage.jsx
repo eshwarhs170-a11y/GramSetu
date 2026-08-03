@@ -4,7 +4,7 @@ import { districtData } from '../data/districtsData'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import {
-  ArrowRight, Wheat, Users, Star, MapPin, Landmark
+  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Twitter, Facebook, Instagram, Mail, Phone, ExternalLink
 } from 'lucide-react'
 
 // ── District Knowledge Base ──────────────────────────────────
@@ -303,50 +303,56 @@ export default function LandingPage() {
         <div className="features-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: 28, maxWidth: 1200, margin: '0 auto' }}>
           {[
             {
-              img: 'https://images.unsplash.com/photo-1590779033100-9f17a5d834ee?w=700&q=80',
+              id: 'schemes',
+              img: 'https://images.unsplash.com/photo-1544390041-3701389886db?w=700&q=80',
               badge: '30+ Schemes',
               badgeColor: '#16a34a',
               title: 'Government Schemes & Scholarships',
-              desc: 'Browse 30+ live schemes — PM Kisan, Raitha Siri, Gruha Lakshmi, Krishi Bhagya. Check eligibility in seconds and apply directly from your phone. Scholarships for SC/ST students also included.',
+              desc: 'Browse 30+ live schemes — PM Kisan, Raitha Siri, Gruha Lakshmi, Krishi Bhagya. Check eligibility in seconds and apply directly from your phone.',
               tag: '₹6,000 PM Kisan · Raitha Siri ₹10,000/ha'
             },
             {
-              img: 'https://images.unsplash.com/photo-1592878906578-0c8c7c3b5aad?w=700&q=80',
+              id: 'apmc',
+              img: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=700&q=80',
               badge: 'Live APMC Rates',
               badgeColor: '#0369a1',
               title: 'Real-Time Market Prices (APMC)',
-              desc: 'Today\'s MSP and APMC rates for 20+ crops — Ragi, Areca Nut, Coffee, Silk, Jowar, Maize and more. Compare prices across markets — Bengaluru, Shimoga, Mysuru, Dharwad — and sell at the best rate.',
+              desc: 'Today\'s MSP and APMC rates for 20+ crops. Compare prices across markets — Bengaluru, Shimoga, Mysuru, Dharwad — and sell at the best rate.',
               tag: 'Ragi ₹3,846/qtl · Areca ₹42,000/qtl'
             },
             {
-              img: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=700&q=80',
+              id: 'alerts',
+              img: 'https://images.unsplash.com/photo-1577563908411-50cb98976fea?w=700&q=80',
               badge: 'Govt Alerts',
               badgeColor: '#7c3aed',
               title: 'Announcements & Melas',
-              desc: 'Get urgent government alerts — Ragi MSP procurement registration, free Krishi Melas, weather advisories, ration card renewals. Subscribe to SMS alerts so you never miss a deadline.',
+              desc: 'Get urgent government alerts — Ragi MSP procurement registration, free Krishi Melas, weather advisories, ration card renewals.',
               tag: 'SMS Alerts · Krishi Melas · MSP Notices'
             },
             {
-              img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=700&q=80',
+              id: 'complaints',
+              img: 'https://images.unsplash.com/photo-1590402494587-44b71d7772f6?w=700&q=80',
               badge: 'Auto-Escalation',
               badgeColor: '#dc2626',
               title: 'Complaint Filing & Tracking',
-              desc: 'File complaints with your phone camera for Water Supply, BESCOM electricity, Roads, PHC/Health, Schools, Sanitation. Complaints auto-escalate to Taluk officials if unresolved in 7 days. Track status live.',
+              desc: 'File complaints with your phone camera for Water Supply, BESCOM electricity, Roads. Complaints auto-escalate to Taluk officials if unresolved.',
               tag: 'Taluk Auto-Escalation · 8 Categories'
             },
             {
-              img: 'https://images.unsplash.com/photo-1591474200742-8e512e6f98f8?w=700&q=80',
+              id: 'districts',
+              img: 'https://images.unsplash.com/photo-1596422846543-74c6eb24f6f8?w=700&q=80',
               badge: 'All 31 Districts',
               badgeColor: '#d97706',
               title: 'District Heritage Explorer',
-              desc: 'Discover the rich cultural heritage, famous landmarks, GI-tagged products, major crops, and tourism highlights for all 31 districts of Karnataka — from Hampi to Jog Falls to Mysore Silk.',
+              desc: 'Discover the rich cultural heritage, famous landmarks, GI-tagged products, major crops, and tourism highlights for all 31 districts of Karnataka.',
               tag: 'Mysuru · Kodagu · Belagavi · Ballari...'
             },
           ].map((f, i) => (
             <div
               key={i}
+              onClick={() => navigate(`/feature/${f.id}`)}
               style={{
-                borderRadius: 20, overflow: 'hidden',
+                borderRadius: 20, overflow: 'hidden', cursor: 'pointer',
                 border: '1px solid #e5e7eb',
                 background: '#fff',
                 boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
@@ -367,12 +373,20 @@ export default function LandingPage() {
                   padding: '4px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700,
                   boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
                 }}>{f.badge}</div>
+                <div style={{
+                  position: 'absolute', top: 14, right: 14,
+                  background: 'rgba(255,255,255,0.9)', color: '#0f172a',
+                  width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                }}>
+                  <ExternalLink size={14} />
+                </div>
               </div>
               {/* Content */}
               <div style={{ padding: 24 }}>
                 <h3 style={{ fontSize: 17, fontWeight: 800, color: '#0f172a', marginBottom: 10 }}>{f.title}</h3>
                 <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7, margin: '0 0 14px 0' }}>{f.desc}</p>
-                <div style={{ fontSize: 12, fontWeight: 700, color: f.badgeColor, background: `${f.badgeColor}15`, borderRadius: 8, padding: '6px 10px' }}>{f.tag}</div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: f.badgeColor, background: `${f.badgeColor}15`, borderRadius: 8, padding: '6px 10px', display: 'inline-block' }}>{f.tag}</div>
               </div>
             </div>
           ))}
@@ -411,24 +425,87 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer style={{ background: '#0f172a', padding: '36px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, #16a34a, #15803d)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Wheat size={16} color="#fff" />
-          </div>
+      <footer style={{ background: '#0a0f1c', padding: '64px 48px 32px', color: '#fff' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 48, maxWidth: 1200, margin: '0 auto', marginBottom: 48 }}>
+          
+          {/* Brand Col */}
           <div>
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>{t('appName')}</div>
-            <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>Karnataka e-Governance Services Ltd. (KeGSL)</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #16a34a, #15803d)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Wheat size={20} color="#fff" />
+              </div>
+              <div>
+                <div style={{ fontWeight: 800, fontSize: 18 }}>{t('appName')}</div>
+                <div style={{ color: '#4ade80', fontSize: 11, fontWeight: 600, letterSpacing: 0.5 }}>KARNATAKA GOVT. INITIATIVE</div>
+              </div>
+            </div>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, lineHeight: 1.7, marginBottom: 24 }}>
+              Empowering Karnataka's 6 crore rural citizens with seamless digital access to schemes, APMC prices, and civic services.
+            </p>
+            <div style={{ display: 'flex', gap: 16 }}>
+              {[Twitter, Facebook, Instagram].map((Icon, idx) => (
+                <a key={idx} href="#" style={{ color: 'rgba(255,255,255,0.4)', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#fff'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.4)'}>
+                  <Icon size={20} />
+                </a>
+              ))}
+            </div>
           </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20, color: '#fff' }}>Quick Links</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {['Home', 'About GramSetu', 'State Schemes', 'District Explorer', 'APMC Daily Rates'].map(l => (
+                <a key={l} href="#" style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
+                  {l}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20, color: '#fff' }}>Contact Us</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                <MapPin size={18} color="#4ade80" style={{ flexShrink: 0, marginTop: 2 }} />
+                <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, lineHeight: 1.5 }}>Vidhana Soudha, Dr Ambedkar Veedhi, Bengaluru, Karnataka 560001</span>
+              </div>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <Phone size={18} color="#4ade80" style={{ flexShrink: 0 }} />
+                <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14 }}>1902 (Toll Free Kisan Helpline)</span>
+              </div>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <Mail size={18} color="#4ade80" style={{ flexShrink: 0 }} />
+                <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14 }}>support@gramsetu.karnataka.gov.in</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20, color: '#fff' }}>Stay Updated</h4>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
+              Subscribe to SMS alerts for Krishi Melas and MSP procurement dates.
+            </p>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input type="text" placeholder="Mobile Number" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 14px', borderRadius: 8, color: '#fff', fontSize: 14, width: '100%', outline: 'none' }} />
+              <button style={{ background: '#16a34a', color: '#fff', border: 'none', padding: '10px 16px', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>Join</button>
+            </div>
+          </div>
+
         </div>
-        <div style={{ display: 'flex', gap: 24 }}>
-          {['Privacy Policy', 'Terms of Use', 'Help Center', 'Contact'].map(l => (
-            <a key={l} style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, cursor: 'pointer', transition: 'color 0.2s' }}
-              onMouseEnter={e => e.target.style.color = 'rgba(255,255,255,0.8)'}
-              onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.4)'}
-            >{l}</a>
-          ))}
+        
+        {/* Bottom Bar */}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>
+            © {new Date().getFullYear()} Karnataka e-Governance Services Ltd. (KeGSL). All rights reserved.
+          </div>
+          <div style={{ display: 'flex', gap: 24 }}>
+            {['Privacy Policy', 'Terms of Use', 'Accessibility'].map(l => (
+              <a key={l} href="#" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, textDecoration: 'none' }}>{l}</a>
+            ))}
+          </div>
         </div>
       </footer>
     </div>

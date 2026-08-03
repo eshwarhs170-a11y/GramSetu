@@ -208,6 +208,7 @@ export default function DistrictPage() {
                   src={(districtImages[id] && districtImages[id][h.title]) || getTopicImage(h.icon)} 
                   alt={h.title}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  onError={(e) => { e.target.onerror = null; e.target.src = getTopicImage(h.icon); }}
                 />
                 <div style={{
                   position: 'absolute', top: 16, right: 16,

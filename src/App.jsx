@@ -5,6 +5,7 @@ import VillagerLogin from './pages/VillagerLogin'
 import OfficialLogin from './pages/OfficialLogin'
 import VillagerDashboard from './pages/VillagerDashboard'
 import OfficialDashboard from './pages/OfficialDashboard'
+import FeatureDetails from './pages/FeatureDetails'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/login/official" element={<OfficialLogin />} />
       <Route path="/dashboard/villager/*" element={<VillagerDashboard />} />
       <Route path="/dashboard/official/*" element={<OfficialDashboard />} />
+      <Route path="/feature/:id" element={<FeatureDetails />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
