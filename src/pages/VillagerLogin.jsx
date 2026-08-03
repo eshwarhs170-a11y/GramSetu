@@ -1,21 +1,28 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
-import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2 } from 'lucide-react'
-import { auth, db } from '../firebase'
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
+import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail } from 'lucide-react'
+import emailjs from '@emailjs/browser'
+import { db } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
+
+// ── EmailJS Config ────────────────────────────────────────────
+const EMAILJS_SERVICE_ID  = 'service_yupzec9'
+const EMAILJS_TEMPLATE_ID = 'template_ipabajb'
+const EMAILJS_PUBLIC_KEY  = 'WxFna4OMAj2w50yJk'
 
 export default function VillagerLogin() {
   const navigate = useNavigate()
   const { t } = useLanguage()
   const [step, setStep] = useState(1)
+  const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const [name, setName] = useState('ರಾಮಪ್ಪ ಗೌಡ')
+  const [name, setName] = useState('')
   const [district, setDistrict] = useState('Mysuru')
   const [taluk, setTaluk] = useState('Mysuru Taluk')
   const [otp, setOtp] = useState('')
+  const [generatedOtp, setGeneratedOtp] = useState('')
   const [otpSentAlert, setOtpSentAlert] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
@@ -26,99 +33,87 @@ export default function VillagerLogin() {
     { name: 'Mandya', taluks: ['Mandya Taluk', 'Maddur Taluk', 'Malavalli Taluk', 'Srirangapatna Taluk'] },
     { name: 'Tumkuru', taluks: ['Tumkuru Taluk', 'Sira Taluk', 'Tiptur Taluk', 'Madhugiri Taluk'] },
     { name: 'Belagavi', taluks: ['Belagavi Taluk', 'Gokak Taluk', 'Athani Taluk', 'Chikodi Taluk'] },
+    { name: 'Ballari', taluks: ['Ballari Taluk', 'Hospet Taluk', 'Sandur Taluk', 'Siruguppa Taluk'] },
+    { name: 'Bengaluru Rural', taluks: ['Devanahalli Taluk', 'Doddaballapur Taluk', 'Hosakote Taluk', 'Nelamangala Taluk'] },
+    { name: 'Dharwad', taluks: ['Dharwad Taluk', 'Hubli Taluk', 'Kalghatgi Taluk', 'Navalgund Taluk'] },
+    { name: 'Haveri', taluks: ['Haveri Taluk', 'Byadagi Taluk', 'Hanagal Taluk', 'Ranebennur Taluk'] },
+    { name: 'Shivamogga', taluks: ['Shivamogga Taluk', 'Sagar Taluk', 'Soraba Taluk', 'Thirthahalli Taluk'] },
   ]
 
   const handleDistrictChange = (distName) => {
     setDistrict(distName)
     const found = districtsOfKarnataka.find(d => d.name === distName)
-    if (found && found.taluks.length > 0) {
-      setTaluk(found.taluks[0])
-    }
-  }
-
-  const setupRecaptcha = () => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        'size': 'invisible',
-      })
-    }
+    if (found && found.taluks.length > 0) setTaluk(found.taluks[0])
   }
 
   const handleSendOtp = async (e) => {
     e.preventDefault()
-    if (phone.length === 10 && name.trim().length > 0) {
-      setLoading(true)
-      setErrorMsg('')
-      
-      try {
-        setupRecaptcha()
-        const appVerifier = window.recaptchaVerifier
-        const phoneNumber = '+91' + phone
-        
-        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-        window.confirmationResult = confirmationResult
-        
-        setOtpSentAlert(true)
-        setStep(2)
-      } catch (error) {
-        console.error("Error sending OTP:", error)
-        setErrorMsg(error.message || 'Failed to send OTP. Please try again.')
-        if (window.recaptchaVerifier) {
-          window.recaptchaVerifier.clear()
-          window.recaptchaVerifier = null
-        }
-      } finally {
-        setLoading(false)
-      }
-    } else {
-      setErrorMsg('Please enter a valid name and 10-digit mobile number')
+    if (!name.trim() || !email.includes('@')) {
+      setErrorMsg('Please enter a valid name and email address.')
+      return
     }
-  }
-
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault()
     setLoading(true)
     setErrorMsg('')
-    
+
+    const newOtp = Math.floor(100000 + Math.random() * 900000).toString()
+    setGeneratedOtp(newOtp)
+
     try {
-      const result = await window.confirmationResult.confirm(otp)
-      const user = result.user
-
-      // Save user profile to Firestore
-      await setDoc(doc(db, 'users', user.uid), {
-        uid: user.uid,
-        name,
-        phone: user.phoneNumber,
-        district,
-        taluk,
-        role: 'villager',
-        createdAt: serverTimestamp()
-      }, { merge: true })
-
-      // Save session info
-      window.sessionStorage.setItem('citizen_name', name)
-      window.sessionStorage.setItem('citizen_district', district)
-      window.sessionStorage.setItem('citizen_taluk', taluk)
-      window.sessionStorage.setItem('citizen_phone', user.phoneNumber)
-      
-      navigate('/dashboard/villager')
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          email: email,
+          passcode: newOtp,
+          time: new Date(Date.now() + 10 * 60000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+        },
+        EMAILJS_PUBLIC_KEY
+      )
+      setOtpSentAlert(true)
+      setStep(2)
     } catch (error) {
-      console.error("Error verifying OTP:", error)
-      setErrorMsg('Invalid OTP. Please enter the correct OTP sent to your phone.')
+      console.error('EmailJS error:', error)
+      setErrorMsg('Failed to send OTP. Please check your email and try again.')
     } finally {
       setLoading(false)
     }
   }
 
-  // Cleanup recaptcha on unmount
-  useEffect(() => {
-    return () => {
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear()
-        window.recaptchaVerifier = null
-      }
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault()
+    if (otp !== generatedOtp) {
+      setErrorMsg('Invalid OTP. Please enter the correct 6-digit code sent to your email.')
+      return
     }
-  }, [])
+    setLoading(true)
+    setErrorMsg('')
+
+    try {
+      const uid = 'user-' + email.replace(/[^a-z0-9]/gi, '-')
+      try {
+        await setDoc(doc(db, 'users', uid), {
+          uid, name, email, phone, district, taluk,
+          role: 'villager',
+          createdAt: serverTimestamp()
+        }, { merge: true })
+      } catch (fsErr) {
+        console.warn('Firestore save failed, continuing...', fsErr)
+      }
+
+      window.sessionStorage.setItem('citizen_name', name)
+      window.sessionStorage.setItem('citizen_email', email)
+      window.sessionStorage.setItem('citizen_district', district)
+      window.sessionStorage.setItem('citizen_taluk', taluk)
+      window.sessionStorage.setItem('citizen_phone', phone)
+
+      navigate('/dashboard/villager')
+    } catch (error) {
+      console.error('Login error:', error)
+      setErrorMsg('Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const activeDistrictObj = districtsOfKarnataka.find(d => d.name === district) || districtsOfKarnataka[0]
 
@@ -178,11 +173,11 @@ export default function VillagerLogin() {
           </div>
 
           <div className="login-form-header">
-            <h3>{step === 1 ? t('villagerLoginTitle') : t('villagerLoginOtp')}</h3>
+            <h3>{step === 1 ? 'Raita / Villager Login' : 'Verify Your Email OTP'}</h3>
             <p>
               {step === 1
-                ? t('villagerLoginDesc')
-                : `${t('villagerLoginOtpDesc')} ${phone}`}
+                ? 'Enter your email to receive a one-time password'
+                : `We sent a 6-digit OTP to ${email}`}
             </p>
           </div>
 
@@ -196,8 +191,8 @@ export default function VillagerLogin() {
           {otpSentAlert && step === 2 && (
             <div style={{ padding: 16, background: '#d1fae5', border: '1px solid #6ee7b7', color: '#065f46', borderRadius: 'var(--radius-md)', fontSize: 14, marginBottom: 16, textAlign: 'center' }}>
               <CheckCircle2 size={16} style={{ verticalAlign: 'middle', marginRight: 6 }} />
-              <strong>Official OTP sent via Firebase to +91 {phone}!</strong><br />
-              <span style={{ fontSize: 12 }}>Check your phone for the 6-digit code.</span>
+              <strong>OTP sent to {email}!</strong><br />
+              <span style={{ fontSize: 12 }}>Check your inbox (and spam folder) for the 6-digit code.</span>
             </div>
           )}
 
@@ -205,7 +200,7 @@ export default function VillagerLogin() {
             <form className="login-form" onSubmit={handleSendOtp}>
               <div className="form-group">
                 <label className="form-label">Full Name / ಪೂರ್ಣ ಹೆಸರು *</label>
-                <input 
+                <input
                   type="text"
                   className="form-input"
                   placeholder="e.g. Ramappa Gowda"
@@ -215,7 +210,22 @@ export default function VillagerLogin() {
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">{t('mobileLabel')}</label>
+                <label className="form-label">Email Address / ಇಮೇಲ್ *</label>
+                <div style={{ position: 'relative' }}>
+                  <Mail size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
+                  <input
+                    className="form-input"
+                    type="email"
+                    placeholder="yourname@gmail.com"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    style={{ paddingLeft: 36 }}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Mobile Number (Optional)</label>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <input className="form-input" style={{ width: 60, flexShrink: 0 }} value="+91" readOnly />
                   <input
@@ -224,14 +234,13 @@ export default function VillagerLogin() {
                     placeholder="9876543210"
                     value={phone}
                     onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                    required
                   />
                 </div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div className="form-group">
                   <label className="form-label">District / ಜಿಲ್ಲೆ *</label>
-                  <select 
+                  <select
                     className="form-input"
                     value={district}
                     onChange={e => handleDistrictChange(e.target.value)}
@@ -244,7 +253,7 @@ export default function VillagerLogin() {
                 </div>
                 <div className="form-group">
                   <label className="form-label">Taluk / ತಾಲೂಕು *</label>
-                  <select 
+                  <select
                     className="form-input"
                     value={taluk}
                     onChange={e => setTaluk(e.target.value)}
@@ -256,18 +265,13 @@ export default function VillagerLogin() {
                   </select>
                 </div>
               </div>
-              <div className="form-group">
-                <label className="form-label">{t('aadhaarLabel')}</label>
-                <input className="form-input" type="text" placeholder="XXXX XXXX XXXX" maxLength={12} />
-              </div>
-              <div id="recaptcha-container"></div>
               <button
                 className="btn btn-primary w-full"
                 style={{ justifyContent: 'center', padding: '14px' }}
                 type="submit"
-                disabled={loading || phone.length < 10 || !name.trim()}
+                disabled={loading || !email.includes('@') || !name.trim()}
               >
-                {loading ? t('sendingOtp') : t('sendOtp')}
+                {loading ? 'Sending OTP...' : '📧 Send OTP to Email'}
               </button>
             </form>
           ) : (
@@ -282,8 +286,9 @@ export default function VillagerLogin() {
                   onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                   style={{ fontSize: 24, letterSpacing: 12, textAlign: 'center' }}
                   required
+                  autoFocus
                 />
-                <div className="otp-hint" style={{ color: '#065f46' }}>📱 Enter the OTP sent to your phone</div>
+                <div className="otp-hint" style={{ color: '#065f46' }}>📧 Enter the OTP sent to your email</div>
               </div>
               <button
                 className="btn btn-primary w-full"
@@ -291,14 +296,14 @@ export default function VillagerLogin() {
                 type="submit"
                 disabled={loading || otp.length < 6}
               >
-                {loading ? t('verifying') : t('verifyLogin')}
+                {loading ? 'Verifying...' : '✅ Verify & Login'}
               </button>
               <button
                 type="button"
-                style={{ textAlign: 'center', color: 'var(--primary)', fontSize: 14, fontWeight: 600, display: 'block', width: '100%', marginTop: 12 }}
-                onClick={() => { setStep(1); setOtpSentAlert(false); setOtp(''); }}
+                style={{ textAlign: 'center', color: 'var(--primary)', fontSize: 14, fontWeight: 600, display: 'block', width: '100%', marginTop: 12, background: 'transparent', border: 'none', cursor: 'pointer' }}
+                onClick={() => { setStep(1); setOtpSentAlert(false); setOtp(''); setGeneratedOtp(''); }}
               >
-                {t('changeNumber')}
+                ← Change Email
               </button>
             </form>
           )}
