@@ -9,7 +9,7 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 
 // ── EmailJS Config ────────────────────────────────────────────
 const EMAILJS_SERVICE_ID  = 'service_yupzec9'
-const EMAILJS_TEMPLATE_ID = 'template_ipabajb'
+const EMAILJS_TEMPLATE_ID = 'template_iiz68fd'
 const EMAILJS_PUBLIC_KEY  = 'WxFna4OMAj2w50yJk'
 
 export default function VillagerLogin() {
