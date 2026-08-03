@@ -7,7 +7,7 @@ const featureContent = {
   schemes: {
     title: 'Government Schemes & Scholarships',
     desc: 'Access and apply for all Karnataka state government schemes like PM Kisan, Raitha Siri, and Gruha Lakshmi directly from your phone.',
-    image: 'https://images.unsplash.com/photo-1544390041-3701389886db?w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1607004468138-e7e23ea26947?w=1200&q=80',
     details: [
       'Apply for PM Kisan and receive ₹6,000 annually.',
       'Access Raitha Siri for ₹10,000/hectare assistance for minor millets.',
@@ -29,7 +29,7 @@ const featureContent = {
   alerts: {
     title: 'Announcements & Melas',
     desc: 'Never miss an important government deadline. Stay updated on MSP procurements and Krishi Melas.',
-    image: 'https://images.unsplash.com/photo-1577563908411-50cb98976fea?w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80',
     details: [
       'Instant SMS alerts for Ragi MSP procurement registration.',
       'Information and dates for upcoming Krishi Melas in your district.',
@@ -51,7 +51,7 @@ const featureContent = {
   districts: {
     title: 'District Heritage Explorer',
     desc: 'Explore the rich culture, major crops, and famous landmarks of all 31 districts of Karnataka.',
-    image: 'https://images.unsplash.com/photo-1596422846543-74c6eb24f6f8?w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1200&q=80',
     details: [
       'Discover GI-tagged products from your region.',
       'Find the best tourist spots and historical temples.',
