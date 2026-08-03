@@ -304,7 +304,7 @@ export default function LandingPage() {
           {[
             {
               id: 'schemes',
-              img: 'https://images.unsplash.com/photo-1544390041-3701389886db?w=700&q=80',
+              img: 'https://images.unsplash.com/photo-1607004468138-e7e23ea26947?w=700&q=80',
               badge: '30+ Schemes',
               badgeColor: '#16a34a',
               title: 'Government Schemes & Scholarships',
@@ -322,7 +322,7 @@ export default function LandingPage() {
             },
             {
               id: 'alerts',
-              img: 'https://images.unsplash.com/photo-1577563908411-50cb98976fea?w=700&q=80',
+              img: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=700&q=80',
               badge: 'Govt Alerts',
               badgeColor: '#7c3aed',
               title: 'Announcements & Melas',
@@ -340,7 +340,7 @@ export default function LandingPage() {
             },
             {
               id: 'districts',
-              img: 'https://images.unsplash.com/photo-1596422846543-74c6eb24f6f8?w=700&q=80',
+              img: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=700&q=80',
               badge: 'All 31 Districts',
               badgeColor: '#d97706',
               title: 'District Heritage Explorer',
