@@ -4,7 +4,7 @@ import { districtData } from '../data/districtsData'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import {
-  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Twitter, Facebook, Instagram, Mail, Phone, ExternalLink
+  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink
 } from 'lucide-react'
 
 // ── District Knowledge Base ──────────────────────────────────
@@ -443,7 +443,7 @@ export default function LandingPage() {
               Empowering Karnataka's 6 crore rural citizens with seamless digital access to schemes, APMC prices, and civic services.
             </p>
             <div style={{ display: 'flex', gap: 16 }}>
-              {[Twitter, Facebook, Instagram].map((Icon, idx) => (
+              {[Globe, MessageCircle, Share2].map((Icon, idx) => (
                 <a key={idx} href="#" style={{ color: 'rgba(255,255,255,0.4)', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#fff'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.4)'}>
                   <Icon size={20} />
                 </a>
