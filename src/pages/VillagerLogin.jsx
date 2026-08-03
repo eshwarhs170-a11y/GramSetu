@@ -57,22 +57,12 @@ export default function VillagerLogin() {
         
         const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier)
         window.confirmationResult = confirmationResult
-        window.isBypassMode = false
         
         setOtpSentAlert(true)
         setStep(2)
       } catch (error) {
         console.error("Error sending OTP:", error)
-        // Bypass Mode Trigger for Localhost/Unconfigured Firebase
-        if (error.code === 'auth/internal-error' || error.message?.includes('internal-error') || window.location.hostname === 'localhost') {
-          console.warn("Triggering Development Bypass Mode for OTP")
-          window.isBypassMode = true
-          setOtpSentAlert(true)
-          setStep(2)
-        } else {
-          setErrorMsg(error.message || 'Failed to send OTP. Please try again.')
-        }
-        
+        setErrorMsg(error.message || 'Failed to send OTP. Please try again.')
         if (window.recaptchaVerifier) {
           window.recaptchaVerifier.clear()
           window.recaptchaVerifier = null
@@ -91,38 +81,25 @@ export default function VillagerLogin() {
     setErrorMsg('')
     
     try {
-      let uid, phoneNumber
-      if (window.isBypassMode) {
-        // Mock user for bypass mode
-        uid = 'dev-bypass-' + Date.now()
-        phoneNumber = '+91' + phone
-      } else {
-        const result = await window.confirmationResult.confirm(otp)
-        const user = result.user
-        uid = user.uid
-        phoneNumber = user.phoneNumber
-      }
+      const result = await window.confirmationResult.confirm(otp)
+      const user = result.user
 
       // Save user profile to Firestore
-      try {
-        await setDoc(doc(db, 'users', uid), {
-          uid: uid,
-          name,
-          phone: phoneNumber,
-          district,
-          taluk,
-          role: 'villager',
-          createdAt: serverTimestamp()
-        }, { merge: true })
-      } catch (fsError) {
-         console.warn("Firestore save failed (likely due to rules), proceeding with login...", fsError)
-      }
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        name,
+        phone: user.phoneNumber,
+        district,
+        taluk,
+        role: 'villager',
+        createdAt: serverTimestamp()
+      }, { merge: true })
 
       // Save session info
       window.sessionStorage.setItem('citizen_name', name)
       window.sessionStorage.setItem('citizen_district', district)
       window.sessionStorage.setItem('citizen_taluk', taluk)
-      window.sessionStorage.setItem('citizen_phone', phoneNumber)
+      window.sessionStorage.setItem('citizen_phone', user.phoneNumber)
       
       navigate('/dashboard/villager')
     } catch (error) {
@@ -219,8 +196,8 @@ export default function VillagerLogin() {
           {otpSentAlert && step === 2 && (
             <div style={{ padding: 16, background: '#d1fae5', border: '1px solid #6ee7b7', color: '#065f46', borderRadius: 'var(--radius-md)', fontSize: 14, marginBottom: 16, textAlign: 'center' }}>
               <CheckCircle2 size={16} style={{ verticalAlign: 'middle', marginRight: 6 }} />
-              <strong>{window.isBypassMode ? 'Bypass Mode Active: Enter any 6 digits!' : `Official OTP sent via Firebase to +91 ${phone}!`}</strong><br />
-              <span style={{ fontSize: 12 }}>{window.isBypassMode ? 'Since Firebase is not configured fully, you can use any OTP.' : 'Check your phone for the 6-digit code.'}</span>
+              <strong>Official OTP sent via Firebase to +91 {phone}!</strong><br />
+              <span style={{ fontSize: 12 }}>Check your phone for the 6-digit code.</span>
             </div>
           )}
 
