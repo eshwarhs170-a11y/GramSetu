@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
@@ -15,6 +15,11 @@ const EMAILJS_PUBLIC_KEY  = 'WxFna4OMAj2w50yJk'
 export default function VillagerLogin() {
   const navigate = useNavigate()
   const { t } = useLanguage()
+
+  // Initialize EmailJS once
+  useEffect(() => {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY })
+  }, [])
   const [step, setStep] = useState(1)
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -66,14 +71,13 @@ export default function VillagerLogin() {
           email: email,
           passcode: newOtp,
           time: new Date(Date.now() + 10 * 60000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-        },
-        EMAILJS_PUBLIC_KEY
+        }
       )
       setOtpSentAlert(true)
       setStep(2)
     } catch (error) {
-      console.error('EmailJS error:', error)
-      setErrorMsg('Failed to send OTP. Please check your email and try again.')
+      console.error('EmailJS error full:', JSON.stringify(error), error)
+      setErrorMsg(`Failed to send OTP: ${error?.text || error?.message || 'Unknown error'}. Check console for details.`)
     } finally {
       setLoading(false)
     }
