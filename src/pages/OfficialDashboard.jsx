@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
@@ -9,6 +9,9 @@ import {
   Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2,
   MapPin, Phone, Home, ShieldCheck, Mail, Map, Building2, User
 } from 'lucide-react'
+
+import { db } from '../firebase'
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
 
 // ===== Karnataka Official Data =====
 const kaNewComplaints = [
@@ -213,6 +216,22 @@ function OverviewScreen() {
 // ===== Complaints =====
 function ComplaintsScreen({ resolved }) {
   const { t } = useLanguage()
+  const [liveComplaints, setLiveComplaints] = useState(kaNewComplaints)
+
+  useEffect(() => {
+    if (resolved) return // Only fetch for pending/new
+    const q = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetched = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.data().id || doc.id }))
+      // Merge with hardcoded to ensure table is never empty during demo
+      const merged = [...fetched, ...kaNewComplaints].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+      setLiveComplaints(merged)
+    }, (error) => {
+      console.warn("Error fetching complaints, using local state", error)
+    })
+    return () => unsubscribe && unsubscribe()
+  }, [resolved])
+
   return (
     <div className="animate-fadeInUp">
       <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
@@ -252,11 +271,18 @@ function ComplaintsScreen({ resolved }) {
               </tr>
             </thead>
             <tbody>
-              {kaNewComplaints.map((c, i) => (
+              {liveComplaints.map((c, i) => (
                 <tr key={i}>
                   <td style={{ fontFamily: 'monospace', fontSize: 11 }}>{c.id}</td>
-                  <td style={{ fontWeight: 600, maxWidth: 180, fontSize: 13 }}>{c.title}</td>
-                  <td>{c.village}</td>
+                  <td style={{ fontWeight: 600, maxWidth: 180, fontSize: 13 }}>
+                    {c.title}
+                    {c.photo && (
+                      <div style={{ marginTop: 6 }}>
+                        <span className="badge" style={{ background: '#e0f2fe', color: '#0369a1', fontSize: 10 }}>📷 Has Image</span>
+                      </div>
+                    )}
+                  </td>
+                  <td>{c.village || c.taluk || c.district}</td>
                   <td><span className="badge badge-primary" style={{ fontSize: 11 }}>{c.category}</span></td>
                   <td>
                     <span className={`badge ${c.priority === 'high' ? 'badge-danger' : c.priority === 'medium' ? 'badge-warning' : 'badge-success'}`}>
