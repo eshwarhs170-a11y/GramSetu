@@ -184,13 +184,13 @@ export default function LandingPage() {
             border: '1px solid rgba(255,255,255,0.1)'
           }}>
             <img
-              src="https://images.unsplash.com/photo-1591474200742-8e512e6f98f8?w=800&q=80"
+              src="https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=800&q=80"
               alt="Karnataka farmers"
               style={{ width: '100%', height: 260, objectFit: 'cover', display: 'block' }}
             />
             <div style={{ background: 'rgba(15,23,42,0.85)', backdropFilter: 'blur(8px)', padding: '14px 18px' }}>
               <div style={{ color: '#4ade80', fontSize: 12, fontWeight: 700, marginBottom: 4 }}>✓ LIVE — Karnataka Portal</div>
-              <div style={{ color: '#fff', fontWeight: 700, fontSize: 15 }}>3.8M+ ರೈತರು ಸಂಪರ್ಕಿತರು</div>
+              <div style={{ color: '#fff', fontWeight: 700, fontSize: 15 }}>ಸಾವಿರಾರು ರೈತರು ಸಂಪರ್ಕಿತರು</div>
             </div>
           </div>
 
@@ -205,8 +205,8 @@ export default function LandingPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <Users size={18} color="#4ade80" />
               <div>
-                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 3 }}>Active Today</div>
-                <div style={{ fontSize: 20, fontWeight: 900, color: '#fff' }}>1,24,000</div>
+                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 3 }}>Active Community</div>
+                <div style={{ fontSize: 18, fontWeight: 900, color: '#fff' }}>Growing Daily</div>
                 <div style={{ fontSize: 11, color: '#4ade80', fontWeight: 600 }}>↑ Citizens Online</div>
               </div>
             </div>

@@ -507,32 +507,34 @@ export function HomeScreen() {
             <h3>{t('todayPrices')} {lang === 'kn' ? `(${userDistrict} APMC)` : `(${userDistrict} APMC)`}</h3>
           </div>
           <div className="card" style={{ padding: 0 }}>
-            <table className="market-table">
-              <thead><tr><th>{t('cropCol')}</th><th>{t('priceCol')}</th><th>{t('changeCol')}</th></tr></thead>
-              <tbody>
-                {(kaPrices.filter(p => p.market.includes(userDistrict)).length > 0 
-                  ? kaPrices.filter(p => p.market.includes(userDistrict)) 
-                  : kaPrices.slice(0, 5)).map((p, i) => (
-                  <tr key={i}>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <img src={p.img} alt={p.crop} style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'cover' }} onError={e => { e.target.style.display='none' }} />
-                        <div>
-                          <div style={{ fontWeight: 600, fontSize: 13 }}>{p.crop}</div>
-                          <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{p.market}</div>
+            <div className="table-responsive">
+              <table className="market-table">
+                <thead><tr><th>{t('cropCol')}</th><th>{t('priceCol')}</th><th>{t('changeCol')}</th></tr></thead>
+                <tbody>
+                  {(kaPrices.filter(p => p.market.includes(userDistrict)).length > 0 
+                    ? kaPrices.filter(p => p.market.includes(userDistrict)) 
+                    : kaPrices.slice(0, 5)).map((p, i) => (
+                    <tr key={i}>
+                      <td>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <img src={p.img} alt={p.crop} className="crop-img" style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'cover' }} onError={e => { e.target.style.display='none' }} />
+                          <div>
+                            <div style={{ fontWeight: 600, fontSize: 13 }}>{p.crop}</div>
+                            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{p.market}</div>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td style={{ fontWeight: 700 }}>{p.price}</td>
-                    <td className={p.trend === 'up' ? 'price-up' : p.trend === 'down' ? 'price-down' : 'price-neutral'}>
-                      <span style={{ display:'flex', alignItems:'center', gap: 3 }}>
-                        {p.trend === 'up' ? <ArrowUp size={12}/> : p.trend === 'down' ? <ArrowDown size={12}/> : <Minus size={12}/>} {p.change}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      </td>
+                      <td style={{ fontWeight: 700 }}>{p.price}</td>
+                      <td className={p.trend === 'up' ? 'price-up' : p.trend === 'down' ? 'price-down' : 'price-neutral'}>
+                        <span style={{ display:'flex', alignItems:'center', gap: 3 }}>
+                          {p.trend === 'up' ? <ArrowUp size={12}/> : p.trend === 'down' ? <ArrowDown size={12}/> : <Minus size={12}/>} {p.change}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
