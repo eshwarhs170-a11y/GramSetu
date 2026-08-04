@@ -39,11 +39,11 @@ export default function VillagerDashboard() {
     }
   }
 
-  const [storedName, setStoredName] = useState(window.sessionStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ')
+  const [storedName, setStoredName] = useState(window.localStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ')
 
   useEffect(() => {
     const handleUpdate = () => {
-      setStoredName(window.sessionStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ')
+      setStoredName(window.localStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ')
     }
     window.addEventListener('profileUpdate', handleUpdate)
     return () => window.removeEventListener('profileUpdate', handleUpdate)

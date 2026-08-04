@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { districtData } from '../data/districtsData'
 import { useLanguage } from '../context/LanguageContext'
@@ -24,6 +24,14 @@ export default function LandingPage() {
   const navigate = useNavigate()
   const { t } = useLanguage()
   const [selectedRole, setSelectedRole] = useState('farmer')
+
+  useEffect(() => {
+    if (window.localStorage.getItem('official_id')) {
+      navigate('/dashboard/official')
+    } else if (window.localStorage.getItem('citizen_email') || window.localStorage.getItem('citizen_phone')) {
+      navigate('/dashboard/villager')
+    }
+  }, [navigate])
 
   return (
     <div style={{ fontFamily: "'Inter', 'Noto Sans Kannada', sans-serif", overflowX: 'hidden' }}>

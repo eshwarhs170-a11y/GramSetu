@@ -20,13 +20,19 @@ export default function OfficialLogin() {
   useEffect(() => {
     emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY })
   }, [])
+
+  useEffect(() => {
+    if (window.localStorage.getItem('official_id')) {
+      navigate('/dashboard/official')
+    }
+  }, [navigate])
   
   const [step, setStep] = useState(1)
   const [name, setName] = useState('')
   const [officerId, setOfficerId] = useState('')
   const [email, setEmail] = useState('')
   const [department, setDepartment] = useState('Agriculture (RSK)')
-  const [district, setDistrict] = useState('Mysuru')
+  const [district, setDistrict] = useState('')
   const [otp, setOtp] = useState('')
   const [generatedOtp, setGeneratedOtp] = useState('')
   
@@ -99,11 +105,11 @@ export default function OfficialLogin() {
         console.warn('Firestore save failed, continuing...', fsErr)
       }
 
-      window.sessionStorage.setItem('official_name', name)
-      window.sessionStorage.setItem('official_id', officerId)
-      window.sessionStorage.setItem('official_email', email)
-      window.sessionStorage.setItem('official_department', department)
-      window.sessionStorage.setItem('official_district', district)
+      window.localStorage.setItem('official_name', name)
+      window.localStorage.setItem('official_id', officerId)
+      window.localStorage.setItem('official_email', email)
+      window.localStorage.setItem('official_department', department)
+      window.localStorage.setItem('official_district', district)
 
       navigate('/dashboard/official')
     } catch (error) {
@@ -242,7 +248,9 @@ export default function OfficialLogin() {
                     className="form-input custom-select"
                     value={district}
                     onChange={e => setDistrict(e.target.value)}
+                    required
                   >
+                    <option value="" disabled>Select District</option>
                     {districts.map(dist => (
                       <option key={dist} value={dist}>{dist}</option>
                     ))}

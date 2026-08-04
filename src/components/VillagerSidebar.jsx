@@ -85,7 +85,14 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
       </nav>
 
       <div className="sidebar-footer">
-        <button className="logout-btn" onClick={() => navigate('/')}>
+        <button className="logout-btn" onClick={() => {
+          window.localStorage.removeItem('citizen_name')
+          window.localStorage.removeItem('citizen_email')
+          window.localStorage.removeItem('citizen_district')
+          window.localStorage.removeItem('citizen_taluk')
+          window.localStorage.removeItem('citizen_phone')
+          navigate('/')
+        }}>
           <LogOut size={16} strokeWidth={2} />
           {t('logout')}
         </button>

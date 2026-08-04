@@ -20,12 +20,18 @@ export default function VillagerLogin() {
   useEffect(() => {
     emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY })
   }, [])
+
+  useEffect(() => {
+    if (window.localStorage.getItem('citizen_email') || window.localStorage.getItem('citizen_phone')) {
+      navigate('/dashboard/villager')
+    }
+  }, [navigate])
   const [step, setStep] = useState(1)
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [name, setName] = useState('')
-  const [district, setDistrict] = useState('Mysuru')
-  const [taluk, setTaluk] = useState('Mysuru Taluk')
+  const [district, setDistrict] = useState('')
+  const [taluk, setTaluk] = useState('')
   const [otp, setOtp] = useState('')
   const [generatedOtp, setGeneratedOtp] = useState('')
   const [otpSentAlert, setOtpSentAlert] = useState(false)
@@ -73,8 +79,8 @@ export default function VillagerLogin() {
 
   const handleSendOtp = async (e) => {
     e.preventDefault()
-    if (!name.trim() || !email.includes('@')) {
-      setErrorMsg('Please enter a valid name and email address.')
+    if (!name.trim() || !email.includes('@') || !district || !taluk) {
+      setErrorMsg('Please fill in all required fields.')
       return
     }
     setLoading(true)
@@ -124,11 +130,11 @@ export default function VillagerLogin() {
         console.warn('Firestore save failed, continuing...', fsErr)
       }
 
-      window.sessionStorage.setItem('citizen_name', name)
-      window.sessionStorage.setItem('citizen_email', email)
-      window.sessionStorage.setItem('citizen_district', district)
-      window.sessionStorage.setItem('citizen_taluk', taluk)
-      window.sessionStorage.setItem('citizen_phone', phone)
+      window.localStorage.setItem('citizen_name', name)
+      window.localStorage.setItem('citizen_email', email)
+      window.localStorage.setItem('citizen_district', district)
+      window.localStorage.setItem('citizen_taluk', taluk)
+      window.localStorage.setItem('citizen_phone', phone)
 
       navigate('/dashboard/villager')
     } catch (error) {
@@ -200,7 +206,7 @@ export default function VillagerLogin() {
             <h3>{step === 1 ? 'Raita / Villager Login' : 'Verify Your Email OTP'}</h3>
             <p>
               {step === 1
-                ? 'Enter your email to receive a one-time password'
+                ? 'Enter your details to receive a one-time password'
                 : `We sent a 6-digit OTP to ${email}`}
             </p>
           </div>
@@ -264,12 +270,8 @@ export default function VillagerLogin() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div className="form-group">
                   <label className="form-label">District / ಜಿಲ್ಲೆ *</label>
-                  <select
-                    className="form-input"
-                    value={district}
-                    onChange={e => handleDistrictChange(e.target.value)}
-                    required
-                  >
+                  <select className="form-input custom-select" value={district} onChange={e => handleDistrictChange(e.target.value)} required>
+                    <option value="" disabled>Select District</option>
                     {districtsOfKarnataka.map(d => (
                       <option key={d.name} value={d.name}>{d.name}</option>
                     ))}
@@ -277,12 +279,8 @@ export default function VillagerLogin() {
                 </div>
                 <div className="form-group">
                   <label className="form-label">Taluk / ತಾಲೂಕು *</label>
-                  <select
-                    className="form-input"
-                    value={taluk}
-                    onChange={e => setTaluk(e.target.value)}
-                    required
-                  >
+                  <select className="form-input custom-select" value={taluk} onChange={e => setTaluk(e.target.value)} required>
+                    <option value="" disabled>Select Taluk</option>
                     {activeDistrictObj.taluks.map(tOption => (
                       <option key={tOption} value={tOption}>{tOption}</option>
                     ))}

@@ -14,15 +14,15 @@ import { db } from '../firebase'
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
 
 export const getSessionData = () => {
-  const name = window.sessionStorage.getItem('official_name') || 'ಶ್ರೀನಿವಾಸ ಕುಮಾರ್'
+  const name = window.localStorage.getItem('official_name') || 'ಶ್ರೀನಿವಾಸ ಕುಮಾರ್'
   const initial = name.charAt(0).toUpperCase()
   return {
     name,
     initial,
-    id: window.sessionStorage.getItem('official_id') || 'KA-MYS-PDO-2024-001',
-    email: window.sessionStorage.getItem('official_email') || 'pdo.mysuru@karnataka.gov.in',
-    department: window.sessionStorage.getItem('official_department') || 'Rural Development & Panchayat Raj',
-    district: window.sessionStorage.getItem('official_district') || 'Mysuru',
+    id: window.localStorage.getItem('official_id') || 'KA-MYS-PDO-2024-001',
+    email: window.localStorage.getItem('official_email') || 'pdo.mysuru@karnataka.gov.in',
+    department: window.localStorage.getItem('official_department') || 'Rural Development & Panchayat Raj',
+    district: window.localStorage.getItem('official_district') || 'Mysuru',
     designation: 'Panchayat Development Officer (PDO)',
   }
 }
@@ -116,7 +116,14 @@ function OfficialSidebar({ active, setActive }) {
         })}
       </nav>
       <div className="sidebar-footer">
-        <button className="logout-btn" onClick={() => navigate('/')}>
+        <button className="logout-btn" onClick={() => {
+          window.localStorage.removeItem('official_name')
+          window.localStorage.removeItem('official_id')
+          window.localStorage.removeItem('official_email')
+          window.localStorage.removeItem('official_department')
+          window.localStorage.removeItem('official_district')
+          navigate('/')
+        }}>
           <LogOut size={16} strokeWidth={2} />
           {t('logout')}
         </button>
