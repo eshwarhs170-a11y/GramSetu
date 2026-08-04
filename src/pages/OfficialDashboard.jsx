@@ -13,6 +13,20 @@ import {
 import { db } from '../firebase'
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
 
+export const getSessionData = () => {
+  const name = window.sessionStorage.getItem('official_name') || 'ಶ್ರೀನಿವಾಸ ಕುಮಾರ್'
+  const initial = name.charAt(0).toUpperCase()
+  return {
+    name,
+    initial,
+    id: window.sessionStorage.getItem('official_id') || 'KA-MYS-PDO-2024-001',
+    email: window.sessionStorage.getItem('official_email') || 'pdo.mysuru@karnataka.gov.in',
+    department: window.sessionStorage.getItem('official_department') || 'Rural Development & Panchayat Raj',
+    district: window.sessionStorage.getItem('official_district') || 'Mysuru',
+    designation: 'Panchayat Development Officer (PDO)',
+  }
+}
+
 // ===== Karnataka Official Data =====
 const kaNewComplaints = [
   { id: 'GS-KA-0501', title: 'No Water for 3 Days — Ward 5', village: 'Ramanagara', status: 'pending', category: 'Water', date: '5 Aug', priority: 'high' },
@@ -33,13 +47,17 @@ const kaResolvedComplaints = [
 const kaVillages = ['ರಾಮನಗರ', 'ಮೈಸೂರು', 'ಮಂಡ್ಯ', 'ಚನ್ನಪಟ್ಟಣ', 'ತುಮಕೂರು']
 const kaVillagesEn = ['Ramanagara', 'Mysuru', 'Mandya', 'Channapatna', 'Tumkuru']
 
-const kaFarmers = [
-  ['ರಾಮಪ್ಪ ಗೌಡ', 'Ramanagara', '+91 98441 23456', 'Verified', 4],
-  ['ಸಿದ್ದಮ್ಮ ದೇವಿ', 'Mysuru', '+91 87432 10987', 'Verified', 2],
-  ['ಮಹೇಶ ನಾಯಕ', 'Mandya', '+91 76523 43210', 'Pending', 3],
-  ['ಕಾವೇರಿ ಅಮ್ಮ', 'Channapatna', '+91 65432 21098', 'Verified', 5],
-  ['ಬಸವರಾಜ ಹೆಗಡೆ', 'Shimoga', '+91 94456 78901', 'Verified', 2],
-]
+const getDistrictFarmers = (district) => {
+  const baseNames = ['ರಾಮಪ್ಪ ಗೌಡ (Ramappa Gowda)', 'ಸಿದ್ದಮ್ಮ ದೇವಿ (Siddamma Devi)', 'ಮಹೇಶ ನಾಯಕ (Mahesha Nayaka)', 'ಕಾವೇರಿ ಅಮ್ಮ (Kaveri Amma)', 'ಬಸವರಾಜ ಹೆಗಡೆ (Basavaraja Hegde)', 'ಮಂಜುನಾಥ (Manjunatha)', 'ಸುನೀತಾ (Suneetha)']
+  const villages = ['Halli', 'Koppal', 'Palya', 'Nagara', 'Kere']
+  return Array.from({length: 8}).map((_, i) => [
+    baseNames[i % baseNames.length],
+    `${villages[i % villages.length]}, ${district}`,
+    `+91 9${Math.floor(100000000 + Math.random() * 900000000)}`,
+    Math.random() > 0.2 ? 'Verified' : 'Pending',
+    Math.floor(Math.random() * 5) + 1
+  ])
+}
 
 // ===== Sidebar =====
 function OfficialSidebar({ active, setActive }) {
@@ -50,6 +68,7 @@ function OfficialSidebar({ active, setActive }) {
     { id: 'overview',   icon: LayoutDashboard, labelKey: 'sNavOverview',      badge: null },
     { id: 'complaints', icon: ClipboardList,   labelKey: 'sNavNewComplaints',  badge: '28' },
     { id: 'resolved',   icon: CheckCircle2,    labelKey: 'sNavResolved',       badge: null },
+    { id: 'state',      icon: Map,             labelKey: 'State Overview',     badge: null },
     { id: 'announce',   icon: Megaphone,       labelKey: 'sNavPublish',        badge: null },
     { id: 'analytics',  icon: BarChart3,       labelKey: 'sNavAnalytics',      badge: null },
     { id: 'citizens',   icon: Users,           labelKey: 'sNavCitizens',       badge: null },
@@ -70,10 +89,12 @@ function OfficialSidebar({ active, setActive }) {
         </div>
       </div>
       <div className="sidebar-user">
-        <div className="sidebar-user-avatar" style={{ background: '#3b82f6', fontSize: 13, fontWeight: 750 }}>ಶ್ರೀ</div>
+        <div className="sidebar-user-avatar" style={{ background: '#3b82f6', fontSize: 13, fontWeight: 750 }}>
+          {getSessionData().initial}
+        </div>
         <div className="sidebar-user-info">
-          <p>ಶ್ರೀನಿವಾಸ ಕುಮಾರ್</p>
-          <p>PDO, Mysuru Taluk</p>
+          <p>{getSessionData().name}</p>
+          <p>{getSessionData().department}</p>
         </div>
       </div>
       <nav className="sidebar-nav">
@@ -118,7 +139,7 @@ function OverviewScreen() {
           <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
             <span className="badge badge-danger">28 {t('pendingComplaints')}</span>
             <span className="badge badge-success">15 {t('resolvedComplaints')} This Week</span>
-            <span className="badge" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>Mysuru Taluk</span>
+            <span className="badge" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>{getSessionData().district} District</span>
           </div>
         </div>
         <div className="welcome-banner-img">
@@ -214,7 +235,7 @@ function OverviewScreen() {
 }
 
 // ===== Complaints =====
-function ComplaintsScreen({ resolved }) {
+function ComplaintsScreen({ resolved, stateOverview }) {
   const { t } = useLanguage()
   const [liveComplaints, setLiveComplaints] = useState(kaNewComplaints)
 
@@ -231,6 +252,13 @@ function ComplaintsScreen({ resolved }) {
     })
     return () => unsubscribe && unsubscribe()
   }, [resolved])
+
+  const displayedComplaints = stateOverview 
+    ? liveComplaints 
+    : liveComplaints.filter(c => {
+        const loc = (c.district || c.taluk || c.village || '').toLowerCase()
+        return loc.includes(getSessionData().district.toLowerCase())
+      })
 
   return (
     <div className="animate-fadeInUp">
@@ -271,7 +299,7 @@ function ComplaintsScreen({ resolved }) {
               </tr>
             </thead>
             <tbody>
-              {liveComplaints.map((c, i) => (
+              {displayedComplaints.map((c, i) => (
                 <tr key={i}>
                   <td style={{ fontFamily: 'monospace', fontSize: 11 }}>{c.id}</td>
                   <td style={{ fontWeight: 600, maxWidth: 180, fontSize: 13 }}>
@@ -296,8 +324,8 @@ function ComplaintsScreen({ resolved }) {
                   </td>
                   <td>
                     <div style={{ display: 'flex', gap: 6 }}>
-                      <button className="btn btn-primary btn-sm">{t('assign')}</button>
-                      <button className="btn btn-outline btn-sm">{t('view')}</button>
+                      <button className="btn btn-primary btn-sm" onClick={() => alert(`✅ Assigned complaint ${c.id} to your department.`)}>{t('assign')}</button>
+                      <button className="btn btn-outline btn-sm" onClick={() => alert(`📄 Viewing details for ${c.id}:\n\nTitle: ${c.title}\nCategory: ${c.category}\n\nThis will open a full modal in a future update.`)}>{t('view')}</button>
                     </div>
                   </td>
                 </tr>
@@ -398,9 +426,23 @@ function AnnounceScreen() {
           </div>
           <div className="form-group">
             <label className="form-label">Attach Image (Optional)</label>
-            <div style={{ border: '2px dashed var(--border)', borderRadius: 'var(--radius-md)', padding: 24, textAlign: 'center', cursor: 'pointer', background: 'var(--bg-main)' }}>
-              <div style={{ fontSize: 28, marginBottom: 8 }}>🖼️</div>
-              <p style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Upload image for announcement</p>
+            <div style={{ position: 'relative', border: '2px dashed var(--border)', borderRadius: 'var(--radius-md)', padding: 24, textAlign: 'center', background: 'var(--bg-main)', overflow: 'hidden' }}>
+              <input type="file" accept="image/*" style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} onChange={(e) => {
+                if(e.target.files && e.target.files[0]) {
+                  const reader = new FileReader()
+                  reader.onload = (ev) => {
+                    e.target.parentElement.style.backgroundImage = `url(${ev.target.result})`
+                    e.target.parentElement.style.backgroundSize = 'cover'
+                    e.target.parentElement.style.backgroundPosition = 'center'
+                    e.target.nextSibling.style.opacity = 0
+                  }
+                  reader.readAsDataURL(e.target.files[0])
+                }
+              }} />
+              <div style={{ pointerEvents: 'none', transition: 'opacity 0.2s' }}>
+                <div style={{ fontSize: 28, marginBottom: 8 }}>🖼️</div>
+                <p style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Click to upload image or drag & drop</p>
+              </div>
             </div>
           </div>
           <button className="btn btn-primary" style={{ padding: '14px 24px' }} onClick={() => setSubmitted(true)}>
@@ -415,6 +457,8 @@ function AnnounceScreen() {
 // ===== Citizens =====
 function CitizensScreen() {
   const { t } = useLanguage()
+  const districtFarmers = getDistrictFarmers(getSessionData().district)
+  
   return (
     <div className="animate-fadeInUp">
       <div className="stats-grid" style={{ marginBottom: 24 }}>
@@ -452,7 +496,7 @@ function CitizensScreen() {
             </tr>
           </thead>
           <tbody>
-            {kaFarmers.map(([name, village, mobile, aadhaar, schemes], i) => (
+            {districtFarmers.map(([name, village, mobile, aadhaar, schemes], i) => (
               <tr key={i}>
                 <td style={{ color: 'var(--text-muted)' }}>{i + 1}</td>
                 <td style={{ fontWeight: 600 }}>{name}</td>
@@ -476,11 +520,11 @@ function SettingsScreen() {
   // Profile fields state
   const [editingProfile, setEditingProfile] = useState(false)
   const [profile, setProfile] = useState({
-    fullName:    localStorage.getItem('officer_name')   || 'ಶ್ರೀನಿವಾಸ ಕುಮಾರ್ (Srinivas Kumar)',
-    designation: localStorage.getItem('officer_desig')  || 'Panchayat Development Officer (PDO)',
-    taluk:       localStorage.getItem('officer_taluk')  || 'Mysuru Taluk, Mysuru District',
-    officerId:   localStorage.getItem('officer_id')     || 'KA-MYS-PDO-2024-001',
-    department:  localStorage.getItem('officer_dept')   || 'Rural Development & Panchayat Raj',
+    fullName:    getSessionData().name,
+    designation: getSessionData().designation,
+    taluk:       getSessionData().district + ' District',
+    officerId:   getSessionData().id,
+    department:  getSessionData().department,
   })
   const [draftProfile, setDraftProfile] = useState({ ...profile })
 
@@ -602,6 +646,7 @@ const pageMeta = {
   overview:   { titleKey: 'sNavOverview',      subKey: 'officerLocation' },
   complaints: { titleKey: 'sNavNewComplaints', subKey: 'complaintSub' },
   resolved:   { titleKey: 'sNavResolved',      subKey: 'statusSub' },
+  state:      { titleKey: 'State Overview',    subKey: 'All Karnataka Districts' },
   announce:   { titleKey: 'sNavPublish',       subKey: 'announceSub' },
   analytics:  { titleKey: 'sNavAnalytics',     subKey: 'officerLocation' },
   citizens:   { titleKey: 'sNavCitizens',      subKey: 'schemesSub' },
@@ -619,6 +664,7 @@ export default function OfficialDashboard() {
       case 'overview':   return <OverviewScreen />
       case 'complaints': return <ComplaintsScreen resolved={false} />
       case 'resolved':   return <ComplaintsScreen resolved={true} />
+      case 'state':      return <ComplaintsScreen resolved={false} stateOverview={true} />
       case 'announce':   return <AnnounceScreen />
       case 'analytics':  return <OverviewScreen />
       case 'citizens':   return <CitizensScreen />
@@ -633,20 +679,22 @@ export default function OfficialDashboard() {
       <div className="main-content">
         <header className="topbar">
           <div>
-            <div className="topbar-title">{t(page.titleKey)}</div>
-            <div className="topbar-subtitle">Mysuru Taluk, Karnataka — PDO Portal</div>
+            <div className="topbar-title">{t(page.titleKey) || page.titleKey}</div>
+            <div className="topbar-subtitle">{getSessionData().district} District, Karnataka — {getSessionData().department}</div>
           </div>
           <div className="topbar-right">
             <LanguageSwitcher variant="topbar-style" />
-            <button className="topbar-icon-btn">
+            <button className="topbar-icon-btn" onClick={() => alert('Search functionality coming soon')}>
               <Search size={18} strokeWidth={2} />
             </button>
-            <button className="topbar-icon-btn" style={{ position: 'relative' }}>
+            <button className="topbar-icon-btn" style={{ position: 'relative' }} onClick={() => alert('You have 3 new notifications')}>
               <Bell size={18} strokeWidth={2} />
               <div className="notif-dot" />
             </button>
             <button className="topbar-icon-btn" onClick={() => setActive('settings')}>
-              <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 12 }}>ಶ್ರೀ</div>
+              <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 12 }}>
+                {getSessionData().initial}
+              </div>
             </button>
           </div>
         </header>

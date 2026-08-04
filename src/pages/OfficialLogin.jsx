@@ -26,6 +26,7 @@ export default function OfficialLogin() {
   const [officerId, setOfficerId] = useState('')
   const [email, setEmail] = useState('')
   const [department, setDepartment] = useState('Agriculture (RSK)')
+  const [district, setDistrict] = useState('Mysuru')
   const [otp, setOtp] = useState('')
   const [generatedOtp, setGeneratedOtp] = useState('')
   
@@ -42,6 +43,8 @@ export default function OfficialLogin() {
     'Health / PHC',
     'Education / DDPI',
   ]
+
+  const districts = ['Bengaluru', 'Mysuru', 'Mandya', 'Tumkuru', 'Ramanagara', 'Chikkamagaluru', 'Shimoga', 'Dharwad', 'Belagavi']
 
   const handleSendOtp = async (e) => {
     e.preventDefault()
@@ -100,6 +103,7 @@ export default function OfficialLogin() {
       window.sessionStorage.setItem('official_id', officerId)
       window.sessionStorage.setItem('official_email', email)
       window.sessionStorage.setItem('official_department', department)
+      window.sessionStorage.setItem('official_district', district)
 
       navigate('/dashboard/official')
     } catch (error) {
@@ -226,6 +230,21 @@ export default function OfficialLogin() {
                   >
                     {departments.map(dept => (
                       <option key={dept} value={dept}>{dept}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">District / ಜಿಲ್ಲೆ *</label>
+                <div className="custom-select-wrapper">
+                  <select
+                    className="form-input custom-select"
+                    value={district}
+                    onChange={e => setDistrict(e.target.value)}
+                  >
+                    {districts.map(dist => (
+                      <option key={dist} value={dist}>{dist}</option>
                     ))}
                   </select>
                 </div>
