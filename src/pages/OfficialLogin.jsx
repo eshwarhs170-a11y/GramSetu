@@ -184,9 +184,14 @@ export default function OfficialLogin() {
           )}
 
           {otpSentAlert && (
-            <div className="success-alert animate-fadeInUp" style={{ background: '#eff6ff', color: '#1e40af', border: '1px solid #bfdbfe' }}>
-              <CheckCircle2 size={16} color="#3b82f6" />
-              OTP has been successfully sent to {email}. Please check your inbox.
+            <div className="success-alert animate-fadeInUp" style={{ background: '#eff6ff', color: '#1e40af', border: '1px solid #bfdbfe', alignItems: 'flex-start', lineHeight: '1.4' }}>
+              <CheckCircle2 size={16} color="#3b82f6" style={{ marginTop: 2, flexShrink: 0 }} />
+              <div>
+                <strong>OTP sent successfully to {email}!</strong>
+                <div style={{ fontSize: 12, marginTop: 6, opacity: 0.9 }}>
+                  <strong>Note:</strong> You will <em>not</em> receive a push notification. Please manually open your email app and check your <strong>Inbox</strong> or <strong>Spam</strong> folder.
+                </div>
+              </div>
             </div>
           )}
 
