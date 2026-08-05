@@ -221,10 +221,12 @@ export default function VillagerLogin() {
           )}
 
           {otpSentAlert && step === 2 && (
-            <div style={{ padding: 16, background: '#d1fae5', border: '1px solid #6ee7b7', color: '#065f46', borderRadius: 'var(--radius-md)', fontSize: 14, marginBottom: 16, textAlign: 'center' }}>
+            <div style={{ padding: 16, background: '#d1fae5', border: '1px solid #6ee7b7', color: '#065f46', borderRadius: 'var(--radius-md)', fontSize: 14, marginBottom: 16, textAlign: 'center', lineHeight: '1.4' }}>
               <CheckCircle2 size={16} style={{ verticalAlign: 'middle', marginRight: 6 }} />
-              <strong>OTP sent to {email}!</strong><br />
-              <span style={{ fontSize: 12 }}>Check your inbox (and spam folder) for the 6-digit code.</span>
+              <strong>OTP sent to {email}!</strong>
+              <div style={{ fontSize: 12, marginTop: 8, padding: '8px', background: 'rgba(6,95,70,0.06)', borderRadius: 6 }}>
+                <strong>Note:</strong> You will <em>not</em> receive a push notification. Please manually open your email app and check your <strong>Inbox</strong> or <strong>Spam</strong> folder.
+              </div>
             </div>
           )}
 
