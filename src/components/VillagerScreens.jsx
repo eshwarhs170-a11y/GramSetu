@@ -5,7 +5,7 @@ import {
   Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2, MapPin,
   Camera, Phone, Home, Map,
   Building2, Wheat, ArrowUp, ArrowDown, Minus,
-  Bell, ShieldCheck, RefreshCw
+  Bell, ShieldCheck, RefreshCw, Sparkles, CheckCircle2, Star
 } from 'lucide-react'
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
@@ -367,10 +367,15 @@ export function HomeScreen() {
         <div className="welcome-banner-bg" />
         <div className="welcome-banner-bg2" />
         <div className="welcome-banner-text">
-          <h2>{lang === 'kn' ? `${userName} ಅವರಿಗೆ ಸ್ವಾಗತ! 🙏` : `Welcome, ${userName}! 🙏`}</h2>
+          <h2 style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {lang === 'kn' ? `${userName} ಅವರಿಗೆ ಸ್ವಾಗತ!` : `Welcome, ${userName}!`}
+            <Sparkles size={20} style={{ color: '#fbbf24', flexShrink: 0 }} />
+          </h2>
           <p>{userTaluk}, {userDistrict} District, Karnataka</p>
           <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
-            <span className="badge badge-success">PM Kisan Active ✓</span>
+            <span className="badge badge-success" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              <CheckCircle2 size={12} />PM Kisan Active
+            </span>
             <span className="badge badge-warning">ರಾಗಿ MSP ಖರೀದಿ ಶುರು</span>
             <span className="badge" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>1 {t('newAlerts')}</span>
           </div>

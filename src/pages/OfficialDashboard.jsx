@@ -8,7 +8,8 @@ import {
   BarChart3, Users, Settings, Landmark, LogOut, ArrowRight,
   TrendingUp, Clock, RefreshCw, CheckCircle, Bell, Search,
   Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2,
-  MapPin, Phone, Home, ShieldCheck, Mail, Map, Building2, User
+  MapPin, Phone, Home, ShieldCheck, Mail, Map, Building2, User,
+  Star, Tag, Calendar
 } from 'lucide-react'
 
 import { db } from '../firebase'
@@ -350,9 +351,22 @@ function ComplaintsScreen({ resolved, stateOverview }) {
                 <h4>{c.title}</h4>
                 <p>{c.village} — Resolved by: {c.resolvedBy}</p>
                 <div className="complaint-status-meta">
-                  <span>🎫 {c.id}</span>
-                  <span>📅 {c.resolvedDate}</span>
-                  <span>⭐ {'★'.repeat(c.rating)}{'☆'.repeat(5 - c.rating)}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <Tag size={12} /> {c.id}
+                  </span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <Calendar size={12} /> {c.resolvedDate}
+                  </span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}>
+                    {[...Array(5)].map((_, si) => (
+                      <Star
+                        key={si}
+                        size={13}
+                        fill={si < c.rating ? '#fbbf24' : 'none'}
+                        color={si < c.rating ? '#fbbf24' : '#d1d5db'}
+                      />
+                    ))}
+                  </span>
                   <span className="badge badge-success">{t('resolved')}</span>
                 </div>
               </div>

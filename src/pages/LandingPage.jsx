@@ -5,7 +5,7 @@ import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
 import {
-  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink
+  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink, Building2, GraduationCap
 } from 'lucide-react'
 
 // ── District Knowledge Base ──────────────────────────────────
@@ -41,9 +41,11 @@ export default function LandingPage() {
       <div style={{
         background: 'linear-gradient(90deg, #FF6B35, #F7931E, #16a34a)',
         color: '#fff', fontSize: 13, fontWeight: 600,
-        padding: '8px 24px', textAlign: 'center', letterSpacing: 0.4
+        padding: '8px 24px', textAlign: 'center', letterSpacing: 0.4,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
       }}>
-        🏛️ &nbsp;ಕರ್ನಾಟಕ ಸರ್ಕಾರ &nbsp;|&nbsp; Government of Karnataka &nbsp;|&nbsp; कर्नाटक सरकार
+        <Building2 size={14} />
+        &nbsp;ಕರ್ನಾಟಕ ಸರ್ಕಾರ &nbsp;|&nbsp; Government of Karnataka &nbsp;|&nbsp; कर्नाटक सरकार
       </div>
 
       {/* ── NAV ── */}
@@ -141,8 +143,8 @@ export default function LandingPage() {
             border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)'
           }}>
             {[
-              { id: 'farmer', label: '🌾 Farmer / Student' },
-              { id: 'official', label: '🏛️ Govt Employee' },
+              { id: 'farmer',   Icon: Wheat,     label: 'Farmer / Student' },
+              { id: 'official', Icon: Building2, label: 'Govt Employee' },
             ].map(role => (
               <button
                 key={role.id}
@@ -150,6 +152,7 @@ export default function LandingPage() {
                 style={{
                   padding: '10px 22px', borderRadius: 10, fontWeight: 700, fontSize: 14,
                   cursor: 'pointer', transition: 'all 0.25s ease', border: 'none',
+                  display: 'flex', alignItems: 'center', gap: 7,
                   background: selectedRole === role.id
                     ? (role.id === 'farmer'
                         ? 'linear-gradient(135deg, #16a34a, #15803d)'
@@ -159,6 +162,7 @@ export default function LandingPage() {
                   boxShadow: selectedRole === role.id ? '0 4px 16px rgba(0,0,0,0.3)' : 'none',
                 }}
               >
+                <role.Icon size={15} strokeWidth={2} />
                 {role.label}
               </button>
             ))}
