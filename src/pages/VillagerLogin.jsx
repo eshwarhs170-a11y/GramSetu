@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import ThemeToggle from '../components/ThemeToggle'
 import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import { db } from '../firebase'
@@ -199,6 +200,7 @@ export default function VillagerLogin() {
             </button>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <LanguageSwitcher variant="topbar-style" />
+              <ThemeToggle />
             </div>
           </div>
 
