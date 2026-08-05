@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
-import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail } from 'lucide-react'
+import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail, Send, ShieldCheck } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import { db } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
@@ -295,7 +295,9 @@ export default function VillagerLogin() {
                 type="submit"
                 disabled={loading || !email.includes('@') || !name.trim()}
               >
-                {loading ? 'Sending OTP...' : '📧 Send OTP to Email'}
+                {loading
+                  ? 'Sending OTP...'
+                  : <><Send size={15} style={{ marginRight: 6 }} />Send OTP to Email</>}
               </button>
             </form>
           ) : (
@@ -312,7 +314,10 @@ export default function VillagerLogin() {
                   required
                   autoFocus
                 />
-                <div className="otp-hint" style={{ color: '#065f46' }}>📧 Enter the OTP sent to your email</div>
+                <div className="otp-hint" style={{ color: '#065f46', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Mail size={13} />
+                  Enter the OTP sent to your email
+                </div>
               </div>
               <button
                 className="btn btn-primary w-full"
@@ -320,14 +325,16 @@ export default function VillagerLogin() {
                 type="submit"
                 disabled={loading || otp.length < 6}
               >
-                {loading ? 'Verifying...' : '✅ Verify & Login'}
+                {loading
+                  ? 'Verifying...'
+                  : <><ShieldCheck size={15} style={{ marginRight: 6 }} />Verify &amp; Login</>}
               </button>
               <button
                 type="button"
                 style={{ textAlign: 'center', color: 'var(--primary)', fontSize: 14, fontWeight: 600, display: 'block', width: '100%', marginTop: 12, background: 'transparent', border: 'none', cursor: 'pointer' }}
                 onClick={() => { setStep(1); setOtpSentAlert(false); setOtp(''); setGeneratedOtp(''); }}
               >
-                ← Change Email
+                <ArrowLeft size={14} style={{ marginRight: 4 }} /> Change Email
               </button>
             </form>
           )}

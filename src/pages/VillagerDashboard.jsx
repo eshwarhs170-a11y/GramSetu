@@ -7,7 +7,7 @@ import {
   HomeScreen, SchemesScreen, MarketScreen, AnnouncementsScreen,
   ComplaintScreen, ComplaintStatusScreen, ProfileScreen,
 } from '../components/VillagerScreens'
-import { Menu, Search, Bell, X } from 'lucide-react'
+import { Menu, Search, Bell, X, AlertTriangle, IndianRupee } from 'lucide-react'
 
 export default function VillagerDashboard() {
   const [active, setActive] = useState('home')
@@ -102,14 +102,18 @@ export default function VillagerDashboard() {
                   </div>
                   <div className="notif-list">
                     <div className="notif-item unread">
-                      <div className="notif-icon bg-warning">⚠️</div>
+                      <div className="notif-icon bg-warning" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <AlertTriangle size={16} color="#d97706" />
+                      </div>
                       <div>
                         <p>Crop Alert: Heavy rain expected tomorrow in your district.</p>
                         <span>2 hours ago</span>
                       </div>
                     </div>
                     <div className="notif-item unread">
-                      <div className="notif-icon bg-success">₹</div>
+                      <div className="notif-icon bg-success" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <IndianRupee size={16} color="#15803d" />
+                      </div>
                       <div>
                         <p>PM Kisan: ₹2,000 credited to your account ending in 4521.</p>
                         <span>1 day ago</span>
