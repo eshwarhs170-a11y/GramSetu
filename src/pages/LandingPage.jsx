@@ -145,27 +145,30 @@ export default function LandingPage() {
             {[
               { id: 'farmer',   Icon: Wheat,     label: 'Farmer / Student' },
               { id: 'official', Icon: Building2, label: 'Govt Employee' },
-            ].map(role => (
-              <button
-                key={role.id}
-                onClick={() => setSelectedRole(role.id)}
-                style={{
-                  padding: '10px 22px', borderRadius: 10, fontWeight: 700, fontSize: 14,
-                  cursor: 'pointer', transition: 'all 0.25s ease', border: 'none',
-                  display: 'flex', alignItems: 'center', gap: 7,
-                  background: selectedRole === role.id
-                    ? (role.id === 'farmer'
-                        ? 'linear-gradient(135deg, #16a34a, #15803d)'
-                        : 'linear-gradient(135deg, #3b82f6, #2563eb)')
-                    : 'transparent',
-                  color: selectedRole === role.id ? '#fff' : 'rgba(255,255,255,0.6)',
-                  boxShadow: selectedRole === role.id ? '0 4px 16px rgba(0,0,0,0.3)' : 'none',
-                }}
-              >
-                <role.Icon size={15} strokeWidth={2} />
-                {role.label}
-              </button>
-            ))}
+            ].map(role => {
+              const RoleIcon = role.Icon
+              return (
+                <button
+                  key={role.id}
+                  onClick={() => setSelectedRole(role.id)}
+                  style={{
+                    padding: '10px 22px', borderRadius: 10, fontWeight: 700, fontSize: 14,
+                    cursor: 'pointer', transition: 'all 0.25s ease', border: 'none',
+                    display: 'flex', alignItems: 'center', gap: 7,
+                    background: selectedRole === role.id
+                      ? (role.id === 'farmer'
+                          ? 'linear-gradient(135deg, #16a34a, #15803d)'
+                          : 'linear-gradient(135deg, #3b82f6, #2563eb)')
+                      : 'transparent',
+                    color: selectedRole === role.id ? '#fff' : 'rgba(255,255,255,0.6)',
+                    boxShadow: selectedRole === role.id ? '0 4px 16px rgba(0,0,0,0.3)' : 'none',
+                  }}
+                >
+                  <RoleIcon size={15} strokeWidth={2} />
+                  {role.label}
+                </button>
+              )
+            })}
           </div>
 
           {/* CTA button */}
@@ -297,7 +300,7 @@ export default function LandingPage() {
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                <span style={{ fontSize: 16 }}>{info.emoji}</span> {d}
+                <MapPin size={13} style={{ opacity: 0.7, flexShrink: 0 }} /> {d}
               </Link>
             )
           })}
