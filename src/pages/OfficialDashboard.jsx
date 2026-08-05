@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import ThemeToggle from '../components/ThemeToggle'
 import {
   LayoutDashboard, ClipboardList, CheckCircle2, Megaphone,
   BarChart3, Users, Settings, Landmark, LogOut, ArrowRight,
@@ -691,6 +692,7 @@ export default function OfficialDashboard() {
           </div>
           <div className="topbar-right">
             <LanguageSwitcher variant="topbar-style" />
+            <ThemeToggle />
             <button className="topbar-icon-btn" onClick={() => alert('Search functionality coming soon')}>
               <Search size={18} strokeWidth={2} />
             </button>

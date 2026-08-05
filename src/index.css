@@ -51,6 +51,114 @@
   --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ===== DARK MODE OVERRIDES ===== */
+[data-theme="dark"] {
+  --primary: #22c55e;
+  --primary-dark: #16a34a;
+  --primary-light: #4ade80;
+  --primary-glow: rgba(34, 197, 94, 0.15);
+
+  --bg-main: #0d1117;
+  --bg-card: #161b22;
+  --bg-sidebar: #0a0f1a;
+  --bg-sidebar-hover: #1c2a3a;
+  --bg-sidebar-active: #22c55e;
+
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --text-sidebar: #b3c3d4;
+
+  --border: #30363d;
+  --border-light: #21262d;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -1px rgba(0,0,0,0.3);
+  --shadow-lg: 0 10px 25px -3px rgba(0,0,0,0.5), 0 4px 8px -2px rgba(0,0,0,0.3);
+  --shadow-green: 0 4px 20px rgba(34, 197, 94, 0.25);
+
+  --danger-light: rgba(239,68,68,0.15);
+  --success-light: rgba(16,185,129,0.15);
+  --warning-light: rgba(245,158,11,0.15);
+  --info-light: rgba(59,130,246,0.15);
+}
+
+/* Smooth theme transition on all elements */
+*, *::before, *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode: topbar */
+[data-theme="dark"] .topbar {
+  background: #161b22 !important;
+  border-color: #30363d !important;
+}
+/* Dark mode: cards & modals */
+[data-theme="dark"] .card,
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .notif-dropdown {
+  background: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+[data-theme="dark"] .notif-header {
+  background: #0d1117 !important;
+  border-color: #30363d !important;
+}
+[data-theme="dark"] .notif-item:hover,
+[data-theme="dark"] .notif-view-all:hover {
+  background: #0d1117 !important;
+}
+[data-theme="dark"] .notif-item.unread {
+  background: rgba(34,197,94,0.07) !important;
+}
+[data-theme="dark"] .notif-view-all {
+  background: #161b22 !important;
+}
+/* Dark mode: form inputs */
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .input-group input {
+  background: #0d1117 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+[data-theme="dark"] .form-input::placeholder,
+[data-theme="dark"] .input-group input::placeholder {
+  color: #6e7681 !important;
+}
+/* Dark mode: tables */
+[data-theme="dark"] .market-table th {
+  border-color: #30363d !important;
+}
+[data-theme="dark"] .market-table td {
+  border-color: #21262d !important;
+}
+[data-theme="dark"] .market-table tr:hover td {
+  background: #21262d !important;
+}
+/* Dark mode: login page */
+[data-theme="dark"] .login-form-side {
+  background: #0d1117 !important;
+}
+[data-theme="dark"] .login-form-card {
+  background: #161b22 !important;
+  border-color: #30363d !important;
+}
+/* Dark mode: page content area */
+[data-theme="dark"] .page-content {
+  background: #0d1117;
+}
+/* Dark mode: welcome banner stays green */
+[data-theme="dark"] .welcome-banner {
+  background: linear-gradient(135deg, #145f38, #0a3d22) !important;
+}
+/* Dark mode: scheme / feature cards */
+[data-theme="dark"] .scheme-card,
+[data-theme="dark"] .announcement-card {
+  background: #161b22 !important;
+  border-color: #30363d !important;
+}
+
+
 /* ===== RESET ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 16px; scroll-behavior: smooth; }
@@ -1190,5 +1298,33 @@ input, textarea, select { font-family: inherit; outline: none; }
   /* ── Schemes Grid ── */
   .schemes-grid {
     grid-template-columns: 1fr !important;
+  }
+
+  /* ── Landing Page Hero (mobile) ── */
+  .hero-right-img {
+    display: none !important;
+  }
+  .landing-hero-section {
+    padding: 32px 16px !important;
+    gap: 20px !important;
+  }
+  .district-explorer-section {
+    padding: 36px 16px !important;
+  }
+  .district-pill-grid {
+    gap: 8px !important;
+  }
+  .features-section {
+    padding: 36px 16px !important;
+  }
+  .features-card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .testimonials-section {
+    padding: 36px 16px !important;
+  }
+  footer {
+    padding: 32px 16px 20px !important;
   }
 }

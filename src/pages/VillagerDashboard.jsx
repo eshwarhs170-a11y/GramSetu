@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import VillagerSidebar from '../components/VillagerSidebar'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import ThemeToggle from '../components/ThemeToggle'
 import { useLanguage } from '../context/LanguageContext'
 import {
   HomeScreen, SchemesScreen, MarketScreen, AnnouncementsScreen,
@@ -84,6 +85,7 @@ export default function VillagerDashboard() {
 
           <div className="topbar-right">
             <LanguageSwitcher variant="topbar-style" />
+            <ThemeToggle />
             <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
               <Search size={18} strokeWidth={2} />
             </button>

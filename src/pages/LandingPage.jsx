@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { districtData } from '../data/districtsData'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import ThemeToggle from '../components/ThemeToggle'
 import {
   ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink
 } from 'lucide-react'
@@ -10,7 +11,7 @@ import {
 // ── District Knowledge Base ──────────────────────────────────
 
 
-const districtList = Object.keys(districtData)
+const districtList = Object.keys(districtData).sort((a, b) => a.localeCompare(b))
 
 
 
@@ -69,6 +70,7 @@ export default function LandingPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <LanguageSwitcher variant="topbar-style" />
+          <ThemeToggle />
           <button
             onClick={() => navigate('/login/villager')}
             style={{
@@ -87,16 +89,16 @@ export default function LandingPage() {
 
       {/* ── HERO ── */}
       <section className="landing-hero-section" style={{
-        minHeight: '88vh', display: 'flex', alignItems: 'center', flexWrap: 'wrap',
+        display: 'flex', alignItems: 'center', flexWrap: 'wrap',
         background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0d4b2f 100%)',
-        position: 'relative', overflow: 'hidden', padding: '60px 48px', gap: 40
+        position: 'relative', overflow: 'hidden', padding: '40px 24px', gap: 32
       }}>
         {/* Decorative orbs */}
         <div style={{ position: 'absolute', top: -80, left: -80, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -100, right: -80, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(22,163,74,0.25) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Left content */}
-        <div style={{ flex: '1 1 300px', maxWidth: 580, position: 'relative', zIndex: 1 }}>
+        <div style={{ flex: '1 1 280px', maxWidth: 580, position: 'relative', zIndex: 1 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             background: 'rgba(22,163,74,0.15)', border: '1px solid rgba(22,163,74,0.3)',
@@ -106,7 +108,7 @@ export default function LandingPage() {
             <span style={{ color: '#86efac', fontSize: 13, fontWeight: 600 }}>{t('heroAvailable')}</span>
           </div>
 
-          <h2 style={{ fontSize: 52, fontWeight: 900, lineHeight: 1.12, color: '#fff', marginBottom: 20, letterSpacing: -1 }}>
+          <h2 style={{ fontSize: 'clamp(30px, 6vw, 52px)', fontWeight: 900, lineHeight: 1.12, color: '#fff', marginBottom: 16, letterSpacing: -1 }}>
             {t('heroTitle1')}{' '}
             <span style={{ background: 'linear-gradient(90deg, #4ade80, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               {t('heroTitle2')}
@@ -114,12 +116,12 @@ export default function LandingPage() {
             {t('heroTitle3')}
           </h2>
 
-          <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, marginBottom: 36, maxWidth: 460 }}>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, marginBottom: 24, maxWidth: 460 }}>
             {t('heroDesc')}
           </p>
 
           {/* Stats row */}
-          <div style={{ display: 'flex', gap: 32, marginBottom: 40, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 24, marginBottom: 28, flexWrap: 'wrap' }}>
             {[
               { val: t('stat1Val'), label: t('stat1Label') },
               { val: t('stat2Val'), label: t('stat2Label') },
@@ -185,7 +187,7 @@ export default function LandingPage() {
         </div>
 
         {/* Right image */}
-        <div className="hero-right-img" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', minHeight: 380 }}>
+        <div className="hero-right-img" style={{ flex: '1 1 300px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', minHeight: 300 }}>
           <div style={{
             position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)',
             width: 340, borderRadius: 20, overflow: 'hidden',
@@ -241,8 +243,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── DISTRICT EXPLORER ── */}
-      <section className="district-explorer-section" style={{ background: '#0f172a', padding: '64px 48px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+      <section className="district-explorer-section" style={{ background: '#0f172a', padding: '48px 24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <div style={{
             display: 'inline-block', background: 'rgba(22,163,74,0.12)', color: '#4ade80',
             borderRadius: 50, padding: '6px 18px', fontSize: 13, fontWeight: 700, marginBottom: 14,
@@ -251,7 +253,7 @@ export default function LandingPage() {
             <MapPin size={13} style={{ verticalAlign: 'middle', marginRight: 6 }} />
             District Explorer — Karnataka
           </div>
-          <h2 style={{ fontSize: 36, fontWeight: 900, color: '#fff', marginBottom: 12, letterSpacing: -0.5 }}>
+          <h2 style={{ fontSize: 'clamp(24px, 4vw, 34px)', fontWeight: 900, color: '#fff', marginBottom: 10, letterSpacing: -0.5 }}>
             Discover Your District
           </h2>
           <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', maxWidth: 480, margin: '0 auto' }}>
@@ -299,17 +301,17 @@ export default function LandingPage() {
       </section>
 
       {/* ── FEATURES ── */}
-      <section className="features-section" style={{ background: '#fff', padding: '80px 48px' }}>
-        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+      <section className="features-section" style={{ background: '#fff', padding: '52px 24px' }}>
+        <div style={{ textAlign: 'center', marginBottom: 36 }}>
           <div style={{
             display: 'inline-block', background: '#f0fdf4', color: '#16a34a',
             borderRadius: 50, padding: '6px 18px', fontSize: 13, fontWeight: 700, marginBottom: 14
           }}>Core Features</div>
-          <h2 style={{ fontSize: 38, fontWeight: 900, color: '#0f172a', marginBottom: 14, letterSpacing: -0.5 }}>{t('featTitle')}</h2>
+          <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 900, color: '#0f172a', marginBottom: 12, letterSpacing: -0.5 }}>{t('featTitle')}</h2>
           <p style={{ fontSize: 17, color: '#6b7280', maxWidth: 560, margin: '0 auto', lineHeight: 1.6 }}>{t('featSub')}</p>
         </div>
 
-        <div className="features-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: 28, maxWidth: 1200, margin: '0 auto' }}>
+        <div className="features-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: 20, maxWidth: 1200, margin: '0 auto' }}>
           {[
             {
               id: 'schemes',
@@ -371,7 +373,7 @@ export default function LandingPage() {
               onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)' }}
             >
               {/* Real image */}
-              <div style={{ height: 200, overflow: 'hidden', position: 'relative' }}>
+              <div style={{ height: 160, overflow: 'hidden', position: 'relative' }}>
                 <img src={f.img} alt={f.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
                   onMouseEnter={e => e.target.style.transform = 'scale(1.05)'}
                   onMouseLeave={e => e.target.style.transform = 'scale(1)'}
@@ -403,9 +405,9 @@ export default function LandingPage() {
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section className="testimonials-section" style={{ background: 'linear-gradient(135deg, #f0fdf4, #ecfdf5)', padding: '72px 48px', borderTop: '1px solid #d1fae5' }}>
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <h2 style={{ fontSize: 34, fontWeight: 900, color: '#0f172a', marginBottom: 10 }}>ರೈತರ ಮಾತು — What Farmers Say</h2>
+      <section className="testimonials-section" style={{ background: 'linear-gradient(135deg, #f0fdf4, #ecfdf5)', padding: '48px 24px', borderTop: '1px solid #d1fae5' }}>
+        <div style={{ textAlign: 'center', marginBottom: 28 }}>
+          <h2 style={{ fontSize: 'clamp(22px, 4vw, 32px)', fontWeight: 900, color: '#0f172a', marginBottom: 8 }}>ರೈತರ ಮಾತು — What Farmers Say</h2>
           <p style={{ fontSize: 15, color: '#6b7280' }}>Real stories from Karnataka's rural communities</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, maxWidth: 1000, margin: '0 auto' }}>
@@ -434,8 +436,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer style={{ background: '#0a0f1c', padding: '64px 48px 32px', color: '#fff' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 48, maxWidth: 1200, margin: '0 auto', marginBottom: 48 }}>
+      <footer style={{ background: '#0a0f1c', padding: '40px 24px 24px', color: '#fff' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 32, maxWidth: 1200, margin: '0 auto', marginBottom: 32 }}>
           
           {/* Brand Col */}
           <div>
