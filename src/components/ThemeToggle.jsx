@@ -10,36 +10,40 @@ export default function ThemeToggle({ style = {} }) {
       onClick={toggleTheme}
       title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       style={{
-        width: 38, height: 38,
-        borderRadius: 10,
-        border: 'none',
+        display: 'flex', alignItems: 'center', gap: 8,
+        padding: '6px 14px',
+        height: 38,
+        borderRadius: 20,
+        border: isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.15)',
         cursor: 'pointer',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: isDark
-          ? 'rgba(255,255,255,0.1)'
-          : 'rgba(0,0,0,0.06)',
-        transition: 'all 0.2s ease',
+        background: isDark ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.8)',
+        color: isDark ? '#f8fafc' : '#334155',
+        fontWeight: 600,
+        fontSize: 13,
+        transition: 'all 0.3s ease',
+        boxShadow: isDark ? 'inset 0 2px 4px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.05)',
         flexShrink: 0,
-        color: isDark ? '#fbbf24' : '#6366f1',
         ...style,
       }}
       onMouseEnter={e => {
-        e.currentTarget.style.background = isDark
-          ? 'rgba(255,255,255,0.18)'
-          : 'rgba(0,0,0,0.12)'
-        e.currentTarget.style.transform = 'scale(1.1) rotate(15deg)'
+        e.currentTarget.style.transform = 'scale(1.05)'
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.background = isDark
-          ? 'rgba(255,255,255,0.1)'
-          : 'rgba(0,0,0,0.06)'
-        e.currentTarget.style.transform = 'scale(1) rotate(0deg)'
+        e.currentTarget.style.transform = 'scale(1)'
       }}
     >
-      {isDark
-        ? <Sun size={18} strokeWidth={2} />
-        : <Moon size={18} strokeWidth={2} />
-      }
+      {isDark ? (
+        <>
+          <Moon size={16} color="#818cf8" />
+          <span>Dark</span>
+        </>
+      ) : (
+        <>
+          <Sun size={16} color="#f59e0b" />
+          <span>Light</span>
+        </>
+      )}
     </button>
   )
 }
+
