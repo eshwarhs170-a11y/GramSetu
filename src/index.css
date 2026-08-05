@@ -1300,6 +1300,24 @@ input, textarea, select { font-family: inherit; outline: none; }
     grid-template-columns: 1fr !important;
   }
 
+  /* ── Landing Page Nav (mobile) ── */
+  .landing-top-nav {
+    padding: 12px 10px !important;
+  }
+  .landing-nav-subtitle {
+    display: none !important;
+  }
+  .landing-nav-left {
+    gap: 6px !important;
+  }
+  .landing-nav-right {
+    gap: 6px !important;
+  }
+  .landing-nav-right button {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+  }
+
   /* ── Landing Page Hero (mobile) ── */
   .hero-right-img {
     display: none !important;
