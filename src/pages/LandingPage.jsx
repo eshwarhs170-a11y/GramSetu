@@ -49,16 +49,16 @@ export default function LandingPage() {
       </div>
 
       {/* ── NAV ── */}
-      <nav style={{
+      <nav className="landing-top-nav" style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '14px 16px', background: '#fff',
         borderBottom: '1px solid #e5e7eb',
         position: 'sticky', top: 0, zIndex: 100,
         boxShadow: '0 1px 12px rgba(0,0,0,0.06)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div className="landing-nav-left" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
-            width: 38, height: 38, borderRadius: 10,
+            width: 38, height: 38, borderRadius: 10, flexShrink: 0,
             background: 'linear-gradient(135deg, #16a34a, #15803d)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: '0 4px 12px rgba(22,163,74,0.3)'
@@ -66,11 +66,11 @@ export default function LandingPage() {
             <Wheat size={20} color="#fff" strokeWidth={2} />
           </div>
           <div>
-            <div style={{ fontWeight: 800, fontSize: 18, color: '#111827', lineHeight: 1.1 }}>{t('appName')}</div>
-            <div style={{ fontSize: 11, color: '#6b7280' }}>{t('appSubtitle')}</div>
+            <div className="landing-nav-title" style={{ fontWeight: 800, fontSize: 18, color: '#111827', lineHeight: 1.1 }}>{t('appName')}</div>
+            <div className="landing-nav-subtitle" style={{ fontSize: 11, color: '#6b7280' }}>{t('appSubtitle')}</div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className="landing-nav-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <LanguageSwitcher variant="topbar-style" />
           <ThemeToggle />
           <button
