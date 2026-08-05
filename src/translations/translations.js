@@ -102,7 +102,7 @@ const translations = {
 
     // ---- Dashboard subtitles ----
     dashTitle: 'Dashboard',
-    dashSub: 'Welcome back, Ramappa',
+    dashSub: 'Welcome back,',
     schemesTitle: 'Government Schemes',
     schemesSub: 'Karnataka state & central schemes with eligibility',
     marketTitle: 'APMC Market Prices',
@@ -310,7 +310,7 @@ const translations = {
     sNavSettings: 'ಸೆಟ್ಟಿಂಗ್ಸ್',
 
     dashTitle: 'ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
-    dashSub: 'ಸ್ವಾಗತ, ರಾಮಪ್ಪ',
+    dashSub: 'ಮರಳಿ ಸ್ವಾಗತ,',
     schemesTitle: 'ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು',
     schemesSub: 'ಕರ್ನಾಟಕ ರಾಜ್ಯ ಮತ್ತು ಕೇಂದ್ರ ಯೋಜನೆಗಳು',
     marketTitle: 'APMC ಮಾರುಕಟ್ಟೆ ಬೆಲೆ',
@@ -511,7 +511,7 @@ const translations = {
     sNavSettings: 'सेटिंग्स',
 
     dashTitle: 'डैशबोर्ड',
-    dashSub: 'स्वागत है, रामप्पा',
+    dashSub: 'वापसी पर स्वागत है,',
     schemesTitle: 'सरकारी योजनाएं',
     schemesSub: 'कर्नाटक राज्य और केंद्रीय योजनाएं',
     marketTitle: 'APMC बाजार भाव',
