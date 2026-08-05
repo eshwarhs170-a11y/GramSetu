@@ -1307,6 +1307,9 @@ input, textarea, select { font-family: inherit; outline: none; }
   .landing-nav-subtitle {
     display: none !important;
   }
+  .lang-label {
+    display: none !important;
+  }
   .landing-nav-left {
     gap: 6px !important;
   }

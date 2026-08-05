@@ -30,11 +30,12 @@ export default function ThemeToggle({ style = {} }) {
       }}
     >
       {isDark ? (
-        <Moon size={18} color="#818cf8" />
+        <Moon size={18} color="#f1f5f9" />
       ) : (
         <Sun size={18} color="#f59e0b" />
       )}
     </button>
   )
 }
+
 
