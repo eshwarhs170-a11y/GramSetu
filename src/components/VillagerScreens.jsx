@@ -347,9 +347,9 @@ export function HomeScreen() {
   const [roleMode, setRoleMode] = useState('farmer')
 
   const loadProfile = () => {
-    const sName = window.sessionStorage.getItem('citizen_name')
-    const sDist = window.sessionStorage.getItem('citizen_district')
-    const sTaluk = window.sessionStorage.getItem('citizen_taluk')
+    const sName = window.localStorage.getItem('citizen_name')
+    const sDist = window.localStorage.getItem('citizen_district')
+    const sTaluk = window.localStorage.getItem('citizen_taluk')
     if (sName) setUserName(sName)
     if (sDist) setUserDistrict(sDist)
     if (sTaluk) setUserTaluk(sTaluk)
@@ -775,7 +775,7 @@ export function SchemesScreen() {
 
             <div className="form-group" style={{ marginBottom: 12 }}>
               <label className="form-label">Full Name / ಪೂರ್ಣ ಹೆಸರು</label>
-              <input className="form-input" defaultValue={window.sessionStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ'} required />
+              <input className="form-input" defaultValue={window.localStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ'} required />
             </div>
 
             <div className="form-group" style={{ marginBottom: 12 }}>
@@ -1169,9 +1169,9 @@ export function ComplaintScreen() {
   const streamRef = React.useRef(null)
 
   useEffect(() => {
-    const sName = window.sessionStorage.getItem('citizen_name')
-    const sDist = window.sessionStorage.getItem('citizen_district')
-    const sTaluk = window.sessionStorage.getItem('citizen_taluk')
+    const sName = window.localStorage.getItem('citizen_name')
+    const sDist = window.localStorage.getItem('citizen_district')
+    const sTaluk = window.localStorage.getItem('citizen_taluk')
     if (sName) setUserName(sName)
     if (sDist) setUserDistrict(sDist)
     if (sTaluk) { setTaluk(sTaluk); setLocation(sTaluk.replace(' Taluk', '') + ' Village') }
@@ -1658,15 +1658,15 @@ export function ProfileScreen() {
   }
 
   useEffect(() => {
-    const sName = window.sessionStorage.getItem('citizen_name')
-    const sDist = window.sessionStorage.getItem('citizen_district')
-    const sTaluk = window.sessionStorage.getItem('citizen_taluk')
-    const sPhone = window.sessionStorage.getItem('citizen_phone')
-    const sAadhaar = window.sessionStorage.getItem('citizen_aadhaar')
-    const sLand = window.sessionStorage.getItem('citizen_land')
-    const sBank = window.sessionStorage.getItem('citizen_bank')
-    const sAccount = window.sessionStorage.getItem('citizen_account')
-    const sIfsc = window.sessionStorage.getItem('citizen_ifsc')
+    const sName = window.localStorage.getItem('citizen_name')
+    const sDist = window.localStorage.getItem('citizen_district')
+    const sTaluk = window.localStorage.getItem('citizen_taluk')
+    const sPhone = window.localStorage.getItem('citizen_phone')
+    const sAadhaar = window.localStorage.getItem('citizen_aadhaar')
+    const sLand = window.localStorage.getItem('citizen_land')
+    const sBank = window.localStorage.getItem('citizen_bank')
+    const sAccount = window.localStorage.getItem('citizen_account')
+    const sIfsc = window.localStorage.getItem('citizen_ifsc')
 
     if (sName) setUserName(sName)
     if (sDist) setUserDistrict(sDist)
@@ -1695,15 +1695,15 @@ export function ProfileScreen() {
   const handleSave = (e) => {
     e.preventDefault()
     
-    window.sessionStorage.setItem('citizen_name', editName)
-    window.sessionStorage.setItem('citizen_district', editDistrict)
-    window.sessionStorage.setItem('citizen_taluk', editTaluk)
-    window.sessionStorage.setItem('citizen_phone', editPhone)
-    window.sessionStorage.setItem('citizen_aadhaar', editAadhaar)
-    window.sessionStorage.setItem('citizen_land', editLand)
-    window.sessionStorage.setItem('citizen_bank', editBank)
-    window.sessionStorage.setItem('citizen_account', editAccount)
-    window.sessionStorage.setItem('citizen_ifsc', editIfsc)
+    window.localStorage.setItem('citizen_name', editName)
+    window.localStorage.setItem('citizen_district', editDistrict)
+    window.localStorage.setItem('citizen_taluk', editTaluk)
+    window.localStorage.setItem('citizen_phone', editPhone)
+    window.localStorage.setItem('citizen_aadhaar', editAadhaar)
+    window.localStorage.setItem('citizen_land', editLand)
+    window.localStorage.setItem('citizen_bank', editBank)
+    window.localStorage.setItem('citizen_account', editAccount)
+    window.localStorage.setItem('citizen_ifsc', editIfsc)
 
     setUserName(editName)
     setUserDistrict(editDistrict)

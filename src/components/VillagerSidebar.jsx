@@ -12,16 +12,16 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
   const { t } = useLanguage()
 
   // Reactive profile state — updates whenever user saves profile
-  const [storedName,     setStoredName]     = useState(window.sessionStorage.getItem('citizen_name')     || 'ರಾಮಪ್ಪ ಗೌಡ')
-  const [storedDistrict, setStoredDistrict] = useState(window.sessionStorage.getItem('citizen_district') || 'Mysuru')
-  const [storedTaluk,    setStoredTaluk]    = useState(window.sessionStorage.getItem('citizen_taluk')    || 'Mysuru Taluk')
+  const [storedName,     setStoredName]     = useState(window.localStorage.getItem('citizen_name')     || 'ರಾಮಪ್ಪ ಗೌಡ')
+  const [storedDistrict, setStoredDistrict] = useState(window.localStorage.getItem('citizen_district') || 'Mysuru')
+  const [storedTaluk,    setStoredTaluk]    = useState(window.localStorage.getItem('citizen_taluk')    || 'Mysuru Taluk')
 
   // Listen to the profileUpdate event dispatched by ProfileScreen on save
   useEffect(() => {
     const refresh = () => {
-      setStoredName(    window.sessionStorage.getItem('citizen_name')     || 'ರಾಮಪ್ಪ ಗೌಡ')
-      setStoredDistrict(window.sessionStorage.getItem('citizen_district') || 'Mysuru')
-      setStoredTaluk(   window.sessionStorage.getItem('citizen_taluk')    || 'Mysuru Taluk')
+      setStoredName(    window.localStorage.getItem('citizen_name')     || 'ರಾಮಪ್ಪ ಗೌಡ')
+      setStoredDistrict(window.localStorage.getItem('citizen_district') || 'Mysuru')
+      setStoredTaluk(   window.localStorage.getItem('citizen_taluk')    || 'Mysuru Taluk')
     }
     window.addEventListener('profileUpdate', refresh)
     return () => window.removeEventListener('profileUpdate', refresh)
