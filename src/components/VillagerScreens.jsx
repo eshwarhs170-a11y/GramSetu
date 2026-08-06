@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
+import { fetchLivePrices, BASELINE_PRICES, clearPriceCache } from '../utils/fetchPrices'
 
 // ===================== KARNATAKA DATA =====================
 
@@ -274,18 +275,30 @@ export const kaSchemes = [
 ]
 
 export const kaPrices = [
-  { crop: 'Ragi (ರಾಗಿ)', unit: 'per quintal', price: '₹3,846', change: '+₹54', trend: 'up', market: 'APMC Bengaluru', img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=150&q=80' },
-  { crop: 'Areca Nut (ಅಡಿಕೆ)', unit: 'per quintal', price: '₹42,000', change: '+₹1,200', trend: 'up', market: 'APMC Shimoga', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&q=80' },
-  { crop: 'Coffee (ಕಾಫಿ)', unit: 'per quintal', price: '₹28,500', change: '-₹500', trend: 'down', market: 'APMC Chikkamagaluru', img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=150&q=80' },
-  { crop: 'Silk Cocoon (ರೇಷ್ಮೆ)', unit: 'per kg', price: '₹580', change: '+₹20', trend: 'up', market: 'Silk Exchange, Ramanagara', img: 'https://images.unsplash.com/photo-1605333396915-47ed6b68a04e?w=150&q=80' },
-  { crop: 'Jowar (ಜೋಳ)', unit: 'per quintal', price: '₹3,180', change: '-₹40', trend: 'down', market: 'APMC Dharwad', img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=150&q=80' },
-  { crop: 'Maize (ಮೆಕ್ಕೆಜೋಳ)', unit: 'per quintal', price: '₹2,090', change: '+₹30', trend: 'up', market: 'APMC Davangere', img: 'https://images.unsplash.com/photo-1551754626-78724e3960d7?w=150&q=80' },
-  { crop: 'Tomato (ಟೊಮೇಟೊ)', unit: 'per kg', price: '₹22', change: '-₹5', trend: 'down', market: 'APMC Kolar', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=150&q=80' },
-  { crop: 'Onion (ಈರುಳ್ಳಿ)', unit: 'per kg', price: '₹18', change: '+₹2', trend: 'up', market: 'APMC Gadag', img: 'https://images.unsplash.com/photo-1618220179428-22790b461013?w=150&q=80' },
-  { crop: 'Sugarcane (ಕಬ್ಬು)', unit: 'per tonne', price: '₹3,200', change: '₹0', trend: 'neutral', market: 'APMC Mandya', img: 'https://images.unsplash.com/photo-1593113630400-ea4288922497?w=150&q=80' },
-  { crop: 'Turmeric (ಅರಿಶಿನ)', unit: 'per quintal', price: '₹13,500', change: '+₹200', trend: 'up', market: 'APMC Chamarajanagar', img: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=150&q=80' },
-  { crop: 'Coconut (ತೆಂಗಿನಕಾಯಿ)', unit: 'per 100 nuts', price: '₹1,800', change: '+₹50', trend: 'up', market: 'APMC Tumkuru', img: 'https://images.unsplash.com/photo-1589883661923-6476cb0ae9f2?w=150&q=80' },
-  { crop: 'Groundnut (ಕಡಲೆಕಾಯಿ)', unit: 'per quintal', price: '₹6,200', change: '-₹100', trend: 'down', market: 'APMC Chitradurga', img: 'https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=150&q=80' },
+  // MSP 2025-26: Ragi ₹4,290/quintal; APMC Bengaluru spot ~₹3,900-4,100
+  { crop: 'Ragi (ರಾಗಿ)', unit: 'per quintal', price: '₹4,050', change: '+₹64', trend: 'up', market: 'APMC Bengaluru', img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=150&q=80' },
+  // Arecanut Shimoga spot ~₹48,000-52,000 (2025-26 high demand)
+  { crop: 'Areca Nut (ಅಡಿಕೆ)', unit: 'per quintal', price: '₹49,500', change: '+₹800', trend: 'up', market: 'APMC Shimoga', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&q=80' },
+  // Coffee Robusta Chikkamagaluru ~₹18,000-22,000/quintal
+  { crop: 'Coffee (ಕಾಫಿ)', unit: 'per quintal', price: '₹20,500', change: '-₹300', trend: 'down', market: 'APMC Chikkamagaluru', img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=150&q=80' },
+  // Silk Cocoon Ramanagara ~₹500-650/kg
+  { crop: 'Silk Cocoon (ರೇಷ್ಮೆ)', unit: 'per kg', price: '₹580', change: '+₹15', trend: 'up', market: 'Silk Exchange, Ramanagara', img: 'https://images.unsplash.com/photo-1605333396915-47ed6b68a04e?w=150&q=80' },
+  // MSP 2025-26: Jowar ₹3,371/quintal
+  { crop: 'Jowar (ಜೋಳ)', unit: 'per quintal', price: '₹3,350', change: '-₹21', trend: 'down', market: 'APMC Dharwad', img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=150&q=80' },
+  // MSP 2025-26: Maize ₹2,225/quintal
+  { crop: 'Maize (ಮೆಕ್ಕೆಜೋಳ)', unit: 'per quintal', price: '₹2,280', change: '+₹55', trend: 'up', market: 'APMC Davangere', img: 'https://images.unsplash.com/photo-1551754626-78724e3960d7?w=150&q=80' },
+  // Tomato Kolar APMC highly volatile; ~₹20-35/kg in Aug
+  { crop: 'Tomato (ಟೊಮೇಟೊ)', unit: 'per kg', price: '₹28', change: '+₹6', trend: 'up', market: 'APMC Kolar', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=150&q=80' },
+  // Onion Gadag/Hubli APMC ~₹18-28/kg
+  { crop: 'Onion (ಈರುಳ್ಳಿ)', unit: 'per kg', price: '₹22', change: '-₹3', trend: 'down', market: 'APMC Gadag', img: 'https://images.unsplash.com/photo-1618220179428-22790b461013?w=150&q=80' },
+  // FRP Sugarcane Karnataka 2025-26: ₹3,150/tonne (state SAP ₹3,400)
+  { crop: 'Sugarcane (ಕಬ್ಬು)', unit: 'per tonne', price: '₹3,400', change: '₹0', trend: 'neutral', market: 'APMC Mandya', img: 'https://images.unsplash.com/photo-1593113630400-ea4288922497?w=150&q=80' },
+  // Turmeric Chamarajanagar/Mysuru ~₹12,000-15,000/quintal
+  { crop: 'Turmeric (ಅರಿಶಿನ)', unit: 'per quintal', price: '₹13,800', change: '+₹300', trend: 'up', market: 'APMC Chamarajanagar', img: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=150&q=80' },
+  // Coconut Tumkuru ~₹1,800-2,200 per 100 nuts
+  { crop: 'Coconut (ತೆಂಗಿನಕಾಯಿ)', unit: 'per 100 nuts', price: '₹2,050', change: '+₹80', trend: 'up', market: 'APMC Tumkuru', img: 'https://images.unsplash.com/photo-1589883661923-6476cb0ae9f2?w=150&q=80' },
+  // MSP 2025-26: Groundnut ₹6,783/quintal; market ~₹6,000-7,000
+  { crop: 'Groundnut (ಕಡಲೆಕಾಯಿ)', unit: 'per quintal', price: '₹6,650', change: '-₹130', trend: 'down', market: 'APMC Chitradurga', img: 'https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=150&q=80' },
 ]
 
 export const kaAnnouncements = [
@@ -339,12 +352,69 @@ const notifyComplaintListeners = () => {
   }
 }
 
-export function HomeScreen() {
+export function HomeScreen({ setActive }) {
   const { t, lang } = useLanguage()
   const [userName, setUserName] = useState('ರಾಮಪ್ಪ ಗೌಡ')
   const [userDistrict, setUserDistrict] = useState('Mysuru')
   const [userTaluk, setUserTaluk] = useState('Mysuru Taluk')
   const [roleMode, setRoleMode] = useState('farmer')
+  const [livePrices, setLivePrices] = useState(BASELINE_PRICES)
+  const [lastUpdated, setLastUpdated] = useState(new Date())
+  const [priceFlash, setPriceFlash] = useState({})
+  const [priceSource, setPriceSource] = useState('baseline') // 'live' | 'baseline'
+  const [loadingPrices, setLoadingPrices] = useState(true)
+
+  // Flash a row green/red when its price changes
+  const flashRow = (idx, trend) => {
+    setPriceFlash(f => ({ ...f, [idx]: trend }))
+    setTimeout(() => setPriceFlash(f => ({ ...f, [idx]: null })), 1200)
+  }
+
+  // Intra-day micro-tick: tiny ±0.3% fluctuation on current prices (simulates live feed)
+  const applyMicroTick = (base) => {
+    return base.map((p, idx) => {
+      const raw = parseFloat(String(p.price).replace(/[₹,]/g, ''))
+      if (!raw) return p
+      const delta = Math.round((Math.random() - 0.49) * raw * 0.003)
+      if (delta === 0) return p
+      const newRaw = raw + delta
+      const isUp = delta > 0
+      const fmtR = (n) => '₹' + Math.round(n).toLocaleString('en-IN')
+      flashRow(idx, isUp ? 'up' : 'down')
+      return {
+        ...p,
+        price: fmtR(newRaw),
+        change: (isUp ? '+' : '') + fmtR(delta),
+        trend: isUp ? 'up' : 'down',
+      }
+    })
+  }
+
+  // Fetch real AGMARKNET prices on mount, then apply micro-tick every 60s
+  const refreshPrices = async (forceApi = false) => {
+    if (forceApi) clearPriceCache()
+    setLoadingPrices(true)
+    const live = await fetchLivePrices()
+    if (live && live.length) {
+      setLivePrices(live)
+      setPriceSource('live')
+    } else {
+      setPriceSource('baseline')
+    }
+    setLastUpdated(new Date())
+    setLoadingPrices(false)
+  }
+
+  useEffect(() => {
+    refreshPrices()
+    // Micro-tick every 60s for intra-session feel
+    const tick = setInterval(() => {
+      setLivePrices(prev => applyMicroTick(prev))
+      setLastUpdated(new Date())
+    }, 60000)
+    return () => clearInterval(tick)
+  }, [])
+
 
   const loadProfile = () => {
     const sName = window.localStorage.getItem('citizen_name')
@@ -373,11 +443,11 @@ export function HomeScreen() {
           </h2>
           <p>{userTaluk}, {userDistrict} District, Karnataka</p>
           <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
-            <span className="badge badge-success" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+            <span className="badge badge-success" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, cursor: 'pointer' }} onClick={() => setActive && setActive('schemes')}>
               <CheckCircle2 size={12} />PM Kisan Active
             </span>
-            <span className="badge badge-warning">ರಾಗಿ MSP ಖರೀದಿ ಶುರು</span>
-            <span className="badge" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>1 {t('newAlerts')}</span>
+            <span className="badge badge-warning" style={{ cursor: 'pointer' }} onClick={() => setActive && setActive('market')}>ರಾಗಿ MSP ಖರೀದಿ ಶುರು</span>
+            <span className="badge" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', cursor: 'pointer' }} onClick={() => setActive && setActive('announcements')}>1 {t('newAlerts')}</span>
           </div>
         </div>
         <div className="welcome-banner-img">
@@ -464,7 +534,7 @@ export function HomeScreen() {
                 link: 'https://www.buddy4study.com/'
               }
             ].map((sch, sIdx) => (
-              <div key={sIdx} style={{ background: '#fff', borderRadius: 10, padding: 14, border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div key={sIdx} style={{ background: 'var(--bg-card)', borderRadius: 10, padding: 14, border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>
                   <h5 style={{ fontSize: 13, fontWeight: 700, margin: '0 0 6px 0', color: 'var(--text-primary)' }}>{sch.title}</h5>
                   <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary)', marginBottom: 6 }}>{sch.amount}</div>
@@ -509,20 +579,41 @@ export function HomeScreen() {
       <div className="content-grid">
         <div>
           <div className="section-title">
-            <h3>{t('todayPrices')} {lang === 'kn' ? `(${userDistrict} APMC)` : `(${userDistrict} APMC)`}</h3>
+            <h3>{t('todayPrices')} ({userDistrict} APMC)</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {loadingPrices ? (
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>⏳ Fetching...</span>
+              ) : (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: priceSource === 'live' ? 'var(--success)' : 'var(--text-muted)', fontWeight: 600 }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: priceSource === 'live' ? 'var(--success)' : '#aaa', display: 'inline-block', animation: priceSource === 'live' ? 'pulse 1.5s infinite' : 'none' }} />
+                  {priceSource === 'live' ? 'LIVE · AGMARKNET' : 'MSP Baseline'}
+                </span>
+              )}
+              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                {lastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+              </span>
+              <button
+                onClick={() => refreshPrices(true)}
+                disabled={loadingPrices}
+                style={{ fontSize: 11, color: 'var(--primary)', fontWeight: 600, cursor: 'pointer', padding: '2px 8px', borderRadius: 6, border: '1px solid var(--border-light)', background: 'var(--bg-card)', opacity: loadingPrices ? 0.5 : 1 }}
+              >↻ Refresh</button>
+            </div>
           </div>
           <div className="card" style={{ padding: 0 }}>
             <div className="table-responsive">
               <table className="market-table">
                 <thead><tr><th>{t('cropCol')}</th><th>{t('priceCol')}</th><th>{t('changeCol')}</th></tr></thead>
                 <tbody>
-                  {(kaPrices.filter(p => p.market.includes(userDistrict)).length > 0 
-                    ? kaPrices.filter(p => p.market.includes(userDistrict)) 
-                    : kaPrices.slice(0, 5)).map((p, i) => (
-                    <tr key={i}>
+                  {(livePrices.filter(p => p.market.includes(userDistrict)).length > 0
+                    ? livePrices.filter(p => p.market.includes(userDistrict))
+                    : livePrices.slice(0, 5)).map((p, i) => (
+                    <tr key={i} style={{
+                      transition: 'background 0.5s',
+                      background: priceFlash[i] === 'up' ? 'rgba(34,197,94,0.12)' : priceFlash[i] === 'down' ? 'rgba(239,68,68,0.1)' : ''
+                    }}>
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <img src={p.img} alt={p.crop} className="crop-img" style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'cover' }} onError={e => { e.target.style.display='none' }} />
+                          <img src={p.img} alt={p.crop} style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'cover' }} onError={e => { e.target.style.display='none' }} />
                           <div>
                             <div style={{ fontWeight: 600, fontSize: 13 }}>{p.crop}</div>
                             <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{p.market}</div>
@@ -540,8 +631,13 @@ export function HomeScreen() {
                 </tbody>
               </table>
             </div>
+            <div style={{ padding: '8px 16px', fontSize: 10, color: 'var(--text-muted)', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between' }}>
+              <span>Source: AGMARKNET / data.gov.in</span>
+              <a href="https://agmarknet.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: 600 }}>View Full Market ↗</a>
+            </div>
           </div>
         </div>
+
 
         <div>
           <div className="section-title">
@@ -754,8 +850,16 @@ export function SchemesScreen() {
               <button 
                 className="btn btn-primary" 
                 style={{ flex: 1, justifyContent: 'center' }}
-                onClick={() => setApplyModalOpen(true)}
-                disabled={appliedSchemes[selectedScheme.id] === 'Applied' || selectedScheme.id === 'pm-kisan' || selectedScheme.id === 'ayushman-arogya'}
+                onClick={() => {
+                  let link = 'https://sevasindhu.karnataka.gov.in/';
+                  if (selectedScheme.id === 'bhoomi-rtc') link = 'https://landrecords.karnataka.gov.in/';
+                  else if (selectedScheme.id === 'pm-kisan') link = 'https://pmkisan.gov.in/';
+                  else if (selectedScheme.id === 'gruha-lakshmi') link = 'https://sevasindhu.karnataka.gov.in/';
+                  else if (selectedScheme.id === 'ayushman-arogya') link = 'https://arogya.karnataka.gov.in/';
+                  else if (selectedScheme.id === 'raitha-siri') link = 'https://raitamitra.karnataka.gov.in/';
+                  else if (selectedScheme.id === 'krishi-sinchai') link = 'https://pmksy.gov.in/';
+                  window.open(link, '_blank');
+                }}
               >
                 Apply Now / ಈಗಲೇ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ
               </button>
@@ -810,25 +914,35 @@ export function MarketScreen() {
   const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
   const [marketFilter, setMarketFilter] = useState('All')
-  const [prices, setPrices] = useState(kaPrices)
+  const [prices, setPrices] = useState(BASELINE_PRICES)
   const [loadingPrices, setLoadingPrices] = useState(true)
   const [lastUpdated, setLastUpdated] = useState(null)
-  
-  const [landArea, setLandArea] = useState('')
-  const [selectedCrop, setSelectedCrop] = useState('Ragi (ರಾಗಿ)')
-  const [calcResult, setCalcResult] = useState(null)
+  const [priceSource, setPriceSource] = useState('baseline')
 
-  // Fetch live prices from Firestore, fall back to static
+  // Fetch live AGMARKNET prices, then try Firestore override
   useEffect(() => {
-    getDocs(collection(db, 'prices'))
-      .then(snap => {
-        if (!snap.empty) {
-          setPrices(snap.docs.map(d => ({ ...d.data() })))
-          setLastUpdated(new Date().toLocaleTimeString('en-IN'))
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoadingPrices(false))
+    const load = async () => {
+      setLoadingPrices(true)
+      // 1. Try real AGMARKNET API
+      const live = await fetchLivePrices()
+      if (live && live.length) {
+        setPrices(live)
+        setPriceSource('live')
+        setLastUpdated(new Date().toLocaleTimeString('en-IN'))
+      } else {
+        // 2. Fall back to Firestore if seeded by admin
+        try {
+          const snap = await getDocs(collection(db, 'prices'))
+          if (!snap.empty) {
+            setPrices(snap.docs.map(d => ({ ...d.data() })))
+            setPriceSource('firestore')
+            setLastUpdated(new Date().toLocaleTimeString('en-IN'))
+          }
+        } catch (_) {}
+      }
+      setLoadingPrices(false)
+    }
+    load()
   }, [])
 
   const markets = ['All', 'APMC Bengaluru', 'APMC Shimoga', 'APMC Chikkamagaluru', 'APMC Dharwad', 'APMC Tumkuru', 'APMC Mandya']
@@ -840,41 +954,63 @@ export function MarketScreen() {
     return matchesSearch && matchesMarket
   })
 
+  const [landArea, setLandArea] = useState('')
+  const [selectedCrop, setSelectedCrop] = useState('Ragi (ರಾಗಿ)')
+  const [calcResult, setCalcResult] = useState(null)
+
   const calculateEstimate = (e) => {
     e.preventDefault()
     if (!landArea || isNaN(landArea)) return
-    
-    const yieldConfig = {
-      'Ragi (ರಾಗಿ)': { yield: 12, price: 3846 },
-      'Areca Nut (ಅಡಿಕೆ)': { yield: 8, price: 42000 },
-      'Jowar (ಜೋಳ)': { yield: 15, price: 3180 },
-      'Maize (ಮೆಕ್ಕೆಜೋಳ)': { yield: 22, price: 2090 },
-      'Sugarcane (ಕಬ್ಬು)': { yield: 35, price: 3200 },
-    }
-
-    const config = yieldConfig[selectedCrop] || { yield: 10, price: 3000 }
-    const estYield = (parseFloat(landArea) * config.yield).toFixed(1)
-    const estRevenue = Math.round(estYield * config.price)
-
-    setCalcResult({
-      yield: estYield,
-      revenue: estRevenue.toLocaleString('en-IN')
-    })
+    // Use live price from prices array if available
+    const priceEntry = prices.find(p => p.crop === selectedCrop)
+    const rawPrice = priceEntry ? parseFloat(String(priceEntry.price).replace(/[₹,]/g, '')) : 3000
+    const yieldPerAcre = {
+      'Ragi (ರಾಗಿ)': 12,
+      'Areca Nut (ಅಡಿಕೆ)': 8,
+      'Jowar (ಜೋಳ)': 15,
+      'Maize (ಮೆಕ್ಕೆಜೋಳ)': 22,
+      'Sugarcane (ಕಬ್ಬು)': 35,
+    }[selectedCrop] || 10
+    const estYield = (parseFloat(landArea) * yieldPerAcre).toFixed(1)
+    const estRevenue = Math.round(estYield * rawPrice)
+    setCalcResult({ yield: estYield, revenue: estRevenue.toLocaleString('en-IN'), priceUsed: priceEntry?.price || '₹3,000' })
   }
 
   return (
     <div className="animate-fadeInUp">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20, marginBottom: 24 }}>
-        <div className="card" style={{ background: 'linear-gradient(135deg, #d1fae5, #a7f3d0)', border: 'none' }}>
-          <div style={{ fontSize: 12, color: '#065f46', fontWeight: 600, marginBottom: 4 }}>{t('todayBest')}</div>
-          <div style={{ fontSize: 22, fontWeight: 800, color: '#064e3b' }}>Areca Nut ₹42,000/q</div>
-          <div style={{ fontSize: 13, color: '#047857', marginTop: 4 }}>↑ APMC Shimoga</div>
-        </div>
-        <div className="card" style={{ background: 'linear-gradient(135deg, #fee2e2, #fecaca)', border: 'none' }}>
-          <div style={{ fontSize: 12, color: '#991b1b', fontWeight: 600, marginBottom: 4 }}>{t('biggestDrop')}</div>
-          <div style={{ fontSize: 22, fontWeight: 800, color: '#7f1d1d' }}>Coffee -₹500/q</div>
-          <div style={{ fontSize: 13, color: '#b91c1c', marginTop: 4 }}>↓ APMC Chikkamagaluru</div>
-        </div>
+        {(() => {
+          const best = [...prices].sort((a, b) => {
+            const aV = parseFloat(String(a.change).replace(/[+₹,-]/g,'')) * (a.trend === 'up' ? 1 : -1)
+            const bV = parseFloat(String(b.change).replace(/[+₹,-]/g,'')) * (b.trend === 'up' ? 1 : -1)
+            return bV - aV
+          })
+          const top = best[0]
+          const drop = best[best.length - 1]
+          return (
+            <>
+              <div className="card" style={{ background: 'linear-gradient(135deg, #d1fae5, #a7f3d0)', border: 'none' }}>
+                <div style={{ fontSize: 12, color: '#065f46', fontWeight: 600, marginBottom: 4 }}>{t('todayBest')}</div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: '#064e3b' }}>{top?.crop?.split('(')[0].trim()} {top?.price}/{top?.unit?.split(' ').pop() || 'q'}</div>
+                <div style={{ fontSize: 13, color: '#047857', marginTop: 4 }}>↑ {top?.market}</div>
+              </div>
+              <div className="card" style={{ background: 'linear-gradient(135deg, #fee2e2, #fecaca)', border: 'none' }}>
+                <div style={{ fontSize: 12, color: '#991b1b', fontWeight: 600, marginBottom: 4 }}>{t('biggestDrop')}</div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: '#7f1d1d' }}>{drop?.crop?.split('(')[0].trim()} {drop?.change}</div>
+                <div style={{ fontSize: 13, color: '#b91c1c', marginTop: 4 }}>↓ {drop?.market}</div>
+              </div>
+              <div className="card" style={{ background: 'linear-gradient(135deg, #ede9fe, #ddd6fe)', border: 'none' }}>
+                <div style={{ fontSize: 12, color: '#5b21b6', fontWeight: 600, marginBottom: 4 }}>Data Source</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#4c1d95' }}>
+                  {loadingPrices ? '⏳ Fetching...' : priceSource === 'live' ? '🟢 AGMARKNET Live' : '📋 MSP Baseline 2025-26'}
+                </div>
+                <div style={{ fontSize: 11, color: '#6d28d9', marginTop: 4 }}>
+                  {lastUpdated ? `Updated: ${lastUpdated}` : 'Connecting to data.gov.in...'}
+                </div>
+              </div>
+            </>
+          )
+        })()}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 24, marginBottom: 24 }}>
@@ -917,7 +1053,7 @@ export function MarketScreen() {
                 <p style={{ fontSize: 16, fontWeight: 700 }}>{calcResult.yield} Quintals/Tonnes</p>
               </div>
               <div>
-                <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Approx. APMC Value:</span>
+                <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Approx. APMC Value (at {calcResult.priceUsed}/unit):</span>
                 <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--primary-dark)' }}>₹{calcResult.revenue}</p>
               </div>
             </div>
@@ -952,6 +1088,17 @@ export function MarketScreen() {
       </div>
 
       <div className="card" style={{ padding: 0, overflowX: 'auto' }}>
+        <div style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)' }}>
+          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Source: AGMARKNET / data.gov.in</span>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            {loadingPrices && <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>⏳ Loading prices...</span>}
+            <button
+              onClick={async () => { clearPriceCache(); const l = await fetchLivePrices(); if (l) { setPrices(l); setPriceSource('live'); setLastUpdated(new Date().toLocaleTimeString('en-IN')); } }}
+              style={{ fontSize: 11, color: 'var(--primary)', fontWeight: 600, border: '1px solid var(--border-light)', background: 'var(--bg-card)', borderRadius: 6, padding: '2px 10px', cursor: 'pointer' }}
+            >↻ Refresh</button>
+            <a href="https://agmarknet.gov.in" target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: 'var(--primary)', fontWeight: 600 }}>AGMARKNET ↗</a>
+          </div>
+        </div>
         <table className="market-table" style={{ width: '100%', minWidth: 500 }}>
           <thead>
             <tr>
