@@ -72,6 +72,7 @@ export const districtData = {
       { icon: '☕', title: 'Coffee Estates', desc: 'The Sakleshpur and Alur taluks of Hassan are Karnataka\'s coffee country — shade-grown Arabica amid cardamom forests.' },
       { icon: '🌿', title: 'Areca Nut Orchards', desc: 'Hassan is among the top areca nut producing districts — Shivamogga and Hassan together dominate Karnataka\'s supply.' },
       { icon: '🏞️', title: 'Hemavathi Reservoir', desc: 'Built across the Hemavathi river — irrigates Mandya, Hassan and Tumkuru. Scenic backwaters for birding and fishing.' },
+      { icon: '🛕', title: 'Hasanamba Temple', desc: 'An ancient temple dedicated to Goddess Hasanamba, which opens only for a few days during the Deepavali festival.' }
     ]
   },
   Belagavi: {
@@ -218,7 +219,8 @@ export const districtData = {
       { icon: '🌳', title: 'Lalbagh Botanical Garden', desc: 'Historic 240-acre botanical garden housing India\'s largest collection of tropical plants.' },
       { icon: '🏛️', title: 'Vidhana Soudha', desc: 'The magnificent state legislature building, an architectural marvel.' },
       { icon: '🚀', title: 'ISRO Headquarters', desc: 'The nerve center of India\'s space research and exploration.' },
-      { icon: '☕', title: 'Filter Coffee & Darshinis', desc: 'Famous for its unique food culture, darshinis, and filter coffee.' }
+      { icon: '🛕', title: 'ISKCON Temple', desc: 'A magnificent shrine dedicated to Lord Krishna, known for its spiritual and cultural significance.' },
+      { icon: '🏰', title: 'Bengaluru Palace', desc: 'A majestic 19th-century palace built in Tudor Revival style architecture.' }
     ]
   },
   Bidar: {
