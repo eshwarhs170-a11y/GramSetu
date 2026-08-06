@@ -45,7 +45,7 @@
   --radius-full: 9999px;
 
   --sidebar-width: 260px;
-  --header-height: 64px;
+  --header-height: 76px;
 
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -151,9 +151,10 @@
 [data-theme="dark"] .welcome-banner {
   background: linear-gradient(135deg, #145f38, #0a3d22) !important;
 }
-/* Dark mode: scheme / feature cards */
+/* Dark mode: scheme / feature cards / stat cards */
 [data-theme="dark"] .scheme-card,
-[data-theme="dark"] .announcement-card {
+[data-theme="dark"] .announcement-card,
+[data-theme="dark"] .stat-card {
   background: #161b22 !important;
   border-color: #30363d !important;
 }
@@ -290,7 +291,7 @@ input, textarea, select { font-family: inherit; outline: none; }
   border-radius: var(--radius-md);
   font-size: 15px;
   color: var(--text-primary);
-  background: #fff;
+  background: var(--bg-card);
   transition: var(--transition);
 }
 .form-input:focus {
@@ -431,7 +432,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 /* ===== TOPBAR ===== */
 .topbar {
   height: var(--header-height);
-  background: #fff;
+  background: var(--bg-card);
   border-bottom: 1px solid var(--border-light);
   display: flex;
   align-items: center;
@@ -465,7 +466,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 /* ===== MODALS & DROPDOWNS ===== */
 .notif-dropdown {
   position: absolute; top: 50px; right: 0;
-  width: 320px; background: #fff; border-radius: var(--radius-lg);
+  width: 320px; background: var(--bg-card); border-radius: var(--radius-lg);
   box-shadow: 0 10px 40px rgba(0,0,0,0.15);
   border: 1px solid var(--border-light); z-index: 100;
   overflow: hidden;
@@ -490,7 +491,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 .notif-item p { margin: 0 0 4px 0; font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
 .notif-item span { font-size: 11px; color: var(--text-muted); }
 .notif-view-all {
-  width: 100%; padding: 12px; background: #fff; border: none;
+  width: 100%; padding: 12px; background: var(--bg-card); border: none;
   font-size: 13px; font-weight: 600; color: var(--primary);
   cursor: pointer; transition: background 0.2s; text-align: center;
 }
@@ -502,7 +503,7 @@ input, textarea, select { font-family: inherit; outline: none; }
   display: flex; align-items: flex-start; justify-content: center; padding-top: 10vh;
 }
 .modal-content {
-  background: #fff; border-radius: var(--radius-lg);
+  background: var(--bg-card); border-radius: var(--radius-lg);
   box-shadow: 0 20px 60px rgba(0,0,0,0.2); width: 100%;
 }
 .input-group {
@@ -662,7 +663,7 @@ input, textarea, select { font-family: inherit; outline: none; }
   max-width: 1280px; margin: 0 auto;
 }
 .feature-card {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -720,7 +721,7 @@ input, textarea, select { font-family: inherit; outline: none; }
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
   padding: 48px;
-  background: #fff;
+  background: var(--bg-card);
 }
 .login-form-card { width: 100%; max-width: 400px; }
 .login-form-header { margin-bottom: 32px; }
@@ -734,7 +735,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 /* ===== STATS GRID ===== */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 28px; }
 .stat-card {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 20px;
   display: flex; align-items: center; gap: 16px;
@@ -767,7 +768,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 
 /* ===== SCHEME CARD ===== */
 .scheme-card {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -802,7 +803,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 
 /* ===== ANNOUNCEMENT CARD ===== */
 .announcement-card {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -829,7 +830,7 @@ input, textarea, select { font-family: inherit; outline: none; }
   border: 2px solid var(--border);
   border-radius: var(--radius-md);
   font-size: 13px; font-weight: 600; color: var(--text-secondary);
-  background: #fff; transition: var(--transition); cursor: pointer; text-align: center;
+  background: var(--bg-card); transition: var(--transition); cursor: pointer; text-align: center;
 }
 .complaint-category-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
 .complaint-category-btn.selected { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
@@ -838,7 +839,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 
 /* ===== COMPLAINT STATUS ===== */
 .complaint-status-card {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 20px;
   border: 1px solid var(--border-light);
