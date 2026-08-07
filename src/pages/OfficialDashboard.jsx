@@ -9,7 +9,7 @@ import {
   TrendingUp, Clock, RefreshCw, CheckCircle, Bell, Search,
   Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2,
   MapPin, Phone, Home, ShieldCheck, Mail, Map, Building2, User,
-  Star, Tag, Calendar
+  Star, Tag, Calendar, Menu, X
 } from 'lucide-react'
 
 import { db } from '../firebase'
@@ -62,7 +62,7 @@ const getDistrictFarmers = (district) => {
 }
 
 // ===== Sidebar =====
-function OfficialSidebar({ active, setActive }) {
+function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen }) {
   const navigate = useNavigate()
   const { t } = useLanguage()
 
@@ -78,7 +78,7 @@ function OfficialSidebar({ active, setActive }) {
   ]
 
   return (
-    <div className="sidebar" style={{ background: '#0f172a' }}>
+    <div className={`sidebar ${sidebarOpen ? 'open' : ''}`} style={{ background: '#0f172a' }}>
       <div className="sidebar-logo">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div className="sidebar-logo-icon" style={{ background: '#3b82f6', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -89,6 +89,13 @@ function OfficialSidebar({ active, setActive }) {
             <p>ಅಧಿಕಾರಿ ಪೋರ್ಟಲ್</p>
           </div>
         </div>
+        <button
+          className="sidebar-close-btn"
+          onClick={() => setSidebarOpen(false)}
+          aria-label="Close Sidebar"
+        >
+          <X size={18} strokeWidth={2.5} />
+        </button>
       </div>
       <div className="sidebar-user">
         <div className="sidebar-user-avatar" style={{ background: '#3b82f6', fontSize: 13, fontWeight: 750 }}>
@@ -678,6 +685,7 @@ const pageMeta = {
 // ===== Main Dashboard =====
 export default function OfficialDashboard() {
   const [active, setActive] = useState('overview')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const { t } = useLanguage()
   const page = pageMeta[active] || pageMeta.overview
 
@@ -695,14 +703,36 @@ export default function OfficialDashboard() {
     }
   }
 
+  useEffect(() => {
+    if (sidebarOpen) document.body.style.overflow = 'hidden'
+    else document.body.style.overflow = ''
+    return () => { document.body.style.overflow = '' }
+  }, [sidebarOpen])
+
   return (
-    <div className="app-layout">
-      <OfficialSidebar active={active} setActive={setActive} />
+    <div className={`app-layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
+      <OfficialSidebar 
+        active={active} 
+        setActive={(id) => { setActive(id); setSidebarOpen(false); }} 
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
+      {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={() => setSidebarOpen(false)} />}
       <div className="main-content">
         <header className="topbar">
-          <div>
-            <div className="topbar-title">{t(page.titleKey) || page.titleKey}</div>
-            <div className="topbar-subtitle">{getSessionData().district} District, Karnataka — {getSessionData().department}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button
+              type="button"
+              className="hamburger-btn"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              aria-label="Toggle Sidebar"
+            >
+              <Menu size={22} strokeWidth={2} />
+            </button>
+            <div>
+              <div className="topbar-title">{t(page.titleKey) || page.titleKey}</div>
+              <div className="topbar-subtitle">{getSessionData().district} District, Karnataka — {getSessionData().department}</div>
+            </div>
           </div>
           <div className="topbar-right">
             <LanguageSwitcher variant="topbar-style" />
