@@ -2557,7 +2557,7 @@ export function TutorialsScreen() {
       color: '#0369a1',
       title: lang === 'kn' ? '\u0C9A\u0CC1\u0CA8\u0CBE\u0CB5\u0CA3\u0CBE \u0C86\u0CAF\u0CCB\u0C97\u0CA6 SIR \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD' : lang === 'hi' ? '\u091A\u0941\u0928\u093E\u0935 \u0906\u092F\u094B\u0917 SIR \u092B\u0949\u0930\u094D\u092E' : 'Election Commission SIR Form',
       desc: lang === 'kn' ? 'SIR (Voter) \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CA4\u0CC1\u0C82\u0CAC\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6' : lang === 'hi' ? 'SIR (Voter) \u092B\u0949\u0930\u094D\u092E \u0915\u0948\u0938\u0947 \u092D\u0930\u0947\u0902' : 'How to fill the Enumeration (SIR) form',
-      videoId: lang === 'kn' ? 'NBdvlI6z1Qw' : lang === 'hi' ? 'OMtQPtYFBfQ' : '517So_qusUE'
+      videoId: lang === 'kn' ? 'r17iw80YRog' : lang === 'hi' ? 'OMtQPtYFBfQ' : '517So_qusUE'
     },
     {
       id: 'market',
