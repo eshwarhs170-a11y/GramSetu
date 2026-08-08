@@ -2610,7 +2610,7 @@ export function TutorialsScreen() {
                 <iframe 
                   width="100%" 
                   height="100%" 
-                  src={\`https://www.youtube.com/embed/\${tut.videoId}?autoplay=1\`} 
+                  src={`https://www.youtube.com/embed/${tut.videoId}?autoplay=1`} 
                   title="YouTube video player" 
                   frameBorder="0" 
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -2619,7 +2619,7 @@ export function TutorialsScreen() {
                 />
               ) : (
                 <>
-                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: \`url(https://img.youtube.com/vi/\${tut.videoId}/maxresdefault.jpg)\`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.6 }} />
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `url(https://img.youtube.com/vi/${tut.videoId}/maxresdefault.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.6 }} />
                   <button 
                     onClick={() => setPlayingId(tut.id)}
                     style={{ position: 'relative', zIndex: 10, background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '50%', padding: 12, cursor: 'pointer', color: '#fff', transition: 'transform 0.2s' }}
