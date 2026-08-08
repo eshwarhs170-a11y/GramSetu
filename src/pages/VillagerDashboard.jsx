@@ -6,7 +6,7 @@ import { useLanguage } from '../context/LanguageContext'
 import {
   HomeScreen, SchemesScreen, MarketScreen, AnnouncementsScreen,
   ComplaintScreen, ComplaintStatusScreen, ProfileScreen,
-  WeatherScreen, EmergencySOSScreen, CropDoctorScreen, WaterTankScreen
+  WeatherScreen, EmergencySOSScreen, CropDoctorScreen, WaterTankScreen, TutorialsScreen
 } from '../components/VillagerScreens'
 import { Menu, Search, Bell, X, AlertTriangle, IndianRupee } from 'lucide-react'
 
@@ -35,6 +35,7 @@ export default function VillagerDashboard() {
     sos:           { titleKey: 'sosTitle',       subKey: 'sosSub' },
     cropdoctor:    { titleKey: 'cropDoctorTitle',subKey: 'cropDoctorSub' },
     watertank:     { titleKey: 'waterTankTitle', subKey: 'waterTankSub' },
+    tutorials:     { titleKey: 'tutorialTitle',  subKey: 'tutorialSub' },
   }
   const page = pageMeta[active] || pageMeta.home
 
@@ -51,6 +52,7 @@ export default function VillagerDashboard() {
       case 'sos':           return <EmergencySOSScreen />
       case 'cropdoctor':    return <CropDoctorScreen />
       case 'watertank':     return <WaterTankScreen />
+      case 'tutorials':     return <TutorialsScreen />
       default:              return <HomeScreen />
     }
   }
