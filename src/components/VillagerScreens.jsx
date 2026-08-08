@@ -6,7 +6,7 @@ import {
   Camera, Phone, Home, Map,
   Building2, Wheat, ArrowUp, ArrowDown, Minus,
   Bell, ShieldCheck, RefreshCw, Sparkles, CheckCircle2, Star,
-  Cloud, CloudRain, Sun, Thermometer, Wind, ShieldAlert, AlertTriangle, Stethoscope, Clock, CheckCircle, Info, PhoneCall, FileText, PlayCircle, Volume2
+  Cloud, CloudRain, Sun, Thermometer, Wind, ShieldAlert, AlertTriangle, Stethoscope, Clock, CheckCircle, Info, PhoneCall, FileText, PlayCircle, Volume2, Send, Bot, MessageCircle, AlertCircle
 } from 'lucide-react'
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
@@ -2536,6 +2536,10 @@ export function WaterTankScreen() {
 
 export function TutorialsScreen() {
   const { t, lang } = useLanguage()
+  const [activeQuestion, setActiveQuestion] = useState(null)
+  const [isTyping, setIsTyping] = useState(false)
+  const [chatHistory, setChatHistory] = useState({}) // { tutorialId: [ {role: 'user'|'ai', text: ''} ] }
+  const [inputVal, setInputVal] = useState('')
 
   // Real YouTube video IDs per language per topic
   const tutorials = [
@@ -2565,16 +2569,51 @@ export function TutorialsScreen() {
     }
   ]
 
+  const getAiResponse = (q) => {
+    if (lang === 'kn') return "\u0C87\u0CA6\u0CC1 \u0CB8\u0CC1\u0CB2\u0CAD! \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAC\u0CCD\u0CAF\u0CBE\u0C82\u0C95\u0CCD \u0C96\u0CBE\u0CA4\u0CC6\u0CAF\u0CA8\u0CCD\u0CA8\u0CC1 \u0C9C\u0CCB\u0CA1\u0CBF\u0CB8\u0CBF \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 QR \u0C95\u0CCB\u0CA1\u0CCD \u0CB8\u0CCD\u0C95\u0CCD\u0CAF\u0CBE\u0CA8\u0CCD \u0CAE\u0CBE\u0CA1\u0CBF \u0CAA\u0CBE\u0CB5\u0CA4\u0CBF\u0CB8\u0CBF. \u0CB5\u0CC0\u0CA1\u0CBF\u0CAF\u0CCB\u0CA6\u0CB2\u0CCD\u0CB2\u0CBF 2:15 \u0CA8\u0CBF\u0CAE\u0CBF\u0CB7\u0CA6\u0CB2\u0CCD\u0CB2\u0CBF \u0CB9\u0C82\u0CA4\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CCB\u0CA1\u0CBF."
+    if (lang === 'hi') return "\u092F\u0939 \u0906\u0938\u093E\u0928 \u0939\u0948! \u0905\u092A\u0928\u093E \u092C\u0948\u0902\u0915 \u0916\u093E\u0924\u093E \u091C\u094B\u0921\u093C\u0947\u0902 \u0914\u0930 \u092D\u0941\u0917\u0924\u093E\u0928 \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F QR \u0915\u094B\u0921 \u0938\u094D\u0915\u0948\u0928 \u0915\u0930\u0947\u0902\u0964 \u0935\u0940\u0921\u093F\u092F\u094B \u092E\u0947\u0902 2:15 \u092E\u093F\u0928\u091F \u092A\u0930 \u0926\u0947\u0916\u0947\u0902\u0964"
+    return "It's easy! Just link your bank account and scan the QR code to pay. Check the video at 2:15 for exact steps."
+  }
+
+  const handleSend = (tutId) => {
+    if (!inputVal.trim()) return
+    const newChat = { role: 'user', text: inputVal }
+    setChatHistory(prev => ({
+      ...prev,
+      [tutId]: [...(prev[tutId] || []), newChat]
+    }))
+    setInputVal('')
+    setIsTyping(true)
+    
+    setTimeout(() => {
+      const aiReply = { role: 'ai', text: getAiResponse(inputVal) }
+      setChatHistory(prev => ({
+        ...prev,
+        [tutId]: [...(prev[tutId] || []), aiReply]
+      }))
+      setIsTyping(false)
+    }, 1500)
+  }
+
   return (
     <div className="animate-fadeInUp">
       <div style={{ marginBottom: 20 }}>
         <h2 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 8px 0' }}>{t('tutorialTitle')}</h2>
         <p style={{ color: 'var(--text-secondary)', fontSize: 14, margin: 0 }}>{t('tutorialSub')}</p>
+        
+        {/* Helper Note for the blocked issue */}
+        <div style={{ background: '#fef3c7', color: '#b45309', padding: '12px', borderRadius: 8, marginTop: 12, fontSize: 13, border: '1px solid #fde68a', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+          <AlertCircle size={16} style={{ marginTop: 2, flexShrink: 0 }} />
+          <span>If videos say "Content is blocked", please <b>restart your development server</b> in the terminal (press Ctrl+C, then run <code>npm run dev</code>). The security policy needs a restart to apply.</span>
+        </div>
       </div>
 
       <div style={{ display: 'grid', gap: 20 }}>
         {tutorials.map(tut => {
           const Icon = tut.icon
+          const isActive = activeQuestion === tut.id
+          const history = chatHistory[tut.id] || []
+          
           return (
           <div key={tut.id + lang} className="card" style={{ padding: 0, overflow: 'hidden' }}>
             {/* Header */}
@@ -2582,14 +2621,14 @@ export function TutorialsScreen() {
               <div style={{ background: tut.color, color: '#fff', padding: 10, borderRadius: '50%' }}>
                 <Icon size={20} />
               </div>
-              <div>
+              <div style={{ flex: 1 }}>
                 <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>{tut.title}</h3>
                 <p style={{ margin: '2px 0 0 0', fontSize: 12, color: 'var(--text-muted)' }}>{tut.desc}</p>
               </div>
             </div>
 
             {/* YouTube Embed */}
-            <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+            <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', background: '#000' }}>
               <iframe
                 key={tut.videoId}
                 src={`https://www.youtube.com/embed/${tut.videoId}?rel=0`}
@@ -2599,6 +2638,72 @@ export function TutorialsScreen() {
                 allowFullScreen
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
               />
+            </div>
+            
+            {/* AI Doubt Solver Section */}
+            <div style={{ padding: '16px 20px', borderTop: '1px solid var(--border-light)', background: '#f8fafc' }}>
+              {!isActive && history.length === 0 ? (
+                <button 
+                  onClick={() => setActiveQuestion(tut.id)}
+                  style={{ width: '100%', background: '#fff', border: '1px solid #cbd5e1', padding: '12px', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, color: '#475569', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+                >
+                  <MessageCircle size={16} />
+                  {lang === 'kn' ? '\u0C88 \u0CB5\u0CC0\u0CA1\u0CBF\u0CAF\u0CCB \u0CAC\u0C97\u0CCD\u0C97\u0CC6 \u0CAA\u0CCD\u0CB0\u0CB6\u0CCD\u0CA8\u0CC6\u0C97\u0CB3\u0CBF\u0CB5\u0CC6\u0CAF\u0CC7? AI \u0C95\u0CC7\u0CB3\u0CBF' : lang === 'hi' ? '\u0907\u0938 \u0935\u0940\u0921\u093F\u092F\u094B \u0915\u0947 \u092C\u093E\u0930\u0947 \u092E\u0947\u0902 \u0915\u094B\u0908 \u0938\u0935\u093E\u0932? AI \u0938\u0947 \u092A\u0942\u091B\u0947\u0902' : 'Have a doubt about this video? Ask AI'}
+                </button>
+              ) : (
+                <div className="animate-fadeInUp" style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, color: tut.color, fontWeight: 700, fontSize: 13 }}>
+                    <Bot size={18} />
+                    <span>{lang === 'kn' ? 'AI \u0CB8\u0CB9\u0CBE\u0CAF\u0C95' : lang === 'hi' ? 'AI \u0938\u0939\u093E\u092F\u0915' : 'AI Assistant'}</span>
+                  </div>
+                  
+                  {/* Chat History */}
+                  <div style={{ maxHeight: 200, overflowY: 'auto', marginBottom: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {history.length === 0 && (
+                      <div style={{ fontSize: 13, color: '#64748b', textAlign: 'center', padding: '10px' }}>
+                        {lang === 'kn' ? '\u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAA\u0CCD\u0CB0\u0CB6\u0CCD\u0CA8\u0CC6\u0CAF\u0CA8\u0CCD\u0CA8\u0CC1 \u0C95\u0CC6\u0CB3\u0C97\u0CC6 \u0C9F\u0CC8\u0CAA\u0CCD \u0CAE\u0CBE\u0CA1\u0CBF...' : lang === 'hi' ? '\u0905\u092A\u0928\u093E \u0938\u0935\u093E\u0932 \u0928\u0940\u091A\u0947 \u091F\u093E\u0907\u092A \u0915\u0930\u0947\u0902...' : 'Type your question below...'}
+                      </div>
+                    )}
+                    {history.map((msg, i) => (
+                      <div key={i} style={{ 
+                        alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                        background: msg.role === 'user' ? tut.color : '#f1f5f9',
+                        color: msg.role === 'user' ? '#fff' : '#334155',
+                        padding: '8px 12px',
+                        borderRadius: msg.role === 'user' ? '12px 12px 0 12px' : '12px 12px 12px 0',
+                        fontSize: 13,
+                        maxWidth: '85%'
+                      }}>
+                        {msg.text}
+                      </div>
+                    ))}
+                    {isTyping && (
+                      <div style={{ alignSelf: 'flex-start', background: '#f1f5f9', padding: '8px 12px', borderRadius: '12px 12px 12px 0', fontSize: 13, color: '#64748b', fontStyle: 'italic' }}>
+                        Typing...
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Input Field */}
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <input 
+                      type="text" 
+                      value={inputVal}
+                      onChange={e => setInputVal(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleSend(tut.id)}
+                      placeholder={lang === 'kn' ? '\u0C8E\u0CB2\u0CCD\u0CB2\u0CBF \u0C95\u0CCD\u0CB2\u0CBF\u0C95\u0CCD \u0CAE\u0CBE\u0CA1\u0CAC\u0CC7\u0C95\u0CC1?' : lang === 'hi' ? '\u0915\u0939\u093E\u0901 \u0915\u094D\u0932\u093F\u0915 \u0915\u0930\u0928\u093E \u0939\u0948?' : 'Where should I click?'}
+                      style={{ flex: 1, padding: '10px 12px', borderRadius: 8, border: '1px solid #cbd5e1', outline: 'none', fontSize: 13 }}
+                    />
+                    <button 
+                      onClick={() => handleSend(tut.id)}
+                      disabled={isTyping}
+                      style={{ background: tut.color, color: '#fff', border: 'none', borderRadius: 8, padding: '0 16px', cursor: isTyping ? 'not-allowed' : 'pointer', opacity: isTyping ? 0.7 : 1 }}
+                    >
+                      <Send size={16} />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           )
