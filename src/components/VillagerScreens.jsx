@@ -2537,62 +2537,98 @@ export function WaterTankScreen() {
 export function TutorialsScreen() {
   const { t, lang } = useLanguage()
   const [playingId, setPlayingId] = useState(null)
-  
+  const [speaking, setSpeaking] = useState(null)
+
+  // Load voices on mount (some browsers load them asynchronously)
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices()
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices()
+    }
+    return () => {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel()
+    }
+  }, [])
+
   const tutorials = [
     {
       id: 'upi',
-      title: lang === 'kn' ? 'ಫೋನ್‌ಪೇ / ಗೂಗಲ್ ಪೇ ಬಳಸುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'फोनपे / गूगल पे का उपयोग कैसे करें?' : 'How to use PhonePe / Google Pay?',
-      desc: lang === 'kn' ? 'ಸುರಕ್ಷಿತವಾಗಿ ಹಣ ಕಳುಹಿಸಲು ಮತ್ತು ಸ್ವೀಕರಿಸಲು ಹಂತ-ಹಂತದ ಮಾರ್ಗದರ್ಶಿ.' : lang === 'hi' ? 'सुरक्षित रूप से पैसे भेजने और प्राप्त करने के लिए चरण-दर-चरण मार्गदर्शिका।' : 'Step-by-step guide to send and receive money securely.',
-      videoId: '2283Xp12XpQ', // Example random video ID, usually these are 11 chars
-      voiceText: lang === 'kn' ? 'ಫೋನ್‌ಪೇ ಬಳಸಲು ಮೊದಲು ಆಪ್ ತೆರೆಯಿರಿ. ನಂತರ ಟು ಮೊಬೈಲ್ ನಂಬರ್ ಆಯ್ಕೆ ಮಾಡಿ, ನೀವು ಹಣ ಕಳುಹಿಸಬೇಕಾದವರ ನಂಬರ್ ಟೈಪ್ ಮಾಡಿ. ಮೊತ್ತವನ್ನು ನಮೂದಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಯುಪಿಐ ಪಿನ್ ಹಾಕಿ.' 
-                 : lang === 'hi' ? 'फोनपे का उपयोग करने के लिए सबसे पहले ऐप खोलें। फिर टू मोबाइल नंबर चुनें, जिसे पैसे भेजने हैं उसका नंबर टाइप करें। राशि दर्ज करें और अपना यूपीआई पिन डालें।'
-                 : 'To use PhonePe, first open the app. Select "To Mobile Number", type the number of the person you want to send money to. Enter the amount and your UPI PIN.'
+      icon: IndianRupee,
+      color: '#7c3aed',
+      title: lang === 'kn' ? '\u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 / \u0C97\u0CC2\u0C97\u0CB2\u0CCD \u0CAA\u0CC7 \u0CAC\u0CB3\u0CB8\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6?' : lang === 'hi' ? '\u092B\u094B\u0928\u092A\u0947 / \u0917\u0942\u0917\u0932 \u092A\u0947 \u0915\u093E \u0909\u092A\u092F\u094B\u0917 \u0915\u0948\u0938\u0947 \u0915\u0930\u0947\u0902?' : 'How to use PhonePe / Google Pay?',
+      desc: lang === 'kn' ? '\u0CB8\u0CC1\u0CB0\u0C95\u0CCD\u0CB7\u0CBF\u0CA4\u0CB5\u0CBE\u0C97\u0CBF \u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CB2\u0CC1 \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CB8\u0CCD\u0CB5\u0CC0\u0C95\u0CB0\u0CBF\u0CB8\u0CB2\u0CC1 \u0CB9\u0C82\u0CA4-\u0CB9\u0C82\u0CA4\u0CA6 \u0CAE\u0CBE\u0CB0\u0CCD\u0C97\u0CA6\u0CB0\u0CCD\u0CB6\u0CBF.' : lang === 'hi' ? '\u0938\u0941\u0930\u0915\u094D\u0937\u093F\u0924 \u0930\u0942\u092A \u0938\u0947 \u092A\u0948\u0938\u0947 \u092D\u0947\u091C\u0928\u0947 \u0914\u0930 \u092A\u094D\u0930\u093E\u092A\u094D\u0924 \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \u091A\u0930\u0923-\u0926\u0930-\u091A\u0930\u0923 \u092E\u093E\u0930\u094D\u0917\u0926\u0930\u094D\u0936\u093F\u0915\u093E\u0964' : 'Step-by-step guide to send and receive money securely.',
+      steps: lang === 'kn' 
+        ? ['1. \u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 \u0C86\u0CAA\u0CCD \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF', '2. \u0C9F\u0CC1 \u0CAE\u0CCA\u0CAC\u0CC8\u0CB2\u0CCD \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0C86\u0CAF\u0CCD\u0C95\u0CC6 \u0CAE\u0CBE\u0CA1\u0CBF', '3. \u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CAC\u0CC7\u0C95\u0CBE\u0CA6\u0CB5\u0CB0 \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0C9F\u0CC8\u0CAA\u0CCD \u0CAE\u0CBE\u0CA1\u0CBF', '4. \u0CAE\u0CCA\u0CA4\u0CCD\u0CA4\u0CB5\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CAE\u0CC2\u0CA6\u0CBF\u0CB8\u0CBF', '5. \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE UPI PIN \u0CB9\u0CBE\u0C95\u0CBF']
+        : lang === 'hi'
+        ? ['1. \u092B\u094B\u0928\u092A\u0947 \u0910\u092A \u0916\u094B\u0932\u0947\u0902', '2. \u091F\u0942 \u092E\u094B\u092C\u093E\u0907\u0932 \u0928\u0902\u092C\u0930 \u091A\u0941\u0928\u0947\u0902', '3. \u091C\u093F\u0938\u0947 \u092A\u0948\u0938\u0947 \u092D\u0947\u091C\u0928\u0947 \u0939\u0948\u0902 \u0909\u0928\u0915\u093E \u0928\u0902\u092C\u0930 \u0921\u093E\u0932\u0947\u0902', '4. \u0930\u093E\u0936\u093F \u0926\u0930\u094D\u091C \u0915\u0930\u0947\u0902', '5. \u0905\u092A\u0928\u093E UPI PIN \u0921\u093E\u0932\u0947\u0902']
+        : ['1. Open the PhonePe app', '2. Select "To Mobile Number"', '3. Type their phone number', '4. Enter the amount', '5. Enter your UPI PIN and confirm'],
+      voiceText: lang === 'kn' ? '\u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 \u0CAC\u0CB3\u0CB8\u0CB2\u0CC1 \u0CAE\u0CCA\u0CA6\u0CB2\u0CC1 \u0C86\u0CAA\u0CCD \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF. \u0CA8\u0C82\u0CA4\u0CB0 \u0C9F\u0CC1 \u0CAE\u0CCA\u0CAC\u0CC8\u0CB2\u0CCD \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0C86\u0CAF\u0CCD\u0C95\u0CC6 \u0CAE\u0CBE\u0CA1\u0CBF, \u0CA8\u0CC0\u0CB5\u0CC1 \u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CAC\u0CC7\u0C95\u0CBE\u0CA6\u0CB5\u0CB0 \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0C9F\u0CC8\u0CAA\u0CCD \u0CAE\u0CBE\u0CA1\u0CBF. \u0CAE\u0CCA\u0CA4\u0CCD\u0CA4\u0CB5\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CAE\u0CC2\u0CA6\u0CBF\u0CB8\u0CBF \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAF\u0CC1\u0CAA\u0CBF\u0C90 \u0CAA\u0CBF\u0CA8\u0CCD \u0CB9\u0CBE\u0C95\u0CBF.'
+                 : lang === 'hi' ? '\u092B\u094B\u0928\u092A\u0947 \u0915\u093E \u0909\u092A\u092F\u094B\u0917 \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \u0938\u092C\u0938\u0947 \u092A\u0939\u0932\u0947 \u0910\u092A \u0916\u094B\u0932\u0947\u0902\u0964 \u092B\u093F\u0930 \u091F\u0942 \u092E\u094B\u092C\u093E\u0907\u0932 \u0928\u0902\u092C\u0930 \u091A\u0941\u0928\u0947\u0902, \u091C\u093F\u0938\u0947 \u092A\u0948\u0938\u0947 \u092D\u0947\u091C\u0928\u0947 \u0939\u0948\u0902 \u0909\u0938\u0915\u093E \u0928\u0902\u092C\u0930 \u091F\u093E\u0907\u092A \u0915\u0930\u0947\u0902\u0964 \u0930\u093E\u0936\u093F \u0926\u0930\u094D\u091C \u0915\u0930\u0947\u0902 \u0914\u0930 \u0905\u092A\u0928\u093E \u092F\u0942\u092A\u0940\u0906\u0908 \u092A\u093F\u0928 \u0921\u093E\u0932\u0947\u0902\u0964'
+                 : 'To use PhonePe, first open the app. Select To Mobile Number, type the number of the person you want to send money to. Enter the amount and your UPI PIN.'
     },
     {
       id: 'sir',
-      title: lang === 'kn' ? 'ಬೆಳೆ ವಿಮೆ (SIR) ಫಾರ್ಮ್ ಭರ್ತಿ ಮಾಡುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'फसल बीमा (SIR) फॉर्म कैसे भरें?' : 'How to fill Crop Insurance (SIR) Form?',
-      desc: lang === 'kn' ? 'ನಿಮ್ಮ ಬೆಳೆ ವಿಮೆ ಕ್ಲೇಮ್ ಮಾಡಲು ಅರ್ಜಿ ಸಲ್ಲಿಸುವ ವಿಧಾನ.' : lang === 'hi' ? 'अपने फसल बीमा का दावा करने के लिए आवेदन कैसे करें।' : 'How to apply for your crop insurance claim.',
-      videoId: 'dQw4w9WgXcQ', // Example
-      voiceText: lang === 'kn' ? 'ಬೆಳೆ ವಿಮೆ ಫಾರ್ಮ್ ತುಂಬಲು, ನಿಮ್ಮ ಆರ್ ಟಿ ಸಿ , ಆಧಾರ್ ಕಾರ್ಡ್ ಮತ್ತು ಬ್ಯಾಂಕ್ ಪಾಸ್ ಬುಕ್ ನಕಲು ಬೇಕು. ನಿಮ್ಮ ಹತ್ತಿರದ ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರ ಅಥವಾ ಆನ್ಲೈನ್ ಪೋರ್ಟಲ್ ಮೂಲಕ ಇದನ್ನು ಸಲ್ಲಿಸಬಹುದು.'
-                 : lang === 'hi' ? 'फसल बीमा फॉर्म भरने के लिए, आपको अपना आरटीसी, आधार कार्ड और बैंक पासबुक की कॉपी चाहिए। इसे आप नजदीकी रायता संपर्क केंद्र या ऑनलाइन पोर्टल के माध्यम से जमा कर सकते हैं।'
+      icon: FileText,
+      color: '#0369a1',
+      title: lang === 'kn' ? '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 (SIR) \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CAD\u0CB0\u0CCD\u0CA4\u0CBF \u0CAE\u0CBE\u0CA1\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6?' : lang === 'hi' ? '\u092B\u0938\u0932 \u092C\u0940\u092E\u093E (SIR) \u092B\u0949\u0930\u094D\u092E \u0915\u0948\u0938\u0947 \u092D\u0930\u0947\u0902?' : 'How to fill Crop Insurance (SIR) Form?',
+      desc: lang === 'kn' ? '\u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 \u0C95\u0CCD\u0CB2\u0CC7\u0CAE\u0CCD \u0CAE\u0CBE\u0CA1\u0CB2\u0CC1 \u0C85\u0CB0\u0CCD\u0C9C\u0CBF \u0CB8\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CC1\u0CB5 \u0CB5\u0CBF\u0CA7\u0CBE\u0CA8.' : lang === 'hi' ? '\u0905\u092A\u0928\u0947 \u092B\u0938\u0932 \u092C\u0940\u092E\u093E \u0915\u093E \u0926\u093E\u0935\u093E \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \u0906\u0935\u0947\u0926\u0928 \u0915\u0948\u0938\u0947 \u0915\u0930\u0947\u0902\u0964' : 'How to apply for your crop insurance claim.',
+      steps: lang === 'kn'
+        ? ['1. RTC, \u0C86\u0CA7\u0CBE\u0CB0\u0CCD, \u0CAC\u0CCD\u0CAF\u0CBE\u0C82\u0C95\u0CCD \u0CAA\u0CBE\u0CB8\u0CCD\u0CAC\u0CC1\u0C95\u0CCD \u0CB0\u0CC6\u0CA1\u0CBF \u0C87\u0CA1\u0CBF', '2. \u0CB0\u0CC8\u0CA4 \u0CB8\u0C82\u0CAA\u0CB0\u0CCD\u0C95 \u0C95\u0CC7\u0C82\u0CA6\u0CCD\u0CB0\u0C95\u0CCD\u0C95\u0CC6 \u0CB9\u0CCB\u0C97\u0CBF', '3. SIR \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CA4\u0CC1\u0C82\u0CAC\u0CBF', '4. \u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CB5\u0CB0 \u0CA8\u0CAE\u0CC2\u0CA6\u0CBF\u0CB8\u0CBF', '5. \u0CB0\u0CB8\u0CC0\u0CA6\u0CBF \u0CAA\u0CA1\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF']
+        : lang === 'hi'
+        ? ['1. RTC, \u0906\u0927\u093E\u0930, \u092C\u0948\u0902\u0915 \u092A\u093E\u0938\u092C\u0941\u0915 \u0924\u0948\u092F\u093E\u0930 \u0930\u0916\u0947\u0902', '2. \u0928\u091C\u0926\u0940\u0915\u0940 \u0930\u093E\u092F\u0924\u093E \u0938\u0902\u092A\u0930\u094D\u0915 \u0915\u0947\u0902\u0926\u094D\u0930 \u091C\u093E\u090F\u0902', '3. SIR \u092B\u0949\u0930\u094D\u092E \u092D\u0930\u0947\u0902', '4. \u092B\u0938\u0932 \u0935\u093F\u0935\u0930\u0923 \u0926\u0930\u094D\u091C \u0915\u0930\u0947\u0902', '5. \u0930\u0938\u0940\u0926 \u0932\u0947\u0902']
+        : ['1. Keep your RTC, Aadhaar, and Bank Passbook ready', '2. Visit the nearest Raitha Samparka Kendra', '3. Fill the SIR Form', '4. Enter your crop details', '5. Collect your receipt'],
+      voiceText: lang === 'kn' ? '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CA4\u0CC1\u0C82\u0CAC\u0CB2\u0CC1, \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0C86\u0CB0\u0CCD \u0C9F\u0CBF \u0CB8\u0CBF , \u0C86\u0CA7\u0CBE\u0CB0\u0CCD \u0C95\u0CBE\u0CB0\u0CCD\u0CA1\u0CCD \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CAC\u0CCD\u0CAF\u0CBE\u0C82\u0C95\u0CCD \u0CAA\u0CBE\u0CB8\u0CCD \u0CAC\u0CC1\u0C95\u0CCD \u0CA8\u0C95\u0CB2\u0CC1 \u0CAC\u0CC7\u0C95\u0CC1. \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CB9\u0CA4\u0CCD\u0CA4\u0CBF\u0CB0\u0CA6 \u0CB0\u0CC8\u0CA4 \u0CB8\u0C82\u0CAA\u0CB0\u0CCD\u0C95 \u0C95\u0CC7\u0C82\u0CA6\u0CCD\u0CB0 \u0C85\u0CA5\u0CB5\u0CBE \u0C86\u0CA8\u0CCD\u0CB2\u0CC8\u0CA8\u0CCD \u0CAA\u0CCB\u0CB0\u0CCD\u0C9F\u0CB2\u0CCD \u0CAE\u0CC2\u0CB2\u0C95 \u0C87\u0CA6\u0CA8\u0CCD\u0CA8\u0CC1 \u0CB8\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CAC\u0CB9\u0CC1\u0CA6\u0CC1.'
+                 : lang === 'hi' ? '\u092B\u0938\u0932 \u092C\u0940\u092E\u093E \u092B\u0949\u0930\u094D\u092E \u092D\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F, \u0906\u092A\u0915\u094B \u0905\u092A\u0928\u093E \u0906\u0930\u091F\u0940\u0938\u0940, \u0906\u0927\u093E\u0930 \u0915\u093E\u0930\u094D\u0921 \u0914\u0930 \u092C\u0948\u0902\u0915 \u092A\u093E\u0938\u092C\u0941\u0915 \u0915\u0940 \u0915\u0949\u092A\u0940 \u091A\u093E\u0939\u093F\u090F\u0964 \u0907\u0938\u0947 \u0906\u092A \u0928\u091C\u0926\u0940\u0915\u0940 \u0930\u093E\u092F\u0924\u093E \u0938\u0902\u092A\u0930\u094D\u0915 \u0915\u0947\u0902\u0926\u094D\u0930 \u092F\u093E \u0911\u0928\u0932\u093E\u0907\u0928 \u092A\u094B\u0930\u094D\u091F\u0932 \u0915\u0947 \u092E\u093E\u0927\u094D\u092F\u092E \u0938\u0947 \u091C\u092E\u093E \u0915\u0930 \u0938\u0915\u0924\u0947 \u0939\u0948\u0902\u0964'
                  : 'To fill the crop insurance form, you need your RTC, Aadhaar card, and bank passbook copy. You can submit this at your nearest Raitha Samparka Kendra or via the online portal.'
     },
     {
       id: 'market',
-      title: lang === 'kn' ? 'ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳನ್ನು ಚೆಕ್ ಮಾಡುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'बाजार की कीमतें कैसे जांचें?' : 'How to check Market Prices?',
-      desc: lang === 'kn' ? 'ದೈನಂದಿನ ಎಪಿಎಂಸಿ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳನ್ನು ನಿಮ್ಮ ಫೋನ್ ನಲ್ಲಿ ನೋಡಿ.' : lang === 'hi' ? 'अपने फोन पर दैनिक एपीएमसी बाजार की कीमतें देखें।' : 'Check daily APMC market prices on your phone.',
-      videoId: '2283Xp12XpQ', // Example
-      voiceText: lang === 'kn' ? 'ಗ್ರಾಮ್ ಸೇತು ಆಪ್ ನಲ್ಲಿ ಮಾರುಕಟ್ಟೆ ವಿಭಾಗಕ್ಕೆ ಹೋಗಿ. ಅಲ್ಲಿ ನಿಮ್ಮ ಬೆಳೆಗಳನ್ನು ಹುಡುಕಿ ಮತ್ತು ಪ್ರಸ್ತುತ ಬೆಲೆಗಳನ್ನು ನೋಡಬಹುದು.'
-                 : lang === 'hi' ? 'ग्राम सेतु ऐप में बाजार अनुभाग पर जाएं। वहां अपनी फसलों को खोजें और वर्तमान कीमतें देख सकते हैं।'
+      icon: TrendingUp,
+      color: '#16a34a',
+      title: lang === 'kn' ? '\u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0C9A\u0CC6\u0C95\u0CCD \u0CAE\u0CBE\u0CA1\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6?' : lang === 'hi' ? '\u092C\u093E\u091C\u093E\u0930 \u0915\u0940 \u0915\u0940\u092E\u0924\u0947\u0902 \u0915\u0948\u0938\u0947 \u091C\u093E\u0902\u091A\u0947\u0902?' : 'How to check Market Prices?',
+      desc: lang === 'kn' ? '\u0CA6\u0CC8\u0CA8\u0C82\u0CA6\u0CBF\u0CA8 \u0C8E\u0CAA\u0CBF\u0C8E\u0C82\u0CB8\u0CBF \u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAB\u0CCB\u0CA8\u0CCD \u0CA8\u0CB2\u0CCD\u0CB2\u0CBF \u0CA8\u0CCB\u0CA1\u0CBF.' : lang === 'hi' ? '\u0905\u092A\u0928\u0947 \u092B\u094B\u0928 \u092A\u0930 \u0926\u0948\u0928\u093F\u0915 \u090F\u092A\u0940\u090F\u092E\u0938\u0940 \u092C\u093E\u091C\u093E\u0930 \u0915\u0940 \u0915\u0940\u092E\u0924\u0947\u0902 \u0926\u0947\u0916\u0947\u0902\u0964' : 'Check daily APMC market prices on your phone.',
+      steps: lang === 'kn'
+        ? ['1. \u0C97\u0CCD\u0CB0\u0CBE\u0CAE\u0CCD \u0CB8\u0CC7\u0CA4\u0CC1 \u0C86\u0CAA\u0CCD \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF', '2. \u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CB5\u0CBF\u0CAD\u0CBE\u0C97\u0C95\u0CCD\u0C95\u0CC6 \u0CB9\u0CCB\u0C97\u0CBF', '3. \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAC\u0CC6\u0CB3\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CB9\u0CC1\u0CA1\u0CC1\u0C95\u0CBF', '4. \u0CAA\u0CCD\u0CB0\u0CB8\u0CCD\u0CA4\u0CC1\u0CA4 \u0CAC\u0CC6\u0CB2\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CCB\u0CA1\u0CBF']
+        : lang === 'hi'
+        ? ['1. \u0917\u094D\u0930\u093E\u092E \u0938\u0947\u0924\u0941 \u0910\u092A \u0916\u094B\u0932\u0947\u0902', '2. \u092C\u093E\u091C\u093E\u0930 \u0905\u0928\u0941\u092D\u093E\u0917 \u092A\u0930 \u091C\u093E\u090F\u0902', '3. \u0905\u092A\u0928\u0940 \u092B\u0938\u0932 \u0916\u094B\u091C\u0947\u0902', '4. \u0935\u0930\u094D\u0924\u092E\u093E\u0928 \u0915\u0940\u092E\u0924\u0947\u0902 \u0926\u0947\u0916\u0947\u0902']
+        : ['1. Open the Gram Setu app', '2. Go to the Market section', '3. Search for your crop', '4. See the current APMC price'],
+      voiceText: lang === 'kn' ? '\u0C97\u0CCD\u0CB0\u0CBE\u0CAE\u0CCD \u0CB8\u0CC7\u0CA4\u0CC1 \u0C86\u0CAA\u0CCD \u0CA8\u0CB2\u0CCD\u0CB2\u0CBF \u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CB5\u0CBF\u0CAD\u0CBE\u0C97\u0C95\u0CCD\u0C95\u0CC6 \u0CB9\u0CCB\u0C97\u0CBF. \u0C85\u0CB2\u0CCD\u0CB2\u0CBF \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAC\u0CC6\u0CB3\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CB9\u0CC1\u0CA1\u0CC1\u0C95\u0CBF \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CAA\u0CCD\u0CB0\u0CB8\u0CCD\u0CA4\u0CC1\u0CA4 \u0CAC\u0CC6\u0CB2\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CCB\u0CA1\u0CAC\u0CB9\u0CC1\u0CA6\u0CC1.'
+                 : lang === 'hi' ? '\u0917\u094D\u0930\u093E\u092E \u0938\u0947\u0924\u0941 \u0910\u092A \u092E\u0947\u0902 \u092C\u093E\u091C\u093E\u0930 \u0905\u0928\u0941\u092D\u093E\u0917 \u092A\u0930 \u091C\u093E\u090F\u0902\u0964 \u0935\u0939\u093E\u0902 \u0905\u092A\u0928\u0940 \u092B\u0938\u0932\u094B\u0902 \u0915\u094B \u0916\u094B\u091C\u0947\u0902 \u0914\u0930 \u0935\u0930\u094D\u0924\u092E\u093E\u0928 \u0915\u0940\u092E\u0924\u0947\u0902 \u0926\u0947\u0916 \u0938\u0915\u0924\u0947 \u0939\u0948\u0902\u0964'
                  : 'Go to the Market section in the Gram Setu app. Search for your crops there and you can see the current prices.'
     }
   ]
 
-  const handleVoicePlay = (text) => {
+  const handleVoicePlay = (tutId, text) => {
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel() // Stop any currently playing audio
+      window.speechSynthesis.cancel()
+      
+      if (speaking === tutId) {
+        setSpeaking(null)
+        return
+      }
+
       const utterance = new SpeechSynthesisUtterance(text)
-      
-      // Try to set appropriate language voice
-      if (lang === 'kn') utterance.lang = 'kn-IN'
-      else if (lang === 'hi') utterance.lang = 'hi-IN'
-      else utterance.lang = 'en-IN'
-      
-      utterance.rate = 0.9 // slightly slower for better comprehension
+      const voices = window.speechSynthesis.getVoices()
+      let selectedVoice = null
+
+      if (lang === 'kn') {
+        utterance.lang = 'kn-IN'
+        selectedVoice = voices.find(v => v.lang.includes('kn') || v.name.toLowerCase().includes('kannada'))
+      } else if (lang === 'hi') {
+        utterance.lang = 'hi-IN'
+        selectedVoice = voices.find(v => v.lang.includes('hi') || v.name.toLowerCase().includes('hindi'))
+      } else {
+        utterance.lang = 'en-IN'
+        selectedVoice = voices.find(v => v.lang.includes('en-IN')) || voices.find(v => v.lang.includes('en'))
+      }
+
+      if (selectedVoice) utterance.voice = selectedVoice
+      utterance.rate = 0.85
+      utterance.onend = () => setSpeaking(null)
+      setSpeaking(tutId)
       window.speechSynthesis.speak(utterance)
-    } else {
-      alert("Text-to-speech is not supported in this browser.")
     }
   }
-
-  // Cleanup speech synthesis on unmount
-  useEffect(() => {
-    return () => {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel()
-      }
-    }
-  }, [])
 
   return (
     <div className="animate-fadeInUp">
@@ -2602,52 +2638,74 @@ export function TutorialsScreen() {
       </div>
 
       <div style={{ display: 'grid', gap: 20 }}>
-        {tutorials.map(tut => (
+        {tutorials.map(tut => {
+          const Icon = tut.icon
+          return (
           <div key={tut.id} className="card" style={{ padding: 0, overflow: 'hidden' }}>
-            {/* Video Thumbnail Area */}
-            <div style={{ position: 'relative', width: '100%', height: 200, background: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {playingId === tut.id ? (
-                <iframe 
-                  width="100%" 
-                  height="100%" 
-                  src={`https://www.youtube.com/embed/${tut.videoId}?autoplay=1`} 
-                  title="YouTube video player" 
-                  frameBorder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowFullScreen
-                  style={{ position: 'absolute', top: 0, left: 0 }}
-                />
-              ) : (
-                <>
-                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `url(https://img.youtube.com/vi/${tut.videoId}/maxresdefault.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.6 }} />
-                  <button 
-                    onClick={() => setPlayingId(tut.id)}
-                    style={{ position: 'relative', zIndex: 10, background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '50%', padding: 12, cursor: 'pointer', color: '#fff', transition: 'transform 0.2s' }}
-                    onMouseOver={e => e.currentTarget.style.transform = 'scale(1.1)'}
-                    onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-                  >
-                    <PlayCircle size={48} />
-                  </button>
-                </>
-              )}
+            {/* Colored Header with Icon */}
+            <div style={{ 
+              background: tut.color + '15', 
+              padding: '24px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 16,
+              borderBottom: '1px solid var(--border-light)'
+            }}>
+              <div style={{ background: tut.color, color: '#fff', padding: 14, borderRadius: '50%' }}>
+                <Icon size={28} />
+              </div>
+              <div>
+                <h3 style={{ margin: 0, fontSize: 17, fontWeight: 700 }}>{tut.title}</h3>
+                <p style={{ margin: '4px 0 0 0', fontSize: 13, color: 'var(--text-muted)' }}>{tut.desc}</p>
+              </div>
             </div>
 
-            {/* Content & Voice Guide Area */}
-            <div style={{ padding: 20 }}>
-              <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px 0' }}>{tut.title}</h3>
-              <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 16px 0', lineHeight: 1.5 }}>{tut.desc}</p>
+            {/* Step-by-Step Guide */}
+            <div style={{ padding: '20px 24px' }}>
+              <h4 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', margin: '0 0 12px 0' }}>
+                {lang === 'kn' ? '\u0CB9\u0C82\u0CA4-\u0CB9\u0C82\u0CA4\u0CA6 \u0CAE\u0CBE\u0CB0\u0CCD\u0C97\u0CA6\u0CB0\u0CCD\u0CB6\u0CBF' : lang === 'hi' ? '\u091A\u0930\u0923-\u0926\u0930-\u091A\u0930\u0923 \u092E\u093E\u0930\u094D\u0917\u0926\u0930\u094D\u0936\u093F\u0915\u093E' : 'Step-by-Step Guide'}
+              </h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {tut.steps.map((step, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 12px', background: 'var(--bg-main)', borderRadius: 8 }}>
+                    <div style={{ width: 24, height: 24, borderRadius: '50%', background: tut.color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{i + 1}</div>
+                    <span style={{ fontSize: 14, lineHeight: 1.5 }}>{step.replace(/^\d+\.\s*/, '')}</span>
+                  </div>
+                ))}
+              </div>
               
+              {/* AI Voice Button */}
               <button 
-                onClick={() => handleVoicePlay(tut.voiceText)}
-                className="btn btn-outline"
-                style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: 8, borderColor: '#3b82f6', color: '#3b82f6', background: '#eff6ff', padding: '12px', borderRadius: 8, fontWeight: 700 }}
+                onClick={() => handleVoicePlay(tut.id, tut.voiceText)}
+                style={{ 
+                  width: '100%', 
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  alignItems: 'center',
+                  gap: 8, 
+                  borderColor: speaking === tut.id ? '#dc2626' : '#3b82f6', 
+                  color: speaking === tut.id ? '#dc2626' : '#3b82f6', 
+                  background: speaking === tut.id ? '#fef2f2' : '#eff6ff', 
+                  padding: '14px', 
+                  borderRadius: 8, 
+                  fontWeight: 700, 
+                  border: '2px solid',
+                  cursor: 'pointer',
+                  marginTop: 16,
+                  fontSize: 14,
+                  transition: 'all 0.2s'
+                }}
               >
                 <Volume2 size={18} />
-                {lang === 'kn' ? 'ಕನ್ನಡದಲ್ಲಿ ಆಲಿಸಿ (AI Voice)' : lang === 'hi' ? 'हिंदी में सुनें (AI Voice)' : 'Listen in English (AI Voice)'}
+                {speaking === tut.id 
+                  ? (lang === 'kn' ? '\u0CA8\u0CBF\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CBF' : lang === 'hi' ? '\u0930\u0941\u0915\u0947\u0902' : 'Stop Speaking') 
+                  : (lang === 'kn' ? '\u0C95\u0CA8\u0CCD\u0CA8\u0CA1\u0CA6\u0CB2\u0CCD\u0CB2\u0CBF \u0C86\u0CB2\u0CBF\u0CB8\u0CBF (AI Voice)' : lang === 'hi' ? '\u0939\u093F\u0902\u0926\u0940 \u092E\u0947\u0902 \u0938\u0941\u0928\u0947\u0902 (AI Voice)' : 'Listen in English (AI Voice)')
+                }
               </button>
             </div>
           </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
