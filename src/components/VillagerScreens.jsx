@@ -2549,7 +2549,7 @@ export function TutorialsScreen() {
       color: '#7c3aed',
       title: lang === 'kn' ? '\u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 / GPay \u0CAC\u0CB3\u0CB8\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6?' : lang === 'hi' ? '\u092B\u094B\u0928\u092A\u0947 / GPay \u0915\u093E \u0909\u092A\u092F\u094B\u0917 \u0915\u0948\u0938\u0947 \u0915\u0930\u0947\u0902?' : 'How to use PhonePe / Google Pay?',
       desc: lang === 'kn' ? 'UPI \u0CAE\u0CC2\u0CB2\u0C95 \u0CB8\u0CC1\u0CB0\u0C95\u0CCD\u0CB7\u0CBF\u0CA4\u0CB5\u0CBE\u0C97\u0CBF \u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CBF' : lang === 'hi' ? 'UPI \u0938\u0947 \u0938\u0941\u0930\u0915\u094D\u0937\u093F\u0924 \u092A\u0948\u0938\u0947 \u092D\u0947\u091C\u0947\u0902' : 'Send money securely via UPI',
-      videoId: lang === 'kn' ? 'FqPzD_bT_Yk' : lang === 'hi' ? 'sI9kM10U0Ew' : 'jW01H9YJzQo'
+      videoId: lang === 'kn' ? 'VIMM_NwaSag' : lang === 'hi' ? 'ff-5HWDEzAw' : 'EsmAFKKfwDQ'
     },
     {
       id: 'sir',
@@ -2557,7 +2557,7 @@ export function TutorialsScreen() {
       color: '#0369a1',
       title: lang === 'kn' ? '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 (PMFBY) \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD' : lang === 'hi' ? '\u092B\u0938\u0932 \u092C\u0940\u092E\u093E (PMFBY) \u092B\u0949\u0930\u094D\u092E' : 'Crop Insurance (PMFBY) Form',
       desc: lang === 'kn' ? '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 \u0C85\u0CB0\u0CCD\u0C9C\u0CBF \u0CB8\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6' : lang === 'hi' ? '\u092B\u0938\u0932 \u092C\u0940\u092E\u093E \u0906\u0935\u0947\u0926\u0928 \u0915\u0948\u0938\u0947 \u0915\u0930\u0947\u0902' : 'How to apply for crop insurance',
-      videoId: lang === 'kn' ? 'E8rGfC8D5Q0' : lang === 'hi' ? '1bJ1z9o2A9c' : '1bJ1z9o2A9c'
+      videoId: lang === 'kn' ? 'HH86mthMpvg' : lang === 'hi' ? 'wwuniZ-uR9w' : '9wUVTZ_S6kA'
     },
     {
       id: 'market',
@@ -2565,7 +2565,7 @@ export function TutorialsScreen() {
       color: '#16a34a',
       title: lang === 'kn' ? '\u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6 \u0CA8\u0CCB\u0CA1\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1' : lang === 'hi' ? '\u092C\u093E\u091C\u093E\u0930 \u092D\u093E\u0935 \u0915\u0948\u0938\u0947 \u0926\u0947\u0916\u0947\u0902' : 'Check Market Prices (APMC)',
       desc: lang === 'kn' ? 'APMC \u0CAC\u0CC6\u0CB3\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6 \u0CA8\u0CCB\u0CA1\u0CBF' : lang === 'hi' ? 'APMC \u092B\u0938\u0932 \u0915\u0940\u092E\u0924 \u0926\u0947\u0916\u0947\u0902' : 'Check daily APMC crop prices',
-      videoId: lang === 'kn' ? 'fXsb0OonxhQ' : lang === 'hi' ? 'TiD0HagnPzU' : 'TiD0HagnPzU'
+      videoId: lang === 'kn' ? 'NUmn690WdPU' : lang === 'hi' ? 'JAf9nVU5I40' : 'jkUDB7OWmwQ'
     }
   ]
 
