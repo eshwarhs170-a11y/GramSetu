@@ -310,7 +310,8 @@ input, textarea, select { font-family: inherit; outline: none; }
 .sidebar {
   width: var(--sidebar-width);
   background: var(--bg-sidebar);
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -404,6 +405,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 
 .sidebar-footer {
   padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 .logout-btn {

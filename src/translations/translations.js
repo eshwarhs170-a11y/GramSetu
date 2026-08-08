@@ -176,7 +176,7 @@ const translations = {
     aadhaar: 'Aadhaar',
 
     // ---- Official ----
-    officerWelcome: 'Good Morning, Srinivas Kumar! 🏛️',
+    officerWelcome: 'Good Morning',
     officerLocation: 'Mysuru Taluk — 28 pending complaints need attention',
     totalComplaints: 'Total Complaints',
     pendingComplaints: 'Pending',
@@ -377,7 +377,7 @@ const translations = {
     district: 'ಜಿಲ್ಲೆ',
     aadhaar: 'ಆಧಾರ್',
 
-    officerWelcome: 'ಶುಭೋದಯ, ಶ್ರೀನಿವಾಸ್ ಕುಮಾರ್! 🏛️',
+    officerWelcome: 'ಶುಭೋದಯ',
     officerLocation: 'ಮೈಸೂರು ತಾಲೂಕು — 28 ದೂರುಗಳಿಗೆ ಗಮನ ಬೇಕಿದೆ',
     totalComplaints: 'ಒಟ್ಟು ದೂರುಗಳು',
     pendingComplaints: 'ಬಾಕಿ ಇದೆ',
@@ -578,7 +578,7 @@ const translations = {
     district: 'जिला',
     aadhaar: 'आधार',
 
-    officerWelcome: 'शुभ प्रभात, श्रीनिवास कुमार! 🏛️',
+    officerWelcome: 'शुभ प्रभात',
     officerLocation: 'मैसूर तालुक — 28 शिकायतों पर ध्यान आवश्यक',
     totalComplaints: 'कुल शिकायतें',
     pendingComplaints: 'लंबित',
