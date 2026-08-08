@@ -5,7 +5,8 @@ import {
   Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2, MapPin,
   Camera, Phone, Home, Map,
   Building2, Wheat, ArrowUp, ArrowDown, Minus,
-  Bell, ShieldCheck, RefreshCw, Sparkles, CheckCircle2, Star
+  Bell, ShieldCheck, RefreshCw, Sparkles, CheckCircle2, Star,
+  Cloud, CloudRain, Sun, Thermometer, Wind, ShieldAlert, AlertTriangle, Stethoscope, Clock, CheckCircle, Info, PhoneCall, FileText
 } from 'lucide-react'
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
@@ -2122,6 +2123,273 @@ export function ProfileScreen() {
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+export function WeatherScreen() {
+  const { t, lang } = useLanguage()
+  const district = window.localStorage.getItem('citizen_district') || 'Mysuru'
+  
+  const forecast = [
+    { day: 'Today', temp: '28°', high: '30°', low: '22°', condition: 'Rain', icon: CloudRain, rain: '60%' },
+    { day: 'Tomorrow', temp: '29°', high: '31°', low: '22°', condition: 'Cloudy', icon: Cloud, rain: '20%' },
+    { day: 'Wed', temp: '31°', high: '32°', low: '23°', condition: 'Sunny', icon: Sun, rain: '0%' },
+    { day: 'Thu', temp: '30°', high: '31°', low: '23°', condition: 'Cloudy', icon: Cloud, rain: '10%' },
+    { day: 'Fri', temp: '27°', high: '29°', low: '21°', condition: 'Rain', icon: CloudRain, rain: '80%' },
+    { day: 'Sat', temp: '26°', high: '28°', low: '21°', condition: 'Rain', icon: CloudRain, rain: '90%' },
+    { day: 'Sun', temp: '28°', high: '30°', low: '22°', condition: 'Cloudy', icon: Cloud, rain: '30%' }
+  ]
+
+  return (
+    <div className="animate-fadeInUp">
+      <div className="card" style={{ background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)', color: '#fff', padding: '24px', marginBottom: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 8px 0' }}>{district}, Karnataka</h2>
+            <div style={{ fontSize: 48, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 12 }}>
+              28°C <CloudRain size={40} />
+            </div>
+            <p style={{ fontSize: 16, opacity: 0.9, marginTop: 4 }}>Heavy rain expected in the evening.</p>
+          </div>
+          <div style={{ textAlign: 'right', opacity: 0.9 }}>
+            <p style={{ margin: '4px 0' }}><Thermometer size={16} style={{ verticalAlign: 'middle', marginRight: 4 }}/> Humidity: 78%</p>
+            <p style={{ margin: '4px 0' }}><Wind size={16} style={{ verticalAlign: 'middle', marginRight: 4 }}/> Wind: 14 km/h</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>7-Day Forecast</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {forecast.map((f, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: 'var(--bg-main)', borderRadius: '8px' }}>
+              <span style={{ width: 80, fontWeight: 600 }}>{f.day}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, justifyContent: 'center' }}>
+                <f.icon size={20} style={{ color: f.condition === 'Sunny' ? '#eab308' : f.condition === 'Rain' ? '#3b82f6' : '#9ca3af' }} />
+                <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>{f.rain}</span>
+              </div>
+              <div style={{ width: 80, textAlign: 'right' }}>
+                <span style={{ fontWeight: 700 }}>{f.high}</span>
+                <span style={{ color: 'var(--text-muted)', marginLeft: 8 }}>{f.low}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function EmergencySOSScreen() {
+  const { t, lang } = useLanguage()
+  const district = window.localStorage.getItem('citizen_district') || 'Mysuru'
+
+  const helplines = [
+    { title: 'Ambulance / Medical', num: '108', icon: PhoneCall, color: '#dc2626' },
+    { title: 'Police / Law & Order', num: '100', icon: ShieldAlert, color: '#1d4ed8' },
+    { title: 'Fire & Rescue', num: '101', icon: AlertTriangle, color: '#ea580c' },
+    { title: 'Women Helpline', num: '1091', icon: PhoneCall, color: '#db2777' },
+    { title: 'Kisan Call Center', num: '1551', icon: PhoneCall, color: '#16a34a' },
+    { title: 'Poison Information', num: '1066', icon: PhoneCall, color: '#9333ea' }
+  ]
+
+  return (
+    <div className="animate-fadeInUp">
+      <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', padding: '24px', borderRadius: '12px', textAlign: 'center', marginBottom: 20 }}>
+        <h2 style={{ color: '#dc2626', fontSize: 24, fontWeight: 800, marginBottom: 8 }}>EMERGENCY SOS</h2>
+        <p style={{ color: '#991b1b', fontSize: 14, marginBottom: 20 }}>Tap the button below to immediately dial the national emergency number (112).</p>
+        <a href="tel:112" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#dc2626', color: '#fff', width: 120, height: 120, borderRadius: '50%', textDecoration: 'none', boxShadow: '0 10px 25px rgba(220,38,38,0.4)', transition: 'transform 0.2s' }} onMouseDown={e => e.currentTarget.style.transform='scale(0.95)'} onMouseUp={e => e.currentTarget.style.transform='scale(1)'}>
+          <Phone size={48} fill="currentColor" />
+        </a>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 16 }}>
+        {helplines.map((h, i) => (
+          <a key={i} href={`tel:${h.num}`} className="card" style={{ display: 'flex', alignItems: 'center', gap: 16, textDecoration: 'none', color: 'inherit', padding: '16px', transition: 'transform 0.2s' }}>
+            <div style={{ background: h.color + '20', color: h.color, padding: '12px', borderRadius: '50%' }}>
+              <h.icon size={24} />
+            </div>
+            <div>
+              <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{h.title}</div>
+              <div style={{ fontSize: 20, fontWeight: 800 }}>{h.num}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div className="card" style={{ marginTop: 20, display: 'flex', gap: 12, alignItems: 'flex-start', background: '#f0f9ff', borderColor: '#bae6fd' }}>
+        <Info size={24} color="#0369a1" style={{ flexShrink: 0 }} />
+        <div>
+          <h4 style={{ margin: '0 0 4px 0', color: '#0369a1', fontSize: 14, fontWeight: 700 }}>Location Sharing</h4>
+          <p style={{ margin: 0, color: '#0c4a6e', fontSize: 12 }}>When you call 112 from a smartphone, your approximate location ({district}) is automatically shared with the emergency response center in Karnataka.</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function CropDoctorScreen() {
+  const { t, lang } = useLanguage()
+  const [selectedCrop, setSelectedCrop] = useState('')
+  const [selectedSymptom, setSelectedSymptom] = useState('')
+  const [diagnosis, setDiagnosis] = useState(null)
+
+  const crops = ['Ragi', 'Paddy', 'Sugarcane', 'Cotton', 'Tomato', 'Maize']
+  
+  const symptoms = {
+    'Ragi': ['Yellowing of leaves', 'Brown spots on leaves', 'Stunted growth'],
+    'Paddy': ['White patches on leaves', 'Stem borer damage', 'Brown spots'],
+    'Sugarcane': ['Red rot in stem', 'Yellowing leaves', 'Stunted growth'],
+    'Cotton': ['Bollworm damage', 'Leaf curling', 'Yellow spots'],
+    'Tomato': ['Leaf blight', 'Fruit rot', 'Whitefly infestation'],
+    'Maize': ['Fall armyworm', 'Leaf blight', 'Stalk rot']
+  }
+
+  const diagnoses = {
+    'Ragi-Brown spots on leaves': { name: 'Blast Disease', cause: 'Fungal infection (Magnaporthe grisea)', treatment: 'Spray Tricyclazole (0.6g/L) or Kasugamycin (2.5ml/L).', prevention: 'Avoid excess nitrogen fertilizer. Use resistant varieties.' },
+    'Tomato-Leaf blight': { name: 'Early Blight', cause: 'Fungus (Alternaria solani)', treatment: 'Spray Mancozeb (2g/L) or Chlorothalonil.', prevention: 'Crop rotation. Avoid overhead irrigation.' },
+    'Paddy-Stem borer damage': { name: 'Yellow Stem Borer', cause: 'Insect (Scirpophaga incertulas)', treatment: 'Apply Cartap Hydrochloride 4G @ 10kg/acre.', prevention: 'Clip seedling tips before transplanting.' },
+    'Maize-Fall armyworm': { name: 'Fall Armyworm (FAW)', cause: 'Insect (Spodoptera frugiperda)', treatment: 'Spray Emamectin Benzoate (0.4g/L) or Spinetoram.', prevention: 'Deep summer ploughing. Intercropping with legumes.' }
+  }
+
+  const handleDiagnose = () => {
+    const key = `${selectedCrop}-${selectedSymptom}`
+    const result = diagnoses[key] || { name: 'General Stress / Unknown', cause: 'Possible nutrient deficiency or water stress', treatment: 'Consult your local Raitha Samparka Kendra with a leaf sample.', prevention: 'Maintain proper soil health and irrigation schedule.' }
+    setDiagnosis(result)
+  }
+
+  return (
+    <div className="animate-fadeInUp">
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+          <div style={{ background: '#dcfce7', color: '#16a34a', padding: '12px', borderRadius: '50%' }}>
+            <Stethoscope size={24} />
+          </div>
+          <div>
+            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>AI Crop Doctor</h3>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--text-muted)' }}>Select crop and symptoms for immediate diagnosis and treatment</p>
+          </div>
+        </div>
+
+        <div className="form-group" style={{ marginBottom: 16 }}>
+          <label className="form-label">Select Crop</label>
+          <select className="form-input" value={selectedCrop} onChange={e => { setSelectedCrop(e.target.value); setSelectedSymptom(''); setDiagnosis(null); }}>
+            <option value="">-- Choose Crop --</option>
+            {crops.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+
+        {selectedCrop && (
+          <div className="form-group" style={{ marginBottom: 16 }}>
+            <label className="form-label">Observed Symptom</label>
+            <select className="form-input" value={selectedSymptom} onChange={e => { setSelectedSymptom(e.target.value); setDiagnosis(null); }}>
+              <option value="">-- Choose Symptom --</option>
+              {symptoms[selectedCrop].map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+        )}
+
+        <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={!selectedCrop || !selectedSymptom} onClick={handleDiagnose}>
+          Diagnose Issue
+        </button>
+      </div>
+
+      {diagnosis && (
+        <div className="card animate-fadeInUp" style={{ borderLeft: '4px solid #16a34a' }}>
+          <h4 style={{ fontSize: 16, fontWeight: 700, color: '#16a34a', marginBottom: 12 }}>Diagnosis: {diagnosis.name}</h4>
+          
+          <div style={{ marginBottom: 12 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Cause</span>
+            <p style={{ margin: '4px 0 0 0', fontSize: 14 }}>{diagnosis.cause}</p>
+          </div>
+          
+          <div style={{ marginBottom: 12 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Treatment (Chemical/Organic)</span>
+            <p style={{ margin: '4px 0 0 0', fontSize: 14, fontWeight: 600 }}>{diagnosis.treatment}</p>
+          </div>
+
+          <div>
+            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Preventive Measures</span>
+            <p style={{ margin: '4px 0 0 0', fontSize: 14 }}>{diagnosis.prevention}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function WaterTankScreen() {
+  const { t, lang } = useLanguage()
+  const village = window.localStorage.getItem('citizen_taluk') || 'Mysuru Taluk'
+  
+  // Simulated data
+  const fillLevel = 75 // Percentage
+  const isPumping = true
+  
+  return (
+    <div className="animate-fadeInUp">
+      <div className="card" style={{ textAlign: 'center', padding: '32px 16px' }}>
+        <h3 style={{ margin: '0 0 8px 0', fontSize: 18, fontWeight: 700 }}>OHT Status: {village} Main Tank</h3>
+        <p style={{ margin: '0 0 24px 0', fontSize: 13, color: 'var(--text-muted)' }}>Real-time water level and supply schedule</p>
+
+        <div style={{ position: 'relative', width: 200, height: 200, margin: '0 auto', borderRadius: '50%', background: '#e0f2fe', overflow: 'hidden', border: '8px solid #bae6fd' }}>
+          <div style={{ 
+            position: 'absolute', 
+            bottom: 0, left: 0, right: 0, 
+            height: `${fillLevel}%`, 
+            background: 'linear-gradient(180deg, #38bdf8 0%, #0284c7 100%)',
+            transition: 'height 1s ease-in-out'
+          }}>
+            <div className="wave" style={{
+              position: 'absolute', top: -10, left: 0, width: '200%', height: 20, 
+              background: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1440 320\'%3E%3Cpath fill=\'%2338bdf8\' fill-opacity=\'1\' d=\'M0,160L48,170.7C96,181,192,203,288,202.7C384,203,480,181,576,149.3C672,117,768,75,864,80C960,85,1056,139,1152,149.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z\'%3E%3C/path%3E%3C/svg%3E")',
+              backgroundSize: '50% 100%',
+              animation: 'wave 3s linear infinite'
+            }} />
+          </div>
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: fillLevel > 50 ? '#fff' : '#0284c7', fontSize: 36, fontWeight: 800, textShadow: fillLevel > 50 ? '0 2px 4px rgba(0,0,0,0.2)' : 'none' }}>
+            {fillLevel}%
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 24, marginTop: 24 }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Status</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: isPumping ? '#16a34a' : '#ea580c', display: 'flex', alignItems: 'center', gap: 6 }}>
+              {isPumping ? <><RefreshCw size={14} className="spin" /> Pumping In</> : 'Standby'}
+            </div>
+          </div>
+          <div style={{ width: 1, background: 'var(--border-light)' }} />
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Last Updated</div>
+            <div style={{ fontSize: 15, fontWeight: 700 }}>Just now</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="card">
+        <h4 style={{ margin: '0 0 12px 0', fontSize: 15, fontWeight: 700 }}>Water Supply Schedule</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', background: '#f0fdf4', borderRadius: 8, border: '1px solid #bbf7d0' }}>
+            <span style={{ fontWeight: 600, color: '#166534' }}>Morning Supply</span>
+            <span style={{ fontWeight: 700, color: '#15803d' }}>6:00 AM - 8:30 AM</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', background: 'var(--bg-main)', borderRadius: 8 }}>
+            <span style={{ fontWeight: 600 }}>Evening Supply</span>
+            <span style={{ fontWeight: 700 }}>5:00 PM - 7:00 PM</span>
+          </div>
+        </div>
+      </div>
+      
+      <style>{`
+        @keyframes wave {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .spin { animation: spin 2s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+      `}</style>
     </div>
   )
 }
