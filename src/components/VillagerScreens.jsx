@@ -2555,9 +2555,9 @@ export function TutorialsScreen() {
       id: 'sir',
       icon: FileText,
       color: '#0369a1',
-      title: lang === 'kn' ? '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 (PMFBY) \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD' : lang === 'hi' ? '\u092B\u0938\u0932 \u092C\u0940\u092E\u093E (PMFBY) \u092B\u0949\u0930\u094D\u092E' : 'Crop Insurance (PMFBY) Form',
-      desc: lang === 'kn' ? '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 \u0C85\u0CB0\u0CCD\u0C9C\u0CBF \u0CB8\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6' : lang === 'hi' ? '\u092B\u0938\u0932 \u092C\u0940\u092E\u093E \u0906\u0935\u0947\u0926\u0928 \u0915\u0948\u0938\u0947 \u0915\u0930\u0947\u0902' : 'How to apply for crop insurance',
-      videoId: lang === 'kn' ? 'vlWO3GFiVEU' : lang === 'hi' ? '9Pm-hOp7Lm8' : 'N5UnhZ4SbM4'
+      title: lang === 'kn' ? '\u0C9A\u0CC1\u0CA8\u0CBE\u0CB5\u0CA3\u0CBE \u0C86\u0CAF\u0CCB\u0C97\u0CA6 SIR \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD' : lang === 'hi' ? '\u091A\u0941\u0928\u093E\u0935 \u0906\u092F\u094B\u0917 SIR \u092B\u0949\u0930\u094D\u092E' : 'Election Commission SIR Form',
+      desc: lang === 'kn' ? 'SIR (Voter) \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CA4\u0CC1\u0C82\u0CAC\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6' : lang === 'hi' ? 'SIR (Voter) \u092B\u0949\u0930\u094D\u092E \u0915\u0948\u0938\u0947 \u092D\u0930\u0947\u0902' : 'How to fill the Enumeration (SIR) form',
+      videoId: lang === 'kn' ? 'NBdvlI6z1Qw' : lang === 'hi' ? 'OMtQPtYFBfQ' : '517So_qusUE'
     },
     {
       id: 'market',
