@@ -2536,98 +2536,139 @@ export function WaterTankScreen() {
 
 export function TutorialsScreen() {
   const { t, lang } = useLanguage()
-  const [playingId, setPlayingId] = useState(null)
+  const [activeDemo, setActiveDemo] = useState(null)
+  const [demoStep, setDemoStep] = useState(0)
   const [speaking, setSpeaking] = useState(null)
 
-  // Load voices on mount (some browsers load them asynchronously)
   useEffect(() => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.getVoices()
       window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices()
     }
-    return () => {
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel()
-    }
+    return () => { if ('speechSynthesis' in window) window.speechSynthesis.cancel() }
   }, [])
 
-  const tutorials = [
+  // Auto-advance demo steps
+  useEffect(() => {
+    if (activeDemo !== null) {
+      const timer = setTimeout(() => {
+        const maxSteps = demos[activeDemo].screens.length - 1
+        if (demoStep < maxSteps) setDemoStep(prev => prev + 1)
+      }, 2500)
+      return () => clearTimeout(timer)
+    }
+  }, [activeDemo, demoStep])
+
+  const L = (en, kn, hi) => lang === 'kn' ? kn : lang === 'hi' ? hi : en
+
+  const demos = [
     {
       id: 'upi',
       icon: IndianRupee,
       color: '#7c3aed',
-      title: lang === 'kn' ? '\u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 / \u0C97\u0CC2\u0C97\u0CB2\u0CCD \u0CAA\u0CC7 \u0CAC\u0CB3\u0CB8\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6?' : lang === 'hi' ? '\u092B\u094B\u0928\u092A\u0947 / \u0917\u0942\u0917\u0932 \u092A\u0947 \u0915\u093E \u0909\u092A\u092F\u094B\u0917 \u0915\u0948\u0938\u0947 \u0915\u0930\u0947\u0902?' : 'How to use PhonePe / Google Pay?',
-      desc: lang === 'kn' ? '\u0CB8\u0CC1\u0CB0\u0C95\u0CCD\u0CB7\u0CBF\u0CA4\u0CB5\u0CBE\u0C97\u0CBF \u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CB2\u0CC1 \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CB8\u0CCD\u0CB5\u0CC0\u0C95\u0CB0\u0CBF\u0CB8\u0CB2\u0CC1 \u0CB9\u0C82\u0CA4-\u0CB9\u0C82\u0CA4\u0CA6 \u0CAE\u0CBE\u0CB0\u0CCD\u0C97\u0CA6\u0CB0\u0CCD\u0CB6\u0CBF.' : lang === 'hi' ? '\u0938\u0941\u0930\u0915\u094D\u0937\u093F\u0924 \u0930\u0942\u092A \u0938\u0947 \u092A\u0948\u0938\u0947 \u092D\u0947\u091C\u0928\u0947 \u0914\u0930 \u092A\u094D\u0930\u093E\u092A\u094D\u0924 \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \u091A\u0930\u0923-\u0926\u0930-\u091A\u0930\u0923 \u092E\u093E\u0930\u094D\u0917\u0926\u0930\u094D\u0936\u093F\u0915\u093E\u0964' : 'Step-by-step guide to send and receive money securely.',
-      steps: lang === 'kn' 
-        ? ['1. \u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 \u0C86\u0CAA\u0CCD \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF', '2. \u0C9F\u0CC1 \u0CAE\u0CCA\u0CAC\u0CC8\u0CB2\u0CCD \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0C86\u0CAF\u0CCD\u0C95\u0CC6 \u0CAE\u0CBE\u0CA1\u0CBF', '3. \u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CAC\u0CC7\u0C95\u0CBE\u0CA6\u0CB5\u0CB0 \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0C9F\u0CC8\u0CAA\u0CCD \u0CAE\u0CBE\u0CA1\u0CBF', '4. \u0CAE\u0CCA\u0CA4\u0CCD\u0CA4\u0CB5\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CAE\u0CC2\u0CA6\u0CBF\u0CB8\u0CBF', '5. \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE UPI PIN \u0CB9\u0CBE\u0C95\u0CBF']
-        : lang === 'hi'
-        ? ['1. \u092B\u094B\u0928\u092A\u0947 \u0910\u092A \u0916\u094B\u0932\u0947\u0902', '2. \u091F\u0942 \u092E\u094B\u092C\u093E\u0907\u0932 \u0928\u0902\u092C\u0930 \u091A\u0941\u0928\u0947\u0902', '3. \u091C\u093F\u0938\u0947 \u092A\u0948\u0938\u0947 \u092D\u0947\u091C\u0928\u0947 \u0939\u0948\u0902 \u0909\u0928\u0915\u093E \u0928\u0902\u092C\u0930 \u0921\u093E\u0932\u0947\u0902', '4. \u0930\u093E\u0936\u093F \u0926\u0930\u094D\u091C \u0915\u0930\u0947\u0902', '5. \u0905\u092A\u0928\u093E UPI PIN \u0921\u093E\u0932\u0947\u0902']
-        : ['1. Open the PhonePe app', '2. Select "To Mobile Number"', '3. Type their phone number', '4. Enter the amount', '5. Enter your UPI PIN and confirm'],
-      voiceText: lang === 'kn' ? '\u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 \u0CAC\u0CB3\u0CB8\u0CB2\u0CC1 \u0CAE\u0CCA\u0CA6\u0CB2\u0CC1 \u0C86\u0CAA\u0CCD \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF. \u0CA8\u0C82\u0CA4\u0CB0 \u0C9F\u0CC1 \u0CAE\u0CCA\u0CAC\u0CC8\u0CB2\u0CCD \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0C86\u0CAF\u0CCD\u0C95\u0CC6 \u0CAE\u0CBE\u0CA1\u0CBF, \u0CA8\u0CC0\u0CB5\u0CC1 \u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CAC\u0CC7\u0C95\u0CBE\u0CA6\u0CB5\u0CB0 \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0C9F\u0CC8\u0CAA\u0CCD \u0CAE\u0CBE\u0CA1\u0CBF. \u0CAE\u0CCA\u0CA4\u0CCD\u0CA4\u0CB5\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CAE\u0CC2\u0CA6\u0CBF\u0CB8\u0CBF \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAF\u0CC1\u0CAA\u0CBF\u0C90 \u0CAA\u0CBF\u0CA8\u0CCD \u0CB9\u0CBE\u0C95\u0CBF.'
-                 : lang === 'hi' ? '\u092B\u094B\u0928\u092A\u0947 \u0915\u093E \u0909\u092A\u092F\u094B\u0917 \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \u0938\u092C\u0938\u0947 \u092A\u0939\u0932\u0947 \u0910\u092A \u0916\u094B\u0932\u0947\u0902\u0964 \u092B\u093F\u0930 \u091F\u0942 \u092E\u094B\u092C\u093E\u0907\u0932 \u0928\u0902\u092C\u0930 \u091A\u0941\u0928\u0947\u0902, \u091C\u093F\u0938\u0947 \u092A\u0948\u0938\u0947 \u092D\u0947\u091C\u0928\u0947 \u0939\u0948\u0902 \u0909\u0938\u0915\u093E \u0928\u0902\u092C\u0930 \u091F\u093E\u0907\u092A \u0915\u0930\u0947\u0902\u0964 \u0930\u093E\u0936\u093F \u0926\u0930\u094D\u091C \u0915\u0930\u0947\u0902 \u0914\u0930 \u0905\u092A\u0928\u093E \u092F\u0942\u092A\u0940\u0906\u0908 \u092A\u093F\u0928 \u0921\u093E\u0932\u0947\u0902\u0964'
-                 : 'To use PhonePe, first open the app. Select To Mobile Number, type the number of the person you want to send money to. Enter the amount and your UPI PIN.'
+      title: L('UPI Payment Demo', 'UPI \u0CAA\u0CBE\u0CB5\u0CA4\u0CBF \u0CA1\u0CC6\u0CAE\u0CCB', 'UPI \u092D\u0941\u0917\u0924\u093E\u0928 \u0921\u0947\u092E\u094B'),
+      desc: L('Watch how to send money using PhonePe/GPay', '\u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 \u0CAC\u0CB3\u0CB8\u0CBF \u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6 \u0CA8\u0CCB\u0CA1\u0CBF', '\u092B\u094B\u0928\u092A\u0947 \u0938\u0947 \u092A\u0948\u0938\u0947 \u092D\u0947\u091C\u0928\u093E \u0926\u0947\u0916\u0947\u0902'),
+      voiceText: L(
+        'Step 1: Open PhonePe app. Step 2: Tap on To Mobile Number. Step 3: Enter the phone number of the person. Step 4: Enter the amount, for example 500 rupees. Step 5: Enter your UPI PIN. Step 6: Payment successful! The money has been sent.',
+        '\u0CB9\u0C82\u0CA4 1: \u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 \u0C86\u0CAA\u0CCD \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF. \u0CB9\u0C82\u0CA4 2: \u0C9F\u0CC1 \u0CAE\u0CCA\u0CAC\u0CC8\u0CB2\u0CCD \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0C92\u0CA4\u0CCD\u0CA4\u0CBF. \u0CB9\u0C82\u0CA4 3: \u0CB5\u0CCD\u0CAF\u0C95\u0CCD\u0CA4\u0CBF\u0CAF \u0CAB\u0CCB\u0CA8\u0CCD \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0CA8\u0CAE\u0CC2\u0CA6\u0CBF\u0CB8\u0CBF. \u0CB9\u0C82\u0CA4 4: \u0CAE\u0CCA\u0CA4\u0CCD\u0CA4 \u0CA8\u0CAE\u0CC2\u0CA6\u0CBF\u0CB8\u0CBF, \u0C89\u0CA6\u0CBE\u0CB9\u0CB0\u0CA3\u0CC6\u0C97\u0CC6 500 \u0CB0\u0CC2\u0CAA\u0CBE\u0CAF\u0CBF. \u0CB9\u0C82\u0CA4 5: \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE UPI PIN \u0CB9\u0CBE\u0C95\u0CBF. \u0CB9\u0C82\u0CA4 6: \u0CAA\u0CBE\u0CB5\u0CA4\u0CBF \u0CAF\u0CB6\u0CB8\u0CCD\u0CB5\u0CBF! \u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CB2\u0CBE\u0C97\u0CBF\u0CA6\u0CC6.',
+        '\u091A\u0930\u0923 1: \u092B\u094B\u0928\u092A\u0947 \u0910\u092A \u0916\u094B\u0932\u0947\u0902. \u091A\u0930\u0923 2: \u091F\u0942 \u092E\u094B\u092C\u093E\u0907\u0932 \u0928\u0902\u092C\u0930 \u092A\u0930 \u091F\u0948\u092A \u0915\u0930\u0947\u0902. \u091A\u0930\u0923 3: \u0935\u094D\u092F\u0915\u094D\u0924\u093F \u0915\u093E \u092B\u094B\u0928 \u0928\u0902\u092C\u0930 \u0921\u093E\u0932\u0947\u0902. \u091A\u0930\u0923 4: \u0930\u093E\u0936\u093F \u0926\u0930\u094D\u091C \u0915\u0930\u0947\u0902, \u091C\u0948\u0938\u0947 500 \u0930\u0941\u092A\u092F\u0947. \u091A\u0930\u0923 5: \u0905\u092A\u0928\u093E UPI PIN \u0921\u093E\u0932\u0947\u0902. \u091A\u0930\u0923 6: \u092D\u0941\u0917\u0924\u093E\u0928 \u0938\u092B\u0932! \u092A\u0948\u0938\u0947 \u092D\u0947\u091C \u0926\u093F\u090F \u0917\u090F.'
+      ),
+      screens: [
+        { title: L('Open PhonePe', '\u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF', '\u092B\u094B\u0928\u092A\u0947 \u0916\u094B\u0932\u0947\u0902'), ui: 'home' },
+        { title: L('Tap "To Mobile Number"', '"\u0C9F\u0CC1 \u0CAE\u0CCA\u0CAC\u0CC8\u0CB2\u0CCD \u0CA8\u0C82\u0CAC\u0CB0\u0CCD" \u0C92\u0CA4\u0CCD\u0CA4\u0CBF', '"\u091F\u0942 \u092E\u094B\u092C\u093E\u0907\u0932 \u0928\u0902\u092C\u0930" \u0926\u092C\u093E\u090F\u0902'), ui: 'select' },
+        { title: L('Enter Phone Number', '\u0CAB\u0CCB\u0CA8\u0CCD \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0CA8\u0CAE\u0CC2\u0CA6\u0CBF\u0CB8\u0CBF', '\u092B\u094B\u0928 \u0928\u0902\u092C\u0930 \u0921\u093E\u0932\u0947\u0902'), ui: 'number' },
+        { title: L('Enter Amount: \u20B9500', '\u0CAE\u0CCA\u0CA4\u0CCD\u0CA4: \u20B9500', '\u0930\u093E\u0936\u093F: \u20B9500'), ui: 'amount' },
+        { title: L('Enter UPI PIN', 'UPI PIN \u0CB9\u0CBE\u0C95\u0CBF', 'UPI PIN \u0921\u093E\u0932\u0947\u0902'), ui: 'pin' },
+        { title: L('Payment Successful! \u2705', '\u0CAA\u0CBE\u0CB5\u0CA4\u0CBF \u0CAF\u0CB6\u0CB8\u0CCD\u0CB5\u0CBF! \u2705', '\u092D\u0941\u0917\u0924\u093E\u0928 \u0938\u092B\u0932! \u2705'), ui: 'success' }
+      ]
     },
     {
       id: 'sir',
       icon: FileText,
       color: '#0369a1',
-      title: lang === 'kn' ? '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 (SIR) \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CAD\u0CB0\u0CCD\u0CA4\u0CBF \u0CAE\u0CBE\u0CA1\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6?' : lang === 'hi' ? '\u092B\u0938\u0932 \u092C\u0940\u092E\u093E (SIR) \u092B\u0949\u0930\u094D\u092E \u0915\u0948\u0938\u0947 \u092D\u0930\u0947\u0902?' : 'How to fill Crop Insurance (SIR) Form?',
-      desc: lang === 'kn' ? '\u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 \u0C95\u0CCD\u0CB2\u0CC7\u0CAE\u0CCD \u0CAE\u0CBE\u0CA1\u0CB2\u0CC1 \u0C85\u0CB0\u0CCD\u0C9C\u0CBF \u0CB8\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CC1\u0CB5 \u0CB5\u0CBF\u0CA7\u0CBE\u0CA8.' : lang === 'hi' ? '\u0905\u092A\u0928\u0947 \u092B\u0938\u0932 \u092C\u0940\u092E\u093E \u0915\u093E \u0926\u093E\u0935\u093E \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \u0906\u0935\u0947\u0926\u0928 \u0915\u0948\u0938\u0947 \u0915\u0930\u0947\u0902\u0964' : 'How to apply for your crop insurance claim.',
-      steps: lang === 'kn'
-        ? ['1. RTC, \u0C86\u0CA7\u0CBE\u0CB0\u0CCD, \u0CAC\u0CCD\u0CAF\u0CBE\u0C82\u0C95\u0CCD \u0CAA\u0CBE\u0CB8\u0CCD\u0CAC\u0CC1\u0C95\u0CCD \u0CB0\u0CC6\u0CA1\u0CBF \u0C87\u0CA1\u0CBF', '2. \u0CB0\u0CC8\u0CA4 \u0CB8\u0C82\u0CAA\u0CB0\u0CCD\u0C95 \u0C95\u0CC7\u0C82\u0CA6\u0CCD\u0CB0\u0C95\u0CCD\u0C95\u0CC6 \u0CB9\u0CCB\u0C97\u0CBF', '3. SIR \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CA4\u0CC1\u0C82\u0CAC\u0CBF', '4. \u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CB5\u0CB0 \u0CA8\u0CAE\u0CC2\u0CA6\u0CBF\u0CB8\u0CBF', '5. \u0CB0\u0CB8\u0CC0\u0CA6\u0CBF \u0CAA\u0CA1\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF']
-        : lang === 'hi'
-        ? ['1. RTC, \u0906\u0927\u093E\u0930, \u092C\u0948\u0902\u0915 \u092A\u093E\u0938\u092C\u0941\u0915 \u0924\u0948\u092F\u093E\u0930 \u0930\u0916\u0947\u0902', '2. \u0928\u091C\u0926\u0940\u0915\u0940 \u0930\u093E\u092F\u0924\u093E \u0938\u0902\u092A\u0930\u094D\u0915 \u0915\u0947\u0902\u0926\u094D\u0930 \u091C\u093E\u090F\u0902', '3. SIR \u092B\u0949\u0930\u094D\u092E \u092D\u0930\u0947\u0902', '4. \u092B\u0938\u0932 \u0935\u093F\u0935\u0930\u0923 \u0926\u0930\u094D\u091C \u0915\u0930\u0947\u0902', '5. \u0930\u0938\u0940\u0926 \u0932\u0947\u0902']
-        : ['1. Keep your RTC, Aadhaar, and Bank Passbook ready', '2. Visit the nearest Raitha Samparka Kendra', '3. Fill the SIR Form', '4. Enter your crop details', '5. Collect your receipt'],
-      voiceText: lang === 'kn' ? '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CA4\u0CC1\u0C82\u0CAC\u0CB2\u0CC1, \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0C86\u0CB0\u0CCD \u0C9F\u0CBF \u0CB8\u0CBF , \u0C86\u0CA7\u0CBE\u0CB0\u0CCD \u0C95\u0CBE\u0CB0\u0CCD\u0CA1\u0CCD \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CAC\u0CCD\u0CAF\u0CBE\u0C82\u0C95\u0CCD \u0CAA\u0CBE\u0CB8\u0CCD \u0CAC\u0CC1\u0C95\u0CCD \u0CA8\u0C95\u0CB2\u0CC1 \u0CAC\u0CC7\u0C95\u0CC1. \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CB9\u0CA4\u0CCD\u0CA4\u0CBF\u0CB0\u0CA6 \u0CB0\u0CC8\u0CA4 \u0CB8\u0C82\u0CAA\u0CB0\u0CCD\u0C95 \u0C95\u0CC7\u0C82\u0CA6\u0CCD\u0CB0 \u0C85\u0CA5\u0CB5\u0CBE \u0C86\u0CA8\u0CCD\u0CB2\u0CC8\u0CA8\u0CCD \u0CAA\u0CCB\u0CB0\u0CCD\u0C9F\u0CB2\u0CCD \u0CAE\u0CC2\u0CB2\u0C95 \u0C87\u0CA6\u0CA8\u0CCD\u0CA8\u0CC1 \u0CB8\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CAC\u0CB9\u0CC1\u0CA6\u0CC1.'
-                 : lang === 'hi' ? '\u092B\u0938\u0932 \u092C\u0940\u092E\u093E \u092B\u0949\u0930\u094D\u092E \u092D\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F, \u0906\u092A\u0915\u094B \u0905\u092A\u0928\u093E \u0906\u0930\u091F\u0940\u0938\u0940, \u0906\u0927\u093E\u0930 \u0915\u093E\u0930\u094D\u0921 \u0914\u0930 \u092C\u0948\u0902\u0915 \u092A\u093E\u0938\u092C\u0941\u0915 \u0915\u0940 \u0915\u0949\u092A\u0940 \u091A\u093E\u0939\u093F\u090F\u0964 \u0907\u0938\u0947 \u0906\u092A \u0928\u091C\u0926\u0940\u0915\u0940 \u0930\u093E\u092F\u0924\u093E \u0938\u0902\u092A\u0930\u094D\u0915 \u0915\u0947\u0902\u0926\u094D\u0930 \u092F\u093E \u0911\u0928\u0932\u093E\u0907\u0928 \u092A\u094B\u0930\u094D\u091F\u0932 \u0915\u0947 \u092E\u093E\u0927\u094D\u092F\u092E \u0938\u0947 \u091C\u092E\u093E \u0915\u0930 \u0938\u0915\u0924\u0947 \u0939\u0948\u0902\u0964'
-                 : 'To fill the crop insurance form, you need your RTC, Aadhaar card, and bank passbook copy. You can submit this at your nearest Raitha Samparka Kendra or via the online portal.'
+      title: L('Crop Insurance (SIR) Form Demo', '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CAE\u0CC6 (SIR) \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CA1\u0CC6\u0CAE\u0CCB', '\u092B\u0938\u0932 \u092C\u0940\u092E\u093E (SIR) \u092B\u0949\u0930\u094D\u092E \u0921\u0947\u092E\u094B'),
+      desc: L('See how to fill and submit the SIR form', 'SIR \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CA4\u0CC1\u0C82\u0CAC\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CA8\u0CCB\u0CA1\u0CBF', 'SIR \u092B\u0949\u0930\u094D\u092E \u092D\u0930\u0928\u093E \u0926\u0947\u0916\u0947\u0902'),
+      voiceText: L(
+        'Step 1: Keep your RTC, Aadhaar and Bank Passbook ready. Step 2: Go to the Raitha Samparka Kendra. Step 3: Ask for the SIR form. Step 4: Fill your name, crop, and land survey number. Step 5: Submit the form and collect the receipt.',
+        '\u0CB9\u0C82\u0CA4 1: RTC, \u0C86\u0CA7\u0CBE\u0CB0\u0CCD \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CAC\u0CCD\u0CAF\u0CBE\u0C82\u0C95\u0CCD \u0CAA\u0CBE\u0CB8\u0CCD\u0CAC\u0CC1\u0C95\u0CCD \u0CB0\u0CC6\u0CA1\u0CBF \u0C87\u0CA1\u0CBF. \u0CB9\u0C82\u0CA4 2: \u0CB0\u0CC8\u0CA4 \u0CB8\u0C82\u0CAA\u0CB0\u0CCD\u0C95 \u0C95\u0CC7\u0C82\u0CA6\u0CCD\u0CB0\u0C95\u0CCD\u0C95\u0CC6 \u0CB9\u0CCB\u0C97\u0CBF. \u0CB9\u0C82\u0CA4 3: SIR \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0C95\u0CC7\u0CB3\u0CBF. \u0CB9\u0C82\u0CA4 4: \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CB9\u0CC6\u0CB8\u0CB0\u0CC1, \u0CAC\u0CC6\u0CB3\u0CC6, \u0CB8\u0CB0\u0CCD\u0CB5\u0CC7 \u0CA8\u0C82\u0CAC\u0CB0\u0CCD \u0CA4\u0CC1\u0C82\u0CAC\u0CBF. \u0CB9\u0C82\u0CA4 5: \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CB8\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CBF \u0CB0\u0CB8\u0CC0\u0CA6\u0CBF \u0CAA\u0CA1\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF.',
+        '\u091A\u0930\u0923 1: RTC, \u0906\u0927\u093E\u0930 \u0914\u0930 \u092C\u0948\u0902\u0915 \u092A\u093E\u0938\u092C\u0941\u0915 \u0924\u0948\u092F\u093E\u0930 \u0930\u0916\u0947\u0902. \u091A\u0930\u0923 2: \u0930\u093E\u092F\u0924\u093E \u0938\u0902\u092A\u0930\u094D\u0915 \u0915\u0947\u0902\u0926\u094D\u0930 \u091C\u093E\u090F\u0902. \u091A\u0930\u0923 3: SIR \u092B\u0949\u0930\u094D\u092E \u092E\u093E\u0902\u0917\u0947\u0902. \u091A\u0930\u0923 4: \u0905\u092A\u0928\u093E \u0928\u093E\u092E, \u092B\u0938\u0932, \u0938\u0930\u094D\u0935\u0947 \u0928\u0902\u092C\u0930 \u092D\u0930\u0947\u0902. \u091A\u0930\u0923 5: \u092B\u0949\u0930\u094D\u092E \u091C\u092E\u093E \u0915\u0930\u0947\u0902 \u0914\u0930 \u0930\u0938\u0940\u0926 \u0932\u0947\u0902.'
+      ),
+      screens: [
+        { title: L('Gather Documents', '\u0CA6\u0CBE\u0C96\u0CB2\u0CC6\u0C97\u0CB3\u0CC1 \u0CB8\u0CBF\u0CA6\u0CCD\u0CA7\u0CAA\u0CA1\u0CBF\u0CB8\u0CBF', '\u0926\u0938\u094D\u0924\u093E\u0935\u0947\u091C\u093C \u0924\u0948\u092F\u093E\u0930 \u0915\u0930\u0947\u0902'), ui: 'docs' },
+        { title: L('Visit Raitha Samparka Kendra', '\u0CB0\u0CC8\u0CA4 \u0CB8\u0C82\u0CAA\u0CB0\u0CCD\u0C95 \u0C95\u0CC7\u0C82\u0CA6\u0CCD\u0CB0\u0C95\u0CCD\u0C95\u0CC6 \u0CB9\u0CCB\u0C97\u0CBF', '\u0930\u093E\u092F\u0924\u093E \u0938\u0902\u092A\u0930\u094D\u0915 \u0915\u0947\u0902\u0926\u094D\u0930 \u091C\u093E\u090F\u0902'), ui: 'visit' },
+        { title: L('Fill the SIR Form', 'SIR \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CA4\u0CC1\u0C82\u0CAC\u0CBF', 'SIR \u092B\u0949\u0930\u094D\u092E \u092D\u0930\u0947\u0902'), ui: 'fill' },
+        { title: L('Enter Crop & Land Details', '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CAD\u0CC2\u0CAE\u0CBF \u0CB5\u0CBF\u0CB5\u0CB0', '\u092B\u0938\u0932 \u0914\u0930 \u092D\u0942\u092E\u093F \u0935\u093F\u0935\u0930\u0923'), ui: 'details' },
+        { title: L('Submit & Get Receipt \u2705', '\u0CB8\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CBF \u0CB0\u0CB8\u0CC0\u0CA6\u0CBF \u0CAA\u0CA1\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF \u2705', '\u091C\u092E\u093E \u0915\u0930\u0947\u0902 \u0914\u0930 \u0930\u0938\u0940\u0926 \u0932\u0947\u0902 \u2705'), ui: 'receipt' }
+      ]
     },
     {
       id: 'market',
       icon: TrendingUp,
       color: '#16a34a',
-      title: lang === 'kn' ? '\u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0C9A\u0CC6\u0C95\u0CCD \u0CAE\u0CBE\u0CA1\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6?' : lang === 'hi' ? '\u092C\u093E\u091C\u093E\u0930 \u0915\u0940 \u0915\u0940\u092E\u0924\u0947\u0902 \u0915\u0948\u0938\u0947 \u091C\u093E\u0902\u091A\u0947\u0902?' : 'How to check Market Prices?',
-      desc: lang === 'kn' ? '\u0CA6\u0CC8\u0CA8\u0C82\u0CA6\u0CBF\u0CA8 \u0C8E\u0CAA\u0CBF\u0C8E\u0C82\u0CB8\u0CBF \u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAB\u0CCB\u0CA8\u0CCD \u0CA8\u0CB2\u0CCD\u0CB2\u0CBF \u0CA8\u0CCB\u0CA1\u0CBF.' : lang === 'hi' ? '\u0905\u092A\u0928\u0947 \u092B\u094B\u0928 \u092A\u0930 \u0926\u0948\u0928\u093F\u0915 \u090F\u092A\u0940\u090F\u092E\u0938\u0940 \u092C\u093E\u091C\u093E\u0930 \u0915\u0940 \u0915\u0940\u092E\u0924\u0947\u0902 \u0926\u0947\u0916\u0947\u0902\u0964' : 'Check daily APMC market prices on your phone.',
-      steps: lang === 'kn'
-        ? ['1. \u0C97\u0CCD\u0CB0\u0CBE\u0CAE\u0CCD \u0CB8\u0CC7\u0CA4\u0CC1 \u0C86\u0CAA\u0CCD \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF', '2. \u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CB5\u0CBF\u0CAD\u0CBE\u0C97\u0C95\u0CCD\u0C95\u0CC6 \u0CB9\u0CCB\u0C97\u0CBF', '3. \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAC\u0CC6\u0CB3\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CB9\u0CC1\u0CA1\u0CC1\u0C95\u0CBF', '4. \u0CAA\u0CCD\u0CB0\u0CB8\u0CCD\u0CA4\u0CC1\u0CA4 \u0CAC\u0CC6\u0CB2\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CCB\u0CA1\u0CBF']
-        : lang === 'hi'
-        ? ['1. \u0917\u094D\u0930\u093E\u092E \u0938\u0947\u0924\u0941 \u0910\u092A \u0916\u094B\u0932\u0947\u0902', '2. \u092C\u093E\u091C\u093E\u0930 \u0905\u0928\u0941\u092D\u093E\u0917 \u092A\u0930 \u091C\u093E\u090F\u0902', '3. \u0905\u092A\u0928\u0940 \u092B\u0938\u0932 \u0916\u094B\u091C\u0947\u0902', '4. \u0935\u0930\u094D\u0924\u092E\u093E\u0928 \u0915\u0940\u092E\u0924\u0947\u0902 \u0926\u0947\u0916\u0947\u0902']
-        : ['1. Open the Gram Setu app', '2. Go to the Market section', '3. Search for your crop', '4. See the current APMC price'],
-      voiceText: lang === 'kn' ? '\u0C97\u0CCD\u0CB0\u0CBE\u0CAE\u0CCD \u0CB8\u0CC7\u0CA4\u0CC1 \u0C86\u0CAA\u0CCD \u0CA8\u0CB2\u0CCD\u0CB2\u0CBF \u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CB5\u0CBF\u0CAD\u0CBE\u0C97\u0C95\u0CCD\u0C95\u0CC6 \u0CB9\u0CCB\u0C97\u0CBF. \u0C85\u0CB2\u0CCD\u0CB2\u0CBF \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAC\u0CC6\u0CB3\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CB9\u0CC1\u0CA1\u0CC1\u0C95\u0CBF \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 \u0CAA\u0CCD\u0CB0\u0CB8\u0CCD\u0CA4\u0CC1\u0CA4 \u0CAC\u0CC6\u0CB2\u0CC6\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CCB\u0CA1\u0CAC\u0CB9\u0CC1\u0CA6\u0CC1.'
-                 : lang === 'hi' ? '\u0917\u094D\u0930\u093E\u092E \u0938\u0947\u0924\u0941 \u0910\u092A \u092E\u0947\u0902 \u092C\u093E\u091C\u093E\u0930 \u0905\u0928\u0941\u092D\u093E\u0917 \u092A\u0930 \u091C\u093E\u090F\u0902\u0964 \u0935\u0939\u093E\u0902 \u0905\u092A\u0928\u0940 \u092B\u0938\u0932\u094B\u0902 \u0915\u094B \u0916\u094B\u091C\u0947\u0902 \u0914\u0930 \u0935\u0930\u094D\u0924\u092E\u093E\u0928 \u0915\u0940\u092E\u0924\u0947\u0902 \u0926\u0947\u0916 \u0938\u0915\u0924\u0947 \u0939\u0948\u0902\u0964'
-                 : 'Go to the Market section in the Gram Setu app. Search for your crops there and you can see the current prices.'
+      title: L('Check Market Prices Demo', '\u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6 \u0CA1\u0CC6\u0CAE\u0CCB', '\u092C\u093E\u091C\u093E\u0930 \u0915\u0940\u092E\u0924 \u0921\u0947\u092E\u094B'),
+      desc: L('Learn to check APMC crop prices', 'APMC \u0CAC\u0CC6\u0CB3\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6 \u0CA8\u0CCB\u0CA1\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0C95\u0CB2\u0CBF\u0CAF\u0CBF\u0CB0\u0CBF', 'APMC \u092B\u0938\u0932 \u0915\u0940\u092E\u0924 \u0926\u0947\u0916\u0928\u093E \u0938\u0940\u0916\u0947\u0902'),
+      voiceText: L(
+        'Step 1: Open the Gram Setu app. Step 2: Tap on Market from the menu. Step 3: You will see a list of crops. Step 4: Select your crop, for example Ragi. Step 5: See the current price and price trend.',
+        '\u0CB9\u0C82\u0CA4 1: \u0C97\u0CCD\u0CB0\u0CBE\u0CAE\u0CCD \u0CB8\u0CC7\u0CA4\u0CC1 \u0C86\u0CAA\u0CCD \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF. \u0CB9\u0C82\u0CA4 2: \u0CAE\u0CC6\u0CA8\u0CC1\u0CA8\u0CB2\u0CCD\u0CB2\u0CBF \u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0C92\u0CA4\u0CCD\u0CA4\u0CBF. \u0CB9\u0C82\u0CA4 3: \u0CAC\u0CC6\u0CB3\u0CC6\u0C97\u0CB3 \u0CAA\u0C9F\u0CCD\u0C9F\u0CBF \u0C95\u0CBE\u0CA3\u0CC1\u0CA4\u0CCD\u0CA4\u0CA6\u0CC6. \u0CB9\u0C82\u0CA4 4: \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAC\u0CC6\u0CB3\u0CC6 \u0C86\u0CAF\u0CCD\u0C95\u0CC6 \u0CAE\u0CBE\u0CA1\u0CBF, \u0C89\u0CA6\u0CBE\u0CB9\u0CB0\u0CA3\u0CC6\u0C97\u0CC6 \u0CB0\u0CBE\u0C97\u0CBF. \u0CB9\u0C82\u0CA4 5: \u0CAA\u0CCD\u0CB0\u0CB8\u0CCD\u0CA4\u0CC1\u0CA4 \u0CAC\u0CC6\u0CB2\u0CC6 \u0CA8\u0CCB\u0CA1\u0CBF.',
+        '\u091A\u0930\u0923 1: \u0917\u094D\u0930\u093E\u092E \u0938\u0947\u0924\u0941 \u0910\u092A \u0916\u094B\u0932\u0947\u0902. \u091A\u0930\u0923 2: \u092E\u0947\u0928\u0942 \u092E\u0947\u0902 \u092C\u093E\u091C\u093E\u0930 \u092A\u0930 \u091F\u0948\u092A \u0915\u0930\u0947\u0902. \u091A\u0930\u0923 3: \u092B\u0938\u0932\u094B\u0902 \u0915\u0940 \u0938\u0942\u091A\u0940 \u0926\u093F\u0916\u0947\u0917\u0940. \u091A\u0930\u0923 4: \u0905\u092A\u0928\u0940 \u092B\u0938\u0932 \u091A\u0941\u0928\u0947\u0902, \u091C\u0948\u0938\u0947 \u0930\u093E\u0917\u0940. \u091A\u0930\u0923 5: \u0935\u0930\u094D\u0924\u092E\u093E\u0928 \u0915\u0940\u092E\u0924 \u0926\u0947\u0916\u0947\u0902.'
+      ),
+      screens: [
+        { title: L('Open Gram Setu', '\u0C97\u0CCD\u0CB0\u0CBE\u0CAE\u0CCD \u0CB8\u0CC7\u0CA4\u0CC1 \u0CA4\u0CC6\u0CB0\u0CC6\u0CAF\u0CBF\u0CB0\u0CBF', '\u0917\u094D\u0930\u093E\u092E \u0938\u0947\u0924\u0941 \u0916\u094B\u0932\u0947\u0902'), ui: 'app' },
+        { title: L('Tap Market', '\u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0C92\u0CA4\u0CCD\u0CA4\u0CBF', '\u092C\u093E\u091C\u093E\u0930 \u0926\u092C\u093E\u090F\u0902'), ui: 'menu' },
+        { title: L('See Crop List', '\u0CAC\u0CC6\u0CB3\u0CC6 \u0CAA\u0C9F\u0CCD\u0C9F\u0CBF', '\u092B\u0938\u0932 \u0938\u0942\u091A\u0940'), ui: 'list' },
+        { title: L('Select Ragi', '\u0CB0\u0CBE\u0C97\u0CBF \u0C86\u0CAF\u0CCD\u0C95\u0CC6 \u0CAE\u0CBE\u0CA1\u0CBF', '\u0930\u093E\u0917\u0940 \u091A\u0941\u0928\u0947\u0902'), ui: 'crop' },
+        { title: L('View Price: \u20B93,450/qtl \u2705', '\u0CAC\u0CC6\u0CB2\u0CC6: \u20B93,450/\u0C95\u0CCD\u0CB5\u0CBF \u2705', '\u0915\u0940\u092E\u0924: \u20B93,450/\u0915\u094D\u0935\u093F \u2705'), ui: 'price' }
+      ]
     }
   ]
 
   const handleVoicePlay = (tutId, text) => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel()
-      
-      if (speaking === tutId) {
-        setSpeaking(null)
-        return
-      }
-
+      if (speaking === tutId) { setSpeaking(null); return }
       const utterance = new SpeechSynthesisUtterance(text)
       const voices = window.speechSynthesis.getVoices()
-      let selectedVoice = null
-
-      if (lang === 'kn') {
-        utterance.lang = 'kn-IN'
-        selectedVoice = voices.find(v => v.lang.includes('kn') || v.name.toLowerCase().includes('kannada'))
-      } else if (lang === 'hi') {
-        utterance.lang = 'hi-IN'
-        selectedVoice = voices.find(v => v.lang.includes('hi') || v.name.toLowerCase().includes('hindi'))
-      } else {
-        utterance.lang = 'en-IN'
-        selectedVoice = voices.find(v => v.lang.includes('en-IN')) || voices.find(v => v.lang.includes('en'))
-      }
-
-      if (selectedVoice) utterance.voice = selectedVoice
+      let sv = null
+      if (lang === 'kn') { utterance.lang = 'kn-IN'; sv = voices.find(v => v.lang.includes('kn') || v.name.toLowerCase().includes('kannada')) }
+      else if (lang === 'hi') { utterance.lang = 'hi-IN'; sv = voices.find(v => v.lang.includes('hi') || v.name.toLowerCase().includes('hindi')) }
+      else { utterance.lang = 'en-IN'; sv = voices.find(v => v.lang.includes('en-IN')) || voices.find(v => v.lang.includes('en')) }
+      if (sv) utterance.voice = sv
       utterance.rate = 0.85
       utterance.onend = () => setSpeaking(null)
       setSpeaking(tutId)
       window.speechSynthesis.speak(utterance)
     }
+  }
+
+  // Render a mock phone screen based on the UI type
+  const renderPhoneScreen = (demo, step) => {
+    const screen = demo.screens[step]
+    const isUPI = demo.id === 'upi'
+    const isSIR = demo.id === 'sir'
+
+    const phoneUI = {
+      // UPI Screens
+      home: (<div style={{textAlign:'center'}}><div style={{background:'#5b21b6',color:'#fff',padding:'12px',borderRadius:8,fontSize:16,fontWeight:700,marginBottom:12}}>PhonePe</div><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>{[L('To Mobile','\u0CAE\u0CCA\u0CAC\u0CC8\u0CB2\u0CCD\u0C97\u0CC6','\u092E\u094B\u092C\u093E\u0907\u0932 \u092A\u0930'),L('To Bank','\u0CAC\u0CCD\u0CAF\u0CBE\u0C82\u0C95\u0CCD\u0C97\u0CC6','\u092C\u0948\u0902\u0915 \u092E\u0947\u0902'),L('Scan QR','QR \u0CB8\u0CCD\u0C95\u0CCD\u0CAF\u0CBE\u0CA8\u0CCD','QR \u0938\u094D\u0915\u0948\u0928'),L('Bills','\u0CAC\u0CBF\u0CB2\u0CCD\u0CB8\u0CCD','\u092C\u093F\u0932')].map((b,i) => <div key={i} style={{background:'#ede9fe',padding:'14px 8px',borderRadius:8,fontSize:11,fontWeight:600,color:'#5b21b6'}}>{b}</div>)}</div></div>),
+      select: (<div><div style={{background:'#5b21b6',color:'#fff',padding:'10px 12px',borderRadius:8,fontSize:13,fontWeight:700,marginBottom:12}}>\u2190 {L('Send Money','\u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CBF','\u092A\u0948\u0938\u0947 \u092D\u0947\u091C\u0947\u0902')}</div><div style={{background:'#f5f3ff',border:'2px solid #7c3aed',padding:12,borderRadius:8,fontSize:13,fontWeight:700,color:'#5b21b6',textAlign:'center',animation:'pulse 1.5s infinite'}}>\u261E {L('To Mobile Number','\u0C9F\u0CC1 \u0CAE\u0CCA\u0CAC\u0CC8\u0CB2\u0CCD \u0CA8\u0C82\u0CAC\u0CB0\u0CCD','\u091F\u0942 \u092E\u094B\u092C\u093E\u0907\u0932 \u0928\u0902\u092C\u0930')}</div></div>),
+      number: (<div><div style={{background:'#5b21b6',color:'#fff',padding:'10px 12px',borderRadius:8,fontSize:13,fontWeight:700,marginBottom:12}}>\u2190 {L('Enter Number','\u0CA8\u0C82\u0CAC\u0CB0\u0CCD','\u0928\u0902\u092C\u0930')}</div><div style={{background:'#f9fafb',border:'1px solid #d1d5db',padding:12,borderRadius:8,fontSize:18,fontWeight:700,fontFamily:'monospace',letterSpacing:2}}>9876543210</div><div style={{fontSize:11,color:'#16a34a',fontWeight:600,marginTop:8}}>\u2713 {L('Ramappa Gowda','\u0CB0\u0CBE\u0CAE\u0CAA\u0CCD\u0CAA \u0C97\u0CCC\u0CA1','\u0930\u093E\u092E\u092A\u094D\u092A\u093E \u0917\u094C\u0921')}</div></div>),
+      amount: (<div style={{textAlign:'center'}}><div style={{fontSize:11,color:'#6b7280',marginBottom:4}}>{L('Enter Amount','\u0CAE\u0CCA\u0CA4\u0CCD\u0CA4','\u0930\u093E\u0936\u093F')}</div><div style={{fontSize:36,fontWeight:800,color:'#5b21b6'}}>\u20B9 500</div><div style={{fontSize:11,color:'#6b7280',marginTop:8}}>{L('To: Ramappa Gowda','\u0C97\u0CC6: \u0CB0\u0CBE\u0CAE\u0CAA\u0CCD\u0CAA \u0C97\u0CCC\u0CA1','\u0915\u094B: \u0930\u093E\u092E\u092A\u094D\u092A\u093E \u0917\u094C\u0921')}</div><div style={{background:'#7c3aed',color:'#fff',padding:'10px',borderRadius:8,marginTop:16,fontSize:13,fontWeight:700}}>{L('PAY \u20B9500','\u20B9500 \u0CAA\u0CBE\u0CB5\u0CA4\u0CBF\u0CB8\u0CBF','\u20B9500 \u092D\u0941\u0917\u0924\u093E\u0928 \u0915\u0930\u0947\u0902')}</div></div>),
+      pin: (<div style={{textAlign:'center'}}><div style={{fontSize:12,color:'#6b7280',marginBottom:12}}>{L('Enter 4-digit UPI PIN','4-\u0C85\u0C82\u0C95\u0CBF UPI PIN \u0CB9\u0CBE\u0C95\u0CBF','4-\u0905\u0902\u0915 UPI PIN \u0921\u093E\u0932\u0947\u0902')}</div><div style={{display:'flex',gap:12,justifyContent:'center'}}>{[1,2,3,4].map(i => <div key={i} style={{width:36,height:36,borderRadius:8,background:'#ede9fe',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,fontWeight:800,color:'#5b21b6'}}>\u2022</div>)}</div></div>),
+      success: (<div style={{textAlign:'center'}}><div style={{width:56,height:56,borderRadius:'50%',background:'#dcfce7',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 12px auto',fontSize:28}}>\u2705</div><div style={{fontSize:18,fontWeight:800,color:'#16a34a'}}>{L('Payment Successful!','\u0CAA\u0CBE\u0CB5\u0CA4\u0CBF \u0CAF\u0CB6\u0CB8\u0CCD\u0CB5\u0CBF!','\u092D\u0941\u0917\u0924\u093E\u0928 \u0938\u092B\u0932!')}</div><div style={{fontSize:13,color:'#6b7280',marginTop:4}}>\u20B9500 {L('sent to Ramappa','\u0CB0\u0CBE\u0CAE\u0CAA\u0CCD\u0CAA\u0C97\u0CC6 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CB2\u0CBE\u0C97\u0CBF\u0CA6\u0CC6','\u0930\u093E\u092E\u092A\u094D\u092A\u093E \u0915\u094B \u092D\u0947\u091C\u093E \u0917\u092F\u093E')}</div><div style={{fontSize:11,color:'#9ca3af',marginTop:8}}>Txn ID: UPI2025080812345</div></div>),
+      // SIR Screens
+      docs: (<div><div style={{fontSize:13,fontWeight:700,marginBottom:10}}>{L('Documents Needed','\u0CAC\u0CC7\u0C95\u0CBE\u0CA6 \u0CA6\u0CBE\u0C96\u0CB2\u0CC6\u0C97\u0CB3\u0CC1','\u0906\u0935\u0936\u094D\u092F\u0915 \u0926\u0938\u094D\u0924\u093E\u0935\u0947\u091C\u093C')}</div>{[{n:'RTC',e:'\u2705'},{n:L('Aadhaar Card','\u0C86\u0CA7\u0CBE\u0CB0\u0CCD \u0C95\u0CBE\u0CB0\u0CCD\u0CA1\u0CCD','\u0906\u0927\u093E\u0930 \u0915\u093E\u0930\u094D\u0921'),e:'\u2705'},{n:L('Bank Passbook','\u0CAC\u0CCD\u0CAF\u0CBE\u0C82\u0C95\u0CCD \u0CAA\u0CBE\u0CB8\u0CCD\u0CAC\u0CC1\u0C95\u0CCD','\u092C\u0948\u0902\u0915 \u092A\u093E\u0938\u092C\u0941\u0915'),e:'\u2705'}].map((d,i) => <div key={i} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid #e5e7eb',fontSize:13}}><span>{d.n}</span><span>{d.e}</span></div>)}</div>),
+      visit: (<div style={{textAlign:'center'}}><div style={{fontSize:28,marginBottom:8}}>\uD83C\uDFE2</div><div style={{fontSize:14,fontWeight:700}}>{L('Raitha Samparka Kendra','\u0CB0\u0CC8\u0CA4 \u0CB8\u0C82\u0CAA\u0CB0\u0CCD\u0C95 \u0C95\u0CC7\u0C82\u0CA6\u0CCD\u0CB0','\u0930\u093E\u092F\u0924\u093E \u0938\u0902\u092A\u0930\u094D\u0915 \u0915\u0947\u0902\u0926\u094D\u0930')}</div><div style={{fontSize:11,color:'#6b7280',marginTop:4}}>{L('Your nearest government service center','\u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CB9\u0CA4\u0CCD\u0CA4\u0CBF\u0CB0\u0CA6 \u0CB8\u0CB0\u0CCD\u0C95\u0CBE\u0CB0\u0CBF \u0C95\u0CC7\u0C82\u0CA6\u0CCD\u0CB0','\u0906\u092A\u0915\u093E \u0928\u091C\u0926\u0940\u0915\u0940 \u0938\u0930\u0915\u093E\u0930\u0940 \u0915\u0947\u0902\u0926\u094D\u0930')}</div></div>),
+      fill: (<div><div style={{fontSize:12,fontWeight:700,marginBottom:10,color:'#0369a1'}}>SIR {L('Form','\u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD','\u092B\u0949\u0930\u094D\u092E')}</div>{[L('Name','\u0CB9\u0CC6\u0CB8\u0CB0\u0CC1','\u0928\u093E\u092E'),L('Aadhaar','\u0C86\u0CA7\u0CBE\u0CB0\u0CCD','\u0906\u0927\u093E\u0930'),L('Phone','\u0CAB\u0CCB\u0CA8\u0CCD','\u092B\u094B\u0928')].map((f,i) => <div key={i} style={{marginBottom:8}}><div style={{fontSize:10,color:'#6b7280',marginBottom:2}}>{f}</div><div style={{background:'#f0f9ff',border:'1px solid #bae6fd',padding:'6px 8px',borderRadius:4,fontSize:12}}>{i===0?L('Ramappa Gowda','\u0CB0\u0CBE\u0CAE\u0CAA\u0CCD\u0CAA \u0C97\u0CCC\u0CA1','\u0930\u093E\u092E\u092A\u094D\u092A\u093E \u0917\u094C\u0921'):i===1?'XXXX-XXXX-1234':'98765-43210'}</div></div>)}</div>),
+      details: (<div><div style={{fontSize:12,fontWeight:700,marginBottom:10,color:'#0369a1'}}>{L('Crop Details','\u0CAC\u0CC6\u0CB3\u0CC6 \u0CB5\u0CBF\u0CB5\u0CB0','\u092B\u0938\u0932 \u0935\u093F\u0935\u0930\u0923')}</div>{[[L('Crop','\u0CAC\u0CC6\u0CB3\u0CC6','\u092B\u0938\u0932'),L('Ragi','\u0CB0\u0CBE\u0C97\u0CBF','\u0930\u093E\u0917\u0940')],[L('Season','\u0C8B\u0CA4\u0CC1','\u092E\u094C\u0938\u092E'),'Kharif 2025'],[L('Survey No.','\u0CB8\u0CB0\u0CCD\u0CB5\u0CC7 \u0CA8\u0C82.','\u0938\u0930\u094D\u0935\u0947 \u0928\u0902.'),'45/2A'],[L('Area','\u0CB5\u0CBF\u0CB8\u0CCD\u0CA4\u0CC0\u0CB0\u0CCD\u0CA3','\u0915\u094D\u0937\u0947\u0924\u094D\u0930\u092B\u0932'),L('2.5 Acres','2.5 \u0C8E\u0C95\u0CB0\u0CC6','2.5 \u090F\u0915\u0921\u093C')]].map(([l,v],i) => <div key={i} style={{display:'flex',justifyContent:'space-between',padding:'6px 0',borderBottom:'1px solid #e5e7eb',fontSize:12}}><span style={{color:'#6b7280'}}>{l}</span><span style={{fontWeight:600}}>{v}</span></div>)}</div>),
+      receipt: (<div style={{textAlign:'center'}}><div style={{fontSize:28,marginBottom:8}}>\u2705</div><div style={{fontSize:15,fontWeight:800,color:'#0369a1'}}>{L('Form Submitted!','\u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD \u0CB8\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CB2\u0CBE\u0C97\u0CBF\u0CA6\u0CC6!','\u092B\u0949\u0930\u094D\u092E \u091C\u092E\u093E \u0939\u094B \u0917\u092F\u093E!')}</div><div style={{fontSize:11,color:'#6b7280',marginTop:6}}>{L('Receipt No: SIR-2025-04521','\u0CB0\u0CB8\u0CC0\u0CA6\u0CBF \u0CA8\u0C82: SIR-2025-04521','\u0930\u0938\u0940\u0926 \u0928\u0902: SIR-2025-04521')}</div></div>),
+      // Market Screens
+      app: (<div style={{textAlign:'center'}}><div style={{background:'linear-gradient(135deg,#16a34a,#15803d)',color:'#fff',padding:12,borderRadius:8,fontSize:16,fontWeight:800,marginBottom:8}}>\uD83C\uDF3E Gram Setu</div><div style={{fontSize:11,color:'#6b7280'}}>{L('Village Digital Platform','\u0C97\u0CCD\u0CB0\u0CBE\u0CAE \u0CA1\u0CBF\u0C9C\u0CBF\u0C9F\u0CB2\u0CCD \u0CB5\u0CC7\u0CA6\u0CBF\u0C95\u0CC6','\u0917\u094D\u0930\u093E\u092E \u0921\u093F\u091C\u093F\u091F\u0932 \u092A\u094D\u0932\u0947\u091F\u092B\u0949\u0930\u094D\u092E')}</div></div>),
+      menu: (<div><div style={{fontSize:13,fontWeight:700,marginBottom:8}}>{L('Menu','\u0CAE\u0CC6\u0CA8\u0CC1','\u092E\u0947\u0928\u0942')}</div>{[L('Dashboard','\u0CA1\u0CCD\u0CAF\u0CBE\u0CB6\u0CAC\u0CCB\u0CB0\u0CCD\u0CA1\u0CCD','\u0921\u0948\u0936\u092C\u094B\u0930\u094D\u0921'),L('\u261E Market','\u261E \u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6','\u261E \u092C\u093E\u091C\u093E\u0930'),L('Schemes','\u0CAF\u0CCB\u0C9C\u0CA8\u0CC6\u0C97\u0CB3\u0CC1','\u092F\u094B\u091C\u0928\u093E\u090F\u0902')].map((m,i) => <div key={i} style={{padding:'8px 10px',borderRadius:6,fontSize:12,fontWeight:i===1?700:400,background:i===1?'#dcfce7':'transparent',color:i===1?'#16a34a':'inherit',marginBottom:4,border:i===1?'1px solid #bbf7d0':'1px solid transparent'}}>{m}</div>)}</div>),
+      list: (<div><div style={{fontSize:12,fontWeight:700,marginBottom:8}}>{L('Today\'s Prices','\u0C87\u0C82\u0CA6\u0CBF\u0CA8 \u0CAC\u0CC6\u0CB2\u0CC6','\u0906\u091C \u0915\u0940 \u0915\u0940\u092E\u0924')}</div>{[['Ragi','\u20B93,450'],['Paddy','\u20B92,180'],['Jowar','\u20B93,100']].map(([c,p],i) => <div key={i} style={{display:'flex',justifyContent:'space-between',padding:'8px',background:i===0?'#f0fdf4':'#f9fafb',borderRadius:6,marginBottom:4,fontSize:12,fontWeight:i===0?700:400,border:i===0?'1px solid #bbf7d0':'none'}}><span>{c}</span><span style={{color:'#16a34a',fontWeight:700}}>{p}/qtl</span></div>)}</div>),
+      crop: (<div style={{textAlign:'center'}}><div style={{fontSize:28,marginBottom:4}}>\uD83C\uDF3E</div><div style={{fontSize:16,fontWeight:800}}>Ragi</div><div style={{fontSize:11,color:'#6b7280'}}>{L('Finger Millet','\u0CB0\u0CBE\u0C97\u0CBF','\u0930\u093E\u0917\u0940')}</div></div>),
+      price: (<div style={{textAlign:'center'}}><div style={{fontSize:11,color:'#6b7280'}}>{L('Current Price','\u0CAA\u0CCD\u0CB0\u0CB8\u0CCD\u0CA4\u0CC1\u0CA4 \u0CAC\u0CC6\u0CB2\u0CC6','\u0935\u0930\u094D\u0924\u092E\u093E\u0928 \u0915\u0940\u092E\u0924')}</div><div style={{fontSize:28,fontWeight:800,color:'#16a34a',margin:'4px 0'}}>\u20B93,450<span style={{fontSize:12,fontWeight:400,color:'#6b7280'}}>/qtl</span></div><div style={{fontSize:11,color:'#16a34a',fontWeight:600}}>\u2191 +\u20B9120 {L('from yesterday','\u0CA8\u0CBF\u0CA8\u0CCD\u0CA8\u0CC6\u0CAF\u0CBF\u0C82\u0CA6','\u0915\u0932 \u0938\u0947')}</div></div>)
+    }
+
+    return phoneUI[screen.ui] || null
   }
 
   return (
@@ -2638,75 +2679,88 @@ export function TutorialsScreen() {
       </div>
 
       <div style={{ display: 'grid', gap: 20 }}>
-        {tutorials.map(tut => {
-          const Icon = tut.icon
+        {demos.map((demo, dIdx) => {
+          const Icon = demo.icon
+          const isActive = activeDemo === dIdx
           return (
-          <div key={tut.id} className="card" style={{ padding: 0, overflow: 'hidden' }}>
-            {/* Colored Header with Icon */}
-            <div style={{ 
-              background: tut.color + '15', 
-              padding: '24px', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 16,
-              borderBottom: '1px solid var(--border-light)'
-            }}>
-              <div style={{ background: tut.color, color: '#fff', padding: 14, borderRadius: '50%' }}>
-                <Icon size={28} />
-              </div>
-              <div>
-                <h3 style={{ margin: 0, fontSize: 17, fontWeight: 700 }}>{tut.title}</h3>
-                <p style={{ margin: '4px 0 0 0', fontSize: 13, color: 'var(--text-muted)' }}>{tut.desc}</p>
+          <div key={demo.id} className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            {/* Header */}
+            <div style={{ background: demo.color + '12', padding: '20px 24px', display: 'flex', alignItems: 'center', gap: 16, borderBottom: '1px solid var(--border-light)' }}>
+              <div style={{ background: demo.color, color: '#fff', padding: 12, borderRadius: '50%' }}><Icon size={24} /></div>
+              <div style={{ flex: 1 }}>
+                <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>{demo.title}</h3>
+                <p style={{ margin: '4px 0 0 0', fontSize: 13, color: 'var(--text-muted)' }}>{demo.desc}</p>
               </div>
             </div>
 
-            {/* Step-by-Step Guide */}
-            <div style={{ padding: '20px 24px' }}>
-              <h4 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', margin: '0 0 12px 0' }}>
-                {lang === 'kn' ? '\u0CB9\u0C82\u0CA4-\u0CB9\u0C82\u0CA4\u0CA6 \u0CAE\u0CBE\u0CB0\u0CCD\u0C97\u0CA6\u0CB0\u0CCD\u0CB6\u0CBF' : lang === 'hi' ? '\u091A\u0930\u0923-\u0926\u0930-\u091A\u0930\u0923 \u092E\u093E\u0930\u094D\u0917\u0926\u0930\u094D\u0936\u093F\u0915\u093E' : 'Step-by-Step Guide'}
-              </h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {tut.steps.map((step, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 12px', background: 'var(--bg-main)', borderRadius: 8 }}>
-                    <div style={{ width: 24, height: 24, borderRadius: '50%', background: tut.color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{i + 1}</div>
-                    <span style={{ fontSize: 14, lineHeight: 1.5 }}>{step.replace(/^\d+\.\s*/, '')}</span>
-                  </div>
+            {/* Phone Demo Area */}
+            <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              {/* Mock Phone Frame */}
+              <div style={{ 
+                width: 240, minHeight: 320, 
+                border: '3px solid #1f2937', borderRadius: 24, 
+                background: '#fff', padding: '32px 16px 16px 16px', 
+                position: 'relative', 
+                boxShadow: '0 20px 40px rgba(0,0,0,0.12)'
+              }}>
+                {/* Phone notch */}
+                <div style={{ position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)', width: 60, height: 6, background: '#1f2937', borderRadius: 4 }} />
+                
+                {/* Status bar */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#6b7280', marginBottom: 12, padding: '0 4px' }}>
+                  <span>9:41 AM</span>
+                  <span>\uD83D\uDD0B 85%</span>
+                </div>
+
+                {/* Screen Content */}
+                <div style={{ minHeight: 180 }} key={isActive ? demoStep : 'idle'} className="animate-fadeInUp">
+                  {isActive ? renderPhoneScreen(demo, demoStep) : renderPhoneScreen(demo, 0)}
+                </div>
+              </div>
+
+              {/* Step indicator dots */}
+              <div style={{ display: 'flex', gap: 6, marginTop: 16 }}>
+                {demo.screens.map((_, i) => (
+                  <div key={i} style={{ 
+                    width: isActive && i === demoStep ? 20 : 8, height: 8, borderRadius: 4, 
+                    background: isActive && i === demoStep ? demo.color : (isActive && i < demoStep ? demo.color + '80' : '#d1d5db'),
+                    transition: 'all 0.3s ease'
+                  }} />
                 ))}
               </div>
-              
-              {/* AI Voice Button */}
-              <button 
-                onClick={() => handleVoicePlay(tut.id, tut.voiceText)}
-                style={{ 
-                  width: '100%', 
-                  display: 'flex', 
-                  justifyContent: 'center', 
-                  alignItems: 'center',
-                  gap: 8, 
-                  borderColor: speaking === tut.id ? '#dc2626' : '#3b82f6', 
-                  color: speaking === tut.id ? '#dc2626' : '#3b82f6', 
-                  background: speaking === tut.id ? '#fef2f2' : '#eff6ff', 
-                  padding: '14px', 
-                  borderRadius: 8, 
-                  fontWeight: 700, 
-                  border: '2px solid',
-                  cursor: 'pointer',
-                  marginTop: 16,
-                  fontSize: 14,
-                  transition: 'all 0.2s'
-                }}
-              >
-                <Volume2 size={18} />
-                {speaking === tut.id 
-                  ? (lang === 'kn' ? '\u0CA8\u0CBF\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CBF' : lang === 'hi' ? '\u0930\u0941\u0915\u0947\u0902' : 'Stop Speaking') 
-                  : (lang === 'kn' ? '\u0C95\u0CA8\u0CCD\u0CA8\u0CA1\u0CA6\u0CB2\u0CCD\u0CB2\u0CBF \u0C86\u0CB2\u0CBF\u0CB8\u0CBF (AI Voice)' : lang === 'hi' ? '\u0939\u093F\u0902\u0926\u0940 \u092E\u0947\u0902 \u0938\u0941\u0928\u0947\u0902 (AI Voice)' : 'Listen in English (AI Voice)')
-                }
-              </button>
+
+              {/* Step label */}
+              <p style={{ fontSize: 13, fontWeight: 700, color: demo.color, marginTop: 8, textAlign: 'center' }}>
+                {isActive ? demo.screens[demoStep].title : demo.screens[0].title}
+              </p>
+
+              {/* Controls */}
+              <div style={{ display: 'flex', gap: 8, marginTop: 16, width: '100%' }}>
+                <button 
+                  onClick={() => { 
+                    if (isActive) { setActiveDemo(null); setDemoStep(0) } 
+                    else { setActiveDemo(dIdx); setDemoStep(0) }
+                  }}
+                  style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, background: isActive ? '#fef2f2' : demo.color, color: isActive ? '#dc2626' : '#fff', border: isActive ? '2px solid #fca5a5' : 'none', padding: '12px', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                >
+                  {isActive ? L('\u23F9 Stop Demo','\u23F9 \u0CA8\u0CBF\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CBF','\u23F9 \u0930\u094B\u0915\u0947\u0902') : L('\u25B6 Play Demo','\u25B6 \u0CA1\u0CC6\u0CAE\u0CCB \u0CA8\u0CCB\u0CA1\u0CBF','\u25B6 \u0921\u0947\u092E\u094B \u0926\u0947\u0916\u0947\u0902')}
+                </button>
+                <button 
+                  onClick={() => handleVoicePlay(demo.id, demo.voiceText)}
+                  style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, background: speaking === demo.id ? '#fef2f2' : '#eff6ff', color: speaking === demo.id ? '#dc2626' : '#3b82f6', border: '2px solid', borderColor: speaking === demo.id ? '#fca5a5' : '#93c5fd', padding: '12px', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                >
+                  <Volume2 size={16} />
+                  {speaking === demo.id ? L('Stop','\u0CA8\u0CBF\u0CB2\u0CCD\u0CB2\u0CBF\u0CB8\u0CBF','\u0930\u0941\u0915\u0947\u0902') : L('AI Voice','AI \u0CA7\u0CCD\u0CB5\u0CA8\u0CBF','AI \u0906\u0935\u093E\u091C\u093C')}
+                </button>
+              </div>
             </div>
           </div>
           )
         })}
       </div>
+      <style>{`
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+      `}</style>
     </div>
   )
 }
