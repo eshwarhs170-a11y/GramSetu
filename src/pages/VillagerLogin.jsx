@@ -69,6 +69,7 @@ export default function VillagerLogin() {
     { name: 'Udupi', taluks: ['Karkala', 'Kundapur', 'Udupi'] },
     { name: 'Uttara Kannada', taluks: ['Ankola', 'Bhatkal', 'Dandeli', 'Haliyal', 'Honavar', 'Joida', 'Karwar', 'Kumta', 'Mundgod', 'Siddapur', 'Yellapur'] },
     { name: 'Vijayapura', taluks: ['Basavana Bagewadi', 'Indi', 'Muddebihal', 'Sindagi', 'Vijayapura'] },
+    { name: 'Vijayanagara', taluks: ['Harapanahalli', 'Hoovina Hadagali', 'Hospet', 'Hagari Bommanahalli', 'Kotturu', 'Kudligi'] },
     { name: 'Yadgir', taluks: ['Shahapur', 'Shorapur', 'Yadgir'] },
   ]
 

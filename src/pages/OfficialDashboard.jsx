@@ -13,10 +13,10 @@ import {
 } from 'lucide-react'
 
 import { db } from '../firebase'
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
+import { collection, onSnapshot, query, orderBy, deleteDoc, doc, addDoc, serverTimestamp } from 'firebase/firestore'
 
 export const getSessionData = () => {
-  const name = window.localStorage.getItem('official_name') || 'ಶ್ರೀನಿವಾಸ ಕುಮಾರ್'
+  const name = window.localStorage.getItem('official_name') || ''
   const initial = name.charAt(0).toUpperCase()
   return {
     name,
@@ -61,8 +61,17 @@ const getDistrictFarmers = (district) => {
   ])
 }
 
+const allDistricts = [
+  'Bagalkot', 'Ballari', 'Belagavi', 'Bengaluru Rural', 'Bengaluru Urban',
+  'Bidar', 'Chamarajanagar', 'Chikkaballapur', 'Chikkamagaluru', 'Chitradurga',
+  'Dakshina Kannada', 'Davanagere', 'Dharwad', 'Gadag', 'Hassan', 'Haveri',
+  'Kalaburagi', 'Kodagu', 'Kolar', 'Koppal', 'Mandya', 'Mysuru', 'Raichur',
+  'Ramanagara', 'Shivamogga', 'Tumkuru', 'Udupi', 'Uttara Kannada', 'Vijayapura',
+  'Vijayanagara', 'Yadgir'
+]
+
 // ===== Sidebar =====
-function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen }) {
+function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessionData }) {
   const navigate = useNavigate()
   const { t } = useLanguage()
 
@@ -71,7 +80,8 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen }) {
     { id: 'complaints', icon: ClipboardList,   labelKey: 'sNavNewComplaints',  badge: '28' },
     { id: 'resolved',   icon: CheckCircle2,    labelKey: 'sNavResolved',       badge: null },
     { id: 'state',      icon: Map,             labelKey: 'State Overview',     badge: null },
-    { id: 'announce',   icon: Megaphone,       labelKey: 'sNavPublish',        badge: null },
+    { id: 'announcements', icon: ClipboardList, labelKey: 'Announcements', badge: null },
+    { id: 'announce', icon: Megaphone, labelKey: 'sNavPublish', badge: null },
     { id: 'analytics',  icon: BarChart3,       labelKey: 'sNavAnalytics',      badge: null },
     { id: 'citizens',   icon: Users,           labelKey: 'sNavCitizens',       badge: null },
     { id: 'settings',   icon: Settings,        labelKey: 'sNavSettings',       badge: null },
@@ -99,11 +109,11 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen }) {
       </div>
       <div className="sidebar-user">
         <div className="sidebar-user-avatar" style={{ background: '#3b82f6', fontSize: 13, fontWeight: 750 }}>
-          {getSessionData().initial}
+          {sessionData.initial}
         </div>
         <div className="sidebar-user-info">
-          <p>{getSessionData().name}</p>
-          <p>{getSessionData().department}</p>
+          <p>{sessionData.name}</p>
+          <p>{sessionData.department}</p>
         </div>
       </div>
       <nav className="sidebar-nav">
@@ -142,7 +152,7 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen }) {
 }
 
 // ===== Overview =====
-function OverviewScreen() {
+function OverviewScreen({ onPendingClick, onResolvedClick, sessionData, pendingCount, resolvedCount }) {
   const { t } = useLanguage()
   return (
     <div className="animate-fadeInUp">
@@ -153,9 +163,9 @@ function OverviewScreen() {
           <h2>{t('officerWelcome')}</h2>
           <p>{t('officerLocation')}</p>
           <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
-            <span className="badge badge-danger">28 {t('pendingComplaints')}</span>
-            <span className="badge badge-success">15 {t('resolvedComplaints')} This Week</span>
-            <span className="badge" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>{getSessionData().district} District</span>
+            <span className="badge badge-danger" onClick={onPendingClick} style={{ cursor: 'pointer' }}>{pendingCount} {t('pendingComplaints')}</span>
+            <span className="badge badge-success" onClick={onResolvedClick} style={{ cursor: 'pointer' }}>{resolvedCount} {t('resolvedComplaints')} This Week</span>
+            <span className="badge" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>{sessionData.district} District</span>
           </div>
         </div>
         <div className="welcome-banner-img">
@@ -185,6 +195,20 @@ function OverviewScreen() {
         ))}
       </div>
 
+    </div>
+  )
+}
+
+// ===== Analytics =====
+function AnalyticsScreen({ sessionData, pendingCount, resolvedCount }) {
+  const { t } = useLanguage()
+  return (
+    <div className="animate-fadeInUp">
+      <div style={{ marginBottom: 20 }}>
+        <h2 style={{ fontSize: 24, fontWeight: 700 }}>📈 Analytics & Reports</h2>
+        <p style={{ color: 'var(--text-secondary)' }}>Performance and trends for {sessionData.district} District</p>
+      </div>
+
       <div className="content-grid">
         <div className="card">
           <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>{t('weeklyComplaints')}</h3>
@@ -205,11 +229,11 @@ function OverviewScreen() {
         <div className="card">
           <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>{t('villageBreakdown')}</h3>
           {[
-            ['Ramanagara', 22, '#ef4444'],
-            ['Mysuru', 18, '#f59e0b'],
-            ['Mandya', 14, '#3b82f6'],
-            ['Channapatna', 8, '#10b981'],
-            ['Tumkuru', 6, '#8b5cf6'],
+            ['Taluk HQ', 22, '#ef4444'],
+            ['North Zone', 18, '#f59e0b'],
+            ['South Zone', 14, '#3b82f6'],
+            ['East Zone', 8, '#10b981'],
+            ['West Zone', 6, '#8b5cf6'],
           ].map(([village, count, color]) => (
             <div key={village} style={{ marginBottom: 14 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>
@@ -229,12 +253,12 @@ function OverviewScreen() {
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>📊 Complaints by Category</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 12 }}>
           {[
-            { cat: 'Water', count: 32, color: '#3b82f6', Icon: Droplets },
-            { cat: 'Electricity', count: 28, color: '#f59e0b', Icon: Zap },
-            { cat: 'Roads', count: 24, color: '#ef4444', Icon: Route },
-            { cat: 'Ration/PDS', count: 18, color: '#10b981', Icon: ClipboardList },
-            { cat: 'Agriculture', count: 15, color: '#8b5cf6', Icon: Sprout },
-            { cat: 'Health/PHC', count: 12, color: '#ec4899', Icon: Activity },
+            { cat: 'Water', count: Math.floor((pendingCount+resolvedCount)*0.3) || 32, color: '#3b82f6', Icon: Droplets },
+            { cat: 'Electricity', count: Math.floor((pendingCount+resolvedCount)*0.25) || 28, color: '#f59e0b', Icon: Zap },
+            { cat: 'Roads', count: Math.floor((pendingCount+resolvedCount)*0.2) || 24, color: '#ef4444', Icon: Route },
+            { cat: 'Ration/PDS', count: Math.floor((pendingCount+resolvedCount)*0.1) || 18, color: '#10b981', Icon: ClipboardList },
+            { cat: 'Agriculture', count: Math.floor((pendingCount+resolvedCount)*0.1) || 15, color: '#8b5cf6', Icon: Sprout },
+            { cat: 'Health/PHC', count: Math.floor((pendingCount+resolvedCount)*0.05) || 12, color: '#ec4899', Icon: Activity },
           ].map(s => (
             <div key={s.cat} style={{ background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', padding: 14, textAlign: 'center' }}>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 6, color: s.color }}>
@@ -251,7 +275,7 @@ function OverviewScreen() {
 }
 
 // ===== Complaints =====
-function ComplaintsScreen({ resolved, stateOverview }) {
+function ComplaintsScreen({ resolved, stateOverview, filter }) {
   const { t } = useLanguage()
   const [liveComplaints, setLiveComplaints] = useState(kaNewComplaints)
 
@@ -273,7 +297,8 @@ function ComplaintsScreen({ resolved, stateOverview }) {
     ? liveComplaints 
     : liveComplaints.filter(c => {
         const loc = (c.district || c.taluk || c.village || '').toLowerCase()
-        return loc.includes(getSessionData().district.toLowerCase())
+        const statusMatch = filter ? (c.status && c.status === filter) : true
+        return loc.includes(getSessionData().district.toLowerCase()) && statusMatch
       })
 
   return (
@@ -385,33 +410,130 @@ function ComplaintsScreen({ resolved, stateOverview }) {
   )
 }
 
+// ===== Official Announcements =====
+function OfficialAnnouncements({ onEdit }) {
+  const { t } = useLanguage()
+  const [announcements, setAnnouncements] = useState([])
+
+  useEffect(() => {
+    const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'))
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setAnnouncements(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })))
+    })
+    return () => unsubscribe()
+  }, [])
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this announcement?')) {
+      await deleteDoc(doc(db, 'announcements', id))
+    }
+  }
+
+  return (
+    <div className="animate-fadeInUp">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <div>
+          <h3>📢 {t('Announcements')}</h3>
+          <p style={{ color: 'var(--text-secondary)' }}>View and manage official government notices.</p>
+        </div>
+      </div>
+      <div className="card" style={{ padding: 0, overflowX: 'auto' }}>
+        {announcements.length === 0 ? (
+          <p style={{ padding: 20 }}>No recent announcements.</p>
+        ) : (
+          <table className="market-table" style={{ width: '100%', minWidth: 600 }}>
+            <thead>
+              <tr>
+                <th>Title / ಶೀರ್ಷಿಕೆ</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Target</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {announcements.map((a) => (
+                <tr key={a.id}>
+                  <td style={{ fontWeight: 600 }}>{a.title}</td>
+                  <td><span className="badge badge-primary">{a.category}</span></td>
+                  <td><span className={`badge ${a.priority === 'Emergency / ತುರ್ತು' || a.priority === 'Urgent' ? 'badge-danger' : 'badge-info'}`}>{a.priority}</span></td>
+                  <td>{a.target}</td>
+                  <td>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <button className="btn-icon" onClick={() => onEdit(a)} style={{ color: '#3b82f6' }} title="Edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                      </button>
+                      <button className="btn-icon" onClick={() => handleDelete(a.id)} style={{ color: '#ef4444' }} title="Delete">
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ===== Announce =====
-function AnnounceScreen() {
+function AnnounceScreen({ editMode, editingAnnouncement }) {
   const { t } = useLanguage()
   const [submitted, setSubmitted] = useState(false)
+  const [title, setTitle] = useState(editMode && editingAnnouncement ? editingAnnouncement.title : '')
+  const [category, setCategory] = useState(editMode && editingAnnouncement ? editingAnnouncement.category : 'Government / ಸರ್ಕಾರ')
+  const [priority, setPriority] = useState(editMode && editingAnnouncement ? editingAnnouncement.priority : 'Normal')
+  const [message, setMessage] = useState(editMode && editingAnnouncement ? editingAnnouncement.message : '')
+  const [target, setTarget] = useState(editMode && editingAnnouncement ? editingAnnouncement.target : 'All Districts')
+
+  const handlePublish = async () => {
+    if (!title || !message) return alert('Please fill required fields')
+    if (editMode) {
+      await setDoc(doc(db, 'announcements', editingAnnouncement.id), {
+        title, category, priority, message, target,
+        publishedBy: editingAnnouncement.publishedBy || getSessionData().name,
+        createdAt: editingAnnouncement.createdAt
+      })
+      setSubmitted(true)
+    } else {
+      await addDoc(collection(db, 'announcements'), {
+        title,
+        category,
+        priority,
+        message,
+        target,
+        publishedBy: getSessionData().name,
+        createdAt: serverTimestamp()
+      })
+      setSubmitted(true)
+    }
+  }
+
   if (submitted) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', textAlign: 'center' }} className="animate-fadeInUp">
         <div style={{ fontSize: 72, marginBottom: 20 }}>📢</div>
         <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 8 }}>{t('announcePublished')}</h2>
         <p style={{ color: 'var(--text-secondary)', marginBottom: 20 }}>{t('announceMsg')}</p>
-        <button className="btn btn-primary" onClick={() => setSubmitted(false)}>{t('publishAnother')}</button>
+        <button className="btn btn-primary" onClick={() => { setSubmitted(false); setTitle(''); setMessage(''); }}>{t('publishAnother')}</button>
       </div>
     )
   }
   return (
     <div className="animate-fadeInUp" style={{ maxWidth: 700 }}>
       <div className="card">
-        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>{t('announceFormTitle')}</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>{editMode ? 'Edit Announcement' : t('announceFormTitle')}</h3>
         <div className="login-form" style={{ gap: 18 }}>
           <div className="form-group">
             <label className="form-label">{t('announceLabel')}</label>
-            <input className="form-input" placeholder={t('announcePlaceholder')} />
+            <input className="form-input" placeholder={t('announcePlaceholder')} value={title} onChange={e => setTitle(e.target.value)} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div className="form-group">
               <label className="form-label">{t('categoryLabel')}</label>
-              <select className="form-input">
+              <select className="form-input" value={category} onChange={e => setCategory(e.target.value)}>
                 <option>Agriculture / ಕೃಷಿ</option>
                 <option>Health / ಆರೋಗ್ಯ</option>
                 <option>Infrastructure / ಮೂಲಸೌಕರ್ಯ</option>
@@ -422,24 +544,24 @@ function AnnounceScreen() {
             </div>
             <div className="form-group">
               <label className="form-label">{t('priorityLevel')}</label>
-              <select className="form-input">
-                <option>{t('normal')}</option>
-                <option>{t('urgent')}</option>
+              <select className="form-input" value={priority} onChange={e => setPriority(e.target.value)}>
+                <option>Normal</option>
+                <option>Urgent</option>
                 <option>Emergency / ತುರ್ತು</option>
               </select>
             </div>
           </div>
           <div className="form-group">
             <label className="form-label">{t('messageLabel')}</label>
-            <textarea className="form-input" rows={5} placeholder={t('messagePlaceholder')} style={{ resize: 'vertical' }} />
+            <textarea className="form-input" rows={5} placeholder={t('messagePlaceholder')} style={{ resize: 'vertical' }} value={message} onChange={e => setMessage(e.target.value)} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div className="form-group">
               <label className="form-label">{t('targetVillages')}</label>
-              <select className="form-input">
-                <option>{t('allVillages')}</option>
-                {kaVillages.map((v, i) => (
-                  <option key={i}>{v} ({kaVillagesEn[i]})</option>
+              <select className="form-input" value={target} onChange={e => setTarget(e.target.value)}>
+                <option>All Districts</option>
+                {allDistricts.map((d, i) => (
+                  <option key={i}>{d}</option>
                 ))}
               </select>
             </div>
@@ -453,29 +575,8 @@ function AnnounceScreen() {
               </select>
             </div>
           </div>
-          <div className="form-group">
-            <label className="form-label">Attach Image (Optional)</label>
-            <div style={{ position: 'relative', border: '2px dashed var(--border)', borderRadius: 'var(--radius-md)', padding: 24, textAlign: 'center', background: 'var(--bg-main)', overflow: 'hidden' }}>
-              <input type="file" accept="image/*" style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 10 }} onChange={(e) => {
-                if(e.target.files && e.target.files[0]) {
-                  const reader = new FileReader()
-                  reader.onload = (ev) => {
-                    e.target.parentElement.style.backgroundImage = `url(${ev.target.result})`
-                    e.target.parentElement.style.backgroundSize = 'cover'
-                    e.target.parentElement.style.backgroundPosition = 'center'
-                    e.target.nextSibling.style.opacity = 0
-                  }
-                  reader.readAsDataURL(e.target.files[0])
-                }
-              }} />
-              <div style={{ pointerEvents: 'none', transition: 'opacity 0.2s' }}>
-                <div style={{ fontSize: 28, marginBottom: 8 }}>🖼️</div>
-                <p style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Click to upload image or drag & drop</p>
-              </div>
-            </div>
-          </div>
-          <button className="btn btn-primary" style={{ padding: '14px 24px' }} onClick={() => setSubmitted(true)}>
-            {t('publishBtn')}
+          <button className="btn btn-primary" style={{ padding: '14px 24px' }} onClick={handlePublish}>
+            {editMode ? 'Update Announcement' : t('publishBtn')}
           </button>
         </div>
       </div>
@@ -558,11 +659,11 @@ function SettingsScreen() {
   const [draftProfile, setDraftProfile] = useState({ ...profile })
 
   const saveProfile = () => {
-    localStorage.setItem('officer_name',  draftProfile.fullName)
-    localStorage.setItem('officer_desig', draftProfile.designation)
-    localStorage.setItem('officer_taluk', draftProfile.taluk)
-    localStorage.setItem('officer_id',    draftProfile.officerId)
-    localStorage.setItem('officer_dept',  draftProfile.department)
+    localStorage.setItem('official_name',  draftProfile.fullName)
+    localStorage.setItem('official_desig', draftProfile.designation)
+    localStorage.setItem('official_taluk', draftProfile.taluk)
+    localStorage.setItem('official_id',    draftProfile.officerId)
+    localStorage.setItem('official_department',  draftProfile.department)
     setProfile({ ...draftProfile })
     setEditingProfile(false)
   }
@@ -677,6 +778,7 @@ const pageMeta = {
   resolved:   { titleKey: 'sNavResolved',      subKey: 'statusSub' },
   state:      { titleKey: 'State Overview',    subKey: 'All Karnataka Districts' },
   announce:   { titleKey: 'sNavPublish',       subKey: 'announceSub' },
+  announcements: { titleKey: 'Announcements', subKey: 'View Notices' },
   analytics:  { titleKey: 'sNavAnalytics',     subKey: 'officerLocation' },
   citizens:   { titleKey: 'sNavCitizens',      subKey: 'schemesSub' },
   settings:   { titleKey: 'sNavSettings',      subKey: 'profileSub' },
@@ -686,20 +788,65 @@ const pageMeta = {
 export default function OfficialDashboard() {
   const [active, setActive] = useState('overview')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [editMode, setEditMode] = useState(false)
+  const [editingAnnouncement, setEditingAnnouncement] = useState(null)
+
+  const handleEditAnnouncement = (announcement) => {
+    setEditMode(true)
+    setEditingAnnouncement(announcement)
+    setActive('announce')
+  }
+  const [sessionData, setSessionData] = useState(getSessionData())
+  const [pendingCount, setPendingCount] = useState(0)
+  const [resolvedCount, setResolvedCount] = useState(0)
+
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      setSessionData(getSessionData())
+    }
+    window.addEventListener('profileUpdate', handleProfileUpdate)
+    return () => window.removeEventListener('profileUpdate', handleProfileUpdate)
+  }, [])
+
+  useEffect(() => {
+    const q = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetched = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.data().id || doc.id }))
+      const merged = [...fetched, ...kaNewComplaints, ...kaResolvedComplaints.map(c => ({...c, status: 'resolved'}))].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+      
+      const districtDocs = merged.filter(c => {
+        const loc = (c.district || c.taluk || c.village || '').toLowerCase()
+        return loc.includes(sessionData.district.toLowerCase())
+      })
+      setPendingCount(districtDocs.filter(c => c.status === 'pending').length)
+      setResolvedCount(districtDocs.filter(c => c.status === 'resolved').length)
+    })
+    return () => unsubscribe()
+  }, [sessionData.district])
+
+  const [complaintFilter, setComplaintFilter] = useState(null) // 'pending' | null
+  const handlePendingClick = () => {
+    setComplaintFilter('pending')
+    setActive('complaints')
+  }
+  const handleResolvedClick = () => {
+    setActive('resolved')
+  }
   const { t } = useLanguage()
   const page = pageMeta[active] || pageMeta.overview
 
   const renderScreen = () => {
     switch (active) {
-      case 'overview':   return <OverviewScreen />
-      case 'complaints': return <ComplaintsScreen resolved={false} />
+      case 'overview':   return <OverviewScreen onPendingClick={handlePendingClick} onResolvedClick={handleResolvedClick} sessionData={sessionData} pendingCount={pendingCount} resolvedCount={resolvedCount} />
+      case 'complaints': return <ComplaintsScreen resolved={false} filter={complaintFilter} />
       case 'resolved':   return <ComplaintsScreen resolved={true} />
       case 'state':      return <ComplaintsScreen resolved={false} stateOverview={true} />
-      case 'announce':   return <AnnounceScreen />
-      case 'analytics':  return <OverviewScreen />
+      case 'announcements': return <OfficialAnnouncements onEdit={handleEditAnnouncement} />
+      case 'announce':   return <AnnounceScreen editMode={editMode} editingAnnouncement={editingAnnouncement} />
+      case 'analytics':  return <AnalyticsScreen sessionData={sessionData} pendingCount={pendingCount} resolvedCount={resolvedCount} />
       case 'citizens':   return <CitizensScreen />
       case 'settings':   return <SettingsScreen />
-      default:           return <OverviewScreen />
+      default:           return <OverviewScreen sessionData={sessionData} pendingCount={pendingCount} resolvedCount={resolvedCount} />
     }
   }
 
@@ -709,6 +856,49 @@ export default function OfficialDashboard() {
     return () => { document.body.style.overflow = '' }
   }, [sidebarOpen])
 
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [notifOpen, setNotifOpen] = useState(false)
+
+  const renderModals = () => {
+    return (
+      <>
+        {searchOpen && (
+          <div className="modal-overlay" onClick={() => setSearchOpen(false)}>
+            <div className="modal-content animate-fadeInUp" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, padding: '20px 24px', zIndex: 100 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                <h3 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Search</h3>
+                <button onClick={() => setSearchOpen(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="input-group">
+                <Search size={18} className="input-icon" />
+                <input 
+                  type="text" 
+                  placeholder="Search complaints, citizens, or announcements..." 
+                  autoFocus 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      const q = searchQuery.toLowerCase();
+                      if (q.includes('farmer') || q.includes('citizen')) setActive('citizens');
+                      else if (q.includes('announce')) setActive('announcements');
+                      else setActive('complaints');
+                      setSearchOpen(false);
+                      setSearchQuery('');
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </>
+    )
+  }
+
   return (
     <div className={`app-layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
       <OfficialSidebar 
@@ -716,6 +906,7 @@ export default function OfficialDashboard() {
         setActive={(id) => { setActive(id); setSidebarOpen(false); }} 
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
+        sessionData={sessionData}
       />
       {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={() => setSidebarOpen(false)} />}
       <div className="main-content">
@@ -731,22 +922,48 @@ export default function OfficialDashboard() {
             </button>
             <div>
               <div className="topbar-title">{t(page.titleKey) || page.titleKey}</div>
-              <div className="topbar-subtitle">{getSessionData().district} District, Karnataka — {getSessionData().department}</div>
+              <div className="topbar-subtitle">{sessionData.district} District, Karnataka — {sessionData.department}</div>
             </div>
           </div>
           <div className="topbar-right">
             <LanguageSwitcher variant="topbar-style" />
             <ThemeToggle />
-            <button className="topbar-icon-btn" onClick={() => alert('Search functionality coming soon')}>
+            <button className="topbar-icon-btn" onClick={() => setSearchOpen(true)}>
               <Search size={18} strokeWidth={2} />
             </button>
-            <button className="topbar-icon-btn" style={{ position: 'relative' }} onClick={() => alert('You have 3 new notifications')}>
-              <Bell size={18} strokeWidth={2} />
-              <div className="notif-dot" />
-            </button>
+            <div style={{ position: 'relative' }}>
+              <button className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
+                <Bell size={18} strokeWidth={2} />
+                <div className="notif-dot" />
+              </button>
+              {notifOpen && (
+                <div className="notif-dropdown animate-fadeInUp" style={{ right: 0 }}>
+                  <div className="notif-header">
+                    <h4>Notifications</h4>
+                    <button onClick={() => setNotifOpen(false)}><X size={14} /></button>
+                  </div>
+                  <div className="notif-list">
+                    <div className="notif-item unread" onClick={() => { setActive('complaints'); setNotifOpen(false) }} style={{ cursor: 'pointer' }}>
+                      <div className="notif-icon bg-warning"><ClipboardList size={16} /></div>
+                      <div>
+                        <p>5 new water complaints in your taluk.</p>
+                        <span>10 mins ago</span>
+                      </div>
+                    </div>
+                    <div className="notif-item" onClick={() => { setActive('citizens'); setNotifOpen(false) }} style={{ cursor: 'pointer' }}>
+                      <div className="notif-icon bg-success"><Users size={16} /></div>
+                      <div>
+                        <p>12 new farmer registrations today.</p>
+                        <span>2 hours ago</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
             <button className="topbar-icon-btn" onClick={() => setActive('settings')}>
               <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 12 }}>
-                {getSessionData().initial}
+                {sessionData.initial}
               </div>
             </button>
           </div>
@@ -755,6 +972,7 @@ export default function OfficialDashboard() {
           {renderScreen()}
         </main>
       </div>
+      {renderModals()}
     </div>
   )
 }

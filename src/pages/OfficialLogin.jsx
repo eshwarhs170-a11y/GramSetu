@@ -33,6 +33,7 @@ export default function OfficialLogin() {
   const [email, setEmail] = useState('')
   const [department, setDepartment] = useState('Agriculture (RSK)')
   const [district, setDistrict] = useState('')
+  const [taluk, setTaluk] = useState('')
   const [otp, setOtp] = useState('')
   const [generatedOtp, setGeneratedOtp] = useState('')
   
@@ -50,12 +51,52 @@ export default function OfficialLogin() {
     'Education / DDPI',
   ]
 
-  const districts = ['Bengaluru', 'Mysuru', 'Mandya', 'Tumkuru', 'Ramanagara', 'Chikkamagaluru', 'Shimoga', 'Dharwad', 'Belagavi']
+  const districtsOfKarnataka = [
+    { name: 'Bagalkot', taluks: ['Bagalkot', 'Badami', 'Bilagi', 'Hungund', 'Jamkhandi', 'Mudhol'] },
+    { name: 'Ballari', taluks: ['Ballari', 'Hadagali', 'Hagaribommanahalli', 'Hospet', 'Kudligi', 'Sandur', 'Siruguppa'] },
+    { name: 'Belagavi', taluks: ['Belagavi', 'Athani', 'Bailhongal', 'Chikodi', 'Gokak', 'Hukkeri', 'Khanapur', 'Raibag', 'Ramdurg', 'Savadatti', 'Soundatti'] },
+    { name: 'Bengaluru Rural', taluks: ['Devanahalli', 'Doddaballapur', 'Hosakote', 'Nelamangala'] },
+    { name: 'Bengaluru Urban', taluks: ['Anekal', 'Bengaluru East', 'Bengaluru North', 'Bengaluru South', 'Bengaluru West', 'Yelahanka'] },
+    { name: 'Bidar', taluks: ['Aurad', 'Basavakalyan', 'Bhalki', 'Bidar', 'Humnabad'] },
+    { name: 'Chamarajanagar', taluks: ['Chamarajanagar', 'Gundlupet', 'Kollegal', 'Yelandur'] },
+    { name: 'Chikkaballapur', taluks: ['Bagepalli', 'Chikkaballapur', 'Chintamani', 'Gauribidanur', 'Gudibande', 'Sidlaghatta'] },
+    { name: 'Chikkamagaluru', taluks: ['Birur', 'Chikkamagaluru', 'Kadur', 'Koppa', 'Mudigere', 'N.R.Pura', 'Sringeri', 'Tarikere'] },
+    { name: 'Chitradurga', taluks: ['Challakere', 'Chitradurga', 'Hiriyur', 'Holalkere', 'Hosadurga', 'Molakalmuru'] },
+    { name: 'Dakshina Kannada', taluks: ['Bantval', 'Belthangady', 'Mangaluru', 'Puttur', 'Sullia'] },
+    { name: 'Davanagere', taluks: ['Channagiri', 'Davanagere', 'Harihara', 'Honnali', 'Jagalur', 'Nyamathi'] },
+    { name: 'Dharwad', taluks: ['Dharwad', 'Hubli', 'Kalghatgi', 'Kundgol', 'Navalgund'] },
+    { name: 'Gadag', taluks: ['Gadag', 'Mundaragi', 'Nargund', 'Ron', 'Shirahatti'] },
+    { name: 'Hassan', taluks: ['Alur', 'Arakalagudu', 'Arkalgud', 'Belur', 'Channarayapatna', 'Hassan', 'Holenarasipura', 'Sakleshpur'] },
+    { name: 'Haveri', taluks: ['Byadagi', 'Hanagal', 'Haveri', 'Hirekerur', 'Ranebennur', 'Savanur', 'Shiggaon'] },
+    { name: 'Kalaburagi', taluks: ['Afzalpur', 'Aland', 'Chincholi', 'Chittapur', 'Kalaburagi', 'Jevargi', 'Sedam'] },
+    { name: 'Kodagu', taluks: ['Madikeri', 'Somwarpet', 'Virajpet'] },
+    { name: 'Kolar', taluks: ['Bangarpet', 'Kolar', 'Malur', 'Mulbagal', 'Srinivaspur'] },
+    { name: 'Koppal', taluks: ['Gangavathi', 'Koppal', 'Kushtagi', 'Yelburga'] },
+    { name: 'Mandya', taluks: ['K.R.Pet', 'Kirugavalu', 'Maddur', 'Malavalli', 'Mandya', 'Nagamangala', 'Pandavapura', 'Srirangapatna'] },
+    { name: 'Mysuru', taluks: ['Heggadadevankote', 'Hunsur', 'K.R.Nagar', 'Mysuru', 'Nanjangud', 'Periyapatna', 'T.Narasipura'] },
+    { name: 'Raichur', taluks: ['Devadurga', 'Lingsugur', 'Manvi', 'Raichur', 'Sindhanur'] },
+    { name: 'Ramanagara', taluks: ['Channapatna', 'Kanakapura', 'Magadi', 'Ramanagara'] },
+    { name: 'Shivamogga', taluks: ['Bhadravati', 'Hosanagara', 'Sagar', 'Shikaripura', 'Shivamogga', 'Soraba', 'Thirthahalli'] },
+    { name: 'Tumkuru', taluks: ['Chiknayakanhalli', 'Gubbi', 'Koratagere', 'Kunigal', 'Madhugiri', 'Pavagada', 'Sira', 'Tiptur', 'Tumkuru', 'Turuvekere'] },
+    { name: 'Udupi', taluks: ['Karkala', 'Kundapur', 'Udupi'] },
+    { name: 'Uttara Kannada', taluks: ['Ankola', 'Bhatkal', 'Dandeli', 'Haliyal', 'Honavar', 'Joida', 'Karwar', 'Kumta', 'Mundgod', 'Siddapur', 'Yellapur'] },
+    { name: 'Vijayapura', taluks: ['Basavana Bagewadi', 'Indi', 'Muddebihal', 'Sindagi', 'Vijayapura'] },
+    { name: 'Vijayanagara', taluks: ['Harapanahalli', 'Hoovina Hadagali', 'Hospet', 'Hagari Bommanahalli', 'Kotturu', 'Kudligi'] },
+    { name: 'Yadgir', taluks: ['Shahapur', 'Shorapur', 'Yadgir'] },
+  ]
+
+  const handleDistrictChange = (distName) => {
+    setDistrict(distName)
+    const found = districtsOfKarnataka.find(d => d.name === distName)
+    if (found && found.taluks.length > 0) setTaluk(found.taluks[0])
+  }
+
+  const activeDistrictObj = districtsOfKarnataka.find(d => d.name === district) || districtsOfKarnataka[0]
 
   const handleSendOtp = async (e) => {
     e.preventDefault()
-    if (!name.trim() || !officerId.trim() || !email.includes('@')) {
-      setErrorMsg('Please enter a valid Name, Officer ID, and Official Email.')
+    if (!name.trim() || !officerId.trim() || !email.includes('@') || !district || !taluk) {
+      setErrorMsg('Please enter all required fields.')
       return
     }
     setLoading(true)
@@ -97,7 +138,7 @@ export default function OfficialLogin() {
       const uid = 'official-' + email.replace(/[^a-z0-9]/gi, '-')
       try {
         await setDoc(doc(db, 'users', uid), {
-          uid, name, officerId, email, department,
+          uid, name, officerId, email, department, district, taluk,
           role: 'official',
           createdAt: serverTimestamp()
         }, { merge: true })
@@ -110,6 +151,7 @@ export default function OfficialLogin() {
       window.localStorage.setItem('official_email', email)
       window.localStorage.setItem('official_department', department)
       window.localStorage.setItem('official_district', district)
+      window.localStorage.setItem('official_taluk', taluk)
 
       navigate('/dashboard/official')
     } catch (error) {
@@ -246,18 +288,22 @@ export default function OfficialLogin() {
                 </div>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">District / ಜಿಲ್ಲೆ *</label>
-                <div className="custom-select-wrapper">
-                  <select
-                    className="form-input custom-select"
-                    value={district}
-                    onChange={e => setDistrict(e.target.value)}
-                    required
-                  >
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div className="form-group">
+                  <label className="form-label">District / ಜಿಲ್ಲೆ *</label>
+                  <select className="form-input custom-select" value={district} onChange={e => handleDistrictChange(e.target.value)} required>
                     <option value="" disabled>Select District</option>
-                    {districts.map(dist => (
-                      <option key={dist} value={dist}>{dist}</option>
+                    {districtsOfKarnataka.map(d => (
+                      <option key={d.name} value={d.name}>{d.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Taluk / ತಾಲೂಕು *</label>
+                  <select className="form-input custom-select" value={taluk} onChange={e => setTaluk(e.target.value)} required>
+                    <option value="" disabled>Select Taluk</option>
+                    {activeDistrictObj.taluks.map(tOption => (
+                      <option key={tOption} value={tOption}>{tOption}</option>
                     ))}
                   </select>
                 </div>

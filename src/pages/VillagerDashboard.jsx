@@ -9,6 +9,9 @@ import {
 } from '../components/VillagerScreens'
 import { Menu, Search, Bell, X, AlertTriangle, IndianRupee } from 'lucide-react'
 
+import { db } from '../firebase'
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
+
 export default function VillagerDashboard() {
   const [active, setActive] = useState('home')
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -16,6 +19,7 @@ export default function VillagerDashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const [notifOpen, setNotifOpen] = useState(false)
   const [notifExpanded, setNotifExpanded] = useState(null)
+  const [announcements, setAnnouncements] = useState([])
   const { t } = useLanguage()
 
   const pageMeta = {
@@ -63,6 +67,17 @@ export default function VillagerDashboard() {
     }
   }, [sidebarOpen])
 
+  useEffect(() => {
+    const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'))
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+      const district = window.localStorage.getItem('citizen_district') || 'Mysuru'
+      const relevant = fetched.filter(a => a.target === 'All Districts' || a.target === district)
+      setAnnouncements(relevant)
+    })
+    return () => unsubscribe()
+  }, [])
+
   return (
     <div className={`app-layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
       <VillagerSidebar
@@ -108,42 +123,7 @@ export default function VillagerDashboard() {
                 <div className="notif-dot" />
               </button>
               {notifOpen && (() => {
-                const notifications = [
-                  {
-                    id: 1,
-                    icon: <AlertTriangle size={16} color="#d97706" />,
-                    iconBg: 'bg-warning',
-                    title: 'Crop Alert: Heavy rain expected tomorrow in your district.',
-                    detail: 'IMD has issued a yellow alert for heavy rainfall in your taluk tomorrow (07 Aug). Secure stored crops, avoid field operations. Visit KSNDMC for updates.',
-                    time: '2 hours ago',
-                    link: 'https://ksndmc.org/',
-                    linkLabel: 'KSNDMC Weather ↗',
-                    page: 'announcements',
-                  },
-                  {
-                    id: 2,
-                    icon: <IndianRupee size={16} color="#15803d" />,
-                    iconBg: 'bg-success',
-                    title: 'PM Kisan: ₹2,000 credited to your account ending in 4521.',
-                    detail: 'PM Kisan Samman Nidhi 18th instalment of ₹2,000 has been credited on 5 Aug 2026. Check your Aadhaar-linked bank account. Next instalment expected in Dec 2026.',
-                    time: '1 day ago',
-                    link: 'https://pmkisan.gov.in/',
-                    linkLabel: 'PM Kisan Portal ↗',
-                    page: 'schemes',
-                  },
-                  {
-                    id: 3,
-                    icon: <AlertTriangle size={16} color="#dc2626" />,
-                    iconBg: 'bg-danger',
-                    title: 'Ragi MSP Procurement starts Aug 10 — Register now.',
-                    detail: 'Karnataka Food Corporation begins Ragi MSP procurement at ₹3,846/quintal from 10 Aug. Bring Aadhaar, land RTC, and bank passbook to your nearest APMC centre.',
-                    time: '2 days ago',
-                    link: 'https://kfc.karnataka.gov.in/',
-                    linkLabel: 'KFC Portal ↗',
-                    page: 'market',
-                  },
-                ]
-                const [expandedId, setExpandedId] = [notifExpanded, setNotifExpanded]
+                const unreadCount = announcements.length
                 return (
                   <div className="notif-dropdown animate-fadeInUp">
                     <div className="notif-header">
@@ -151,50 +131,45 @@ export default function VillagerDashboard() {
                       <button onClick={() => setNotifOpen(false)}><X size={14} /></button>
                     </div>
                     <div className="notif-list">
-                      {notifications.map(n => (
-                        <div key={n.id}>
-                          <div
-                            className="notif-item unread"
-                            style={{ cursor: 'pointer', flexDirection: 'column', gap: 0, padding: 0 }}
-                            onClick={() => setNotifExpanded(notifExpanded === n.id ? null : n.id)}
-                          >
-                            <div style={{ display: 'flex', gap: 12, padding: '14px 16px' }}>
-                              <div className={`notif-icon ${n.iconBg}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                {n.icon}
-                              </div>
-                              <div style={{ flex: 1 }}>
-                                <p style={{ margin: 0 }}>{n.title}</p>
-                                <span>{n.time}</span>
-                              </div>
-                              <span style={{ fontSize: 11, color: 'var(--text-muted)', alignSelf: 'center' }}>
-                                {notifExpanded === n.id ? '▲' : '▼'}
-                              </span>
-                            </div>
-                            {notifExpanded === n.id && (
-                              <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid var(--border-light)', paddingTop: 10 }}>
-                                <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 10, lineHeight: 1.6 }}>{n.detail}</p>
-                                <div style={{ display: 'flex', gap: 8 }}>
-                                  <a
-                                    href={n.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={e => e.stopPropagation()}
-                                    style={{ fontSize: 12, fontWeight: 600, color: 'var(--primary)', border: '1px solid var(--primary)', borderRadius: 6, padding: '3px 10px', textDecoration: 'none' }}
-                                  >
-                                    {n.linkLabel}
-                                  </a>
-                                  <button
-                                    onClick={e => { e.stopPropagation(); setActive(n.page); setNotifOpen(false); setNotifExpanded(null); }}
-                                    style={{ fontSize: 12, fontWeight: 600, color: '#fff', background: 'var(--primary)', border: 'none', borderRadius: 6, padding: '3px 10px', cursor: 'pointer' }}
-                                  >
-                                    View in App →
-                                  </button>
+                      {announcements.length === 0 ? (
+                        <div style={{ padding: 16, textAlign: 'center', color: 'var(--text-muted)' }}>No new notifications</div>
+                      ) : (
+                        announcements.map(n => (
+                          <div key={n.id}>
+                            <div
+                              className="notif-item unread"
+                              style={{ cursor: 'pointer', flexDirection: 'column', gap: 0, padding: 0 }}
+                              onClick={() => setNotifExpanded(notifExpanded === n.id ? null : n.id)}
+                            >
+                              <div style={{ display: 'flex', gap: 12, padding: '14px 16px' }}>
+                                <div className={`notif-icon ${n.priority === 'Emergency / ತುರ್ತು' || n.priority === 'Urgent' ? 'bg-danger' : 'bg-info'}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                  {n.priority === 'Emergency / ತುರ್ತು' || n.priority === 'Urgent' ? <AlertTriangle size={16} /> : <Bell size={16} />}
                                 </div>
+                                <div style={{ flex: 1 }}>
+                                  <p style={{ margin: 0 }}>{n.title}</p>
+                                  <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{n.category}</span>
+                                </div>
+                                <span style={{ fontSize: 11, color: 'var(--text-muted)', alignSelf: 'center' }}>
+                                  {notifExpanded === n.id ? '▲' : '▼'}
+                                </span>
                               </div>
-                            )}
+                              {notifExpanded === n.id && (
+                                <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid var(--border-light)', paddingTop: 10 }}>
+                                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 10, lineHeight: 1.6 }}>{n.message}</p>
+                                  <div style={{ display: 'flex', gap: 8 }}>
+                                    <button
+                                      onClick={e => { e.stopPropagation(); setActive('announcements'); setNotifOpen(false); setNotifExpanded(null); }}
+                                      style={{ fontSize: 12, fontWeight: 600, color: '#fff', background: 'var(--primary)', border: 'none', borderRadius: 6, padding: '3px 10px', cursor: 'pointer' }}
+                                    >
+                                      View All →
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      )}
                     </div>
                     <button className="notif-view-all" onClick={() => { setActive('announcements'); setNotifOpen(false) }}>View All Alerts</button>
                   </div>
