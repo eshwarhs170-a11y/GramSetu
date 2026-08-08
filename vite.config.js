@@ -34,7 +34,7 @@ const securityHeaders = {
     "img-src 'self' data: https://images.unsplash.com",
     "font-src 'self' data: https://fonts.gstatic.com",
     "connect-src 'self' ws: wss: http: https:",
-    "frame-src 'none'",
+    "frame-src https://www.youtube.com https://youtube.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
