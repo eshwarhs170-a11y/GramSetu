@@ -61,7 +61,7 @@
     "Hebbe Falls": "/district-images/chikkamagaluru_hebbe_falls.jpg",
     "Kudremukh National Park": "/district-images/chikkamagaluru_kudremukh_national_park.jpg",
     "Baba Budan Dargah": "/district-images/chikkamagaluru_baba_budan_dargah.jpg",
-    "Mullayanagiri Peak": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Mullayanagiri_Peak.jpg",
+    "Mullayanagiri Peak": "/district-images/chikkamagaluru_mullayanagiri_peak.png",
     "Coffee & Pepper Estates": "/district-images/chikkamagaluru_coffee_pepper_estates.jpg"
   },
   "Dakshina Kannada": {
@@ -93,7 +93,7 @@
     "Badami Caves": "/district-images/bagalkot_badami_caves.jpg",
     "Pattadakal": "/district-images/bagalkot_pattadakal.jpg",
     "Pomegranate Hub": "/district-images/bagalkot_pomegranate_hub.jpg",
-    "Ilkal Sarees": "https://upload.wikimedia.org/wikipedia/commons/3/30/Ilkal_Saree.jpg",
+    "Ilkal Sarees": "/district-images/bagalkot_ilkal_sarees.png",
     "Almatti Dam": "/district-images/bagalkot_almatti_dam.jpg"
   },
   "Ballari": {
@@ -144,7 +144,7 @@
     "Onake Obavva": "/district-images/chitradurga_onake_obavva.jpg",
     "Onion Cultivation": "/district-images/chitradurga_onion_cultivation.jpg",
     "Wind Farms": "/district-images/chitradurga_wind_farms.jpg",
-    "Vani Vilas Sagar": "https://upload.wikimedia.org/wikipedia/commons/7/77/Vani_vilas_sagar_dam.jpg"
+    "Vani Vilas Sagar": "/district-images/chitradurga_vani_vilas_sagar.png"
   },
   "Davanagere": {
     "Benne Dosa": "/district-images/davanagere_benne_dosa.jpg",
@@ -186,7 +186,7 @@
     "Mahadeva Temple, Itagi": "/district-images/koppal_mahadeva_temple_itagi.jpg",
     "Anegundi": "/district-images/koppal_anegundi.jpg",
     "Koppal Fort": "/district-images/koppal_koppal_fort.jpg",
-    "Seed Production": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Seeds_in_a_basket.jpg"
+    "Seed Production": "/district-images/koppal_seed_production.png"
   },
   "Udupi": {
     "Sri Krishna Matha": "/district-images/udupi_sri_krishna_matha.jpg",
@@ -214,7 +214,7 @@
     "Bheema River": "/district-images/yadgir_bheema_river.jpg",
     "Chintanalli": "/district-images/yadgir_chintanalli.jpg",
     "Uranium Deposits": "/district-images/yadgir_uranium_deposits.jpg",
-    "Dhab Dhabhi Falls": "https://upload.wikimedia.org/wikipedia/commons/7/73/Dhab_Dhabi_falls.jpg"
+    "Dhab Dhabhi Falls": "/district-images/yadgir_dhab_dhabhi_falls.png"
   },
   "Vijayanagara": {
     "Hampi Ruins": "/district-images/vijayanagara_hampi_ruins.jpg",
