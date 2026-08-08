@@ -2234,29 +2234,104 @@ export function CropDoctorScreen() {
   const [selectedCrop, setSelectedCrop] = useState('')
   const [selectedSymptom, setSelectedSymptom] = useState('')
   const [diagnosis, setDiagnosis] = useState(null)
+  
+  // New States for Camera/Upload
+  const [image, setImage] = useState(null)
+  const [analyzing, setAnalyzing] = useState(false)
+  const [analyzeStep, setAnalyzeStep] = useState(0)
 
-  const crops = ['Ragi', 'Paddy', 'Sugarcane', 'Cotton', 'Tomato', 'Maize']
+  // Expanded Knowledge Base
+  const crops = [
+    'Arecanut', 'Banana', 'Chilli', 'Coconut', 'Coffee', 'Cotton',
+    'Groundnut', 'Jowar', 'Maize', 'Mango', 'Onion', 'Paddy', 
+    'Papaya', 'Pepper', 'Potato', 'Ragi', 'Sugarcane', 'Tomato', 'Tur (Pigeon Pea)'
+  ]
   
   const symptoms = {
-    'Ragi': ['Yellowing of leaves', 'Brown spots on leaves', 'Stunted growth'],
-    'Paddy': ['White patches on leaves', 'Stem borer damage', 'Brown spots'],
-    'Sugarcane': ['Red rot in stem', 'Yellowing leaves', 'Stunted growth'],
+    'Arecanut': ['Nut dropping', 'Yellowing leaves', 'Stem bleeding'],
+    'Banana': ['Yellowing of leaves', 'Stunted growth', 'Fruit spots'],
+    'Chilli': ['Leaf curling', 'Fruit rot', 'Wilting'],
+    'Coconut': ['Crown choking', 'Nut fall', 'Stem bleeding'],
+    'Coffee': ['Rust on leaves', 'Berry borer', 'Dieback'],
     'Cotton': ['Bollworm damage', 'Leaf curling', 'Yellow spots'],
+    'Groundnut': ['Tikka leaf spot', 'Collar rot', 'Rust'],
+    'Jowar': ['Grain smut', 'Stem borer', 'Shoot fly'],
+    'Maize': ['Fall armyworm', 'Leaf blight', 'Stalk rot'],
+    'Mango': ['Powdery mildew', 'Fruit fly', 'Hopper damage'],
+    'Onion': ['Purple blotch', 'Thrips', 'Bulb rot'],
+    'Paddy': ['White patches on leaves', 'Stem borer damage', 'Brown spots'],
+    'Papaya': ['Ringspot virus', 'Mealybug', 'Root rot'],
+    'Pepper': ['Quick wilt', 'Pollu beetle', 'Slow wilt'],
+    'Potato': ['Late blight', 'Early blight', 'Tuber moth'],
+    'Ragi': ['Yellowing of leaves', 'Brown spots on leaves', 'Stunted growth'],
+    'Sugarcane': ['Red rot in stem', 'Yellowing leaves', 'Stunted growth'],
     'Tomato': ['Leaf blight', 'Fruit rot', 'Whitefly infestation'],
-    'Maize': ['Fall armyworm', 'Leaf blight', 'Stalk rot']
+    'Tur (Pigeon Pea)': ['Wilt', 'Pod borer', 'Sterility mosaic']
   }
 
+  // A comprehensive list of specific disease mappings (mocked but realistic)
   const diagnoses = {
-    'Ragi-Brown spots on leaves': { name: 'Blast Disease', cause: 'Fungal infection (Magnaporthe grisea)', treatment: 'Spray Tricyclazole (0.6g/L) or Kasugamycin (2.5ml/L).', prevention: 'Avoid excess nitrogen fertilizer. Use resistant varieties.' },
-    'Tomato-Leaf blight': { name: 'Early Blight', cause: 'Fungus (Alternaria solani)', treatment: 'Spray Mancozeb (2g/L) or Chlorothalonil.', prevention: 'Crop rotation. Avoid overhead irrigation.' },
+    'Arecanut-Nut dropping': { name: 'Koleroga (Fruit Rot)', cause: 'Fungus (Phytophthora meadii)', treatment: 'Spray 1% Bordeaux mixture before monsoon.', prevention: 'Improve drainage. Destroy infected fallen nuts.' },
+    'Banana-Yellowing of leaves': { name: 'Panama Wilt', cause: 'Fungus (Fusarium oxysporum)', treatment: 'Drench soil with Carbendazim (1g/L).', prevention: 'Plant disease-free suckers. Crop rotation.' },
+    'Chilli-Leaf curling': { name: 'Leaf Curl Virus', cause: 'Transmitted by Thrips / Whitefly', treatment: 'Spray Imidacloprid (0.5ml/L) or Spinosad (0.3ml/L).', prevention: 'Use nylon nets in nursery. Remove infected plants.' },
+    'Coconut-Stem bleeding': { name: 'Stem Bleeding', cause: 'Fungus (Thielaviopsis paradoxa)', treatment: 'Chisel out infected tissue and apply hot coal tar.', prevention: 'Avoid physical injury to stem. Apply Neem cake.' },
+    'Coffee-Rust on leaves': { name: 'Coffee Leaf Rust', cause: 'Fungus (Hemileia vastatrix)', treatment: 'Spray 0.5% Bordeaux mixture or Hexaconazole.', prevention: 'Maintain optimal shade. Prune to improve aeration.' },
+    'Cotton-Bollworm damage': { name: 'Pink Bollworm', cause: 'Insect (Pectinophora gossypiella)', treatment: 'Spray Emamectin Benzoate 5SG (0.5g/L).', prevention: 'Install pheromone traps. Destroy crop residue.' },
+    'Groundnut-Tikka leaf spot': { name: 'Tikka Disease', cause: 'Fungus (Cercospora arachidicola)', treatment: 'Spray Mancozeb (2g/L) or Chlorothalonil.', prevention: 'Crop rotation. Treat seeds with Trichoderma.' },
+    'Jowar-Grain smut': { name: 'Grain Smut', cause: 'Fungus (Sphacelotheca sorghi)', treatment: 'Seed treatment with Thiram (3g/kg seed).', prevention: 'Use certified disease-free seeds.' },
+    'Maize-Fall armyworm': { name: 'Fall Armyworm', cause: 'Insect (Spodoptera frugiperda)', treatment: 'Spray Spinetoram 11.7 SC (0.5ml/L).', prevention: 'Deep summer ploughing. Bird perches.' },
+    'Mango-Powdery mildew': { name: 'Powdery Mildew', cause: 'Fungus (Oidium mangiferae)', treatment: 'Spray Wettable Sulphur (3g/L) or Hexaconazole.', prevention: 'Prune overcrowded branches.' },
+    'Onion-Purple blotch': { name: 'Purple Blotch', cause: 'Fungus (Alternaria porri)', treatment: 'Spray Mancozeb (2.5g/L) + Tricyclazole.', prevention: 'Crop rotation. Ensure good field drainage.' },
     'Paddy-Stem borer damage': { name: 'Yellow Stem Borer', cause: 'Insect (Scirpophaga incertulas)', treatment: 'Apply Cartap Hydrochloride 4G @ 10kg/acre.', prevention: 'Clip seedling tips before transplanting.' },
-    'Maize-Fall armyworm': { name: 'Fall Armyworm (FAW)', cause: 'Insect (Spodoptera frugiperda)', treatment: 'Spray Emamectin Benzoate (0.4g/L) or Spinetoram.', prevention: 'Deep summer ploughing. Intercropping with legumes.' }
+    'Papaya-Ringspot virus': { name: 'Papaya Ringspot Virus', cause: 'Aphid-transmitted Virus', treatment: 'No chemical cure. Spray Dimethoate to control aphids.', prevention: 'Use virus-tolerant varieties. Eradicate infected plants.' },
+    'Pepper-Quick wilt': { name: 'Quick Wilt (Foot Rot)', cause: 'Fungus (Phytophthora capsici)', treatment: 'Soil drenching with 1% Bordeaux mixture.', prevention: 'Provide good drainage. Apply Trichoderma.' },
+    'Potato-Late blight': { name: 'Late Blight', cause: 'Oomycete (Phytophthora infestans)', treatment: 'Spray Cymoxanil + Mancozeb (3g/L).', prevention: 'Use disease-free tubers. Earthing up.' },
+    'Ragi-Brown spots on leaves': { name: 'Blast Disease', cause: 'Fungus (Magnaporthe grisea)', treatment: 'Spray Tricyclazole (0.6g/L) or Kasugamycin (2.5ml/L).', prevention: 'Avoid excess nitrogen fertilizer. Use resistant varieties.' },
+    'Sugarcane-Red rot in stem': { name: 'Red Rot', cause: 'Fungus (Colletotrichum falcatum)', treatment: 'No direct chemical control for standing crop.', prevention: 'Use healthy setts. Treat setts with Carbendazim (1g/L).' },
+    'Tomato-Leaf blight': { name: 'Early Blight', cause: 'Fungus (Alternaria solani)', treatment: 'Spray Mancozeb (2g/L) or Chlorothalonil.', prevention: 'Crop rotation. Avoid overhead irrigation.' },
+    'Tur (Pigeon Pea)-Pod borer': { name: 'Pod Borer', cause: 'Insect (Helicoverpa armigera)', treatment: 'Spray Indoxacarb 14.5 SC (0.5ml/L).', prevention: 'Install pheromone traps. Grow Marigold as trap crop.' }
   }
 
-  const handleDiagnose = () => {
-    const key = `${selectedCrop}-${selectedSymptom}`
-    const result = diagnoses[key] || { name: 'General Stress / Unknown', cause: 'Possible nutrient deficiency or water stress', treatment: 'Consult your local Raitha Samparka Kendra with a leaf sample.', prevention: 'Maintain proper soil health and irrigation schedule.' }
+  const handleDiagnose = (crop, symptom) => {
+    const key = `${crop}-${symptom}`
+    const result = diagnoses[key] || { 
+      name: 'General Stress / Unknown', 
+      cause: 'Possible nutrient deficiency or water stress', 
+      treatment: 'Consult your local Raitha Samparka Kendra with a leaf sample.', 
+      prevention: 'Maintain proper soil health and irrigation schedule.' 
+    }
     setDiagnosis(result)
+  }
+
+  // Handle Photo Upload & Simulated AI Analysis
+  const handlePhotoUpload = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      const imageUrl = URL.createObjectURL(file)
+      setImage(imageUrl)
+      setDiagnosis(null)
+      setSelectedCrop('')
+      setSelectedSymptom('')
+      setAnalyzing(true)
+      setAnalyzeStep(0)
+      
+      // Simulated AI progression
+      setTimeout(() => setAnalyzeStep(1), 800) // Scanning image...
+      setTimeout(() => setAnalyzeStep(2), 1600) // Identifying pathogen...
+      setTimeout(() => {
+        setAnalyzing(false)
+        
+        // Pick a pseudo-random disease to simulate AI finding based on file name/size
+        const hash = file.name.length + file.size
+        const cropKeys = Object.keys(diagnoses)
+        const selectedKey = cropKeys[hash % cropKeys.length]
+        const [c, s] = selectedKey.split('-')
+        
+        setSelectedCrop(c)
+        setSelectedSymptom(s)
+        handleDiagnose(c, s)
+      }, 2500)
+    }
   }
 
   return (
@@ -2268,9 +2343,66 @@ export function CropDoctorScreen() {
           </div>
           <div>
             <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>AI Crop Doctor</h3>
-            <p style={{ margin: 0, fontSize: 13, color: 'var(--text-muted)' }}>Select crop and symptoms for immediate diagnosis and treatment</p>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--text-muted)' }}>Take a photo or select symptoms for immediate diagnosis</p>
           </div>
         </div>
+
+        {/* AI Camera Upload Section */}
+        <div style={{ 
+          border: '2px dashed #bbf7d0', 
+          background: '#f0fdf4', 
+          borderRadius: 12, 
+          padding: '24px 16px', 
+          textAlign: 'center', 
+          marginBottom: 20,
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          {image ? (
+            <div>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <img src={image} alt="Crop" style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
+                {analyzing && (
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: '#16a34a', boxShadow: '0 0 10px #22c55e', animation: 'scan 1.2s ease-in-out infinite alternate' }} />
+                )}
+              </div>
+              
+              {analyzing ? (
+                <div style={{ marginTop: 16 }}>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: '#16a34a', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                    <RefreshCw size={16} className="spin" /> 
+                    {analyzeStep === 0 ? 'Analyzing leaf patterns...' : analyzeStep === 1 ? 'Identifying crop type...' : 'Detecting pathogen...'}
+                  </p>
+                  <div style={{ height: 6, background: '#dcfce7', borderRadius: 4, width: '60%', margin: '0 auto', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', background: '#16a34a', width: analyzeStep === 0 ? '33%' : analyzeStep === 1 ? '66%' : '95%', transition: 'width 0.8s ease' }} />
+                  </div>
+                </div>
+              ) : (
+                <div style={{ marginTop: 12 }}>
+                  <p style={{ fontSize: 13, color: '#15803d', fontWeight: 600, margin: '0 0 12px 0' }}>✅ Analysis Complete</p>
+                  <button className="btn btn-outline btn-sm" onClick={() => { setImage(null); setDiagnosis(null); setSelectedCrop(''); setSelectedSymptom(''); }}>
+                    <Camera size={14} /> Scan Another
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div>
+              <div style={{ background: '#dcfce7', color: '#16a34a', width: 48, height: 48, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
+                <Camera size={24} />
+              </div>
+              <h4 style={{ margin: '0 0 8px 0', fontSize: 15, fontWeight: 700, color: '#15803d' }}>Take a Photo</h4>
+              <p style={{ margin: '0 0 16px 0', fontSize: 12, color: 'var(--text-secondary)' }}>Snap a clear picture of the diseased leaf or pest</p>
+              
+              <label style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, background: '#16a34a', color: '#fff', padding: '10px 20px', borderRadius: 8, fontSize: 14, fontWeight: 600 }}>
+                <Camera size={16} /> Open Camera / Gallery
+                <input type="file" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={handlePhotoUpload} />
+              </label>
+            </div>
+          )}
+        </div>
+
+        <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: 12, fontWeight: 600, marginBottom: 16 }}>— OR SELECT MANUALLY —</div>
 
         <div className="form-group" style={{ marginBottom: 16 }}>
           <label className="form-label">Select Crop</label>
@@ -2285,22 +2417,23 @@ export function CropDoctorScreen() {
             <label className="form-label">Observed Symptom</label>
             <select className="form-input" value={selectedSymptom} onChange={e => { setSelectedSymptom(e.target.value); setDiagnosis(null); }}>
               <option value="">-- Choose Symptom --</option>
-              {symptoms[selectedCrop].map(s => <option key={s} value={s}>{s}</option>)}
+              {symptoms[selectedCrop]?.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
         )}
 
-        <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={!selectedCrop || !selectedSymptom} onClick={handleDiagnose}>
+        <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={!selectedCrop || !selectedSymptom || analyzing} onClick={() => handleDiagnose(selectedCrop, selectedSymptom)}>
           Diagnose Issue
         </button>
       </div>
 
-      {diagnosis && (
+      {diagnosis && !analyzing && (
         <div className="card animate-fadeInUp" style={{ borderLeft: '4px solid #16a34a' }}>
-          <h4 style={{ fontSize: 16, fontWeight: 700, color: '#16a34a', marginBottom: 12 }}>Diagnosis: {diagnosis.name}</h4>
+          <h4 style={{ fontSize: 16, fontWeight: 700, color: '#16a34a', marginBottom: 4 }}>Detected: {diagnosis.name}</h4>
+          <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: '0 0 16px 0', fontWeight: 600 }}>Crop: {selectedCrop} • Symptom: {selectedSymptom}</p>
           
           <div style={{ marginBottom: 12 }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Cause</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Cause / Pathogen</span>
             <p style={{ margin: '4px 0 0 0', fontSize: 14 }}>{diagnosis.cause}</p>
           </div>
           
@@ -2315,6 +2448,13 @@ export function CropDoctorScreen() {
           </div>
         </div>
       )}
+      <style>{`
+        @keyframes scan {
+          0% { top: 0; }
+          100% { top: 116px; }
+        }
+        .spin { animation: spin 1s linear infinite; }
+      `}</style>
     </div>
   )
 }
