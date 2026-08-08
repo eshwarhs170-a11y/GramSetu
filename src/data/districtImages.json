@@ -1,105 +1,105 @@
 {
   "Mysuru": {
-    "Mysore Palace": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Mysore_Palace_Morning.jpg",
-    "Chamundeshwari Temple": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Chamundeshwari_Temple_Mysore.jpg",
-    "Brindavan Gardens": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Brindavan_Gardens.JPG",
-    "Dasara Festival": "https://upload.wikimedia.org/wikipedia/commons/3/30/Mysore_Palace_Dussera_%2829633564994%29.jpg",
-    "Mysore Silk": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Mysore_Silk_Saree.jpg",
-    "Sandalwood Capital": "https://upload.wikimedia.org/wikipedia/commons/8/85/Santalum_paniculatum_1326.jpg"
+    "Mysore Palace": "/district-images/mysuru_mysore_palace.jpg",
+    "Chamundeshwari Temple": "/district-images/mysuru_chamundeshwari_temple.jpg",
+    "Brindavan Gardens": "/district-images/mysuru_brindavan_gardens.jpg",
+    "Dasara Festival": "/district-images/mysuru_dasara_festival.jpg",
+    "Mysore Silk": "/district-images/mysuru_mysore_silk.jpg",
+    "Sandalwood Capital": "/district-images/mysuru_sandalwood_capital.jpg"
   },
   "Tumkuru": {
-    "Siddaganga Mutt": "https://upload.wikimedia.org/wikipedia/commons/2/24/Shivakumara_Swami.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-    "Coconut Hub of Karnataka": "https://upload.wikimedia.org/wikipedia/commons/3/32/Cocos_nucifera_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-187.jpg",
-    "Madhugiri Fort": "https://upload.wikimedia.org/wikipedia/commons/6/63/Madhugiri_Fort_1.JPG",
-    "Devarayanadurga": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Yoga_Narasimha_Temple_Devarayanadurga.JPG",
-    "Shivaganga Hill": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Shivagange_Basavanna.JPG",
-    "Silk Rearing": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Eri_cocoons.jpg"
+    "Siddaganga Mutt": "/district-images/tumkuru_siddaganga_mutt.png",
+    "Coconut Hub of Karnataka": "/district-images/tumkuru_coconut_hub_of_karnataka.jpg",
+    "Madhugiri Fort": "/district-images/tumkuru_madhugiri_fort.jpg",
+    "Devarayanadurga": "/district-images/tumkuru_devarayanadurga.jpg",
+    "Shivaganga Hill": "/district-images/tumkuru_shivaganga_hill.jpg",
+    "Silk Rearing": "/district-images/tumkuru_silk_rearing.jpg"
   },
   "Ramanagara": {
-    "Silk Cocoon Capital": "https://upload.wikimedia.org/wikipedia/commons/4/47/Pairedmoths.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-    "Vulture Sanctuary": "https://upload.wikimedia.org/wikipedia/commons/2/20/Indian_vulture_%28Gyps_indicus%29_Photograph_by_Shantanu_Kuveskar.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-    "Savandurga": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Savandurga_Hill_02.jpg",
-    "Cauvery Wildlife Sanctuary": "https://upload.wikimedia.org/wikipedia/commons/3/33/Indian_leopard_in_Jawai_Bandh_April_2025_by_Tisha_Mukherjee_02.jpg",
-    "Ramdevarabetta — Sholay Hills": "https://upload.wikimedia.org/wikipedia/commons/9/90/Ramadevarabetta.jpg",
-    "Crocodile Farm, Mysuru Rd": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Mugger_crocodile_%28Crocodylus_palustris%29_Gal_Oya.jpg"
+    "Silk Cocoon Capital": "/district-images/ramanagara_silk_cocoon_capital.jpg",
+    "Vulture Sanctuary": "/district-images/ramanagara_vulture_sanctuary.jpg",
+    "Savandurga": "/district-images/ramanagara_savandurga.jpg",
+    "Cauvery Wildlife Sanctuary": "/district-images/ramanagara_cauvery_wildlife_sanctuary.jpg",
+    "Ramdevarabetta — Sholay Hills": "/district-images/ramanagara_ramdevarabetta_sholay_hills.jpg",
+    "Crocodile Farm, Mysuru Rd": "/district-images/ramanagara_crocodile_farm_mysuru_rd.jpg"
   },
   "Mandya": {
-    "KRS Dam & Brindavan Gardens": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Brindavan_Gardens.JPG",
-    "Melkote — Cheluvanarayana Swamy": "https://upload.wikimedia.org/wikipedia/commons/5/55/Cheluvanarayana_Swamy_Temple_BNC.jpg",
-    "Shivanasamudra Falls": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Gagana_Chukki_%281%29.jpg",
-    "Sugarcane & Jaggery": "https://upload.wikimedia.org/wikipedia/commons/0/09/Sa-indian-gud.jpg",
-    "Pandavapura Town": "https://upload.wikimedia.org/wikipedia/commons/7/74/Saccharum_officinarum_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-125.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-    "Ranganathittu Bird Sanctuary": "https://upload.wikimedia.org/wikipedia/commons/7/75/Spot-billed_Pelican_Rising_Flight_Ranganathittu_Feb24_D72_26266.jpg"
+    "KRS Dam & Brindavan Gardens": "/district-images/mandya_krs_dam_brindavan_gardens.jpg",
+    "Melkote — Cheluvanarayana Swamy": "/district-images/mandya_melkote_cheluvanarayana_swamy.jpg",
+    "Shivanasamudra Falls": "/district-images/mandya_shivanasamudra_falls.jpg",
+    "Sugarcane & Jaggery": "/district-images/mandya_sugarcane_jaggery.jpg",
+    "Pandavapura Town": "/district-images/mandya_pandavapura_town.jpg",
+    "Ranganathittu Bird Sanctuary": "/district-images/mandya_ranganathittu_bird_sanctuary.jpg"
   },
   "Hassan": {
-    "Belur — Chennakeshava Temple": "https://upload.wikimedia.org/wikipedia/commons/0/0a/The_Courtyard_of_Chennakesava_Temple_-_Belur.jpg",
-    "Halebid — Hoysaleshwara Temple": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Hoysaleshwara_temple_in_Monsoon.JPG",
-    "Shravanabelagola — Gommateshwara": "https://upload.wikimedia.org/wikipedia/commons/8/87/Gommateshwara%2C_Shravanabelagola.jpg",
-    "Coffee Estates": "https://upload.wikimedia.org/wikipedia/commons/d/d7/India_coffee_forests.jpg",
-    "Areca Nut Orchards": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Bago%2C_mercado_23.jpg",
-    "Hemavathi Reservoir": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Gorur_Dam-1.jpg",
-    "Hasanamba Temple": "https://upload.wikimedia.org/wikipedia/commons/9/93/Someshwara1.jpg"
+    "Belur — Chennakeshava Temple": "/district-images/hassan_belur_chennakeshava_temple.jpg",
+    "Halebid — Hoysaleshwara Temple": "/district-images/hassan_halebid_hoysaleshwara_temple.jpg",
+    "Shravanabelagola — Gommateshwara": "/district-images/hassan_shravanabelagola_gommateshwara.jpg",
+    "Coffee Estates": "/district-images/hassan_coffee_estates.jpg",
+    "Areca Nut Orchards": "/district-images/hassan_areca_nut_orchards.jpg",
+    "Hemavathi Reservoir": "/district-images/hassan_hemavathi_reservoir.jpg",
+    "Hasanamba Temple": "/district-images/hassan_hasanamba_temple.jpg"
   },
   "Belagavi": {
-    "Kittur — Rani Chennamma": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Kittur_Chenamma.jpg",
-    "Belagavi Fort": "https://upload.wikimedia.org/wikipedia/commons/3/33/Suvarna_Vidhana_Soudha.jpg",
-    "Kapileshwara Temple": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hampi_virupaksha_temple.jpg",
-    "Kunda — Famous Sweet": "https://upload.wikimedia.org/wikipedia/commons/6/66/Kamal_Basti%2C_Belgaum.jpg",
-    "Gokak Falls": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Gokak_Falls_During_Night.jpg",
-    "Dodda Sampige & Yakshagana": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Yakshaganads.jpg"
+    "Kittur — Rani Chennamma": "/district-images/belagavi_kittur_rani_chennamma.jpg",
+    "Belagavi Fort": "/district-images/belagavi_belagavi_fort.jpg",
+    "Kapileshwara Temple": "/district-images/belagavi_kapileshwara_temple.jpg",
+    "Kunda — Famous Sweet": "/district-images/belagavi_kunda_famous_sweet.jpg",
+    "Gokak Falls": "/district-images/belagavi_gokak_falls.jpg",
+    "Dodda Sampige & Yakshagana": "/district-images/belagavi_dodda_sampige_yakshagana.jpg"
   },
   "Shivamogga": {
-    "Jog Falls": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Jog_Falls_05092016.jpg",
-    "Agumbe Rainforest": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Agumbe_View_point.jpg",
-    "Keladi Kingdom History": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Greatest_Extent_Of_Keladi_Kingdom_during_the_reign_of_Shivappa_Nayaka.jpg",
-    "Coffee & Areca Nut": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Bago%2C_mercado_23.jpg",
-    "Bhadra Wildlife Sanctuary": "https://upload.wikimedia.org/wikipedia/commons/c/cd/2006-Tigers-and-Gaurs.jpg",
-    "Linganamakki Reservoir": "https://upload.wikimedia.org/wikipedia/commons/8/87/Linganamakki_dam.jpg"
+    "Jog Falls": "/district-images/shivamogga_jog_falls.jpg",
+    "Agumbe Rainforest": "/district-images/shivamogga_agumbe_rainforest.jpg",
+    "Keladi Kingdom History": "/district-images/shivamogga_keladi_kingdom_history.jpg",
+    "Coffee & Areca Nut": "/district-images/shivamogga_coffee_areca_nut.jpg",
+    "Bhadra Wildlife Sanctuary": "/district-images/shivamogga_bhadra_wildlife_sanctuary.jpg",
+    "Linganamakki Reservoir": "/district-images/shivamogga_linganamakki_reservoir.jpg"
   },
   "Chikkamagaluru": {
-    "Birthplace of Indian Coffee": "https://upload.wikimedia.org/wikipedia/commons/c/c1/John_Frederick_Lewis_004.jpg",
-    "Hebbe Falls": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Hebbe_Falls.JPG",
-    "Kudremukh National Park": "https://upload.wikimedia.org/wikipedia/commons/8/83/Kudremukh_national_park.jpg",
-    "Baba Budan Dargah": "https://upload.wikimedia.org/wikipedia/commons/a/ac/A_scenery_from_bababudan_hill.jpg",
+    "Birthplace of Indian Coffee": "/district-images/chikkamagaluru_birthplace_of_indian_coffee.jpg",
+    "Hebbe Falls": "/district-images/chikkamagaluru_hebbe_falls.jpg",
+    "Kudremukh National Park": "/district-images/chikkamagaluru_kudremukh_national_park.jpg",
+    "Baba Budan Dargah": "/district-images/chikkamagaluru_baba_budan_dargah.jpg",
     "Mullayanagiri Peak": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Mullayanagiri_Peak.jpg",
-    "Coffee & Pepper Estates": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Roasted_coffee_beans.jpg"
+    "Coffee & Pepper Estates": "/district-images/chikkamagaluru_coffee_pepper_estates.jpg"
   },
   "Dakshina Kannada": {
-    "Mangaladevi Temple": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Mangaladevi_Temple_Mangalore_2.jpg",
-    "Yakshagana Theatre": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Yakshaganads.jpg",
-    "Panambur & Tannirbhavi Beach": "https://upload.wikimedia.org/wikipedia/commons/2/23/Panambur_Beach_Mangalore.jpg",
-    "Seafood Capital": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Plateau_van_zeevruchten.jpg",
-    "St. Aloysius Chapel": "https://upload.wikimedia.org/wikipedia/commons/4/46/St._Aloysius_Church_Mangalore.jpg",
-    "Cashew Processing Hub": "https://upload.wikimedia.org/wikipedia/commons/6/64/Cashew_apples.jpg"
+    "Mangaladevi Temple": "/district-images/dakshina_kannada_mangaladevi_temple.jpg",
+    "Yakshagana Theatre": "/district-images/dakshina_kannada_yakshagana_theatre.jpg",
+    "Panambur & Tannirbhavi Beach": "/district-images/dakshina_kannada_panambur_tannirbhavi_beach.jpg",
+    "Seafood Capital": "/district-images/dakshina_kannada_seafood_capital.jpg",
+    "St. Aloysius Chapel": "/district-images/dakshina_kannada_st_aloysius_chapel.jpg",
+    "Cashew Processing Hub": "/district-images/dakshina_kannada_cashew_processing_hub.jpg"
   },
   "Dharwad": {
-    "Dharwad — Hindustani Music": "https://upload.wikimedia.org/wikipedia/commons/3/39/Sitar%2C_late_19th_Century.jpg",
-    "Dharwad Peda": "https://upload.wikimedia.org/wikipedia/commons/0/01/Dharwad_peda.jpg",
-    "Karnataka University": "https://upload.wikimedia.org/wikipedia/commons/9/99/GBerunda.JPG",
-    "Sunflower & Jowar": "https://upload.wikimedia.org/wikipedia/commons/4/40/Sunflower_sky_backdrop.jpg",
-    "Karadi Majalu Dance": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Yakshaganads.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-    "University of Agricultural Sciences": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Mysore_Agriculture_Department_1926.jpg"
+    "Dharwad — Hindustani Music": "/district-images/dharwad_dharwad_hindustani_music.jpg",
+    "Dharwad Peda": "/district-images/dharwad_dharwad_peda.jpg",
+    "Karnataka University": "/district-images/dharwad_karnataka_university.jpg",
+    "Sunflower & Jowar": "/district-images/dharwad_sunflower_jowar.jpg",
+    "Karadi Majalu Dance": "/district-images/dharwad_karadi_majalu_dance.jpg",
+    "University of Agricultural Sciences": "/district-images/dharwad_university_of_agricultural_sciences.jpg"
   },
   "Raichur": {
-    "Raichur Fort": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Raichur_Fort_1.jpg",
-    "Tungabhadra Dam": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Tungabhadra_dam_all_gates_open.jpg",
-    "Cotton & Groundnut": "https://upload.wikimedia.org/wikipedia/commons/6/68/CottonPlant.JPG",
-    "Veeragase & Goravara Kunitha": "https://upload.wikimedia.org/wikipedia/commons/d/dc/LORD_VEERABHADRA.jpg",
-    "Raichur Thermal Power Station": "https://upload.wikimedia.org/wikipedia/commons/1/12/Raichur_Thermal_Power_Station.jpg",
-    "Paddy Granary": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Pana_Banaue_Rice_Terraces_%28Cropped%29.jpg",
-    "Paddy & Arecanut": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Pana_Banaue_Rice_Terraces_%28Cropped%29.jpg"
+    "Raichur Fort": "/district-images/raichur_raichur_fort.jpg",
+    "Tungabhadra Dam": "/district-images/raichur_tungabhadra_dam.jpg",
+    "Cotton & Groundnut": "/district-images/raichur_cotton_groundnut.jpg",
+    "Veeragase & Goravara Kunitha": "/district-images/raichur_veeragase_goravara_kunitha.jpg",
+    "Raichur Thermal Power Station": "/district-images/raichur_raichur_thermal_power_station.jpg",
+    "Paddy Granary": "/district-images/raichur_paddy_granary.jpg",
+    "Paddy & Arecanut": "/district-images/raichur_paddy_arecanut.jpg"
   },
   "Bagalkot": {
-    "Badami Caves": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Vishnu_image_inside_cave_number_3_in_Badami.jpg",
-    "Pattadakal": "https://upload.wikimedia.org/wikipedia/commons/0/03/Pattadakal_000.JPG",
-    "Pomegranate Hub": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Pomegranate_Juice_%282019%29.jpg",
+    "Badami Caves": "/district-images/bagalkot_badami_caves.jpg",
+    "Pattadakal": "/district-images/bagalkot_pattadakal.jpg",
+    "Pomegranate Hub": "/district-images/bagalkot_pomegranate_hub.jpg",
     "Ilkal Sarees": "https://upload.wikimedia.org/wikipedia/commons/3/30/Ilkal_Saree.jpg",
-    "Almatti Dam": "https://upload.wikimedia.org/wikipedia/commons/3/31/Almatti_Dam_26.jpg"
+    "Almatti Dam": "/district-images/bagalkot_almatti_dam.jpg"
   },
   "Ballari": {
-    "Ballari Fort": "https://upload.wikimedia.org/wikipedia/commons/2/29/BELLARY_FORT_2.jpg",
-    "Garment Industry": "https://upload.wikimedia.org/wikipedia/commons/2/29/BELLARY_FORT_2.jpg",
-    "Daroji Sloth Bear Sanctuary": "https://upload.wikimedia.org/wikipedia/commons/8/85/MelursusUrsinusFemaleCub.jpg",
+    "Ballari Fort": "/district-images/ballari_ballari_fort.jpg",
+    "Garment Industry": "/district-images/ballari_garment_industry.jpg",
+    "Daroji Sloth Bear Sanctuary": "/district-images/ballari_daroji_sloth_bear_sanctuary.jpg",
     "Tungabhadra Irrigation": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Tungabhadra_dam_all_gates_open.jpg",
     "Iron Ore Mining": "https://upload.wikimedia.org/wikipedia/commons/2/2e/HematitaEZ.jpg"
   },
@@ -107,12 +107,12 @@
     "Kempegowda Int. Airport": "https://upload.wikimedia.org/wikipedia/commons/1/1a/2024-12-08-00_00_2024-12-08-23_59_Sentinel-2_L2A_True_color_%281%29.jpg",
     "Grape Cultivation": "https://upload.wikimedia.org/wikipedia/commons/6/60/Blue_grapes_in_vineyard.jpg",
     "Mulberry & Silk": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Mysore_Silk_Saree.jpg",
-    "Ghati Subramanya": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Ghati_Subramanya_Temple.JPG",
+    "Ghati Subramanya": "/district-images/bengaluru_rural_ghati_subramanya.jpg",
     "Aerospace Park": "https://upload.wikimedia.org/wikipedia/commons/d/d5/HAL_Museum_Bengaluru.jpg"
   },
   "Bengaluru Urban": {
     "IT Hub": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Ubcity2.jpg",
-    "Lalbagh Botanical Garden": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Glasshouse_and_fountain_at_lalbagh.jpg",
+    "Lalbagh Botanical Garden": "/district-images/bengaluru_urban_lalbagh_botanical_garden.jpg",
     "Vidhana Soudha": "https://upload.wikimedia.org/wikipedia/commons/2/25/Vidhana_Soudha_2012.jpg",
     "ISRO Headquarters": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Indian_Space_Research_Organisation_Logo.svg",
     "ISKCON Temple": "https://upload.wikimedia.org/wikipedia/commons/1/11/ISKCON_Banglaore_Temple.jpg",
@@ -134,7 +134,7 @@
   },
   "Chikkaballapur": {
     "Nandi Hills": "https://upload.wikimedia.org/wikipedia/commons/1/19/Sunrise_at_Nandi_Hills.jpg",
-    "Potato & Maize": "https://upload.wikimedia.org/wikipedia/commons/4/49/Papamuseolarco.jpg",
+    "Potato & Maize": "/district-images/chikkaballapur_potato_maize.jpg",
     "Isha Foundation (Adiyogi)": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Adiyogi_Shiva_steel_burst_2018.jpg",
     "Bhoga Nandeeshwara": "https://upload.wikimedia.org/wikipedia/commons/7/73/Bhoga_Nandeeshwara_Temple_-_North_Side_View.jpg",
     "Silk Cocoon Market": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Silk_raw_01a.jpg"
@@ -151,21 +151,21 @@
     "Textile Mills": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Finlaysonin_kutojia_vuonna_1951._Kuva_Veikko_Kanninen%2C_Vapriikin_kuva-arkisto._%2816248493129%29.jpg",
     "Paddy & Arecanut": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Pana_Banaue_Rice_Terraces_%28Cropped%29.jpg",
     "Harihareshwara Temple": "https://upload.wikimedia.org/wikipedia/commons/0/04/Harihareshwara_temple_at_Harihar.JPG",
-    "Geographical Center": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Karnataka_topo_deu.png"
+    "Geographical Center": "/district-images/davanagere_geographical_center.png"
   },
   "Gadag": {
     "Trikuteshwara Temple": "https://upload.wikimedia.org/wikipedia/commons/9/99/Gadag_Trikuteshwara_temple_complex_3.JPG",
     "Printing Hub": "https://upload.wikimedia.org/wikipedia/commons/9/96/Gutenberg_press.png",
     "Wind Energy": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Alpha_Ventus_Windmills.JPG",
     "Kumara Vyasa": "https://upload.wikimedia.org/wikipedia/commons/8/81/Kurukshetra.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-    "Magadi Bird Sanctuary": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Ocyceros_griseus_-India-8a.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
+    "Magadi Bird Sanctuary": "/district-images/gadag_magadi_bird_sanctuary.jpg"
   },
   "Kalaburagi": {
     "Khwaja Bande Nawaz": "https://upload.wikimedia.org/wikipedia/commons/7/70/Portrait_of_Bande_Nawaz%2C_a_Sufi_saint_from_India.jpg",
     "Gulbarga Fort": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Gulbarga_Fort..jpg",
     "Tur Dal Capital": "https://upload.wikimedia.org/wikipedia/commons/0/08/Watch_towers_at_Gulbarga_Fort.JPG",
     "Sun City": "https://upload.wikimedia.org/wikipedia/commons/1/14/Growing_skylines_of_the_Mangalore_CBD_region.jpg",
-    "Medical & Dental Hub": "https://upload.wikimedia.org/wikipedia/commons/7/76/Iisc-Founder.jpg"
+    "Medical & Dental Hub": "/district-images/kalaburagi_medical_dental_hub.jpg"
   },
   "Kodagu": {
     "Coffee Plantations": "https://upload.wikimedia.org/wikipedia/commons/d/d7/India_coffee_forests.jpg",
@@ -175,7 +175,7 @@
     "Madikeri Fort": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Madikeri_Palace_now_used_as_district_administration_seat.jpg"
   },
   "Kolar": {
-    "Kolar Gold Fields (KGF)": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Kolar_Gold_Fields_-_1913.jpg",
+    "Kolar Gold Fields (KGF)": "/district-images/kolar_kolar_gold_fields_kgf.jpg",
     "Mango Cultivation": "https://upload.wikimedia.org/wikipedia/commons/7/74/Mangos_-_single_and_halved.jpg",
     "Someshwara Temple": "https://upload.wikimedia.org/wikipedia/commons/9/93/Someshwara1.jpg",
     "Dairy Production": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Cow_female_black_white.jpg",
@@ -189,7 +189,7 @@
     "Seed Production": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Seeds_in_a_basket.jpg"
   },
   "Udupi": {
-    "Sri Krishna Matha": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Udupi_Sri_Krishna_Matha_Temple.jpg",
+    "Sri Krishna Matha": "/district-images/udupi_sri_krishna_matha.jpg",
     "Malpe Beach & St. Mary's": "https://upload.wikimedia.org/wikipedia/commons/f/fc/St._Mary%27s_islands%2C_Udupi_1767.jpg",
     "Manipal": "https://upload.wikimedia.org/wikipedia/commons/3/30/Night_in_Manipal.jpg",
     "Bhoota Kola": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Dancer%27s_Headpiece_in_the_Form_of_a_Panjurli_Bhuta_%28boar_spirit_deity%29_LACMA_M.2005.49a-b_%282_of_3%29.jpg",
@@ -206,7 +206,7 @@
     "Gol Gumbaz": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Gol_Gumbaj2.JPG",
     "Grape & Raisin Hub": "https://upload.wikimedia.org/wikipedia/commons/5/53/Grapes%2C_Rostov-on-Don%2C_Russia.jpg",
     "Indi Lemon": "https://upload.wikimedia.org/wikipedia/commons/e/e4/P1030323.JPG",
-    "Ibrahim Rauza": "https://upload.wikimedia.org/wikipedia/commons/5/51/Ibrahim_Roza.jpg",
+    "Ibrahim Rauza": "/district-images/vijayapura_ibrahim_rauza.jpg",
     "Bijapur Fort": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Malik_E_Maidan.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
   },
   "Yadgir": {
@@ -220,15 +220,15 @@
     "Hampi Ruins": "https://upload.wikimedia.org/wikipedia/commons/4/49/Hampi%2C_India%2C_View_of_Hampi_Bazaar_from_Matanga_Hill.jpg",
     "Virupaksha Temple": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Complex_of_Virupaksha_Temple%2C_Hampi_%2804%29.jpg",
     "Tungabhadra Dam (Hospet)": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Hampi%2C_Tungabhadra_River%2C_India.jpg",
-    "Daroji Bear Sanctuary": "https://upload.wikimedia.org/wikipedia/commons/8/85/MelursusUrsinusFemaleCub.jpg",
+    "Daroji Bear Sanctuary": "/district-images/vijayanagara_daroji_bear_sanctuary.jpg",
     "Banana & Sugarcane": "https://upload.wikimedia.org/wikipedia/commons/0/01/Bananal_REFON.jpg"
   },
   "Haveri": {
     "Lambani / Banjara Crafts": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Exhibit_in_Craft_Museum_New_Delhi-30.JPG",
-    "Cotton Cultivation": "https://upload.wikimedia.org/wikipedia/commons/6/68/CottonPlant.JPG",
+    "Cotton Cultivation": "/district-images/haveri_cotton_cultivation.jpg",
     "Tungabhadra Canal System": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Tungabhadra_dam_all_gates_open.jpg",
     "Guttal — Siddeshwara Temple": "https://upload.wikimedia.org/wikipedia/commons/7/77/Chaudayyadanapura_Mukteshwara_temple_11.jpg",
     "Dodderi Math": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Vidyashankara_Temple_at_Shringeri.jpg",
-    "Kamsale & Bedara Vesha": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Bedara_Vesha.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
+    "Kamsale & Bedara Vesha": "/district-images/haveri_kamsale_bedara_vesha.jpg"
   }
 }
