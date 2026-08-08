@@ -6,6 +6,7 @@ import { useLanguage } from '../context/LanguageContext'
 import {
   HomeScreen, SchemesScreen, MarketScreen, AnnouncementsScreen,
   ComplaintScreen, ComplaintStatusScreen, ProfileScreen,
+  WeatherScreen, EmergencySOSScreen, CropDoctorScreen, WaterTankScreen
 } from '../components/VillagerScreens'
 import { Menu, Search, Bell, X, AlertTriangle, IndianRupee } from 'lucide-react'
 
@@ -30,6 +31,10 @@ export default function VillagerDashboard() {
     complaint:     { titleKey: 'complaintTitle', subKey: 'complaintSub' },
     status:        { titleKey: 'statusTitle',    subKey: 'statusSub' },
     profile:       { titleKey: 'profileTitle',   subKey: 'profileSub' },
+    weather:       { titleKey: 'weatherTitle',   subKey: 'weatherSub' },
+    sos:           { titleKey: 'sosTitle',       subKey: 'sosSub' },
+    cropdoctor:    { titleKey: 'cropDoctorTitle',subKey: 'cropDoctorSub' },
+    watertank:     { titleKey: 'waterTankTitle', subKey: 'waterTankSub' },
   }
   const page = pageMeta[active] || pageMeta.home
 
@@ -42,6 +47,10 @@ export default function VillagerDashboard() {
       case 'complaint':     return <ComplaintScreen />
       case 'status':        return <ComplaintStatusScreen />
       case 'profile':       return <ProfileScreen />
+      case 'weather':       return <WeatherScreen />
+      case 'sos':           return <EmergencySOSScreen />
+      case 'cropdoctor':    return <CropDoctorScreen />
+      case 'watertank':     return <WaterTankScreen />
       default:              return <HomeScreen />
     }
   }
