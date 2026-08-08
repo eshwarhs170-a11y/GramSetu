@@ -6,7 +6,7 @@ import {
   Camera, Phone, Home, Map,
   Building2, Wheat, ArrowUp, ArrowDown, Minus,
   Bell, ShieldCheck, RefreshCw, Sparkles, CheckCircle2, Star,
-  Cloud, CloudRain, Sun, Thermometer, Wind, ShieldAlert, AlertTriangle, Stethoscope, Clock, CheckCircle, Info, PhoneCall, FileText
+  Cloud, CloudRain, Sun, Thermometer, Wind, ShieldAlert, AlertTriangle, Stethoscope, Clock, CheckCircle, Info, PhoneCall, FileText, PlayCircle, Volume2
 } from 'lucide-react'
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
@@ -2530,6 +2530,125 @@ export function WaterTankScreen() {
         .spin { animation: spin 2s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
       `}</style>
+    </div>
+  )
+}
+
+export function TutorialsScreen() {
+  const { t, lang } = useLanguage()
+  const [playingId, setPlayingId] = useState(null)
+  
+  const tutorials = [
+    {
+      id: 'upi',
+      title: lang === 'kn' ? 'ಫೋನ್‌ಪೇ / ಗೂಗಲ್ ಪೇ ಬಳಸುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'फोनपे / गूगल पे का उपयोग कैसे करें?' : 'How to use PhonePe / Google Pay?',
+      desc: lang === 'kn' ? 'ಸುರಕ್ಷಿತವಾಗಿ ಹಣ ಕಳುಹಿಸಲು ಮತ್ತು ಸ್ವೀಕರಿಸಲು ಹಂತ-ಹಂತದ ಮಾರ್ಗದರ್ಶಿ.' : lang === 'hi' ? 'सुरक्षित रूप से पैसे भेजने और प्राप्त करने के लिए चरण-दर-चरण मार्गदर्शिका।' : 'Step-by-step guide to send and receive money securely.',
+      videoId: '2283Xp12XpQ', // Example random video ID, usually these are 11 chars
+      voiceText: lang === 'kn' ? 'ಫೋನ್‌ಪೇ ಬಳಸಲು ಮೊದಲು ಆಪ್ ತೆರೆಯಿರಿ. ನಂತರ ಟು ಮೊಬೈಲ್ ನಂಬರ್ ಆಯ್ಕೆ ಮಾಡಿ, ನೀವು ಹಣ ಕಳುಹಿಸಬೇಕಾದವರ ನಂಬರ್ ಟೈಪ್ ಮಾಡಿ. ಮೊತ್ತವನ್ನು ನಮೂದಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಯುಪಿಐ ಪಿನ್ ಹಾಕಿ.' 
+                 : lang === 'hi' ? 'फोनपे का उपयोग करने के लिए सबसे पहले ऐप खोलें। फिर टू मोबाइल नंबर चुनें, जिसे पैसे भेजने हैं उसका नंबर टाइप करें। राशि दर्ज करें और अपना यूपीआई पिन डालें।'
+                 : 'To use PhonePe, first open the app. Select "To Mobile Number", type the number of the person you want to send money to. Enter the amount and your UPI PIN.'
+    },
+    {
+      id: 'sir',
+      title: lang === 'kn' ? 'ಬೆಳೆ ವಿಮೆ (SIR) ಫಾರ್ಮ್ ಭರ್ತಿ ಮಾಡುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'फसल बीमा (SIR) फॉर्म कैसे भरें?' : 'How to fill Crop Insurance (SIR) Form?',
+      desc: lang === 'kn' ? 'ನಿಮ್ಮ ಬೆಳೆ ವಿಮೆ ಕ್ಲೇಮ್ ಮಾಡಲು ಅರ್ಜಿ ಸಲ್ಲಿಸುವ ವಿಧಾನ.' : lang === 'hi' ? 'अपने फसल बीमा का दावा करने के लिए आवेदन कैसे करें।' : 'How to apply for your crop insurance claim.',
+      videoId: 'dQw4w9WgXcQ', // Example
+      voiceText: lang === 'kn' ? 'ಬೆಳೆ ವಿಮೆ ಫಾರ್ಮ್ ತುಂಬಲು, ನಿಮ್ಮ ಆರ್ ಟಿ ಸಿ , ಆಧಾರ್ ಕಾರ್ಡ್ ಮತ್ತು ಬ್ಯಾಂಕ್ ಪಾಸ್ ಬುಕ್ ನಕಲು ಬೇಕು. ನಿಮ್ಮ ಹತ್ತಿರದ ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರ ಅಥವಾ ಆನ್ಲೈನ್ ಪೋರ್ಟಲ್ ಮೂಲಕ ಇದನ್ನು ಸಲ್ಲಿಸಬಹುದು.'
+                 : lang === 'hi' ? 'फसल बीमा फॉर्म भरने के लिए, आपको अपना आरटीसी, आधार कार्ड और बैंक पासबुक की कॉपी चाहिए। इसे आप नजदीकी रायता संपर्क केंद्र या ऑनलाइन पोर्टल के माध्यम से जमा कर सकते हैं।'
+                 : 'To fill the crop insurance form, you need your RTC, Aadhaar card, and bank passbook copy. You can submit this at your nearest Raitha Samparka Kendra or via the online portal.'
+    },
+    {
+      id: 'market',
+      title: lang === 'kn' ? 'ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳನ್ನು ಚೆಕ್ ಮಾಡುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'बाजार की कीमतें कैसे जांचें?' : 'How to check Market Prices?',
+      desc: lang === 'kn' ? 'ದೈನಂದಿನ ಎಪಿಎಂಸಿ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳನ್ನು ನಿಮ್ಮ ಫೋನ್ ನಲ್ಲಿ ನೋಡಿ.' : lang === 'hi' ? 'अपने फोन पर दैनिक एपीएमसी बाजार की कीमतें देखें।' : 'Check daily APMC market prices on your phone.',
+      videoId: '2283Xp12XpQ', // Example
+      voiceText: lang === 'kn' ? 'ಗ್ರಾಮ್ ಸೇತು ಆಪ್ ನಲ್ಲಿ ಮಾರುಕಟ್ಟೆ ವಿಭಾಗಕ್ಕೆ ಹೋಗಿ. ಅಲ್ಲಿ ನಿಮ್ಮ ಬೆಳೆಗಳನ್ನು ಹುಡುಕಿ ಮತ್ತು ಪ್ರಸ್ತುತ ಬೆಲೆಗಳನ್ನು ನೋಡಬಹುದು.'
+                 : lang === 'hi' ? 'ग्राम सेतु ऐप में बाजार अनुभाग पर जाएं। वहां अपनी फसलों को खोजें और वर्तमान कीमतें देख सकते हैं।'
+                 : 'Go to the Market section in the Gram Setu app. Search for your crops there and you can see the current prices.'
+    }
+  ]
+
+  const handleVoicePlay = (text) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel() // Stop any currently playing audio
+      const utterance = new SpeechSynthesisUtterance(text)
+      
+      // Try to set appropriate language voice
+      if (lang === 'kn') utterance.lang = 'kn-IN'
+      else if (lang === 'hi') utterance.lang = 'hi-IN'
+      else utterance.lang = 'en-IN'
+      
+      utterance.rate = 0.9 // slightly slower for better comprehension
+      window.speechSynthesis.speak(utterance)
+    } else {
+      alert("Text-to-speech is not supported in this browser.")
+    }
+  }
+
+  // Cleanup speech synthesis on unmount
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel()
+      }
+    }
+  }, [])
+
+  return (
+    <div className="animate-fadeInUp">
+      <div style={{ marginBottom: 20 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 8px 0' }}>{t('tutorialTitle')}</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 14, margin: 0 }}>{t('tutorialSub')}</p>
+      </div>
+
+      <div style={{ display: 'grid', gap: 20 }}>
+        {tutorials.map(tut => (
+          <div key={tut.id} className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            {/* Video Thumbnail Area */}
+            <div style={{ position: 'relative', width: '100%', height: 200, background: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {playingId === tut.id ? (
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  src={\`https://www.youtube.com/embed/\${tut.videoId}?autoplay=1\`} 
+                  title="YouTube video player" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen
+                  style={{ position: 'absolute', top: 0, left: 0 }}
+                />
+              ) : (
+                <>
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: \`url(https://img.youtube.com/vi/\${tut.videoId}/maxresdefault.jpg)\`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.6 }} />
+                  <button 
+                    onClick={() => setPlayingId(tut.id)}
+                    style={{ position: 'relative', zIndex: 10, background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '50%', padding: 12, cursor: 'pointer', color: '#fff', transition: 'transform 0.2s' }}
+                    onMouseOver={e => e.currentTarget.style.transform = 'scale(1.1)'}
+                    onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                  >
+                    <PlayCircle size={48} />
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Content & Voice Guide Area */}
+            <div style={{ padding: 20 }}>
+              <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px 0' }}>{tut.title}</h3>
+              <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 16px 0', lineHeight: 1.5 }}>{tut.desc}</p>
+              
+              <button 
+                onClick={() => handleVoicePlay(tut.voiceText)}
+                className="btn btn-outline"
+                style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: 8, borderColor: '#3b82f6', color: '#3b82f6', background: '#eff6ff', padding: '12px', borderRadius: 8, fontWeight: 700 }}
+              >
+                <Volume2 size={18} />
+                {lang === 'kn' ? 'ಕನ್ನಡದಲ್ಲಿ ಆಲಿಸಿ (AI Voice)' : lang === 'hi' ? 'हिंदी में सुनें (AI Voice)' : 'Listen in English (AI Voice)'}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

@@ -94,6 +94,7 @@ const translations = {
     sNavSOS: 'Emergency SOS',
     sNavCropDoctor: 'Crop Doctor',
     sNavWaterTank: 'Water Tank',
+    sNavTutorials: 'Digital Tutorials',
 
     // ---- Sidebar Official ----
     sNavOverview: 'Overview',
@@ -127,6 +128,8 @@ const translations = {
     cropDoctorSub: 'Identify disease and get treatment advice',
     waterTankTitle: 'Water Tank Status',
     waterTankSub: 'Live village water supply tracker',
+    tutorialTitle: 'Digital Learning & Tutorials',
+    tutorialSub: 'Learn how to use digital tools securely',
 
     // ---- Home screen ----
     welcomeMsg: 'Welcome, Ramappa! 🙏',
@@ -317,6 +320,7 @@ const translations = {
     sNavSOS: 'ತುರ್ತು SOS',
     sNavCropDoctor: 'ಬೆಳೆ ವೈದ್ಯ',
     sNavWaterTank: 'ನೀರಿನ ತೊಟ್ಟಿ',
+    sNavTutorials: 'ಡಿಜಿಟಲ್ ಟ್ಯುಟೋರಿಯಲ್ಸ್',
     sNavOverview: 'ಅವಲೋಕನ',
     sNavNewComplaints: 'ಹೊಸ ದೂರುಗಳು',
     sNavResolved: 'ಪರಿಹರಿಸಿದ ದೂರುಗಳು',
@@ -347,6 +351,8 @@ const translations = {
     cropDoctorSub: 'ರೋಗ ಗುರುತಿಸಿ ಚಿಕಿತ್ಸೆ ಪಡೆಯಿರಿ',
     waterTankTitle: 'ನೀರಿನ ತೊಟ್ಟಿ ಸ್ಥಿತಿ',
     waterTankSub: 'ಗ್ರಾಮದ ನೀರಿನ ಸರಬರಾಜು ಮಾಹಿತಿ',
+    tutorialTitle: 'ಡಿಜಿಟಲ್ ಕಲಿಕೆ ಮತ್ತು ಮಾರ್ಗದರ್ಶಿ',
+    tutorialSub: 'ಡಿಜಿಟಲ್ ಸಾಧನಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಬಳಸುವುದು ಹೇಗೆ ಎಂದು ಕಲಿಯಿರಿ',
 
     welcomeMsg: 'ಸ್ವಾಗತ, ರಾಮಪ್ಪ! 🙏',
     welcomeVillage: 'ರಾಮನಗರ ಗ್ರಾಮ, ಮೈಸೂರು ತಾಲೂಕು, ಕರ್ನಾಟಕ',
@@ -530,6 +536,7 @@ const translations = {
     sNavSOS: 'आपातकाल SOS',
     sNavCropDoctor: 'फसल डॉक्टर',
     sNavWaterTank: 'पानी टंकी',
+    sNavTutorials: 'डिजिटल ट्यूटोरियल',
     sNavOverview: 'अवलोकन',
     sNavNewComplaints: 'नई शिकायतें',
     sNavResolved: 'हल शिकायतें',
@@ -560,6 +567,8 @@ const translations = {
     cropDoctorSub: 'रोग पहचानें और उपचार पाएं',
     waterTankTitle: 'पानी टंकी स्थिति',
     waterTankSub: 'गाँव की पानी आपूर्ति की जानकारी',
+    tutorialTitle: 'डिजिटल शिक्षा और ट्यूटोरियल',
+    tutorialSub: 'डिजिटल उपकरणों का सुरक्षित उपयोग करना सीखें',
 
     welcomeMsg: 'स्वागत है, रामप्पा! 🙏',
     welcomeVillage: 'रामनगर गाँव, मैसूर तालुक, कर्नाटक',
