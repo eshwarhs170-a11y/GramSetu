@@ -3,24 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import { Landmark, ClipboardList, Megaphone, BarChart3, Users, ArrowLeft, CheckCircle2, ShieldAlert } from 'lucide-react'
-import emailjs from '@emailjs/browser'
 import { db, auth } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
-
-// ── EmailJS Config ────────────────────────────────────────────
-const EMAILJS_SERVICE_ID  = 'service_yupzec9'
-const EMAILJS_TEMPLATE_ID = 'template_iiz68fd'
-const EMAILJS_PUBLIC_KEY  = 'WxFna4OMAj2w50yJk'
+import { districtsOfKarnataka } from '../data/karnatakaTaluks'
+import { sendOtpEmail } from '../utils/sendOtp'
 
 export default function OfficialLogin() {
   const navigate = useNavigate()
   const { t } = useLanguage()
-
-  // Initialize EmailJS once
-  useEffect(() => {
-    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY })
-  }, [])
 
   useEffect(() => {
     if (window.localStorage.getItem('official_id')) {
@@ -52,39 +43,7 @@ export default function OfficialLogin() {
     'Education / DDPI',
   ]
 
-  const districtsOfKarnataka = [
-    { name: 'Bagalkot', taluks: ['Bagalkot', 'Badami', 'Bilagi', 'Hungund', 'Jamkhandi', 'Mudhol'] },
-    { name: 'Ballari', taluks: ['Ballari', 'Hadagali', 'Hagaribommanahalli', 'Hospet', 'Kudligi', 'Sandur', 'Siruguppa'] },
-    { name: 'Belagavi', taluks: ['Belagavi', 'Athani', 'Bailhongal', 'Chikodi', 'Gokak', 'Hukkeri', 'Khanapur', 'Raibag', 'Ramdurg', 'Savadatti', 'Soundatti'] },
-    { name: 'Bengaluru Rural', taluks: ['Devanahalli', 'Doddaballapur', 'Hosakote', 'Nelamangala'] },
-    { name: 'Bengaluru Urban', taluks: ['Anekal', 'Bengaluru East', 'Bengaluru North', 'Bengaluru South', 'Bengaluru West', 'Yelahanka'] },
-    { name: 'Bidar', taluks: ['Aurad', 'Basavakalyan', 'Bhalki', 'Bidar', 'Humnabad'] },
-    { name: 'Chamarajanagar', taluks: ['Chamarajanagar', 'Gundlupet', 'Kollegal', 'Yelandur'] },
-    { name: 'Chikkaballapur', taluks: ['Bagepalli', 'Chikkaballapur', 'Chintamani', 'Gauribidanur', 'Gudibande', 'Sidlaghatta'] },
-    { name: 'Chikkamagaluru', taluks: ['Birur', 'Chikkamagaluru', 'Kadur', 'Koppa', 'Mudigere', 'N.R.Pura', 'Sringeri', 'Tarikere'] },
-    { name: 'Chitradurga', taluks: ['Challakere', 'Chitradurga', 'Hiriyur', 'Holalkere', 'Hosadurga', 'Molakalmuru'] },
-    { name: 'Dakshina Kannada', taluks: ['Bantval', 'Belthangady', 'Mangaluru', 'Puttur', 'Sullia'] },
-    { name: 'Davanagere', taluks: ['Channagiri', 'Davanagere', 'Harihara', 'Honnali', 'Jagalur', 'Nyamathi'] },
-    { name: 'Dharwad', taluks: ['Dharwad', 'Hubli', 'Kalghatgi', 'Kundgol', 'Navalgund'] },
-    { name: 'Gadag', taluks: ['Gadag', 'Mundaragi', 'Nargund', 'Ron', 'Shirahatti'] },
-    { name: 'Hassan', taluks: ['Alur', 'Arakalagudu', 'Arkalgud', 'Belur', 'Channarayapatna', 'Hassan', 'Holenarasipura', 'Sakleshpur'] },
-    { name: 'Haveri', taluks: ['Byadagi', 'Hanagal', 'Haveri', 'Hirekerur', 'Ranebennur', 'Savanur', 'Shiggaon'] },
-    { name: 'Kalaburagi', taluks: ['Afzalpur', 'Aland', 'Chincholi', 'Chittapur', 'Kalaburagi', 'Jevargi', 'Sedam'] },
-    { name: 'Kodagu', taluks: ['Madikeri', 'Somwarpet', 'Virajpet'] },
-    { name: 'Kolar', taluks: ['Bangarpet', 'Kolar', 'Malur', 'Mulbagal', 'Srinivaspur'] },
-    { name: 'Koppal', taluks: ['Gangavathi', 'Koppal', 'Kushtagi', 'Yelburga'] },
-    { name: 'Mandya', taluks: ['K.R.Pet', 'Kirugavalu', 'Maddur', 'Malavalli', 'Mandya', 'Nagamangala', 'Pandavapura', 'Srirangapatna'] },
-    { name: 'Mysuru', taluks: ['Heggadadevankote', 'Hunsur', 'K.R.Nagar', 'Mysuru', 'Nanjangud', 'Periyapatna', 'T.Narasipura'] },
-    { name: 'Raichur', taluks: ['Devadurga', 'Lingsugur', 'Manvi', 'Raichur', 'Sindhanur'] },
-    { name: 'Ramanagara', taluks: ['Channapatna', 'Kanakapura', 'Magadi', 'Ramanagara'] },
-    { name: 'Shivamogga', taluks: ['Bhadravati', 'Hosanagara', 'Sagar', 'Shikaripura', 'Shivamogga', 'Soraba', 'Thirthahalli'] },
-    { name: 'Tumkuru', taluks: ['Chiknayakanhalli', 'Gubbi', 'Koratagere', 'Kunigal', 'Madhugiri', 'Pavagada', 'Sira', 'Tiptur', 'Tumkuru', 'Turuvekere'] },
-    { name: 'Udupi', taluks: ['Karkala', 'Kundapur', 'Udupi'] },
-    { name: 'Uttara Kannada', taluks: ['Ankola', 'Bhatkal', 'Dandeli', 'Haliyal', 'Honavar', 'Joida', 'Karwar', 'Kumta', 'Mundgod', 'Siddapur', 'Yellapur'] },
-    { name: 'Vijayapura', taluks: ['Basavana Bagewadi', 'Indi', 'Muddebihal', 'Sindagi', 'Vijayapura'] },
-    { name: 'Vijayanagara', taluks: ['Harapanahalli', 'Hoovina Hadagali', 'Hospet', 'Hagari Bommanahalli', 'Kotturu', 'Kudligi'] },
-    { name: 'Yadgir', taluks: ['Shahapur', 'Shorapur', 'Yadgir'] },
-  ]
+
 
   const handleDistrictChange = (distName) => {
     setDistrict(distName)
@@ -107,20 +66,12 @@ export default function OfficialLogin() {
     setGeneratedOtp(newOtp)
 
     try {
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          email: email,
-          passcode: newOtp,
-          time: new Date(Date.now() + 10 * 60000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-        }
-      )
+      await sendOtpEmail(email, newOtp)
       setOtpSentAlert(true)
       setStep(2)
     } catch (error) {
-      console.error('EmailJS error full:', JSON.stringify(error), error)
-      setErrorMsg(`Failed to send OTP: ${error?.text || error?.message || 'Unknown error'}. Check console for details.`)
+      console.error('OTP send error:', error)
+      setErrorMsg(error.message || 'Failed to send OTP. Please try again.')
     } finally {
       setLoading(false)
     }

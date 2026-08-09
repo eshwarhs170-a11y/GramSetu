@@ -4,25 +4,16 @@ import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
 import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail, Send, ShieldCheck } from 'lucide-react'
-import emailjs from '@emailjs/browser'
 import { db, auth } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
-
-// ── EmailJS Config ────────────────────────────────────────────
-const EMAILJS_SERVICE_ID  = 'service_yupzec9'
-const EMAILJS_TEMPLATE_ID = 'template_iiz68fd'
-const EMAILJS_PUBLIC_KEY  = 'WxFna4OMAj2w50yJk'
+import { sendOtpEmail } from '../utils/sendOtp'
 
 export default function VillagerLogin() {
   const navigate = useNavigate()
   const { t } = useLanguage()
 
-  // Initialize EmailJS once
-  useEffect(() => {
-    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY })
-  }, [])
 
   useEffect(() => {
     if (window.localStorage.getItem('citizen_email') || window.localStorage.getItem('citizen_phone')) {
@@ -60,20 +51,12 @@ export default function VillagerLogin() {
     setGeneratedOtp(newOtp)
 
     try {
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          email: email,
-          passcode: newOtp,
-          time: new Date(Date.now() + 10 * 60000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-        }
-      )
+      await sendOtpEmail(email, newOtp)
       setOtpSentAlert(true)
       setStep(2)
     } catch (error) {
-      console.error('EmailJS error full:', JSON.stringify(error), error)
-      setErrorMsg(`Failed to send OTP: ${error?.text || error?.message || 'Unknown error'}. Check console for details.`)
+      console.error('OTP send error:', error)
+      setErrorMsg(error.message || 'Failed to send OTP. Please try again.')
     } finally {
       setLoading(false)
     }
