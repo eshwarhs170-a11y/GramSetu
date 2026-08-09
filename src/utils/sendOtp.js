@@ -36,10 +36,7 @@ async function sendViaEmailJS(email, otp) {
   await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
     email,
     passcode: otp,
-    time: new Date(Date.now() + 10 * 60000).toLocaleTimeString('en-IN', {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
+    time: '10 minutes',
   })
 
   return true
