@@ -2131,15 +2131,83 @@ export function WeatherScreen() {
   const { t, lang } = useLanguage()
   const district = window.localStorage.getItem('citizen_district') || 'Mysuru'
   
-  const forecast = [
-    { day: 'Today', temp: '28°', high: '30°', low: '22°', condition: 'Rain', icon: CloudRain, rain: '60%' },
-    { day: 'Tomorrow', temp: '29°', high: '31°', low: '22°', condition: 'Cloudy', icon: Cloud, rain: '20%' },
-    { day: 'Wed', temp: '31°', high: '32°', low: '23°', condition: 'Sunny', icon: Sun, rain: '0%' },
-    { day: 'Thu', temp: '30°', high: '31°', low: '23°', condition: 'Cloudy', icon: Cloud, rain: '10%' },
-    { day: 'Fri', temp: '27°', high: '29°', low: '21°', condition: 'Rain', icon: CloudRain, rain: '80%' },
-    { day: 'Sat', temp: '26°', high: '28°', low: '21°', condition: 'Rain', icon: CloudRain, rain: '90%' },
-    { day: 'Sun', temp: '28°', high: '30°', low: '22°', condition: 'Cloudy', icon: Cloud, rain: '30%' }
-  ]
+  const [weather, setWeather] = React.useState(null)
+  const [forecast, setForecast] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    async function loadWeather() {
+      setLoading(true)
+      const { fetchWeatherForDistrict, formatForecastData } = await import('../utils/fetchWeather')
+      
+      const data = await fetchWeatherForDistrict(district)
+      if (data) {
+        setWeather(data)
+        setForecast(formatForecastData(data))
+      }
+      setLoading(false)
+    }
+    loadWeather()
+  }, [district])
+
+  const getIconForType = (type) => {
+    switch (type) {
+      case 'sunny': return Sun;
+      case 'cloudy': return Cloud;
+      case 'rain': return CloudRain;
+      case 'snow': return CloudRain; // default to rain if snow icon isn't there
+      default: return Cloud;
+    }
+  }
+
+  const getConditionColor = (type) => {
+    switch (type) {
+      case 'sunny': return '#eab308';
+      case 'rain': return '#3b82f6';
+      case 'cloudy': return '#9ca3af';
+      case 'snow': return '#a5f3fc';
+      default: return '#9ca3af';
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="card animate-fadeInUp" style={{ padding: '40px', textAlign: 'center' }}>
+        <div style={{ color: 'var(--primary)', marginBottom: 12 }}>
+           <Cloud size={40} className="animate-pulse" />
+        </div>
+        <p style={{ fontWeight: 600 }}>Fetching live weather for {district}...</p>
+      </div>
+    )
+  }
+
+  if (!weather || forecast.length === 0) {
+    return (
+      <div className="card animate-fadeInUp" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+        <p>Failed to load weather data for {district}. Please try again later.</p>
+      </div>
+    )
+  }
+
+  // Get current weather derived from utility
+  let currentTemp = '--'
+  let currentHumidity = '--'
+  let currentWind = '--'
+  let currentConditionStr = 'Unknown'
+  let CurrentConditionIcon = Cloud
+
+  if (weather.current) {
+    currentTemp = Math.round(weather.current.temperature_2m)
+    currentHumidity = weather.current.relative_humidity_2m
+    currentWind = Math.round(weather.current.wind_speed_10m)
+  }
+  
+  // Use today's forecast for current condition if available
+  const todayForecast = forecast[0]
+  if (todayForecast) {
+    currentConditionStr = todayForecast.condition
+    CurrentConditionIcon = getIconForType(todayForecast.type)
+  }
 
   return (
     <div className="animate-fadeInUp">
@@ -2148,13 +2216,15 @@ export function WeatherScreen() {
           <div>
             <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 8px 0' }}>{district}, Karnataka</h2>
             <div style={{ fontSize: 48, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 12 }}>
-              28°C <CloudRain size={40} />
+              {currentTemp}°C <CurrentConditionIcon size={40} />
             </div>
-            <p style={{ fontSize: 16, opacity: 0.9, marginTop: 4 }}>Heavy rain expected in the evening.</p>
+            <p style={{ fontSize: 16, opacity: 0.9, marginTop: 4 }}>
+              {todayForecast?.rain && parseInt(todayForecast.rain) > 50 ? 'Heavy rain expected.' : currentConditionStr}
+            </p>
           </div>
           <div style={{ textAlign: 'right', opacity: 0.9 }}>
-            <p style={{ margin: '4px 0' }}><Thermometer size={16} style={{ verticalAlign: 'middle', marginRight: 4 }}/> Humidity: 78%</p>
-            <p style={{ margin: '4px 0' }}><Wind size={16} style={{ verticalAlign: 'middle', marginRight: 4 }}/> Wind: 14 km/h</p>
+            <p style={{ margin: '4px 0' }}><Thermometer size={16} style={{ verticalAlign: 'middle', marginRight: 4 }}/> Humidity: {currentHumidity}%</p>
+            <p style={{ margin: '4px 0' }}><Wind size={16} style={{ verticalAlign: 'middle', marginRight: 4 }}/> Wind: {currentWind} km/h</p>
           </div>
         </div>
       </div>
@@ -2162,19 +2232,22 @@ export function WeatherScreen() {
       <div className="card">
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>7-Day Forecast</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {forecast.map((f, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: 'var(--bg-main)', borderRadius: '8px' }}>
-              <span style={{ width: 80, fontWeight: 600 }}>{f.day}</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, justifyContent: 'center' }}>
-                <f.icon size={20} style={{ color: f.condition === 'Sunny' ? '#eab308' : f.condition === 'Rain' ? '#3b82f6' : '#9ca3af' }} />
-                <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>{f.rain}</span>
+          {forecast.map((f, i) => {
+            const Icon = getIconForType(f.type)
+            return (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', background: 'var(--bg-main)', borderRadius: '8px' }}>
+                <span style={{ width: 80, fontWeight: 600 }}>{f.day}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, justifyContent: 'center' }}>
+                  <Icon size={20} style={{ color: getConditionColor(f.type) }} />
+                  <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>{f.rain}</span>
+                </div>
+                <div style={{ width: 80, textAlign: 'right' }}>
+                  <span style={{ fontWeight: 700 }}>{f.high}</span>
+                  <span style={{ color: 'var(--text-muted)', marginLeft: 8 }}>{f.low}</span>
+                </div>
               </div>
-              <div style={{ width: 80, textAlign: 'right' }}>
-                <span style={{ fontWeight: 700 }}>{f.high}</span>
-                <span style={{ color: 'var(--text-muted)', marginLeft: 8 }}>{f.low}</span>
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>
