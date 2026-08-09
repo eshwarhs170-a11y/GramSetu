@@ -199,9 +199,6 @@ export default function OfficialLogin() {
               <CheckCircle2 size={16} color="#3b82f6" style={{ marginTop: 2, flexShrink: 0 }} />
               <div>
                 <strong>OTP sent successfully to {email}!</strong>
-                <div style={{ fontSize: 12, marginTop: 6, opacity: 0.9 }}>
-                  <strong>Note:</strong> You will <em>not</em> receive a push notification. Please manually open your email app and check your <strong>Inbox</strong> or <strong>Spam</strong> folder.
-                </div>
               </div>
             </div>
           )}
