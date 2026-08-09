@@ -1,11 +1,30 @@
+const districtToCityMap = {
+  'Dakshina Kannada': 'Mangaluru',
+  'Uttara Kannada': 'Karwar',
+  'Bengaluru Urban': 'Bengaluru',
+  'Bengaluru Rural': 'Doddaballapura',
+  'Chamarajanagar': 'Chamarajanagar',
+  'Vijayanagara': 'Hospet',
+}
+
 export async function fetchWeatherForDistrict(districtName) {
   try {
+    let searchQuery = districtToCityMap[districtName] || districtName;
+    
     // 1. Get coordinates for the district
-    const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(districtName)}&count=1&language=en&format=json`);
-    const geoData = await geoRes.json();
+    let geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchQuery)}&count=1&language=en&format=json`);
+    let geoData = await geoRes.json();
 
+    // If not found, try appending "Karnataka"
     if (!geoData.results || geoData.results.length === 0) {
-      throw new Error("District not found");
+      geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchQuery + " Karnataka")}&count=1&language=en&format=json`);
+      geoData = await geoRes.json();
+    }
+
+    // If STILL not found, fallback to Bangalore so it doesn't crash
+    if (!geoData.results || geoData.results.length === 0) {
+      geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=Bengaluru&count=1&language=en&format=json`);
+      geoData = await geoRes.json();
     }
 
     const { latitude, longitude } = geoData.results[0];
