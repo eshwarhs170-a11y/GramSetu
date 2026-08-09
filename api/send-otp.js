@@ -21,6 +21,13 @@ export default async function handler(req, res) {
     },
   });
 
+  const expiryTime = new Date(Date.now() + 10 * 60000).toLocaleTimeString('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'Asia/Kolkata',
+  });
+
   const htmlBody = `
     <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb;">
       <!-- Header -->
@@ -48,7 +55,7 @@ export default async function handler(req, res) {
             ${otp}
           </div>
           <p style="font-size: 12px; color: #6b7280; margin: 10px 0 0 0;">
-            Valid for <strong>10 minutes</strong>
+            Valid until <strong>${expiryTime}</strong> IST (10 minutes)
           </p>
         </div>
 
