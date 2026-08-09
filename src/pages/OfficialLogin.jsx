@@ -4,8 +4,9 @@ import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import { Landmark, ClipboardList, Megaphone, BarChart3, Users, ArrowLeft, CheckCircle2, ShieldAlert } from 'lucide-react'
 import emailjs from '@emailjs/browser'
-import { db } from '../firebase'
+import { db, auth } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 
 // ── EmailJS Config ────────────────────────────────────────────
 const EMAILJS_SERVICE_ID  = 'service_yupzec9'
@@ -135,12 +136,29 @@ export default function OfficialLogin() {
     setErrorMsg('')
 
     try {
+      // Sync user with Firebase Authentication so they appear in the Auth dashboard
+      const dummyPassword = email + "GramSetu!2026";
+      try {
+        await signInWithEmailAndPassword(auth, email, dummyPassword);
+      } catch (authErr) {
+        if (authErr.code === 'auth/user-not-found' || authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/invalid-login-credentials') {
+          try {
+            await createUserWithEmailAndPassword(auth, email, dummyPassword);
+          } catch (createErr) {
+            console.error("Firebase Auth creation error:", createErr);
+          }
+        } else {
+          console.error("Firebase Auth sign-in error:", authErr);
+        }
+      }
+
       const uid = 'official-' + email.replace(/[^a-z0-9]/gi, '-')
       try {
         await setDoc(doc(db, 'users', uid), {
           uid, name, officerId, email, department, district, taluk,
           role: 'official',
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
+          lastLoginAt: serverTimestamp()
         }, { merge: true })
       } catch (fsErr) {
         console.warn('Firestore save failed, continuing...', fsErr)
