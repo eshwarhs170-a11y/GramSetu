@@ -11,6 +11,7 @@ import {
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
 import { fetchLivePrices, BASELINE_PRICES, clearPriceCache } from '../utils/fetchPrices'
+import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 
 // ===================== KARNATAKA DATA =====================
 
@@ -2130,25 +2131,33 @@ export function ProfileScreen() {
 export function WeatherScreen() {
   const { t, lang } = useLanguage()
   const district = window.localStorage.getItem('citizen_district') || 'Mysuru'
+  const defaultTaluk = window.localStorage.getItem('citizen_taluk') || ''
   
+  const [selectedTaluk, setSelectedTaluk] = React.useState(defaultTaluk)
   const [weather, setWeather] = React.useState(null)
   const [forecast, setForecast] = React.useState([])
   const [loading, setLoading] = React.useState(true)
+  const [locationName, setLocationName] = React.useState(district)
+
+  // Find taluks for this district to populate the dropdown
+  const districtData = districtsOfKarnataka.find(d => d.name === district)
+  const availableTaluks = districtData ? districtData.taluks : []
 
   React.useEffect(() => {
     async function loadWeather() {
       setLoading(true)
-      const { fetchWeatherForDistrict, formatForecastData } = await import('../utils/fetchWeather')
+      const { fetchWeatherForLocation, formatForecastData } = await import('../utils/fetchWeather')
       
-      const data = await fetchWeatherForDistrict(district)
+      const data = await fetchWeatherForLocation(selectedTaluk, district)
       if (data) {
         setWeather(data)
         setForecast(formatForecastData(data))
+        if (data.resolvedLocation) setLocationName(data.resolvedLocation)
       }
       setLoading(false)
     }
     loadWeather()
-  }, [district])
+  }, [district, selectedTaluk])
 
   const getIconForType = (type) => {
     switch (type) {
@@ -2212,9 +2221,35 @@ export function WeatherScreen() {
   return (
     <div className="animate-fadeInUp">
       <div className="card" style={{ background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)', color: '#fff', padding: '24px', marginBottom: 20 }}>
+        
+        {availableTaluks.length > 0 && (
+          <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
+            <select
+              value={selectedTaluk}
+              onChange={(e) => setSelectedTaluk(e.target.value)}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '6px',
+                border: 'none',
+                background: 'rgba(255,255,255,0.2)',
+                color: '#fff',
+                fontSize: 14,
+                fontWeight: 600,
+                outline: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              <option value="" style={{ color: '#000' }}>Select Taluk</option>
+              {availableTaluks.map(tName => (
+                <option key={tName} value={tName} style={{ color: '#000' }}>{tName}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 8px 0' }}>{district}, Karnataka</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 8px 0' }}>{locationName}, Karnataka</h2>
             <div style={{ fontSize: 48, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 12 }}>
               {currentTemp}°C <CurrentConditionIcon size={40} />
             </div>
