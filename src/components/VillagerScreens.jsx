@@ -12,6 +12,7 @@ import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
 import { fetchLivePrices, BASELINE_PRICES, clearPriceCache } from '../utils/fetchPrices'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
+import { fetchWeatherForLocation, formatForecastData } from '../utils/fetchWeather'
 
 // ===================== KARNATAKA DATA =====================
 
@@ -2144,19 +2145,24 @@ export function WeatherScreen() {
   const availableTaluks = districtData ? districtData.taluks : []
 
   React.useEffect(() => {
+    let isMounted = true;
     async function loadWeather() {
       setLoading(true)
-      const { fetchWeatherForLocation, formatForecastData } = await import('../utils/fetchWeather')
-      
-      const data = await fetchWeatherForLocation(selectedTaluk, district)
-      if (data) {
-        setWeather(data)
-        setForecast(formatForecastData(data))
-        if (data.resolvedLocation) setLocationName(data.resolvedLocation)
+      try {
+        const data = await fetchWeatherForLocation(selectedTaluk, district)
+        if (isMounted && data) {
+          setWeather(data)
+          setForecast(formatForecastData(data))
+          if (data.resolvedLocation) setLocationName(data.resolvedLocation)
+        }
+      } catch (err) {
+        console.error("Failed to load weather:", err)
+      } finally {
+        if (isMounted) setLoading(false)
       }
-      setLoading(false)
     }
     loadWeather()
+    return () => { isMounted = false }
   }, [district, selectedTaluk])
 
   const getIconForType = (type) => {
