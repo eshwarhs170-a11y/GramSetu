@@ -7,31 +7,47 @@ const districtToCityMap = {
   'Vijayanagara': 'Hospet',
 }
 
-export async function fetchWeatherForDistrict(districtName) {
+export async function fetchWeatherForLocation(talukName, districtName) {
   try {
-    let searchQuery = districtToCityMap[districtName] || districtName;
+    let geoRes;
+    let geoData;
+    let usedLocationName = talukName || districtName;
     
-    // 1. Get coordinates for the district
-    let geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchQuery)}&count=1&language=en&format=json`);
-    let geoData = await geoRes.json();
-
-    // If not found, try appending "Karnataka"
-    if (!geoData.results || geoData.results.length === 0) {
-      geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchQuery + " Karnataka")}&count=1&language=en&format=json`);
+    // 1. Try Taluk first (most precise)
+    if (talukName) {
+      geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(talukName)}&count=1&language=en&format=json`);
       geoData = await geoRes.json();
     }
 
-    // If STILL not found, fallback to Bangalore so it doesn't crash
-    if (!geoData.results || geoData.results.length === 0) {
+    // 2. If Taluk fails, try District mapped name
+    if (!geoData?.results || geoData.results.length === 0) {
+      let searchQuery = districtToCityMap[districtName] || districtName;
+      usedLocationName = districtName;
+      geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchQuery)}&count=1&language=en&format=json`);
+      geoData = await geoRes.json();
+
+      // 3. Try District + Karnataka
+      if (!geoData?.results || geoData.results.length === 0) {
+        geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchQuery + " Karnataka")}&count=1&language=en&format=json`);
+        geoData = await geoRes.json();
+      }
+    }
+
+    // 4. Ultimate fallback to Bengaluru
+    if (!geoData?.results || geoData.results.length === 0) {
+      usedLocationName = "Bengaluru";
       geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=Bengaluru&count=1&language=en&format=json`);
       geoData = await geoRes.json();
     }
 
     const { latitude, longitude } = geoData.results[0];
 
-    // 2. Fetch weather forecast using coordinates
+    // Fetch weather forecast using coordinates
     const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`);
     const weatherData = await weatherRes.json();
+    
+    // Attach the resolved location name so UI knows what we actually found
+    weatherData.resolvedLocation = usedLocationName;
 
     return weatherData;
   } catch (error) {
