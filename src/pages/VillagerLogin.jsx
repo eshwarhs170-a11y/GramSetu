@@ -10,6 +10,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'fire
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import talukToGps from '../data/talukToGps'
 import villageData from '../data/karnatakVillages'
+import karnatakaUrbanData from '../data/karnatakaUrbanData'
 import { sendOtpEmail } from '../utils/sendOtp'
 
 export default function VillagerLogin() {
@@ -28,9 +29,13 @@ export default function VillagerLogin() {
   const [name, setName] = useState('')
   const [district, setDistrict] = useState('')
   const [taluk, setTaluk] = useState('')
+  const [areaType, setAreaType] = useState('')  // 'rural' | 'urban'
   const [gp, setGp] = useState('')
   const [village, setVillage] = useState('')
   const [isOtherVillage, setIsOtherVillage] = useState(false)
+  // Urban fields
+  const [urbanBody, setUrbanBody] = useState('')
+  const [ward, setWard] = useState('')
   const [otp, setOtp] = useState('')
   const [generatedOtp, setGeneratedOtp] = useState('')
   const [otpSentAlert, setOtpSentAlert] = useState(false)
@@ -63,15 +68,29 @@ export default function VillagerLogin() {
   const handleDistrictChange = (d) => {
     setDistrict(d)
     setTaluk('')
+    setAreaType('')
     setGp('')
     setVillage('')
     setIsOtherVillage(false)
+    setUrbanBody('')
+    setWard('')
   }
   const handleTalukChange = (t) => {
     setTaluk(t)
+    setAreaType('')
     setGp('')
     setVillage('')
     setIsOtherVillage(false)
+    setUrbanBody('')
+    setWard('')
+  }
+  const handleAreaTypeChange = (type) => {
+    setAreaType(type)
+    setGp('')
+    setVillage('')
+    setIsOtherVillage(false)
+    setUrbanBody('')
+    setWard('')
   }
   const handleGpChange = (g) => {
     setGp(g)
@@ -88,11 +107,46 @@ export default function VillagerLogin() {
     }
   }
 
+  // Urban bodies and wards — look up real data first, then fall back
+  const urbanEntry = useMemo(() => {
+    if (!district || !taluk) return null
+    // Try exact key match
+    const key = `${district}|${taluk}`
+    if (karnatakaUrbanData[key]) return karnatakaUrbanData[key]
+    // Try partial taluk name match
+    const found = Object.entries(karnatakaUrbanData).find(([k]) => {
+      const [kDist, kTaluk] = k.split('|')
+      return kDist.toLowerCase() === district.toLowerCase() &&
+             (kTaluk.toLowerCase().includes(taluk.toLowerCase()) || taluk.toLowerCase().includes(kTaluk.toLowerCase()))
+    })
+    return found ? found[1] : null
+  }, [district, taluk])
+
+  const urbanBodiesForTaluk = useMemo(() => {
+    if (urbanEntry) return [urbanEntry.ulb]
+    if (!taluk) return []
+    return [`${taluk} Town Municipal Council`]
+  }, [urbanEntry, taluk])
+
+  const wardsForUrbanBody = useMemo(() => {
+    if (!urbanBody) return []
+    // If we have real data, use it
+    if (urbanEntry && urbanEntry.wards && urbanEntry.wards.length > 0) return urbanEntry.wards
+    // Fallback: numbered wards
+    const wardCount = urbanBody.includes('Corporation') ? 60 : urbanBody.includes('BBMP') ? 198 : 35
+    return Array.from({ length: wardCount }, (_, i) => `Ward ${i + 1}`)
+  }, [urbanBody, urbanEntry])
+
+  // Determine the final address for OTP validation
+  const finalAddress = areaType === 'urban' ? ward : village
+
   // ── OTP send ───────────────────────────────────────────────────
   const handleSendOtp = async (e) => {
     e.preventDefault()
-    if (!name.trim() || !email.includes('@') || !district || !taluk || !gp || !village) {
-      setErrorMsg('Please fill in all required fields including your village.')
+    const ruralOk = areaType === 'rural' && gp && village
+    const urbanOk = areaType === 'urban' && urbanBody && ward
+    if (!name.trim() || !email.includes('@') || !district || !taluk || !areaType || (!ruralOk && !urbanOk)) {
+      setErrorMsg('Please fill in all required fields including your location.')
       return
     }
     setLoading(true)
@@ -131,10 +185,15 @@ export default function VillagerLogin() {
       }
 
       const uid = 'user-' + email.replace(/[^a-z0-9]/gi, '-')
+      const resolvedGp = areaType === 'urban' ? urbanBody : gp
+      const resolvedVillage = areaType === 'urban' ? ward : village
       try {
         await setDoc(doc(db, 'users', uid), {
           uid, name, email, phone,
-          district, taluk, gp, village,
+          district, taluk,
+          areaType,
+          gp: resolvedGp,
+          village: resolvedVillage,
           role: 'villager',
           createdAt: serverTimestamp(),
           lastLoginAt: serverTimestamp()
@@ -145,8 +204,9 @@ export default function VillagerLogin() {
       window.localStorage.setItem('citizen_email', email)
       window.localStorage.setItem('citizen_district', district)
       window.localStorage.setItem('citizen_taluk', taluk)
-      window.localStorage.setItem('citizen_gp', gp)
-      window.localStorage.setItem('citizen_village', village)
+      window.localStorage.setItem('citizen_gp', resolvedGp)
+      window.localStorage.setItem('citizen_village', resolvedVillage)
+      window.localStorage.setItem('citizen_area_type', areaType)
       window.localStorage.setItem('citizen_phone', phone)
 
       navigate('/dashboard/villager')
@@ -326,91 +386,159 @@ export default function VillagerLogin() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-                <div className="form-group">
-                  <label className="form-label">Gram Panchayat / ಗ್ರಾ.ಪಂ *</label>
-                  <select
-                    className="form-input custom-select"
-                    value={gp}
-                    onChange={e => handleGpChange(e.target.value)}
-                    required
-                    disabled={!taluk}
-                    style={selStyle(!taluk)}
-                  >
-                    <option value="" disabled>
-                      {!taluk ? 'Select Taluk first' : 'Select Panchayat'}
-                    </option>
-                    {availableGps.map(g => (
-                      <option key={g} value={g}>{g}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Village */}
+              {/* ── Area Type ── */}
               <div className="form-group">
-                <label className="form-label">Village / ಗ್ರಾಮ *</label>
-                {!isOtherVillage ? (
-                  <select
-                    className="form-input custom-select"
-                    value={village}
-                    onChange={e => handleVillageChange(e.target.value)}
-                    required
-                    disabled={!gp}
-                    style={selStyle(!gp)}
-                  >
-                    <option value="" disabled>
-                      {!gp ? 'Select Panchayat first' : availableVillages.length === 0 ? 'Type your village ↓' : 'Select Village'}
-                    </option>
-                    {availableVillages.map(v => (
-                      <option key={v} value={v}>{v}</option>
-                    ))}
-                    {gp && <option value="OTHER">Other / My village is not listed</option>}
-                  </select>
-                ) : (
-                  <div style={{ position: 'relative' }}>
-                    <input
-                      className="form-input"
-                      type="text"
-                      placeholder="Enter your village or hamlet name"
-                      value={village}
-                      onChange={e => setVillage(e.target.value)}
-                      required
-                      autoFocus
-                    />
-                    <button 
-                      type="button" 
-                      onClick={() => { setIsOtherVillage(false); setVillage(''); }}
-                      style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
+                <label className="form-label">Area Type / ಪ್ರದೇಶದ ಪ್ರಕಾರ *</label>
+                <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+                  {[
+                    { value: 'rural', emoji: '🌾', label: 'Rural / ಗ್ರಾಮೀಣ' },
+                    { value: 'urban', emoji: '🏙️', label: 'Urban / ನಗರ' },
+                  ].map(opt => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => handleAreaTypeChange(opt.value)}
+                      style={{
+                        flex: 1,
+                        padding: '10px 8px',
+                        borderRadius: 'var(--radius-md)',
+                        border: `2px solid ${areaType === opt.value ? 'var(--primary)' : 'var(--border)'}`,
+                        background: areaType === opt.value ? 'var(--primary-light, #d1fae5)' : 'var(--bg-card)',
+                        color: areaType === opt.value ? 'var(--primary-dark, #065f46)' : 'var(--text-secondary)',
+                        fontWeight: areaType === opt.value ? 700 : 500,
+                        fontSize: 13,
+                        cursor: !taluk ? 'not-allowed' : 'pointer',
+                        opacity: !taluk ? 0.45 : 1,
+                        transition: 'all 0.18s',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                      }}
+                      disabled={!taluk}
                     >
-                      Cancel
+                      <span style={{ fontSize: 18 }}>{opt.emoji}</span>
+                      {opt.label}
                     </button>
-                  </div>
-                )}
+                  ))}
+                </div>
+                {!taluk && <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>Select a Taluk first</p>}
               </div>
 
-              {/* Location summary */}
-              {village && (
-                <div style={{
-                  padding: '10px 14px',
-                  background: 'var(--primary-light, #d1fae5)',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: 12,
-                  color: 'var(--primary-dark, #065f46)',
-                  marginBottom: 4,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                }}>
-                  📍 {village} → {gp} GP → {taluk} Taluk → {district} Dist
-                </div>
+              {/* ── RURAL FIELDS ── */}
+              {areaType === 'rural' && (
+                <>
+                  <div className="form-group">
+                    <label className="form-label">Gram Panchayat / ಗ್ರಾ.ಪಂ *</label>
+                    <select
+                      className="form-input custom-select"
+                      value={gp}
+                      onChange={e => handleGpChange(e.target.value)}
+                      required
+                    >
+                      <option value="" disabled>Select Gram Panchayat</option>
+                      {availableGps.map(g => (
+                        <option key={g} value={g}>{g}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Village / ಗ್ರಾಮ *</label>
+                    {!isOtherVillage ? (
+                      <select
+                        className="form-input custom-select"
+                        value={village}
+                        onChange={e => handleVillageChange(e.target.value)}
+                        required
+                        disabled={!gp}
+                        style={selStyle(!gp)}
+                      >
+                        <option value="" disabled>
+                          {!gp ? 'Select Panchayat first' : availableVillages.length === 0 ? 'Type your village ↓' : 'Select Village'}
+                        </option>
+                        {availableVillages.map(v => (
+                          <option key={v} value={v}>{v}</option>
+                        ))}
+                        {gp && <option value="OTHER">Other / My village is not listed</option>}
+                      </select>
+                    ) : (
+                      <div style={{ position: 'relative' }}>
+                        <input
+                          className="form-input"
+                          type="text"
+                          placeholder="Enter your village or hamlet name"
+                          value={village}
+                          onChange={e => setVillage(e.target.value)}
+                          required
+                          autoFocus
+                        />
+                        <button
+                          type="button"
+                          onClick={() => { setIsOtherVillage(false); setVillage('') }}
+                          style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {village && (
+                    <div style={{ padding: '10px 14px', background: 'var(--primary-light, #d1fae5)', borderRadius: 'var(--radius-sm)', fontSize: 12, color: 'var(--primary-dark, #065f46)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      📍 {village} → {gp} GP → {taluk} → {district}
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* ── URBAN FIELDS ── */}
+              {areaType === 'urban' && (
+                <>
+                  <div className="form-group">
+                    <label className="form-label">Urban Local Body / ನಗರ ಸ್ಥಳೀಯ ಸಂಸ್ಥೆ *</label>
+                    <select
+                      className="form-input custom-select"
+                      value={urbanBody}
+                      onChange={e => { setUrbanBody(e.target.value); setWard('') }}
+                      required
+                    >
+                      <option value="" disabled>Select Urban Local Body</option>
+                      {urbanBodiesForTaluk.map(ub => (
+                        <option key={ub} value={ub}>{ub}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Ward / ವಾರ್ಡ್ *</label>
+                    <select
+                      className="form-input custom-select"
+                      value={ward}
+                      onChange={e => setWard(e.target.value)}
+                      required
+                      disabled={!urbanBody}
+                      style={selStyle(!urbanBody)}
+                    >
+                      <option value="" disabled>
+                        {!urbanBody ? 'Select Urban Local Body first' : 'Select Ward'}
+                      </option>
+                      {wardsForUrbanBody.map(w => (
+                        <option key={w} value={w}>{w}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {ward && (
+                    <div style={{ padding: '10px 14px', background: 'linear-gradient(135deg,#ede9fe,#ddd6fe)', borderRadius: 'var(--radius-sm)', fontSize: 12, color: '#4c1d95', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      🏙️ {ward} → {urbanBody} → {taluk} → {district}
+                    </div>
+                  )}
+                </>
               )}
 
               <button
                 className="btn btn-primary w-full"
                 style={{ justifyContent: 'center', padding: '14px' }}
                 type="submit"
-                disabled={loading || !email.includes('@') || !name.trim() || !village}
+                disabled={loading || !email.includes('@') || !name.trim() || !areaType || (areaType === 'rural' ? !village : !ward)}
               >
                 {loading
                   ? 'Sending OTP...'
