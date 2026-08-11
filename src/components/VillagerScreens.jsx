@@ -2060,8 +2060,8 @@ export function WeatherScreen() {
               }}
             >
               <option value="" style={{ color: '#000' }}>Select Taluk</option>
-              {availableTaluks.map(tName => (
-                <option key={tName} value={tName} style={{ color: '#000' }}>{tName}</option>
+              {availableTaluks.map(tObj => (
+                <option key={tObj.name} value={tObj.name} style={{ color: '#000' }}>{tObj.name}</option>
               ))}
             </select>
           </div>
