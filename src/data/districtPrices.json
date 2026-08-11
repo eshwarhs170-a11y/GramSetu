@@ -1,0 +1,3164 @@
+{
+  "Bagalkot": [
+    {
+      "crop": "Maize",
+      "market": "Bagalkot APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Bagalkot APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Bagalkot APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Bagalkot APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Bagalkot APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Bajra",
+      "market": "Bagalkot APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Wheat",
+      "market": "Bagalkot APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Bagalkot APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Bagalkot APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Bagalkot APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    }
+  ],
+  "Ballari": [
+    {
+      "crop": "Jowar",
+      "market": "Ballari APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Ballari APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Ballari APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Ballari APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Bajra",
+      "market": "Ballari APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Ballari APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Ballari APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Ballari APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Ballari APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Ballari APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    }
+  ],
+  "Belagavi": [
+    {
+      "crop": "Sugarcane",
+      "market": "Belagavi APMC",
+      "min": "₹300",
+      "max": "₹400",
+      "price": "₹350",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Belagavi APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Soybean",
+      "market": "Belagavi APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Belagavi APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Belagavi APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Belagavi APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Belagavi APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Belagavi APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Wheat",
+      "market": "Belagavi APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Belagavi APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    }
+  ],
+  "Bengaluru Rural": [
+    {
+      "crop": "Ragi",
+      "market": "Bengaluru Rural APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Bengaluru Rural APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Tomato",
+      "market": "Bengaluru Rural APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Potato",
+      "market": "Bengaluru Rural APMC",
+      "min": "₹1,280",
+      "max": "₹1,720",
+      "price": "₹1,500",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Onion",
+      "market": "Bengaluru Rural APMC",
+      "min": "₹1,530",
+      "max": "₹2,070",
+      "price": "₹1,800",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Beans",
+      "market": "Hoskote APMC",
+      "min": "₹3,500",
+      "max": "₹3,700",
+      "price": "₹3,600",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Bengaluru Rural APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Mulberry",
+      "market": "Bengaluru Rural APMC",
+      "min": "₹5,100",
+      "max": "₹6,900",
+      "price": "₹6,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Bengaluru Rural APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Finger",
+      "market": "millet Bengaluru Rural APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    }
+  ],
+  "Bengaluru Urban": [
+    {
+      "crop": "Ragi",
+      "market": "Bengaluru Urban APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Rice",
+      "market": "Bengaluru APMC",
+      "min": "₹3,800",
+      "max": "₹6,600",
+      "price": "₹5,333",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Bengaluru APMC",
+      "min": "₹4,000",
+      "max": "₹6,000",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Bengaluru Urban APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Green",
+      "market": "gram Bengaluru APMC",
+      "min": "₹9,000",
+      "max": "₹12,500",
+      "price": "₹10,750",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Black",
+      "market": "gram Bengaluru Urban APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Dry",
+      "market": "chilli Bengaluru APMC",
+      "min": "₹20,000",
+      "max": "₹26,000",
+      "price": "₹23,000",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Turmeric",
+      "market": "Bengaluru Urban APMC",
+      "min": "₹6,800",
+      "max": "₹9,200",
+      "price": "₹8,000",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Tamarind",
+      "market": "Bengaluru Urban APMC",
+      "min": "₹10,620",
+      "max": "₹14,370",
+      "price": "₹12,500",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Sesame",
+      "market": "Bengaluru Urban APMC",
+      "min": "₹13,180",
+      "max": "₹17,820",
+      "price": "₹15,500",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    }
+  ],
+  "Bidar": [
+    {
+      "crop": "Tur",
+      "market": "Bidar APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Bidar APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Soybean",
+      "market": "Bidar APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Bidar APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Black",
+      "market": "gram Bidar APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Green",
+      "market": "gram Bidar APMC",
+      "min": "₹9,140",
+      "max": "₹12,360",
+      "price": "₹10,750",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Wheat",
+      "market": "Bidar APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Bidar APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Bidar APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Bidar APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    }
+  ],
+  "Chamarajanagar": [
+    {
+      "crop": "Turmeric",
+      "market": "Chamarajanagar APMC",
+      "min": "₹6,800",
+      "max": "₹9,200",
+      "price": "₹8,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Chamarajanagar APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Arecanut",
+      "market": "Chamarajanagar APMC",
+      "min": "₹27,200",
+      "max": "₹36,800",
+      "price": "₹32,000",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Ragi",
+      "market": "Chamarajanagar APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Chamarajanagar APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Sugarcane",
+      "market": "Chamarajanagar APMC",
+      "min": "₹300",
+      "max": "₹400",
+      "price": "₹350",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Chamarajanagar APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Tomato",
+      "market": "Chamarajanagar APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Tamarind",
+      "market": "Chamarajanagar APMC",
+      "min": "₹10,620",
+      "max": "₹14,370",
+      "price": "₹12,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Chamarajanagar APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    }
+  ],
+  "Chikkaballapur": [
+    {
+      "crop": "Tomato",
+      "market": "Chikkaballapur APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Ragi",
+      "market": "Chikkaballapur APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Chikkaballapur APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Chikkaballapur APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Green",
+      "market": "chilli Chikkaballapur APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Potato",
+      "market": "Chikkaballapur APMC",
+      "min": "₹1,280",
+      "max": "₹1,720",
+      "price": "₹1,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Onion",
+      "market": "Chikkaballapur APMC",
+      "min": "₹1,530",
+      "max": "₹2,070",
+      "price": "₹1,800",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Beans",
+      "market": "Chikkaballapur APMC",
+      "min": "₹3,060",
+      "max": "₹4,140",
+      "price": "₹3,600",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Lime",
+      "market": "Chikkaballapur APMC",
+      "min": "₹3,820",
+      "max": "₹5,180",
+      "price": "₹4,500",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Mulberry",
+      "market": "Chikkaballapur APMC",
+      "min": "₹5,100",
+      "max": "₹6,900",
+      "price": "₹6,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    }
+  ],
+  "Chikkamagaluru": [
+    {
+      "crop": "Coffee",
+      "market": "Chikkamagaluru APMC",
+      "min": "₹18,700",
+      "max": "₹25,300",
+      "price": "₹22,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Arecanut",
+      "market": "Chikkamagaluru APMC",
+      "min": "₹27,200",
+      "max": "₹36,800",
+      "price": "₹32,000",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Chikkamagaluru APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Chikkamagaluru APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Chikkamagaluru APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Ragi",
+      "market": "Chikkamagaluru APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Tomato",
+      "market": "Chikkamagaluru APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Potato",
+      "market": "Chikkamagaluru APMC",
+      "min": "₹1,280",
+      "max": "₹1,720",
+      "price": "₹1,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Beans",
+      "market": "Chikkamagaluru APMC",
+      "min": "₹3,060",
+      "max": "₹4,140",
+      "price": "₹3,600",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Green",
+      "market": "chilli Chikkamagaluru APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    }
+  ],
+  "Chitradurga": [
+    {
+      "crop": "Maize",
+      "market": "Chitradurga APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Chitradurga APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Chitradurga APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Castor",
+      "market": "seed Chitradurga APMC",
+      "min": "₹4,590",
+      "max": "₹6,210",
+      "price": "₹5,400",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Horse",
+      "market": "gram Chitradurga APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Chitradurga APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Ragi",
+      "market": "Chitradurga APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Chitradurga APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Chitradurga APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Onion",
+      "market": "Chitradurga APMC",
+      "min": "₹1,530",
+      "max": "₹2,070",
+      "price": "₹1,800",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    }
+  ],
+  "Dakshina Kannada": [
+    {
+      "crop": "Arecanut",
+      "market": "Dakshina Kannada APMC",
+      "min": "₹27,200",
+      "max": "₹36,800",
+      "price": "₹32,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Dakshina Kannada APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Dakshina Kannada APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Cashew",
+      "market": "Dakshina Kannada APMC",
+      "min": "₹10,200",
+      "max": "₹13,800",
+      "price": "₹12,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Black",
+      "market": "pepper Dakshina Kannada APMC",
+      "min": "₹55,250",
+      "max": "₹74,750",
+      "price": "₹65,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Banana",
+      "market": "Dakshina Kannada APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Turmeric",
+      "market": "Dakshina Kannada APMC",
+      "min": "₹6,800",
+      "max": "₹9,200",
+      "price": "₹8,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Ginger",
+      "market": "Dakshina Kannada APMC",
+      "min": "₹6,630",
+      "max": "₹8,970",
+      "price": "₹7,800",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Cocoa",
+      "market": "Dakshina Kannada APMC",
+      "min": "₹15,300",
+      "max": "₹20,700",
+      "price": "₹18,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Rubber",
+      "market": "Dakshina Kannada APMC",
+      "min": "₹15,300",
+      "max": "₹20,700",
+      "price": "₹18,000",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    }
+  ],
+  "Davanagere": [
+    {
+      "crop": "Maize",
+      "market": "Davanagere APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Davanagere APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Davanagere APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Davanagere APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Sugarcane",
+      "market": "Davanagere APMC",
+      "min": "₹300",
+      "max": "₹400",
+      "price": "₹350",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Davanagere APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Davanagere APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Davanagere APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Davanagere APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Davanagere APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    }
+  ],
+  "Dharwad": [
+    {
+      "crop": "Cotton",
+      "market": "Dharwad APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Hubballi APMC",
+      "min": "₹1,335",
+      "max": "₹4,326",
+      "price": "₹3,407",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Dharwad APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Hubballi APMC",
+      "min": "₹4,420",
+      "max": "₹6,661",
+      "price": "₹5,582",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Soybean",
+      "market": "Hubballi APMC",
+      "min": "₹6,949",
+      "max": "₹6,949",
+      "price": "₹6,949",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Wheat",
+      "market": "Hubballi APMC",
+      "min": "₹2,007",
+      "max": "₹3,589",
+      "price": "₹2,455",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Hubballi APMC",
+      "min": "₹1,621",
+      "max": "₹6,229",
+      "price": "₹4,930",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Hubballi APMC",
+      "min": "₹5,526",
+      "max": "₹5,526",
+      "price": "₹5,526",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Dharwad APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Dharwad APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    }
+  ],
+  "Gadag": [
+    {
+      "crop": "Jowar",
+      "market": "Gadag APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Gadag APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Gadag APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Gadag APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Gadag APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Gadag APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Gadag APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Wheat",
+      "market": "Gadag APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Gadag APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Soybean",
+      "market": "Gadag APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    }
+  ],
+  "Hassan": [
+    {
+      "crop": "Paddy",
+      "market": "Hassan APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Coffee",
+      "market": "Hassan APMC",
+      "min": "₹18,700",
+      "max": "₹25,300",
+      "price": "₹22,000",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Arecanut",
+      "market": "Hassan APMC",
+      "min": "₹27,200",
+      "max": "₹36,800",
+      "price": "₹32,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Hassan APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Ragi",
+      "market": "Hassan APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Hassan APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Potato",
+      "market": "Hassan APMC",
+      "min": "₹1,280",
+      "max": "₹1,720",
+      "price": "₹1,500",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Tomato",
+      "market": "Hassan APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Black",
+      "market": "pepper Hassan APMC",
+      "min": "₹55,250",
+      "max": "₹74,750",
+      "price": "₹65,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Ginger",
+      "market": "Hassan APMC",
+      "min": "₹6,630",
+      "max": "₹8,970",
+      "price": "₹7,800",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    }
+  ],
+  "Haveri": [
+    {
+      "crop": "Maize",
+      "market": "Haveri APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Haveri APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Soybean",
+      "market": "Haveri APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Haveri APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Haveri APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Haveri APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Haveri APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Haveri APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Haveri APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Haveri APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    }
+  ],
+  "Kalaburagi": [
+    {
+      "crop": "Tur",
+      "market": "Kalaburagi APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Kalaburagi APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Kalaburagi APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Black",
+      "market": "gram Kalaburagi APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Green",
+      "market": "gram Kalaburagi APMC",
+      "min": "₹9,140",
+      "max": "₹12,360",
+      "price": "₹10,750",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Soybean",
+      "market": "Kalaburagi APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Kalaburagi APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Kalaburagi APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Wheat",
+      "market": "Kalaburagi APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Kalaburagi APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    }
+  ],
+  "Kodagu": [
+    {
+      "crop": "Coffee",
+      "market": "Kodagu APMC",
+      "min": "₹18,700",
+      "max": "₹25,300",
+      "price": "₹22,000",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Black",
+      "market": "pepper Kodagu APMC",
+      "min": "₹55,250",
+      "max": "₹74,750",
+      "price": "₹65,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Cardamom",
+      "market": "Kodagu APMC",
+      "min": "₹153,000",
+      "max": "₹207,000",
+      "price": "₹180,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Arecanut",
+      "market": "Kodagu APMC",
+      "min": "₹27,200",
+      "max": "₹36,800",
+      "price": "₹32,000",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Kodagu APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Kodagu APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Ginger",
+      "market": "Kodagu APMC",
+      "min": "₹6,630",
+      "max": "₹8,970",
+      "price": "₹7,800",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Turmeric",
+      "market": "Kodagu APMC",
+      "min": "₹6,800",
+      "max": "₹9,200",
+      "price": "₹8,000",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Banana",
+      "market": "Kodagu APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Cocoa",
+      "market": "Kodagu APMC",
+      "min": "₹15,300",
+      "max": "₹20,700",
+      "price": "₹18,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    }
+  ],
+  "Kolar": [
+    {
+      "crop": "Tomato",
+      "market": "Kolar APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Ragi",
+      "market": "Kolar APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Kolar APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Kolar APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Mulberry",
+      "market": "Kolar APMC",
+      "min": "₹5,100",
+      "max": "₹6,900",
+      "price": "₹6,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Potato",
+      "market": "Kolar APMC",
+      "min": "₹1,280",
+      "max": "₹1,720",
+      "price": "₹1,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Onion",
+      "market": "Kolar APMC",
+      "min": "₹1,530",
+      "max": "₹2,070",
+      "price": "₹1,800",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Beans",
+      "market": "Kolar APMC",
+      "min": "₹3,060",
+      "max": "₹4,140",
+      "price": "₹3,600",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Mango",
+      "market": "Kolar APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Kolar APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    }
+  ],
+  "Koppal": [
+    {
+      "crop": "Maize",
+      "market": "Koppal APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Koppal APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Koppal APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Koppal APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Koppal APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Koppal APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Koppal APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Koppal APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Koppal APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Wheat",
+      "market": "Koppal APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    }
+  ],
+  "Mandya": [
+    {
+      "crop": "Sugarcane",
+      "market": "Mandya APMC",
+      "min": "₹300",
+      "max": "₹400",
+      "price": "₹350",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Mandya APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Ragi",
+      "market": "Mandya APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Mandya APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Mandya APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Mandya APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Mandya APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Tomato",
+      "market": "Mandya APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Banana",
+      "market": "Mandya APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Mulberry",
+      "market": "Mandya APMC",
+      "min": "₹5,100",
+      "max": "₹6,900",
+      "price": "₹6,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    }
+  ],
+  "Mysuru": [
+    {
+      "crop": "Paddy",
+      "market": "Mysuru APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Ragi",
+      "market": "Mysuru APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Sugarcane",
+      "market": "Mysuru APMC",
+      "min": "₹300",
+      "max": "₹400",
+      "price": "₹350",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Mysuru APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Mysuru APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Mysuru APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Mysuru APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Tobacco",
+      "market": "Mysuru APMC",
+      "min": "₹10,200",
+      "max": "₹13,800",
+      "price": "₹12,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Banana",
+      "market": "Mysuru APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Turmeric",
+      "market": "Mysuru APMC",
+      "min": "₹6,800",
+      "max": "₹9,200",
+      "price": "₹8,000",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    }
+  ],
+  "Raichur": [
+    {
+      "crop": "Paddy",
+      "market": "Raichur APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Raichur APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Raichur APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Raichur APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Raichur APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Raichur APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Raichur APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Raichur APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Raichur APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Wheat",
+      "market": "Raichur APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    }
+  ],
+  "Ramanagara": [
+    {
+      "crop": "Ragi",
+      "market": "Ramanagara APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Mango",
+      "market": "Ramanagara APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Ramanagara APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Tomato",
+      "market": "Ramanagara APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Banana",
+      "market": "Ramanagara APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Ramanagara APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Ramanagara APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Ramanagara APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Mulberry",
+      "market": "Ramanagara APMC",
+      "min": "₹5,100",
+      "max": "₹6,900",
+      "price": "₹6,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Tamarind",
+      "market": "Ramanagara APMC",
+      "min": "₹10,620",
+      "max": "₹14,370",
+      "price": "₹12,500",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    }
+  ],
+  "Shivamogga": [
+    {
+      "crop": "Paddy",
+      "market": "Shivamogga APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Arecanut",
+      "market": "Shivamogga APMC",
+      "min": "₹27,200",
+      "max": "₹36,800",
+      "price": "₹32,000",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Shivamogga APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Shivamogga APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Sugarcane",
+      "market": "Shivamogga APMC",
+      "min": "₹300",
+      "max": "₹400",
+      "price": "₹350",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Ragi",
+      "market": "Shivamogga APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Ginger",
+      "market": "Shivamogga APMC",
+      "min": "₹6,630",
+      "max": "₹8,970",
+      "price": "₹7,800",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Black",
+      "market": "pepper Shivamogga APMC",
+      "min": "₹55,250",
+      "max": "₹74,750",
+      "price": "₹65,000",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Banana",
+      "market": "Shivamogga APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Turmeric",
+      "market": "Shivamogga APMC",
+      "min": "₹6,800",
+      "max": "₹9,200",
+      "price": "₹8,000",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    }
+  ],
+  "Tumakuru": [
+    {
+      "crop": "Ragi",
+      "market": "Tumakuru APMC",
+      "min": "₹3,400",
+      "max": "₹4,600",
+      "price": "₹4,000",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Tumakuru APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Tumakuru APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Tumakuru APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Tumakuru APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Tumakuru APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Tumakuru APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Tumakuru APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Tomato",
+      "market": "Tumakuru APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Onion",
+      "market": "Tumakuru APMC",
+      "min": "₹1,530",
+      "max": "₹2,070",
+      "price": "₹1,800",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    }
+  ],
+  "Udupi": [
+    {
+      "crop": "Paddy",
+      "market": "Udupi APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Arecanut",
+      "market": "Udupi APMC",
+      "min": "₹27,200",
+      "max": "₹36,800",
+      "price": "₹32,000",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Udupi APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Cashew",
+      "market": "Udupi APMC",
+      "min": "₹10,200",
+      "max": "₹13,800",
+      "price": "₹12,000",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Black",
+      "market": "pepper Udupi APMC",
+      "min": "₹55,250",
+      "max": "₹74,750",
+      "price": "₹65,000",
+      "trend": "down",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Banana",
+      "market": "Udupi APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Pineapple",
+      "market": "Udupi APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Ginger",
+      "market": "Udupi APMC",
+      "min": "₹6,630",
+      "max": "₹8,970",
+      "price": "₹7,800",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Turmeric",
+      "market": "Udupi APMC",
+      "min": "₹6,800",
+      "max": "₹9,200",
+      "price": "₹8,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Cocoa",
+      "market": "Udupi APMC",
+      "min": "₹15,300",
+      "max": "₹20,700",
+      "price": "₹18,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    }
+  ],
+  "Uttara Kannada": [
+    {
+      "crop": "Arecanut",
+      "market": "Uttara Kannada APMC",
+      "min": "₹27,200",
+      "max": "₹36,800",
+      "price": "₹32,000",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Paddy",
+      "market": "Uttara Kannada APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Coconut",
+      "market": "Uttara Kannada APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Cashew",
+      "market": "Uttara Kannada APMC",
+      "min": "₹10,200",
+      "max": "₹13,800",
+      "price": "₹12,000",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Black",
+      "market": "pepper Uttara Kannada APMC",
+      "min": "₹55,250",
+      "max": "₹74,750",
+      "price": "₹65,000",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Cardamom",
+      "market": "Uttara Kannada APMC",
+      "min": "₹153,000",
+      "max": "₹207,000",
+      "price": "₹180,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Uttara Kannada APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Mango",
+      "market": "Uttara Kannada APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Banana",
+      "market": "Uttara Kannada APMC",
+      "min": "₹2,120",
+      "max": "₹2,880",
+      "price": "₹2,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Turmeric",
+      "market": "Uttara Kannada APMC",
+      "min": "₹6,800",
+      "max": "₹9,200",
+      "price": "₹8,000",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    }
+  ],
+  "Vijayapura": [
+    {
+      "crop": "Jowar",
+      "market": "Vijayapura APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Vijayapura APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Vijayapura APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Vijayapura APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Vijayapura APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Vijayapura APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "up",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Wheat",
+      "market": "Vijayapura APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Vijayapura APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Vijayapura APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "down",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Soybean",
+      "market": "Vijayapura APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    }
+  ],
+  "Yadgir": [
+    {
+      "crop": "Tur",
+      "market": "Yadgir APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Yadgir APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Yadgir APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Yadgir APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Yadgir APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "up",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Yadgir APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "up",
+      "change": "+₹10",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Yadgir APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "-₹40",
+      "img": ""
+    },
+    {
+      "crop": "Wheat",
+      "market": "Yadgir APMC",
+      "min": "₹2,380",
+      "max": "₹3,220",
+      "price": "₹2,800",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Black",
+      "market": "gram Yadgir APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "up",
+      "change": "+₹120",
+      "img": ""
+    },
+    {
+      "crop": "Soybean",
+      "market": "Yadgir APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    }
+  ],
+  "Vijayanagara": [
+    {
+      "crop": "Paddy",
+      "market": "Vijayanagara APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    },
+    {
+      "crop": "Maize",
+      "market": "Vijayanagara APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "down",
+      "change": "-₹20",
+      "img": ""
+    },
+    {
+      "crop": "Cotton",
+      "market": "Vijayanagara APMC",
+      "min": "₹5,950",
+      "max": "₹8,050",
+      "price": "₹7,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Jowar",
+      "market": "Vijayanagara APMC",
+      "min": "₹2,980",
+      "max": "₹4,020",
+      "price": "₹3,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Groundnut",
+      "market": "Vijayanagara APMC",
+      "min": "₹4,760",
+      "max": "₹6,440",
+      "price": "₹5,600",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Chilli",
+      "market": "Vijayanagara APMC",
+      "min": "₹19,550",
+      "max": "₹26,450",
+      "price": "₹23,000",
+      "trend": "up",
+      "change": "+₹0",
+      "img": ""
+    },
+    {
+      "crop": "Bengal",
+      "market": "gram Vijayanagara APMC",
+      "min": "₹4,250",
+      "max": "₹5,750",
+      "price": "₹5,000",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Tur",
+      "market": "Vijayanagara APMC",
+      "min": "₹4,680",
+      "max": "₹6,320",
+      "price": "₹5,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Sunflower",
+      "market": "Vijayanagara APMC",
+      "min": "₹5,520",
+      "max": "₹7,470",
+      "price": "₹6,500",
+      "trend": "stable",
+      "change": "-",
+      "img": ""
+    },
+    {
+      "crop": "Sugarcane",
+      "market": "Vijayanagara APMC",
+      "min": "₹300",
+      "max": "₹400",
+      "price": "₹350",
+      "trend": "down",
+      "change": "+₹50",
+      "img": ""
+    }
+  ]
+}

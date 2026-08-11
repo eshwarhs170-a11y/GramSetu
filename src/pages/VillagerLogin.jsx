@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
-import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail, Send, ShieldCheck } from 'lucide-react'
+import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail, Send, ShieldCheck, Building2, TreePine } from 'lucide-react'
 import { db, auth } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
@@ -391,8 +391,8 @@ export default function VillagerLogin() {
                 <label className="form-label">Area Type / ಪ್ರದೇಶದ ಪ್ರಕಾರ *</label>
                 <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
                   {[
-                    { value: 'rural', emoji: '🌾', label: 'Rural / ಗ್ರಾಮೀಣ' },
-                    { value: 'urban', emoji: '🏙️', label: 'Urban / ನಗರ' },
+                    { value: 'rural', icon: <TreePine size={18} />, label: 'Rural / ಗ್ರಾಮೀಣ' },
+                    { value: 'urban', icon: <Building2 size={18} />, label: 'Urban / ನಗರ' },
                   ].map(opt => (
                     <button
                       key={opt.value}
@@ -414,7 +414,7 @@ export default function VillagerLogin() {
                       }}
                       disabled={!taluk}
                     >
-                      <span style={{ fontSize: 18 }}>{opt.emoji}</span>
+                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{opt.icon}</span>
                       {opt.label}
                     </button>
                   ))}

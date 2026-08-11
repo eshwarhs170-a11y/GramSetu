@@ -1,0 +1,222 @@
+{
+  "Maize": {
+    "name": "Maize",
+    "description": "Maize, also known as corn, is a tall stout grass that produces cereal grain. The leafy stalk of the plant gives rise to male inflorescences or tassels which produce pollen, and female inflorescences called ears. The ears yield grain, known as kernels or seeds. In modern commercial varieties, these are usually yellow or white; other varieties can be of many colors. Maize was domesticated by indigenous peoples in southern Mexico about 9,000 years ago from wild teosinte. Native Americans planted it alongside beans and squashes in the Three Sisters polyculture. That is, those three vegetables were the main staple crops of the time.",
+    "image": "/crops/Maize.jpg"
+  },
+  "Bengal gram": {
+    "name": "Bengal gram",
+    "description": "The chickpea or chick pea is an annual legume of the family Fabaceae, subfamily Faboideae, cultivated for its edible seeds. Its different types are variously known as gram, Bengal gram, chana (চানা), garbanzo, garbanzo bean, or Egyptian pea. It is one of the earliest cultivated legumes, the oldest archaeological evidence of which was found in Syria.",
+    "image": "/crops/Bengal_gram.jpg"
+  },
+  "Groundnut": {
+    "name": "Groundnut",
+    "description": "Groundnut may refer to:Seeds that ripen underground, of the following plants, all in the Faboideae subfamily of the legumes:\nArachis hypogaea, the peanut\nArachis villosulicarpa, a perennial peanut species\nVigna subterranea, the Bambara groundnut\nMacrotyloma geocarpum, the Hausa groundnut\nRoots and tubers:\nApios americana, the American groundnut or potato-bean\nConopodium majus, called the kippernut among many other names\nPanax trifolius, or dwarf ginseng",
+    "image": "/crops/Groundnut.jpg"
+  },
+  "Sunflower": {
+    "name": "Sunflower",
+    "description": "The common sunflower is a large annual forb in the daisy family Asteraceae. The domesticated form of common sunflower is harvested for its edible seeds, which come in two types: oil and confectionary seeds. Oilseed sunflowers are widely grown globally and represent the fourth most used vegetable oil in the world. They also are used widely as bird food or as food for livestock. In contrast, confectionary sunflower seeds are often eaten as a snack food or in baking. There also are horticultural sunflower varieties that are used as plantings in domestic gardens for aesthetics. Wild plants are known for their multiple flower heads, whereas the domestic sunflower often possesses a single large flower head atop an unbranched stem.",
+    "image": "/crops/Sunflower.jpg"
+  },
+  "Jowar": {
+    "name": "Jowar",
+    "description": "Sorghum bicolor, commonly called sorghum and also known as broomcorn, great millet, Indian millet, Guinea corn, jowar, or milo, is a species in the grass genus Sorghum. It is typically an annual, but some cultivars are perennial. It grows in clumps that may reach over 4 metres (13 ft) high. The grain is 2 to 4 millimetres in diameter.",
+    "image": "/crops/Jowar.jpg"
+  },
+  "Bajra": {
+    "name": "Bajra",
+    "description": "Pearl millet is the most widely grown type of millet. It has been grown in Africa and the Indian subcontinent since prehistoric times. The center of diversity and suggested area of domestication for the crop is in the Sahel zone of West Africa.",
+    "image": "/crops/Bajra.jpg"
+  },
+  "Wheat": {
+    "name": "Wheat",
+    "description": "Wheat is a group of wild and domesticated grasses of the genus Triticum. As cereals, they are cultivated for their grains, which are staple foods around the world. Well-known wheat species and hybrids include the most widely grown common wheat, spelt, durum, emmer, einkorn, and Khorasan or Kamut. The archaeological record suggests that wheat was first cultivated in the regions of the Fertile Crescent around 9600 BC.",
+    "image": "/crops/Wheat.jpg"
+  },
+  "Tur": {
+    "name": "Tur",
+    "description": "The pigeon pea is a perennial legume from the family Fabaceae native to the Eastern Hemisphere. The pigeon pea is widely cultivated in tropical and semitropical regions around the world, being commonly consumed in the Indian Subcontinent, Southeast Asia, Africa, Latin America and the Caribbean.",
+    "image": "/crops/Tur.jpg"
+  },
+  "Chilli": {
+    "name": "Chilli",
+    "description": "Chili peppers, also spelled chile or chilli, are varieties of berry-fruit plants from the genus Capsicum, which are members of the nightshade family Solanaceae, cultivated for their pungency. They are used as a spice to add pungency in many cuisines. Capsaicin and the related capsaicinoids give chili peppers their intensity when ingested or applied topically. Chili peppers exhibit a range of heat and flavors. This diversity is the reason behind the availability of different types of chili powder, each offering its own taste and heat level.",
+    "image": "/crops/Chilli.jpg"
+  },
+  "Cotton": {
+    "name": "Cotton",
+    "description": "Cotton is a soft, fluffy staple fiber that grows in a boll, or protective case, around the seeds of the cotton plants of the genus Gossypium in the mallow family Malvaceae. The fiber is almost pure cellulose and may contain minor percentages of waxes, fats, pectins, and water. Under natural conditions, cotton bolls facilitate the dispersal of the seeds.",
+    "image": "/crops/Cotton.jpg"
+  },
+  "Paddy": {
+    "name": "Paddy",
+    "description": "Rice is a cereal grain and, in its domesticated form, is the staple food of over half of the world's population, particularly in Africa and Asia. Rice is the seed of the grass species Oryza sativa —or, less commonly, Oryza glaberrima. Asian rice was domesticated in China some 13,500 to 8,200 years ago; African rice was domesticated independently in West Africa about 3,000 years ago. Rice has become commonplace in many cultures worldwide; in 2023, 800 million tons were produced, placing it third after sugarcane and maize. Only some 8% of rice is traded internationally. China, India, and Indonesia are the largest consumers of rice. A substantial amount of the rice produced in developing nations is lost after harvest through factors such as poor transport and storage. Rice yields can be reduced by pests including insects, rodents, and birds, as well as by weeds, and by diseases such as rice blast. Traditional rice polycultures such as rice-duck farming, and modern integrated pest management seek to control damage from pests in a sustainable way.",
+    "image": "/crops/Paddy.jpg"
+  },
+  "Sugarcane": {
+    "name": "Sugarcane",
+    "description": "Sugarcane or sugar cane is a species of tall, perennial grass that is used for sugar production. The plants are 2–7 m tall with stout, jointed, fibrous stalks that are rich in sucrose, which accumulates in the stalk internodes. Sugarcanes belong to the grass family, Poaceae, an economically important flowering plant family that includes maize, wheat, rice, and sorghum, and many forage crops. It is native to New Guinea.",
+    "image": "/crops/Sugarcane.jpg"
+  },
+  "Soybean": {
+    "name": "Soybean",
+    "description": "The soybean, soy bean, or soya bean is a species of legume native to East Asia, widely grown for its edible bean. Soy is a staple crop, the world's most grown legume, and an important animal feed.",
+    "image": "/crops/Soybean.jpg"
+  },
+  "Ragi": {
+    "name": "Ragi",
+    "description": "Finger millet is an annual herbaceous plant. It is a tetraploid and self-pollinating species probably evolved from its wild relative Eleusine africana.",
+    "image": "/crops/Ragi.jpg"
+  },
+  "Tomato": {
+    "name": "Tomato",
+    "description": "The tomato is a plant whose fruit is an edible berry that is eaten as a vegetable. The tomato is a member of the nightshade family that includes tobacco, potato, and chili peppers. It originated from western South America, and may have been domesticated there, in Mexico, or in Central America. The Spanish introduced tomatoes to Eurasia in the Columbian exchange in the 16th century.",
+    "image": "/crops/Tomato.jpg"
+  },
+  "Potato": {
+    "name": "Potato",
+    "description": "The potato is a starchy tuberous vegetable native to the Americas that is consumed as a staple food in many parts of the world. Potatoes are underground stem tubers of the plant Solanum tuberosum, a perennial in the nightshade family Solanaceae.",
+    "image": "/crops/Potato.jpg"
+  },
+  "Onion": {
+    "name": "Onion",
+    "description": "The onion, also known as the bulb onion or common onion, is a vegetable that is the most widely cultivated species of the genus Allium. The shallot is a botanical variety of the onion which was classified as a separate species until 2011. The onion's close relatives include garlic, scallion, leek, and chives.",
+    "image": "/crops/Onion.jpg"
+  },
+  "Beans": {
+    "name": "Beans",
+    "description": "A bean is the seed of plants in many genera of the legume family (Fabaceae) used as a vegetable for human consumption or animal feed. The seeds are sold fresh or preserved through drying. Beans have been cultivated since the seventh millennium BCE in Thailand, and since the second millennium BCE in Europe and in Peru. Most beans, with the exception of peas, are summer crops. As legumes, the plants fix nitrogen and form seeds with a high protein content. They are produced on a scale of millions of tons annually in many countries, with India as the largest producer.",
+    "image": "/crops/Beans.jpg"
+  },
+  "Mulberry": {
+    "name": "Mulberry",
+    "description": "Morus, a genus of flowering plants in the family Moraceae, consists of 19 species of deciduous trees commonly known as mulberries, growing wild and under cultivation in many temperate world regions. Generally, the genus has 64 subordinate taxa, though the three most common are referred to as white, red, and black, originating from the color of their dormant buds and not necessarily the fruit color, with numerous cultivars and some taxa currently unchecked and awaiting taxonomic scrutiny. M. alba is native to South Asia, but is widely distributed across Europe, Southern Africa, South America, and North America. M. alba is also the species most preferred by the silkworm. It is regarded as an invasive species in Brazil, the United States and some states of Australia.",
+    "image": "/crops/Mulberry.jpg"
+  },
+  "Finger millet": {
+    "name": "Finger millet",
+    "description": "Finger millet is an annual herbaceous plant. It is a tetraploid and self-pollinating species probably evolved from its wild relative Eleusine africana.",
+    "image": "/crops/Finger_millet.jpg"
+  },
+  "Rice": {
+    "name": "Rice",
+    "description": "Rice is a cereal grain and, in its domesticated form, is the staple food of over half of the world's population, particularly in Africa and Asia. Rice is the seed of the grass species Oryza sativa —or, less commonly, Oryza glaberrima. Asian rice was domesticated in China some 13,500 to 8,200 years ago; African rice was domesticated independently in West Africa about 3,000 years ago. Rice has become commonplace in many cultures worldwide; in 2023, 800 million tons were produced, placing it third after sugarcane and maize. Only some 8% of rice is traded internationally. China, India, and Indonesia are the largest consumers of rice. A substantial amount of the rice produced in developing nations is lost after harvest through factors such as poor transport and storage. Rice yields can be reduced by pests including insects, rodents, and birds, as well as by weeds, and by diseases such as rice blast. Traditional rice polycultures such as rice-duck farming, and modern integrated pest management seek to control damage from pests in a sustainable way.",
+    "image": "/crops/Rice.jpg"
+  },
+  "Green gram": {
+    "name": "Green gram",
+    "description": "The mung bean or green gram is a plant species in the legume family. It is mainly cultivated in East, Southeast, and in South Asia and used as an ingredient in both savoury and sweet dishes.",
+    "image": "/crops/Green_gram.jpg"
+  },
+  "Black gram": {
+    "name": "Black gram",
+    "description": "The black gram is a bean grown in South Asia. Like its relative the mung bean, it has been reclassified from the genus Phaseolus to Vigna. The product sold as black gram is usually the whole bean, whereas the split bean is called white lentil. It should not be confused with the much smaller true black lentil.",
+    "image": "/crops/Black_gram.jpg"
+  },
+  "Dry chilli": {
+    "name": "Dry chilli",
+    "description": "Chili peppers, also spelled chile or chilli, are varieties of berry-fruit plants from the genus Capsicum, which are members of the nightshade family Solanaceae, cultivated for their pungency. They are used as a spice to add pungency in many cuisines. Capsaicin and the related capsaicinoids give chili peppers their intensity when ingested or applied topically. Chili peppers exhibit a range of heat and flavors. This diversity is the reason behind the availability of different types of chili powder, each offering its own taste and heat level.",
+    "image": "/crops/Dry_chilli.jpg"
+  },
+  "Turmeric": {
+    "name": "Turmeric",
+    "description": "Turmeric, or Curcuma longa, is a flowering plant in the ginger family Zingiberaceae. It is a perennial, rhizomatous, herbaceous plant native to the Indian subcontinent and Southeast Asia that requires temperatures between 20 and 30 °C and high annual rainfall to thrive. Plants are gathered each year for their rhizomes, some for propagation in the following season and some for consumption or dyeing.",
+    "image": "/crops/Turmeric.jpg"
+  },
+  "Tamarind": {
+    "name": "Tamarind",
+    "description": "Tamarind is a leguminous tree bearing edible fruit that is indigenous to tropical Africa and naturalized in Asia. The genus Tamarindus is monotypic, meaning that it contains only this species. It belongs to the family Fabaceae.",
+    "image": "/crops/Tamarind.jpg"
+  },
+  "Sesame": {
+    "name": "Sesame",
+    "description": "Sesame is a plant in the genus Sesamum, also called benne. Numerous wild relatives occur in Africa and a smaller number in India. It is widely naturalized in tropical regions around the world and is cultivated for its edible seeds, which grow in pods. World production in 2024 was 6.7 million tonnes, with India, Myanmar, and Sudan as the largest producers.",
+    "image": "/crops/Sesame.jpg"
+  },
+  "Coconut": {
+    "name": "Coconut",
+    "description": "The coconut is a member of the palm family (Arecaceae) and the only living species of the genus Cocos. The term \"coconut\" can denote the whole coconut palm tree or the large hard fruit. Originally native to the Central Indo-Pacific, they are ubiquitous in coastal tropical regions.",
+    "image": "/crops/Coconut.jpg"
+  },
+  "Arecanut": {
+    "name": "Arecanut",
+    "description": "The areca nut, also called betel nut, is the seed of a palm belonging to the areca genus. The palm is originally native to the Philippines, but was carried widely through the tropics by the Austronesian migrations and trade since at least 1500 BCE due to its use in betel nut chewing. It is widespread in cultivation and is considered naturalized in much of the tropical Pacific, South Asia, Southeast Asia, and parts of east Africa. It is not to be confused with betel leaves that are often used to wrap it. The practice of betel nut chewing, often together with other herbs as a stimulant drug, dates back thousands of years, and continues to the present day in many countries.",
+    "image": "/crops/Arecanut.jpg"
+  },
+  "Green chilli": {
+    "name": "Green chilli",
+    "description": "Chili peppers, also spelled chile or chilli, are varieties of berry-fruit plants from the genus Capsicum, which are members of the nightshade family Solanaceae, cultivated for their pungency. They are used as a spice to add pungency in many cuisines. Capsaicin and the related capsaicinoids give chili peppers their intensity when ingested or applied topically. Chili peppers exhibit a range of heat and flavors. This diversity is the reason behind the availability of different types of chili powder, each offering its own taste and heat level.",
+    "image": "/crops/Green_chilli.jpg"
+  },
+  "Lime": {
+    "name": "Lime",
+    "description": "Lime most commonly refers to:Lime (fruit), a green citrus fruit\nLime (material), inorganic materials containing calcium, usually calcium oxide or calcium hydroxide\nLime (color), a color between yellow and green",
+    "image": "/crops/Lime.jpg"
+  },
+  "Coffee": {
+    "name": "Coffee",
+    "description": "Coffee is a beverage brewed from roasted ground coffee beans. Darkly colored and bitter, coffee has a stimulating effect on humans due to its caffeine content, but decaffeinated coffee is also commercially available. There are also various coffee substitutes.",
+    "image": "/crops/Coffee.jpg"
+  },
+  "Castor seed": {
+    "name": "Castor seed",
+    "description": "Ricinus communis, the castor bean or castor oil plant, is a species of perennial flowering plant in the spurge family, Euphorbiaceae. It is the sole species in the monotypic genus, Ricinus, and subtribe, Ricininae.",
+    "image": "/crops/Castor_seed.jpg"
+  },
+  "Horse gram": {
+    "name": "Horse gram",
+    "description": "Macrotyloma uniflorum is a legume native to tropical southern Asia. Known for its distinct taste and texture, its rich nutrients and reputed medicinal properties, it is widely used in many cuisines. It is also commonly grown for horse feed, hence the name \"horse gram\". Horse gram is grown in parts of India, Nepal, Malaysia, Sri Lanka, and the West Indies. Consumed whole, sprouted, or ground, it is also allowed to be eaten on some Hindu fasting days. Medical uses of these legumes are described in the Ayurveda.",
+    "image": "/crops/Horse_gram.jpg"
+  },
+  "Cashew": {
+    "name": "Cashew",
+    "description": "Cashew is the common name of a tropical evergreen tree Anacardium occidentale, in the family Anacardiaceae. It is the source of the cashew nut and the cashew apple. The tree can grow as tall as 14 meters.",
+    "image": "/crops/Cashew.jpg"
+  },
+  "Black pepper": {
+    "name": "Black pepper",
+    "description": "Black pepper is a flowering vine in the family Piperaceae, cultivated for its fruit, which is usually dried and used as a spice and seasoning. The fruit is a drupe (stonefruit) which is about 5 mm in diameter, dark red, and contains a stone which encloses a single pepper seed. Peppercorns and the ground pepper derived from them may be described simply as pepper, or more precisely as black pepper, green pepper, or white pepper.",
+    "image": "/crops/Black_pepper.jpg"
+  },
+  "Banana": {
+    "name": "Banana",
+    "description": "A banana is an elongated, edible fruit that is botanically a berry produced by several kinds of large treelike herbaceous flowering plants in the genus Musa. In some countries, cooking bananas are called plantains, distinguishing them from dessert bananas. The fruit is variable in size, color and firmness, but is usually elongated and curved, with soft flesh rich in starch covered with a peel, which may have a variety of colors when ripe. It grows upward in clusters near the top of the plant. Almost all modern edible seedless (parthenocarp) cultivated bananas come from two wild species – Musa acuminata and Musa balbisiana, or their hybrids.",
+    "image": "/crops/Banana.jpg"
+  },
+  "Ginger": {
+    "name": "Ginger",
+    "description": "Ginger is a flowering plant whose rhizome, ginger root or ginger, is widely used as a spice and a folk medicine. It is an herbaceous perennial that grows annual pseudostems about one meter tall, bearing narrow leaf blades. The inflorescences bear flowers having pale yellow petals with purple edges, and arise directly from the rhizome on separate shoots.",
+    "image": "/crops/Ginger.jpg"
+  },
+  "Cocoa": {
+    "name": "Cocoa",
+    "description": "Cocoa may refer to:",
+    "image": "/crops/Cocoa.jpg"
+  },
+  "Rubber": {
+    "name": "Rubber",
+    "description": "Rubber, also called India rubber, latex, Amazonian rubber, caucho, or caoutchouc, as initially produced, consists of polymers of the organic compound isoprene, with minor impurities of other organic compounds.",
+    "image": "/crops/Rubber.jpg"
+  },
+  "Mango": {
+    "name": "Mango",
+    "description": "A mango is an edible stone fruit produced by the tropical tree Mangifera indica. It originated in the northeastern part of the South Asia, in what is now Bangladesh, northeastern India and Myanmar. M. indica has been cultivated in South and Southeast Asia since ancient times, resulting in two modern mango cultivar lineages: the \"Indian\" and the \"Southeast Asian\" types. Other species in the genus Mangifera also produce edible fruit called \"mangoes\", most of which are found in the Malesian ecoregion.",
+    "image": "/crops/Mango.jpg"
+  },
+  "Tobacco": {
+    "name": "Tobacco",
+    "description": "Tobacco is the common name of several plants in the genus Nicotiana of the family Solanaceae, and the general term for any product prepared from the cured leaves of these plants. Seventy-nine species of tobacco are known, but the chief commercial crop is N. tabacum. The more potent variant N. rustica is also used in some countries.",
+    "image": "/crops/Tobacco.jpg"
+  },
+  "Cardamom": {
+    "name": "Cardamom",
+    "description": "Cardamom, sometimes cardamon or cardamum, is a spice made from the seeds of several plants in the genera Elettaria and Amomum in the family Zingiberaceae. Both genera are native to the Indian subcontinent and Indonesia. They are recognized by their small seed pods: triangular in cross-section and spindle-shaped, with a thin, papery outer shell and small, black seeds; Elettaria pods are light green and smaller, while Amomum pods are dark brown and larger.",
+    "image": "/crops/Cardamom.jpg"
+  },
+  "Pineapple": {
+    "name": "Pineapple",
+    "description": "The pineapple is a tropical plant with an edible fruit; it is the most economically significant plant in the family Bromeliaceae.",
+    "image": "/crops/Pineapple.jpg"
+  }
+}
