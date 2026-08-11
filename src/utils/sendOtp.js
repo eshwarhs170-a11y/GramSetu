@@ -48,21 +48,14 @@ async function sendViaEmailJS(email, otp) {
  * @returns {Promise<{success: boolean, method: 'api'|'emailjs'}>}
  */
 export async function sendOtpEmail(email, otp) {
-  // Try the server-side Gmail SMTP route first (inbox-friendly)
+  // Use the server-side Gmail SMTP route (inbox-friendly)
   try {
     await sendViaApi(email, otp)
     return { success: true, method: 'api' }
   } catch (apiErr) {
-    console.warn('API route unavailable, falling back to EmailJS:', apiErr.message)
-  }
-
-  // Fallback to EmailJS (may land in spam)
-  try {
-    await sendViaEmailJS(email, otp)
-    return { success: true, method: 'emailjs' }
-  } catch (ejsErr) {
+    console.error('API route error:', apiErr)
     throw new Error(
-      `Failed to send OTP: ${ejsErr?.text || ejsErr?.message || 'Unknown error'}`
+      `Failed to send OTP via SMTP: ${apiErr.message}. Make sure GMAIL_USER and GMAIL_APP_PASSWORD are set in your .env file!`
     )
   }
 }
