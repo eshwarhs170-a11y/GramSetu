@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
@@ -8,48 +8,97 @@ import { db, auth } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
+import talukToGps from '../data/talukToGps'
+import villageData from '../data/karnatakVillages'
 import { sendOtpEmail } from '../utils/sendOtp'
 
 export default function VillagerLogin() {
   const navigate = useNavigate()
   const { t } = useLanguage()
 
-
   useEffect(() => {
     if (window.localStorage.getItem('citizen_email') || window.localStorage.getItem('citizen_phone')) {
       navigate('/dashboard/villager')
     }
   }, [navigate])
+
   const [step, setStep] = useState(1)
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [name, setName] = useState('')
   const [district, setDistrict] = useState('')
   const [taluk, setTaluk] = useState('')
+  const [gp, setGp] = useState('')
+  const [village, setVillage] = useState('')
+  const [isOtherVillage, setIsOtherVillage] = useState(false)
   const [otp, setOtp] = useState('')
   const [generatedOtp, setGeneratedOtp] = useState('')
   const [otpSentAlert, setOtpSentAlert] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
 
-  const handleDistrictChange = (distName) => {
-    setDistrict(distName)
-    const found = districtsOfKarnataka.find(d => d.name === distName)
-    if (found && found.taluks.length > 0) setTaluk(found.taluks[0])
+  // ── Cascading helpers ──────────────────────────────────────────
+  const activeDistrictObj = useMemo(
+    () => districtsOfKarnataka.find(d => d.name === district) || null,
+    [district]
+  )
+  const activeTalukObj = useMemo(
+    () => activeDistrictObj?.taluks.find(t => t.name === taluk) || null,
+    [activeDistrictObj, taluk]
+  )
+  
+  const talukKey = district && taluk ? `${district}|${taluk}` : ''
+  const availableGps = useMemo(
+    () => (talukKey ? (talukToGps[talukKey] || []) : []),
+    [talukKey]
+  )
+
+  const villageKey = district && taluk && gp ? `${district}|${taluk}|${gp}` : ''
+  const availableVillages = useMemo(
+    () => (villageKey ? (villageData[villageKey] || []) : []),
+    [villageKey]
+  )
+
+  // ── Cascade resets ──────────────────────────────────────────────
+  const handleDistrictChange = (d) => {
+    setDistrict(d)
+    setTaluk('')
+    setGp('')
+    setVillage('')
+    setIsOtherVillage(false)
+  }
+  const handleTalukChange = (t) => {
+    setTaluk(t)
+    setGp('')
+    setVillage('')
+    setIsOtherVillage(false)
+  }
+  const handleGpChange = (g) => {
+    setGp(g)
+    setVillage('')
+    setIsOtherVillage(false)
+  }
+  const handleVillageChange = (v) => {
+    if (v === 'OTHER') {
+      setIsOtherVillage(true)
+      setVillage('')
+    } else {
+      setIsOtherVillage(false)
+      setVillage(v)
+    }
   }
 
+  // ── OTP send ───────────────────────────────────────────────────
   const handleSendOtp = async (e) => {
     e.preventDefault()
-    if (!name.trim() || !email.includes('@') || !district || !taluk) {
-      setErrorMsg('Please fill in all required fields.')
+    if (!name.trim() || !email.includes('@') || !district || !taluk || !gp || !village) {
+      setErrorMsg('Please fill in all required fields including your village.')
       return
     }
     setLoading(true)
     setErrorMsg('')
-
     const newOtp = Math.floor(100000 + Math.random() * 900000).toString()
     setGeneratedOtp(newOtp)
-
     try {
       await sendOtpEmail(email, newOtp)
       setOtpSentAlert(true)
@@ -62,6 +111,7 @@ export default function VillagerLogin() {
     }
   }
 
+  // ── OTP verify ─────────────────────────────────────────────────
   const handleVerifyOtp = async (e) => {
     e.preventDefault()
     if (otp !== generatedOtp) {
@@ -70,41 +120,33 @@ export default function VillagerLogin() {
     }
     setLoading(true)
     setErrorMsg('')
-
     try {
-      // Sync user with Firebase Authentication so they appear in the Auth dashboard
-      const dummyPassword = email + "GramSetu!2026";
+      const dummyPassword = email + 'GramSetu!2026'
       try {
-        await signInWithEmailAndPassword(auth, email, dummyPassword);
+        await signInWithEmailAndPassword(auth, email, dummyPassword)
       } catch (authErr) {
-        // If user doesn't exist or password mismatch (shouldn't happen with deterministic pwd), try creating
-        if (authErr.code === 'auth/user-not-found' || authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/invalid-login-credentials') {
-          try {
-            await createUserWithEmailAndPassword(auth, email, dummyPassword);
-          } catch (createErr) {
-            console.error("Firebase Auth creation error:", createErr);
-          }
-        } else {
-          console.error("Firebase Auth sign-in error:", authErr);
+        if (['auth/user-not-found', 'auth/invalid-credential', 'auth/invalid-login-credentials'].includes(authErr.code)) {
+          try { await createUserWithEmailAndPassword(auth, email, dummyPassword) } catch (_) {}
         }
       }
 
       const uid = 'user-' + email.replace(/[^a-z0-9]/gi, '-')
       try {
         await setDoc(doc(db, 'users', uid), {
-          uid, name, email, phone, district, taluk,
+          uid, name, email, phone,
+          district, taluk, gp, village,
           role: 'villager',
           createdAt: serverTimestamp(),
           lastLoginAt: serverTimestamp()
         }, { merge: true })
-      } catch (fsErr) {
-        console.warn('Firestore save failed, continuing...', fsErr)
-      }
+      } catch (_) {}
 
       window.localStorage.setItem('citizen_name', name)
       window.localStorage.setItem('citizen_email', email)
       window.localStorage.setItem('citizen_district', district)
       window.localStorage.setItem('citizen_taluk', taluk)
+      window.localStorage.setItem('citizen_gp', gp)
+      window.localStorage.setItem('citizen_village', village)
       window.localStorage.setItem('citizen_phone', phone)
 
       navigate('/dashboard/villager')
@@ -116,7 +158,12 @@ export default function VillagerLogin() {
     }
   }
 
-  const activeDistrictObj = districtsOfKarnataka.find(d => d.name === district) || districtsOfKarnataka[0]
+  // ── Select style helper ────────────────────────────────────────
+  const selStyle = (disabled) => ({
+    opacity: disabled ? 0.5 : 1,
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    background: disabled ? 'var(--bg-main)' : undefined,
+  })
 
   return (
     <div className="login-page">
@@ -145,9 +192,9 @@ export default function VillagerLogin() {
             </p>
             <div className="login-visual-features">
               {[
-                [Landmark,      'Raitha Siri / ರೈತ ಸಿರಿ'],
-                [Wheat,         'Krishi Bhagya / ಕೃಷಿ ಭಾಗ್ಯ'],
-                [TrendingUp,    'APMC Karnataka Live Prices'],
+                [Landmark, 'Raitha Siri / ರೈತ ಸಿರಿ'],
+                [Wheat, 'Krishi Bhagya / ಕೃಷಿ ಭಾಗ್ಯ'],
+                [TrendingUp, 'APMC Karnataka Live Prices'],
                 [ClipboardList, 'Complaint → Taluk Auto-Escalation'],
               ].map(([Icon, text]) => (
                 <div className="login-visual-feature" key={text}>
@@ -199,6 +246,7 @@ export default function VillagerLogin() {
 
           {step === 1 ? (
             <form className="login-form" onSubmit={handleSendOtp}>
+              {/* Name */}
               <div className="form-group">
                 <label className="form-label">Full Name / ಪೂರ್ಣ ಹೆಸರು *</label>
                 <input
@@ -210,6 +258,8 @@ export default function VillagerLogin() {
                   required
                 />
               </div>
+
+              {/* Email */}
               <div className="form-group">
                 <label className="form-label">Email Address / ಇಮೇಲ್ *</label>
                 <div style={{ position: 'relative' }}>
@@ -225,6 +275,8 @@ export default function VillagerLogin() {
                   />
                 </div>
               </div>
+
+              {/* Phone */}
               <div className="form-group">
                 <label className="form-label">Mobile Number (Optional)</label>
                 <div style={{ display: 'flex', gap: 8 }}>
@@ -238,31 +290,127 @@ export default function VillagerLogin() {
                   />
                 </div>
               </div>
+
+              {/* District + Taluk */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div className="form-group">
                   <label className="form-label">District / ಜಿಲ್ಲೆ *</label>
-                  <select className="form-input custom-select" value={district} onChange={e => handleDistrictChange(e.target.value)} required>
+                  <select
+                    className="form-input custom-select"
+                    value={district}
+                    onChange={e => handleDistrictChange(e.target.value)}
+                    required
+                  >
                     <option value="" disabled>Select District</option>
                     {districtsOfKarnataka.map(d => (
                       <option key={d.name} value={d.name}>{d.name}</option>
                     ))}
                   </select>
                 </div>
+
                 <div className="form-group">
                   <label className="form-label">Taluk / ತಾಲೂಕು *</label>
-                  <select className="form-input custom-select" value={taluk} onChange={e => setTaluk(e.target.value)} required>
+                  <select
+                    className="form-input custom-select"
+                    value={taluk}
+                    onChange={e => handleTalukChange(e.target.value)}
+                    required
+                    disabled={!district}
+                    style={selStyle(!district)}
+                  >
                     <option value="" disabled>Select Taluk</option>
-                    {activeDistrictObj.taluks.map(tOption => (
-                      <option key={tOption} value={tOption}>{tOption}</option>
+                    {(activeDistrictObj?.taluks || []).map(t => (
+                      <option key={t.name} value={t.name}>{t.name}</option>
                     ))}
                   </select>
                 </div>
               </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div className="form-group">
+                  <label className="form-label">Gram Panchayat / ಗ್ರಾ.ಪಂ *</label>
+                  <select
+                    className="form-input custom-select"
+                    value={gp}
+                    onChange={e => handleGpChange(e.target.value)}
+                    required
+                    disabled={!taluk}
+                    style={selStyle(!taluk)}
+                  >
+                    <option value="" disabled>
+                      {!taluk ? 'Select Taluk first' : 'Select Panchayat'}
+                    </option>
+                    {availableGps.map(g => (
+                      <option key={g} value={g}>{g}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Village */}
+              <div className="form-group">
+                <label className="form-label">Village / ಗ್ರಾಮ *</label>
+                {!isOtherVillage ? (
+                  <select
+                    className="form-input custom-select"
+                    value={village}
+                    onChange={e => handleVillageChange(e.target.value)}
+                    required
+                    disabled={!gp}
+                    style={selStyle(!gp)}
+                  >
+                    <option value="" disabled>
+                      {!gp ? 'Select Panchayat first' : availableVillages.length === 0 ? 'Type your village ↓' : 'Select Village'}
+                    </option>
+                    {availableVillages.map(v => (
+                      <option key={v} value={v}>{v}</option>
+                    ))}
+                    {gp && <option value="OTHER">Other / My village is not listed</option>}
+                  </select>
+                ) : (
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      className="form-input"
+                      type="text"
+                      placeholder="Enter your village or hamlet name"
+                      value={village}
+                      onChange={e => setVillage(e.target.value)}
+                      required
+                      autoFocus
+                    />
+                    <button 
+                      type="button" 
+                      onClick={() => { setIsOtherVillage(false); setVillage(''); }}
+                      style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Location summary */}
+              {village && (
+                <div style={{
+                  padding: '10px 14px',
+                  background: 'var(--primary-light, #d1fae5)',
+                  borderRadius: 'var(--radius-sm)',
+                  fontSize: 12,
+                  color: 'var(--primary-dark, #065f46)',
+                  marginBottom: 4,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                }}>
+                  📍 {village} → {gp} GP → {taluk} Taluk → {district} Dist
+                </div>
+              )}
+
               <button
                 className="btn btn-primary w-full"
                 style={{ justifyContent: 'center', padding: '14px' }}
                 type="submit"
-                disabled={loading || !email.includes('@') || !name.trim()}
+                disabled={loading || !email.includes('@') || !name.trim() || !village}
               >
                 {loading
                   ? 'Sending OTP...'
@@ -301,7 +449,7 @@ export default function VillagerLogin() {
               <button
                 type="button"
                 style={{ textAlign: 'center', color: 'var(--primary)', fontSize: 14, fontWeight: 600, display: 'block', width: '100%', marginTop: 12, background: 'transparent', border: 'none', cursor: 'pointer' }}
-                onClick={() => { setStep(1); setOtpSentAlert(false); setOtp(''); setGeneratedOtp(''); }}
+                onClick={() => { setStep(1); setOtpSentAlert(false); setOtp(''); setGeneratedOtp('') }}
               >
                 <ArrowLeft size={14} style={{ marginRight: 4 }} /> Change Email
               </button>

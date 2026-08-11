@@ -7,6 +7,7 @@ import { db, auth } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
+import talukToGps from '../data/talukToGps'
 import { sendOtpEmail } from '../utils/sendOtp'
 
 export default function OfficialLogin() {
@@ -26,6 +27,7 @@ export default function OfficialLogin() {
   const [department, setDepartment] = useState('Agriculture (RSK)')
   const [district, setDistrict] = useState('')
   const [taluk, setTaluk] = useState('')
+  const [gp, setGp] = useState('')
   const [otp, setOtp] = useState('')
   const [generatedOtp, setGeneratedOtp] = useState('')
   
@@ -47,11 +49,19 @@ export default function OfficialLogin() {
 
   const handleDistrictChange = (distName) => {
     setDistrict(distName)
-    const found = districtsOfKarnataka.find(d => d.name === distName)
-    if (found && found.taluks.length > 0) setTaluk(found.taluks[0])
+    setTaluk('')
+    setGp('')
+  }
+  const handleTalukChange = (t) => {
+    setTaluk(t)
+    setGp('')
   }
 
-  const activeDistrictObj = districtsOfKarnataka.find(d => d.name === district) || districtsOfKarnataka[0]
+  const activeDistrictObj = districtsOfKarnataka.find(d => d.name === district) || null
+  const activeTalukObj = activeDistrictObj?.taluks.find(t => t.name === taluk) || null
+  
+  const talukKey = district && taluk ? `${district}|${taluk}` : ''
+  const availableGps = (talukKey ? (talukToGps[talukKey] || []) : [])
 
   const handleSendOtp = async (e) => {
     e.preventDefault()
@@ -106,7 +116,7 @@ export default function OfficialLogin() {
       const uid = 'official-' + email.replace(/[^a-z0-9]/gi, '-')
       try {
         await setDoc(doc(db, 'users', uid), {
-          uid, name, officerId, email, department, district, taluk,
+          uid, name, officerId, email, department, district, taluk, gp,
           role: 'official',
           createdAt: serverTimestamp(),
           lastLoginAt: serverTimestamp()
@@ -121,6 +131,7 @@ export default function OfficialLogin() {
       window.localStorage.setItem('official_department', department)
       window.localStorage.setItem('official_district', district)
       window.localStorage.setItem('official_taluk', taluk)
+      window.localStorage.setItem('official_gp', gp)
 
       navigate('/dashboard/official')
     } catch (error) {
@@ -266,13 +277,42 @@ export default function OfficialLogin() {
                 </div>
                 <div className="form-group">
                   <label className="form-label">Taluk / ತಾಲೂಕು *</label>
-                  <select className="form-input custom-select" value={taluk} onChange={e => setTaluk(e.target.value)} required>
+                  <select
+                    className="form-input custom-select"
+                    value={taluk}
+                    onChange={e => handleTalukChange(e.target.value)}
+                    required
+                    disabled={!district}
+                  >
                     <option value="" disabled>Select Taluk</option>
-                    {activeDistrictObj.taluks.map(tOption => (
-                      <option key={tOption} value={tOption}>{tOption}</option>
+                    {(activeDistrictObj?.taluks || []).map(t => (
+                      <option key={t.name} value={t.name}>{t.name}</option>
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14 }}>
+                <div className="form-group">
+                  <label className="form-label">Gram Panchayat (Optional)</label>
+                  <select
+                    className="form-input custom-select"
+                    value={gp}
+                    onChange={e => setGp(e.target.value)}
+                    disabled={!taluk}
+                    style={{ opacity: !taluk ? 0.5 : 1, cursor: !taluk ? 'not-allowed' : 'pointer' }}
+                  >
+                    <option value="" disabled>{!taluk ? 'Select Taluk first' : 'Select Panchayat'}</option>
+                    <option value="">-- All Panchayats --</option>
+                    {availableGps.map(g => (
+                      <option key={g} value={g}>{g}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              <div style={{ marginTop: 6, fontSize: 11, color: 'var(--text-muted)' }}>
+                📍 Jurisdiction: {gp ? `${gp} GP, ` : ''}{taluk} Taluk, {district}
               </div>
 
               <button
