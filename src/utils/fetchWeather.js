@@ -7,40 +7,53 @@ const districtToCityMap = {
   'Vijayanagara': 'Hospet',
 }
 
+// Helper to fetch and find the best match in India/Karnataka
+async function fetchGeocode(query) {
+  const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`);
+  const geoData = await geoRes.json();
+  if (!geoData.results || geoData.results.length === 0) return null;
+  
+  // Prefer Karnataka
+  let bestMatch = geoData.results.find(r => r.admin1 === 'Karnataka');
+  // Fallback to India
+  if (!bestMatch) bestMatch = geoData.results.find(r => r.country_code === 'IN');
+  // Fallback to first result
+  if (!bestMatch) bestMatch = geoData.results[0];
+  
+  return bestMatch;
+}
+
 export async function fetchWeatherForLocation(talukName, districtName) {
   try {
-    let geoRes;
-    let geoData;
+    let bestMatch = null;
     let usedLocationName = talukName || districtName;
     
     // 1. Try Taluk first (most precise)
     if (talukName) {
-      geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(talukName)}&count=1&language=en&format=json`);
-      geoData = await geoRes.json();
+      bestMatch = await fetchGeocode(talukName);
     }
 
     // 2. If Taluk fails, try District mapped name
-    if (!geoData?.results || geoData.results.length === 0) {
+    if (!bestMatch) {
       let searchQuery = districtToCityMap[districtName] || districtName;
       usedLocationName = districtName;
-      geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchQuery)}&count=1&language=en&format=json`);
-      geoData = await geoRes.json();
+      bestMatch = await fetchGeocode(searchQuery);
 
       // 3. Try District + Karnataka
-      if (!geoData?.results || geoData.results.length === 0) {
-        geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchQuery + " Karnataka")}&count=1&language=en&format=json`);
-        geoData = await geoRes.json();
+      if (!bestMatch) {
+        bestMatch = await fetchGeocode(searchQuery + " Karnataka");
       }
     }
 
     // 4. Ultimate fallback to Bengaluru
-    if (!geoData?.results || geoData.results.length === 0) {
+    if (!bestMatch) {
       usedLocationName = "Bengaluru";
-      geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=Bengaluru&count=1&language=en&format=json`);
-      geoData = await geoRes.json();
+      bestMatch = await fetchGeocode("Bengaluru");
     }
 
-    const { latitude, longitude } = geoData.results[0];
+    if (!bestMatch) return null;
+
+    const { latitude, longitude } = bestMatch;
 
     // Fetch weather forecast using coordinates
     const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`);
