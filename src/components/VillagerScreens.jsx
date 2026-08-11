@@ -282,48 +282,66 @@ export function HomeScreen({ setActive }) {
       )}
 
       {roleMode === 'student' && (
-        <div className="animate-fadeInUp card" style={{ marginBottom: 20, border: '1.5px solid var(--primary-light)', background: '#f0fdf4' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-            <span style={{ fontSize: 22 }}>🎓</span>
-            <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--primary-dark)', margin: 0 }}>
-              {t('availableScholarships')}
-            </h4>
+        <div className="animate-fadeInUp card" style={{ marginBottom: 20, border: '1.5px solid var(--primary-light)', background: 'var(--bg-card)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, marginBottom: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 22 }}>🎓</span>
+              <div>
+                <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--primary-dark)', margin: 0 }}>
+                  {t('availableScholarships')} (India & Karnataka)
+                </h4>
+                <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
+                  {lang === 'kn'
+                    ? 'ಶಾಲೆ, ಪಿಯುಸಿ, ಪದವಿ, ತಾಂತ್ರಿಕ ಹಾಗೂ ಪಿಜಿ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಲಭ್ಯವಿರುವ ಪ್ರಮುಖ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳು'
+                    : 'Key scholarships for School, PUC, Technical, UG, PG & SC/ST/OBC/Minority students'}
+                </p>
+              </div>
+            </div>
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => setActive && setActive('schemes')}
+              style={{ fontSize: 12 }}
+            >
+              🎓 {lang === 'kn' ? 'ಎಲ್ಲಾ 18 ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ವೀಕ್ಷಿಸಿ' : 'View All 18 Scholarships'} ➔
+            </button>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 16 }}>
-            {lang === 'kn'
-              ? 'ರೈತರು ಮತ್ತು ಸಣ್ಣ ವರ್ಗಗಳ ಮಕ್ಕಳಿಗಾಗಿ ಲಭ್ಯವಿರುವ ಪರಿಶೀಲಿಸಿದ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳು. ಅರ್ಜಿ ಸಲ್ಲಿಸಲು ಲಿಂಕ್ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ.'
-              : 'Verified post-matric and CSR scholarships supporting children of farmers and rural students. Click links below to apply.'}
-          </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
             {[
               {
-                title: lang === 'kn' ? 'ರೈತ ವಿದ್ಯಾநிதி ಯೋಜನೆ' : 'Rytha Vidyanidhi Yojane',
+                title: lang === 'kn' ? 'ಕರ್ನಾಟಕ ರಾಜ್ಯ ವಿದ್ಯಾರ್ಥಿವೇತನ (SSP)' : 'Karnataka SSP Scholarships (SC/ST/OBC/Farmers)',
                 amount: '₹2,500 - ₹11,000 / Year',
-                eligibility: lang === 'kn' ? 'ನೋಂದಾಯಿತ ರೈತರ ಮಕ್ಕಳು (FRUITS ID)' : 'Children of registered farmers in Karnataka',
-                source: t('sspPortal'),
+                eligibility: lang === 'kn' ? 'ಎಸ್‌ಸಿ/ಎಸ್‌ಟಿ/ಓಬಿಸಿ/ರೈತರ ಮಕ್ಕಳು (SSP ಪೋರ್ಟಲ್)' : 'SC/ST/OBC/Minority & Rytha Vidyanidhi beneficiaries',
+                source: 'State Scholarship Portal (SSP)',
                 link: 'https://ssp.postmatric.karnataka.gov.in/'
               },
               {
-                title: lang === 'kn' ? 'ಎಚ್‌ಡಿಎಫ್‌ಸಿ ಪರಿವರ್ತನ್ ಸ್ಕಾಲರ್‌ಶಿಪ್' : 'HDFC Bank Parivartan ECSS',
-                amount: 'Up to ₹75,000 / Year',
-                eligibility: lang === 'kn' ? 'ಬಡತನ ಅಥವಾ ಆರ್ಥಿಕ ಸಂಕಷ್ಟದಲ್ಲಿರುವ ವಿದ್ಯಾರ್ಥಿಗಳು' : 'Students facing financial crisis / small farmers',
-                source: t('buddyStudy'),
-                link: 'https://www.buddy4study.com/'
+                title: lang === 'kn' ? 'ರಾಷ್ಟ್ರೀಯ ಮೀನ್ಸ್-ಕಮ್-ಮೆರಿಟ್ (NMMSS)' : 'National Means-cum-Merit (NMMSS)',
+                amount: '₹12,000 / Year',
+                eligibility: lang === 'kn' ? '9 - 12ನೇ ತರಗತಿಯ ಪ್ರತಿಭಾವಂತ ವಿದ್ಯಾರ್ಥಿಗಳು (ಆದಾಯ < ₹3.5L)' : 'Class 9–12 meritorious school students (Income < ₹3.5L)',
+                source: 'National Scholarship Portal (NSP)',
+                link: 'https://scholarships.gov.in/'
               },
               {
-                title: lang === 'kn' ? 'ಎಸ್‌ಬಿಐ ಆಶಾ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'SBI Foundation Asha Scholarship',
-                amount: '₹15,000 - ₹5,00,000 / Year',
-                eligibility: lang === 'kn' ? 'ಕಡಿಮೆ ಆದಾಯದ ಕುಟುಂಬಗಳ ಪ್ರತಿಭಾವಂತ ವಿದ್ಯಾರ್ಥಿಗಳು' : 'Meritorious students from low-income families',
-                source: t('buddyStudy'),
-                link: 'https://www.buddy4study.com/'
+                title: lang === 'kn' ? 'ಎಐಸಿಟಿಇ ಪ್ರಗತಿ ಹೆಣ್ಣುಮಕ್ಕಳ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'AICTE Pragati Scholarship for Girls',
+                amount: '₹50,000 / Year',
+                eligibility: lang === 'kn' ? 'ತಾಂತ್ರಿಕ ಡಿಪ್ಲೊಮಾ/ಪದವಿಗೆ ಪ್ರವೇಶ ಪಡೆದ ಹೆಣ್ಣುಮಕ್ಕಳು' : 'Girls pursuing Technical Degree / Diploma (Polytechnic/BE)',
+                source: 'AICTE / NSP Portal',
+                link: 'https://scholarships.gov.in/'
+              },
+              {
+                title: lang === 'kn' ? 'ಪಿಎಂ-ಯಶಸ್ವಿ ಯೋಜನೆ (PM-YASASVI)' : 'PM-YASASVI Scholarship Scheme',
+                amount: 'Up to ₹1,25,000 / Year',
+                eligibility: lang === 'kn' ? 'ಓಬಿಸಿ, ಇಬಿಸಿ ಹಾಗೂ ಡಿಎನ್‌ಟಿ ವಿದ್ಯಾರ್ಥಿಗಳು' : 'OBC, EBC and DNT students in School / Higher Education',
+                source: 'NTA / Social Justice Ministry',
+                link: 'https://yet.nta.ac.in/'
               }
             ].map((sch, sIdx) => (
-              <div key={sIdx} style={{ background: 'var(--bg-card)', borderRadius: 10, padding: 14, border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div key={sIdx} style={{ background: 'var(--bg-main)', borderRadius: 10, padding: 14, border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>
                   <h5 style={{ fontSize: 13, fontWeight: 700, margin: '0 0 6px 0', color: 'var(--text-primary)' }}>{sch.title}</h5>
                   <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary)', marginBottom: 6 }}>{sch.amount}</div>
                   <p style={{ fontSize: 11, color: 'var(--text-secondary)', margin: '0 0 4px 0' }}><strong>Eligible:</strong> {sch.eligibility}</p>
-                  <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '0 0 12px 0' }}><strong>Platform:</strong> {sch.source}</p>
+                  <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '0 0 12px 0' }}><strong>Portal:</strong> {sch.source}</p>
                 </div>
                 <a
                   href={sch.link}
