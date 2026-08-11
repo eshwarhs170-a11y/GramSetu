@@ -41,7 +41,7 @@ const sendOtpPlugin = () => {
                 hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata'
               })
 
-              const htmlBody = \`
+              const htmlBody = `
                 <div style="font-family: 'Segoe UI', sans-serif; max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e5e7eb;">
                   <div style="background: linear-gradient(135deg, #15803d 0%, #166534 100%); padding: 28px 32px; text-align: center;">
                     <h1 style="color: #ffffff; font-size: 22px; margin: 0; font-weight: 700;">🌾 GramSetu — ಗ್ರಾಮ ಸೇತು</h1>
@@ -50,17 +50,17 @@ const sendOtpPlugin = () => {
                     <p style="color: #374151; font-size: 15px; margin: 0 0 8px 0;">Namaskara / ನಮಸ್ಕಾರ,</p>
                     <p style="color: #6b7280; font-size: 14px; margin: 0 0 24px 0;">Your verification code is:</p>
                     <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 10px; padding: 20px; text-align: center; margin: 0 0 24px 0;">
-                      <div style="font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #15803d; font-family: 'Courier New', monospace;">\${otp}</div>
-                      <p style="font-size: 12px; color: #6b7280; margin: 10px 0 0 0;">Valid until <strong>\${expiryTime}</strong> IST</p>
+                      <div style="font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #15803d; font-family: 'Courier New', monospace;">${otp}</div>
+                      <p style="font-size: 12px; color: #6b7280; margin: 10px 0 0 0;">Valid until <strong>${expiryTime}</strong> IST</p>
                     </div>
                   </div>
                 </div>
-              \`
+              `
 
               await transporter.sendMail({
-                from: \`"GramSetu ಗ್ರಾಮ ಸೇತು" <\${user}>\`,
+                from: `"GramSetu ಗ್ರಾಮ ಸೇತು" <${user}>`,
                 to: email,
-                subject: \`\${otp} — Your GramSetu Login OTP\`,
+                subject: `${otp} — Your GramSetu Login OTP`,
                 html: htmlBody,
               })
 
