@@ -624,7 +624,7 @@ export function SchemesScreen() {
         <div className="card animate-fadeInUp" style={{
           maxWidth: 620,
           margin: '10px auto 30px auto',
-          padding: '30px 28px',
+          padding: '32px 28px',
           borderRadius: 20,
           border: '2px solid #2563eb',
           boxShadow: '0 10px 30px rgba(37, 99, 235, 0.14)',
@@ -633,10 +633,10 @@ export function SchemesScreen() {
           <div style={{ textAlign: 'center', marginBottom: 24 }}>
             <span style={{ fontSize: 44, display: 'inline-block', marginBottom: 8 }}>🎓</span>
             <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-              {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಹತಾ ಪೋರ್ಟಲ್' : 'Find Scholarships Matching Your Profile'}
+              {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಹತಾ ಪೋರ್ಟಲ್: ಮೊದಲಿಗೆ ನಿಮ್ಮ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ' : 'Student Setup: Enter Your Class & Family Income First'}
             </h3>
-            <p style={{ fontSize: 14, color: 'var(--text-muted)', marginTop: 6, lineHeight: 1.5 }}>
-              {lang === 'kn' ? 'ನಿಮ್ಮ ತರಗತಿ ಹಾಗೂ ವಾರ್ಷಿಕ ಕುಟುಂಬದ ಆದಾಯವನ್ನು ನಮೂದಿಸಿ. ನಿಮ್ಮ ಅರ್ಹತೆಗೆ ಹೊಂದುವ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ಮಾತ್ರ ವೀಕ್ಷಿಸಿ.' : 'Enter your current class and family annual income to filter scholarships that meet your exact requirements.'}
+            <p style={{ fontSize: 14, color: 'var(--text-muted)', marginTop: 8, lineHeight: 1.5 }}>
+              {lang === 'kn' ? 'ನಿಮ್ಮ ಅರ್ಹತೆಗೆ ಹೊಂದುವ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ಮಾತ್ರ ವೀಕ್ಷಿಸಲು ನಿಮ್ಮ ಪ್ರಸ್ತುತ ತರಗತಿ ಹಾಗೂ ಕುಟುಂಬದ ಆದಾಯವನ್ನು ಮೊದಲಿಗೆ ಆಯ್ಕೆ ಮಾಡಿ.' : 'To display only the scholarships you qualify for, please select your Class and Annual Family Income first.'}
             </p>
           </div>
 
@@ -647,7 +647,7 @@ export function SchemesScreen() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
               <div>
                 <label style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
-                  📚 Select Your Current Class / Course / ಶಿಕ್ಷಣ ಮಟ್ಟ:
+                  1️⃣ Select Your Current Class / Course / ತರಗತಿ (Required):
                 </label>
                 <select 
                   className="form-input" 
@@ -656,8 +656,8 @@ export function SchemesScreen() {
                   required
                   style={{ width: '100%', padding: '12px 14px', fontSize: 14, borderRadius: 10, border: '1.5px solid var(--border-light)', background: 'var(--bg-main)', color: 'var(--text-primary)' }}
                 >
-                  <option value="">-- Select Education Level --</option>
-                  <option value="8">Class 8th – 10th (High School)</option>
+                  <option value="">-- Choose Education Level / ತರಗತಿ ಆಯ್ಕೆಮಾಡಿ --</option>
+                  <option value="8">Class 8th – 10th (High School / 8 - 10)</option>
                   <option value="12">Class 11th &amp; 12th (PUC / 10+2)</option>
                   <option value="14">ITI / Diploma / Polytechnic</option>
                   <option value="16">Undergraduate (BA, BSc, BCom, BE, MBBS)</option>
@@ -667,7 +667,7 @@ export function SchemesScreen() {
 
               <div>
                 <label style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
-                  💰 Family Annual Income / ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯ (₹):
+                  2️⃣ Annual Family Income / ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯ (Required):
                 </label>
                 <select
                   className="form-input"
@@ -676,18 +676,18 @@ export function SchemesScreen() {
                   required
                   style={{ width: '100%', padding: '12px 14px', fontSize: 14, borderRadius: 10, border: '1.5px solid var(--border-light)', background: 'var(--bg-main)', color: 'var(--text-primary)' }}
                 >
-                  <option value="">-- Select Annual Income Limit --</option>
-                  <option value="180000">Up to ₹1,80,000 / year</option>
-                  <option value="250000">Up to ₹2,50,000 / year</option>
-                  <option value="300000">Up to ₹3,00,000 / year</option>
-                  <option value="450000">Up to ₹4,50,000 / year</option>
-                  <option value="600000">Up to ₹6,00,000 / year</option>
+                  <option value="">-- Choose Income Range / ಆದಾಯ ಆಯ್ಕೆಮಾಡಿ --</option>
+                  <option value="180000">Up to ₹1,80,000 / year (₹1.8 Lakh)</option>
+                  <option value="250000">Up to ₹2,50,000 / year (₹2.5 Lakh)</option>
+                  <option value="300000">Up to ₹3,00,000 / year (₹3.0 Lakh)</option>
+                  <option value="450000">Up to ₹4,50,000 / year (₹4.5 Lakh)</option>
+                  <option value="600000">Up to ₹6,00,000 / year (₹6.0 Lakh)</option>
                 </select>
               </div>
 
               <div>
                 <label style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
-                  📍 State / Location:
+                  3️⃣ State / Location:
                 </label>
                 <input 
                   className="form-input" 
@@ -698,13 +698,13 @@ export function SchemesScreen() {
               </div>
 
               <div>
-                <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 8 }}>⚡ Quick Sample Presets:</p>
+                <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 8 }}>⚡ Quick Sample Presets (One Tap):</p>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   <button 
                     type="button"
                     className="btn btn-outline btn-sm" 
                     onClick={() => applyQuickPreset('12', '180000')}
-                    style={{ fontSize: 12, borderRadius: 8, borderColor: '#2563eb', color: '#2563eb' }}
+                    style={{ fontSize: 12, borderRadius: 8, borderColor: '#2563eb', color: '#2563eb', fontWeight: 600 }}
                   >
                     ⚡ Class 12th &amp; ₹1.8L Income
                   </button>
@@ -732,7 +732,7 @@ export function SchemesScreen() {
                 className="btn btn-primary"
                 style={{ width: '100%', padding: 14, fontSize: 15, fontWeight: 700, borderRadius: 10, justifyContent: 'center', marginTop: 8 }}
               >
-                🔍 {lang === 'kn' ? 'ಅರ್ಹ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ವೀಕ್ಷಿಸಿ →' : 'Show Matching Scholarships →'}
+                🚀 {lang === 'kn' ? 'ಅರ್ಹ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ಪಡೆಯಿರಿ →' : 'Search & Find Eligible Scholarships →'}
               </button>
             </div>
           </form>
