@@ -517,10 +517,10 @@ export function SchemesScreen() {
   const [schemes, setSchemes] = useState(kaSchemes)
   const [loadingSchemes, setLoadingSchemes] = useState(true)
 
-  // Smart Scholarship Finder Filters
+  // Smart Scholarship Finder Form State
   const [filterClass, setFilterClass] = useState('')
   const [filterIncome, setFilterIncome] = useState('')
-  const [filterLocation, setFilterLocation] = useState('Karnataka')
+  const [scholarshipFormSubmitted, setScholarshipFormSubmitted] = useState(false)
 
   // Fetch from Firestore, fall back to static data
   useEffect(() => {
@@ -536,6 +536,15 @@ export function SchemesScreen() {
   }, [])
 
   const categories = ['All', 'Agriculture', 'Finance', 'Health', 'Women', 'Scholarship']
+
+  const getClassLabel = (val) => {
+    if (val === '8') return 'Class 8th – 10th'
+    if (val === '12') return 'Class 11th & 12th (PUC)'
+    if (val === '14') return 'ITI / Diploma / Polytechnic'
+    if (val === '16') return 'Undergraduate (BA, BSc, BE, MBBS)'
+    if (val === '18') return 'Post Graduation (PG / PhD)'
+    return 'All Classes'
+  }
 
   const isEligibleForFilters = (scheme) => {
     if (scheme.category !== 'Scholarship') return true
@@ -584,6 +593,7 @@ export function SchemesScreen() {
     setCategoryFilter('Scholarship')
     setFilterClass(cls)
     setFilterIncome(inc)
+    setScholarshipFormSubmitted(true)
   }
 
   return (
@@ -596,7 +606,12 @@ export function SchemesScreen() {
             <button
               key={cat}
               className={`btn btn-sm ${categoryFilter === cat ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => setCategoryFilter(cat)}
+              onClick={() => {
+                setCategoryFilter(cat)
+                if (cat === 'Scholarship' && !filterClass && !filterIncome) {
+                  setScholarshipFormSubmitted(false)
+                }
+              }}
             >
               {cat === 'Scholarship' ? '🎓 Scholarships' : cat}
             </button>
@@ -604,185 +619,214 @@ export function SchemesScreen() {
         </div>
       </div>
 
-      {/* Smart Scholarship Finder Widget */}
-      <div style={{
-        background: 'var(--bg-card)',
-        borderRadius: 16,
-        padding: '20px 24px',
-        marginBottom: 24,
-        border: '2px solid #3b82f6',
-        boxShadow: '0 4px 20px rgba(59, 130, 246, 0.12)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: 28 }}>🎓</span>
-            <div>
-              <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>
-                {lang === 'kn' ? 'ಸ್ಮಾರ್ಟ್ ವಿದ್ಯಾರ್ಥಿವೇತನ ಶೋಧಕ' : 'Smart Scholarship Eligibility Finder'}
-              </h4>
-              <p style={{ margin: 0, fontSize: 12, color: 'var(--text-muted)' }}>
-                {lang === 'kn' ? 'ನಿಮ್ಮ ತರಗತಿ ಹಾಗೂ ಆದಾಯ ನಮೂದಿಸಿ, ಸೂಕ್ತ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ಲೈವ್ ಪೋರ್ಟಲ್‌ಗಳಲ್ಲಿ ಪಡೆಯಿರಿ' : 'Select your class and income to filter scholarships you qualify for'}
-              </p>
-            </div>
-          </div>
-          {(filterClass || filterIncome) && (
-            <button 
-              className="btn btn-outline btn-sm" 
-              onClick={() => { setFilterClass(''); setFilterIncome('') }}
-              style={{ fontSize: 12 }}
-            >
-              🔄 {lang === 'kn' ? 'ಫಿಲ್ಟರ್ ತೆರವುಗೊಳಿಸಿ' : 'Reset Filters'}
-            </button>
-          )}
-        </div>
-
-        {/* Input Form Fields */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 6, color: 'var(--text-secondary)' }}>
-              📚 {lang === 'kn' ? 'ತರಗತಿ / ಶಿಕ್ಷಣ ಮಟ್ಟ' : 'Class / Education Level'}
-            </label>
-            <select 
-              className="form-input" 
-              value={filterClass} 
-              onChange={e => {
-                setFilterClass(e.target.value)
-                if (categoryFilter !== 'Scholarship') setCategoryFilter('Scholarship')
-              }}
-              style={{ padding: '8px 12px', fontSize: 13, borderRadius: 8, background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-light)' }}
-            >
-              <option value="">All Education Levels</option>
-              <option value="8">Class 8th – 10th (High School)</option>
-              <option value="12">Class 11th &amp; 12th (PUC)</option>
-              <option value="14">ITI / Diploma / Polytechnic</option>
-              <option value="16">Undergraduate (BA, BSc, BCom, BE, MBBS)</option>
-              <option value="18">Post Graduation (MA, MSc, MCom, PhD)</option>
-            </select>
+      {/* STEP 1: Student Requirement Entry Form when Scholarship category is active and not submitted */}
+      {categoryFilter === 'Scholarship' && !scholarshipFormSubmitted ? (
+        <div className="card animate-fadeInUp" style={{
+          maxWidth: 620,
+          margin: '10px auto 30px auto',
+          padding: '30px 28px',
+          borderRadius: 20,
+          border: '2px solid #2563eb',
+          boxShadow: '0 10px 30px rgba(37, 99, 235, 0.14)',
+          background: 'var(--bg-card)'
+        }}>
+          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+            <span style={{ fontSize: 44, display: 'inline-block', marginBottom: 8 }}>🎓</span>
+            <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
+              {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಹತಾ ಪೋರ್ಟಲ್' : 'Find Scholarships Matching Your Profile'}
+            </h3>
+            <p style={{ fontSize: 14, color: 'var(--text-muted)', marginTop: 6, lineHeight: 1.5 }}>
+              {lang === 'kn' ? 'ನಿಮ್ಮ ತರಗತಿ ಹಾಗೂ ವಾರ್ಷಿಕ ಕುಟುಂಬದ ಆದಾಯವನ್ನು ನಮೂದಿಸಿ. ನಿಮ್ಮ ಅರ್ಹತೆಗೆ ಹೊಂದುವ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ಮಾತ್ರ ವೀಕ್ಷಿಸಿ.' : 'Enter your current class and family annual income to filter scholarships that meet your exact requirements.'}
+            </p>
           </div>
 
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 6, color: 'var(--text-secondary)' }}>
-              💰 {lang === 'kn' ? 'ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯ (₹)' : 'Family Annual Income (₹)'}
-            </label>
-            <select
-              className="form-input"
-              value={filterIncome}
-              onChange={e => {
-                setFilterIncome(e.target.value)
-                if (categoryFilter !== 'Scholarship') setCategoryFilter('Scholarship')
-              }}
-              style={{ padding: '8px 12px', fontSize: 13, borderRadius: 8, background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-light)' }}
-            >
-              <option value="">Any Family Income</option>
-              <option value="180000">Up to ₹1,80,000 / year</option>
-              <option value="250000">Up to ₹2,50,000 / year</option>
-              <option value="300000">Up to ₹3,00,000 / year</option>
-              <option value="450000">Up to ₹4,50,000 / year</option>
-              <option value="600000">Up to ₹6,00,000 / year</option>
-            </select>
-          </div>
-
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 6, color: 'var(--text-secondary)' }}>
-              📍 {lang === 'kn' ? 'ಸ್ಥಳ / ರಾಜ್ಯ' : 'Location'}
-            </label>
-            <input 
-              className="form-input" 
-              value="Karnataka (All 31 Districts)" 
-              readOnly 
-              style={{ padding: '8px 12px', fontSize: 13, borderRadius: 8, background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-light)', cursor: 'not-allowed' }}
-            />
-          </div>
-        </div>
-
-        {/* Quick Sample Presets */}
-        <div style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>Quick Presets:</span>
-            <button 
-              className="btn btn-outline btn-sm" 
-              onClick={() => applyQuickPreset('12', '180000')}
-              style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, borderColor: '#3b82f6', color: '#2563eb' }}
-            >
-              ⚡ Class 12th &amp; ₹1.8 Lakh Income
-            </button>
-            <button 
-              className="btn btn-outline btn-sm" 
-              onClick={() => applyQuickPreset('8', '250000')}
-              style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6 }}
-            >
-              ⚡ Class 8th–10th &amp; ₹2.5 Lakh Income
-            </button>
-            <button 
-              className="btn btn-outline btn-sm" 
-              onClick={() => applyQuickPreset('16', '300000')}
-              style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6 }}
-            >
-              ⚡ Degree (UG) &amp; ₹3.0 Lakh Income
-            </button>
-          </div>
-
-          {(filterClass || filterIncome) && (
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#16a34a', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              ✅ {filteredSchemes.filter(s => s.category === 'Scholarship').length} {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿವೇತನಗಳು ಲಭ್ಯವಿವೆ' : 'Scholarships you are eligible for'}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
-        {filteredSchemes.map((s, i) => {
-          const portalUrl = getSchemePortalUrl(s)
-          return (
-            <div className="scheme-card animate-fadeInUp" key={i} style={{ animationDelay: `${i * 0.08}s` }}>
-              <div className="scheme-card-img">
-                <img src={s.img} alt={s.title[lang] || s.title.en} />
-                <div className="scheme-card-img-overlay" />
-                <div className="scheme-card-overlay-badge">
-                  <span className={`badge ${s.badgeClass || 'badge-success'}`}>{s.badge ? (s.badge[lang] || s.badge.en) : 'Active Portal'}</span>
-                </div>
+          <form onSubmit={(e) => {
+            e.preventDefault()
+            setScholarshipFormSubmitted(true)
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <div>
+                <label style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
+                  📚 Select Your Current Class / Course / ಶಿಕ್ಷಣ ಮಟ್ಟ:
+                </label>
+                <select 
+                  className="form-input" 
+                  value={filterClass} 
+                  onChange={e => setFilterClass(e.target.value)}
+                  required
+                  style={{ width: '100%', padding: '12px 14px', fontSize: 14, borderRadius: 10, border: '1.5px solid var(--border-light)', background: 'var(--bg-main)', color: 'var(--text-primary)' }}
+                >
+                  <option value="">-- Select Education Level --</option>
+                  <option value="8">Class 8th – 10th (High School)</option>
+                  <option value="12">Class 11th &amp; 12th (PUC / 10+2)</option>
+                  <option value="14">ITI / Diploma / Polytechnic</option>
+                  <option value="16">Undergraduate (BA, BSc, BCom, BE, MBBS)</option>
+                  <option value="18">Post Graduation (MA, MSc, MCom, PhD)</option>
+                </select>
               </div>
-              <div className="scheme-card-body">
-                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 6 }}>{s.ministry[lang] || s.ministry.en}</div>
-                <h4>{s.title[lang] || s.title.en}</h4>
-                <p style={{ fontSize: 13, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: '0 0 8px 0' }}>{s.desc[lang] || s.desc.en}</p>
 
-                {s.category === 'Scholarship' && (
-                  <div style={{ fontSize: 12, margin: '6px 0 10px 0', display: 'flex', flexDirection: 'column', gap: 4, background: 'var(--bg-main)', padding: 10, borderRadius: 8, border: '1px solid var(--border-light)' }}>
-                    <p style={{ margin: 0, color: 'var(--text-secondary)', fontWeight: 600 }}>
-                      <strong>📚 Class:</strong> {s.classRangeText ? (s.classRangeText[lang] || s.classRangeText.en) : (s.classRequired ? (s.classRequired[lang] || s.classRequired.en) : 'Class 8th–12th / UG / PG')}
-                    </p>
-                    <p style={{ margin: 0, color: 'var(--text-secondary)', fontWeight: 600 }}>
-                      <strong>💰 Income Limit:</strong> {s.incomeLimitText ? (s.incomeLimitText[lang] || s.incomeLimitText.en) : (s.incomeLimit ? (s.incomeLimit[lang] || s.incomeLimit.en) : 'Up to ₹2.5 Lakh/year')}
-                    </p>
-                    <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: 11 }}>
-                      <strong>📍 Location:</strong> Karnataka (All Districts)
-                    </p>
-                  </div>
-                )}
+              <div>
+                <label style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
+                  💰 Family Annual Income / ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯ (₹):
+                </label>
+                <select
+                  className="form-input"
+                  value={filterIncome}
+                  onChange={e => setFilterIncome(e.target.value)}
+                  required
+                  style={{ width: '100%', padding: '12px 14px', fontSize: 14, borderRadius: 10, border: '1.5px solid var(--border-light)', background: 'var(--bg-main)', color: 'var(--text-primary)' }}
+                >
+                  <option value="">-- Select Annual Income Limit --</option>
+                  <option value="180000">Up to ₹1,80,000 / year</option>
+                  <option value="250000">Up to ₹2,50,000 / year</option>
+                  <option value="300000">Up to ₹3,00,000 / year</option>
+                  <option value="450000">Up to ₹4,50,000 / year</option>
+                  <option value="600000">Up to ₹6,00,000 / year</option>
+                </select>
+              </div>
 
-                <div style={{ display: 'flex', gap: 8, marginTop: 'auto', paddingTop: 12 }}>
-                  <a
-                    href={portalUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-primary btn-sm"
-                    style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, flex: 1, justifyContent: 'center' }}
-                  >
-                    {s.category === 'Scholarship' ? 'Apply →' : 'Apply Online ↗'}
-                  </a>
+              <div>
+                <label style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
+                  📍 State / Location:
+                </label>
+                <input 
+                  className="form-input" 
+                  value="Karnataka (All 31 Districts)" 
+                  readOnly 
+                  style={{ width: '100%', padding: '12px 14px', fontSize: 14, borderRadius: 10, background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1.5px solid var(--border-light)', cursor: 'not-allowed' }}
+                />
+              </div>
+
+              <div>
+                <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 8 }}>⚡ Quick Sample Presets:</p>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   <button 
-                    className="btn btn-outline btn-sm"
-                    onClick={() => setSelectedScheme(s)}
+                    type="button"
+                    className="btn btn-outline btn-sm" 
+                    onClick={() => applyQuickPreset('12', '180000')}
+                    style={{ fontSize: 12, borderRadius: 8, borderColor: '#2563eb', color: '#2563eb' }}
                   >
-                    {t('learnMore')}
+                    ⚡ Class 12th &amp; ₹1.8L Income
+                  </button>
+                  <button 
+                    type="button"
+                    className="btn btn-outline btn-sm" 
+                    onClick={() => applyQuickPreset('8', '250000')}
+                    style={{ fontSize: 12, borderRadius: 8 }}
+                  >
+                    ⚡ Class 8th–10th &amp; ₹2.5L Income
+                  </button>
+                  <button 
+                    type="button"
+                    className="btn btn-outline btn-sm" 
+                    onClick={() => applyQuickPreset('16', '300000')}
+                    style={{ fontSize: 12, borderRadius: 8 }}
+                  >
+                    ⚡ Degree (UG) &amp; ₹3.0L Income
                   </button>
                 </div>
               </div>
+
+              <button 
+                type="submit" 
+                className="btn btn-primary"
+                style={{ width: '100%', padding: 14, fontSize: 15, fontWeight: 700, borderRadius: 10, justifyContent: 'center', marginTop: 8 }}
+              >
+                🔍 {lang === 'kn' ? 'ಅರ್ಹ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ವೀಕ್ಷಿಸಿ →' : 'Show Matching Scholarships →'}
+              </button>
             </div>
-          )
-        })}
-      </div>
+          </form>
+        </div>
+      ) : (
+        /* STEP 2: Rendered Scholarship & Scheme Results */
+        <>
+          {categoryFilter === 'Scholarship' && (
+            <div style={{
+              background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
+              borderRadius: 16,
+              padding: '16px 20px',
+              marginBottom: 24,
+              color: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 12
+            }}>
+              <div>
+                <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#fff' }}>
+                  🎓 {filteredSchemes.filter(s => s.category === 'Scholarship').length} Scholarships Matching Your Profile
+                </h4>
+                <p style={{ margin: '4px 0 0 0', fontSize: 12, color: 'rgba(255,255,255,0.9)' }}>
+                  Class: <strong>{getClassLabel(filterClass)}</strong> | Income Limit: <strong>₹{parseInt(filterIncome || 0).toLocaleString('en-IN')}/yr</strong> | Location: <strong>Karnataka</strong>
+                </p>
+              </div>
+
+              <button
+                className="btn btn-sm"
+                onClick={() => setScholarshipFormSubmitted(false)}
+                style={{ background: '#fff', color: '#1e3a8a', fontWeight: 700, border: 'none', borderRadius: 8, padding: '8px 14px', cursor: 'pointer' }}
+              >
+                ✏️ Edit Class &amp; Income
+              </button>
+            </div>
+          )}
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
+            {filteredSchemes.map((s, i) => {
+              const portalUrl = getSchemePortalUrl(s)
+              return (
+                <div className="scheme-card animate-fadeInUp" key={i} style={{ animationDelay: `${i * 0.08}s` }}>
+                  <div className="scheme-card-img">
+                    <img src={s.img} alt={s.title[lang] || s.title.en} />
+                    <div className="scheme-card-img-overlay" />
+                    <div className="scheme-card-overlay-badge">
+                      <span className={`badge ${s.badgeClass || 'badge-success'}`}>{s.badge ? (s.badge[lang] || s.badge.en) : 'Active Portal'}</span>
+                    </div>
+                  </div>
+                  <div className="scheme-card-body">
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 6 }}>{s.ministry[lang] || s.ministry.en}</div>
+                    <h4>{s.title[lang] || s.title.en}</h4>
+                    <p style={{ fontSize: 13, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: '0 0 8px 0' }}>{s.desc[lang] || s.desc.en}</p>
+
+                    {s.category === 'Scholarship' && (
+                      <div style={{ fontSize: 12, margin: '6px 0 10px 0', display: 'flex', flexDirection: 'column', gap: 4, background: 'var(--bg-main)', padding: 10, borderRadius: 8, border: '1px solid var(--border-light)' }}>
+                        <p style={{ margin: 0, color: 'var(--text-secondary)', fontWeight: 600 }}>
+                          <strong>📚 Class:</strong> {s.classRangeText ? (s.classRangeText[lang] || s.classRangeText.en) : (s.classRequired ? (s.classRequired[lang] || s.classRequired.en) : 'Class 8th–12th / UG / PG')}
+                        </p>
+                        <p style={{ margin: 0, color: 'var(--text-secondary)', fontWeight: 600 }}>
+                          <strong>💰 Income Limit:</strong> {s.incomeLimitText ? (s.incomeLimitText[lang] || s.incomeLimitText.en) : (s.incomeLimit ? (s.incomeLimit[lang] || s.incomeLimit.en) : 'Up to ₹2.5 Lakh/year')}
+                        </p>
+                        <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: 11 }}>
+                          <strong>📍 Location:</strong> Karnataka (All Districts)
+                        </p>
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', gap: 8, marginTop: 'auto', paddingTop: 12 }}>
+                      <a
+                        href={portalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-primary btn-sm"
+                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, flex: 1, justifyContent: 'center' }}
+                      >
+                        {s.category === 'Scholarship' ? 'Apply →' : 'Apply Online ↗'}
+                      </a>
+                      <button 
+                        className="btn btn-outline btn-sm"
+                        onClick={() => setSelectedScheme(s)}
+                      >
+                        {t('learnMore')}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </>
+      )}
 
       {selectedScheme && (
         <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }}>
