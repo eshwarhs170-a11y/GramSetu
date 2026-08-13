@@ -947,59 +947,6 @@ export function SchemesScreen() {
       )}
     </div>
   )
-}selectedScheme.id === 'ayushman-arogya') link = 'https://arogya.karnataka.gov.in/';
-                  else if (selectedScheme.id === 'raitha-siri') link = 'https://raitamitra.karnataka.gov.in/';
-                  else if (selectedScheme.id === 'krishi-sinchai') link = 'https://pmksy.gov.in/';
-                  window.open(link, '_blank');
-                }}
-              >
-                Apply Now / ಈಗಲೇ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ
-              </button>
-              <button className="btn btn-outline" onClick={() => setSelectedScheme(null)}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {applyModalOpen && selectedScheme && (
-        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1001, padding: 16 }}>
-          <form className="card" onSubmit={handleApplySubmit} style={{ maxWidth: 500, width: '100%', padding: 24, position: 'relative' }}>
-            <button 
-              type="button"
-              onClick={() => setApplyModalOpen(false)}
-              style={{ position: 'absolute', top: 16, right: 16, fontSize: 20, cursor: 'pointer', fontWeight: 'bold' }}
-            >
-              ✕
-            </button>
-            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Application: {selectedScheme.title[lang] || selectedScheme.title.en}</h3>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 20 }}>Please confirm your details for Karnataka DBT submission</p>
-
-            <div className="form-group" style={{ marginBottom: 12 }}>
-              <label className="form-label">Full Name / ಪೂರ್ಣ ಹೆಸರು</label>
-              <input className="form-input" defaultValue={window.localStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ'} required />
-            </div>
-
-            <div className="form-group" style={{ marginBottom: 12 }}>
-              <label className="form-label">Aadhaar Card Number / ಆಧಾರ್ ಸಂಖ್ಯೆ</label>
-              <input className="form-input" defaultValue="XXXX-XXXX-5678" readOnly />
-            </div>
-
-            <div className="form-group" style={{ marginBottom: 20 }}>
-              <label className="form-label">Land Registry ID (Pahani RTC Number)</label>
-              <input className="form-input" placeholder="e.g. MR-2024-8902/B" required defaultValue="RTC-MY-RMN-2026" />
-            </div>
-
-            <div style={{ display: 'flex', gap: 12 }}>
-              <button type="submit" className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }}>
-                Submit Application
-              </button>
-              <button type="button" className="btn btn-outline" onClick={() => setApplyModalOpen(false)}>Cancel</button>
-            </div>
-          </form>
-        </div>
-      )}
-    </div>
-  )
 }
 
 
