@@ -539,6 +539,85 @@ export const kaSchemes = [
   // SCHOLARSHIPS
   // ==========================================
   {
+    id: 'raitha-vidya-nidhi',
+    category: 'Scholarship',
+    districtSpecific: ['All'],
+    title: { en: 'Raitha Vidya Nidhi Scholarship', kn: 'ರೈತ ವಿದ್ಯಾ ನಿಧಿ ವಿದ್ಯಾರ್ಥಿವೇತನ', hi: 'रैता विद्या निधि छात्रवृत्ति' },
+    desc: { 
+      en: 'Karnataka government scholarship for children of farmers studying in Class 8 to Post Graduation (₹2,500 to ₹11,000 per year).', 
+      kn: '8ನೇ ತರಗತಿಯಿಂದ ಸ್ನಾತಕೋತ್ತರ (PG) ವರೆಗೆ ಓದುತ್ತಿರುವ ರೈತರ ಮಕ್ಕಳಿಗೆ ವಾರ್ಷಿಕ ₹2,500 ರಿಂದ ₹11,000 ವರೆಗೆ ವಿದ್ಯಾರ್ಥಿವೇತನ ನೀಡುವ ಯೋಜನೆ.', 
+      hi: 'कक्षा 8 से स्नातकोत्तर तक पढ़ने वाले किसानों के बच्चों के लिए छात्रवृत्ति (₹2,500 - ₹11,000)।' 
+    },
+    eligibility: {
+      en: 'Children of registered Karnataka farmers pursuing Class 8-10 (girls), PUC, ITI, Diploma, BE, MBBS, BA, BSc, PG.',
+      kn: 'ಕರ್ನಾಟಕದ ನೋಂದಾಯಿತ ರೈತರ ಮಕ್ಕಳು. ತಂದೆ/ತಾಯಿ ಹೆಸರಿನಲ್ಲಿ ರೈತ ಪರಿಚಯ ಪತ್ರ (FRUITS ID) ಇರಬೇಕು.',
+      hi: 'कर्नाटक के किसानों के बच्चे।'
+    },
+    documents: {
+      en: 'Aadhaar, FRUITS Farmer ID, Student College ID, Previous Marks Card, Bank Passbook.',
+      kn: 'ಆಧಾರ್, ಫ್ರೂಟ್ಸ್ ರೈತ ಐಡಿ, ಕಾಲೇಜು ಗುರುತಿನ ಚೀಟಿ, ಅಂಕಪಟ್ಟಿ, ಬ್ಯಾಂಕ್ ಖಾತೆ.',
+      hi: 'आधार, फ्रूट्स किसान आईडी, अंकपत्र, बैंक खाता।'
+    },
+    img: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80',
+    badge: { en: 'Farmers Children', kn: 'ರೈತರ ಮಕ್ಕಳಿಗೆ', hi: 'किसानों के बच्चों हेतु' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Dept. of Agriculture, Karnataka', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ', hi: 'कृषि विभाग, कर्नाटक' },
+    applyLink: 'https://ssp.postmatric.karnataka.gov.in/',
+    buddyUrl: 'https://www.buddy4study.com/article/raitha-vidya-nidhi-scholarship'
+  },
+  {
+    id: 'ssp-karnataka',
+    category: 'Scholarship',
+    districtSpecific: ['All'],
+    title: { en: 'SSP Karnataka State Scholarship Portal', kn: 'SSP ರಾಜ್ಯ ವಿದ್ಯಾರ್ಥಿವೇತನ ಪೋರ್ಟಲ್', hi: 'एसएसपी कर्नाटक राज्य छात्रवृत्ति पोर्टल' },
+    desc: { 
+      en: 'Single window online portal by Govt of Karnataka for Post-Matric & Pre-Matric scholarships for SC/ST, OBC, Minorities, and Farmers children.', 
+      kn: 'ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಮೆಟ್ರಿಕ್ ಪೂರ್ವ ಮತ್ತು ಮೆಟ್ರಿಕ್ ನಂತರದ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳಿಗೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಲು ಅಧಿಕೃತ ಏಕೀಕೃತ ಪೋರ್ಟಲ್.', 
+      hi: 'कर्नाटक सरकार के सभी पोस्ट-मैट्रिक और प्री-मैट्रिक छात्रवृत्तियों के लिए आधिकारिक पोर्टल।' 
+    },
+    eligibility: {
+      en: 'Karnataka resident students enrolled in recognized schools, colleges, or universities in Karnataka.',
+      kn: 'ಕರ್ನಾಟಕದ ಶಾಲೆ, ಕಾಲೇಜು ಅಥವಾ ವಿಶ್ವವಿದ್ಯಾಲಯಗಳಲ್ಲಿ ವ್ಯಾಸಂಗ ಮಾಡುತ್ತಿರುವ ವಿದ್ಯಾರ್ಥಿಗಳು.',
+      hi: 'कर्नाटक के निवासी छात्र।'
+    },
+    documents: {
+      en: 'Aadhaar, SSP Student ID, Income & Caste Certificate, College Admission Receipt, Marksheets.',
+      kn: 'ಆಧಾರ್, ಎಸ್‌ಎಸ್‌ಪಿ ವಿದ್ಯಾರ್ಥಿ ಐಡಿ, ಆದಾಯ ಮತ್ತು ಜಾತಿ ಪ್ರಮಾಣಪತ್ರ, ಕಾಲೇಜು ಪ್ರವೇಶ ರಶೀದಿ, ಅಂಕಪಟ್ಟಿಗಳು.',
+      hi: 'आधार, एसएसपी आईडी, आय व जाति प्रमाण पत्र, अंकपत्र।'
+    },
+    img: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&q=80',
+    badge: { en: 'State Portal', kn: 'ರಾಜ್ಯ ಪೋರ್ಟಲ್', hi: 'राज्य पोर्टल' },
+    badgeClass: 'badge-primary',
+    ministry: { en: 'Govt. of Karnataka', kn: 'ಕರ್ನಾಟಕ ಸರ್ಕಾರ', hi: 'कर्नाटक सरकार' },
+    applyLink: 'https://ssp.postmatric.karnataka.gov.in/'
+  },
+  {
+    id: 'buddy4study-portal',
+    category: 'Scholarship',
+    districtSpecific: ['All'],
+    title: { en: 'Buddy4Study Scholarship Portal', kn: 'ಬಡ್ಡಿ4ಸ್ಟಡಿ ವಿದ್ಯಾರ್ಥಿವೇತನ ಪೋರ್ಟಲ್', hi: 'बडी4स्टडी छात्रवृत्ति पोर्टल' },
+    desc: { 
+      en: 'India’s largest scholarship platform offering access to government, corporate, and private foundation scholarships (Tata, Reliance, HDFC, Kotak).', 
+      kn: 'ಟಾಟಾ, ರಿಲಯನ್ಸ್, ಎಚ್‌ಡಿಎಫ್‌ಸಿ ಮತ್ತು ಸರ್ಕಾರಿ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ಒಂದೇ ಸೂರಿನಡಿ ಒದಗಿಸುವ ಭಾರತದ ಅತಿದೊಡ್ಡ ಪೋರ್ಟಲ್.', 
+      hi: 'भारत का सबसे बड़ा छात्रवृत्ति मंच (सरकारी, टाटा, रिलायंस, एचडीएफसी छात्रवृत्तियां)।' 
+    },
+    eligibility: {
+      en: 'Students from School (Class 1-12), Diploma, UG, PG, and Professional courses across India.',
+      kn: '1 ರಿಂದ 12 ನೇ ತರಗತಿ, ಡಿಪ್ಲೊಮಾ, ಪದವಿ ಮತ್ತು ಸ್ನಾತಕೋತ್ತರ ವಿದ್ಯಾರ್ಥಿಗಳು.',
+      hi: 'कक्षा 1 से 12 और उच्च शिक्षा के सभी छात्र।'
+    },
+    documents: {
+      en: 'Aadhaar Card, Marksheet of previous class, Family Income proof, Bank Passbook, Passport Photo.',
+      kn: 'ಆಧಾರ್ ಕಾರ್ಡ್, ಹಿಂದಿನ ತರಗತಿಯ ಅಂಕಪಟ್ಟಿ, ಕುಟುಂಬದ ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ, ಬ್ಯಾಂಕ್ ಖಾತೆ ವಿವರ.',
+      hi: 'आधार, पिछली कक्षा का मार्कशीट, आय प्रमाण।'
+    },
+    img: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80',
+    badge: { en: 'National & Private', kn: 'ರಾಷ್ಟ್ರೀಯ ಮತ್ತು ಖಾಸಗಿ', hi: 'राष्ट्रीय एवं निजी' },
+    badgeClass: 'badge-info',
+    ministry: { en: 'Buddy4Study India', kn: 'ಬಡ್ಡಿ4ಸ್ಟಡಿ ಸಂಸ್ಥೆ', hi: 'बडी4स्टडी इंडिया' },
+    applyLink: 'https://www.buddy4study.com/'
+  },
+  {
     id: 'nsp-portal',
     category: 'Scholarship',
     districtSpecific: ['All'],
