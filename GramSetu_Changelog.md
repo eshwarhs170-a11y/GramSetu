@@ -139,6 +139,27 @@
 
 ---
 
+## 📅 13 August 2026 — Smart Scholarship Eligibility Finder & Direct Portal Redirection 🎓
+
+### Direct Portal Application Redirection
+- Removed mock application modal and "Successfully applied" alert simulation.
+- Every scheme & scholarship now directly opens the official portal (`target="_blank"`) in a new browser tab.
+- Connected scholarships directly to:
+  - **SSP Karnataka State Scholarship Portal**: `https://ssp.postmatric.karnataka.gov.in/`
+  - **Buddy4Study National & Private Scholarships**: `https://www.buddy4study.com/`
+  - **National Scholarship Portal (NSP)**: `https://scholarships.gov.in/`
+  - **PM-YASASVI Portal**: `https://yet.nta.ac.in/`
+
+### Smart Scholarship Eligibility Finder Widget
+- Added interactive eligibility filter widget allowing students to filter scholarships by:
+  - **Class / Education Level**: Class 8th–10th, Class 11th & 12th (PUC), ITI/Diploma, Undergraduate (UG), Post Graduate (PG).
+  - **Family Annual Income**: Up to ₹1.8L, ₹2.5L, ₹3.0L, ₹4.5L, ₹6.0L.
+  - **Location**: Karnataka (All 31 Districts).
+- Quick One-Touch Presets for fast student filtering (e.g. `Class 12th & ₹1.8 Lakh Income`).
+- Added structured scholarship metadata in `schemesData.js` (`minClassLevel`, `maxClassLevel`, `maxIncomeLimit`, `classRangeText`, `incomeLimitText`).
+
+---
+
 ## 📊 Summary Stats
 
 | Metric | Count |
