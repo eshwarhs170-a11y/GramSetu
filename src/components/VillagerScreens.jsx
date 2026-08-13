@@ -287,13 +287,13 @@ export function HomeScreen({ setActive }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ fontSize: 22 }}>🎓</span>
               <div>
-                <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--primary-dark)', margin: 0 }}>
-                  {t('availableScholarships')} (India & Karnataka)
+                <h4 style={{ fontSize: 16, fontWeight: 700, color: 'var(--primary-dark)', margin: 0 }}>
+                  🎓 Scholarships & Eligibility
                 </h4>
                 <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
                   {lang === 'kn'
-                    ? 'ಶಾಲೆ, ಪಿಯುಸಿ, ಪದವಿ, ತಾಂತ್ರಿಕ ಹಾಗೂ ಪಿಜಿ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಲಭ್ಯವಿರುವ ಪ್ರಮುಖ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳು'
-                    : 'Key scholarships for School, PUC, Technical, UG, PG & SC/ST/OBC/Minority students'}
+                    ? 'ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ಸುಲಭವಾಗಿ ಹೋಲಿಸಿ ಮತ್ತು ನೇರವಾಗಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ'
+                    : 'Quickly compare scholarships and view application details'}
                 </p>
               </div>
             </div>
@@ -302,55 +302,66 @@ export function HomeScreen({ setActive }) {
               onClick={() => setActive && setActive('schemes')}
               style={{ fontSize: 12 }}
             >
-              🎓 {lang === 'kn' ? 'ಎಲ್ಲಾ 18 ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ವೀಕ್ಷಿಸಿ' : 'View All 18 Scholarships'} ➔
+              🎓 {lang === 'kn' ? 'ಎಲ್ಲಾ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ವೀಕ್ಷಿಸಿ' : 'View All Scholarships'} ➔
             </button>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
             {[
               {
                 title: lang === 'kn' ? 'ಕರ್ನಾಟಕ ರಾಜ್ಯ ವಿದ್ಯಾರ್ಥಿವೇತನ (SSP)' : 'Karnataka SSP Scholarships (SC/ST/OBC/Farmers)',
-                amount: '₹2,500 - ₹11,000 / Year',
-                eligibility: lang === 'kn' ? 'ಎಸ್‌ಸಿ/ಎಸ್‌ಟಿ/ಓಬಿಸಿ/ರೈತರ ಮಕ್ಕಳು (SSP ಪೋರ್ಟಲ್)' : 'SC/ST/OBC/Minority & Rytha Vidyanidhi beneficiaries',
-                source: 'State Scholarship Portal (SSP)',
+                classReq: lang === 'kn' ? '೮ ರಿಂದ ೧೨ನೇ / ಪದವಿ / ಪಿಜಿ' : '8th–12th / UG / PG',
+                incomeLimit: lang === 'kn' ? '₹2.5 ಲಕ್ಷ/ವರ್ಷ' : '₹2.5 Lakh/year',
                 link: 'https://ssp.postmatric.karnataka.gov.in/'
               },
               {
                 title: lang === 'kn' ? 'ರಾಷ್ಟ್ರೀಯ ಮೀನ್ಸ್-ಕಮ್-ಮೆರಿಟ್ (NMMSS)' : 'National Means-cum-Merit (NMMSS)',
-                amount: '₹12,000 / Year',
-                eligibility: lang === 'kn' ? '9 - 12ನೇ ತರಗತಿಯ ಪ್ರತಿಭಾವಂತ ವಿದ್ಯಾರ್ಥಿಗಳು (ಆದಾಯ < ₹3.5L)' : 'Class 9–12 meritorious school students (Income < ₹3.5L)',
-                source: 'National Scholarship Portal (NSP)',
+                classReq: lang === 'kn' ? '೮ ರಿಂದ ೧೨ನೇ ತರಗತಿ' : '8th–12th Class',
+                incomeLimit: lang === 'kn' ? '₹3.5 ಲಕ್ಷ/ವರ್ಷ' : '₹3.5 Lakh/year',
                 link: 'https://scholarships.gov.in/'
               },
               {
                 title: lang === 'kn' ? 'ಎಐಸಿಟಿಇ ಪ್ರಗತಿ ಹೆಣ್ಣುಮಕ್ಕಳ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'AICTE Pragati Scholarship for Girls',
-                amount: '₹50,000 / Year',
-                eligibility: lang === 'kn' ? 'ತಾಂತ್ರಿಕ ಡಿಪ್ಲೊಮಾ/ಪದವಿಗೆ ಪ್ರವೇಶ ಪಡೆದ ಹೆಣ್ಣುಮಕ್ಕಳು' : 'Girls pursuing Technical Degree / Diploma (Polytechnic/BE)',
-                source: 'AICTE / NSP Portal',
+                classReq: lang === 'kn' ? 'ಡಿಪ್ಲೊಮಾ / ತಾಂತ್ರಿಕ ಪದವಿ (BE)' : 'Diploma / UG (Technical)',
+                incomeLimit: lang === 'kn' ? '₹8.0 ಲಕ್ಷ/ವರ್ಷ' : '₹8.0 Lakh/year',
                 link: 'https://scholarships.gov.in/'
               },
               {
                 title: lang === 'kn' ? 'ಪಿಎಂ-ಯಶಸ್ವಿ ಯೋಜನೆ (PM-YASASVI)' : 'PM-YASASVI Scholarship Scheme',
-                amount: 'Up to ₹1,25,000 / Year',
-                eligibility: lang === 'kn' ? 'ಓಬಿಸಿ, ಇಬಿಸಿ ಹಾಗೂ ಡಿಎನ್‌ಟಿ ವಿದ್ಯಾರ್ಥಿಗಳು' : 'OBC, EBC and DNT students in School / Higher Education',
-                source: 'NTA / Social Justice Ministry',
+                classReq: lang === 'kn' ? '೯ ರಿಂದ ೧೨ನೇ / ಪದವಿ' : '9th–12th / UG',
+                incomeLimit: lang === 'kn' ? '₹2.5 ಲಕ್ಷ/ವರ್ಷ' : '₹2.5 Lakh/year',
                 link: 'https://yet.nta.ac.in/'
+              },
+              {
+                title: lang === 'kn' ? 'ಪಿಎಂ-ಯುಎಸ್‌ಪಿ ಸೆಂಟ್ರಲ್ ಸೆಕ್ಟರ್ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'PM-USP Central Sector Scholarship',
+                classReq: lang === 'kn' ? '೧೨ನೇ ಉತ್ತೀರ್ಣ / ಪದವಿ / ಪಿಜಿ' : '12th Pass / UG / PG',
+                incomeLimit: lang === 'kn' ? '₹4.5 ಲಕ್ಷ/ವರ್ಷ' : '₹4.5 Lakh/year',
+                link: 'https://scholarships.gov.in/'
+              },
+              {
+                title: lang === 'kn' ? 'ಪಿಎಂ ಸ್ಕಾಲರ್‌ಶಿಪ್ ಯೋಜನೆ (PMSS)' : 'PM Scholarship Scheme (PMSS)',
+                classReq: lang === 'kn' ? 'ವೃತ್ತಿಪರ ಪದವಿಗಳು (BE, MBBS)' : 'Professional UG (BE, MBBS)',
+                incomeLimit: lang === 'kn' ? 'ಮಾಜಿ ಸೈನಿಕರ ಮಕ್ಕಳಿಗೆ' : 'Ex-Servicemen Wards',
+                link: 'https://scholarships.gov.in/'
               }
             ].map((sch, sIdx) => (
-              <div key={sIdx} style={{ background: 'var(--bg-main)', borderRadius: 10, padding: 14, border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div key={sIdx} style={{ background: 'var(--bg-main)', borderRadius: 12, padding: 16, border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 2px 6px rgba(0,0,0,0.04)' }}>
                 <div>
-                  <h5 style={{ fontSize: 13, fontWeight: 700, margin: '0 0 6px 0', color: 'var(--text-primary)' }}>{sch.title}</h5>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary)', marginBottom: 6 }}>{sch.amount}</div>
-                  <p style={{ fontSize: 11, color: 'var(--text-secondary)', margin: '0 0 4px 0' }}><strong>Eligible:</strong> {sch.eligibility}</p>
-                  <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '0 0 12px 0' }}><strong>Portal:</strong> {sch.source}</p>
+                  <h5 style={{ fontSize: 14, fontWeight: 700, margin: '0 0 10px 0', color: 'var(--text-primary)', lineHeight: 1.3 }}>{sch.title}</h5>
+                  <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 6px 0', fontWeight: 500 }}>
+                    <strong>📚 Class:</strong> {sch.classReq}
+                  </p>
+                  <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 14px 0', fontWeight: 500 }}>
+                    <strong>💰 Family Income Limit:</strong> {sch.incomeLimit}
+                  </p>
                 </div>
                 <a
                   href={sch.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-outline btn-sm"
-                  style={{ width: '100%', justifyContent: 'center', fontSize: 11, padding: '4px 8px' }}
+                  className="btn btn-primary btn-sm"
+                  style={{ width: '100%', justifyContent: 'center', fontSize: 12, padding: '8px 12px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, fontWeight: 600, borderRadius: 8 }}
                 >
-                  Apply Online 🔗
+                  View Scholarship →
                 </a>
               </div>
             ))}
@@ -578,18 +589,42 @@ export function SchemesScreen() {
               <div className="scheme-card-body">
                 <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 6 }}>{s.ministry[lang] || s.ministry.en}</div>
                 <h4>{s.title[lang] || s.title.en}</h4>
-                <p style={{ fontSize: 13, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.desc[lang] || s.desc.en}</p>
+                <p style={{ fontSize: 13, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: '0 0 8px 0' }}>{s.desc[lang] || s.desc.en}</p>
+
+                {s.category === 'Scholarship' && (
+                  <div style={{ fontSize: 12, margin: '6px 0 10px 0', display: 'flex', flexDirection: 'column', gap: 4, background: 'var(--bg-main)', padding: 10, borderRadius: 8, border: '1px solid var(--border-light)' }}>
+                    <p style={{ margin: 0, color: 'var(--text-secondary)', fontWeight: 500 }}>
+                      <strong>📚 Class:</strong> {s.classRequired ? (s.classRequired[lang] || s.classRequired.en) : '8th–12th / UG / PG'}
+                    </p>
+                    <p style={{ margin: 0, color: 'var(--text-secondary)', fontWeight: 500 }}>
+                      <strong>💰 Family Income Limit:</strong> {s.incomeLimit ? (s.incomeLimit[lang] || s.incomeLimit.en) : '₹2.5 Lakh/year'}
+                    </p>
+                  </div>
+                )}
+
                 <div style={{ display: 'flex', gap: 8, marginTop: 'auto', paddingTop: 12 }}>
-                  <button 
-                    className="btn btn-primary btn-sm"
-                    onClick={() => {
-                      setSelectedScheme(s)
-                      setApplyModalOpen(true)
-                    }}
-                    disabled={status === 'Active' || status === 'Applied'}
-                  >
-                    {status === 'Eligible' ? t('checkEligibility') : status}
-                  </button>
+                  {s.applyLink ? (
+                    <a
+                      href={s.applyLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-primary btn-sm"
+                      style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, flex: 1, justifyContent: 'center' }}
+                    >
+                      View Scholarship →
+                    </a>
+                  ) : (
+                    <button 
+                      className="btn btn-primary btn-sm"
+                      onClick={() => {
+                        setSelectedScheme(s)
+                        setApplyModalOpen(true)
+                      }}
+                      disabled={status === 'Active' || status === 'Applied'}
+                    >
+                      {status === 'Eligible' ? t('checkEligibility') : status}
+                    </button>
+                  )}
                   <button 
                     className="btn btn-outline btn-sm"
                     onClick={() => setSelectedScheme(s)}
