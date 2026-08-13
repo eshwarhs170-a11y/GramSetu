@@ -236,21 +236,29 @@ const karnatakaUrbanData = {
   "Shivamogga|Shivamogga": {
     ulb: "Shivamogga City Corporation",
     wards: [
-      "Ward 1 - Shettihalli", "Ward 2 - Nehru Nagar Shimoga",
-      "Ward 3 - Gandhi Nagar Shimoga", "Ward 4 - Vinoba Nagar",
-      "Ward 5 - Kuvempu Nagar Shimoga", "Ward 6 - Basaveshwar Nagar Shimoga",
-      "Ward 7 - Jnanashakthi Nagar", "Ward 8 - Azad Nagar Shimoga",
-      "Ward 9 - Subhash Nagar Shimoga", "Ward 10 - Koppa Road",
-      "Ward 11 - Bhadravathi Road", "Ward 12 - Central Market",
-      "Ward 13 - Honne Area", "Ward 14 - Anandapuram",
-      "Ward 15 - Javali", "Ward 16 - Agrahara Shimoga",
-      "Ward 17 - Sagara Road", "Ward 18 - Holalkere Road",
-      "Ward 19 - Nrupathunga Nagar Shimoga", "Ward 20 - Metagalli"
+      "Ward 1 - Doddapete", "Ward 2 - Halamidi",
+      "Ward 3 - Jayanagar", "Ward 4 - Nehru Nagar",
+      "Ward 5 - Gandhinagar", "Ward 6 - Vinoba Nagar",
+      "Ward 7 - Kuvempu Nagar", "Ward 8 - Basaveshwar Nagar",
+      "Ward 9 - Jnanashakthi Nagar", "Ward 10 - Azad Nagar",
+      "Ward 11 - Subhash Nagar", "Ward 12 - Koppa Road",
+      "Ward 13 - Bhadravathi Road", "Ward 14 - Central Market",
+      "Ward 15 - Honne Area", "Ward 16 - Anandapuram",
+      "Ward 17 - Javali", "Ward 18 - Agrahara",
+      "Ward 19 - Sagara Road", "Ward 20 - Metagalli",
+      "Ward 21 - Shettihalli", "Ward 22 - Holalkere Road",
+      "Ward 23 - Nrupathunga Nagar", "Ward 24 - Santhebennur Road",
+      "Ward 25 - Thirthahalli Road", "Ward 26 - Durgigudi",
+      "Ward 27 - Mandli", "Ward 28 - Krishnapura",
+      "Ward 29 - Vinobanagara Extension", "Ward 30 - Sagar Road Extension",
+      "Ward 31 - Tunga Nagar", "Ward 32 - Shivappa Nayaka Nagara",
+      "Ward 33 - Ramanahalli", "Ward 34 - Ambedkar Nagar",
+      "Ward 35 - Shankar Mutt Road"
     ]
   },
 
   // ─── DAVANGERE ──────────────────────────────────────────
-  "Davangere|Davangere": {
+  "Davanagere|Davanagere": {
     ulb: "Davangere City Corporation",
     wards: [
       "Ward 1 - Gandhi Nagar Davangere", "Ward 2 - Azad Nagar Davangere",
@@ -354,7 +362,7 @@ const karnatakaUrbanData = {
   },
 
   // ─── CHIKKABALLAPURA ──────────────────────────────────────────
-  "Chikkaballapura|Chikkaballapura": {
+  "Chikkaballapur|Chikkaballapur": {
     ulb: "Chikkaballapura Town Municipal Council",
     wards: [
       "Ward 1 - Gandhi Nagar Chikkaballapura", "Ward 2 - Azad Nagar Chikkaballapura",
