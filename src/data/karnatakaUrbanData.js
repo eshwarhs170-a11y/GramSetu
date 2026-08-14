@@ -1262,7 +1262,37 @@ const karnatakaUrbanData = {
   "Raichur|Sindhnur": {
     ulb: "Sindhnur City Municipal Council (CMC)",
     wards: [
-      "Ward 1", "Ward 2", "Ward 3", "Ward 4", "Ward 5", "Ward 6", "Ward 7", "Ward 8", "Ward 9", "Ward 10", "Ward 11", "Ward 12", "Ward 13", "Ward 14", "Ward 15", "Ward 16", "Ward 17", "Ward 18", "Ward 19", "Ward 20", "Ward 21", "Ward 22", "Ward 23", "Ward 24", "Ward 25", "Ward 26", "Ward 27", "Ward 28", "Ward 29", "Ward 30", "Ward 31", "Ward 32", "Ward 33", "Ward 34", "Ward 35"
+      "Ward 1 - Kasabwadi",
+      "Ward 2 - Patelwadi",
+      "Ward 3 - Bhramin Oni",
+      "Ward 4 - Badibase",
+      "Ward 5 - Upparwadi",
+      "Ward 6 - Katibase",
+      "Ward 7 - Dhangarwadi",
+      "Ward 8 - G. Venkatrao Colony",
+      "Ward 9 - Chakkligalli",
+      "Ward 10 - Natraj Colony",
+      "Ward 11 - Natraj Colony-1",
+      "Ward 12 - Tippusulthan Colony",
+      "Ward 13 - Bhagirath Colony",
+      "Ward 14 - Gnaga nagar",
+      "Ward 15",
+      "Ward 16 - Aadarsh Colony",
+      "Ward 17 - Venkateshwar Nagar",
+      "Ward 18 - A.K Gopla nagar",
+      "Ward 19 - Ramkishore Colony",
+      "Ward 20",
+      "Ward 21",
+      "Ward 22 - Maheboob Colony",
+      "Ward 23 - Police Colony",
+      "Ward 24 - Kote Area",
+      "Ward 25 - Janatha Colony",
+      "Ward 26 - Sukalpet",
+      "Ward 27",
+      "Ward 28",
+      "Ward 29 - PWD Camp",
+      "Ward 30 - Lakshmi Camp",
+      "Ward 31 - Vasavi Nagar"
     ]
   },
 };
