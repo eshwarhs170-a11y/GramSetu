@@ -82,7 +82,7 @@ function parseTalukLinks(html, districtSlug) {
   const seen = new Set();
   while ((m = re.exec(html)) !== null) {
     const slug = m[1];
-    if (!seen.has(slug) && slug !== districtSlug) {
+    if (!seen.has(slug) && slug !== 'block') {
       seen.add(slug);
       taluks.push(slug);
     }
@@ -106,7 +106,11 @@ function parseVillages(html) {
 }
 
 function titleFromSlug(slug) {
-  return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  let title = slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  if (title.endsWith(' Block')) {
+    title = title.substring(0, title.length - 6);
+  }
+  return title;
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
