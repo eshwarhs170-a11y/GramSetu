@@ -35,14 +35,23 @@ export default function OfficialLogin() {
   const [errorMsg, setErrorMsg] = useState('')
   const [otpSentAlert, setOtpSentAlert] = useState(false)
 
+  useEffect(() => {
+    if (department !== 'Gram Panchayat / PDO') {
+      setGp('')
+    }
+  }, [department])
+
   const departments = [
-    'Agriculture (RSK)',
     'Gram Panchayat / PDO',
+    'Agriculture (RSK)',
     'Electricity / BESCOM',
     'Water Supply',
     'Revenue Department',
     'Health / PHC',
     'Education / DDPI',
+    'Taluk Panchayat (EO)',
+    'Zilla Panchayat (CEO)',
+    'RDPR Commissioner Office',
   ]
 
 
@@ -294,20 +303,29 @@ export default function OfficialLogin() {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14 }}>
                 <div className="form-group">
-                  <label className="form-label">Gram Panchayat (Optional)</label>
-                  <select
-                    className="form-input custom-select"
-                    value={gp}
-                    onChange={e => setGp(e.target.value)}
-                    disabled={!taluk}
-                    style={{ opacity: !taluk ? 0.5 : 1, cursor: !taluk ? 'not-allowed' : 'pointer' }}
-                  >
-                    <option value="" disabled>{!taluk ? 'Select Taluk first' : 'Select Panchayat'}</option>
-                    <option value="">-- All Panchayats --</option>
-                    {availableGps.map(g => (
-                      <option key={g} value={g}>{g}</option>
-                    ))}
-                  </select>
+                  <label className="form-label">Gram Panchayat</label>
+                  {department === 'Gram Panchayat / PDO' ? (
+                    <select
+                      className="form-input custom-select"
+                      value={gp}
+                      onChange={e => setGp(e.target.value)}
+                      disabled={!taluk}
+                      style={{ opacity: !taluk ? 0.5 : 1, cursor: !taluk ? 'not-allowed' : 'pointer' }}
+                    >
+                      <option value="" disabled>{!taluk ? 'Select Taluk first' : 'Select Panchayat'}</option>
+                      <option value="">-- All Panchayats --</option>
+                      {availableGps.map(g => (
+                        <option key={g} value={g}>{g}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      className="form-input"
+                      value="Not Applicable (Taluk / District level)"
+                      disabled
+                      style={{ background: 'var(--bg-main)', cursor: 'not-allowed', color: 'var(--text-muted)' }}
+                    />
+                  )}
                 </div>
               </div>
               

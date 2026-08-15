@@ -13,7 +13,8 @@ import {
 } from 'lucide-react'
 
 import { db } from '../firebase'
-import { collection, onSnapshot, query, orderBy, deleteDoc, doc, addDoc, serverTimestamp } from 'firebase/firestore'
+import { collection, onSnapshot, query, orderBy, deleteDoc, doc, addDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore'
+import { ESCALATION_LEVELS, isOverdue, getCurrentLevel, getNextLevel, daysSince } from '../utils/escalation'
 
 export const getSessionData = () => {
   const name = window.localStorage.getItem('official_name') || ''
@@ -25,6 +26,8 @@ export const getSessionData = () => {
     email: window.localStorage.getItem('official_email') || 'pdo.mysuru@karnataka.gov.in',
     department: window.localStorage.getItem('official_department') || 'Rural Development & Panchayat Raj',
     district: window.localStorage.getItem('official_district') || 'Mysuru',
+    taluk: window.localStorage.getItem('official_taluk') || 'Mysuru Taluk',
+    gp: window.localStorage.getItem('official_gp') || '',
     designation: 'Panchayat Development Officer (PDO)',
   }
 }
@@ -161,11 +164,16 @@ function OverviewScreen({ onPendingClick, onResolvedClick, sessionData, pendingC
         <div className="welcome-banner-bg2" />
         <div className="welcome-banner-text">
           <h2>{t('officerWelcome')}</h2>
-          <p>{t('officerLocation')}</p>
+          <p>
+            {sessionData.taluk && `${sessionData.taluk}, `}{sessionData.district} District
+            {sessionData.gp && ` — GP: ${sessionData.gp}`}
+          </p>
           <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
             <span className="badge badge-danger" onClick={onPendingClick} style={{ cursor: 'pointer' }}>{pendingCount} {t('pendingComplaints')}</span>
             <span className="badge badge-success" onClick={onResolvedClick} style={{ cursor: 'pointer' }}>{resolvedCount} {t('resolvedComplaints')} This Week</span>
             <span className="badge" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>{sessionData.district} District</span>
+            {sessionData.taluk && <span className="badge" style={{ background: 'rgba(255,255,255,0.12)', color: '#93c5fd' }}>📍 {sessionData.taluk}</span>}
+            {sessionData.gp && <span className="badge" style={{ background: 'rgba(255,255,255,0.10)', color: '#bbf7d0' }}>🏘️ {sessionData.gp}</span>}
           </div>
         </div>
         <div className="welcome-banner-img">
@@ -274,105 +282,384 @@ function AnalyticsScreen({ sessionData, pendingCount, resolvedCount }) {
   )
 }
 
+// ===== Respond Modal =====
+function RespondModal({ complaint, onClose, onSaved }) {
+  const session = getSessionData()
+  const [responseText, setResponseText] = useState('')
+  const [newStatus, setNewStatus] = useState(complaint.status || 'pending')
+  const [etaDays, setEtaDays] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  const handleSave = async () => {
+    if (!responseText.trim()) return
+    setSaving(true)
+    const responseObj = {
+      message: responseText,
+      status: newStatus,
+      etaDays: etaDays ? Number(etaDays) : null,
+      respondedBy: session.name || 'Official',
+      role: session.department,
+      escalationLevel: complaint.escalationLevel ?? 0,
+      timestamp: new Date().toISOString(),
+    }
+    try {
+      // complaint._docId is the Firestore doc ID
+      if (complaint._docId) {
+        await updateDoc(doc(db, 'complaints', complaint._docId), {
+          status: newStatus,
+          lastUpdate: responseText,
+          lastRespondedAt: serverTimestamp(),
+          responses: arrayUnion(responseObj),
+        })
+      }
+      onSaved(responseObj)
+    } catch (e) {
+      console.warn('Firestore update failed', e)
+      onSaved(responseObj)
+    }
+    setSaving(false)
+    onClose()
+  }
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 9999,
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16
+    }}>
+      <div className="card animate-fadeInUp" style={{ maxWidth: 520, width: '100%', padding: 28, borderRadius: 20, boxShadow: '0 24px 60px rgba(0,0,0,0.3)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+          <div>
+            <h3 style={{ fontWeight: 800, fontSize: 17, margin: 0 }}>📋 Official Response</h3>
+            <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '4px 0 0' }}>{complaint.id} — {complaint.title}</p>
+          </div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="form-group" style={{ marginBottom: 14 }}>
+          <label className="form-label">Update Status / ಸ್ಥಿತಿ</label>
+          <select className="form-input" value={newStatus} onChange={e => setNewStatus(e.target.value)}>
+            <option value="pending">⏳ Pending — Under Review</option>
+            <option value="inprogress">🔄 In Progress — Work Started</option>
+            <option value="resolved">✅ Resolved — Issue Fixed</option>
+          </select>
+        </div>
+
+        {(newStatus === 'pending' || newStatus === 'inprogress') && (
+          <div className="form-group" style={{ marginBottom: 14 }}>
+            <label className="form-label">Expected Resolution (Days) / ನಿರೀಕ್ಷಿತ ದಿನಗಳು</label>
+            <input
+              type="number" min="1" max="365"
+              className="form-input"
+              placeholder="e.g. 7"
+              value={etaDays}
+              onChange={e => setEtaDays(e.target.value)}
+            />
+          </div>
+        )}
+
+        <div className="form-group" style={{ marginBottom: 20 }}>
+          <label className="form-label">Your Response / ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆ *</label>
+          <textarea
+            className="form-input"
+            rows={4}
+            placeholder="e.g. Inspection has been scheduled for 20 Aug. The water pump will be repaired within 5 working days..."
+            value={responseText}
+            onChange={e => setResponseText(e.target.value)}
+            style={{ resize: 'vertical' }}
+          />
+        </div>
+
+        <div style={{ background: 'var(--bg-main)', borderRadius: 10, padding: '10px 14px', fontSize: 12, color: 'var(--text-muted)', marginBottom: 18 }}>
+          <strong>{session.name || 'You'}</strong> • {session.department} • {session.taluk || session.district}
+        </div>
+
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleSave} disabled={saving || !responseText.trim()}>
+            {saving ? '⏳ Saving...' : '📤 Submit Response'}
+          </button>
+          <button className="btn btn-outline" onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ===== Escalation badge =====
+function EscalationBadge({ complaint }) {
+  const level = complaint.escalationLevel ?? 0
+  const info = ESCALATION_LEVELS[level]
+  const days = Math.floor(daysSince(complaint.lastRespondedAt || complaint.createdAt))
+  const overdue = isOverdue(complaint)
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <span style={{
+        display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 700,
+        padding: '2px 7px', borderRadius: 6,
+        background: level === 0 ? '#dbeafe' : level === 1 ? '#fef3c7' : level === 2 ? '#fee2e2' : '#fce7f3',
+        color: level === 0 ? '#1d4ed8' : level === 1 ? '#92400e' : level === 2 ? '#991b1b' : '#9d174d',
+      }}>
+        {info.icon} {info.role.split('/')[0].trim()}
+      </span>
+      {overdue ? (
+        <span style={{ fontSize: 10, color: '#ef4444', fontWeight: 700 }}>⚠️ {days}d overdue</span>
+      ) : (
+        <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{days}d / {info.slaDays ?? '—'}d SLA</span>
+      )}
+    </div>
+  )
+}
+
 // ===== Complaints =====
 function ComplaintsScreen({ resolved, stateOverview, filter }) {
   const { t } = useLanguage()
   const [liveComplaints, setLiveComplaints] = useState(kaNewComplaints)
+  const [respondingTo, setRespondingTo] = useState(null)
+  const [searchText, setSearchText] = useState('')
+  const [catFilter, setCatFilter] = useState('All')
+  const session = getSessionData()
 
   useEffect(() => {
-    if (resolved) return // Only fetch for pending/new
+    if (resolved) return
     const q = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetched = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.data().id || doc.id }))
-      // Merge with hardcoded to ensure table is never empty during demo
-      const merged = [...fetched, ...kaNewComplaints].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+      const fetched = snapshot.docs.map(d => ({ ...d.data(), id: d.data().id || d.id, _docId: d.id }))
+      const merged = [...fetched, ...kaNewComplaints].filter((v, i, a) => a.findIndex(x => x.id === v.id) === i)
       setLiveComplaints(merged)
-    }, (error) => {
-      console.warn("Error fetching complaints, using local state", error)
-    })
+    }, () => {})
     return () => unsubscribe && unsubscribe()
   }, [resolved])
 
-  const displayedComplaints = stateOverview 
-    ? liveComplaints 
-    : liveComplaints.filter(c => {
-        const loc = (c.district || c.taluk || c.village || '').toLowerCase()
-        const statusMatch = filter ? (c.status && c.status === filter) : true
-        return loc.includes(getSessionData().district.toLowerCase()) && statusMatch
+  // Auto-escalation: if overdue and has a Firestore doc ID, escalate
+  const handleAutoEscalate = async (complaint) => {
+    const next = getNextLevel(complaint)
+    if (!next || !complaint._docId) return
+    const esc = {
+      message: `Auto-escalated after ${Math.floor(daysSince(complaint.lastRespondedAt || complaint.createdAt))} days with no response from ${getCurrentLevel(complaint).role}.`,
+      respondedBy: 'System (Auto-Escalation)',
+      role: 'GramSetu Platform',
+      escalationLevel: complaint.escalationLevel ?? 0,
+      timestamp: new Date().toISOString(),
+      status: 'escalated',
+    }
+    try {
+      await updateDoc(doc(db, 'complaints', complaint._docId), {
+        escalationLevel: (complaint.escalationLevel ?? 0) + 1,
+        status: 'escalated',
+        lastUpdate: `Escalated to ${next.role} due to no response.`,
+        responses: arrayUnion(esc),
+        escalatedAt: serverTimestamp(),
       })
+    } catch (e) { console.warn('Escalation failed', e) }
+  }
+
+  const displayedComplaints = (() => {
+    let list = stateOverview ? liveComplaints : liveComplaints.filter(c => {
+      const distMatch = session.district ? (c.district || c.village || '').toLowerCase().includes(session.district.toLowerCase()) : true
+      const talukMatch = session.taluk ? (c.taluk || '').toLowerCase() === session.taluk.toLowerCase() : true
+      const gpMatch = session.gp ? (c.gp || '').toLowerCase() === session.gp.toLowerCase() : true
+      const statusMatch = filter ? (c.status === filter) : true
+      // Also show escalated complaints that reached this level
+      const escLevel = c.escalationLevel ?? 0
+      const myLevel = session.department?.includes('Taluk Panchayat') ? 1
+        : session.department?.includes('Zilla') || session.department?.includes('CEO') ? 2
+        : session.department?.includes('RDPR') || session.department?.includes('Commissioner') ? 3
+        : 0
+      const levelMatch = stateOverview ? true : escLevel >= myLevel
+
+      // Specific department category filter
+      const getEligibleCategories = (dept) => {
+        if (!dept) return null
+        const d = dept.toLowerCase()
+        if (d.includes('agriculture')) return ['Agriculture / RSK', 'ಕೃಷಿ / RSK', 'Agriculture']
+        if (d.includes('electricity') || d.includes('bescom')) return ['Electricity / BESCOM', 'ವಿದ್ಯುತ್ / BESCOM', 'Electricity']
+        if (d.includes('water')) return ['Water Supply', 'ನೀರು ಸರಬರಾಜು', 'Water']
+        if (d.includes('revenue')) return ['Bhoomi / Land Records', 'ಭೂಮಿ / ಭೂ ದಾಖಲೆ', 'Ration/PDS']
+        if (d.includes('health') || d.includes('phc')) return ['PHC / Health', 'PHC / ಆರೋಗ್ಯ', 'PHC / स्वास्थ्य']
+        if (d.includes('education') || d.includes('ddpi')) return ['Schools / DDPI', 'ಶಾಲೆ / DDPI']
+        if (d.includes('panchayat') || d.includes('pdo')) return ['Roads & Paths', 'Sanitation / BBMP', 'ರಸ್ತೆ ಮತ್ತು ದಾರಿ', 'ಸ್ವಚ್ಛತೆ', 'Sanitation', 'Roads']
+        return null // General administrative depts see all categories
+      }
+
+      const eligibleCats = getEligibleCategories(session.department)
+      const deptCatMatch = eligibleCats ? eligibleCats.includes(c.category) : true
+
+      return distMatch && talukMatch && gpMatch && statusMatch && levelMatch && deptCatMatch
+    })
+    if (searchText) list = list.filter(c =>
+      c.title?.toLowerCase().includes(searchText.toLowerCase()) ||
+      c.id?.toLowerCase().includes(searchText.toLowerCase())
+    )
+    if (catFilter !== 'All') list = list.filter(c => c.category === catFilter)
+    return list
+  })()
+
+  const overdueCount = displayedComplaints.filter(c => c.status !== 'resolved' && isOverdue(c)).length
 
   return (
     <div className="animate-fadeInUp">
-      <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
-        <div className="form-input" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', flex: 1, minWidth: 200 }}>
-          <Search size={16} style={{ color: 'var(--text-muted)' }} />
-          <input style={{ border: 'none', outline: 'none', width: '100%' }} placeholder={t('search')} />
+      {/* Escalation info banner */}
+      {overdueCount > 0 && (
+        <div style={{
+          background: 'linear-gradient(135deg, #fef2f2, #fee2e2)', border: '1px solid #fecaca',
+          borderRadius: 12, padding: '12px 16px', marginBottom: 18,
+          display: 'flex', alignItems: 'center', gap: 12
+        }}>
+          <span style={{ fontSize: 22 }}>⚠️</span>
+          <div>
+            <strong style={{ color: '#991b1b', fontSize: 14 }}>{overdueCount} complaint(s) past SLA deadline!</strong>
+            <p style={{ margin: 0, fontSize: 12, color: '#b91c1c' }}>
+              As per Karnataka RDPR circular, unresolved complaints are auto-escalated after 7 days. Click "Escalate" to forward to the next officer.
+            </p>
+          </div>
         </div>
-        <select className="form-input" style={{ width: 160 }}>
-          <option>{t('allCategories')}</option>
-          <option>Water / ನೀರು</option>
-          <option>Electricity / ವಿದ್ಯುತ್</option>
-          <option>Roads / ರಸ್ತೆ</option>
-          <option>Agriculture / ಕೃಷಿ</option>
-          <option>Health / ಆರೋಗ್ಯ</option>
-          <option>Ration/PDS</option>
-        </select>
-        <select className="form-input" style={{ width: 150 }}>
-          <option>{t('allPriority')}</option>
-          <option>{t('high')}</option>
-          <option>{t('medium')}</option>
-          <option>{t('low')}</option>
+      )}
+
+      {/* Escalation hierarchy reference */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
+        {ESCALATION_LEVELS.map(lvl => (
+          <div key={lvl.level} style={{
+            display: 'flex', alignItems: 'center', gap: 5, fontSize: 11,
+            padding: '4px 10px', borderRadius: 8,
+            background: lvl.level === 0 ? '#dbeafe' : lvl.level === 1 ? '#fef3c7' : lvl.level === 2 ? '#fee2e2' : '#fce7f3',
+            color: lvl.level === 0 ? '#1d4ed8' : lvl.level === 1 ? '#92400e' : lvl.level === 2 ? '#991b1b' : '#9d174d',
+            fontWeight: 700
+          }}>
+            {lvl.icon} L{lvl.level}: {lvl.role.split('/')[0].trim()}
+            {lvl.slaDays && <span style={{ fontWeight: 400, opacity: 0.7 }}>({lvl.slaDays}d)</span>}
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
+        <div className="form-input" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', flex: 1, minWidth: 180 }}>
+          <Search size={15} style={{ color: 'var(--text-muted)' }} />
+          <input style={{ border: 'none', outline: 'none', width: '100%', fontSize: 13 }}
+            placeholder="Search complaints..."
+            value={searchText} onChange={e => setSearchText(e.target.value)} />
+        </div>
+        <select className="form-input" style={{ width: 160, fontSize: 13 }}
+          value={catFilter} onChange={e => setCatFilter(e.target.value)}>
+          <option value="All">{t('allCategories')}</option>
+          <option value="Water Supply">Water</option>
+          <option value="Electricity / BESCOM">Electricity</option>
+          <option value="Roads & Paths">Roads</option>
+          <option value="Agriculture / RSK">Agriculture</option>
+          <option value="PHC / Health">Health</option>
         </select>
       </div>
 
       {!resolved ? (
-        <div className="card" style={{ padding: 0, overflowX: 'auto' }}>
-          <table className="market-table" style={{ width: '100%', minWidth: 600 }}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Complaint / ದೂರು</th>
-                <th>Village / ಗ್ರಾಮ</th>
-                <th>Category</th>
-                <th>Priority</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayedComplaints.map((c, i) => (
-                <tr key={i}>
-                  <td style={{ fontFamily: 'monospace', fontSize: 11 }}>{c.id}</td>
-                  <td style={{ fontWeight: 600, maxWidth: 180, fontSize: 13 }}>
-                    {c.title}
-                    {c.photo && (
-                      <div style={{ marginTop: 6 }}>
-                        <span className="badge" style={{ background: '#e0f2fe', color: '#0369a1', fontSize: 10 }}>📷 Has Image</span>
-                      </div>
-                    )}
-                  </td>
-                  <td>{c.village || c.taluk || c.district}</td>
-                  <td><span className="badge badge-primary" style={{ fontSize: 11 }}>{c.category}</span></td>
-                  <td>
-                    <span className={`badge ${c.priority === 'high' ? 'badge-danger' : c.priority === 'medium' ? 'badge-warning' : 'badge-success'}`}>
-                      {t(c.priority)}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`badge ${c.status === 'pending' ? 'badge-warning' : 'badge-info'}`}>
-                      {c.status === 'pending' ? t('pending') : t('inProgress')}
-                    </span>
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', gap: 6 }}>
-                      <button className="btn btn-primary btn-sm" onClick={() => alert(`✅ Assigned complaint ${c.id} to your department.`)}>{t('assign')}</button>
-                      <button className="btn btn-outline btn-sm" onClick={() => alert(`📄 Viewing details for ${c.id}:\n\nTitle: ${c.title}\nCategory: ${c.category}\n\nThis will open a full modal in a future update.`)}>{t('view')}</button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {displayedComplaints.map((c, i) => {
+            const overdue = isOverdue(c)
+            const next = getNextLevel(c)
+            const lastResponse = c.responses?.[c.responses.length - 1]
+            return (
+              <div key={i} className="complaint-status-card animate-fadeInUp"
+                style={{
+                  animationDelay: `${i * 0.05}s`,
+                  borderLeft: `4px solid ${overdue ? '#ef4444' : c.status === 'resolved' ? '#10b981' : c.status === 'escalated' ? '#f59e0b' : '#3b82f6'}`,
+                  padding: '16px 18px'
+                }}>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                  <div style={{ flex: 1, minWidth: 180 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
+                      <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--text-muted)' }}>{c.id}</span>
+                      <span className={`badge ${
+                        c.status === 'resolved' ? 'badge-success'
+                        : c.status === 'escalated' ? 'badge-warning'
+                        : c.status === 'inprogress' ? 'badge-info'
+                        : 'badge-warning'}`} style={{ fontSize: 10 }}>
+                        {c.status === 'resolved' ? '✅ Resolved'
+                          : c.status === 'escalated' ? '🔼 Escalated'
+                          : c.status === 'inprogress' ? '🔄 In Progress'
+                          : '⏳ Pending'}
+                      </span>
+                      {overdue && <span className="badge badge-danger" style={{ fontSize: 10 }}>🚨 OVERDUE</span>}
+                      {c.status === 'escalated' && (
+                        <span style={{ fontSize: 10, color: '#92400e', fontWeight: 700 }}>
+                          → {ESCALATION_LEVELS[c.escalationLevel ?? 0]?.role}
+                        </span>
+                      )}
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    <h4 style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 700 }}>{c.title}</h4>
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                      <span>📁 {c.category}</span>
+                      <span>📍 {c.village || c.taluk || c.district}</span>
+                      <span>📅 {c.date || (c.createdAt?.toDate?.()?.toLocaleDateString()) || 'Unknown'}</span>
+                      {c.submittedBy && <span>👤 {c.submittedBy}</span>}
+                    </div>
+                  </div>
+                  <EscalationBadge complaint={c} />
+                </div>
+
+                {/* Official response thread */}
+                {c.responses && c.responses.length > 0 && (
+                  <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 700, marginBottom: 6 }}>📝 Response History</div>
+                    {c.responses.map((r, ri) => (
+                      <div key={ri} style={{
+                        background: 'var(--bg-main)', borderRadius: 8, padding: '8px 12px',
+                        marginBottom: 6, fontSize: 12,
+                        borderLeft: `3px solid ${r.status === 'resolved' ? '#10b981' : r.status === 'escalated' ? '#f59e0b' : '#3b82f6'}`
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+                          <strong style={{ fontSize: 11 }}>{r.respondedBy} <span style={{ fontWeight: 400, color: 'var(--text-muted)' }}>• {r.role}</span></strong>
+                          <span style={{ color: 'var(--text-muted)', fontSize: 10 }}>{new Date(r.timestamp).toLocaleDateString()}</span>
+                        </div>
+                        <p style={{ margin: 0, color: 'var(--text-primary)' }}>{r.message}</p>
+                        {r.etaDays && <span style={{ fontSize: 10, color: '#3b82f6', fontWeight: 700 }}>⏱️ ETA: {r.etaDays} days</span>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Last response summary if no thread shown */}
+                {(!c.responses || c.responses.length === 0) && c.lastUpdate && (
+                  <div style={{ marginTop: 8, fontSize: 12, color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                    ℹ️ {c.lastUpdate}
+                  </div>
+                )}
+
+                {/* Action buttons */}
+                <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => setRespondingTo(c)}
+                    style={{ fontSize: 12 }}
+                  >
+                    📤 Respond / ಉತ್ತರ
+                  </button>
+                  {overdue && next && (
+                    <button
+                      className="btn btn-sm"
+                      style={{ background: '#fef3c7', color: '#92400e', border: '1px solid #fcd34d', fontSize: 12 }}
+                      onClick={() => {
+                        if (window.confirm(`Escalate this complaint to ${next.role}? This cannot be undone.`)) {
+                          handleAutoEscalate(c)
+                        }
+                      }}
+                    >
+                      🔼 Escalate to {next.icon} {next.role.split('/')[0].trim()}
+                    </button>
+                  )}
+                  {c.status === 'escalated' && (
+                    <span style={{ fontSize: 11, color: '#92400e', alignSelf: 'center' }}>
+                      ⬆️ Now with {ESCALATION_LEVELS[c.escalationLevel ?? 0]?.role}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+          {displayedComplaints.length === 0 && (
+            <div className="card" style={{ textAlign: 'center', padding: 32, color: 'var(--text-muted)' }}>
+              No complaints found for your jurisdiction.
+            </div>
+          )}
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -383,20 +670,11 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                 <h4>{c.title}</h4>
                 <p>{c.village} — Resolved by: {c.resolvedBy}</p>
                 <div className="complaint-status-meta">
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                    <Tag size={12} /> {c.id}
-                  </span>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                    <Calendar size={12} /> {c.resolvedDate}
-                  </span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Tag size={12} /> {c.id}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Calendar size={12} /> {c.resolvedDate}</span>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}>
                     {[...Array(5)].map((_, si) => (
-                      <Star
-                        key={si}
-                        size={13}
-                        fill={si < c.rating ? '#fbbf24' : 'none'}
-                        color={si < c.rating ? '#fbbf24' : '#d1d5db'}
-                      />
+                      <Star key={si} size={13} fill={si < c.rating ? '#fbbf24' : 'none'} color={si < c.rating ? '#fbbf24' : '#d1d5db'} />
                     ))}
                   </span>
                   <span className="badge badge-success">{t('resolved')}</span>
@@ -405,6 +683,21 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Respond Modal */}
+      {respondingTo && (
+        <RespondModal
+          complaint={respondingTo}
+          onClose={() => setRespondingTo(null)}
+          onSaved={(resp) => {
+            setLiveComplaints(prev => prev.map(c =>
+              c.id === respondingTo.id
+                ? { ...c, status: resp.status, lastUpdate: resp.message, responses: [...(c.responses || []), resp] }
+                : c
+            ))
+          }}
+        />
       )}
     </div>
   )
@@ -486,13 +779,19 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
   const [category, setCategory] = useState(editMode && editingAnnouncement ? editingAnnouncement.category : 'Government / ಸರ್ಕಾರ')
   const [priority, setPriority] = useState(editMode && editingAnnouncement ? editingAnnouncement.priority : 'Normal')
   const [message, setMessage] = useState(editMode && editingAnnouncement ? editingAnnouncement.message : '')
-  const [target, setTarget] = useState(editMode && editingAnnouncement ? editingAnnouncement.target : 'All Districts')
+  // Default target: official's own Taluk
+  const session = getSessionData()
+  const defaultTarget = session.taluk ? session.taluk : 'All Districts'
+  const [target, setTarget] = useState(editMode && editingAnnouncement ? editingAnnouncement.target : defaultTarget)
 
   const handlePublish = async () => {
     if (!title || !message) return alert('Please fill required fields')
     if (editMode) {
       await setDoc(doc(db, 'announcements', editingAnnouncement.id), {
         title, category, priority, message, target,
+        district: getSessionData().district,
+        taluk: getSessionData().taluk,
+        gp: getSessionData().gp,
         publishedBy: editingAnnouncement.publishedBy || getSessionData().name,
         createdAt: editingAnnouncement.createdAt
       })
@@ -504,6 +803,9 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
         priority,
         message,
         target,
+        district: getSessionData().district,
+        taluk: getSessionData().taluk,
+        gp: getSessionData().gp,
         publishedBy: getSessionData().name,
         createdAt: serverTimestamp()
       })
@@ -557,13 +859,24 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div className="form-group">
-              <label className="form-label">{t('targetVillages')}</label>
+              <label className="form-label">{t('targetVillages')} / ಗುರಿ ಪ್ರದೇಶ</label>
               <select className="form-input" value={target} onChange={e => setTarget(e.target.value)}>
-                <option>All Districts</option>
+                {/* Smart: official's own jurisdiction first */}
+                {session.gp && <option value={session.gp}>🏘️ My GP: {session.gp}</option>}
+                {session.taluk && <option value={session.taluk}>📍 My Taluk: {session.taluk}</option>}
+                {session.district && <option value={session.district}>🗺️ My District: {session.district}</option>}
+                <option value="All Districts">🌐 All Districts (State-wide)</option>
+                <option value="All Villages">🏡 All Villages</option>
+                <option disabled>──────────────</option>
                 {allDistricts.map((d, i) => (
                   <option key={i}>{d}</option>
                 ))}
               </select>
+              {session.taluk && (
+                <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
+                  ℹ️ Recommended: Select "My Taluk" or "My GP" to send only to your jurisdiction.
+                </p>
+              )}
             </div>
             <div className="form-group">
               <label className="form-label">Language / ಭಾಷೆ</label>

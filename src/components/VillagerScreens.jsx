@@ -1213,15 +1213,24 @@ export function AnnouncementsScreen() {
               title: { en: data.title, kn: data.title },
               desc: { en: data.message, kn: data.message },
               img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=80',
-              target: data.target
+              target: data.target,
+              taluk: data.taluk,
+              gp: data.gp
             }
           })
           
-          const relevant = fetched.filter(a => 
-            a.target === 'All Villages' || 
-            a.target.includes(sDistrict) || 
-            a.target.includes(sTaluk)
-          )
+          const sGp = window.localStorage.getItem('citizen_gp') || ''
+          const relevant = fetched.filter(a => {
+            if (a.target === 'All Villages' || a.target === 'All Districts') return true
+            if (a.target.includes(sDistrict) || a.target.includes(sTaluk)) return true
+            // Announcement scoped to a specific taluk/gp from an official
+            if (a.taluk) {
+              if (a.taluk !== sTaluk) return false
+              if (a.gp && sGp && a.gp !== sGp) return false
+              return true
+            }
+            return false
+          })
           
           setAnnouncements([...relevant, ...kaAnnouncements])
         }
@@ -1488,6 +1497,7 @@ export function ComplaintScreen() {
       submittedBy: userName || 'Anonymous',
       district: userDistrict,
       taluk,
+      gp: window.localStorage.getItem('citizen_gp') || '',
       createdAt: serverTimestamp()
     }
 
@@ -1785,11 +1795,15 @@ export function ComplaintStatusScreen() {
     }
   }, [])
 
-  const filteredComplaints = complaints.filter(c => 
-    c.title?.toLowerCase().includes(search.toLowerCase()) ||
-    c.id?.toLowerCase().includes(search.toLowerCase()) ||
-    c.category?.toLowerCase().includes(search.toLowerCase())
-  )
+  const myTaluk = window.localStorage.getItem('citizen_taluk') || ''
+  const filteredComplaints = complaints.filter(c => {
+    const searchMatch = c.title?.toLowerCase().includes(search.toLowerCase()) ||
+                        c.id?.toLowerCase().includes(search.toLowerCase()) ||
+                        c.category?.toLowerCase().includes(search.toLowerCase())
+    // Only show complaints from the same taluk as the logged-in villager
+    const talukMatch = myTaluk ? (c.taluk === myTaluk) : true
+    return searchMatch && talukMatch
+  })
 
   return (
     <div className="animate-fadeInUp">
@@ -1806,24 +1820,102 @@ export function ComplaintStatusScreen() {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-        {filteredComplaints.map((c, i) => (
-          <div className="complaint-status-card animate-fadeInUp" key={i} style={{ animationDelay: `${i * 0.1}s` }}>
-            <div className={`complaint-status-indicator ${c.status}`} />
-            <div className="complaint-status-content">
-              <h4>{c.title}</h4>
-              <p>{c.lastUpdate}</p>
-              <div className="complaint-status-meta">
-                <span>🎫 {c.id}</span>
-                <span>📁 {c.category}</span>
-                <span>📅 {c.date}</span>
-                <span>🏛️ {c.assignedTo}</span>
-                <span className={`badge ${c.status === 'resolved' ? 'badge-success' : c.status === 'inprogress' ? 'badge-info' : 'badge-warning'}`}>
-                  {c.status === 'resolved' ? t('resolved') : c.status === 'inprogress' ? t('inProgress') : t('pending')}
-                </span>
+        {filteredComplaints.map((c, i) => {
+          const hasResponse = c.responses && c.responses.length > 0
+          const lastResp = hasResponse ? c.responses[c.responses.length - 1] : null
+          const isEscalated = c.status === 'escalated' || (c.escalationLevel && c.escalationLevel > 0)
+
+          return (
+            <div className="complaint-status-card animate-fadeInUp" key={i}
+              style={{
+                animationDelay: `${i * 0.1}s`,
+                borderLeft: `4px solid ${
+                  c.status === 'resolved' ? '#10b981'
+                  : isEscalated ? '#f59e0b'
+                  : c.status === 'inprogress' ? '#3b82f6'
+                  : '#e5e7eb'
+                }`,
+                padding: '14px 16px'
+              }}>
+              {/* Header */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap', marginBottom: 4 }}>
+                    <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--text-muted)' }}>🎫 {c.id}</span>
+                    <span className={`badge ${
+                      c.status === 'resolved' ? 'badge-success'
+                      : isEscalated ? 'badge-warning'
+                      : c.status === 'inprogress' ? 'badge-info'
+                      : 'badge-warning'}`} style={{ fontSize: 10 }}>
+                      {c.status === 'resolved' ? '✅ ' + t('resolved')
+                        : isEscalated ? '🔼 Escalated'
+                        : c.status === 'inprogress' ? '🔄 ' + t('inProgress')
+                        : '⏳ ' + t('pending')}
+                    </span>
+                  </div>
+                  <h4 style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 700 }}>{c.title}</h4>
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                    <span>📁 {c.category}</span>
+                    <span>📅 {c.date}</span>
+                    <span>🏛️ {c.assignedTo}</span>
+                  </div>
+                </div>
               </div>
+
+              {/* Escalation notice */}
+              {isEscalated && (
+                <div style={{
+                  marginTop: 10, padding: '8px 12px', borderRadius: 8,
+                  background: '#fef3c7', border: '1px solid #fcd34d',
+                  fontSize: 12, color: '#92400e', display: 'flex', alignItems: 'center', gap: 6
+                }}>
+                  <span style={{ fontSize: 16 }}>🔼</span>
+                  <div>
+                    <strong>Complaint Escalated</strong>
+                    <p style={{ margin: 0 }}>
+                      This complaint was not resolved within 7 days by the Gram Panchayat PDO and has been escalated to a higher officer as per Karnataka RDPR norms.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Official response thread */}
+              {hasResponse ? (
+                <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px dashed var(--border-light)' }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 8 }}>
+                    📋 Official Responses ({c.responses.length})
+                  </div>
+                  {c.responses.map((r, ri) => (
+                    <div key={ri} style={{
+                      background: 'var(--bg-main)', borderRadius: 10, padding: '10px 14px',
+                      marginBottom: 8, fontSize: 12,
+                      borderLeft: `3px solid ${r.status === 'resolved' ? '#10b981' : r.status === 'escalated' ? '#f59e0b' : '#3b82f6'}`
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, flexWrap: 'wrap', gap: 4 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                          <span style={{ fontSize: 13 }}>👮</span>
+                          <strong style={{ fontSize: 12 }}>{r.respondedBy}</strong>
+                          {r.role && <span style={{ fontSize: 10, color: 'var(--text-muted)', background: 'var(--bg-card)', padding: '1px 6px', borderRadius: 4 }}>{r.role}</span>}
+                        </div>
+                        <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{new Date(r.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                      </div>
+                      <p style={{ margin: '0 0 4px', color: 'var(--text-primary)', lineHeight: 1.5 }}>{r.message}</p>
+                      {r.etaDays && (
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, color: '#2563eb', background: '#dbeafe', padding: '2px 8px', borderRadius: 6 }}>
+                          ⏱️ Expected in {r.etaDays} day{r.etaDays > 1 ? 's' : ''}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ marginTop: 8, fontSize: 12, color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                  {c.lastUpdate || 'Awaiting official response...'}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          )
+        })}
         {filteredComplaints.length === 0 && (
           <div className="card" style={{ textAlign: 'center', padding: 32, color: 'var(--text-muted)' }}>
             No complaints found.
