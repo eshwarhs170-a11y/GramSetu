@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Karnataka Urban Local Bodies and their Ward data
  * Sources:
  * - LGD Directory (lgdirectory.gov.in) - requires manual download
