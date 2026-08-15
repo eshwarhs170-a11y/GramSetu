@@ -55,35 +55,46 @@ export default function VillagerLogin() {
       async (position) => {
         const { latitude, longitude } = position.coords
         try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=12&addressdetails=1`, {
+          // zoom=18 gives hamlet/neighbourhood level precision
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`, {
             headers: { 'Accept-Language': 'en' }
           })
           const data = await res.json()
           
           let detectedDistrict = 'Tumkuru'
           let detectedTaluk = 'Gubbi'
-          let detectedVillage = 'Gubbi Village'
-          let detectedGp = 'Gubbi'
+          let detectedVillageRaw = ''
+          const candidateNames = []
 
           if (data && data.address) {
             const addr = data.address
             const rawDist = addr.county || addr.district || addr.state_district || ''
-            if (rawDist) detectedDistrict = rawDist.replace('District', '').trim()
+            if (rawDist) detectedDistrict = rawDist.replace('District', '').replace('district', '').trim()
 
             const rawTaluk = addr.suburb || addr.municipality || addr.taluk || addr.city || addr.town || addr.village_hq || ''
-            if (rawTaluk) detectedTaluk = rawTaluk.replace('Taluk', '').trim()
+            if (rawTaluk) detectedTaluk = rawTaluk.replace('Taluk', '').replace('taluk', '').trim()
 
-            detectedVillage = addr.village || addr.hamlet || addr.neighbourhood || addr.suburb || 'Main Village'
+            // Collect ALL possible village names from the address in order of precision
+            if (addr.hamlet) candidateNames.push(addr.hamlet)
+            if (addr.neighbourhood) candidateNames.push(addr.neighbourhood)
+            if (addr.village) candidateNames.push(addr.village)
+            if (addr.suburb) candidateNames.push(addr.suburb)
+            if (addr.town) candidateNames.push(addr.town)
+            // Also use the display name parts
+            if (data.display_name) {
+              const parts = data.display_name.split(',').map(s => s.trim())
+              parts.slice(0, 3).forEach(p => {
+                if (p && !candidateNames.includes(p)) candidateNames.push(p)
+              })
+            }
+            detectedVillageRaw = candidateNames[0] || 'Main Village'
           }
 
           // Boundary checks for Karnataka mapping
           const inKarnataka = (latitude >= 11.5 && latitude <= 18.5) && (longitude >= 74.0 && longitude <= 78.5)
           if (!inKarnataka) {
-            // Outside Karnataka, use default Gubbi Tumakuru
             detectedDistrict = 'Tumkuru'
             detectedTaluk = 'Gubbi'
-            detectedGp = 'Gubbi'
-            detectedVillage = 'Gubbi Village'
           }
 
           // Match district
@@ -93,11 +104,50 @@ export default function VillagerLogin() {
 
           const tKey = `${distObj.name}|${talObj.name}`
           const gpList = talukToGps[tKey] || []
-          const matchedGp = gpList.find(g => g.toLowerCase().includes(detectedGp.toLowerCase())) || gpList[0] || 'Main GP'
 
-          const gKey = `${distObj.name}|${talObj.name}|${matchedGp}`
-          const villagesList = villageData[gKey] || []
-          const matchedVillage = villagesList.find(v => v.toLowerCase().includes(detectedVillage.toLowerCase())) || villagesList[0] || 'Main Village'
+          // Search ALL villages across ALL GPs in this taluk for a fuzzy match
+          let matchedGp = gpList[0] || 'Main GP'
+          let matchedVillage = 'Main Village'
+          let bestScore = 0
+
+          const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
+
+          for (const gpName of gpList) {
+            const gKey = `${distObj.name}|${talObj.name}|${gpName}`
+            const villages = villageData[gKey] || []
+            for (const v of villages) {
+              const vNorm = normalize(v)
+              for (const candidate of candidateNames) {
+                const cNorm = normalize(candidate)
+                // Exact match = highest score
+                if (vNorm === cNorm) {
+                  matchedGp = gpName
+                  matchedVillage = v
+                  bestScore = 100
+                  break
+                }
+                // Substring match
+                if (vNorm.includes(cNorm) || cNorm.includes(vNorm)) {
+                  const score = Math.min(vNorm.length, cNorm.length) / Math.max(vNorm.length, cNorm.length) * 80
+                  if (score > bestScore) {
+                    bestScore = score
+                    matchedGp = gpName
+                    matchedVillage = v
+                  }
+                }
+              }
+              if (bestScore >= 100) break
+            }
+            if (bestScore >= 100) break
+          }
+
+          // If no match found, use first GP and first village
+          if (bestScore === 0) {
+            matchedGp = gpList[0] || 'Main GP'
+            const gKey = `${distObj.name}|${talObj.name}|${matchedGp}`
+            const vList = villageData[gKey] || []
+            matchedVillage = vList[0] || detectedVillageRaw || 'Main Village'
+          }
 
           // Auto Login directly with these values!
           const mockName = name.trim() || 'GPS Auto User'
@@ -438,29 +488,20 @@ export default function VillagerLogin() {
               {/* GPS Auto Login Button */}
               <button
                 type="button"
-                className="btn btn-outline"
+                className="btn"
                 onClick={handleGpsAutoLogin}
                 disabled={gpsLoading}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                  padding: '12px 16px',
-                  background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
-                  border: '1.5px solid #2563eb',
-                  color: '#1e40af',
-                  fontWeight: 700,
-                  borderRadius: 'var(--radius-md)',
-                  cursor: 'pointer',
-                  width: '100%',
-                  marginBottom: 16,
-                  transition: 'all 0.2s',
-                  boxShadow: '0 4px 12px rgba(37, 99, 235, 0.08)'
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                  padding: '14px 16px', background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
+                  border: 'none', color: '#fff', fontWeight: 700, fontSize: 14,
+                  borderRadius: 'var(--radius-md)', cursor: 'pointer', width: '100%',
+                  marginBottom: 16, transition: 'all 0.2s',
+                  boxShadow: '0 4px 14px rgba(220, 38, 38, 0.25)'
                 }}
               >
-                <MapPin size={18} style={{ color: '#2563eb' }} />
-                {gpsLoading ? 'Detecting GPS & Logging in...' : '📍 GPS Auto-Detect & Quick Login / ಜಿಪಿಎಸ್ ಸ್ವಯಂ ಲಾಗಿನ್'}
+                <MapPin size={18} strokeWidth={2.5} />
+                {gpsLoading ? 'Detecting Location...' : 'GPS Quick Login'}
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', margin: '0 0 16px 0' }}>

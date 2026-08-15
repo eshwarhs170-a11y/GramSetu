@@ -1928,26 +1928,20 @@ export function ComplaintStatusScreen() {
 
 export function ProfileScreen() {
   const { t, lang } = useLanguage()
-  const [userName, setUserName] = useState('ರಾಮಪ್ಪ ಗೌಡ')
-  const [userDistrict, setUserDistrict] = useState('Mysuru')
-  const [userTaluk, setUserTaluk] = useState('Mysuru Taluk')
-  const [userPhone, setUserPhone] = useState('+91 98765 43210')
-  const [userAadhaar, setUserAadhaar] = useState('XXXX-XXXX-5678')
-  const [userLand, setUserLand] = useState('2.5 Acres — Ragi & Mulberry')
-  const [userBank, setUserBank] = useState('Canara Bank (Karnataka Based)')
-  const [userAccount, setUserAccount] = useState('XXXX XXXX 9012')
-  const [userIfsc, setUserIfsc] = useState('CNRB0002789')
+  const [userName, setUserName] = useState('')
+  const [userDistrict, setUserDistrict] = useState('')
+  const [userTaluk, setUserTaluk] = useState('')
+  const [userGp, setUserGp] = useState('')
+  const [userVillage, setUserVillage] = useState('')
+  const [userPhone, setUserPhone] = useState('')
 
   const [isEditing, setIsEditing] = useState(false)
   const [editName, setEditName] = useState('')
   const [editDistrict, setEditDistrict] = useState('')
   const [editTaluk, setEditTaluk] = useState('')
+  const [editGp, setEditGp] = useState('')
+  const [editVillage, setEditVillage] = useState('')
   const [editPhone, setEditPhone] = useState('')
-  const [editAadhaar, setEditAadhaar] = useState('')
-  const [editLand, setEditLand] = useState('')
-  const [editBank, setEditBank] = useState('')
-  const [editAccount, setEditAccount] = useState('')
-  const [editIfsc, setEditIfsc] = useState('')
 
   const districtsOfKarnataka = [
     { name: 'Bagalkot', taluks: ['Bagalkot', 'Badami', 'Bilagi', 'Hungund', 'Jamkhandi', 'Mudhol'] },
@@ -1995,34 +1989,25 @@ export function ProfileScreen() {
     const sName = window.localStorage.getItem('citizen_name')
     const sDist = window.localStorage.getItem('citizen_district')
     const sTaluk = window.localStorage.getItem('citizen_taluk')
+    const sGp = window.localStorage.getItem('citizen_gp')
+    const sVillage = window.localStorage.getItem('citizen_village')
     const sPhone = window.localStorage.getItem('citizen_phone')
-    const sAadhaar = window.localStorage.getItem('citizen_aadhaar')
-    const sLand = window.localStorage.getItem('citizen_land')
-    const sBank = window.localStorage.getItem('citizen_bank')
-    const sAccount = window.localStorage.getItem('citizen_account')
-    const sIfsc = window.localStorage.getItem('citizen_ifsc')
 
     if (sName) setUserName(sName)
     if (sDist) setUserDistrict(sDist)
     if (sTaluk) setUserTaluk(sTaluk)
+    if (sGp) setUserGp(sGp)
+    if (sVillage) setUserVillage(sVillage)
     if (sPhone) setUserPhone(sPhone.startsWith('+91') ? sPhone : '+91 ' + sPhone.slice(0, 5) + ' ' + sPhone.slice(5))
-    if (sAadhaar) setUserAadhaar(sAadhaar)
-    if (sLand) setUserLand(sLand)
-    if (sBank) setUserBank(sBank)
-    if (sAccount) setUserAccount(sAccount)
-    if (sIfsc) setUserIfsc(sIfsc)
   }, [])
 
   const startEditing = () => {
     setEditName(userName)
     setEditDistrict(userDistrict)
     setEditTaluk(userTaluk)
+    setEditGp(userGp)
+    setEditVillage(userVillage)
     setEditPhone(userPhone.replace('+91 ', '').replace(/\s+/g, ''))
-    setEditAadhaar(userAadhaar)
-    setEditLand(userLand)
-    setEditBank(userBank)
-    setEditAccount(userAccount)
-    setEditIfsc(userIfsc)
     setIsEditing(true)
   }
 
@@ -2032,22 +2017,16 @@ export function ProfileScreen() {
     window.localStorage.setItem('citizen_name', editName)
     window.localStorage.setItem('citizen_district', editDistrict)
     window.localStorage.setItem('citizen_taluk', editTaluk)
+    window.localStorage.setItem('citizen_gp', editGp)
+    window.localStorage.setItem('citizen_village', editVillage)
     window.localStorage.setItem('citizen_phone', editPhone)
-    window.localStorage.setItem('citizen_aadhaar', editAadhaar)
-    window.localStorage.setItem('citizen_land', editLand)
-    window.localStorage.setItem('citizen_bank', editBank)
-    window.localStorage.setItem('citizen_account', editAccount)
-    window.localStorage.setItem('citizen_ifsc', editIfsc)
 
     setUserName(editName)
     setUserDistrict(editDistrict)
     setUserTaluk(editTaluk)
+    setUserGp(editGp)
+    setUserVillage(editVillage)
     setUserPhone('+91 ' + editPhone.slice(0, 5) + ' ' + editPhone.slice(5))
-    setUserAadhaar(editAadhaar)
-    setUserLand(editLand)
-    setUserBank(editBank)
-    setUserAccount(editAccount)
-    setUserIfsc(editIfsc)
 
     setIsEditing(false)
 
@@ -2117,58 +2096,25 @@ export function ProfileScreen() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
           <div className="form-group">
-            <label className="form-label">Aadhaar Number / ಆಧಾರ್ ಸಂಖ್ಯೆ</label>
+            <label className="form-label">Gram Panchayat / ಗ್ರಾಮ ಪಂಚಾಯತಿ</label>
             <input 
               type="text" 
               className="form-input" 
-              value={editAadhaar} 
-              onChange={e => setEditAadhaar(e.target.value)} 
-              placeholder="XXXX-XXXX-XXXX"
+              value={editGp} 
+              onChange={e => setEditGp(e.target.value)} 
+              placeholder="Your Gram Panchayat"
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Land Holding (Acres / Crop)</label>
+            <label className="form-label">Village / ಹಳ್ಳಿ</label>
             <input 
               type="text" 
               className="form-input" 
-              value={editLand} 
-              onChange={e => setEditLand(e.target.value)} 
-              placeholder="e.g. 2.5 Acres - Ragi"
+              value={editVillage} 
+              onChange={e => setEditVillage(e.target.value)} 
+              placeholder="Your Village"
             />
           </div>
-        </div>
-
-        <h4 style={{ fontSize: 14, fontWeight: 700, margin: '20px 0 10px', color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-light)', paddingBottom: 6 }}>💳 Bank Account Details (for DBT)</h4>
-        
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-          <div className="form-group">
-            <label className="form-label">Bank Name</label>
-            <input 
-              type="text" 
-              className="form-input" 
-              value={editBank} 
-              onChange={e => setEditBank(e.target.value)} 
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Account Number</label>
-            <input 
-              type="text" 
-              className="form-input" 
-              value={editAccount} 
-              onChange={e => setEditAccount(e.target.value)} 
-            />
-          </div>
-        </div>
-
-        <div className="form-group" style={{ marginBottom: 24, maxWidth: '50%' }}>
-          <label className="form-label">IFSC Code</label>
-          <input 
-            type="text" 
-            className="form-input" 
-            value={editIfsc} 
-            onChange={e => setEditIfsc(e.target.value)} 
-          />
         </div>
 
         <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
@@ -2185,26 +2131,21 @@ export function ProfileScreen() {
         <div>
           <div className="card" style={{ textAlign: 'center', marginBottom: 20 }}>
             <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, color: '#fff', margin: '0 auto 16px', fontWeight: 700 }}>
-              {userName.charAt(0)}
+              {userName.charAt(0) || '?'}
             </div>
-            <h3 style={{ fontSize: 20, fontWeight: 800 }}>{userName}</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2 }}>{userTaluk}, {userDistrict}, Karnataka</p>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-              <span className="badge badge-success">Aadhaar Verified</span>
-              <span className="badge badge-primary">PM Kisan Active</span>
-              <span className="badge badge-warning">Raitha Siri</span>
-            </div>
+            <h3 style={{ fontSize: 20, fontWeight: 800 }}>{userName || 'Villager'}</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2 }}>{userVillage}{userVillage && userGp ? ', ' : ''}{userGp && `${userGp} GP`}</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: 11, marginTop: 2 }}>{userTaluk}{userTaluk && ', '}{userDistrict}{userDistrict && ', Karnataka'}</p>
             <button className="btn btn-outline" onClick={startEditing} style={{ marginTop: 16 }}>✏️ {t('edit')}</button>
           </div>
           <div className="card">
             <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 14 }}>{t('personalDetails')}</h4>
             {[
-              [Phone,    t('mobile'),      userPhone],
-              [Home,     t('village'),     userTaluk + ' Village'],
-              [Map,      t('taluk'),       userTaluk],
-              [Building2,t('district'),    userDistrict + ', Karnataka'],
-              [ShieldCheck, t('aadhaar'),  userAadhaar],
-              [Wheat,    'Land (ಜಮೀನು)',   userLand],
+              [Phone,     t('mobile'),                    userPhone || '—'],
+              [Home,      'Village / ಹಳ್ಳಿ',              userVillage || '—'],
+              [Building2, 'Gram Panchayat / ಗ್ರಾ.ಪಂ.',     userGp || '—'],
+              [Map,       t('taluk'),                     userTaluk || '—'],
+              [Building2, t('district'),                  userDistrict ? userDistrict + ', Karnataka' : '—'],
             ].map(([Icon, label, val]) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: '1px solid var(--border-light)' }}>
                 <div style={{ width: 34, height: 34, borderRadius: 8, background: 'var(--primary-glow)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -2234,22 +2175,6 @@ export function ProfileScreen() {
                   <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{s.next}</p>
                 </div>
                 <span className={`badge ${s.status === 'Active' ? 'badge-success' : 'badge-warning'}`}>{s.status}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="card">
-            <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 14 }}>{t('bankDetails')}</h4>
-            {[
-              ['Bank', userBank],
-              ['Branch', userDistrict + ' Main Branch'],
-              ['Account', userAccount],
-              ['IFSC', userIfsc],
-              ['DBT Linked', '✅ Aadhaar Linked'],
-            ].map(([l, v]) => (
-              <div key={l} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-light)', fontSize: 14 }}>
-                <span style={{ color: 'var(--text-secondary)' }}>{l}</span>
-                <span style={{ fontWeight: 600 }}>{v}</span>
               </div>
             ))}
           </div>
