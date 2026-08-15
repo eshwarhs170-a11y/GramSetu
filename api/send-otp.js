@@ -78,11 +78,11 @@ export default async function handler(req, res) {
 
   try {
     await transporter.sendMail({
-      from: `"GramSetu ಗ್ರಾಮ ಸೇತು" <${process.env.GMAIL_USER}>`,
+      from: `"GramSetu Support" <${process.env.GMAIL_USER}>`,
       to: email,
-      subject: `${otp} — Your GramSetu Login OTP`,
+      subject: `GramSetu Verification Code`,
       html: htmlBody,
-      text: `Your GramSetu OTP is: ${otp}. Valid for 10 minutes. Do not share this code.`,
+      text: `Your GramSetu verification code is: ${otp}. Valid for 10 minutes. Do not share this code.`,
     });
 
     return res.status(200).json({ success: true });
