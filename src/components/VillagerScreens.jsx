@@ -954,24 +954,25 @@ export function SchemesScreen() {
 export function MarketScreen() {
   const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
-  const [marketFilter, setMarketFilter] = useState('All')
+  const [viewMode, setViewMode] = useState('district') // 'district' or 'all'
   const [prices, setPrices] = useState(BASELINE_PRICES)
   const [loadingPrices, setLoadingPrices] = useState(true)
   const [lastUpdated, setLastUpdated] = useState(null)
   const [priceSource, setPriceSource] = useState('baseline')
 
+  // User's current district for filtering
+  const userDistrict = window.localStorage.getItem('citizen_district') || 'Tumkuru'
+
   // Fetch live AGMARKNET prices, then try Firestore override
   useEffect(() => {
     const load = async () => {
       setLoadingPrices(true)
-      // 1. Try real AGMARKNET API
       const live = await fetchLivePrices()
       if (live && live.length) {
         setPrices(live)
         setPriceSource('live')
         setLastUpdated(new Date().toLocaleTimeString('en-IN'))
       } else {
-        // 2. Fall back to Firestore if seeded by admin
         try {
           const snap = await getDocs(collection(db, 'prices'))
           if (!snap.empty) {
@@ -986,13 +987,21 @@ export function MarketScreen() {
     load()
   }, [])
 
-  const markets = ['All', 'APMC Bengaluru', 'APMC Shimoga', 'APMC Chikkamagaluru', 'APMC Dharwad', 'APMC Tumkuru', 'APMC Mandya']
-
   const filteredPrices = prices.filter(p => {
     const matchesSearch = p.crop.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           p.market.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesMarket = marketFilter === 'All' || p.market === marketFilter
-    return matchesSearch && matchesMarket
+    
+    let matchesRegion = true
+    if (viewMode === 'district') {
+      // If we know the districts for this crop, see if user's district is in there
+      if (p.districts && Array.isArray(p.districts)) {
+        matchesRegion = p.districts.includes(userDistrict)
+      } else {
+        // Fallback if no mapping exists, show all
+        matchesRegion = true
+      }
+    }
+    return matchesSearch && matchesRegion
   })
 
   const [landArea, setLandArea] = useState('')
@@ -1002,7 +1011,6 @@ export function MarketScreen() {
   const calculateEstimate = (e) => {
     e.preventDefault()
     if (!landArea || isNaN(landArea)) return
-    // Use live price from prices array if available
     const priceEntry = prices.find(p => p.crop === selectedCrop)
     const rawPrice = priceEntry ? parseFloat(String(priceEntry.price).replace(/[₹,]/g, '')) : 3000
     const yieldPerAcre = {
@@ -1019,6 +1027,8 @@ export function MarketScreen() {
 
   return (
     <div className="animate-fadeInUp">
+      
+      {/* Top Highlights */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20, marginBottom: 24 }}>
         {(() => {
           const best = [...prices].sort((a, b) => {
@@ -1030,30 +1040,41 @@ export function MarketScreen() {
           const drop = best[best.length - 1]
           return (
             <>
-              <div className="card" style={{ background: 'linear-gradient(135deg, #d1fae5, #a7f3d0)', border: 'none' }}>
-                <div style={{ fontSize: 12, color: '#065f46', fontWeight: 600, marginBottom: 4 }}>{t('todayBest')}</div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#064e3b' }}>{top?.crop?.split('(')[0].trim()} {top?.price}/{top?.unit?.split(' ').pop() || 'q'}</div>
-                <div style={{ fontSize: 13, color: '#047857', marginTop: 4 }}>↑ {top?.market}</div>
+              <div className="card" style={{ background: 'linear-gradient(135deg, #d1fae5, #a7f3d0)', border: 'none', display: 'flex', alignItems: 'center', gap: 16 }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 12, color: '#065f46', fontWeight: 600, marginBottom: 4 }}>Top Gainer Today</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: '#064e3b' }}>{top?.crop?.split('(')[0].trim()} {top?.price}/{top?.unit?.split(' ').pop() || 'q'}</div>
+                  <div style={{ fontSize: 13, color: '#047857', marginTop: 4 }}>↑ {top?.market}</div>
+                </div>
+                {top?.img && <img src={top.img} alt={top.crop} style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', border: '3px solid #6ee7b7' }}/>}
               </div>
-              <div className="card" style={{ background: 'linear-gradient(135deg, #fee2e2, #fecaca)', border: 'none' }}>
-                <div style={{ fontSize: 12, color: '#991b1b', fontWeight: 600, marginBottom: 4 }}>{t('biggestDrop')}</div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#7f1d1d' }}>{drop?.crop?.split('(')[0].trim()} {drop?.change}</div>
-                <div style={{ fontSize: 13, color: '#b91c1c', marginTop: 4 }}>↓ {drop?.market}</div>
+              <div className="card" style={{ background: 'linear-gradient(135deg, #fee2e2, #fecaca)', border: 'none', display: 'flex', alignItems: 'center', gap: 16 }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 12, color: '#991b1b', fontWeight: 600, marginBottom: 4 }}>Biggest Drop Today</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: '#7f1d1d' }}>{drop?.crop?.split('(')[0].trim()} {drop?.change}</div>
+                  <div style={{ fontSize: 13, color: '#b91c1c', marginTop: 4 }}>↓ {drop?.market}</div>
+                </div>
+                {drop?.img && <img src={drop.img} alt={drop.crop} style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', border: '3px solid #fca5a5' }}/>}
               </div>
-              <div className="card" style={{ background: 'linear-gradient(135deg, #ede9fe, #ddd6fe)', border: 'none' }}>
+              <div className="card" style={{ background: 'linear-gradient(135deg, #ede9fe, #ddd6fe)', border: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <div style={{ fontSize: 12, color: '#5b21b6', fontWeight: 600, marginBottom: 4 }}>Data Source</div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: '#4c1d95' }}>
-                  {loadingPrices ? '⏳ Fetching...' : priceSource === 'live' ? '🟢 AGMARKNET Live' : '📋 MSP Baseline 2025-26'}
+                  {loadingPrices ? '⏳ Fetching Data...' : priceSource === 'live' ? '🟢 AGMARKNET Live Data' : '📋 MSP Baseline 2025-26'}
                 </div>
                 <div style={{ fontSize: 11, color: '#6d28d9', marginTop: 4 }}>
-                  {lastUpdated ? `Updated: ${lastUpdated}` : 'Connecting to data.gov.in...'}
+                  {lastUpdated ? `Last updated: ${lastUpdated}` : 'Connecting to data.gov.in...'}
                 </div>
+                <button
+                  onClick={async () => { clearPriceCache(); const l = await fetchLivePrices(); if (l) { setPrices(l); setPriceSource('live'); setLastUpdated(new Date().toLocaleTimeString('en-IN')); } }}
+                  style={{ marginTop: 8, fontSize: 11, color: '#5b21b6', fontWeight: 700, border: '1px solid #c4b5fd', background: 'rgba(255,255,255,0.5)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', alignSelf: 'flex-start' }}
+                >↻ Refresh Now</button>
               </div>
             </>
           )
         })()}
       </div>
 
+      {/* Estimator */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 24, marginBottom: 24 }}>
         <div className="card">
           <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12, color: 'var(--primary)' }}>🧮 Crop Yield & Income Estimator</h4>
@@ -1073,15 +1094,11 @@ export function MarketScreen() {
             <div className="form-group" style={{ flex: 1, minWidth: 180 }}>
               <label className="form-label" style={{ fontSize: 12 }}>Select Crop / ಬೆಳೆ ಆಯ್ಕೆ</label>
               <select 
-                className="form-input"
+                className="form-input custom-select"
                 value={selectedCrop}
                 onChange={e => setSelectedCrop(e.target.value)}
               >
-                <option>Ragi (ರಾಗಿ)</option>
-                <option>Areca Nut (ಅಡಿಕೆ)</option>
-                <option>Jowar (ಜೋಳ)</option>
-                <option>Maize (ಮೆಕ್ಕೆಜೋಳ)</option>
-                <option>Sugarcane (ಕಬ್ಬು)</option>
+                {prices.map(p => <option key={p.crop}>{p.crop}</option>)}
               </select>
             </div>
             <button type="submit" className="btn btn-primary" style={{ height: 44 }}>Estimate / ಲೆಕ್ಕಾಚಾರ</button>
@@ -1102,89 +1119,123 @@ export function MarketScreen() {
         </div>
       </div>
 
-      <div className="card" style={{ padding: '16px 20px', marginBottom: 20 }}>
-        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--primary)' }}>🏪 Live APMC Price Directory</div>
+      {/* Main Grid View */}
+      <div className="card" style={{ padding: '20px', marginBottom: 20 }}>
+        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>Live Crop Prices</div>
+          
+          {/* View Mode Toggle */}
+          <div style={{ display: 'flex', background: 'var(--bg-card-alt)', borderRadius: 'var(--radius-md)', padding: 4, border: '1px solid var(--border-light)' }}>
+            <button
+              onClick={() => setViewMode('district')}
+              style={{
+                padding: '8px 16px', fontSize: 13, fontWeight: 600, border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer', transition: 'all 0.2s',
+                background: viewMode === 'district' ? 'var(--primary)' : 'transparent',
+                color: viewMode === 'district' ? '#fff' : 'var(--text-secondary)',
+                boxShadow: viewMode === 'district' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
+              }}
+            >
+              My District ({userDistrict})
+            </button>
+            <button
+              onClick={() => setViewMode('all')}
+              style={{
+                padding: '8px 16px', fontSize: 13, fontWeight: 600, border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer', transition: 'all 0.2s',
+                background: viewMode === 'all' ? 'var(--primary)' : 'transparent',
+                color: viewMode === 'all' ? '#fff' : 'var(--text-secondary)',
+                boxShadow: viewMode === 'all' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
+              }}
+            >
+              All Karnataka Crops
+            </button>
+          </div>
+
           <input 
             type="text" 
             className="form-input" 
-            placeholder="Search crop or market..." 
-            style={{ maxWidth: 260, padding: '6px 12px', fontSize: 13 }}
+            placeholder="Search crop or APMC..." 
+            style={{ maxWidth: 260, padding: '8px 14px', fontSize: 14 }}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {markets.map(m => (
-            <button 
-              key={m} 
-              className={`btn btn-sm ${marketFilter === m ? 'btn-primary' : 'btn-outline'}`}
-              style={{ fontSize: 11, padding: '4px 10px' }}
-              onClick={() => setMarketFilter(m)}
-            >
-              {m}
-            </button>
-          ))}
-        </div>
-      </div>
 
-      <div className="card" style={{ padding: 0, overflowX: 'auto' }}>
-        <div style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)' }}>
-          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Source: AGMARKNET / data.gov.in</span>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            {loadingPrices && <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>⏳ Loading prices...</span>}
-            <button
-              onClick={async () => { clearPriceCache(); const l = await fetchLivePrices(); if (l) { setPrices(l); setPriceSource('live'); setLastUpdated(new Date().toLocaleTimeString('en-IN')); } }}
-              style={{ fontSize: 11, color: 'var(--primary)', fontWeight: 600, border: '1px solid var(--border-light)', background: 'var(--bg-card)', borderRadius: 6, padding: '2px 10px', cursor: 'pointer' }}
-            >↻ Refresh</button>
-            <a href="https://agmarknet.gov.in" target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: 'var(--primary)', fontWeight: 600 }}>AGMARKNET ↗</a>
+        {/* CROP GRID */}
+        {filteredPrices.length === 0 ? (
+          <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>
+            <IndianRupee size={40} style={{ opacity: 0.3, marginBottom: 12 }} />
+            <p style={{ fontWeight: 600 }}>No crops found for the selected view.</p>
+            {viewMode === 'district' && <p style={{ fontSize: 13, marginTop: 4 }}>Try switching to "All Karnataka Crops" or double-check your district mapping.</p>}
           </div>
-        </div>
-        <table className="market-table" style={{ width: '100%', minWidth: 500 }}>
-          <thead>
-            <tr>
-              <th>{t('cropCol')}</th>
-              <th>{t('marketCol')}</th>
-              <th>{t('priceCol')}</th>
-              <th>{t('changeCol')}</th>
-              <th>{t('unitCol')}</th>
-            </tr>
-          </thead>
-          <tbody>
+        ) : (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+            gap: 20
+          }}>
             {filteredPrices.map((p, i) => (
-              <tr key={i}>
-                <td>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <img
-                      src={p.img}
-                      alt={p.crop}
-                      style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'cover', flexShrink: 0, border: '1px solid var(--border-light)' }}
-                      onError={e => { e.target.style.display = 'none' }}
-                    />
-                    <span style={{ fontWeight: 600 }}>{p.crop}</span>
+              <div key={i} style={{
+                background: 'var(--bg-card-alt)',
+                border: '1px solid var(--border-light)',
+                borderRadius: 'var(--radius-md)',
+                overflow: 'hidden',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)'
+                e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.08)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = 'none'
+              }}
+              >
+                {/* Large Crop Image */}
+                <div style={{ width: '100%', height: 160, position: 'relative' }}>
+                  <img
+                    src={p.img || 'https://images.unsplash.com/photo-1595858021156-fde26bd6c905?w=500&q=80'}
+                    alt={p.crop}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    onError={e => { e.target.src = 'https://images.unsplash.com/photo-1595858021156-fde26bd6c905?w=500&q=80' }}
+                  />
+                  <div style={{
+                    position: 'absolute', top: 10, right: 10,
+                    background: p.trend === 'up' ? 'rgba(6, 95, 70, 0.9)' : p.trend === 'down' ? 'rgba(153, 27, 27, 0.9)' : 'rgba(75, 85, 99, 0.9)',
+                    color: '#fff', padding: '4px 8px', borderRadius: 20, fontSize: 12, fontWeight: 700,
+                    display: 'flex', alignItems: 'center', gap: 4, backdropFilter: 'blur(4px)'
+                  }}>
+                    {p.trend === 'up' ? <ArrowUp size={12}/> : p.trend === 'down' ? <ArrowDown size={12}/> : <Minus size={12}/>}
+                    {p.change}
                   </div>
-                </td>
-                <td style={{ color: 'var(--text-secondary)', fontSize: 13 }}>{p.market}</td>
-                <td style={{ fontWeight: 700, fontSize: 15 }}>{p.price}</td>
-                <td className={p.trend === 'up' ? 'price-up' : p.trend === 'down' ? 'price-down' : 'price-neutral'}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                    {p.trend === 'up' ? <ArrowUp size={13}/> : p.trend === 'down' ? <ArrowDown size={13}/> : <Minus size={13}/>} {p.change}
-                  </span>
-                </td>
-                <td style={{ color: 'var(--text-muted)', fontSize: 13 }}>{p.unit}</td>
-              </tr>
+                </div>
+
+                {/* Content */}
+                <div style={{ padding: 16 }}>
+                  <h3 style={{ margin: '0 0 4px 0', fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>{p.crop}</h3>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <MapPin size={14} style={{ opacity: 0.7 }} /> {p.market}
+                  </div>
+                  
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderTop: '1px solid var(--border-light)', paddingTop: 12 }}>
+                    <div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Live Price</div>
+                      <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--primary-dark)' }}>{p.price}</div>
+                    </div>
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 500, paddingBottom: 4 }}>
+                      {p.unit}
+                    </div>
+                  </div>
+                </div>
+              </div>
             ))}
-            {filteredPrices.length === 0 && (
-              <tr>
-                <td colSpan="5" style={{ textAlign: 'center', padding: 24, color: 'var(--text-muted)' }}>No matching crops found.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+          </div>
+        )}
       </div>
     </div>
   )
 }
+
 
 export function AnnouncementsScreen() {
   const { t, lang } = useLanguage()
