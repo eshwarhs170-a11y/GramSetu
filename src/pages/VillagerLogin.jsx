@@ -44,6 +44,11 @@ export default function VillagerLogin() {
   const [gpsLoading, setGpsLoading] = useState(false)
 
   const handleGpsAutoLogin = () => {
+    if (!name.trim() || !email.trim() || !phone.trim() || phone.length < 10) {
+      setErrorMsg('Please enter your Name, Email, and a valid 10-digit Mobile Number first.')
+      return
+    }
+
     if (!navigator.geolocation) {
       setErrorMsg('Geolocation is not supported by your browser.')
       return
@@ -99,10 +104,16 @@ export default function VillagerLogin() {
 
           // Match district
           const distObj = districtsOfKarnataka.find(d => d.name.toLowerCase() === detectedDistrict.toLowerCase()) || districtsOfKarnataka.find(d => d.name === 'Tumkuru')
-          // Match taluk
-          const talObj = distObj.taluks.find(t => t.name.toLowerCase() === detectedTaluk.toLowerCase()) || distObj.taluks[0]
+          // Match taluk (Fallback safely if distObj is somehow missing, though we mock Tumkuru if out of bounds)
+          let talObj = { name: detectedTaluk }
+          if (distObj && distObj.taluks) {
+            talObj = distObj.taluks.find(t => t.name.toLowerCase() === detectedTaluk.toLowerCase()) || distObj.taluks[0]
+          }
 
-          const tKey = `${distObj.name}|${talObj.name}`
+          const distName = distObj ? distObj.name : detectedDistrict
+          const talName = talObj ? talObj.name : detectedTaluk
+
+          const tKey = `${distName}|${talName}`
           const gpList = talukToGps[tKey] || []
 
           // Search ALL villages across ALL GPs in this taluk for a fuzzy match
@@ -113,7 +124,7 @@ export default function VillagerLogin() {
           const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
 
           for (const gpName of gpList) {
-            const gKey = `${distObj.name}|${talObj.name}|${gpName}`
+            const gKey = `${distName}|${talName}|${gpName}`
             const villages = villageData[gKey] || []
             for (const v of villages) {
               const vNorm = normalize(v)
@@ -141,34 +152,31 @@ export default function VillagerLogin() {
             if (bestScore >= 100) break
           }
 
-          // If no match found, use first GP and first village
+          // If no match found, use first GP and first village, or just fallback to detected string
           if (bestScore === 0) {
             matchedGp = gpList[0] || 'Main GP'
-            const gKey = `${distObj.name}|${talObj.name}|${matchedGp}`
+            const gKey = `${distName}|${talName}|${matchedGp}`
             const vList = villageData[gKey] || []
-            matchedVillage = vList[0] || detectedVillageRaw || 'Main Village'
+            matchedVillage = vList.length > 0 ? vList[0] : (detectedVillageRaw || 'Main Village')
           }
 
-          // Auto Login directly with these values!
-          const mockName = name.trim() || 'GPS Auto User'
-          const mockEmail = email.trim() || 'gpsuser@gramsetu.gov.in'
-          const mockPhone = phone.trim() || '9988776655'
-
-          window.localStorage.setItem('citizen_name', mockName)
-          window.localStorage.setItem('citizen_email', mockEmail)
-          window.localStorage.setItem('citizen_district', distObj.name)
-          window.localStorage.setItem('citizen_taluk', talObj.name)
+          // Auto Login directly with entered values + detected location
+          window.localStorage.setItem('citizen_name', name.trim())
+          window.localStorage.setItem('citizen_email', email.trim())
+          window.localStorage.setItem('citizen_district', distName)
+          window.localStorage.setItem('citizen_taluk', talName)
           window.localStorage.setItem('citizen_gp', matchedGp)
           window.localStorage.setItem('citizen_village', matchedVillage)
           window.localStorage.setItem('citizen_area_type', 'rural')
-          window.localStorage.setItem('citizen_phone', mockPhone)
+          window.localStorage.setItem('citizen_phone', phone.trim())
 
           // Sync with Firestore so they have an actual user record
-          const uid = 'user-' + mockEmail.replace(/[^a-z0-9]/gi, '-')
+          const cleanEmail = email.trim()
+          const uid = 'user-' + cleanEmail.replace(/[^a-z0-9]/gi, '-')
           try {
             await setDoc(doc(db, 'users', uid), {
-              uid, name: mockName, email: mockEmail, phone: mockPhone,
-              district: distObj.name, taluk: talObj.name,
+              uid, name: name.trim(), email: cleanEmail, phone: phone.trim(),
+              district: distName, taluk: talName,
               areaType: 'rural', gp: matchedGp, village: matchedVillage,
               role: 'villager',
               createdAt: serverTimestamp(),
@@ -485,31 +493,6 @@ export default function VillagerLogin() {
 
           {step === 1 ? (
             <form className="login-form" onSubmit={handleSendOtp}>
-              {/* GPS Auto Login Button */}
-              <button
-                type="button"
-                className="btn"
-                onClick={handleGpsAutoLogin}
-                disabled={gpsLoading}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                  padding: '14px 16px', background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
-                  border: 'none', color: '#fff', fontWeight: 700, fontSize: 14,
-                  borderRadius: 'var(--radius-md)', cursor: 'pointer', width: '100%',
-                  marginBottom: 16, transition: 'all 0.2s',
-                  boxShadow: '0 4px 14px rgba(220, 38, 38, 0.25)'
-                }}
-              >
-                <MapPin size={18} strokeWidth={2.5} />
-                {gpsLoading ? 'Detecting Location...' : 'GPS Quick Login'}
-              </button>
-
-              <div style={{ display: 'flex', alignItems: 'center', margin: '0 0 16px 0' }}>
-                <hr style={{ flex: 1, border: 'none', borderTop: '1px solid var(--border-light)' }} />
-                <span style={{ padding: '0 10px', fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>OR MANUAL ENTRY / ಅಥವಾ ವಿವರ ನಮೂದಿಸಿ</span>
-                <hr style={{ flex: 1, border: 'none', borderTop: '1px solid var(--border-light)' }} />
-              </div>
-
               {/* Name */}
               <div className="form-group">
                 <label className="form-label">Full Name / ಪೂರ್ಣ ಹೆಸರು *</label>
@@ -542,7 +525,7 @@ export default function VillagerLogin() {
 
               {/* Phone */}
               <div className="form-group">
-                <label className="form-label">Mobile Number (Optional)</label>
+                <label className="form-label">Mobile Number / ಮೊಬೈಲ್ ಸಂಖ್ಯೆ *</label>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <input className="form-input" style={{ width: 60, flexShrink: 0 }} value="+91" readOnly />
                   <input
@@ -551,8 +534,34 @@ export default function VillagerLogin() {
                     placeholder="9876543210"
                     value={phone}
                     onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    required
                   />
                 </div>
+              </div>
+
+              {/* GPS Auto Login Button */}
+              <button
+                type="button"
+                className="btn"
+                onClick={handleGpsAutoLogin}
+                disabled={gpsLoading}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                  padding: '14px 16px', background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
+                  border: 'none', color: '#fff', fontWeight: 700, fontSize: 14,
+                  borderRadius: 'var(--radius-md)', cursor: 'pointer', width: '100%',
+                  marginBottom: 16, transition: 'all 0.2s',
+                  boxShadow: '0 4px 14px rgba(220, 38, 38, 0.25)'
+                }}
+              >
+                <MapPin size={18} strokeWidth={2.5} />
+                {gpsLoading ? 'Detecting Location...' : 'GPS Quick Auto-Fill & Login'}
+              </button>
+
+              <div style={{ display: 'flex', alignItems: 'center', margin: '0 0 16px 0' }}>
+                <hr style={{ flex: 1, border: 'none', borderTop: '1px solid var(--border-light)' }} />
+                <span style={{ padding: '0 10px', fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>OR CHOOSE MANUALLY / ಅಥವಾ ಕೈಯಾರೆ ಆಯ್ಕೆಮಾಡಿ</span>
+                <hr style={{ flex: 1, border: 'none', borderTop: '1px solid var(--border-light)' }} />
               </div>
 
               {/* District + Taluk */}
