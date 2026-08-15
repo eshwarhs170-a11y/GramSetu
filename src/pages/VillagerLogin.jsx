@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
-import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail, Send, ShieldCheck, Building2, TreePine } from 'lucide-react'
+import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail, Send, ShieldCheck, Building2, TreePine, MapPin } from 'lucide-react'
 import { db, auth } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
@@ -41,6 +41,135 @@ export default function VillagerLogin() {
   const [otpSentAlert, setOtpSentAlert] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [gpsLoading, setGpsLoading] = useState(false)
+
+  const handleGpsAutoLogin = () => {
+    if (!navigator.geolocation) {
+      setErrorMsg('Geolocation is not supported by your browser.')
+      return
+    }
+    setGpsLoading(true)
+    setErrorMsg('')
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=12&addressdetails=1`, {
+            headers: { 'Accept-Language': 'en' }
+          })
+          const data = await res.json()
+          
+          let detectedDistrict = 'Tumkuru'
+          let detectedTaluk = 'Gubbi'
+          let detectedVillage = 'Gubbi Village'
+          let detectedGp = 'Gubbi'
+
+          if (data && data.address) {
+            const addr = data.address
+            const rawDist = addr.county || addr.district || addr.state_district || ''
+            if (rawDist) detectedDistrict = rawDist.replace('District', '').trim()
+
+            const rawTaluk = addr.suburb || addr.municipality || addr.taluk || addr.city || addr.town || addr.village_hq || ''
+            if (rawTaluk) detectedTaluk = rawTaluk.replace('Taluk', '').trim()
+
+            detectedVillage = addr.village || addr.hamlet || addr.neighbourhood || addr.suburb || 'Main Village'
+          }
+
+          // Boundary checks for Karnataka mapping
+          const inKarnataka = (latitude >= 11.5 && latitude <= 18.5) && (longitude >= 74.0 && longitude <= 78.5)
+          if (!inKarnataka) {
+            // Outside Karnataka, use default Gubbi Tumakuru
+            detectedDistrict = 'Tumkuru'
+            detectedTaluk = 'Gubbi'
+            detectedGp = 'Gubbi'
+            detectedVillage = 'Gubbi Village'
+          }
+
+          // Match district
+          const distObj = districtsOfKarnataka.find(d => d.name.toLowerCase() === detectedDistrict.toLowerCase()) || districtsOfKarnataka.find(d => d.name === 'Tumkuru')
+          // Match taluk
+          const talObj = distObj.taluks.find(t => t.name.toLowerCase() === detectedTaluk.toLowerCase()) || distObj.taluks[0]
+
+          const tKey = `${distObj.name}|${talObj.name}`
+          const gpList = talukToGps[tKey] || []
+          const matchedGp = gpList.find(g => g.toLowerCase().includes(detectedGp.toLowerCase())) || gpList[0] || 'Main GP'
+
+          const gKey = `${distObj.name}|${talObj.name}|${matchedGp}`
+          const villagesList = villageData[gKey] || []
+          const matchedVillage = villagesList.find(v => v.toLowerCase().includes(detectedVillage.toLowerCase())) || villagesList[0] || 'Main Village'
+
+          // Auto Login directly with these values!
+          const mockName = name.trim() || 'GPS Auto User'
+          const mockEmail = email.trim() || 'gpsuser@gramsetu.gov.in'
+          const mockPhone = phone.trim() || '9988776655'
+
+          window.localStorage.setItem('citizen_name', mockName)
+          window.localStorage.setItem('citizen_email', mockEmail)
+          window.localStorage.setItem('citizen_district', distObj.name)
+          window.localStorage.setItem('citizen_taluk', talObj.name)
+          window.localStorage.setItem('citizen_gp', matchedGp)
+          window.localStorage.setItem('citizen_village', matchedVillage)
+          window.localStorage.setItem('citizen_area_type', 'rural')
+          window.localStorage.setItem('citizen_phone', mockPhone)
+
+          // Sync with Firestore so they have an actual user record
+          const uid = 'user-' + mockEmail.replace(/[^a-z0-9]/gi, '-')
+          try {
+            await setDoc(doc(db, 'users', uid), {
+              uid, name: mockName, email: mockEmail, phone: mockPhone,
+              district: distObj.name, taluk: talObj.name,
+              areaType: 'rural', gp: matchedGp, village: matchedVillage,
+              role: 'villager',
+              createdAt: serverTimestamp(),
+              lastLoginAt: serverTimestamp()
+            }, { merge: true })
+          } catch (_) {}
+
+          setGpsLoading(false)
+          navigate('/dashboard/villager')
+        } catch (err) {
+          console.warn('GPS geocoding err:', err)
+          // Direct fallback login with Gubbi Tumakuru
+          const mockName = name.trim() || 'GPS Auto User'
+          const mockEmail = email.trim() || 'gpsuser@gramsetu.gov.in'
+          const mockPhone = phone.trim() || '9988776655'
+
+          window.localStorage.setItem('citizen_name', mockName)
+          window.localStorage.setItem('citizen_email', mockEmail)
+          window.localStorage.setItem('citizen_district', 'Tumkuru')
+          window.localStorage.setItem('citizen_taluk', 'Gubbi')
+          window.localStorage.setItem('citizen_gp', 'Gubbi')
+          window.localStorage.setItem('citizen_village', 'Gubbi Village')
+          window.localStorage.setItem('citizen_area_type', 'rural')
+          window.localStorage.setItem('citizen_phone', mockPhone)
+
+          setGpsLoading(false)
+          navigate('/dashboard/villager')
+        }
+      },
+      (error) => {
+        console.warn('Geolocation error code:', error.code)
+        // Direct fallback login with Gubbi Tumakuru
+        const mockName = name.trim() || 'GPS Auto User'
+        const mockEmail = email.trim() || 'gpsuser@gramsetu.gov.in'
+        const mockPhone = phone.trim() || '9988776655'
+
+        window.localStorage.setItem('citizen_name', mockName)
+        window.localStorage.setItem('citizen_email', mockEmail)
+        window.localStorage.setItem('citizen_district', 'Tumkuru')
+        window.localStorage.setItem('citizen_taluk', 'Gubbi')
+        window.localStorage.setItem('citizen_gp', 'Gubbi')
+        window.localStorage.setItem('citizen_village', 'Gubbi Village')
+        window.localStorage.setItem('citizen_area_type', 'rural')
+        window.localStorage.setItem('citizen_phone', mockPhone)
+
+        setGpsLoading(false)
+        navigate('/dashboard/villager')
+      },
+      { enableHighAccuracy: true, timeout: 6000 }
+    )
+  }
 
   // ── Cascading helpers ──────────────────────────────────────────
   const activeDistrictObj = useMemo(
@@ -306,6 +435,40 @@ export default function VillagerLogin() {
 
           {step === 1 ? (
             <form className="login-form" onSubmit={handleSendOtp}>
+              {/* GPS Auto Login Button */}
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={handleGpsAutoLogin}
+                disabled={gpsLoading}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  padding: '12px 16px',
+                  background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                  border: '1.5px solid #2563eb',
+                  color: '#1e40af',
+                  fontWeight: 700,
+                  borderRadius: 'var(--radius-md)',
+                  cursor: 'pointer',
+                  width: '100%',
+                  marginBottom: 16,
+                  transition: 'all 0.2s',
+                  boxShadow: '0 4px 12px rgba(37, 99, 235, 0.08)'
+                }}
+              >
+                <MapPin size={18} style={{ color: '#2563eb' }} />
+                {gpsLoading ? 'Detecting GPS & Logging in...' : '📍 GPS Auto-Detect & Quick Login / ಜಿಪಿಎಸ್ ಸ್ವಯಂ ಲಾಗಿನ್'}
+              </button>
+
+              <div style={{ display: 'flex', alignItems: 'center', margin: '0 0 16px 0' }}>
+                <hr style={{ flex: 1, border: 'none', borderTop: '1px solid var(--border-light)' }} />
+                <span style={{ padding: '0 10px', fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>OR MANUAL ENTRY / ಅಥವಾ ವಿವರ ನಮೂದಿಸಿ</span>
+                <hr style={{ flex: 1, border: 'none', borderTop: '1px solid var(--border-light)' }} />
+              </div>
+
               {/* Name */}
               <div className="form-group">
                 <label className="form-label">Full Name / ಪೂರ್ಣ ಹೆಸರು *</label>
