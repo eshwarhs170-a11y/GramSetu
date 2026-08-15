@@ -37,20 +37,21 @@
 | Feature | Description |
 |---|---|
 | 🌾 **Government Schemes** | Browse PM-KISAN, PM Awas, Fasal Bima & more with eligibility checker |
-| 📋 **Complaint Filing** | Photo-supported complaints sent directly to local officials |
+| 📋 **Complaint Filing** | Photo-supported complaints routed strictly to relevant Taluk / GP departments |
 | 📈 **APMC Prices** | Live market prices for rice, maize, sunflower, groundnut |
 | 🌦️ **Weather** | 7-day forecast for your village |
 | 🚑 **Emergency SOS** | One-tap ambulance, police, fire & toll-free helplines |
-| 🌿 **Crop Doctor** | AI-assisted crop disease identification & treatment |
-| 💧 **Water Tank Status** | Real-time village water supply tracker |
-| 📰 **Village Bulletin** | Announcements and notices published by officials |
+| 🔄 **Complaint Tracking** | View response threads, ETA updates, and SLA details in real-time |
+| 📰 **Village Bulletin** | Scoped announcements and notices published by officials |
 
 ### 🏛️ For Government Officials
 | Feature | Description |
 |---|---|
-| 📊 **Dashboard** | District-level overview of schemes, complaints & engagement |
-| 📣 **Publish Bulletins** | Push announcements directly to village feeds |
-| 📥 **Complaint Management** | Track, respond, and resolve citizen complaints |
+| 📊 **Dashboard** | Scoped overview of complaints, announcements & statistics based on officer department |
+| 📣 **Publish Bulletins** | Scoped announcements targetable specifically to Taluk, GP, or District |
+| 📥 **Complaint Management** | Specific line department views (Agriculture, Electricity, PHC, BEO, etc.) |
+| ⚡ **Escalation Engine** | 4-tier RDPR escalation (PDO ➔ Taluk Panchayat ➔ Zilla Panchayat ➔ RDPR Commissioner) with 7-day SLA tracker |
+| 💬 **Response Portal** | Respond with ETA and detailed updates to notify citizens |
 | 📤 **Export Lists** | Download beneficiary lists and reports |
 
 ### 🗺️ Explore Karnataka
