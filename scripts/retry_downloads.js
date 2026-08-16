@@ -1,13 +1,62 @@
-const https = require('https');
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+import https from 'https';
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const publicDir = path.join(__dirname, 'public', 'crops');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const publicDir = path.resolve(__dirname, '../public/crops');
 if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
-const cropInfoPath = path.join(__dirname, 'src', 'data', 'cropInfo.json');
-const cropInfo = JSON.parse(fs.readFileSync(cropInfoPath, 'utf8'));
+const wikiMap = {
+  "Maize": "Maize",
+  "Bengal gram": "Chickpea",
+  "Groundnut": "Peanut",
+  "Sunflower": "Helianthus",
+  "Jowar": "Sorghum",
+  "Bajra": "Pearl_millet",
+  "Wheat": "Wheat",
+  "Tur": "Pigeon_pea",
+  "Chilli": "Chili_pepper",
+  "Cotton": "Cotton",
+  "Paddy": "Rice_paddy",
+  "Sugarcane": "Sugarcane",
+  "Soybean": "Soybean",
+  "Ragi": "Finger_millet",
+  "Tomato": "Tomato",
+  "Potato": "Potato",
+  "Onion": "Onion",
+  "Beans": "Bean",
+  "Mulberry": "Mulberry",
+  "Finger millet": "Finger_millet",
+  "Rice": "Rice",
+  "Green gram": "Mung_bean",
+  "Black gram": "Vigna_mungo",
+  "Dry chilli": "Chili_pepper",
+  "Turmeric": "Turmeric",
+  "Tamarind": "Tamarind",
+  "Sesame": "Sesame",
+  "Coconut": "Coconut",
+  "Arecanut": "Areca_nut",
+  "Green chilli": "Chili_pepper",
+  "Lime": "Lime_(fruit)",
+  "Coffee": "Coffee",
+  "Castor seed": "Ricinus",
+  "Horse gram": "Macrotyloma_uniflorum",
+  "Cashew": "Cashew",
+  "Black pepper": "Black_pepper",
+  "Banana": "Banana",
+  "Ginger": "Ginger",
+  "Cocoa": "Theobroma_cacao",
+  "Rubber": "Natural_rubber",
+  "Mango": "Mango",
+  "Tobacco": "Tobacco",
+  "Cardamom": "Cardamom",
+  "Pineapple": "Pineapple",
+  "Silk Cocoon": "Cocoon"
+};
 
 function download(url, dest) {
   return new Promise((resolve, reject) => {
@@ -21,7 +70,6 @@ function download(url, dest) {
       }
     };
     mod.get(url, options, (res) => {
-      // Follow redirects
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         return download(res.headers.location, dest).then(resolve).catch(reject);
       }
@@ -38,45 +86,27 @@ function download(url, dest) {
   });
 }
 
-const wikiMap = {
-  "Maize": "Maize", "Bengal gram": "Chickpea", "Groundnut": "Peanut",
-  "Sunflower": "Helianthus", "Jowar": "Sorghum", "Bajra": "Pearl_millet",
-  "Wheat": "Wheat", "Tur": "Pigeon_pea", "Chilli": "Chili_pepper",
-  "Cotton": "Cotton", "Paddy": "Rice_paddy", "Sugarcane": "Sugarcane",
-  "Soybean": "Soybean", "Ragi": "Finger_millet", "Tomato": "Tomato",
-  "Potato": "Potato", "Onion": "Onion", "Beans": "Bean",
-  "Mulberry": "Mulberry", "Finger millet": "Finger_millet",
-  "Rice": "Rice", "Green gram": "Mung_bean", "Black gram": "Vigna_mungo",
-  "Dry chilli": "Chili_pepper", "Turmeric": "Turmeric",
-  "Tamarind": "Tamarind", "Sesame": "Sesame", "Coconut": "Coconut",
-  "Arecanut": "Areca_nut", "Green chilli": "Chili_pepper",
-  "Lime": "Lime_(fruit)", "Coffee": "Coffee", "Castor seed": "Ricinus",
-  "Horse gram": "Macrotyloma_uniflorum", "Cashew": "Cashew",
-  "Black pepper": "Black_pepper", "Banana": "Banana",
-  "Ginger": "Ginger", "Cocoa": "Theobroma_cacao", "Rubber": "Natural_rubber",
-  "Mango": "Mango", "Tobacco": "Tobacco", "Cardamom": "Cardamom",
-  "Pineapple": "Pineapple"
-};
-
 async function main() {
-  const cropNames = Object.keys(cropInfo);
+  const cropNames = Object.keys(wikiMap);
   let success = 0, fail = 0;
 
+  console.log("Checking and retrying missing/failing crop downloads...");
   for (const crop of cropNames) {
     const fileName = crop.replace(/\s+/g, '_') + '.jpg';
     const destPath = path.join(publicDir, fileName);
 
-    // Skip if already downloaded
+    // Only download if missing or less than 1KB
     if (fs.existsSync(destPath) && fs.statSync(destPath).size > 1000) {
-      console.log(`✓ ${crop} already exists (${fs.statSync(destPath).size} bytes)`);
+      // console.log(`✓ ${crop} exists`);
       success++;
       continue;
     }
 
-    const wikiTitle = wikiMap[crop] || crop;
+    const wikiTitle = wikiMap[crop];
     const apiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(wikiTitle)}`;
 
     try {
+      console.log(`Fetching Wikipedia summary for ${crop}...`);
       const data = await new Promise((resolve, reject) => {
         https.get(apiUrl, { headers: { 'User-Agent': 'Mozilla/5.0 (contact@gramsetu.org)' } }, (res) => {
           let body = '';
@@ -88,24 +118,22 @@ async function main() {
       });
 
       if (data && data.originalimage && data.originalimage.source) {
-        // Use original image (higher quality), resize via URL if wikimedia
         let imgUrl = data.originalimage.source.split('?')[0];
-        // For wikimedia, request a 500px wide thumbnail
         if (data.thumbnail && data.thumbnail.source) {
           imgUrl = data.thumbnail.source.split('?')[0].replace(/\/\d+px-/, '/500px-');
         }
         
-        console.log(`⬇ ${crop} -> ${imgUrl}`);
+        console.log(`⬇ Downloading ${crop} -> ${imgUrl}`);
         const ok = await download(imgUrl, destPath);
         if (ok && fs.existsSync(destPath) && fs.statSync(destPath).size > 500) {
-          console.log(`  ✓ Saved (${fs.statSync(destPath).size} bytes)`);
+          console.log(`  ✓ Saved ${crop} (${fs.statSync(destPath).size} bytes)`);
           success++;
         } else {
-          console.log(`  ✗ Download failed or too small`);
+          console.log(`  ✗ Download failed for ${crop}`);
           fail++;
         }
       } else {
-        console.log(`✗ ${crop} - no image in Wikipedia API`);
+        console.log(`✗ ${crop} - no image found in Wikipedia API`);
         fail++;
       }
     } catch (err) {
@@ -113,14 +141,11 @@ async function main() {
       fail++;
     }
 
-    await new Promise(r => setTimeout(r, 200));
+    // Add 2.5 seconds delay to prevent HTTP 429
+    await new Promise(r => setTimeout(r, 2500));
   }
 
-  console.log(`\nDone! ${success} succeeded, ${fail} failed.`);
-  
-  // List what we got
-  const files = fs.readdirSync(publicDir);
-  console.log(`Files in public/crops: ${files.length}`);
+  console.log(`\nRetry run completed. Total files in public/crops: ${fs.readdirSync(publicDir).length}`);
 }
 
 main();
