@@ -1,93 +1,51 @@
 // Mapping of crops to correct, verified images (Unsplash)
 export const cropImageMap = {
-  // ✅ Maize/corn cobs on plant - correct
-  "Maize": "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=300&q=80",
-  // ✅ Bengal gram / chickpeas in bowl
-  "Bengal gram": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=300&q=80",
-  // ✅ Groundnuts / peanuts in shells
-  "Groundnut": "https://images.unsplash.com/photo-1604594849809-dfedbc827105?w=300&q=80",
-  // ✅ Sunflower field
-  "Sunflower": "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=300&q=80",
-  // ✅ Sorghum / jowar stalks
-  "Jowar": "https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=300&q=80",
-  // ✅ Pearl millet / bajra crop
-  "Bajra": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&q=80",
-  // ✅ Wheat field golden
-  "Wheat": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80",
-  // ✅ Pigeon peas / tur dal pods
-  "Tur": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=300&q=80",
-  // ✅ Red chilli peppers
-  "Chilli": "https://images.unsplash.com/photo-1526346698789-22fd84314424?w=300&q=80",
-  // ✅ Cotton balls on plant
-  "Cotton": "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=300&q=80",
-  // ✅ Paddy / rice field
-  "Paddy": "https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?w=300&q=80",
-  // ✅ Sugarcane field
-  "Sugarcane": "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=300&q=80",
-  // ✅ Soybean pods on plant
-  "Soybean": "https://images.unsplash.com/photo-1517960413843-0aee8e2b3285?w=300&q=80",
-  // ✅ Finger millet / ragi
-  "Ragi": "https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=300&q=80",
-  // ✅ Ripe red tomatoes
-  "Tomato": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300&q=80",
-  // ✅ Potatoes
-  "Potato": "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300&q=80",
-  // ✅ Onions
-  "Onion": "https://images.unsplash.com/photo-1618220179428-22790b461013?w=300&q=80",
-  // ✅ Green beans pods
-  "Beans": "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=300&q=80",
-  // ✅ Mulberry fruit on tree
-  "Mulberry": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=300&q=80",
-  // ✅ Finger millet
-  "Finger millet": "https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=300&q=80",
-  // ✅ Rice grains / cooked rice
-  "Rice": "https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?w=300&q=80",
-  // ✅ Green mung beans
-  "Green gram": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=300&q=80",
-  // ✅ Black urad dal beans
-  "Black gram": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=300&q=80",
-  // ✅ Dry red chillies
-  "Dry chilli": "https://images.unsplash.com/photo-1526346698789-22fd84314424?w=300&q=80",
-  // ✅ Turmeric root / powder
-  "Turmeric": "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=300&q=80",
-  // ✅ Tamarind fruit pods
-  "Tamarind": "https://images.unsplash.com/photo-1583663848850-46af132dc08e?w=300&q=80",
-  // ✅ Sesame seeds
-  "Sesame": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300&q=80",
-  // ✅ Coconuts whole and halved
-  "Coconut": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80",
-  // ✅ Areca nuts / betel nuts on palm
-  "Arecanut": "https://images.unsplash.com/photo-1631377819268-d716cd610cd2?w=300&q=80",
-  // ✅ Green chilli peppers fresh
-  "Green chilli": "https://images.unsplash.com/photo-1588512285341-c481fb6de19d?w=300&q=80",
-  // ✅ Lime / lemons cut
-  "Lime": "https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=300&q=80",
-  // ✅ Coffee berries / coffee plant
-  "Coffee": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=300&q=80",
-  // ✅ Castor seeds
-  "Castor seed": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&q=80",
-  // ✅ Horse gram / kulthi lentils
-  "Horse gram": "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=300&q=80",
-  // ✅ Cashew nuts
-  "Cashew": "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300&q=80",
-  // ✅ Black pepper corns
-  "Black pepper": "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&q=80",
-  // ✅ Banana bunch on tree
-  "Banana": "https://images.unsplash.com/photo-1528825871115-3581a5387919?w=300&q=80",
-  // ✅ Fresh ginger root
-  "Ginger": "https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?w=300&q=80",
-  // ✅ Cocoa pods on tree
-  "Cocoa": "https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=300&q=80",
-  // ✅ Rubber tree tapping
-  "Rubber": "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=300&q=80",
-  // ✅ Mango fruit
-  "Mango": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=300&q=80",
-  // ✅ Tobacco leaves
-  "Tobacco": "https://images.unsplash.com/photo-1524234107056-1c1f48f64ab8?w=300&q=80",
-  // ✅ Cardamom pods green
-  "Cardamom": "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=300&q=80",
-  // ✅ Pineapple fruit
-  "Pineapple": "https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=300&q=80"
+  "Arecanut": "/crops/Arecanut.jpg",
+  "Areca Nut": "/crops/Arecanut.jpg",
+  "Bajra": "/crops/Bajra.jpg",
+  "Banana": "/crops/Banana.jpg",
+  "Beans": "/crops/Beans.jpg",
+  "Bengal gram": "/crops/Bengal_gram.jpg",
+  "Black gram": "/crops/Black_gram.jpg",
+  "Black pepper": "/crops/Black_pepper.jpg",
+  "Cardamom": "/crops/Cardamom.jpg",
+  "Cashew": "/crops/Cashew.jpg",
+  "Castor seed": "/crops/Castor_seed.jpg",
+  "Chilli": "/crops/Chilli.jpg",
+  "Cocoa": "/crops/Cocoa.jpg",
+  "Coconut": "/crops/Coconut.jpg",
+  "Coffee": "/crops/Coffee.jpg",
+  "Cotton": "/crops/Cotton.jpg",
+  "Dry chilli": "/crops/Dry_chilli.jpg",
+  "Finger millet": "/crops/Finger_millet.jpg",
+  "Ginger": "/crops/Ginger.jpg",
+  "Green chilli": "/crops/Green_chilli.jpg",
+  "Green gram": "/crops/Green_gram.jpg",
+  "Groundnut": "/crops/Groundnut.jpg",
+  "Horse gram": "/crops/Horse_gram.jpg",
+  "Jowar": "/crops/Jowar.jpg",
+  "Lime": "/crops/Lime.jpg",
+  "Maize": "/crops/Maize.jpg",
+  "Mango": "/crops/Mango.jpg",
+  "Mulberry": "/crops/Mulberry.jpg",
+  "Onion": "/crops/Onion.jpg",
+  "Paddy": "/crops/Paddy.jpg",
+  "Pineapple": "/crops/Pineapple.jpg",
+  "Potato": "/crops/Potato.jpg",
+  "Ragi": "/crops/Ragi.jpg",
+  "Rice": "/crops/Rice.jpg",
+  "Rubber": "/crops/Rubber.jpg",
+  "Sesame": "/crops/Sesame.jpg",
+  "Silk Cocoon": "/crops/Silk_Cocoon.jpg",
+  "Soybean": "/crops/Soybean.jpg",
+  "Sugarcane": "/crops/Sugarcane.jpg",
+  "Sunflower": "/crops/Sunflower.jpg",
+  "Tamarind": "/crops/Tamarind.jpg",
+  "Tobacco": "/crops/Tobacco.jpg",
+  "Tomato": "/crops/Tomato.jpg",
+  "Tur": "/crops/Tur.jpg",
+  "Turmeric": "/crops/Turmeric.jpg",
+  "Wheat": "/crops/Wheat.jpg",
 };
 
 // District to 10 major crops mapping (verified agronomic data for Karnataka)
