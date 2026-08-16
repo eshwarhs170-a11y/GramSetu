@@ -5,7 +5,7 @@
 
 // Your API Key from data.gov.in
 const API_KEY = import.meta.env.VITE_AGMARKNET_KEY || '579b464db66ec23bdd000001cdd3946e44ce4aead310bc1d4cef38b'
-const CACHE_KEY = 'gramSetu_prices_cache_v4'
+const CACHE_KEY = 'gramSetu_prices_cache_v5'
 const CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
 
 // Maps AGMARKNET commodity names → our display format
