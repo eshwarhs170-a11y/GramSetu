@@ -7,14 +7,18 @@
     "Mysore Silk": "/district-images/mysuru_mysore_silk.jpg",
     "Sandalwood Capital": "/district-images/mysuru_sandalwood_capital.jpg"
   },
-  "Tumkuru": {
-    "Siddaganga Mutt": "/district-images/tumkuru_siddaganga_mutt.png",
-    "Coconut Hub of Karnataka": "/district-images/tumkuru_coconut_hub_of_karnataka.jpg",
-    "Madhugiri Fort": "/district-images/tumkuru_madhugiri_fort.jpg",
-    "Devarayanadurga": "/district-images/tumkuru_devarayanadurga.jpg",
-    "Shivaganga Hill": "/district-images/tumkuru_shivaganga_hill.jpg",
-    "Silk Rearing": "/district-images/tumkuru_silk_rearing.jpg"
-  },
+    "Tumkuru": {
+      "Ragi": "/crops/Ragi.jpg",
+      "Groundnut": "/crops/Groundnut.jpg",
+      "Coconut": "/crops/Coconut.jpg",
+      "Maize": "/crops/Maize.jpg",
+      "Paddy": "/crops/Paddy.jpg",
+      "Tur": "/crops/Tur.jpg",
+      "Sunflower": "/crops/Sunflower.jpg",
+      "Jowar": "/crops/Jowar.jpg",
+      "Tomato": "/crops/Tomato.jpg",
+      "Onion": "/crops/Onion.jpg"
+    },
   "Ramanagara": {
     "Silk Cocoon Capital": "/district-images/ramanagara_silk_cocoon_capital.jpg",
     "Vulture Sanctuary": "/district-images/ramanagara_vulture_sanctuary.jpg",
