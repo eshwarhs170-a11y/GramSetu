@@ -355,7 +355,12 @@ export default function OfficialLogin() {
                   style={{ fontSize: 24, letterSpacing: 12, textAlign: 'center' }}
                   required
                 />
-                <div className="otp-hint">OTP expires in 15 minutes</div>
+                <div className="otp-hint" style={{ color: '#065f46', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <div>OTP expires in 10 minutes</div>
+                  <div style={{ fontSize: 12, color: '#f59e0b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                    <AlertTriangle size={12} /> Note: The OTP email might go to your Spam/Junk folder
+                  </div>
+                </div>
               </div>
 
               <button

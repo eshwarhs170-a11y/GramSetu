@@ -563,9 +563,13 @@ export default function VillagerLogin() {
                   required
                   autoFocus
                 />
-                <div className="otp-hint" style={{ color: '#065f46', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Mail size={13} />
-                  Enter the OTP sent to your email
+                <div className="otp-hint" style={{ color: '#065f46', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Mail size={13} /> Enter the OTP sent to your email
+                  </div>
+                  <div style={{ fontSize: 12, color: '#f59e0b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                    <AlertTriangle size={12} /> Note: The OTP email might go to your Spam/Junk folder
+                  </div>
                 </div>
               </div>
               <button
