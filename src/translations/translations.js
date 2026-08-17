@@ -234,6 +234,50 @@ const translations = {
     buddyStudy: 'Buddy4Study Portal',
     editOfficerProfile: 'Edit Officer Profile',
     editNotifPref: 'Edit Notification Preferences',
+
+    // ---- Enhanced Schemes Ecosystem ----
+    tabAllSchemes: '🏛️ Schemes Directory',
+    tabLoansInsurance: '💳 Loans & Insurance',
+    tabAdvisoryKVK: '🌾 Advisory & RSK/KVK',
+    tabSuccessStories: '🌟 Impact & Stories',
+    tabGrievanceFAQ: '⚖️ Grievance & Help',
+    
+    filterLevelAll: 'All Governments',
+    filterLevelCentral: '🇮🇳 Central Govt',
+    filterLevelState: '🟡 Karnataka State',
+
+    filterBeneficiaryAll: 'All Beneficiaries',
+    filterBeneficiarySmall: 'Small/Marginal Farmers',
+    filterBeneficiaryLarge: 'Large Landholders',
+    filterBeneficiaryWomen: 'Women Farmers',
+    filterBeneficiaryYouth: 'Youth & Startups',
+    filterBeneficiaryFPO: 'FPOs & Cooperatives',
+
+    filterObjectiveAll: 'All Objectives',
+    filterObjectiveIncome: 'Income Support',
+    filterObjectiveWater: 'Water Conservation',
+    filterObjectiveSoil: 'Soil Health',
+    filterObjectiveInsurance: 'Crop Insurance',
+    filterObjectiveMechanization: 'Mechanization',
+    filterObjectiveOrganic: 'Organic Farming',
+    filterObjectivePostHarvest: 'Post-Harvest & Storage',
+
+    filterStageAll: 'All Stages',
+    filterStagePre: 'Pre-Harvest (Seeds & Inputs)',
+    filterStageHarvest: 'Harvesting',
+    filterStagePost: 'Post-Harvest & Storage',
+    filterStageMarketing: 'Marketing & Export',
+
+    trackStatusBtn: '🔍 Track Application Status',
+    benefitDetails: '💰 Benefit & Subsidy Structure',
+    eligibilityCriteria: '✅ Eligibility & Criteria',
+    exclusionsTitle: '🚫 Exclusions (Who is Not Eligible)',
+    requiredDocs: '📄 Required Documents',
+    stepByStepProcess: '📋 Step-by-Step Application Process',
+    expectedTimeline: '⏱️ Expected Processing Timeline',
+    directApply: 'Apply on Official Portal ↗',
+    voiceReadout: '🔊 Listen to Scheme',
+    stopAudio: '⏹️ Stop Audio',
   },
 
   kn: {
@@ -450,6 +494,50 @@ const translations = {
     buddyStudy: 'ಬಡ್ಡಿ4ಸ್ಟಡಿ ತಂತ್ರಾಂಶ',
     editOfficerProfile: 'ಅಧಿಕಾರಿ ಪ್ರೊಫೈಲ್ ತಿದ್ದಿ',
     editNotifPref: 'ಅಧಿಸೂಚನೆ ಆದ್ಯತೆಗಳನ್ನು ತಿದ್ದಿ',
+
+    // ---- Enhanced Schemes Ecosystem (Kannada) ----
+    tabAllSchemes: '🏛️ ಯೋಜನೆಗಳ ಕೋಶ',
+    tabLoansInsurance: '💳 ಬೆಳೆ ಸಾಲ & ವಿಮೆ',
+    tabAdvisoryKVK: '🌾 ಕೃಷಿ ಸಲಹೆ & RSK/KVK',
+    tabSuccessStories: '🌟 ಸಾಧಕರ ಕಥೆಗಳು',
+    tabGrievanceFAQ: '⚖️ ಕುಂದುಕೊರತೆ & ಸಹಾಯ',
+    
+    filterLevelAll: 'ಎಲ್ಲಾ ಸರ್ಕಾರಗಳು',
+    filterLevelCentral: '🇮🇳 ಕೇಂದ್ರ ಸರ್ಕಾರ',
+    filterLevelState: '🟡 ಕರ್ನಾಟಕ ರಾಜ್ಯ',
+
+    filterBeneficiaryAll: 'ಎಲ್ಲಾ ಫಲಾನುಭವಿಗಳು',
+    filterBeneficiarySmall: 'ಸಣ್ಣ/ಅತಿ ಸಣ್ಣ ರೈತರು',
+    filterBeneficiaryLarge: 'ದೊಡ್ಡ ಭೂಮಾಲೀಕರು',
+    filterBeneficiaryWomen: 'ಮಹಿಳಾ ರೈತರು',
+    filterBeneficiaryYouth: 'ಯುವಕರು & ಸ್ಟಾರ್ಟ್‌ಅಪ್',
+    filterBeneficiaryFPO: 'ಎಫ್‌ಪಿಒ & ಸಹಕಾರ ಸಂಘ',
+
+    filterObjectiveAll: 'ಎಲ್ಲಾ ಉದ್ದೇಶಗಳು',
+    filterObjectiveIncome: 'ಆದಾಯ ಬೆಂಬಲ',
+    filterObjectiveWater: 'ಜಲ ಸಂರಕ್ಷಣೆ & ಹನಿ ನೀರಾವರಿ',
+    filterObjectiveSoil: 'ಮಣ್ಣಿನ ಫಲವತ್ತತೆ',
+    filterObjectiveInsurance: 'ಬೆಳೆ ವಿಮೆ',
+    filterObjectiveMechanization: 'ಕೃಷಿ ಯಾಂತ್ರೀಕರಣ',
+    filterObjectiveOrganic: 'ಸಾವಯವ ಸಿರಿಧಾನ್ಯ',
+    filterObjectivePostHarvest: 'ಕೊಯ್ಲೋತ್ತರ & ಶೇಖರಣೆ',
+
+    filterStageAll: 'ಎಲ್ಲಾ ಹಂತಗಳು',
+    filterStagePre: 'ಬಿತ್ತನೆ ಪೂರ್ವ (ಬೀಜ & ಗೊಬ್ಬರ)',
+    filterStageHarvest: 'ಬೆಳೆ ಕಟಾವು',
+    filterStagePost: 'ಕೊಯ್ಲೋತ್ತರ & ಶೇಖರಣೆ',
+    filterStageMarketing: 'ಮಾರುಕಟ್ಟೆ & ರಫ್ತು',
+
+    trackStatusBtn: '🔍 ಅರ್ಜಿ ಸ್ಥಿತಿ ಪರಿಶೀಲಿಸಿ',
+    benefitDetails: '💰 ಸೌಲಭ್ಯ & ಸಬ್ಸಿಡಿ ವಿವರ',
+    eligibilityCriteria: '✅ ಅರ್ಹತೆ ಮತ್ತು ಷರತ್ತುಗಳು',
+    exclusionsTitle: '🚫 ಅನರ್ಹತೆ (ಯಾರಿಗೆ ಅನ್ವಯಿಸುವುದಿಲ್ಲ)',
+    requiredDocs: '📄 ಅಗತ್ಯ ದಾಖಲೆಗಳು',
+    stepByStepProcess: '📋 ಹಂತ-ಹಂತದ ಅರ್ಜಿ ಸಲ್ಲಿಕೆ ವಿಧಾನ',
+    expectedTimeline: '⏱️ ನಿರೀಕ್ಷಿತ ಪರಿಶೀಲನಾ ಅವಧಿ',
+    directApply: 'ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ ↗',
+    voiceReadout: '🔊 ಯೋಜನೆಯ ಧ್ವನಿ ವಿವರಣೆ',
+    stopAudio: '⏹️ ಧ್ವನಿ ನಿಲ್ಲಿಸಿ',
   },
 
   hi: {
@@ -666,6 +754,50 @@ const translations = {
     buddyStudy: 'बडी4स्टडी पोर्टल',
     editOfficerProfile: 'अधिकारी प्रोफाइल संपादित करें',
     editNotifPref: 'अधिसूचना प्राथमिकताएं संपादित करें',
+
+    // ---- Enhanced Schemes Ecosystem (Hindi) ----
+    tabAllSchemes: '🏛️ योजना निर्देशिका',
+    tabLoansInsurance: '💳 फसल ऋण व बीमा',
+    tabAdvisoryKVK: '🌾 कृषि सलाह व KVK',
+    tabSuccessStories: '🌟 सफलता की कहानियां',
+    tabGrievanceFAQ: '⚖️ शिकायत व सहायता',
+    
+    filterLevelAll: 'सभी सरकारें',
+    filterLevelCentral: '🇮🇳 केंद्र सरकार',
+    filterLevelState: '🟡 कर्नाटक राज्य',
+
+    filterBeneficiaryAll: 'सभी लाभार्थी',
+    filterBeneficiarySmall: 'छोटे/सीमांत किसान',
+    filterBeneficiaryLarge: 'बड़े भूमिधारक',
+    filterBeneficiaryWomen: 'महिला किसान',
+    filterBeneficiaryYouth: 'युवा व स्टार्टअप',
+    filterBeneficiaryFPO: 'FPO व सहकारी समितियां',
+
+    filterObjectiveAll: 'सभी उद्देश्य',
+    filterObjectiveIncome: 'आय सहायता',
+    filterObjectiveWater: 'जल संरक्षण व ड्रिप',
+    filterObjectiveSoil: 'मृदा स्वास्थ्य',
+    filterObjectiveInsurance: 'फसल बीमा',
+    filterObjectiveMechanization: 'कृषि यंत्रीकरण',
+    filterObjectiveOrganic: 'जैविक व मोटा अनाज',
+    filterObjectivePostHarvest: 'कटाई उपरांत व भंडारण',
+
+    filterStageAll: 'सभी चरण',
+    filterStagePre: 'बुवाई पूर्व (बीज व खाद)',
+    filterStageHarvest: 'फसल कटाई',
+    filterStagePost: 'कटाई उपरांत व भंडारण',
+    filterStageMarketing: 'विपणन व निर्यात',
+
+    trackStatusBtn: '🔍 आवेदन स्थिति ट्रैक करें',
+    benefitDetails: '💰 लाभ व सब्सिडी संरचना',
+    eligibilityCriteria: '✅ पात्रता व मानदंड',
+    exclusionsTitle: '🚫 अपवर्जन (कौन पात्र नहीं है)',
+    requiredDocs: '📄 आवश्यक दस्तावेज',
+    stepByStepProcess: '📋 चरणबद्ध आवेदन प्रक्रिया',
+    expectedTimeline: '⏱️ अपेक्षित प्रसंस्करण समय',
+    directApply: 'आधिकारिक पोर्टल पर आवेदन करें ↗',
+    voiceReadout: '🔊 योजना का ऑडियो सुनें',
+    stopAudio: '⏹️ ऑडियो रोकें',
   },
 }
 
