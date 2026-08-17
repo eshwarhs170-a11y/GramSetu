@@ -393,12 +393,16 @@ export function HomeScreen({ setActive }) {
 
       <div className="stats-grid">
         {[
-          { Icon: Landmark,         labelKey: 'activeSchemes',    value: '6',      color: '#dbeafe', iconColor: '#1d4ed8', trend: '+1 Raitha Siri' },
-          { Icon: ClipboardList,    labelKey: 'myComplaints',     value: String(globalComplaints.length), color: '#fee2e2', iconColor: '#dc2626', trend: `${globalComplaints.filter(c => c.status === 'resolved').length} resolved` },
-          { Icon: Bell,             labelKey: 'newAlerts',        value: '4',      color: '#fef3c7', iconColor: '#d97706', trend: '2 urgent' },
-          { Icon: IndianRupee,      labelKey: 'benefitsReceived', value: '₹6,000', color: '#d1fae5', iconColor: '#15803d', trend: 'PM Kisan 2026' },
+          { Icon: Landmark,         labelKey: 'activeSchemes',    value: '6',      color: '#dbeafe', iconColor: '#1d4ed8', trend: '+1 Raitha Siri', pageId: 'schemes' },
+          { Icon: ClipboardList,    labelKey: 'myComplaints',     value: String(globalComplaints.length), color: '#fee2e2', iconColor: '#dc2626', trend: `${globalComplaints.filter(c => c.status === 'resolved').length} resolved`, pageId: 'complaints' },
+          { Icon: Bell,             labelKey: 'newAlerts',        value: '4',      color: '#fef3c7', iconColor: '#d97706', trend: '2 urgent', pageId: 'announcements' }
         ].map((s, i) => (
-          <div className="stat-card animate-fadeInUp" key={i} style={{ animationDelay: `${i * 0.1}s` }}>
+          <div 
+            className="stat-card animate-fadeInUp" 
+            key={i} 
+            style={{ animationDelay: `${i * 0.1}s`, cursor: 'pointer' }}
+            onClick={() => setActive(s.pageId)}
+          >
             <div className="stat-icon" style={{ background: s.color, color: s.iconColor }}>
               <s.Icon size={22} strokeWidth={1.8} />
             </div>
@@ -414,7 +418,7 @@ export function HomeScreen({ setActive }) {
       <div className="content-grid">
         <div>
           <div className="section-title">
-            <h3>{t('todayPrices')} ({userDistrict} APMC)</h3>
+            <h3>{t('todayPrices')} ({userDistrict})</h3>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               {loadingPrices ? (
                 <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>⏳ Fetching...</span>
@@ -439,8 +443,8 @@ export function HomeScreen({ setActive }) {
               <table className="market-table">
                 <thead><tr><th>{t('cropCol')}</th><th>{t('priceCol')}</th><th>{t('changeCol')}</th></tr></thead>
                 <tbody>
-                  {(livePrices.filter(p => p.market.includes(userDistrict)).length > 0
-                    ? livePrices.filter(p => p.market.includes(userDistrict))
+                  {(livePrices.filter(p => p.districts && p.districts.includes(userDistrict)).length > 0
+                    ? livePrices.filter(p => p.districts && p.districts.includes(userDistrict))
                     : livePrices.slice(0, 5)).map((p, i) => (
                     <tr key={i} style={{
                       transition: 'background 0.5s',
@@ -468,7 +472,7 @@ export function HomeScreen({ setActive }) {
             </div>
             <div style={{ padding: '8px 16px', fontSize: 10, color: 'var(--text-muted)', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between' }}>
               <span>Source: AGMARKNET / data.gov.in</span>
-              <a href="https://agmarknet.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: 600 }}>View Full Market ↗</a>
+              <a onClick={() => setActive('market')} style={{ color: 'var(--primary)', fontWeight: 600, cursor: 'pointer' }}>View Full Market ↗</a>
             </div>
           </div>
         </div>
@@ -482,7 +486,7 @@ export function HomeScreen({ setActive }) {
             {(kaAnnouncements.filter(a => a.targetDistrict === userDistrict || a.targetDistrict === 'All' || !a.targetDistrict).length > 0
               ? kaAnnouncements.filter(a => a.targetDistrict === userDistrict || a.targetDistrict === 'All' || !a.targetDistrict).slice(0, 2)
               : kaAnnouncements.slice(0, 2)).map((a, i) => (
-              <div className="card" key={i} style={{ padding: 16, display: 'flex', gap: 14 }}>
+              <div className="card" key={i} style={{ padding: 16, display: 'flex', gap: 14, cursor: 'pointer' }} onClick={() => setActive('announcements')}>
                 <img src={a.img} alt="" style={{ width: 80, height: 60, borderRadius: 8, objectFit: 'cover', flexShrink: 0 }} />
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
