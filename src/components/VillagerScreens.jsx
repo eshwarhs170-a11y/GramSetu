@@ -13,7 +13,15 @@ import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestam
 import { fetchLivePrices, BASELINE_PRICES, clearPriceCache } from '../utils/fetchPrices'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import { fetchWeatherForLocation, formatForecastData } from '../utils/fetchWeather'
-import { kaSchemes } from '../data/schemesData'
+import {
+  kaSchemes,
+  agriFinancialAssistance,
+  agriAdvisoryAndCenters,
+  schemesSuccessStories,
+  schemesImpactStats,
+  schemesFaqs,
+  grievanceHelpdesks
+} from '../data/schemesData'
 import { districtCropsMap, cropImageMap, cropMeta, formatCropLabel } from '../data/districtCrops'
 import cropInfoMap from '../data/cropInfo.json'
 import districtPricesMap from '../data/districtPrices.json'
@@ -343,6 +351,18 @@ export function HomeScreen({ setActive }) {
                 classReq: lang === 'kn' ? 'ವೃತ್ತಿಪರ ಪದವಿಗಳು (BE, MBBS)' : 'Professional UG (BE, MBBS)',
                 incomeLimit: lang === 'kn' ? 'ಮಾಜಿ ಸೈನಿಕರ ಮಕ್ಕಳಿಗೆ' : 'Ex-Servicemen Wards',
                 link: 'https://scholarships.gov.in/'
+              },
+              {
+                title: lang === 'kn' ? 'ಮೆಟ್ರಿಕ್ ನಂತರದ ಎಸ್‌ಸಿ/ಎಸ್‌ಟಿ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'Post-Matric SC/ST Scholarship',
+                classReq: lang === 'kn' ? '೧೧ನೇ / ೧೨ನೇ / ಪದವಿ / ಪಿಜಿ' : '11th / 12th / UG / PG',
+                incomeLimit: lang === 'kn' ? '₹೨.೫ ಲಕ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ (Below ₹2.5L)' : 'Below ₹2.5 Lakh/year',
+                link: 'https://scholarships.gov.in/'
+              },
+              {
+                title: lang === 'kn' ? 'ರಿಲಯನ್ಸ್ ಫೌಂಡೇಶನ್ / AICTE ಸ್ವನಾಥ್ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'Reliance Foundation / AICTE Swanath Scheme',
+                classReq: lang === 'kn' ? 'ಪದವಿ / ಡಿಪ್ಲೊಮಾ / ಎಂಜಿನಿಯರಿಂಗ್' : 'UG Degree / Diploma / Tech',
+                incomeLimit: lang === 'kn' ? '₹೮.೦ ಲಕ್ಷಕ್ಕಿಂತ ಹೆಚ್ಚು/ಯಾವುದೇ ಆದಾಯ ಮಿತಿಯಿಲ್ಲ (Above ₹8.0L / Open)' : 'Above ₹8.0 Lakh / Open to All',
+                link: 'https://www.reliancefoundation.org/'
               }
             ].map((sch, sIdx) => (
               <div key={sIdx} style={{ background: 'var(--bg-main)', borderRadius: 12, padding: 16, border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 2px 6px rgba(0,0,0,0.04)' }}>
@@ -513,17 +533,32 @@ export function HomeScreen({ setActive }) {
 
 export function SchemesScreen() {
   const { t, lang } = useLanguage()
+  const [activeTab, setActiveTab] = useState('directory') // 'directory' | 'loans' | 'advisory' | 'stories' | 'grievance'
   const [selectedScheme, setSelectedScheme] = useState(null)
+  const [trackerModalOpen, setTrackerModalOpen] = useState(false)
+  const [applyModalOpen, setApplyModalOpen] = useState(false)
+  const [trackingId, setTrackingId] = useState('')
+  const [trackingResult, setTrackingResult] = useState(null)
+  const [isSpeaking, setIsSpeaking] = useState(false)
+
+  // Filtering States
   const [categoryFilter, setCategoryFilter] = useState('All')
-  const [schemes, setSchemes] = useState(kaSchemes)
-  const [loadingSchemes, setLoadingSchemes] = useState(true)
+  const [levelFilter, setLevelFilter] = useState('All') // 'All' | 'Central' | 'State'
+  const [beneficiaryFilter, setBeneficiaryFilter] = useState('All')
+  const [objectiveFilter, setObjectiveFilter] = useState('All')
+  const [stageFilter, setStageFilter] = useState('All')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [openFaq, setOpenFaq] = useState(null)
 
   // Smart Scholarship Finder Form State
   const [filterClass, setFilterClass] = useState('')
   const [filterIncome, setFilterIncome] = useState('')
   const [scholarshipFormSubmitted, setScholarshipFormSubmitted] = useState(false)
 
-  // Fetch from Firestore, fall back to static data
+  const [schemes, setSchemes] = useState(kaSchemes)
+  const [loadingSchemes, setLoadingSchemes] = useState(true)
+
+  // Fetch from Firestore or fallback
   useEffect(() => {
     const q = query(collection(db, 'schemes'))
     getDocs(q)
@@ -532,415 +567,1082 @@ export function SchemesScreen() {
           setSchemes(snap.docs.map(d => ({ id: d.id, ...d.data() })))
         }
       })
-      .catch(() => {/* silent fallback to static data */})
+      .catch(() => {/* silent fallback */})
       .finally(() => setLoadingSchemes(false))
   }, [])
 
-  const categories = ['All', 'Agriculture', 'Finance', 'Health', 'Women', 'Scholarship']
-
-  const getClassLabel = (val) => {
-    if (val === '8') return 'Class 8th – 10th'
-    if (val === '12') return 'Class 11th & 12th (PUC)'
-    if (val === '14') return 'ITI / Diploma / Polytechnic'
-    if (val === '16') return 'Undergraduate (BA, BSc, BE, MBBS)'
-    if (val === '18') return 'Post Graduation (PG / PhD)'
-    return 'All Classes'
+  // Text to Speech for Accessibility
+  const handleToggleVoice = (scheme) => {
+    if (!('speechSynthesis' in window)) {
+      alert('Text-to-speech is not supported on this browser.')
+      return
+    }
+    if (isSpeaking) {
+      window.speechSynthesis.cancel()
+      setIsSpeaking(false)
+      return
+    }
+    const textToRead = `${scheme.title[lang] || scheme.title.en}. ${scheme.desc[lang] || scheme.desc.en}. Eligibility: ${scheme.eligibility[lang] || scheme.eligibility.en}.`
+    const utterance = new SpeechSynthesisUtterance(textToRead)
+    if (lang === 'kn') utterance.lang = 'kn-IN'
+    else if (lang === 'hi') utterance.lang = 'hi-IN'
+    else utterance.lang = 'en-IN'
+    
+    utterance.onend = () => setIsSpeaking(false)
+    utterance.onerror = () => setIsSpeaking(false)
+    setIsSpeaking(true)
+    window.speechSynthesis.speak(utterance)
   }
 
-  const isEligibleForFilters = (scheme) => {
-    if (scheme.category !== 'Scholarship') return true
+  // Handle Application Tracker Search
+  const handleTrackSubmit = (e) => {
+    e.preventDefault()
+    if (!trackingId.trim()) return
+    const id = trackingId.trim().toUpperCase()
+    // Simulated realistic status response
+    setTrackingResult({
+      appId: id,
+      schemeName: 'PM-KISAN / Karnataka DBT Unified Welfare Cycle',
+      applicant: window.localStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ',
+      status: 'VERIFIED & SANCTIONED',
+      stage: 'DBT Payment Processed - Cycle 18',
+      lastUpdated: '14 August 2026',
+      disbursementDate: 'Next Batch Scheduled on 25 August 2026',
+      bankAccount: 'SBI (A/C: ******4819)',
+      portalUrl: 'https://fruits.karnataka.gov.in/'
+    })
+  }
 
-    if (filterClass) {
-      const clsVal = parseInt(filterClass)
-      if (scheme.minClassLevel && clsVal < scheme.minClassLevel) return false
-      if (scheme.maxClassLevel && clsVal > scheme.maxClassLevel) return false
+  const categories = ['All', 'Agriculture', 'Finance', 'Health', 'Women', 'Scholarship']
+  const beneficiaryOptions = [
+    { value: 'All', label: t('filterBeneficiaryAll') },
+    { value: 'Small/Marginal Farmers', label: t('filterBeneficiarySmall') },
+    { value: 'Large Landholders', label: t('filterBeneficiaryLarge') },
+    { value: 'Women Farmers', label: t('filterBeneficiaryWomen') },
+    { value: 'Youth/Agri-Startups', label: t('filterBeneficiaryYouth') },
+    { value: 'FPOs', label: t('filterBeneficiaryFPO') }
+  ]
+
+  const objectiveOptions = [
+    { value: 'All', label: t('filterObjectiveAll') },
+    { value: 'Income Support', label: t('filterObjectiveIncome') },
+    { value: 'Water Conservation', label: t('filterObjectiveWater') },
+    { value: 'Soil Health', label: t('filterObjectiveSoil') },
+    { value: 'Crop Insurance', label: t('filterObjectiveInsurance') },
+    { value: 'Mechanization', label: t('filterObjectiveMechanization') },
+    { value: 'Organic Farming', label: t('filterObjectiveOrganic') },
+    { value: 'Post-Harvest', label: t('filterObjectivePostHarvest') }
+  ]
+
+  const stageOptions = [
+    { value: 'All', label: t('filterStageAll') },
+    { value: 'Pre-Harvest', label: t('filterStagePre') },
+    { value: 'Harvesting', label: t('filterStageHarvest') },
+    { value: 'Post-Harvest', label: t('filterStagePost') },
+    { value: 'Marketing', label: t('filterStageMarketing') }
+  ]
+
+  // Filter schemes based on multi-dimensional filters
+  const filteredSchemes = schemes.filter(scheme => {
+    // Category
+    if (categoryFilter !== 'All' && scheme.category !== categoryFilter) return false
+    
+    // Level: Central vs State
+    if (levelFilter !== 'All' && scheme.level && scheme.level !== levelFilter) return false
+
+    // Beneficiary
+    if (beneficiaryFilter !== 'All') {
+      if (!scheme.beneficiary || !scheme.beneficiary.includes(beneficiaryFilter)) return false
     }
 
-    if (filterIncome) {
-      const incVal = parseInt(filterIncome)
-      if (scheme.maxIncomeLimit && incVal > scheme.maxIncomeLimit) return false
+    // Objective
+    if (objectiveFilter !== 'All') {
+      if (scheme.objective !== objectiveFilter) return false
+    }
+
+    // Stage
+    if (stageFilter !== 'All') {
+      if (scheme.stage && scheme.stage !== stageFilter && scheme.stage !== 'All-Season') return false
+    }
+
+    // Search Query
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase()
+      const titleEn = (scheme.title?.en || '').toLowerCase()
+      const titleKn = (scheme.title?.kn || '').toLowerCase()
+      const titleHi = (scheme.title?.hi || '').toLowerCase()
+      const descEn = (scheme.desc?.en || '').toLowerCase()
+      if (!titleEn.includes(q) && !titleKn.includes(q) && !titleHi.includes(q) && !descEn.includes(q)) {
+        return false
+      }
+    }
+
+    // Scholarship specific filters
+    if (scheme.category === 'Scholarship') {
+      if (filterClass) {
+        const clsVal = parseInt(filterClass)
+        if (scheme.minClassLevel && clsVal < scheme.minClassLevel) return false
+        if (scheme.maxClassLevel && clsVal > scheme.maxClassLevel) return false
+      }
+      if (filterIncome) {
+        const incVal = parseInt(filterIncome)
+        if (scheme.maxIncomeLimit && incVal > scheme.maxIncomeLimit) return false
+      }
     }
 
     return true
-  }
-
-  const categoryFiltered = categoryFilter === 'All' 
-    ? schemes 
-    : schemes.filter(s => s.category === categoryFilter)
-
-  const filteredSchemes = categoryFiltered.filter(isEligibleForFilters)
-
-  const getSchemePortalUrl = (scheme) => {
-    if (!scheme) return 'https://sevasindhuservices.karnataka.gov.in/'
-    if (scheme.applyLink) return scheme.applyLink
-    
-    // Mappings by scheme ID
-    if (scheme.id === 'raitha-vidya-nidhi' || scheme.id === 'ssp-karnataka') return 'https://ssp.postmatric.karnataka.gov.in/'
-    if (scheme.id === 'buddy4study-portal' || scheme.id === 'buddy4study') return 'https://www.buddy4study.com/'
-    if (scheme.id === 'nsp-portal' || scheme.id === 'pm-scholarship' || scheme.id === 'nmmss' || scheme.id === 'pm-usp') return 'https://scholarships.gov.in/'
-    if (scheme.id === 'bhoomi-rtc') return 'https://landrecords.karnataka.gov.in/'
-    if (scheme.id === 'pm-kisan') return 'https://pmkisan.gov.in/'
-    if (scheme.id === 'pmfby') return 'https://pmfby.gov.in/'
-    if (scheme.id === 'gruha-lakshmi') return 'https://sevasindhuservices.karnataka.gov.in/'
-    if (scheme.id === 'ayushman-bharat' || scheme.id === 'ayushman-arogya') return 'https://arogya.karnataka.gov.in/'
-    if (scheme.id === 'raitha-siri') return 'https://raitamitra.karnataka.gov.in/'
-    if (scheme.id === 'krishi-sinchai') return 'https://pmksy.gov.in/'
-    
-    if (scheme.category === 'Scholarship') return 'https://ssp.postmatric.karnataka.gov.in/'
-    return 'https://sevasindhuservices.karnataka.gov.in/'
-  }
-
-  const applyQuickPreset = (cls, inc) => {
-    setCategoryFilter('Scholarship')
-    setFilterClass(cls)
-    setFilterIncome(inc)
-    setScholarshipFormSubmitted(true)
-  }
+  })
 
   return (
-    <div className="animate-fadeInUp">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
-        <h3 style={{ fontSize: 17, fontWeight: 700 }}>🏛️ {t('schemesTitle')}</h3>
-        
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {categories.map(cat => (
-            <button
-              key={cat}
-              className={`btn btn-sm ${categoryFilter === cat ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => {
-                setCategoryFilter(cat)
-                if (cat === 'Scholarship' && !filterClass && !filterIncome) {
-                  setScholarshipFormSubmitted(false)
-                }
-              }}
-            >
-              {cat === 'Scholarship' ? '🎓 Scholarships' : cat}
-            </button>
-          ))}
+    <div className="animate-fadeInUp" style={{ paddingBottom: 40 }}>
+      {/* Top Banner with Quick Actions & Stats */}
+      <div style={{
+        background: 'linear-gradient(135deg, #064e3b 0%, #047857 50%, #059669 100%)',
+        borderRadius: 20,
+        padding: '24px 28px',
+        color: '#fff',
+        marginBottom: 24,
+        boxShadow: '0 10px 25px rgba(5, 150, 105, 0.2)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ position: 'absolute', right: -20, bottom: -20, opacity: 0.15, fontSize: 160 }}>
+          🌾
+        </div>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
+            <div>
+              <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', marginBottom: 8, padding: '4px 10px', fontSize: 12 }}>
+                🏛️ Karnataka &amp; Central Agri Portal
+              </span>
+              <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
+                {t('schemesTitle')}
+              </h2>
+              <p style={{ margin: 0, fontSize: 14, color: 'rgba(255,255,255,0.9)', maxWidth: 620 }}>
+                {t('schemesSub')}
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <button
+                className="btn"
+                onClick={() => setTrackerModalOpen(true)}
+                style={{
+                  background: '#fbbf24',
+                  color: '#78350f',
+                  fontWeight: 700,
+                  border: 'none',
+                  borderRadius: 12,
+                  padding: '10px 18px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  cursor: 'pointer'
+                }}
+              >
+                <Search size={16} strokeWidth={2.5} />
+                {t('trackStatusBtn')}
+              </button>
+              
+              <a
+                href="https://fruits.karnataka.gov.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn"
+                style={{
+                  background: 'rgba(255,255,255,0.15)',
+                  color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  backdropFilter: 'blur(8px)',
+                  fontWeight: 600,
+                  borderRadius: 12,
+                  padding: '10px 16px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6
+                }}
+              >
+                🍈 FRUITS Karnataka ↗
+              </a>
+            </div>
+          </div>
+
+          {/* Quick Metrics Strip */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+            gap: 12,
+            marginTop: 20,
+            paddingTop: 16,
+            borderTop: '1px solid rgba(255,255,255,0.2)'
+          }}>
+            <div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats.totalBeneficiaries}</div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Beneficiaries Covered</div>
+            </div>
+            <div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats.totalDisbursed}</div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Funds Disbursed</div>
+            </div>
+            <div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats.solarPumpsInstalled}</div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Solar Pumps Installed</div>
+            </div>
+            <div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats.activeFPOs}</div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Active Agri FPOs</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* STEP 1: Student Requirement Entry Form when Scholarship category is active and not submitted */}
-      {categoryFilter === 'Scholarship' && !scholarshipFormSubmitted ? (
-        <div className="card animate-fadeInUp" style={{
-          maxWidth: 620,
-          margin: '10px auto 30px auto',
-          padding: '32px 28px',
-          borderRadius: 20,
-          border: '2px solid #2563eb',
-          boxShadow: '0 10px 30px rgba(37, 99, 235, 0.14)',
-          background: 'var(--bg-card)'
-        }}>
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <span style={{ fontSize: 44, display: 'inline-block', marginBottom: 8 }}>🎓</span>
-            <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-              {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಹತಾ ಪೋರ್ಟಲ್: ಮೊದಲಿಗೆ ನಿಮ್ಮ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ' : 'Student Setup: Enter Your Class & Family Income First'}
-            </h3>
-            <p style={{ fontSize: 14, color: 'var(--text-muted)', marginTop: 8, lineHeight: 1.5 }}>
-              {lang === 'kn' ? 'ನಿಮ್ಮ ಅರ್ಹತೆಗೆ ಹೊಂದುವ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ಮಾತ್ರ ವೀಕ್ಷಿಸಲು ನಿಮ್ಮ ಪ್ರಸ್ತುತ ತರಗತಿ ಹಾಗೂ ಕುಟುಂಬದ ಆದಾಯವನ್ನು ಮೊದಲಿಗೆ ಆಯ್ಕೆ ಮಾಡಿ.' : 'To display only the scholarships you qualify for, please select your Class and Annual Family Income first.'}
-            </p>
-          </div>
+      {/* Main Feature Tabs */}
+      <div style={{
+        display: 'flex',
+        gap: 8,
+        overflowX: 'auto',
+        paddingBottom: 8,
+        marginBottom: 20,
+        borderBottom: '1px solid var(--border-light)'
+      }}>
+        {[
+          { id: 'directory', label: t('tabAllSchemes') },
+          { id: 'loans', label: t('tabLoansInsurance') },
+          { id: 'advisory', label: t('tabAdvisoryKVK') },
+          { id: 'stories', label: t('tabSuccessStories') },
+          { id: 'grievance', label: t('tabGrievanceFAQ') }
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            style={{
+              padding: '10px 18px',
+              borderRadius: 12,
+              fontWeight: 700,
+              fontSize: 14,
+              cursor: 'pointer',
+              border: 'none',
+              background: activeTab === tab.id ? 'var(--primary)' : 'var(--bg-card)',
+              color: activeTab === tab.id ? '#fff' : 'var(--text-secondary)',
+              boxShadow: activeTab === tab.id ? '0 4px 12px rgba(16, 185, 129, 0.25)' : 'none',
+              transition: 'all 0.2s',
+              whiteSpace: 'nowrap',
+              border: activeTab === tab.id ? 'none' : '1px solid var(--border-light)'
+            }}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-          <form onSubmit={(e) => {
-            e.preventDefault()
-            setScholarshipFormSubmitted(true)
-          }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-              <div>
-                <label style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
-                  1️⃣ Select Your Current Class / Course / ತರಗತಿ (Required):
-                </label>
-                <select 
-                  className="form-input" 
-                  value={filterClass} 
-                  onChange={e => setFilterClass(e.target.value)}
-                  required
-                  style={{ width: '100%', padding: '12px 14px', fontSize: 14, borderRadius: 10, border: '1.5px solid var(--border-light)', background: 'var(--bg-main)', color: 'var(--text-primary)' }}
-                >
-                  <option value="">-- Choose Education Level / ತರಗತಿ ಆಯ್ಕೆಮಾಡಿ --</option>
-                  <option value="8">Class 8th – 10th (High School / 8 - 10)</option>
-                  <option value="12">Class 11th &amp; 12th (PUC / 10+2)</option>
-                  <option value="14">ITI / Diploma / Polytechnic</option>
-                  <option value="16">Undergraduate (BA, BSc, BCom, BE, MBBS)</option>
-                  <option value="18">Post Graduation (MA, MSc, MCom, PhD)</option>
-                </select>
-              </div>
-
-              <div>
-                <label style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
-                  2️⃣ Annual Family Income / ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯ (Required):
-                </label>
-                <select
-                  className="form-input"
-                  value={filterIncome}
-                  onChange={e => setFilterIncome(e.target.value)}
-                  required
-                  style={{ width: '100%', padding: '12px 14px', fontSize: 14, borderRadius: 10, border: '1.5px solid var(--border-light)', background: 'var(--bg-main)', color: 'var(--text-primary)' }}
-                >
-                  <option value="">-- Choose Income Range / ಆದಾಯ ಆಯ್ಕೆಮಾಡಿ --</option>
-                  <option value="180000">Up to ₹1,80,000 / year (₹1.8 Lakh)</option>
-                  <option value="250000">Up to ₹2,50,000 / year (₹2.5 Lakh)</option>
-                  <option value="300000">Up to ₹3,00,000 / year (₹3.0 Lakh)</option>
-                  <option value="450000">Up to ₹4,50,000 / year (₹4.5 Lakh)</option>
-                  <option value="600000">Up to ₹6,00,000 / year (₹6.0 Lakh)</option>
-                </select>
-              </div>
-
-              <div>
-                <label style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
-                  3️⃣ State / Location:
-                </label>
-                <input 
-                  className="form-input" 
-                  value="Karnataka (All 31 Districts)" 
-                  readOnly 
-                  style={{ width: '100%', padding: '12px 14px', fontSize: 14, borderRadius: 10, background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1.5px solid var(--border-light)', cursor: 'not-allowed' }}
-                />
-              </div>
-
-              <div>
-                <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 8 }}>⚡ Quick Sample Presets (One Tap):</p>
-                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  <button 
-                    type="button"
-                    className="btn btn-outline btn-sm" 
-                    onClick={() => applyQuickPreset('12', '180000')}
-                    style={{ fontSize: 12, borderRadius: 8, borderColor: '#2563eb', color: '#2563eb', fontWeight: 600 }}
-                  >
-                    ⚡ Class 12th &amp; ₹1.8L Income
-                  </button>
-                  <button 
-                    type="button"
-                    className="btn btn-outline btn-sm" 
-                    onClick={() => applyQuickPreset('8', '250000')}
-                    style={{ fontSize: 12, borderRadius: 8 }}
-                  >
-                    ⚡ Class 8th–10th &amp; ₹2.5L Income
-                  </button>
-                  <button 
-                    type="button"
-                    className="btn btn-outline btn-sm" 
-                    onClick={() => applyQuickPreset('16', '300000')}
-                    style={{ fontSize: 12, borderRadius: 8 }}
-                  >
-                    ⚡ Degree (UG) &amp; ₹3.0L Income
-                  </button>
-                </div>
-              </div>
-
-              <button 
-                type="submit" 
-                className="btn btn-primary"
-                style={{ width: '100%', padding: 14, fontSize: 15, fontWeight: 700, borderRadius: 10, justifyContent: 'center', marginTop: 8 }}
-              >
-                🚀 {lang === 'kn' ? 'ಅರ್ಹ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ಪಡೆಯಿರಿ →' : 'Search & Find Eligible Scholarships →'}
-              </button>
-            </div>
-          </form>
-        </div>
-      ) : (
-        /* STEP 2: Rendered Scholarship & Scheme Results */
+      {/* ============================================================ */}
+      {/* TAB 1: SCHEMES DIRECTORY WITH MULTI-DIMENSIONAL FILTERS */}
+      {/* ============================================================ */}
+      {activeTab === 'directory' && (
         <>
-          {categoryFilter === 'Scholarship' && (
+          {/* Multi-Dimensional Filter Bar */}
+          <div className="card" style={{ padding: '18px 20px', marginBottom: 24, borderRadius: 16 }}>
+            {/* Search Input & Government Filter */}
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 14 }}>
+              <div style={{ flex: 1, minWidth: 220, position: 'relative' }}>
+                <input
+                  type="text"
+                  placeholder={lang === 'kn' ? 'ಯೋಜನೆ ಅಥವಾ ಕೀವರ್ಡ್ ಹುಡುಕಿ...' : lang === 'hi' ? 'योजना खोजें...' : 'Search scheme by name, subsidy, or keyword...'}
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  className="form-input"
+                  style={{ width: '100%', padding: '10px 14px 10px 36px', borderRadius: 10 }}
+                />
+                <Search size={16} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--text-muted)' }} />
+              </div>
+
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {[
+                  { id: 'All', label: t('filterLevelAll') },
+                  { id: 'Central', label: t('filterLevelCentral') },
+                  { id: 'State', label: t('filterLevelState') }
+                ].map(lvl => (
+                  <button
+                    key={lvl.id}
+                    onClick={() => setLevelFilter(lvl.id)}
+                    className={`btn btn-sm ${levelFilter === lvl.id ? 'btn-primary' : 'btn-outline'}`}
+                    style={{ borderRadius: 8, fontSize: 12 }}
+                  >
+                    {lvl.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Categorized Dropdown Filters */}
             <div style={{
-              background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
-              borderRadius: 16,
-              padding: '16px 20px',
-              marginBottom: 24,
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: 12
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: 12,
+              paddingTop: 12,
+              borderTop: '1px solid var(--border-light)'
             }}>
               <div>
-                <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#fff' }}>
-                  🎓 {filteredSchemes.filter(s => s.category === 'Scholarship').length} Scholarships Matching Your Profile
-                </h4>
-                <p style={{ margin: '4px 0 0 0', fontSize: 12, color: 'rgba(255,255,255,0.9)' }}>
-                  Class: <strong>{getClassLabel(filterClass)}</strong> | Income Limit: <strong>₹{parseInt(filterIncome || 0).toLocaleString('en-IN')}/yr</strong> | Location: <strong>Karnataka</strong>
-                </p>
+                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
+                  👥 {t('filterBeneficiaryAll')}
+                </label>
+                <select
+                  value={beneficiaryFilter}
+                  onChange={e => setBeneficiaryFilter(e.target.value)}
+                  className="form-input"
+                  style={{ width: '100%', padding: '8px 10px', fontSize: 13, borderRadius: 8 }}
+                >
+                  {beneficiaryOptions.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
               </div>
 
-              <button
-                className="btn btn-sm"
-                onClick={() => setScholarshipFormSubmitted(false)}
-                style={{ background: '#fff', color: '#1e3a8a', fontWeight: 700, border: 'none', borderRadius: 8, padding: '8px 14px', cursor: 'pointer' }}
-              >
-                ✏️ Edit Class &amp; Income
-              </button>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
+                  🎯 {t('filterObjectiveAll')}
+                </label>
+                <select
+                  value={objectiveFilter}
+                  onChange={e => setObjectiveFilter(e.target.value)}
+                  className="form-input"
+                  style={{ width: '100%', padding: '8px 10px', fontSize: 13, borderRadius: 8 }}
+                >
+                  {objectiveOptions.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
+                  🌱 {t('filterStageAll')}
+                </label>
+                <select
+                  value={stageFilter}
+                  onChange={e => setStageFilter(e.target.value)}
+                  className="form-input"
+                  style={{ width: '100%', padding: '8px 10px', fontSize: 13, borderRadius: 8 }}
+                >
+                  {stageOptions.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
+                  🏛️ Category
+                </label>
+                <select
+                  value={categoryFilter}
+                  onChange={e => setCategoryFilter(e.target.value)}
+                  className="form-input"
+                  style={{ width: '100%', padding: '8px 10px', fontSize: 13, borderRadius: 8 }}
+                >
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat === 'Scholarship' ? '🎓 Scholarships' : cat}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-          )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
-            {filteredSchemes.map((s, i) => {
-              const portalUrl = getSchemePortalUrl(s)
-              return (
-                <div className="scheme-card animate-fadeInUp" key={i} style={{ animationDelay: `${i * 0.08}s` }}>
-                  <div className="scheme-card-img">
-                    <img src={s.img} alt={s.title[lang] || s.title.en} />
-                    <div className="scheme-card-img-overlay" />
-                    <div className="scheme-card-overlay-badge">
-                      <span className={`badge ${s.badgeClass || 'badge-success'}`}>{s.badge ? (s.badge[lang] || s.badge.en) : 'Active Portal'}</span>
-                    </div>
-                  </div>
-                  <div className="scheme-card-body">
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 6 }}>{s.ministry[lang] || s.ministry.en}</div>
-                    <h4>{s.title[lang] || s.title.en}</h4>
-                    <p style={{ fontSize: 13, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: '0 0 8px 0' }}>{s.desc[lang] || s.desc.en}</p>
+            {/* Active Filters Reset */}
+            {(levelFilter !== 'All' || beneficiaryFilter !== 'All' || objectiveFilter !== 'All' || stageFilter !== 'All' || categoryFilter !== 'All' || searchQuery) && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, fontSize: 12, color: 'var(--text-muted)' }}>
+                <span>Showing <strong>{filteredSchemes.length}</strong> matching schemes</span>
+                <button
+                  onClick={() => {
+                    setLevelFilter('All')
+                    setBeneficiaryFilter('All')
+                    setObjectiveFilter('All')
+                    setStageFilter('All')
+                    setCategoryFilter('All')
+                    setSearchQuery('')
+                  }}
+                  style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', fontWeight: 600 }}
+                >
+                  ↺ Reset all filters
+                </button>
+              </div>
+            )}
+          </div>
 
-                    {s.category === 'Scholarship' && (
-                      <div style={{ fontSize: 12, margin: '6px 0 10px 0', display: 'flex', flexDirection: 'column', gap: 4, background: 'var(--bg-main)', padding: 10, borderRadius: 8, border: '1px solid var(--border-light)' }}>
-                        <p style={{ margin: 0, color: 'var(--text-secondary)', fontWeight: 600 }}>
-                          <strong>📚 Class:</strong> {s.classRangeText ? (s.classRangeText[lang] || s.classRangeText.en) : (s.classRequired ? (s.classRequired[lang] || s.classRequired.en) : 'Class 8th–12th / UG / PG')}
-                        </p>
-                        <p style={{ margin: 0, color: 'var(--text-secondary)', fontWeight: 600 }}>
-                          <strong>💰 Income Limit:</strong> {s.incomeLimitText ? (s.incomeLimitText[lang] || s.incomeLimitText.en) : (s.incomeLimit ? (s.incomeLimit[lang] || s.incomeLimit.en) : 'Up to ₹2.5 Lakh/year')}
-                        </p>
-                        <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: 11 }}>
-                          <strong>📍 Location:</strong> Karnataka (All Districts)
-                        </p>
-                      </div>
+          {/* Scheme Cards Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
+            {filteredSchemes.map((s, idx) => (
+              <div
+                className="scheme-card animate-fadeInUp"
+                key={s.id || idx}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  borderRadius: 16,
+                  overflow: 'hidden',
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border-light)',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
+                }}
+              >
+                <div style={{ position: 'relative', height: 160, overflow: 'hidden' }}>
+                  <img
+                    src={s.img}
+                    alt={s.title[lang] || s.title.en}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    top: 10,
+                    left: 10,
+                    display: 'flex',
+                    gap: 6
+                  }}>
+                    {s.level && (
+                      <span className="badge" style={{ background: s.level === 'Central' ? '#1e3a8a' : '#c2410c', color: '#fff', fontSize: 11 }}>
+                        {s.level === 'Central' ? '🇮🇳 Central' : '🟡 Karnataka'}
+                      </span>
                     )}
-
-                    <div style={{ display: 'flex', gap: 8, marginTop: 'auto', paddingTop: 12 }}>
-                      <a
-                        href={portalUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-primary btn-sm"
-                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, flex: 1, justifyContent: 'center' }}
-                      >
-                        {s.category === 'Scholarship' ? 'Apply →' : 'Apply Online ↗'}
-                      </a>
-                      <button 
-                        className="btn btn-outline btn-sm"
-                        onClick={() => setSelectedScheme(s)}
-                      >
-                        {t('learnMore')}
-                      </button>
-                    </div>
+                    {s.badge && (
+                      <span className={`badge ${s.badgeClass || 'badge-success'}`} style={{ fontSize: 11 }}>
+                        {s.badge[lang] || s.badge.en}
+                      </span>
+                    )}
                   </div>
                 </div>
-              )
-            })}
+
+                <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4, fontWeight: 600 }}>
+                    {s.ministry?.[lang] || s.ministry?.en}
+                  </div>
+
+                  <h4 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px 0', color: 'var(--text-primary)' }}>
+                    {s.title[lang] || s.title.en}
+                  </h4>
+
+                  <p style={{
+                    fontSize: 13,
+                    color: 'var(--text-secondary)',
+                    lineHeight: 1.5,
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    marginBottom: 12
+                  }}>
+                    {s.desc[lang] || s.desc.en}
+                  </p>
+
+                  {/* Highlights Pill Box */}
+                  {s.benefits && (
+                    <div style={{
+                      background: 'var(--bg-main)',
+                      padding: '8px 12px',
+                      borderRadius: 10,
+                      border: '1px solid var(--border-light)',
+                      marginBottom: 14,
+                      fontSize: 12
+                    }}>
+                      <div style={{ color: 'var(--primary-dark)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span>💰 {s.benefits.subsidyPercent || s.benefits.maxLimit}</span>
+                      </div>
+                      {s.benefits.mode && (
+                        <div style={{ color: 'var(--text-muted)', fontSize: 11, marginTop: 2 }}>
+                          Mode: {s.benefits.mode}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
+                    <a
+                      href={s.applyLink || 'https://sevasindhuservices.karnataka.gov.in/'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-primary btn-sm"
+                      style={{ flex: 1, textDecoration: 'none', justifyContent: 'center', fontSize: 13 }}
+                    >
+                      {t('directApply')}
+                    </a>
+                    <button
+                      className="btn btn-outline btn-sm"
+                      onClick={() => setSelectedScheme(s)}
+                      style={{ fontSize: 13 }}
+                    >
+                      {t('learnMore')}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
+
+          {filteredSchemes.length === 0 && (
+            <div className="card" style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: 44, display: 'block', marginBottom: 12 }}>🔍</span>
+              <h3>No matching schemes found</h3>
+              <p>Try resetting filters or searching with a different term.</p>
+            </div>
+          )}
         </>
       )}
 
+      {/* ============================================================ */}
+      {/* TAB 2: FINANCIAL ASSISTANCE, CROP LOANS & INSURANCE */}
+      {/* ============================================================ */}
+      {activeTab === 'loans' && (
+        <div className="animate-fadeInUp" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          <div className="card" style={{ padding: '20px 24px', background: 'var(--bg-card)' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 8, color: 'var(--text-primary)' }}>
+              💳 Agricultural Credit, Kisan Credit Cards (KCC) &amp; Crop Insurance
+            </h3>
+            <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
+              Transparent interest rates, scale of finance limits, moratorium periods, and claim guidelines for Karnataka farmers.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
+            {agriFinancialAssistance.map((fin, i) => (
+              <div className="card" key={i} style={{ padding: 22, display: 'flex', flexDirection: 'column', border: '1.5px solid var(--border-light)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                  <span className="badge badge-primary">{fin.category}</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary)' }}>{fin.interestRate}</span>
+                </div>
+
+                <h4 style={{ fontSize: 17, fontWeight: 700, margin: '0 0 10px 0', color: 'var(--text-primary)' }}>
+                  {fin.title[lang] || fin.title.en}
+                </h4>
+
+                <div style={{ background: 'var(--bg-main)', padding: 12, borderRadius: 10, marginBottom: 14, fontSize: 13 }}>
+                  <p style={{ margin: '0 0 4px 0' }}><strong>Limit / ಮೊತ್ತ:</strong> {fin.limit}</p>
+                  <p style={{ margin: 0 }}><strong>Moratorium / ಮರುಪಾವತಿ:</strong> {fin.moratorium}</p>
+                </div>
+
+                <div style={{ marginBottom: 16 }}>
+                  <h5 style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>Key Features:</h5>
+                  <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    {fin.features.map((feat, fIdx) => (
+                      <li key={fIdx}>{feat[lang] || feat.en}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
+                  <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8 }}>
+                    Partner Banks: {fin.bankPartners.join(', ')}
+                  </div>
+                  <a
+                    href={fin.applyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary btn-sm"
+                    style={{ width: '100%', textDecoration: 'none', justifyContent: 'center' }}
+                  >
+                    Apply on JanSamarth / Samrakshane ↗
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* TAB 3: TECHNICAL ADVISORY & RSK/KVK DIRECTORY */}
+      {/* ============================================================ */}
+      {activeTab === 'advisory' && (
+        <div className="animate-fadeInUp" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          <div className="card" style={{ padding: '20px 24px' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 6 }}>
+              🌾 Agri-Advisory, Soil Testing &amp; KVK Training Centers
+            </h3>
+            <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
+              Connect with 745+ Raitha Samparka Kendras (RSK), 33+ ICAR Krishi Vigyan Kendras, and 24x7 Weather Advisories across Karnataka.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 18 }}>
+            {agriAdvisoryAndCenters.map((adv, idx) => (
+              <div className="card" key={idx} style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 24 }}>🏛️</span>
+                  <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>
+                    {adv.title[lang] || adv.title.en}
+                  </h4>
+                </div>
+
+                <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                  {adv.desc[lang] || adv.desc.en}
+                </p>
+
+                <div style={{ background: 'var(--bg-main)', padding: 10, borderRadius: 8, fontSize: 12, color: 'var(--text-primary)', fontWeight: 600 }}>
+                  📞 {adv.contact}
+                </div>
+
+                <a
+                  href={adv.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-outline btn-sm"
+                  style={{ textDecoration: 'none', justifyContent: 'center', marginTop: 'auto' }}
+                >
+                  {adv.actionText[lang] || adv.actionText.en} ↗
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* TAB 4: SUCCESS STORIES & IMPACT DATA */}
+      {/* ============================================================ */}
+      {activeTab === 'stories' && (
+        <div className="animate-fadeInUp" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          <div className="card" style={{ padding: '20px 24px' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 6 }}>
+              🌟 Real Beneficiary Success Stories &amp; Ground Impact
+            </h3>
+            <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
+              Inspiring real experiences of Karnataka farmers transforming their livelihoods with government schemes.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
+            {schemesSuccessStories.map(story => (
+              <div className="card" key={story.id} style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+                  <img
+                    src={story.image}
+                    alt={story.name}
+                    style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)' }}
+                  />
+                  <div>
+                    <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>{story.name}</h4>
+                    <p style={{ margin: '2px 0 0 0', fontSize: 12, color: 'var(--text-muted)' }}>📍 {story.village}</p>
+                    <span className="badge badge-success" style={{ marginTop: 4, fontSize: 10 }}>{story.stat}</span>
+                  </div>
+                </div>
+
+                <div style={{ background: 'var(--bg-main)', padding: '10px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, color: 'var(--primary-dark)' }}>
+                  🌾 {story.scheme}: {story.benefitReceived}
+                </div>
+
+                <p style={{ fontSize: 13, color: 'var(--text-secondary)', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>
+                  “{story.quote[lang] || story.quote.en}”
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* TAB 5: GRIEVANCE REDRESSAL & FAQS */}
+      {/* ============================================================ */}
+      {activeTab === 'grievance' && (
+        <div className="animate-fadeInUp" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          {/* Helpdesk Contacts */}
+          <div className="card" style={{ padding: '20px 24px' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 12 }}>
+              ⚖️ Official Grievance Portals &amp; 24x7 Helplines
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
+              {grievanceHelpdesks.map((desk, idx) => (
+                <div key={idx} style={{ background: 'var(--bg-main)', padding: 14, borderRadius: 12, border: '1px solid var(--border-light)' }}>
+                  <h4 style={{ margin: '0 0 4px 0', fontSize: 14, fontWeight: 700 }}>{desk.name}</h4>
+                  <p style={{ margin: '0 0 4px 0', fontSize: 13, color: 'var(--primary)', fontWeight: 700 }}>📞 {desk.tollFree}</p>
+                  <p style={{ margin: '0 0 10px 0', fontSize: 11, color: 'var(--text-muted)' }}>🕒 {desk.timings}</p>
+                  <a
+                    href={desk.portalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary btn-sm"
+                    style={{ textDecoration: 'none', display: 'inline-block', fontSize: 12 }}
+                  >
+                    File Grievance ↗
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Interactive FAQs Accordion */}
+          <div className="card" style={{ padding: '20px 24px' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 16 }}>
+              ❓ Frequently Asked Questions (FAQs)
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {schemesFaqs.map((faq, fIdx) => (
+                <div
+                  key={fIdx}
+                  style={{
+                    border: '1px solid var(--border-light)',
+                    borderRadius: 12,
+                    overflow: 'hidden',
+                    background: 'var(--bg-main)'
+                  }}
+                >
+                  <button
+                    onClick={() => setOpenFaq(openFaq === fIdx ? null : fIdx)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px',
+                      background: 'none',
+                      border: 'none',
+                      textAlign: 'left',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: 'var(--text-primary)'
+                    }}
+                  >
+                    <span>{faq.q[lang] || faq.q.en}</span>
+                    <span style={{ fontSize: 18, color: 'var(--primary)', marginLeft: 8 }}>
+                      {openFaq === fIdx ? '−' : '+'}
+                    </span>
+                  </button>
+                  {openFaq === fIdx && (
+                    <div style={{ padding: '0 16px 14px 16px', fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                      {faq.a[lang] || faq.a.en}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* DETAILED SCHEME VIEW MODAL */}
+      {/* ============================================================ */}
       {selectedScheme && (
-        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }}>
-          <div className="card" style={{ maxWidth: 550, width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: 24, position: 'relative' }}>
-            <button 
-              onClick={() => setSelectedScheme(null)}
-              style={{ position: 'absolute', top: 16, right: 16, fontSize: 20, cursor: 'pointer', fontWeight: 'bold', background: 'none', border: 'none', color: 'var(--text-primary)' }}
+        <div
+          className="modal-overlay"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.65)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1100,
+            padding: 16,
+            backdropFilter: 'blur(4px)'
+          }}
+        >
+          <div
+            className="card animate-fadeInUp"
+            style={{
+              maxWidth: 680,
+              width: '100%',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              padding: '24px 28px',
+              position: 'relative',
+              borderRadius: 20
+            }}
+          >
+            <button
+              onClick={() => {
+                if (isSpeaking) {
+                  window.speechSynthesis.cancel()
+                  setIsSpeaking(false)
+                }
+                setSelectedScheme(null)
+              }}
+              style={{
+                position: 'absolute',
+                top: 16,
+                right: 16,
+                background: 'var(--bg-main)',
+                border: 'none',
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                fontSize: 16,
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                color: 'var(--text-primary)'
+              }}
             >
               ✕
             </button>
-            <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--primary)', marginBottom: 12 }}>{selectedScheme.title[lang] || selectedScheme.title.en}</h3>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16 }}>{selectedScheme.ministry[lang] || selectedScheme.ministry.en}</p>
-            
+
+            {/* Scheme Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+              <span className="badge badge-primary">{selectedScheme.level || 'Central/State'}</span>
+              <span className="badge badge-info">{selectedScheme.category}</span>
+            </div>
+            <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', margin: '4px 0' }}>
+              {selectedScheme.title[lang] || selectedScheme.title.en}
+            </h3>
+            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 14 }}>
+              {selectedScheme.ministry[lang] || selectedScheme.ministry.en}
+            </p>
+
+            {/* Accessibility Audio TTS Readout */}
+            <button
+              className="btn btn-sm btn-outline"
+              onClick={() => handleToggleVoice(selectedScheme)}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 16, borderRadius: 8, fontSize: 12 }}
+            >
+              <Volume2 size={14} />
+              {isSpeaking ? t('stopAudio') : t('voiceReadout')}
+            </button>
+
+            {/* Section 1: Overview */}
             <div style={{ marginBottom: 16 }}>
-              <h5 style={{ fontWeight: 600, fontSize: 14, marginBottom: 4 }}>Description / ವಿವರಣೆ</h5>
-              <p style={{ fontSize: 14, color: 'var(--text-secondary)' }}>{selectedScheme.desc[lang] || selectedScheme.desc.en}</p>
+              <h5 style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Description / ವಿವರಣೆ</h5>
+              <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                {selectedScheme.desc[lang] || selectedScheme.desc.en}
+              </p>
             </div>
 
-            {(selectedScheme.id === 'raitha-vidya-nidhi' || selectedScheme.category === 'Scholarship') && (
-              <div style={{ marginBottom: 16, padding: 12, border: '1px solid #fed7aa', background: '#fff7ed', borderRadius: 'var(--radius-md)' }}>
-                <h5 style={{ fontWeight: 600, fontSize: 13, color: '#c2410c', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  🎓 Course-wise Scholarship Rates (Annual) / ಕೋರ್ಸ್‌ವಾರು ವಿವರಗಳು
+            {/* Section 2: Benefit Details & Subsidy Structure */}
+            {selectedScheme.benefits && (
+              <div style={{
+                background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)',
+                padding: 16,
+                borderRadius: 12,
+                border: '1px solid #a7f3d0',
+                marginBottom: 16
+              }}>
+                <h5 style={{ color: '#065f46', fontWeight: 800, fontSize: 14, margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  💰 {t('benefitDetails')}
                 </h5>
-                <div style={{ maxHeight: 180, overflowY: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, textAlign: 'left' }}>
-                    <thead>
-                      <tr style={{ borderBottom: '2px solid #fdba74', color: '#c2410c', fontWeight: 600 }}>
-                        <th style={{ padding: '6px 4px' }}>Course / ಕೋರ್ಸ್</th>
-                        <th style={{ padding: '6px 4px' }}>Boys / ಬಾಲಕರು</th>
-                        <th style={{ padding: '6px 4px' }}>Girls / ಬಾಲಕಿಯರು</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        { course: 'Class 8 - 10 (Girls only)', boys: '-', girls: '₹2,500' },
-                        { course: 'Class 11 & 12 (PUC)', boys: '₹2,500', girls: '₹3,000' },
-                        { course: 'ITI / Diploma / Polytechnic', boys: '₹5,000', girls: '₹5,500' },
-                        { course: 'General Degrees (BA, BSc, BCom)', boys: '₹5,000', girls: '₹5,500' },
-                        { course: 'Professional Degrees (BE, MBBS, Law, Agri)', boys: '₹10,000', girls: '₹11,000' },
-                        { course: 'Post Graduation (PG / PhD)', boys: '₹10,000', girls: '₹11,000' },
-                      ].map((item, idx) => (
-                        <tr key={idx} style={{ borderBottom: '1px solid #ffedd5' }}>
-                          <td style={{ padding: '6px 4px', fontWeight: 500 }}>{item.course}</td>
-                          <td style={{ padding: '6px 4px', color: '#ea580c' }}>{item.boys}</td>
-                          <td style={{ padding: '6px 4px', color: '#ea580c', fontWeight: 600 }}>{item.girls}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div style={{ marginTop: 10, fontSize: 11, color: '#7c2d12', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <p style={{ margin: 0 }}>
-                    🌐 Official Karnataka Portal:{' '}
-                    <a href="https://ssp.postmatric.karnataka.gov.in/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#c2410c', fontWeight: 700 }}>
-                      SSP State Scholarship Portal ↗
-                    </a>
-                  </p>
-                  <p style={{ margin: 0 }}>
-                    📚 National &amp; Private Scholarships:{' '}
-                    <a href="https://www.buddy4study.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#c2410c', fontWeight: 700 }}>
-                      Buddy4Study Scholarship Portal ↗
-                    </a>
-                  </p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, fontSize: 12, color: '#064e3b' }}>
+                  <div><strong>Subsidy Percentage:</strong> {selectedScheme.benefits.subsidyPercent}</div>
+                  <div><strong>Maximum Limit:</strong> {selectedScheme.benefits.maxLimit}</div>
+                  <div><strong>Payment Mode:</strong> {selectedScheme.benefits.mode}</div>
+                  <div><strong>Interest Subvention:</strong> {selectedScheme.benefits.interestSubvention}</div>
                 </div>
               </div>
             )}
 
-            <div style={{ marginBottom: 16, padding: 12, background: 'var(--bg-main)', borderRadius: 'var(--radius-md)' }}>
-              <h5 style={{ fontWeight: 600, fontSize: 14, color: 'var(--primary-dark)', marginBottom: 4 }}>Eligibility / ಅರ್ಹತೆ</h5>
-              <p style={{ fontSize: 13 }}>{selectedScheme.eligibility[lang] || selectedScheme.eligibility.en}</p>
+            {/* Section 3: Eligibility Criteria */}
+            <div style={{ background: 'var(--bg-main)', padding: 14, borderRadius: 12, marginBottom: 14, border: '1px solid var(--border-light)' }}>
+              <h5 style={{ fontWeight: 700, fontSize: 14, color: 'var(--primary)', margin: '0 0 4px 0' }}>
+                {t('eligibilityCriteria')}
+              </h5>
+              <p style={{ fontSize: 13, margin: 0, color: 'var(--text-primary)' }}>
+                {selectedScheme.eligibility[lang] || selectedScheme.eligibility.en}
+              </p>
             </div>
 
-            <div style={{ marginBottom: 20 }}>
-              <h5 style={{ fontWeight: 600, fontSize: 14, marginBottom: 4 }}>Required Documents / ಅಗತ್ಯ ದಾಖಲೆಗಳು</h5>
-              <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{selectedScheme.documents[lang] || selectedScheme.documents.en}</p>
-            </div>
-
-            {selectedScheme.category === 'Scholarship' ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <a 
-                    href={selectedScheme.applyLink || 'https://ssp.postmatric.karnataka.gov.in/'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-primary" 
-                    style={{ flex: 1, justifyContent: 'center', textDecoration: 'none' }}
-                  >
-                    🎓 Apply on SSP Karnataka Portal ↗
-                  </a>
-                  <a 
-                    href="https://www.buddy4study.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-outline" 
-                    style={{ flex: 1, justifyContent: 'center', textDecoration: 'none', borderColor: '#2563eb', color: '#2563eb' }}
-                  >
-                    📚 Apply on Buddy4Study ↗
-                  </a>
-                </div>
-                <button className="btn btn-outline" style={{ marginTop: 4 }} onClick={() => setSelectedScheme(null)}>Close</button>
+            {/* Section 4: Exclusions */}
+            {selectedScheme.exclusions && (
+              <div style={{ background: '#fef2f2', padding: 14, borderRadius: 12, marginBottom: 14, border: '1px solid #fecaca' }}>
+                <h5 style={{ fontWeight: 700, fontSize: 13, color: '#991b1b', margin: '0 0 4px 0' }}>
+                  {t('exclusionsTitle')}
+                </h5>
+                <p style={{ fontSize: 12, margin: 0, color: '#7f1d1d' }}>
+                  {selectedScheme.exclusions[lang] || selectedScheme.exclusions.en}
+                </p>
               </div>
-            ) : (
-              <div style={{ display: 'flex', gap: 12 }}>
-                <a 
-                  href={getSchemePortalUrl(selectedScheme)}
+            )}
+
+            {/* Section 5: Required Documents */}
+            <div style={{ marginBottom: 16 }}>
+              <h5 style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
+                {t('requiredDocs')}
+              </h5>
+              <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
+                {selectedScheme.documents[lang] || selectedScheme.documents.en}
+              </p>
+            </div>
+
+            {/* Section 6: Application Process & Steps */}
+            {selectedScheme.processSteps && (
+              <div style={{ marginBottom: 16 }}>
+                <h5 style={{ fontWeight: 700, fontSize: 14, marginBottom: 10 }}>
+                  {t('stepByStepProcess')}
+                </h5>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {selectedScheme.processSteps.map(st => (
+                    <div key={st.step} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                      <span style={{
+                        width: 24,
+                        height: 24,
+                        borderRadius: '50%',
+                        background: 'var(--primary)',
+                        color: '#fff',
+                        fontSize: 12,
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}>
+                        {st.step}
+                      </span>
+                      <div style={{ fontSize: 13 }}>
+                        <strong>{st.title[lang] || st.title.en}: </strong>
+                        <span style={{ color: 'var(--text-secondary)' }}>{st.desc[lang] || st.desc.en}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Section 7: Timeline */}
+            {selectedScheme.timeline && (
+              <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span>{t('expectedTimeline')}: <strong>{selectedScheme.timeline}</strong></span>
+              </div>
+            )}
+
+            {/* Modal Actions */}
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <a
+                href={selectedScheme.applyLink || 'https://sevasindhuservices.karnataka.gov.in/'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+                style={{ flex: 1, textDecoration: 'none', justifyContent: 'center', fontWeight: 700 }}
+              >
+                {t('directApply')}
+              </a>
+              {selectedScheme.trackerUrl && (
+                <a
+                  href={selectedScheme.trackerUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-primary" 
-                  style={{ flex: 1, justifyContent: 'center', textDecoration: 'none' }}
+                  className="btn btn-outline"
+                  style={{ textDecoration: 'none', justifyContent: 'center' }}
                 >
-                  Apply Online on Official Portal ↗
+                  Track Portal Status ↗
                 </a>
-                <button className="btn btn-outline" onClick={() => setSelectedScheme(null)}>Close</button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* STATUS TRACKER MODAL */}
+      {/* ============================================================ */}
+      {trackerModalOpen && (
+        <div
+          className="modal-overlay"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.65)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1150,
+            padding: 16,
+            backdropFilter: 'blur(4px)'
+          }}
+        >
+          <div
+            className="card animate-fadeInUp"
+            style={{
+              maxWidth: 520,
+              width: '100%',
+              padding: '24px 28px',
+              position: 'relative',
+              borderRadius: 20
+            }}
+          >
+            <button
+              onClick={() => {
+                setTrackerModalOpen(false)
+                setTrackingResult(null)
+              }}
+              style={{
+                position: 'absolute',
+                top: 16,
+                right: 16,
+                background: 'var(--bg-main)',
+                border: 'none',
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                fontSize: 16,
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                color: 'var(--text-primary)'
+              }}
+            >
+              ✕
+            </button>
+
+            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
+              🔍 Application Status Tracker
+            </h3>
+            <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 18 }}>
+              Check live DBT disbursement and verification status across PM-Kisan, Seva Sindhu, and Karnataka FRUITS.
+            </p>
+
+            <form onSubmit={handleTrackSubmit}>
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ fontSize: 12, fontWeight: 700, display: 'block', marginBottom: 6 }}>
+                  Enter Application ID, FRUITS ID or Aadhaar Number:
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. KA-FRUITS-984210 or Aadhaar 12-digit"
+                  value={trackingId}
+                  onChange={e => setTrackingId(e.target.value)}
+                  className="form-input"
+                  required
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: 10 }}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{ width: '100%', justifyContent: 'center', padding: 12, fontWeight: 700, borderRadius: 10 }}
+              >
+                Track Live Status →
+              </button>
+            </form>
+
+            {trackingResult && (
+              <div style={{
+                marginTop: 20,
+                padding: 16,
+                borderRadius: 12,
+                background: 'var(--bg-main)',
+                border: '1.5px solid var(--primary)',
+                animation: 'fadeIn 0.3s ease-in'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>ID: {trackingResult.appId}</span>
+                  <span className="badge badge-success" style={{ fontSize: 11 }}>{trackingResult.status}</span>
+                </div>
+                <h4 style={{ margin: '0 0 6px 0', fontSize: 15, fontWeight: 800 }}>{trackingResult.schemeName}</h4>
+                <p style={{ margin: '0 0 4px 0', fontSize: 12 }}><strong>Beneficiary:</strong> {trackingResult.applicant}</p>
+                <p style={{ margin: '0 0 4px 0', fontSize: 12 }}><strong>Current Stage:</strong> {trackingResult.stage}</p>
+                <p style={{ margin: '0 0 4px 0', fontSize: 12 }}><strong>Account:</strong> {trackingResult.bankAccount}</p>
+                <p style={{ margin: '0 0 10px 0', fontSize: 12, color: 'var(--primary)' }}><strong>Next Update:</strong> {trackingResult.disbursementDate}</p>
+
+                <a
+                  href={trackingResult.portalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-outline btn-sm"
+                  style={{ width: '100%', textDecoration: 'none', justifyContent: 'center', fontSize: 12 }}
+                >
+                  View Official DBT Receipt on FRUITS ↗
+                </a>
               </div>
             )}
           </div>
