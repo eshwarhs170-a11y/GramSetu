@@ -1,4 +1,58 @@
-// Mapping of crops to correct, verified images (Unsplash)
+// Kannada labels and units for display
+export const cropMeta = {
+  "Maize": { kn: "ಮೆಕ್ಕೆಜೋಳ", unit: "per quintal" },
+  "Bengal gram": { kn: "ಕಡಲೆ", unit: "per quintal" },
+  "Groundnut": { kn: "ಕಡಲೆಕಾಯಿ", unit: "per quintal" },
+  "Sunflower": { kn: "ಸೂರ್ಯಕಾಂತಿ", unit: "per quintal" },
+  "Jowar": { kn: "ಜೋಳ", unit: "per quintal" },
+  "Bajra": { kn: "ಸಜ್ಜೆ", unit: "per quintal" },
+  "Wheat": { kn: "ಗೋಧಿ", unit: "per quintal" },
+  "Tur": { kn: "ತೊಗರಿ", unit: "per quintal" },
+  "Chilli": { kn: "ಮೆಣಸಿನಕಾಯಿ", unit: "per quintal" },
+  "Cotton": { kn: "ಹತ್ತಿ", unit: "per quintal" },
+  "Paddy": { kn: "ಭತ್ತ", unit: "per quintal" },
+  "Sugarcane": { kn: "ಕಬ್ಬು", unit: "per tonne" },
+  "Soybean": { kn: "ಸೋಯಾಬೀನ್", unit: "per quintal" },
+  "Ragi": { kn: "ರಾಗಿ", unit: "per quintal" },
+  "Tomato": { kn: "ಟೊಮೇಟೊ", unit: "per quintal" },
+  "Potato": { kn: "ಆಲೂಗಡ್ಡೆ", unit: "per quintal" },
+  "Onion": { kn: "ಈರುಳ್ಳಿ", unit: "per quintal" },
+  "Beans": { kn: "ಬೀನ್ಸ್", unit: "per quintal" },
+  "Mulberry": { kn: "ಹಿಪ್ಪುನೇರಳೆ", unit: "per quintal" },
+  "Finger millet": { kn: "ರಾಗಿ", unit: "per quintal" },
+  "Rice": { kn: "ಅಕ್ಕಿ", unit: "per quintal" },
+  "Green gram": { kn: "ಹೆಸರು ಕಾಳು", unit: "per quintal" },
+  "Black gram": { kn: "ಉದ್ದು", unit: "per quintal" },
+  "Dry chilli": { kn: "ಒಣ ಮೆಣಸಿನಕಾಯಿ", unit: "per quintal" },
+  "Turmeric": { kn: "ಅರಿಶಿನ", unit: "per quintal" },
+  "Tamarind": { kn: "ಹುಣಸೆ", unit: "per quintal" },
+  "Sesame": { kn: "ಎಳ್ಳು", unit: "per quintal" },
+  "Coconut": { kn: "ತೆಂಗಿನಕಾಯಿ", unit: "per quintal" },
+  "Arecanut": { kn: "ಅಡಿಕೆ", unit: "per quintal" },
+  "Green chilli": { kn: "ಹಸಿ ಮೆಣಸು", unit: "per quintal" },
+  "Lime": { kn: "ನಿಂಬೆ", unit: "per quintal" },
+  "Coffee": { kn: "ಕಾಫಿ", unit: "per quintal" },
+  "Castor seed": { kn: "ಹರಳು ಬೀಜ", unit: "per quintal" },
+  "Horse gram": { kn: "ಹುರುಳಿ", unit: "per quintal" },
+  "Cashew": { kn: "ಗೇರು", unit: "per quintal" },
+  "Black pepper": { kn: "ಕಾಳು ಮೆಣಸು", unit: "per quintal" },
+  "Banana": { kn: "ಬಾಳೆ", unit: "per quintal" },
+  "Ginger": { kn: "ಶುಂಠಿ", unit: "per quintal" },
+  "Cocoa": { kn: "ಕೋಕೋ", unit: "per quintal" },
+  "Rubber": { kn: "ರಬ್ಬರ್", unit: "per quintal" },
+  "Mango": { kn: "ಮಾವು", unit: "per quintal" },
+  "Tobacco": { kn: "ತಂಬಾಕು", unit: "per quintal" },
+  "Cardamom": { kn: "ಏಲಕ್ಕಿ", unit: "per kg" },
+  "Pineapple": { kn: "ಅನಾನಸ್", unit: "per quintal" },
+  "Silk Cocoon": { kn: "ರೇಷ್ಮೆ", unit: "per kg" },
+};
+
+export const formatCropLabel = (crop) => {
+  const meta = cropMeta[crop];
+  return meta ? `${crop} (${meta.kn})` : crop;
+};
+
+// Mapping of crops to local verified images in public/crops/
 export const cropImageMap = {
   "Arecanut": "/crops/Arecanut.jpg",
   "Areca Nut": "/crops/Arecanut.jpg",

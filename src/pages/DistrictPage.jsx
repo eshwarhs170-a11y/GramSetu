@@ -1,7 +1,10 @@
+import React, { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, MapPin } from 'lucide-react'
 import { districtData } from '../data/districtsData'
 import districtImages from '../data/districtImages.json'
+import { districtCropsMap, cropImageMap } from '../data/districtCrops'
+import cropInfoMap from '../data/cropInfo.json'
 
 // Helper function to map icons to rich Unsplash images
 const getTopicImage = (icon) => {
@@ -96,6 +99,7 @@ const getTopicImage = (icon) => {
 export default function DistrictPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const [selectedCropInfo, setSelectedCropInfo] = useState(null)
   
   const district = districtData[id]
 
@@ -179,6 +183,43 @@ export default function DistrictPage() {
         </div>
       </div>
 
+      {/* ── MAJOR CROPS SECTION ── */}
+      {districtCropsMap[id] && (
+        <div style={{ maxWidth: 1200, margin: '64px auto 0', padding: '0 48px' }}>
+          <h2 style={{ color: '#fff', fontSize: 28, fontWeight: 800, marginBottom: 24 }}>Major Crops in {id}</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 24 }}>
+            {districtCropsMap[id].map((crop, idx) => (
+              <div 
+                key={idx} 
+                style={{ 
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: 16, padding: 16, textAlign: 'center', cursor: 'pointer',
+                  transition: 'transform 0.2s, background 0.2s'
+                }}
+                onClick={() => setSelectedCropInfo(cropInfoMap[crop])}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-4px)'
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
+                }}
+              >
+                <div style={{ width: 80, height: 80, borderRadius: '50%', margin: '0 auto 12px', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.1)' }}>
+                  <img 
+                    src={cropImageMap[crop] || cropInfoMap[crop]?.image || `/crops/${crop.replace(/\s+/g, '_')}.jpg`} 
+                    alt={crop} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  />
+                </div>
+                <div style={{ color: '#fff', fontWeight: 600, fontSize: 14 }}>{crop}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ── HIGHLIGHTS GRID ── */}
       <div className="district-highlights-container" style={{ maxWidth: 1200, margin: '64px auto', padding: '0 48px' }}>
         <h2 style={{ color: '#fff', fontSize: 28, fontWeight: 800, marginBottom: 32 }}>Explore {id}</h2>
@@ -235,6 +276,37 @@ export default function DistrictPage() {
       
       {/* Spacer */}
       <div style={{ height: 64 }}></div>
+
+      {/* Crop Info Modal */}
+      {selectedCropInfo && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1000,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, backdropFilter: 'blur(4px)'
+        }} onClick={() => setSelectedCropInfo(null)}>
+          <div style={{
+            background: '#1e293b', borderRadius: 20, padding: 32, maxWidth: 450, width: '100%',
+            position: 'relative', border: '1px solid rgba(255,255,255,0.1)', color: '#fff'
+          }} onClick={e => e.stopPropagation()}>
+            <button
+              onClick={() => setSelectedCropInfo(null)}
+              style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(255,255,255,0.1)', border: 'none', width: 32, height: 32, borderRadius: 16, fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}
+            >✕</button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 20 }}>
+              <div style={{ width: 100, height: 100, borderRadius: '50%', overflow: 'hidden', border: '3px solid #4ade80' }}>
+                <img src={selectedCropInfo.image} alt={selectedCropInfo.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 6px 0' }}>{selectedCropInfo.name}</h3>
+                <span style={{ background: '#064e3b', color: '#34d399', padding: '4px 10px', borderRadius: 12, fontSize: 12, fontWeight: 700 }}>Major Crop</span>
+              </div>
+            </div>
+            <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, margin: 0, textAlign: 'justify' }}>
+              {selectedCropInfo.description}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
