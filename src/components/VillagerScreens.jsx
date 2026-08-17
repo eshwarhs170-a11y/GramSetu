@@ -668,11 +668,9 @@ export function SchemesScreen() {
     // Search Query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase()
-      const titleEn = (scheme.title?.en || '').toLowerCase()
-      const titleKn = (scheme.title?.kn || '').toLowerCase()
-      const titleHi = (scheme.title?.hi || '').toLowerCase()
-      const descEn = (scheme.desc?.en || '').toLowerCase()
-      if (!titleEn.includes(q) && !titleKn.includes(q) && !titleHi.includes(q) && !descEn.includes(q)) {
+      const titleStr = typeof scheme.title === 'string' ? scheme.title : `${scheme.title?.en || ''} ${scheme.title?.kn || ''} ${scheme.title?.hi || ''}`
+      const descStr = typeof scheme.desc === 'string' ? scheme.desc : `${scheme.desc?.en || ''} ${scheme.desc?.kn || ''} ${scheme.desc?.hi || ''}`
+      if (!titleStr.toLowerCase().includes(q) && !descStr.toLowerCase().includes(q)) {
         return false
       }
     }
@@ -692,6 +690,13 @@ export function SchemesScreen() {
 
     return true
   })
+
+  // Helper for multi-lang text safely
+  const getLangText = (field) => {
+    if (!field) return ''
+    if (typeof field === 'string') return field
+    return field[lang] || field.en || field.kn || field.hi || ''
+  }
 
   return (
     <div className="animate-fadeInUp" style={{ paddingBottom: 40 }}>
@@ -716,10 +721,10 @@ export function SchemesScreen() {
                 🏛️ Karnataka &amp; Central Agri Portal
               </span>
               <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
-                {t('schemesTitle')}
+                {t('schemesTitle') || 'Government Schemes'}
               </h2>
               <p style={{ margin: 0, fontSize: 14, color: 'rgba(255,255,255,0.9)', maxWidth: 620 }}>
-                {t('schemesSub')}
+                {t('schemesSub') || 'Explore central and state farmer schemes, subsidies, and scholarships'}
               </p>
             </div>
 
@@ -742,7 +747,7 @@ export function SchemesScreen() {
                 }}
               >
                 <Search size={16} strokeWidth={2.5} />
-                {t('trackStatusBtn')}
+                {t('trackStatusBtn') || 'Track Status'}
               </button>
               
               <a
@@ -779,19 +784,19 @@ export function SchemesScreen() {
             borderTop: '1px solid rgba(255,255,255,0.2)'
           }}>
             <div>
-              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats.totalBeneficiaries}</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats?.totalBeneficiaries || '12.8M+'}</div>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Beneficiaries Covered</div>
             </div>
             <div>
-              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats.totalDisbursed}</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats?.totalDisbursed || '₹18,400+ Cr'}</div>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Funds Disbursed</div>
             </div>
             <div>
-              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats.solarPumpsInstalled}</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats?.solarPumpsInstalled || '85,000+'}</div>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Solar Pumps Installed</div>
             </div>
             <div>
-              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats.activeFPOs}</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats?.activeFPOs || '1,240+'}</div>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Active Agri FPOs</div>
             </div>
           </div>
@@ -808,11 +813,11 @@ export function SchemesScreen() {
         borderBottom: '1px solid var(--border-light)'
       }}>
         {[
-          { id: 'directory', label: t('tabAllSchemes') },
-          { id: 'loans', label: t('tabLoansInsurance') },
-          { id: 'advisory', label: t('tabAdvisoryKVK') },
-          { id: 'stories', label: t('tabSuccessStories') },
-          { id: 'grievance', label: t('tabGrievanceFAQ') }
+          { id: 'directory', label: t('tabAllSchemes') || '🏛️ All Schemes' },
+          { id: 'loans', label: t('tabLoansInsurance') || '💳 Loans & Insurance' },
+          { id: 'advisory', label: t('tabAdvisoryKVK') || '🌾 Advisory & KVK' },
+          { id: 'stories', label: t('tabSuccessStories') || '🌟 Success Stories' },
+          { id: 'grievance', label: t('tabGrievanceFAQ') || '⚖️ Grievance & Help' }
         ].map(tab => (
           <button
             key={tab.id}
@@ -860,9 +865,9 @@ export function SchemesScreen() {
 
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                 {[
-                  { id: 'All', label: t('filterLevelAll') },
-                  { id: 'Central', label: t('filterLevelCentral') },
-                  { id: 'State', label: t('filterLevelState') }
+                  { id: 'All', label: t('filterLevelAll') || 'All Governments' },
+                  { id: 'Central', label: t('filterLevelCentral') || 'Central' },
+                  { id: 'State', label: t('filterLevelState') || 'Karnataka State' }
                 ].map(lvl => (
                   <button
                     key={lvl.id}
@@ -886,7 +891,7 @@ export function SchemesScreen() {
             }}>
               <div>
                 <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
-                  👥 {t('filterBeneficiaryAll')}
+                  👥 {t('filterBeneficiaryAll') || 'Beneficiary'}
                 </label>
                 <select
                   value={beneficiaryFilter}
@@ -902,7 +907,7 @@ export function SchemesScreen() {
 
               <div>
                 <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
-                  🎯 {t('filterObjectiveAll')}
+                  🎯 {t('filterObjectiveAll') || 'Objective'}
                 </label>
                 <select
                   value={objectiveFilter}
@@ -918,7 +923,7 @@ export function SchemesScreen() {
 
               <div>
                 <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
-                  🌱 {t('filterStageAll')}
+                  🌱 {t('filterStageAll') || 'Stage'}
                 </label>
                 <select
                   value={stageFilter}
@@ -988,8 +993,8 @@ export function SchemesScreen() {
               >
                 <div style={{ position: 'relative', height: 160, overflow: 'hidden' }}>
                   <img
-                    src={s.img}
-                    alt={s.title[lang] || s.title.en}
+                    src={s.img || 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'}
+                    alt={getLangText(s.title)}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   <div style={{
@@ -1006,7 +1011,7 @@ export function SchemesScreen() {
                     )}
                     {s.badge && (
                       <span className={`badge ${s.badgeClass || 'badge-success'}`} style={{ fontSize: 11 }}>
-                        {s.badge[lang] || s.badge.en}
+                        {getLangText(s.badge)}
                       </span>
                     )}
                   </div>
@@ -1014,11 +1019,11 @@ export function SchemesScreen() {
 
                 <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4, fontWeight: 600 }}>
-                    {s.ministry?.[lang] || s.ministry?.en}
+                    {getLangText(s.ministry)}
                   </div>
 
                   <h4 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px 0', color: 'var(--text-primary)' }}>
-                    {s.title[lang] || s.title.en}
+                    {getLangText(s.title)}
                   </h4>
 
                   <p style={{
@@ -1031,7 +1036,7 @@ export function SchemesScreen() {
                     overflow: 'hidden',
                     marginBottom: 12
                   }}>
-                    {s.desc[lang] || s.desc.en}
+                    {getLangText(s.desc)}
                   </p>
 
                   {/* Highlights Pill Box */}
@@ -1064,14 +1069,14 @@ export function SchemesScreen() {
                       className="btn btn-primary btn-sm"
                       style={{ flex: 1, textDecoration: 'none', justifyContent: 'center', fontSize: 13 }}
                     >
-                      {t('directApply')}
+                      {t('directApply') || 'Apply ↗'}
                     </a>
                     <button
                       className="btn btn-outline btn-sm"
                       onClick={() => setSelectedScheme(s)}
                       style={{ fontSize: 13 }}
                     >
-                      {t('learnMore')}
+                      {t('learnMore') || 'Details'}
                     </button>
                   </div>
                 </div>
@@ -1112,7 +1117,7 @@ export function SchemesScreen() {
                 </div>
 
                 <h4 style={{ fontSize: 17, fontWeight: 700, margin: '0 0 10px 0', color: 'var(--text-primary)' }}>
-                  {fin.title[lang] || fin.title.en}
+                  {getLangText(fin.title)}
                 </h4>
 
                 <div style={{ background: 'var(--bg-main)', padding: 12, borderRadius: 10, marginBottom: 14, fontSize: 13 }}>
@@ -1124,14 +1129,14 @@ export function SchemesScreen() {
                   <h5 style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>Key Features:</h5>
                   <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {fin.features.map((feat, fIdx) => (
-                      <li key={fIdx}>{feat[lang] || feat.en}</li>
+                      <li key={fIdx}>{getLangText(feat)}</li>
                     ))}
                   </ul>
                 </div>
 
                 <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
                   <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8 }}>
-                    Partner Banks: {fin.bankPartners.join(', ')}
+                    Partner Banks: {fin.bankPartners?.join(', ')}
                   </div>
                   <a
                     href={fin.applyUrl}
@@ -1169,12 +1174,12 @@ export function SchemesScreen() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ fontSize: 24 }}>🏛️</span>
                   <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>
-                    {adv.title[lang] || adv.title.en}
+                    {getLangText(adv.title)}
                   </h4>
                 </div>
 
                 <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                  {adv.desc[lang] || adv.desc.en}
+                  {getLangText(adv.desc)}
                 </p>
 
                 <div style={{ background: 'var(--bg-main)', padding: 10, borderRadius: 8, fontSize: 12, color: 'var(--text-primary)', fontWeight: 600 }}>
@@ -1188,7 +1193,7 @@ export function SchemesScreen() {
                   className="btn btn-outline btn-sm"
                   style={{ textDecoration: 'none', justifyContent: 'center', marginTop: 'auto' }}
                 >
-                  {adv.actionText[lang] || adv.actionText.en} ↗
+                  {getLangText(adv.actionText)} ↗
                 </a>
               </div>
             ))}
@@ -1231,7 +1236,7 @@ export function SchemesScreen() {
                 </div>
 
                 <p style={{ fontSize: 13, color: 'var(--text-secondary)', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>
-                  “{story.quote[lang] || story.quote.en}”
+                  “{getLangText(story.quote)}”
                 </p>
               </div>
             ))}
@@ -1302,14 +1307,14 @@ export function SchemesScreen() {
                       color: 'var(--text-primary)'
                     }}
                   >
-                    <span>{faq.q[lang] || faq.q.en}</span>
+                    <span>{getLangText(faq.q)}</span>
                     <span style={{ fontSize: 18, color: 'var(--primary)', marginLeft: 8 }}>
                       {openFaq === fIdx ? '−' : '+'}
                     </span>
                   </button>
                   {openFaq === fIdx && (
                     <div style={{ padding: '0 16px 14px 16px', fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                      {faq.a[lang] || faq.a.en}
+                      {getLangText(faq.a)}
                     </div>
                   )}
                 </div>
@@ -1384,10 +1389,10 @@ export function SchemesScreen() {
               <span className="badge badge-info">{selectedScheme.category}</span>
             </div>
             <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', margin: '4px 0' }}>
-              {selectedScheme.title[lang] || selectedScheme.title.en}
+              {getLangText(selectedScheme.title)}
             </h3>
             <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 14 }}>
-              {selectedScheme.ministry[lang] || selectedScheme.ministry.en}
+              {getLangText(selectedScheme.ministry)}
             </p>
 
             {/* Accessibility Audio TTS Readout */}
@@ -1397,14 +1402,14 @@ export function SchemesScreen() {
               style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 16, borderRadius: 8, fontSize: 12 }}
             >
               <Volume2 size={14} />
-              {isSpeaking ? t('stopAudio') : t('voiceReadout')}
+              {isSpeaking ? t('stopAudio') || 'Stop Audio' : t('voiceReadout') || 'Listen'}
             </button>
 
             {/* Section 1: Overview */}
             <div style={{ marginBottom: 16 }}>
               <h5 style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Description / ವಿವರಣೆ</h5>
               <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                {selectedScheme.desc[lang] || selectedScheme.desc.en}
+                {getLangText(selectedScheme.desc)}
               </p>
             </div>
 
@@ -1418,13 +1423,13 @@ export function SchemesScreen() {
                 marginBottom: 16
               }}>
                 <h5 style={{ color: '#065f46', fontWeight: 800, fontSize: 14, margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  💰 {t('benefitDetails')}
+                  💰 {t('benefitDetails') || 'Benefit & Subsidy Structure'}
                 </h5>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, fontSize: 12, color: '#064e3b' }}>
-                  <div><strong>Subsidy Percentage:</strong> {selectedScheme.benefits.subsidyPercent}</div>
-                  <div><strong>Maximum Limit:</strong> {selectedScheme.benefits.maxLimit}</div>
-                  <div><strong>Payment Mode:</strong> {selectedScheme.benefits.mode}</div>
-                  <div><strong>Interest Subvention:</strong> {selectedScheme.benefits.interestSubvention}</div>
+                  <div><strong>Subsidy Percentage:</strong> {selectedScheme.benefits.subsidyPercent || 'N/A'}</div>
+                  <div><strong>Maximum Limit:</strong> {selectedScheme.benefits.maxLimit || 'N/A'}</div>
+                  <div><strong>Payment Mode:</strong> {selectedScheme.benefits.mode || 'DBT'}</div>
+                  <div><strong>Interest Subvention:</strong> {selectedScheme.benefits.interestSubvention || 'N/A'}</div>
                 </div>
               </div>
             )}
@@ -1432,10 +1437,10 @@ export function SchemesScreen() {
             {/* Section 3: Eligibility Criteria */}
             <div style={{ background: 'var(--bg-main)', padding: 14, borderRadius: 12, marginBottom: 14, border: '1px solid var(--border-light)' }}>
               <h5 style={{ fontWeight: 700, fontSize: 14, color: 'var(--primary)', margin: '0 0 4px 0' }}>
-                {t('eligibilityCriteria')}
+                {t('eligibilityCriteria') || 'Eligibility Criteria'}
               </h5>
               <p style={{ fontSize: 13, margin: 0, color: 'var(--text-primary)' }}>
-                {selectedScheme.eligibility[lang] || selectedScheme.eligibility.en}
+                {getLangText(selectedScheme.eligibility)}
               </p>
             </div>
 
@@ -1443,10 +1448,10 @@ export function SchemesScreen() {
             {selectedScheme.exclusions && (
               <div style={{ background: '#fef2f2', padding: 14, borderRadius: 12, marginBottom: 14, border: '1px solid #fecaca' }}>
                 <h5 style={{ fontWeight: 700, fontSize: 13, color: '#991b1b', margin: '0 0 4px 0' }}>
-                  {t('exclusionsTitle')}
+                  {t('exclusionsTitle') || 'Exclusions'}
                 </h5>
                 <p style={{ fontSize: 12, margin: 0, color: '#7f1d1d' }}>
-                  {selectedScheme.exclusions[lang] || selectedScheme.exclusions.en}
+                  {getLangText(selectedScheme.exclusions)}
                 </p>
               </div>
             )}
@@ -1454,10 +1459,10 @@ export function SchemesScreen() {
             {/* Section 5: Required Documents */}
             <div style={{ marginBottom: 16 }}>
               <h5 style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
-                {t('requiredDocs')}
+                {t('requiredDocs') || 'Required Documents'}
               </h5>
               <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
-                {selectedScheme.documents[lang] || selectedScheme.documents.en}
+                {getLangText(selectedScheme.documents)}
               </p>
             </div>
 
@@ -1465,7 +1470,7 @@ export function SchemesScreen() {
             {selectedScheme.processSteps && (
               <div style={{ marginBottom: 16 }}>
                 <h5 style={{ fontWeight: 700, fontSize: 14, marginBottom: 10 }}>
-                  {t('stepByStepProcess')}
+                  {t('stepByStepProcess') || 'Application Process'}
                 </h5>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {selectedScheme.processSteps.map(st => (
@@ -1486,8 +1491,8 @@ export function SchemesScreen() {
                         {st.step}
                       </span>
                       <div style={{ fontSize: 13 }}>
-                        <strong>{st.title[lang] || st.title.en}: </strong>
-                        <span style={{ color: 'var(--text-secondary)' }}>{st.desc[lang] || st.desc.en}</span>
+                        <strong>{getLangText(st.title)}: </strong>
+                        <span style={{ color: 'var(--text-secondary)' }}>{getLangText(st.desc)}</span>
                       </div>
                     </div>
                   ))}
@@ -1498,7 +1503,7 @@ export function SchemesScreen() {
             {/* Section 7: Timeline */}
             {selectedScheme.timeline && (
               <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span>{t('expectedTimeline')}: <strong>{selectedScheme.timeline}</strong></span>
+                <span>{t('expectedTimeline') || 'Processing Timeline'}: <strong>{selectedScheme.timeline}</strong></span>
               </div>
             )}
 
@@ -1511,7 +1516,7 @@ export function SchemesScreen() {
                 className="btn btn-primary"
                 style={{ flex: 1, textDecoration: 'none', justifyContent: 'center', fontWeight: 700 }}
               >
-                {t('directApply')}
+                {t('directApply') || 'Apply Online ↗'}
               </a>
               {selectedScheme.trackerUrl && (
                 <a
