@@ -51,10 +51,15 @@ export default async function handler(req, res) {
 
         <!-- OTP Box -->
         <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 10px; padding: 20px; text-align: center; margin: 0 0 24px 0;">
-          <div style="font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #15803d; font-family: 'Courier New', monospace;">
-            ${otp}
+          <div style="display: inline-block; background: #fff; border: 1px dashed #4ade80; padding: 10px 20px; border-radius: 8px; margin-bottom: 12px;">
+            <span style="font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #15803d; font-family: 'Courier New', monospace; user-select: all;">${otp}</span>
           </div>
-          <p style="font-size: 12px; color: #6b7280; margin: 10px 0 0 0;">
+          <div>
+            <span style="display: inline-block; background: #16a34a; color: #fff; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+              👆 Double-click code to copy
+            </span>
+          </div>
+          <p style="font-size: 12px; color: #6b7280; margin: 12px 0 0 0;">
             Valid until <strong>${expiryTime}</strong> IST (10 minutes)
           </p>
         </div>
