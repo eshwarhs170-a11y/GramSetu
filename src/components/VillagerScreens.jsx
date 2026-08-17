@@ -3,11 +3,12 @@ import { useLanguage } from '../context/LanguageContext'
 import {
   Landmark, TrendingUp, Megaphone, ClipboardList, IndianRupee,
   Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2, MapPin,
-  Camera, Phone, Home, Map,
+  Camera, Phone, Home, Map, Search,
   Building2, Wheat, ArrowUp, ArrowDown, Minus,
   Bell, ShieldCheck, RefreshCw, Sparkles, CheckCircle2, Star,
   Cloud, CloudRain, Sun, Thermometer, Wind, ShieldAlert, AlertTriangle, Stethoscope, Clock, CheckCircle, Info, PhoneCall, FileText, PlayCircle, Volume2, Send, Bot, MessageCircle, AlertCircle
 } from 'lucide-react'
+
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
 import { fetchLivePrices, BASELINE_PRICES, clearPriceCache } from '../utils/fetchPrices'
