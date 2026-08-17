@@ -14,9 +14,10 @@ import { fetchLivePrices, BASELINE_PRICES, clearPriceCache } from '../utils/fetc
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import { fetchWeatherForLocation, formatForecastData } from '../utils/fetchWeather'
 import { kaSchemes } from '../data/schemesData'
-import { districtCropsMap, cropImageMap } from '../data/districtCrops'
+import { districtCropsMap, cropImageMap, cropMeta, formatCropLabel } from '../data/districtCrops'
 import cropInfoMap from '../data/cropInfo.json'
 import districtPricesMap from '../data/districtPrices.json'
+import { karnatakaPopularCrops } from '../data/karnatakaPopularCrops'
 
 // ===================== KARNATAKA DATA =====================
 
@@ -272,7 +273,7 @@ export function HomeScreen({ setActive }) {
               >
 
                 <div style={{ width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', border: '3px solid #f1f5f9', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-                  <img src={cropInfoMap[crop]?.image || cropImageMap[crop] || 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300&q=80'} alt={crop} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={cropImageMap[crop] || cropInfoMap[crop]?.image || `/crops/${crop.replace(/\s+/g, '_')}.jpg`} alt={crop} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <span style={{ fontSize: 12, fontWeight: 600, textAlign: 'center', color: 'var(--text-main)' }}>{crop}</span>
               </div>
@@ -955,71 +956,102 @@ export function MarketScreen() {
   const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
   const [viewMode, setViewMode] = useState('district') // 'district' or 'all'
-  const [prices, setPrices] = useState(BASELINE_PRICES)
-  const [loadingPrices, setLoadingPrices] = useState(true)
-  const [lastUpdated, setLastUpdated] = useState(null)
-  const [priceSource, setPriceSource] = useState('baseline')
 
-  // User's current district for filtering
-  const userDistrict = window.localStorage.getItem('citizen_district') || 'Tumkuru'
+  const userDistrict = window.localStorage.getItem('citizen_district') || 'Mysuru'
 
-  // Fetch live AGMARKNET prices, then try Firestore override
-  useEffect(() => {
-    const load = async () => {
-      setLoadingPrices(true)
-      const live = await fetchLivePrices()
-      if (live && live.length) {
-        setPrices(live)
-        setPriceSource('live')
-        setLastUpdated(new Date().toLocaleTimeString('en-IN'))
-      } else {
-        try {
-          const snap = await getDocs(collection(db, 'prices'))
-          if (!snap.empty) {
-            setPrices(snap.docs.map(d => ({ ...d.data() })))
-            setPriceSource('firestore')
-            setLastUpdated(new Date().toLocaleTimeString('en-IN'))
-          }
-        } catch (_) {}
-      }
-      setLoadingPrices(false)
+  const getCropLocalImage = (cropName) => {
+    const english = cropName.split('(')[0].trim()
+    if (english === 'Silk Cocoon') return '/crops/Silk_Cocoon.jpg'
+    return cropImageMap[english] || `/crops/${english.replace(/\s+/g, '_')}.jpg`
+  }
+
+  // Unsplash image fallback URLs for crops that may not have local images
+  const cropUnsplashFallback = {
+    'Ragi': 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&q=80',
+    'Paddy': 'https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?w=800&q=80',
+    'Chilli': 'https://images.unsplash.com/photo-1563399652-cf0cd2c6db66?w=800&q=80',
+    'Cotton': 'https://images.unsplash.com/photo-1599419014917-9df3a24dcf82?w=800&q=80',
+    'Coconut': 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=800&q=80',
+    'Banana': 'https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=800&q=80',
+    'Bengal gram': 'https://images.unsplash.com/photo-1616179282965-f9edce48c5c0?w=800&q=80',
+    'Cardamom': 'https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=800&q=80',
+    'Turmeric': 'https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=800&q=80',
+    'Potato': 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=800&q=80',
+    'Cashew': 'https://images.unsplash.com/photo-1607301406259-dfb186e15de8?w=800&q=80',
+    'Lime': 'https://images.unsplash.com/photo-1587714371705-c893dd3bbecd?w=800&q=80',
+    'Onion': 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&q=80',
+    'Dry chilli': 'https://images.unsplash.com/photo-1563399652-cf0cd2c6db66?w=800&q=80',
+    'Green chilli': 'https://images.unsplash.com/photo-1588169770729-cb26b830ba50?w=800&q=80',
+    'Mulberry': 'https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=800&q=80',
+    'Pineapple': 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=800&q=80',
+    'Sugarcane': 'https://images.unsplash.com/photo-1591696331111-ef9586a5b17a?w=800&q=80',
+    'Black gram': 'https://images.unsplash.com/photo-1616179282965-f9edce48c5c0?w=800&q=80',
+    'Finger millet': 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&q=80',
+    'Rice': 'https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?w=800&q=80',
+    'Silk Cocoon': 'https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=800&q=80',
+  }
+
+  const normalizePriceRow = (p) => {
+    const english = p.crop?.split('(')[0].trim() || p.crop
+    const localImg = p.img || getCropLocalImage(p.crop)
+    const fallbackImg = cropUnsplashFallback[english] || cropUnsplashFallback[p.crop] || '/crops/Maize.jpg'
+    return {
+      ...p,
+      cropKey: p.crop,
+      crop: formatCropLabel(p.crop),
+      img: localImg,
+      fallbackImg,
+      unit: p.unit || cropMeta[p.crop]?.unit || 'per quintal',
+      change: p.change || '-',
+      trend: p.trend || 'stable',
     }
-    load()
-  }, [])
+  }
 
-  const filteredPrices = prices.filter(p => {
-    const matchesSearch = p.crop.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          p.market.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    let matchesRegion = true
-    if (viewMode === 'district') {
-      // If we know the districts for this crop, see if user's district is in there
-      if (p.districts && Array.isArray(p.districts)) {
-        matchesRegion = p.districts.includes(userDistrict)
-      } else {
-        // Fallback if no mapping exists, show all
-        matchesRegion = true
-      }
+  // District name aliases (handles spelling variants from login data)
+  const normalizeDistrict = (d) => {
+    const aliases = {
+      'Chikkaballapura': 'Chikkaballapur', 'Bengaluru': 'Bengaluru Urban',
+      'Davangere': 'Davanagere', 'Dharwar': 'Dharwad', 'Gulbarga': 'Kalaburagi',
+      'Bijapur': 'Vijayapura', 'Bellary': 'Ballari', 'Belgaum': 'Belagavi',
+      'Shimoga': 'Shivamogga', 'Tumkur': 'Tumakuru', 'Dakshin Kannada': 'Dakshina Kannada',
     }
-    return matchesSearch && matchesRegion
-  })
+    return aliases[d] || d
+  }
+
+  // My District: 10 crops from PDF dataset | All Karnataka: famous state-wide crops
+  const sourcePrices = viewMode === 'district'
+    ? (districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || [])
+    : karnatakaPopularCrops
+
+
+  const filteredPrices = sourcePrices
+    .map(normalizePriceRow)
+    .filter(p =>
+      p.crop.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.market.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+
+  const highlightPrices = viewMode === 'all' ? karnatakaPopularCrops : sourcePrices
 
   const [landArea, setLandArea] = useState('')
-  const [selectedCrop, setSelectedCrop] = useState('Ragi (ರಾಗಿ)')
+  const [selectedCrop, setSelectedCrop] = useState('')
   const [calcResult, setCalcResult] = useState(null)
+
+  useEffect(() => {
+    const rows = sourcePrices.map(normalizePriceRow)
+    if (rows.length) setSelectedCrop(rows[0].crop)
+  }, [viewMode, userDistrict])
 
   const calculateEstimate = (e) => {
     e.preventDefault()
     if (!landArea || isNaN(landArea)) return
-    const priceEntry = prices.find(p => p.crop === selectedCrop)
+    const priceEntry = filteredPrices.find(p => p.crop === selectedCrop)
     const rawPrice = priceEntry ? parseFloat(String(priceEntry.price).replace(/[₹,]/g, '')) : 3000
+    const cropKey = priceEntry?.cropKey || selectedCrop.split('(')[0].trim()
     const yieldPerAcre = {
-      'Ragi (ರಾಗಿ)': 12,
-      'Areca Nut (ಅಡಿಕೆ)': 8,
-      'Jowar (ಜೋಳ)': 15,
-      'Maize (ಮೆಕ್ಕೆಜೋಳ)': 22,
-      'Sugarcane (ಕಬ್ಬು)': 35,
-    }[selectedCrop] || 10
+      'Ragi': 12, 'Arecanut': 8, 'Jowar': 15, 'Maize': 22, 'Sugarcane': 35,
+      'Paddy': 18, 'Coffee': 6, 'Tomato': 80, 'Groundnut': 10, 'Tur': 8,
+    }[cropKey] || 10
     const estYield = (parseFloat(landArea) * yieldPerAcre).toFixed(1)
     const estRevenue = Math.round(estYield * rawPrice)
     setCalcResult({ yield: estYield, revenue: estRevenue.toLocaleString('en-IN'), priceUsed: priceEntry?.price || '₹3,000' })
@@ -1031,43 +1063,41 @@ export function MarketScreen() {
       {/* Top Highlights */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20, marginBottom: 24 }}>
         {(() => {
-          const best = [...prices].sort((a, b) => {
-            const aV = parseFloat(String(a.change).replace(/[+₹,-]/g,'')) * (a.trend === 'up' ? 1 : -1)
-            const bV = parseFloat(String(b.change).replace(/[+₹,-]/g,'')) * (b.trend === 'up' ? 1 : -1)
-            return bV - aV
-          })
-          const top = best[0]
-          const drop = best[best.length - 1]
+          const best = highlightPrices.map(p => normalizePriceRow(p))
+          const top = [...best].sort((a, b) => parseFloat(String(b.price).replace(/[₹,]/g, '')) - parseFloat(String(a.price).replace(/[₹,]/g, '')))[0]
+          const gainers = [...best].filter(p => p.trend === 'up' && p.change && p.change !== '-')
+          const topGainer = gainers.sort((a, b) =>
+            parseFloat(String(b.change).replace(/[+₹,-]/g, '')) - parseFloat(String(a.change).replace(/[+₹,-]/g, ''))
+          )[0] || top
           return (
             <>
               <div className="card" style={{ background: 'linear-gradient(135deg, #d1fae5, #a7f3d0)', border: 'none', display: 'flex', alignItems: 'center', gap: 16 }}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, color: '#065f46', fontWeight: 600, marginBottom: 4 }}>Top Gainer Today</div>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: '#064e3b' }}>{top?.crop?.split('(')[0].trim()} {top?.price}/{top?.unit?.split(' ').pop() || 'q'}</div>
-                  <div style={{ fontSize: 13, color: '#047857', marginTop: 4 }}>↑ {top?.market}</div>
+                  <div style={{ fontSize: 12, color: '#065f46', fontWeight: 600, marginBottom: 4 }}>Top Value Crop</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: '#064e3b' }}>{top?.crop?.split('(')[0].trim()} {top?.price}</div>
+                  <div style={{ fontSize: 13, color: '#047857', marginTop: 4 }}>{top?.market}</div>
                 </div>
-                {top?.img && <img src={top.img} alt={top.crop} style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', border: '3px solid #6ee7b7' }}/>}
+                {top?.img && <img src={top.img} alt={top.crop} style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '3px solid #6ee7b7', flexShrink: 0 }} onError={e => { e.target.src = '/crops/Maize.jpg' }}/>}
               </div>
-              <div className="card" style={{ background: 'linear-gradient(135deg, #fee2e2, #fecaca)', border: 'none', display: 'flex', alignItems: 'center', gap: 16 }}>
+              <div className="card" style={{ background: 'linear-gradient(135deg, #fef3c7, #fde68a)', border: 'none', display: 'flex', alignItems: 'center', gap: 16 }}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, color: '#991b1b', fontWeight: 600, marginBottom: 4 }}>Biggest Drop Today</div>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: '#7f1d1d' }}>{drop?.crop?.split('(')[0].trim()} {drop?.change}</div>
-                  <div style={{ fontSize: 13, color: '#b91c1c', marginTop: 4 }}>↓ {drop?.market}</div>
+                  <div style={{ fontSize: 12, color: '#92400e', fontWeight: 600, marginBottom: 4 }}>Top Gainer</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: '#78350f' }}>{topGainer?.crop?.split('(')[0].trim()} {topGainer?.change}</div>
+                  <div style={{ fontSize: 13, color: '#b45309', marginTop: 4 }}>{topGainer?.market}</div>
                 </div>
-                {drop?.img && <img src={drop.img} alt={drop.crop} style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', border: '3px solid #fca5a5' }}/>}
+                {topGainer?.img && <img src={topGainer.img} alt={topGainer.crop} style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '3px solid #fcd34d', flexShrink: 0 }} onError={e => { e.target.src = '/crops/Maize.jpg' }}/>}
               </div>
               <div className="card" style={{ background: 'linear-gradient(135deg, #ede9fe, #ddd6fe)', border: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <div style={{ fontSize: 12, color: '#5b21b6', fontWeight: 600, marginBottom: 4 }}>Data Source</div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: '#4c1d95' }}>
-                  {loadingPrices ? '⏳ Fetching Data...' : priceSource === 'live' ? '🟢 AGMARKNET Live Data' : '📋 MSP Baseline 2025-26'}
+                  📋 Karnataka APMC Price Sheet
                 </div>
                 <div style={{ fontSize: 11, color: '#6d28d9', marginTop: 4 }}>
-                  {lastUpdated ? `Last updated: ${lastUpdated}` : 'Connecting to data.gov.in...'}
+                  31 districts × 10 crops · Modal prices · Aug 2026
                 </div>
-                <button
-                  onClick={async () => { clearPriceCache(); const l = await fetchLivePrices(); if (l) { setPrices(l); setPriceSource('live'); setLastUpdated(new Date().toLocaleTimeString('en-IN')); } }}
-                  style={{ marginTop: 8, fontSize: 11, color: '#5b21b6', fontWeight: 700, border: '1px solid #c4b5fd', background: 'rgba(255,255,255,0.5)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', alignSelf: 'flex-start' }}
-                >↻ Refresh Now</button>
+                <div style={{ fontSize: 11, color: '#6d28d9', marginTop: 2 }}>
+                  {viewMode === 'district' ? `Showing: ${userDistrict} district crops` : 'Showing: Famous Karnataka crops'}
+                </div>
               </div>
             </>
           )
@@ -1098,7 +1128,7 @@ export function MarketScreen() {
                 value={selectedCrop}
                 onChange={e => setSelectedCrop(e.target.value)}
               >
-                {prices.map(p => <option key={p.crop}>{p.crop}</option>)}
+                {filteredPrices.map(p => <option key={p.crop} value={p.crop}>{p.crop}</option>)}
               </select>
             </div>
             <button type="submit" className="btn btn-primary" style={{ height: 44 }}>Estimate / ಲೆಕ್ಕಾಚಾರ</button>
@@ -1122,7 +1152,9 @@ export function MarketScreen() {
       {/* Main Grid View */}
       <div className="card" style={{ padding: '20px', marginBottom: 20 }}>
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>Live Crop Prices</div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>
+            {viewMode === 'district' ? `${normalizeDistrict(userDistrict)} District Crops` : 'Famous Karnataka Crops'}
+          </div>
           
           {/* View Mode Toggle */}
           <div style={{ display: 'flex', background: 'var(--bg-card-alt)', borderRadius: 'var(--radius-md)', padding: 4, border: '1px solid var(--border-light)' }}>
@@ -1135,7 +1167,7 @@ export function MarketScreen() {
                 boxShadow: viewMode === 'district' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
               }}
             >
-              My District ({userDistrict})
+              My District ({normalizeDistrict(userDistrict)})
             </button>
             <button
               onClick={() => setViewMode('all')}
@@ -1174,7 +1206,7 @@ export function MarketScreen() {
             gap: 20
           }}>
             {filteredPrices.map((p, i) => (
-              <div key={i} style={{
+              <div key={`${p.cropKey || p.crop}-${i}`} style={{
                 background: 'var(--bg-card-alt)',
                 border: '1px solid var(--border-light)',
                 borderRadius: 'var(--radius-md)',
@@ -1192,38 +1224,73 @@ export function MarketScreen() {
               }}
               >
                 {/* Large Crop Image */}
-                <div style={{ width: '100%', height: 160, position: 'relative' }}>
+                <div style={{ width: '100%', height: 185, position: 'relative', overflow: 'hidden' }}>
                   <img
-                    src={p.img || 'https://images.unsplash.com/photo-1595858021156-fde26bd6c905?w=500&q=80'}
+                    src={p.img}
                     alt={p.crop}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    onError={e => { e.target.src = 'https://images.unsplash.com/photo-1595858021156-fde26bd6c905?w=500&q=80' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.08)' }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)' }}
+                    onError={e => {
+                      if (e.target.dataset.fallbackTried) return
+                      e.target.dataset.fallbackTried = '1'
+                      e.target.src = p.fallbackImg || cropImageMap[p.cropKey] || 'https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?w=800&q=80'
+                    }}
                   />
+                  {/* Price badge overlaid on image */}
                   <div style={{
-                    position: 'absolute', top: 10, right: 10,
-                    background: p.trend === 'up' ? 'rgba(6, 95, 70, 0.9)' : p.trend === 'down' ? 'rgba(153, 27, 27, 0.9)' : 'rgba(75, 85, 99, 0.9)',
-                    color: '#fff', padding: '4px 8px', borderRadius: 20, fontSize: 12, fontWeight: 700,
-                    display: 'flex', alignItems: 'center', gap: 4, backdropFilter: 'blur(4px)'
+                    position: 'absolute', bottom: 0, left: 0, right: 0,
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)',
+                    padding: '20px 12px 10px',
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'
                   }}>
-                    {p.trend === 'up' ? <ArrowUp size={12}/> : p.trend === 'down' ? <ArrowDown size={12}/> : <Minus size={12}/>}
-                    {p.change}
+                    <div style={{ color: '#fff', fontSize: 18, fontWeight: 800, textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+                      {p.price}
+                    </div>
+                    <div style={{
+                      background: p.trend === 'up' ? 'rgba(6, 95, 70, 0.92)' : p.trend === 'down' ? 'rgba(153, 27, 27, 0.92)' : 'rgba(75, 85, 99, 0.85)',
+                      color: '#fff', padding: '3px 8px', borderRadius: 20, fontSize: 11, fontWeight: 700,
+                      display: 'flex', alignItems: 'center', gap: 3, backdropFilter: 'blur(4px)'
+                    }}>
+                      {p.trend === 'up' ? <ArrowUp size={11}/> : p.trend === 'down' ? <ArrowDown size={11}/> : <Minus size={11}/>}
+                      {p.change}
+                    </div>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div style={{ padding: 16 }}>
-                  <h3 style={{ margin: '0 0 4px 0', fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>{p.crop}</h3>
-                  <div style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <MapPin size={14} style={{ opacity: 0.7 }} /> {p.market}
+                <div style={{ padding: '14px 16px 16px' }}>
+                  <h3 style={{ margin: '0 0 3px 0', fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.3 }}>{p.crop}</h3>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: 12, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <MapPin size={12} style={{ opacity: 0.7, flexShrink: 0 }} /> 
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.market}</span>
                   </div>
                   
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderTop: '1px solid var(--border-light)', paddingTop: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderTop: '1px solid var(--border-light)', paddingTop: 10 }}>
                     <div>
-                      <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Live Price</div>
-                      <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--primary-dark)' }}>{p.price}</div>
+                      <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 2 }}>Modal Price</div>
+                      <div style={{ fontSize: 19, fontWeight: 800, color: 'var(--primary-dark)' }}>{p.price}</div>
+                      {p.min && p.max && (
+                        <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>
+                          {p.min} – {p.max}
+                        </div>
+                      )}
                     </div>
-                    <div style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 500, paddingBottom: 4 }}>
-                      {p.unit}
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 500, paddingBottom: 4 }}>
+                        {p.unit}
+                      </div>
+                      {p.status && (
+                        <div style={{
+                          fontSize: 10, fontWeight: 700,
+                          color: p.status === 'ACTUAL' ? '#059669' : '#6b7280',
+                          background: p.status === 'ACTUAL' ? '#f0fdf4' : '#f9fafb',
+                          border: `1px solid ${p.status === 'ACTUAL' ? '#bbf7d0' : '#e5e7eb'}`,
+                          borderRadius: 6, padding: '2px 6px'
+                        }}>
+                          {p.status === 'ACTUAL' ? '✓ Verified' : '~ Estimated'}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -6,19 +6,25 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Bagalkot APMC",
+      "crop": "Bengal gram",
+      "market": "Bagalkot APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -26,9 +32,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -36,9 +45,12 @@
       "min": "₹5,520",
       "max": "₹7,470",
       "price": "₹6,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -46,9 +58,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Bajra",
@@ -56,9 +71,12 @@
       "min": "₹2,380",
       "max": "₹3,220",
       "price": "₹2,800",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Bajra.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Wheat",
@@ -66,9 +84,12 @@
       "min": "₹2,380",
       "max": "₹3,220",
       "price": "₹2,800",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Wheat.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -76,9 +97,12 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Chilli",
@@ -87,8 +111,11 @@
       "max": "₹26,450",
       "price": "₹23,000",
       "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -97,8 +124,11 @@
       "max": "₹8,050",
       "price": "₹7,000",
       "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Ballari": [
@@ -110,7 +140,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -118,19 +151,25 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Ballari APMC",
+      "crop": "Bengal gram",
+      "market": "Ballari APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -138,9 +177,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Bajra",
@@ -148,9 +190,12 @@
       "min": "₹2,380",
       "max": "₹3,220",
       "price": "₹2,800",
-      "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Bajra.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -158,9 +203,12 @@
       "min": "₹5,520",
       "max": "₹7,470",
       "price": "₹6,500",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -169,8 +217,11 @@
       "max": "₹8,050",
       "price": "₹7,000",
       "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Chilli",
@@ -178,9 +229,12 @@
       "min": "₹19,550",
       "max": "₹26,450",
       "price": "₹23,000",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "down",
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -188,9 +242,12 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -200,7 +257,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Belagavi": [
@@ -210,9 +270,12 @@
       "min": "₹300",
       "max": "₹400",
       "price": "₹350",
-      "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Sugarcane.jpg",
+      "unit": "per tonne",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -220,9 +283,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Soybean",
@@ -230,9 +296,12 @@
       "min": "₹5,950",
       "max": "₹8,050",
       "price": "₹7,000",
-      "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "trend": "down",
+      "change": "-₹60",
+      "img": "/crops/Soybean.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -240,9 +309,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -252,7 +324,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -260,9 +335,12 @@
       "min": "₹5,950",
       "max": "₹8,050",
       "price": "₹7,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -271,18 +349,24 @@
       "max": "₹6,320",
       "price": "₹5,500",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Belagavi APMC",
+      "crop": "Bengal gram",
+      "market": "Belagavi APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Wheat",
@@ -290,9 +374,12 @@
       "min": "₹2,380",
       "max": "₹3,220",
       "price": "₹2,800",
-      "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Wheat.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Chilli",
@@ -301,8 +388,11 @@
       "max": "₹26,450",
       "price": "₹23,000",
       "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Bengaluru Rural": [
@@ -312,9 +402,12 @@
       "min": "₹3,400",
       "max": "₹4,600",
       "price": "₹4,000",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -322,9 +415,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tomato",
@@ -333,8 +429,11 @@
       "max": "₹2,880",
       "price": "₹2,500",
       "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "change": "+₹180",
+      "img": "/crops/Tomato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Potato",
@@ -343,8 +442,11 @@
       "max": "₹1,720",
       "price": "₹1,500",
       "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "change": "-₹20",
+      "img": "/crops/Potato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Onion",
@@ -352,9 +454,12 @@
       "min": "₹1,530",
       "max": "₹2,070",
       "price": "₹1,800",
-      "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "trend": "down",
+      "change": "-₹30",
+      "img": "/crops/Onion.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Beans",
@@ -362,9 +467,12 @@
       "min": "₹3,500",
       "max": "₹3,700",
       "price": "₹3,600",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Beans.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
       "crop": "Groundnut",
@@ -373,8 +481,11 @@
       "max": "₹6,440",
       "price": "₹5,600",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Mulberry",
@@ -382,9 +493,12 @@
       "min": "₹5,100",
       "max": "₹6,900",
       "price": "₹6,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹100",
+      "img": "/crops/Mulberry.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -392,19 +506,25 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Finger",
-      "market": "millet Bengaluru Rural APMC",
+      "crop": "Finger millet",
+      "market": "Bengaluru Rural APMC",
       "min": "₹3,400",
       "max": "₹4,600",
       "price": "₹4,000",
-      "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Finger_millet.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Bengaluru Urban": [
@@ -416,7 +536,10 @@
       "price": "₹4,000",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Rice",
@@ -425,8 +548,11 @@
       "max": "₹6,600",
       "price": "₹5,333",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹90",
+      "img": "/crops/Rice.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
       "crop": "Maize",
@@ -435,8 +561,11 @@
       "max": "₹6,000",
       "price": "₹5,000",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
       "crop": "Tur",
@@ -444,39 +573,51 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Green",
-      "market": "gram Bengaluru APMC",
+      "crop": "Green gram",
+      "market": "Bengaluru APMC",
       "min": "₹9,000",
       "max": "₹12,500",
       "price": "₹10,750",
       "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "change": "+₹110",
+      "img": "/crops/Green_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
-      "crop": "Black",
-      "market": "gram Bengaluru Urban APMC",
+      "crop": "Black gram",
+      "market": "Bengaluru Urban APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹40",
+      "img": "/crops/Black_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Dry",
-      "market": "chilli Bengaluru APMC",
+      "crop": "Dry chilli",
+      "market": "Bengaluru APMC",
       "min": "₹20,000",
       "max": "₹26,000",
       "price": "₹23,000",
-      "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Dry_chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
       "crop": "Turmeric",
@@ -484,9 +625,12 @@
       "min": "₹6,800",
       "max": "₹9,200",
       "price": "₹8,000",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "up",
+      "change": "+₹150",
+      "img": "/crops/Turmeric.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tamarind",
@@ -494,9 +638,12 @@
       "min": "₹10,620",
       "max": "₹14,370",
       "price": "₹12,500",
-      "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Tamarind.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sesame",
@@ -504,9 +651,12 @@
       "min": "₹13,180",
       "max": "₹17,820",
       "price": "₹15,500",
-      "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Sesame.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Bidar": [
@@ -517,18 +667,24 @@
       "max": "₹6,320",
       "price": "₹5,500",
       "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Bidar APMC",
+      "crop": "Bengal gram",
+      "market": "Bidar APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Soybean",
@@ -537,8 +693,11 @@
       "max": "₹8,050",
       "price": "₹7,000",
       "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "change": "-₹60",
+      "img": "/crops/Soybean.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -546,29 +705,38 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Black",
-      "market": "gram Bidar APMC",
+      "crop": "Black gram",
+      "market": "Bidar APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "up",
+      "change": "+₹40",
+      "img": "/crops/Black_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Green",
-      "market": "gram Bidar APMC",
+      "crop": "Green gram",
+      "market": "Bidar APMC",
       "min": "₹9,140",
       "max": "₹12,360",
       "price": "₹10,750",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "up",
+      "change": "+₹110",
+      "img": "/crops/Green_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Wheat",
@@ -576,9 +744,12 @@
       "min": "₹2,380",
       "max": "₹3,220",
       "price": "₹2,800",
-      "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Wheat.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -586,9 +757,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
+      "trend": "up",
       "change": "+₹50",
-      "img": ""
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -596,9 +770,12 @@
       "min": "₹5,520",
       "max": "₹7,470",
       "price": "₹6,500",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -606,9 +783,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Chamarajanagar": [
@@ -618,9 +798,12 @@
       "min": "₹6,800",
       "max": "₹9,200",
       "price": "₹8,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹150",
+      "img": "/crops/Turmeric.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -628,9 +811,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Arecanut",
@@ -638,9 +824,12 @@
       "min": "₹27,200",
       "max": "₹36,800",
       "price": "₹32,000",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "up",
+      "change": "+₹200",
+      "img": "/crops/Arecanut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ragi",
@@ -648,9 +837,12 @@
       "min": "₹3,400",
       "max": "₹4,600",
       "price": "₹4,000",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -660,7 +852,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sugarcane",
@@ -670,7 +865,10 @@
       "price": "₹350",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Sugarcane.jpg",
+      "unit": "per tonne",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -680,7 +878,10 @@
       "price": "₹5,000",
       "trend": "up",
       "change": "+₹50",
-      "img": ""
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tomato",
@@ -688,9 +889,12 @@
       "min": "₹2,120",
       "max": "₹2,880",
       "price": "₹2,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹180",
+      "img": "/crops/Tomato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tamarind",
@@ -700,7 +904,10 @@
       "price": "₹12,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Tamarind.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -708,9 +915,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Chikkaballapur": [
@@ -720,9 +930,12 @@
       "min": "₹2,120",
       "max": "₹2,880",
       "price": "₹2,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹180",
+      "img": "/crops/Tomato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ragi",
@@ -732,7 +945,10 @@
       "price": "₹4,000",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -740,9 +956,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -750,19 +969,25 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Green",
-      "market": "chilli Chikkaballapur APMC",
+      "crop": "Green chilli",
+      "market": "Chikkaballapur APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Green_chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Potato",
@@ -770,9 +995,12 @@
       "min": "₹1,280",
       "max": "₹1,720",
       "price": "₹1,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹20",
+      "img": "/crops/Potato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Onion",
@@ -780,9 +1008,12 @@
       "min": "₹1,530",
       "max": "₹2,070",
       "price": "₹1,800",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "down",
+      "change": "-₹30",
+      "img": "/crops/Onion.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Beans",
@@ -790,9 +1021,12 @@
       "min": "₹3,060",
       "max": "₹4,140",
       "price": "₹3,600",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Beans.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Lime",
@@ -800,9 +1034,12 @@
       "min": "₹3,820",
       "max": "₹5,180",
       "price": "₹4,500",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "up",
+      "change": "+₹80",
+      "img": "/crops/Lime.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Mulberry",
@@ -810,9 +1047,12 @@
       "min": "₹5,100",
       "max": "₹6,900",
       "price": "₹6,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹100",
+      "img": "/crops/Mulberry.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Chikkamagaluru": [
@@ -823,8 +1063,11 @@
       "max": "₹25,300",
       "price": "₹22,000",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹500",
+      "img": "/crops/Coffee.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Arecanut",
@@ -833,8 +1076,11 @@
       "max": "₹36,800",
       "price": "₹32,000",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹200",
+      "img": "/crops/Arecanut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -844,7 +1090,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -854,7 +1103,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -863,8 +1115,11 @@
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ragi",
@@ -872,9 +1127,12 @@
       "min": "₹3,400",
       "max": "₹4,600",
       "price": "₹4,000",
-      "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tomato",
@@ -882,9 +1140,12 @@
       "min": "₹2,120",
       "max": "₹2,880",
       "price": "₹2,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹180",
+      "img": "/crops/Tomato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Potato",
@@ -892,9 +1153,12 @@
       "min": "₹1,280",
       "max": "₹1,720",
       "price": "₹1,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹20",
+      "img": "/crops/Potato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Beans",
@@ -903,18 +1167,24 @@
       "max": "₹4,140",
       "price": "₹3,600",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Beans.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Green",
-      "market": "chilli Chikkamagaluru APMC",
+      "crop": "Green chilli",
+      "market": "Chikkamagaluru APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Green_chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Chitradurga": [
@@ -925,8 +1195,11 @@
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -934,9 +1207,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -945,38 +1221,50 @@
       "max": "₹7,470",
       "price": "₹6,500",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Castor",
-      "market": "seed Chitradurga APMC",
+      "crop": "Castor seed",
+      "market": "Chitradurga APMC",
       "min": "₹4,590",
       "max": "₹6,210",
       "price": "₹5,400",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Castor_seed.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Horse",
-      "market": "gram Chitradurga APMC",
+      "crop": "Horse gram",
+      "market": "Chitradurga APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Horse_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Chitradurga APMC",
+      "crop": "Bengal gram",
+      "market": "Chitradurga APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ragi",
@@ -984,9 +1272,12 @@
       "min": "₹3,400",
       "max": "₹4,600",
       "price": "₹4,000",
-      "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -994,9 +1285,12 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -1004,9 +1298,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Onion",
@@ -1014,9 +1311,12 @@
       "min": "₹1,530",
       "max": "₹2,070",
       "price": "₹1,800",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹30",
+      "img": "/crops/Onion.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Dakshina Kannada": [
@@ -1026,9 +1326,12 @@
       "min": "₹27,200",
       "max": "₹36,800",
       "price": "₹32,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹200",
+      "img": "/crops/Arecanut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -1038,7 +1341,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -1048,7 +1354,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cashew",
@@ -1056,19 +1365,25 @@
       "min": "₹10,200",
       "max": "₹13,800",
       "price": "₹12,000",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Cashew.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Black",
-      "market": "pepper Dakshina Kannada APMC",
+      "crop": "Black pepper",
+      "market": "Dakshina Kannada APMC",
       "min": "₹55,250",
       "max": "₹74,750",
       "price": "₹65,000",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹800",
+      "img": "/crops/Black_pepper.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Banana",
@@ -1078,7 +1393,10 @@
       "price": "₹2,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Banana.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Turmeric",
@@ -1086,9 +1404,12 @@
       "min": "₹6,800",
       "max": "₹9,200",
       "price": "₹8,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹150",
+      "img": "/crops/Turmeric.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ginger",
@@ -1097,8 +1418,11 @@
       "max": "₹8,970",
       "price": "₹7,800",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹120",
+      "img": "/crops/Ginger.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cocoa",
@@ -1106,9 +1430,12 @@
       "min": "₹15,300",
       "max": "₹20,700",
       "price": "₹18,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹100",
+      "img": "/crops/Cocoa.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Rubber",
@@ -1117,8 +1444,11 @@
       "max": "₹20,700",
       "price": "₹18,000",
       "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "change": "+₹150",
+      "img": "/crops/Rubber.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Davanagere": [
@@ -1128,9 +1458,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -1140,7 +1473,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -1148,9 +1484,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -1158,9 +1497,12 @@
       "min": "₹5,950",
       "max": "₹8,050",
       "price": "₹7,000",
-      "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "trend": "down",
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sugarcane",
@@ -1168,9 +1510,12 @@
       "min": "₹300",
       "max": "₹400",
       "price": "₹350",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Sugarcane.jpg",
+      "unit": "per tonne",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -1178,9 +1523,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Chilli",
@@ -1188,19 +1536,25 @@
       "min": "₹19,550",
       "max": "₹26,450",
       "price": "₹23,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Davanagere APMC",
+      "crop": "Bengal gram",
+      "market": "Davanagere APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -1208,9 +1562,12 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -1219,8 +1576,11 @@
       "max": "₹7,470",
       "price": "₹6,500",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Dharwad": [
@@ -1231,8 +1591,11 @@
       "max": "₹8,050",
       "price": "₹7,000",
       "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -1242,7 +1605,10 @@
       "price": "₹3,407",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
       "crop": "Maize",
@@ -1251,8 +1617,11 @@
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -1260,9 +1629,12 @@
       "min": "₹4,420",
       "max": "₹6,661",
       "price": "₹5,582",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
       "crop": "Soybean",
@@ -1270,9 +1642,12 @@
       "min": "₹6,949",
       "max": "₹6,949",
       "price": "₹6,949",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹60",
+      "img": "/crops/Soybean.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
       "crop": "Wheat",
@@ -1280,19 +1655,25 @@
       "min": "₹2,007",
       "max": "₹3,589",
       "price": "₹2,455",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Wheat.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Hubballi APMC",
+      "crop": "Bengal gram",
+      "market": "Hubballi APMC",
       "min": "₹1,621",
       "max": "₹6,229",
       "price": "₹4,930",
       "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
       "crop": "Tur",
@@ -1301,8 +1682,11 @@
       "max": "₹5,526",
       "price": "₹5,526",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ACTUAL"
     },
     {
       "crop": "Chilli",
@@ -1311,8 +1695,11 @@
       "max": "₹26,450",
       "price": "₹23,000",
       "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -1320,9 +1707,12 @@
       "min": "₹5,520",
       "max": "₹7,470",
       "price": "₹6,500",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Gadag": [
@@ -1334,7 +1724,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -1342,9 +1735,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -1353,8 +1749,11 @@
       "max": "₹8,050",
       "price": "₹7,000",
       "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -1363,18 +1762,24 @@
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Gadag APMC",
+      "crop": "Bengal gram",
+      "market": "Gadag APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -1383,8 +1788,11 @@
       "max": "₹6,320",
       "price": "₹5,500",
       "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -1393,8 +1801,11 @@
       "max": "₹7,470",
       "price": "₹6,500",
       "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Wheat",
@@ -1402,9 +1813,12 @@
       "min": "₹2,380",
       "max": "₹3,220",
       "price": "₹2,800",
-      "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Wheat.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Chilli",
@@ -1412,9 +1826,12 @@
       "min": "₹19,550",
       "max": "₹26,450",
       "price": "₹23,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Soybean",
@@ -1423,8 +1840,11 @@
       "max": "₹8,050",
       "price": "₹7,000",
       "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "change": "-₹60",
+      "img": "/crops/Soybean.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Hassan": [
@@ -1434,9 +1854,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coffee",
@@ -1445,8 +1868,11 @@
       "max": "₹25,300",
       "price": "₹22,000",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹500",
+      "img": "/crops/Coffee.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Arecanut",
@@ -1454,9 +1880,12 @@
       "min": "₹27,200",
       "max": "₹36,800",
       "price": "₹32,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹200",
+      "img": "/crops/Arecanut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -1464,9 +1893,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ragi",
@@ -1474,9 +1906,12 @@
       "min": "₹3,400",
       "max": "₹4,600",
       "price": "₹4,000",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -1485,8 +1920,11 @@
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Potato",
@@ -1494,9 +1932,12 @@
       "min": "₹1,280",
       "max": "₹1,720",
       "price": "₹1,500",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "down",
+      "change": "-₹20",
+      "img": "/crops/Potato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tomato",
@@ -1505,18 +1946,24 @@
       "max": "₹2,880",
       "price": "₹2,500",
       "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "change": "+₹180",
+      "img": "/crops/Tomato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Black",
-      "market": "pepper Hassan APMC",
+      "crop": "Black pepper",
+      "market": "Hassan APMC",
       "min": "₹55,250",
       "max": "₹74,750",
       "price": "₹65,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹800",
+      "img": "/crops/Black_pepper.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ginger",
@@ -1525,8 +1972,11 @@
       "max": "₹8,970",
       "price": "₹7,800",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹120",
+      "img": "/crops/Ginger.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Haveri": [
@@ -1536,9 +1986,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -1547,8 +2000,11 @@
       "max": "₹8,050",
       "price": "₹7,000",
       "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Soybean",
@@ -1557,8 +2013,11 @@
       "max": "₹8,050",
       "price": "₹7,000",
       "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "change": "-₹60",
+      "img": "/crops/Soybean.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Chilli",
@@ -1566,9 +2025,12 @@
       "min": "₹19,550",
       "max": "₹26,450",
       "price": "₹23,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -1578,7 +2040,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -1586,9 +2051,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -1596,9 +2064,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -1607,18 +2078,24 @@
       "max": "₹6,320",
       "price": "₹5,500",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Haveri APMC",
+      "crop": "Bengal gram",
+      "market": "Haveri APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -1627,8 +2104,11 @@
       "max": "₹7,470",
       "price": "₹6,500",
       "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Kalaburagi": [
@@ -1639,18 +2119,24 @@
       "max": "₹6,320",
       "price": "₹5,500",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Kalaburagi APMC",
+      "crop": "Bengal gram",
+      "market": "Kalaburagi APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -1660,27 +2146,36 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Black",
-      "market": "gram Kalaburagi APMC",
+      "crop": "Black gram",
+      "market": "Kalaburagi APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹40",
+      "img": "/crops/Black_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Green",
-      "market": "gram Kalaburagi APMC",
+      "crop": "Green gram",
+      "market": "Kalaburagi APMC",
       "min": "₹9,140",
       "max": "₹12,360",
       "price": "₹10,750",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "up",
+      "change": "+₹110",
+      "img": "/crops/Green_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Soybean",
@@ -1688,9 +2183,12 @@
       "min": "₹5,950",
       "max": "₹8,050",
       "price": "₹7,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹60",
+      "img": "/crops/Soybean.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -1698,9 +2196,12 @@
       "min": "₹5,520",
       "max": "₹7,470",
       "price": "₹6,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -1709,8 +2210,11 @@
       "max": "₹6,440",
       "price": "₹5,600",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Wheat",
@@ -1720,7 +2224,10 @@
       "price": "₹2,800",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Wheat.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -1729,8 +2236,11 @@
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Kodagu": [
@@ -1741,18 +2251,24 @@
       "max": "₹25,300",
       "price": "₹22,000",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹500",
+      "img": "/crops/Coffee.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Black",
-      "market": "pepper Kodagu APMC",
+      "crop": "Black pepper",
+      "market": "Kodagu APMC",
       "min": "₹55,250",
       "max": "₹74,750",
       "price": "₹65,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹800",
+      "img": "/crops/Black_pepper.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cardamom",
@@ -1760,9 +2276,12 @@
       "min": "₹153,000",
       "max": "₹207,000",
       "price": "₹180,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Cardamom.jpg",
+      "unit": "per kg",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Arecanut",
@@ -1771,8 +2290,11 @@
       "max": "₹36,800",
       "price": "₹32,000",
       "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "change": "+₹200",
+      "img": "/crops/Arecanut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -1780,9 +2302,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -1790,9 +2315,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ginger",
@@ -1801,8 +2329,11 @@
       "max": "₹8,970",
       "price": "₹7,800",
       "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "change": "+₹120",
+      "img": "/crops/Ginger.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Turmeric",
@@ -1811,8 +2342,11 @@
       "max": "₹9,200",
       "price": "₹8,000",
       "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "change": "+₹150",
+      "img": "/crops/Turmeric.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Banana",
@@ -1820,9 +2354,12 @@
       "min": "₹2,120",
       "max": "₹2,880",
       "price": "₹2,500",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Banana.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cocoa",
@@ -1831,8 +2368,11 @@
       "max": "₹20,700",
       "price": "₹18,000",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹100",
+      "img": "/crops/Cocoa.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Kolar": [
@@ -1843,8 +2383,11 @@
       "max": "₹2,880",
       "price": "₹2,500",
       "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "change": "+₹180",
+      "img": "/crops/Tomato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ragi",
@@ -1852,9 +2395,12 @@
       "min": "₹3,400",
       "max": "₹4,600",
       "price": "₹4,000",
-      "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -1863,8 +2409,11 @@
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -1872,9 +2421,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Mulberry",
@@ -1883,8 +2435,11 @@
       "max": "₹6,900",
       "price": "₹6,000",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹100",
+      "img": "/crops/Mulberry.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Potato",
@@ -1892,9 +2447,12 @@
       "min": "₹1,280",
       "max": "₹1,720",
       "price": "₹1,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹20",
+      "img": "/crops/Potato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Onion",
@@ -1902,9 +2460,12 @@
       "min": "₹1,530",
       "max": "₹2,070",
       "price": "₹1,800",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹30",
+      "img": "/crops/Onion.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Beans",
@@ -1914,7 +2475,10 @@
       "price": "₹3,600",
       "trend": "up",
       "change": "+₹50",
-      "img": ""
+      "img": "/crops/Beans.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Mango",
@@ -1922,9 +2486,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Mango.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -1932,9 +2499,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Koppal": [
@@ -1945,8 +2515,11 @@
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -1954,9 +2527,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -1964,9 +2540,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -1974,9 +2553,12 @@
       "min": "₹5,950",
       "max": "₹8,050",
       "price": "₹7,000",
-      "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "trend": "down",
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -1984,19 +2566,25 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Koppal APMC",
+      "crop": "Bengal gram",
+      "market": "Koppal APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -2004,9 +2592,12 @@
       "min": "₹5,520",
       "max": "₹7,470",
       "price": "₹6,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -2015,8 +2606,11 @@
       "max": "₹6,440",
       "price": "₹5,600",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Chilli",
@@ -2024,9 +2618,12 @@
       "min": "₹19,550",
       "max": "₹26,450",
       "price": "₹23,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Wheat",
@@ -2034,9 +2631,12 @@
       "min": "₹2,380",
       "max": "₹3,220",
       "price": "₹2,800",
-      "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Wheat.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Mandya": [
@@ -2046,9 +2646,12 @@
       "min": "₹300",
       "max": "₹400",
       "price": "₹350",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Sugarcane.jpg",
+      "unit": "per tonne",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -2056,9 +2659,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ragi",
@@ -2068,7 +2674,10 @@
       "price": "₹4,000",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -2076,9 +2685,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -2088,7 +2700,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -2097,8 +2712,11 @@
       "max": "₹6,320",
       "price": "₹5,500",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -2106,9 +2724,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tomato",
@@ -2117,8 +2738,11 @@
       "max": "₹2,880",
       "price": "₹2,500",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹180",
+      "img": "/crops/Tomato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Banana",
@@ -2126,9 +2750,12 @@
       "min": "₹2,120",
       "max": "₹2,880",
       "price": "₹2,500",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Banana.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Mulberry",
@@ -2136,9 +2763,12 @@
       "min": "₹5,100",
       "max": "₹6,900",
       "price": "₹6,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹100",
+      "img": "/crops/Mulberry.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Mysuru": [
@@ -2148,9 +2778,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ragi",
@@ -2158,9 +2791,12 @@
       "min": "₹3,400",
       "max": "₹4,600",
       "price": "₹4,000",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sugarcane",
@@ -2170,7 +2806,10 @@
       "price": "₹350",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Sugarcane.jpg",
+      "unit": "per tonne",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -2180,7 +2819,10 @@
       "price": "₹5,000",
       "trend": "up",
       "change": "+₹50",
-      "img": ""
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -2188,9 +2830,12 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -2199,8 +2844,11 @@
       "max": "₹6,440",
       "price": "₹5,600",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -2210,7 +2858,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tobacco",
@@ -2220,7 +2871,10 @@
       "price": "₹12,000",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Tobacco.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Banana",
@@ -2228,9 +2882,12 @@
       "min": "₹2,120",
       "max": "₹2,880",
       "price": "₹2,500",
-      "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Banana.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Turmeric",
@@ -2238,9 +2895,12 @@
       "min": "₹6,800",
       "max": "₹9,200",
       "price": "₹8,000",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "up",
+      "change": "+₹150",
+      "img": "/crops/Turmeric.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Raichur": [
@@ -2250,9 +2910,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -2260,9 +2923,12 @@
       "min": "₹5,950",
       "max": "₹8,050",
       "price": "₹7,000",
-      "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "trend": "down",
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -2270,9 +2936,12 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -2280,9 +2949,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -2290,19 +2962,25 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Raichur APMC",
+      "crop": "Bengal gram",
+      "market": "Raichur APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -2310,9 +2988,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -2321,8 +3002,11 @@
       "max": "₹7,470",
       "price": "₹6,500",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Chilli",
@@ -2331,8 +3015,11 @@
       "max": "₹26,450",
       "price": "₹23,000",
       "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Wheat",
@@ -2340,9 +3027,12 @@
       "min": "₹2,380",
       "max": "₹3,220",
       "price": "₹2,800",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Wheat.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Ramanagara": [
@@ -2352,9 +3042,12 @@
       "min": "₹3,400",
       "max": "₹4,600",
       "price": "₹4,000",
-      "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Mango",
@@ -2362,9 +3055,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Mango.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -2372,9 +3068,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tomato",
@@ -2382,9 +3081,12 @@
       "min": "₹2,120",
       "max": "₹2,880",
       "price": "₹2,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹180",
+      "img": "/crops/Tomato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Banana",
@@ -2392,9 +3094,12 @@
       "min": "₹2,120",
       "max": "₹2,880",
       "price": "₹2,500",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Banana.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -2404,7 +3109,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -2412,9 +3120,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -2422,9 +3133,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Mulberry",
@@ -2432,9 +3146,12 @@
       "min": "₹5,100",
       "max": "₹6,900",
       "price": "₹6,000",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "up",
+      "change": "+₹100",
+      "img": "/crops/Mulberry.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tamarind",
@@ -2442,9 +3159,12 @@
       "min": "₹10,620",
       "max": "₹14,370",
       "price": "₹12,500",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Tamarind.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Shivamogga": [
@@ -2454,9 +3174,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Arecanut",
@@ -2465,8 +3188,11 @@
       "max": "₹36,800",
       "price": "₹32,000",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹200",
+      "img": "/crops/Arecanut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -2475,8 +3201,11 @@
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -2486,7 +3215,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sugarcane",
@@ -2494,9 +3226,12 @@
       "min": "₹300",
       "max": "₹400",
       "price": "₹350",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Sugarcane.jpg",
+      "unit": "per tonne",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ragi",
@@ -2506,7 +3241,10 @@
       "price": "₹4,000",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ginger",
@@ -2514,19 +3252,25 @@
       "min": "₹6,630",
       "max": "₹8,970",
       "price": "₹7,800",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "up",
+      "change": "+₹120",
+      "img": "/crops/Ginger.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Black",
-      "market": "pepper Shivamogga APMC",
+      "crop": "Black pepper",
+      "market": "Shivamogga APMC",
       "min": "₹55,250",
       "max": "₹74,750",
       "price": "₹65,000",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "up",
+      "change": "+₹800",
+      "img": "/crops/Black_pepper.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Banana",
@@ -2534,9 +3278,12 @@
       "min": "₹2,120",
       "max": "₹2,880",
       "price": "₹2,500",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Banana.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Turmeric",
@@ -2545,8 +3292,11 @@
       "max": "₹9,200",
       "price": "₹8,000",
       "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "change": "+₹150",
+      "img": "/crops/Turmeric.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Tumakuru": [
@@ -2556,9 +3306,12 @@
       "min": "₹3,400",
       "max": "₹4,600",
       "price": "₹4,000",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Ragi.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -2566,9 +3319,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -2576,9 +3332,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -2586,9 +3345,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -2596,9 +3358,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -2606,9 +3371,12 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -2616,9 +3384,12 @@
       "min": "₹5,520",
       "max": "₹7,470",
       "price": "₹6,500",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -2628,7 +3399,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tomato",
@@ -2637,8 +3411,11 @@
       "max": "₹2,880",
       "price": "₹2,500",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹180",
+      "img": "/crops/Tomato.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Onion",
@@ -2646,9 +3423,12 @@
       "min": "₹1,530",
       "max": "₹2,070",
       "price": "₹1,800",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹30",
+      "img": "/crops/Onion.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Udupi": [
@@ -2658,9 +3438,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Arecanut",
@@ -2668,9 +3451,12 @@
       "min": "₹27,200",
       "max": "₹36,800",
       "price": "₹32,000",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹200",
+      "img": "/crops/Arecanut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -2680,7 +3466,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cashew",
@@ -2688,19 +3477,25 @@
       "min": "₹10,200",
       "max": "₹13,800",
       "price": "₹12,000",
-      "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Cashew.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Black",
-      "market": "pepper Udupi APMC",
+      "crop": "Black pepper",
+      "market": "Udupi APMC",
       "min": "₹55,250",
       "max": "₹74,750",
       "price": "₹65,000",
-      "trend": "down",
-      "change": "+₹10",
-      "img": ""
+      "trend": "up",
+      "change": "+₹800",
+      "img": "/crops/Black_pepper.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Banana",
@@ -2708,9 +3503,12 @@
       "min": "₹2,120",
       "max": "₹2,880",
       "price": "₹2,500",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Banana.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Pineapple",
@@ -2720,7 +3518,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Pineapple.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Ginger",
@@ -2728,9 +3529,12 @@
       "min": "₹6,630",
       "max": "₹8,970",
       "price": "₹7,800",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹120",
+      "img": "/crops/Ginger.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Turmeric",
@@ -2738,9 +3542,12 @@
       "min": "₹6,800",
       "max": "₹9,200",
       "price": "₹8,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹150",
+      "img": "/crops/Turmeric.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cocoa",
@@ -2748,9 +3555,12 @@
       "min": "₹15,300",
       "max": "₹20,700",
       "price": "₹18,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹100",
+      "img": "/crops/Cocoa.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Uttara Kannada": [
@@ -2761,8 +3571,11 @@
       "max": "₹36,800",
       "price": "₹32,000",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹200",
+      "img": "/crops/Arecanut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Paddy",
@@ -2770,9 +3583,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Coconut",
@@ -2780,9 +3596,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Coconut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cashew",
@@ -2790,19 +3609,25 @@
       "min": "₹10,200",
       "max": "₹13,800",
       "price": "₹12,000",
-      "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Cashew.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Black",
-      "market": "pepper Uttara Kannada APMC",
+      "crop": "Black pepper",
+      "market": "Uttara Kannada APMC",
       "min": "₹55,250",
       "max": "₹74,750",
       "price": "₹65,000",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹800",
+      "img": "/crops/Black_pepper.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cardamom",
@@ -2810,9 +3635,12 @@
       "min": "₹153,000",
       "max": "₹207,000",
       "price": "₹180,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Cardamom.jpg",
+      "unit": "per kg",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -2821,8 +3649,11 @@
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "-₹40",
-      "img": ""
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Mango",
@@ -2830,9 +3661,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "+₹0",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Mango.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Banana",
@@ -2842,7 +3676,10 @@
       "price": "₹2,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Banana.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Turmeric",
@@ -2850,9 +3687,12 @@
       "min": "₹6,800",
       "max": "₹9,200",
       "price": "₹8,000",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹150",
+      "img": "/crops/Turmeric.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Vijayapura": [
@@ -2864,7 +3704,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -2872,19 +3715,25 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Vijayapura APMC",
+      "crop": "Bengal gram",
+      "market": "Vijayapura APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -2892,9 +3741,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -2902,9 +3754,12 @@
       "min": "₹5,520",
       "max": "₹7,470",
       "price": "₹6,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -2913,8 +3768,11 @@
       "max": "₹6,440",
       "price": "₹5,600",
       "trend": "up",
-      "change": "-₹20",
-      "img": ""
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Wheat",
@@ -2922,9 +3780,12 @@
       "min": "₹2,380",
       "max": "₹3,220",
       "price": "₹2,800",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Wheat.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -2933,8 +3794,11 @@
       "max": "₹8,050",
       "price": "₹7,000",
       "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Chilli",
@@ -2943,8 +3807,11 @@
       "max": "₹26,450",
       "price": "₹23,000",
       "trend": "down",
-      "change": "+₹120",
-      "img": ""
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Soybean",
@@ -2952,9 +3819,12 @@
       "min": "₹5,950",
       "max": "₹8,050",
       "price": "₹7,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹60",
+      "img": "/crops/Soybean.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Yadgir": [
@@ -2964,9 +3834,12 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -2974,19 +3847,25 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Yadgir APMC",
+      "crop": "Bengal gram",
+      "market": "Yadgir APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -2994,9 +3873,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -3005,8 +3887,11 @@
       "max": "₹7,470",
       "price": "₹6,500",
       "trend": "up",
-      "change": "+₹50",
-      "img": ""
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -3014,9 +3899,12 @@
       "min": "₹5,950",
       "max": "₹8,050",
       "price": "₹7,000",
-      "trend": "up",
-      "change": "+₹10",
-      "img": ""
+      "trend": "down",
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -3024,9 +3912,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "-₹40",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Wheat",
@@ -3034,19 +3925,25 @@
       "min": "₹2,380",
       "max": "₹3,220",
       "price": "₹2,800",
-      "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Wheat.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Black",
-      "market": "gram Yadgir APMC",
+      "crop": "Black gram",
+      "market": "Yadgir APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
       "trend": "up",
-      "change": "+₹120",
-      "img": ""
+      "change": "+₹40",
+      "img": "/crops/Black_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Soybean",
@@ -3054,9 +3951,12 @@
       "min": "₹5,950",
       "max": "₹8,050",
       "price": "₹7,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹60",
+      "img": "/crops/Soybean.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Vijayanagara": [
@@ -3066,9 +3966,12 @@
       "min": "₹2,980",
       "max": "₹4,020",
       "price": "₹3,500",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Paddy.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Maize",
@@ -3076,9 +3979,12 @@
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "down",
-      "change": "-₹20",
-      "img": ""
+      "trend": "up",
+      "change": "+₹50",
+      "img": "/crops/Maize.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Cotton",
@@ -3086,9 +3992,12 @@
       "min": "₹5,950",
       "max": "₹8,050",
       "price": "₹7,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "down",
+      "change": "-₹80",
+      "img": "/crops/Cotton.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Jowar",
@@ -3098,7 +4007,10 @@
       "price": "₹3,500",
       "trend": "stable",
       "change": "-",
-      "img": ""
+      "img": "/crops/Jowar.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Groundnut",
@@ -3106,9 +4018,12 @@
       "min": "₹4,760",
       "max": "₹6,440",
       "price": "₹5,600",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹45",
+      "img": "/crops/Groundnut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Chilli",
@@ -3116,19 +4031,25 @@
       "min": "₹19,550",
       "max": "₹26,450",
       "price": "₹23,000",
-      "trend": "up",
-      "change": "+₹0",
-      "img": ""
+      "trend": "down",
+      "change": "-₹200",
+      "img": "/crops/Chilli.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
-      "crop": "Bengal",
-      "market": "gram Vijayanagara APMC",
+      "crop": "Bengal gram",
+      "market": "Vijayanagara APMC",
       "min": "₹4,250",
       "max": "₹5,750",
       "price": "₹5,000",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Bengal_gram.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Tur",
@@ -3136,9 +4057,12 @@
       "min": "₹4,680",
       "max": "₹6,320",
       "price": "₹5,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹30",
+      "img": "/crops/Tur.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sunflower",
@@ -3146,9 +4070,12 @@
       "min": "₹5,520",
       "max": "₹7,470",
       "price": "₹6,500",
-      "trend": "stable",
-      "change": "-",
-      "img": ""
+      "trend": "up",
+      "change": "+₹60",
+      "img": "/crops/Sunflower.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     },
     {
       "crop": "Sugarcane",
@@ -3156,9 +4083,12 @@
       "min": "₹300",
       "max": "₹400",
       "price": "₹350",
-      "trend": "down",
-      "change": "+₹50",
-      "img": ""
+      "trend": "stable",
+      "change": "-",
+      "img": "/crops/Sugarcane.jpg",
+      "unit": "per tonne",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ]
 }

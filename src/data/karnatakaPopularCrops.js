@@ -1,0 +1,248 @@
+/**
+ * Most popular & famous crops grown across Karnataka.
+ * Modal APMC prices sourced from Karnataka APMC Price Sheet (Aug 2026).
+ * ACTUAL = verified Agmarknet snapshot; ESTIMATED = representative mandi level.
+ * Images from local /public/crops/ directory (high-quality Wikimedia sourced).
+ */
+export const karnatakaPopularCrops = [
+  {
+    crop: 'Ragi',
+    market: 'Bengaluru Rural APMC',
+    min: '₹3,200',
+    max: '₹4,200',
+    price: '₹3,700',
+    unit: 'per quintal',
+    trend: 'stable',
+    change: '-',
+    status: 'ESTIMATED',
+    img: '/crops/Ragi.jpg'
+  },
+  {
+    crop: 'Coffee',
+    market: 'Chikkamagaluru APMC',
+    min: '₹19,000',
+    max: '₹26,000',
+    price: '₹22,500',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹500',
+    status: 'ESTIMATED',
+    img: '/crops/Coffee.jpg'
+  },
+  {
+    crop: 'Arecanut',
+    market: 'Shivamogga APMC',
+    min: '₹28,800',
+    max: '₹33,200',
+    price: '₹31,000',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹200',
+    status: 'ESTIMATED',
+    img: '/crops/Arecanut.jpg'
+  },
+  {
+    crop: 'Paddy',
+    market: 'Mysuru APMC',
+    min: '₹1,800',
+    max: '₹2,500',
+    price: '₹2,150',
+    unit: 'per quintal',
+    trend: 'stable',
+    change: '-',
+    status: 'ESTIMATED',
+    img: '/crops/Paddy.jpg'
+  },
+  {
+    crop: 'Maize',
+    market: 'Bengaluru APMC',
+    min: '₹4,000',
+    max: '₹6,000',
+    price: '₹5,000',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹120',
+    status: 'ACTUAL',
+    img: '/crops/Maize.jpg'
+  },
+  {
+    crop: 'Sugarcane',
+    market: 'Mandya APMC',
+    min: '₹300',
+    max: '₹400',
+    price: '₹350',
+    unit: 'per tonne',
+    trend: 'stable',
+    change: '-',
+    status: 'ESTIMATED',
+    img: '/crops/Sugarcane.jpg'
+  },
+  {
+    crop: 'Cotton',
+    market: 'Dharwad APMC',
+    min: '₹5,950',
+    max: '₹8,050',
+    price: '₹7,000',
+    unit: 'per quintal',
+    trend: 'down',
+    change: '-₹80',
+    status: 'ESTIMATED',
+    img: '/crops/Cotton.jpg'
+  },
+  {
+    crop: 'Groundnut',
+    market: 'Hubballi APMC',
+    min: '₹4,420',
+    max: '₹6,661',
+    price: '₹5,582',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹45',
+    status: 'ACTUAL',
+    img: '/crops/Groundnut.jpg'
+  },
+  {
+    crop: 'Jowar',
+    market: 'Hubballi APMC',
+    min: '₹1,335',
+    max: '₹4,326',
+    price: '₹3,407',
+    unit: 'per quintal',
+    trend: 'stable',
+    change: '-',
+    status: 'ACTUAL',
+    img: '/crops/Jowar.jpg'
+  },
+  {
+    crop: 'Tur',
+    market: 'Kalaburagi APMC',
+    min: '₹4,680',
+    max: '₹6,320',
+    price: '₹5,500',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹30',
+    status: 'ESTIMATED',
+    img: '/crops/Tur.jpg'
+  },
+  {
+    crop: 'Rice',
+    market: 'Bengaluru APMC',
+    min: '₹3,800',
+    max: '₹6,600',
+    price: '₹5,333',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹90',
+    status: 'ACTUAL',
+    img: '/crops/Rice.jpg'
+  },
+  {
+    crop: 'Tomato',
+    market: 'Kolar APMC',
+    min: '₹2,120',
+    max: '₹2,880',
+    price: '₹2,500',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹180',
+    status: 'ESTIMATED',
+    img: '/crops/Tomato.jpg'
+  },
+  {
+    crop: 'Coconut',
+    market: 'Chamarajanagar APMC',
+    min: '₹2,980',
+    max: '₹4,020',
+    price: '₹3,500',
+    unit: 'per quintal',
+    trend: 'stable',
+    change: '-',
+    status: 'ESTIMATED',
+    img: '/crops/Coconut.jpg'
+  },
+  {
+    crop: 'Turmeric',
+    market: 'Chamarajanagar APMC',
+    min: '₹6,800',
+    max: '₹9,200',
+    price: '₹8,000',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹150',
+    status: 'ESTIMATED',
+    img: '/crops/Turmeric.jpg'
+  },
+  {
+    crop: 'Chilli',
+    market: 'Bagalkot APMC',
+    min: '₹19,550',
+    max: '₹26,450',
+    price: '₹23,000',
+    unit: 'per quintal',
+    trend: 'down',
+    change: '-₹200',
+    status: 'ESTIMATED',
+    img: '/crops/Chilli.jpg'
+  },
+  {
+    crop: 'Sunflower',
+    market: 'Bagalkot APMC',
+    min: '₹5,520',
+    max: '₹7,470',
+    price: '₹6,500',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹60',
+    status: 'ESTIMATED',
+    img: '/crops/Sunflower.jpg'
+  },
+  {
+    crop: 'Green gram',
+    market: 'Bengaluru APMC',
+    min: '₹9,000',
+    max: '₹12,500',
+    price: '₹10,750',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹110',
+    status: 'ACTUAL',
+    img: '/crops/Green_gram.jpg'
+  },
+  {
+    crop: 'Silk Cocoon',
+    market: 'Silk Exchange, Ramanagara',
+    min: '₹520',
+    max: '₹640',
+    price: '₹580',
+    unit: 'per kg',
+    trend: 'up',
+    change: '+₹15',
+    status: 'ESTIMATED',
+    img: '/crops/Silk_Cocoon.jpg'
+  },
+  {
+    crop: 'Black pepper',
+    market: 'Dakshina Kannada APMC',
+    min: '₹55,000',
+    max: '₹75,000',
+    price: '₹65,000',
+    unit: 'per quintal',
+    trend: 'up',
+    change: '+₹800',
+    status: 'ESTIMATED',
+    img: '/crops/Black_pepper.jpg'
+  },
+  {
+    crop: 'Banana',
+    market: 'Mysuru APMC',
+    min: '₹1,800',
+    max: '₹3,200',
+    price: '₹2,500',
+    unit: 'per quintal',
+    trend: 'stable',
+    change: '-',
+    status: 'ESTIMATED',
+    img: '/crops/Banana.jpg'
+  },
+];
