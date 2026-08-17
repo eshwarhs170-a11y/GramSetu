@@ -446,7 +446,15 @@ input, textarea, select { font-family: inherit; outline: none; }
   z-index: 50;
   box-shadow: var(--shadow-sm);
 }
-.topbar-title { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+.topbar-title { 
+  font-size: 20px; 
+  font-weight: 700; 
+  color: var(--text-primary);
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  max-width: 400px;
+}
 .topbar-subtitle { font-size: 13px; color: var(--text-muted); }
 .topbar-right { display: flex; align-items: center; gap: 16px; }
 .topbar-icon-btn {
@@ -1088,10 +1096,10 @@ input, textarea, select { font-family: inherit; outline: none; }
   .content-grid-3 { grid-template-columns: 1fr; }
   .complaint-category-grid { grid-template-columns: repeat(2, 1fr); }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .topbar { padding: 0 16px; }
-  .topbar-title { font-size: 16px; }
+  .topbar { padding: 0 12px; }
+  .topbar-title { font-size: 15px; max-width: 160px; }
   .topbar-subtitle { display: none; }
-  .topbar-right { gap: 8px; }
+  .topbar-right { gap: 6px; }
   .topbar-icon-btn { width: 34px; height: 34px; }
   .notif-dropdown { width: 280px; top: 46px; right: -20px; }
 }
