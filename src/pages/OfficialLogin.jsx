@@ -24,6 +24,7 @@ export default function OfficialLogin() {
   const [name, setName] = useState('')
   const [officerId, setOfficerId] = useState('')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [department, setDepartment] = useState('Agriculture (RSK)')
   const [district, setDistrict] = useState('')
   const [taluk, setTaluk] = useState('')
@@ -74,7 +75,7 @@ export default function OfficialLogin() {
 
   const handleSendOtp = async (e) => {
     e.preventDefault()
-    if (!name.trim() || !officerId.trim() || !email.includes('@') || !district || !taluk) {
+    if (!name.trim() || !officerId.trim() || !email.includes('@') || !phone || !district || !taluk) {
       setErrorMsg('Please enter all required fields.')
       return
     }
@@ -90,7 +91,7 @@ export default function OfficialLogin() {
       setStep(2)
     } catch (error) {
       console.error('OTP send error:', error)
-      setErrorMsg(error.message || 'Failed to send OTP. Please try again.')
+      setErrorMsg(error.message || 'Failed to send OTP to email. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -125,7 +126,7 @@ export default function OfficialLogin() {
       const uid = 'official-' + email.replace(/[^a-z0-9]/gi, '-')
       try {
         await setDoc(doc(db, 'users', uid), {
-          uid, name, officerId, email, department, district, taluk, gp,
+          uid, name, officerId, email, phone, department, district, taluk, gp,
           role: 'official',
           createdAt: serverTimestamp(),
           lastLoginAt: serverTimestamp()
@@ -141,6 +142,7 @@ export default function OfficialLogin() {
       window.localStorage.setItem('official_district', district)
       window.localStorage.setItem('official_taluk', taluk)
       window.localStorage.setItem('official_gp', gp)
+      window.localStorage.setItem('official_phone', phone)
 
       navigate('/dashboard/official')
     } catch (error) {
@@ -203,8 +205,8 @@ export default function OfficialLogin() {
           </div>
 
           <div className="login-form-header">
-            <h3>{step === 1 ? 'Official Login' : 'Verify OTP'}</h3>
-            <p>{step === 1 ? 'Enter your official email to receive a one-time password' : 'Enter the 6-digit code sent to your email'}</p>
+            <h3>{step === 1 ? 'Official Login' : 'Verify Email OTP'}</h3>
+            <p>{step === 1 ? 'Enter your details to receive an Email OTP' : `Enter the 6-digit code sent to ${email}`}</p>
           </div>
 
           {errorMsg && (
@@ -257,6 +259,21 @@ export default function OfficialLogin() {
                   onChange={e => setEmail(e.target.value)}
                   required
                 />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Mobile Number / ಮೊಬೈಲ್ ಸಂಖ್ಯೆ *</label>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <input className="form-input" style={{ width: 60, flexShrink: 0 }} value="+91" readOnly />
+                  <input
+                    className="form-input"
+                    type="tel"
+                    placeholder="9876543210"
+                    value={phone}
+                    onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    required
+                  />
+                </div>
               </div>
 
               <div className="form-group">
@@ -336,7 +353,7 @@ export default function OfficialLogin() {
               <button
                 className="btn w-full"
                 type="submit"
-                disabled={loading || !name || !officerId || !email}
+                disabled={loading || !name || !officerId || !email || !phone}
                 style={{ background: '#3b82f6', color: '#fff', padding: '14px', justifyContent: 'center' }}
               >
                 {loading ? 'Sending OTP...' : 'Send OTP to Email'}
