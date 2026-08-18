@@ -63,7 +63,6 @@ function downloadFile(url, dest) {
 // These are exact Wikimedia Commons filenames for high-res crop photos
 const cropWikiFiles = {
   "Turmeric":    "Turmeric_plant_with_rhizomes.jpg",
-  "Mango":       "Mango_-_single_(Mangifera_indica).jpg",
   "Cotton":      "Gossypium_hirsutum_00.jpg",
   "Chilli":      "Capsicum_annuum_fruits.jpg",
   "Dry_chilli":  "Dry-Chili-Peppers.jpg",

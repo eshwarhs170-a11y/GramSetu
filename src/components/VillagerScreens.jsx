@@ -546,10 +546,7 @@ export function SchemesScreen() {
   const { t, lang } = useLanguage()
   const [activeTab, setActiveTab] = useState('directory') // 'directory' | 'loans' | 'advisory' | 'stories' | 'grievance'
   const [selectedScheme, setSelectedScheme] = useState(null)
-  const [trackerModalOpen, setTrackerModalOpen] = useState(false)
   const [applyModalOpen, setApplyModalOpen] = useState(false)
-  const [trackingId, setTrackingId] = useState('')
-  const [trackingResult, setTrackingResult] = useState(null)
   const [isSpeaking, setIsSpeaking] = useState(false)
 
   // Filtering States
@@ -569,13 +566,20 @@ export function SchemesScreen() {
   const [schemes, setSchemes] = useState(kaSchemes)
   const [loadingSchemes, setLoadingSchemes] = useState(true)
 
-  // Fetch from Firestore or fallback
+  // Fetch from Firestore and merge cleanly with local kaSchemes
   useEffect(() => {
     const q = query(collection(db, 'schemes'))
     getDocs(q)
       .then(snap => {
         if (!snap.empty) {
-          setSchemes(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+          const fetched = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          const merged = [...fetched]
+          kaSchemes.forEach(local => {
+            if (!merged.some(m => m.id === local.id)) {
+              merged.push(local)
+            }
+          })
+          setSchemes(merged)
         }
       })
       .catch(() => {/* silent fallback */})
@@ -605,25 +609,6 @@ export function SchemesScreen() {
     window.speechSynthesis.speak(utterance)
   }
 
-  // Handle Application Tracker Search
-  const handleTrackSubmit = (e) => {
-    e.preventDefault()
-    if (!trackingId.trim()) return
-    const id = trackingId.trim().toUpperCase()
-    // Simulated realistic status response
-    setTrackingResult({
-      appId: id,
-      schemeName: 'PM-KISAN / Karnataka DBT Unified Welfare Cycle',
-      applicant: window.localStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ',
-      status: 'VERIFIED & SANCTIONED',
-      stage: 'DBT Payment Processed - Cycle 18',
-      lastUpdated: '14 August 2026',
-      disbursementDate: 'Next Batch Scheduled on 25 August 2026',
-      bankAccount: 'SBI (A/C: ******4819)',
-      portalUrl: 'https://fruits.karnataka.gov.in/'
-    })
-  }
-
   const categories = ['All', 'Agriculture', 'Finance', 'Health', 'Women', 'Scholarship']
   const beneficiaryOptions = [
     { value: 'All', label: t('filterBeneficiaryAll') },
@@ -642,7 +627,8 @@ export function SchemesScreen() {
     { value: 'Crop Insurance', label: t('filterObjectiveInsurance') },
     { value: 'Mechanization', label: t('filterObjectiveMechanization') },
     { value: 'Organic Farming', label: t('filterObjectiveOrganic') },
-    { value: 'Post-Harvest', label: t('filterObjectivePostHarvest') }
+    { value: 'Post-Harvest', label: t('filterObjectivePostHarvest') },
+    { value: 'Export Promotion', label: t('filterObjectiveExport') }
   ]
 
   const stageOptions = [
@@ -653,35 +639,72 @@ export function SchemesScreen() {
     { value: 'Marketing', label: t('filterStageMarketing') }
   ]
 
+  // Synonym maps for flexible matching
+  const stageSynonyms = {
+    'post-harvest': ['post-harvest', 'post harvest', 'storage', 'post-harvest & storage', 'processing'],
+    'marketing': ['marketing', 'export', 'marketing & export', 'trade', 'market'],
+    'pre-harvest': ['pre-harvest', 'pre harvest', 'seeds', 'inputs'],
+    'harvesting': ['harvesting', 'harvest', 'cutting']
+  }
+
+  const objectiveSynonyms = {
+    'post-harvest': ['post-harvest', 'post harvest', 'storage', 'processing', 'cold chain'],
+    'export promotion': ['export', 'trade', 'export promotion', 'kappec'],
+    'organic farming': ['organic', 'millet', 'raitha siri'],
+    'water conservation': ['water', 'irrigation', 'drip', 'borewell', 'kusum'],
+    'crop insurance': ['insurance', 'bima', 'samrakshane'],
+    'income support': ['income', 'dbt', 'grant', 'cash', 'support'],
+    'mechanization': ['mechanization', 'tractor', 'machinery', 'solar', 'pump']
+  }
+
+  // Robust flexible matcher function
+  const matchesFilter = (schemeVal, filterVal, synonyms = {}) => {
+    if (!filterVal || filterVal === 'All') return true
+    if (!schemeVal) return false
+
+    const fLower = String(filterVal).toLowerCase().trim()
+    const schemeList = Array.isArray(schemeVal)
+      ? schemeVal.map(v => String(v).toLowerCase().trim())
+      : [String(schemeVal).toLowerCase().trim()]
+
+    return schemeList.some(sVal => {
+      if (sVal === fLower) return true
+      if (sVal === 'all-season' || sVal === 'all') return true
+
+      // Substring match in either direction
+      if (sVal.includes(fLower) || fLower.includes(sVal)) return true
+
+      // Synonym mapping
+      const filterSyns = synonyms[fLower] || []
+      return filterSyns.some(syn => sVal.includes(syn) || syn.includes(sVal))
+    })
+  }
+
   // Filter schemes based on multi-dimensional filters
   const filteredSchemes = schemes.filter(scheme => {
     // Category
-    if (categoryFilter !== 'All' && scheme.category !== categoryFilter) return false
+    if (!matchesFilter(scheme.category, categoryFilter)) return false
     
     // Level: Central vs State
-    if (levelFilter !== 'All' && scheme.level && scheme.level !== levelFilter) return false
+    if (!matchesFilter(scheme.level, levelFilter)) return false
 
     // Beneficiary
-    if (beneficiaryFilter !== 'All') {
-      if (!scheme.beneficiary || !scheme.beneficiary.includes(beneficiaryFilter)) return false
-    }
+    if (!matchesFilter(scheme.beneficiary, beneficiaryFilter)) return false
 
     // Objective
-    if (objectiveFilter !== 'All') {
-      if (scheme.objective !== objectiveFilter) return false
-    }
+    if (!matchesFilter(scheme.objective, objectiveFilter, objectiveSynonyms)) return false
 
     // Stage
-    if (stageFilter !== 'All') {
-      if (scheme.stage && scheme.stage !== stageFilter && scheme.stage !== 'All-Season') return false
-    }
+    if (!matchesFilter(scheme.stage, stageFilter, stageSynonyms)) return false
 
     // Search Query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase()
       const titleStr = typeof scheme.title === 'string' ? scheme.title : `${scheme.title?.en || ''} ${scheme.title?.kn || ''} ${scheme.title?.hi || ''}`
       const descStr = typeof scheme.desc === 'string' ? scheme.desc : `${scheme.desc?.en || ''} ${scheme.desc?.kn || ''} ${scheme.desc?.hi || ''}`
-      if (!titleStr.toLowerCase().includes(q) && !descStr.toLowerCase().includes(q)) {
+      const objStr = typeof scheme.objective === 'string' ? scheme.objective : ''
+      const stgStr = typeof scheme.stage === 'string' ? scheme.stage : ''
+      if (!titleStr.toLowerCase().includes(q) && !descStr.toLowerCase().includes(q) && !objStr.toLowerCase().includes(q) && !stgStr.toLowerCase().includes(q)) {
         return false
       }
     }
@@ -740,27 +763,6 @@ export function SchemesScreen() {
             </div>
 
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <button
-                className="btn"
-                onClick={() => setTrackerModalOpen(true)}
-                style={{
-                  background: '#fbbf24',
-                  color: '#78350f',
-                  fontWeight: 700,
-                  border: 'none',
-                  borderRadius: 12,
-                  padding: '10px 18px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  cursor: 'pointer'
-                }}
-              >
-                <Search size={16} strokeWidth={2.5} />
-                {t('trackStatusBtn') || 'Track Status'}
-              </button>
-              
               <a
                 href="https://fruits.karnataka.gov.in/"
                 target="_blank"
@@ -839,7 +841,6 @@ export function SchemesScreen() {
               fontWeight: 700,
               fontSize: 14,
               cursor: 'pointer',
-              border: 'none',
               background: activeTab === tab.id ? 'var(--primary)' : 'var(--bg-card)',
               color: activeTab === tab.id ? '#fff' : 'var(--text-secondary)',
               boxShadow: activeTab === tab.id ? '0 4px 12px rgba(16, 185, 129, 0.25)' : 'none',
@@ -858,10 +859,9 @@ export function SchemesScreen() {
       {/* ============================================================ */}
       {activeTab === 'directory' && (
         <>
-          {/* Multi-Dimensional Filter Bar */}
+            {/* Search Input, Category & Government Level Filter */}
           <div className="card" style={{ padding: '18px 20px', marginBottom: 24, borderRadius: 16 }}>
-            {/* Search Input & Government Filter */}
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 14 }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
               <div style={{ flex: 1, minWidth: 220, position: 'relative' }}>
                 <input
                   type="text"
@@ -872,6 +872,19 @@ export function SchemesScreen() {
                   style={{ width: '100%', padding: '10px 14px 10px 36px', borderRadius: 10 }}
                 />
                 <Search size={16} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--text-muted)' }} />
+              </div>
+
+              <div style={{ minWidth: 160 }}>
+                <select
+                  value={categoryFilter}
+                  onChange={e => setCategoryFilter(e.target.value)}
+                  className="form-input"
+                  style={{ width: '100%', padding: '9px 12px', fontSize: 13, borderRadius: 10 }}
+                >
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat === 'All' ? '🏛️ All Categories' : cat === 'Scholarship' ? '🎓 Scholarships' : cat}</option>
+                  ))}
+                </select>
               </div>
 
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -892,89 +905,13 @@ export function SchemesScreen() {
               </div>
             </div>
 
-            {/* Categorized Dropdown Filters */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: 12,
-              paddingTop: 12,
-              borderTop: '1px solid var(--border-light)'
-            }}>
-              <div>
-                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
-                  👥 {t('filterBeneficiaryAll') || 'Beneficiary'}
-                </label>
-                <select
-                  value={beneficiaryFilter}
-                  onChange={e => setBeneficiaryFilter(e.target.value)}
-                  className="form-input"
-                  style={{ width: '100%', padding: '8px 10px', fontSize: 13, borderRadius: 8 }}
-                >
-                  {beneficiaryOptions.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
-                  🎯 {t('filterObjectiveAll') || 'Objective'}
-                </label>
-                <select
-                  value={objectiveFilter}
-                  onChange={e => setObjectiveFilter(e.target.value)}
-                  className="form-input"
-                  style={{ width: '100%', padding: '8px 10px', fontSize: 13, borderRadius: 8 }}
-                >
-                  {objectiveOptions.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
-                  🌱 {t('filterStageAll') || 'Stage'}
-                </label>
-                <select
-                  value={stageFilter}
-                  onChange={e => setStageFilter(e.target.value)}
-                  className="form-input"
-                  style={{ width: '100%', padding: '8px 10px', fontSize: 13, borderRadius: 8 }}
-                >
-                  {stageOptions.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>
-                  🏛️ Category
-                </label>
-                <select
-                  value={categoryFilter}
-                  onChange={e => setCategoryFilter(e.target.value)}
-                  className="form-input"
-                  style={{ width: '100%', padding: '8px 10px', fontSize: 13, borderRadius: 8 }}
-                >
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat === 'Scholarship' ? '🎓 Scholarships' : cat}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
             {/* Active Filters Reset */}
-            {(levelFilter !== 'All' || beneficiaryFilter !== 'All' || objectiveFilter !== 'All' || stageFilter !== 'All' || categoryFilter !== 'All' || searchQuery) && (
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, fontSize: 12, color: 'var(--text-muted)' }}>
+            {(levelFilter !== 'All' || categoryFilter !== 'All' || searchQuery) && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14, fontSize: 12, color: 'var(--text-muted)' }}>
                 <span>Showing <strong>{filteredSchemes.length}</strong> matching schemes</span>
                 <button
                   onClick={() => {
                     setLevelFilter('All')
-                    setBeneficiaryFilter('All')
-                    setObjectiveFilter('All')
-                    setStageFilter('All')
                     setCategoryFilter('All')
                     setSearchQuery('')
                   }}
@@ -1006,6 +943,7 @@ export function SchemesScreen() {
                   <img
                     src={s.img || 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'}
                     alt={getLangText(s.title)}
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'; }}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   <div style={{
@@ -1122,6 +1060,16 @@ export function SchemesScreen() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
             {agriFinancialAssistance.map((fin, i) => (
               <div className="card" key={i} style={{ padding: 22, display: 'flex', flexDirection: 'column', border: '1.5px solid var(--border-light)' }}>
+                {fin.img && (
+                  <div style={{ height: 140, borderRadius: 10, overflow: 'hidden', marginBottom: 14 }}>
+                    <img
+                      src={fin.img}
+                      alt={getLangText(fin.title)}
+                      onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'; }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                )}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                   <span className="badge badge-primary">{fin.category}</span>
                   <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary)' }}>{fin.interestRate}</span>
@@ -1182,6 +1130,16 @@ export function SchemesScreen() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 18 }}>
             {agriAdvisoryAndCenters.map((adv, idx) => (
               <div className="card" key={idx} style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {adv.img && (
+                  <div style={{ height: 140, borderRadius: 10, overflow: 'hidden', marginBottom: 4 }}>
+                    <img
+                      src={adv.img}
+                      alt={getLangText(adv.title)}
+                      onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'; }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ fontSize: 24 }}>🏛️</span>
                   <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>
@@ -1394,6 +1352,16 @@ export function SchemesScreen() {
               ✕
             </button>
 
+            {/* Scheme Image Banner */}
+            <div style={{ height: 180, borderRadius: 12, overflow: 'hidden', marginBottom: 16 }}>
+              <img
+                src={selectedScheme.img || 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'}
+                alt={getLangText(selectedScheme.title)}
+                onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'; }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
+
             {/* Scheme Header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
               <span className="badge badge-primary">{selectedScheme.level || 'Central/State'}</span>
@@ -1541,126 +1509,6 @@ export function SchemesScreen() {
                 </a>
               )}
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* ============================================================ */}
-      {/* STATUS TRACKER MODAL */}
-      {/* ============================================================ */}
-      {trackerModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0,0,0,0.65)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1150,
-            padding: 16,
-            backdropFilter: 'blur(4px)'
-          }}
-        >
-          <div
-            className="card animate-fadeInUp"
-            style={{
-              maxWidth: 520,
-              width: '100%',
-              padding: '24px 28px',
-              position: 'relative',
-              borderRadius: 20
-            }}
-          >
-            <button
-              onClick={() => {
-                setTrackerModalOpen(false)
-                setTrackingResult(null)
-              }}
-              style={{
-                position: 'absolute',
-                top: 16,
-                right: 16,
-                background: 'var(--bg-main)',
-                border: 'none',
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                fontSize: 16,
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                color: 'var(--text-primary)'
-              }}
-            >
-              ✕
-            </button>
-
-            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
-              🔍 Application Status Tracker
-            </h3>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 18 }}>
-              Check live DBT disbursement and verification status across PM-Kisan, Seva Sindhu, and Karnataka FRUITS.
-            </p>
-
-            <form onSubmit={handleTrackSubmit}>
-              <div style={{ marginBottom: 14 }}>
-                <label style={{ fontSize: 12, fontWeight: 700, display: 'block', marginBottom: 6 }}>
-                  Enter Application ID, FRUITS ID or Aadhaar Number:
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. KA-FRUITS-984210 or Aadhaar 12-digit"
-                  value={trackingId}
-                  onChange={e => setTrackingId(e.target.value)}
-                  className="form-input"
-                  required
-                  style={{ width: '100%', padding: '10px 14px', borderRadius: 10 }}
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary"
-                style={{ width: '100%', justifyContent: 'center', padding: 12, fontWeight: 700, borderRadius: 10 }}
-              >
-                Track Live Status →
-              </button>
-            </form>
-
-            {trackingResult && (
-              <div style={{
-                marginTop: 20,
-                padding: 16,
-                borderRadius: 12,
-                background: 'var(--bg-main)',
-                border: '1.5px solid var(--primary)',
-                animation: 'fadeIn 0.3s ease-in'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>ID: {trackingResult.appId}</span>
-                  <span className="badge badge-success" style={{ fontSize: 11 }}>{trackingResult.status}</span>
-                </div>
-                <h4 style={{ margin: '0 0 6px 0', fontSize: 15, fontWeight: 800 }}>{trackingResult.schemeName}</h4>
-                <p style={{ margin: '0 0 4px 0', fontSize: 12 }}><strong>Beneficiary:</strong> {trackingResult.applicant}</p>
-                <p style={{ margin: '0 0 4px 0', fontSize: 12 }}><strong>Current Stage:</strong> {trackingResult.stage}</p>
-                <p style={{ margin: '0 0 4px 0', fontSize: 12 }}><strong>Account:</strong> {trackingResult.bankAccount}</p>
-                <p style={{ margin: '0 0 10px 0', fontSize: 12, color: 'var(--primary)' }}><strong>Next Update:</strong> {trackingResult.disbursementDate}</p>
-
-                <a
-                  href={trackingResult.portalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline btn-sm"
-                  style={{ width: '100%', textDecoration: 'none', justifyContent: 'center', fontSize: 12 }}
-                >
-                  View Official DBT Receipt on FRUITS ↗
-                </a>
-              </div>
-            )}
           </div>
         </div>
       )}
