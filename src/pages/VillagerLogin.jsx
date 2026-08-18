@@ -12,7 +12,6 @@ import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import talukToGps from '../data/talukToGps'
 import villageData from '../data/karnatakVillages'
 import karnatakaUrbanData from '../data/karnatakaUrbanData'
-import { sendOtpEmail } from '../utils/sendOtp'
 
 export default function VillagerLogin() {
   const navigate = useNavigate()
