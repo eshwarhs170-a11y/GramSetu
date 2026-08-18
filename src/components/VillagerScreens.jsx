@@ -110,16 +110,26 @@ const notifyComplaintListeners = () => {
   }
 }
 
+const normalizeDistrict = (d) => {
+  const aliases = {
+    'Chikkaballapura': 'Chikkaballapur', 'Bengaluru': 'Bengaluru Urban',
+    'Davangere': 'Davanagere', 'Dharwar': 'Dharwad', 'Gulbarga': 'Kalaburagi',
+    'Bijapur': 'Vijayapura', 'Bellary': 'Ballari', 'Belgaum': 'Belagavi',
+    'Shimoga': 'Shivamogga', 'Tumkur': 'Tumakuru', 'Dakshin Kannada': 'Dakshina Kannada',
+  }
+  return aliases[d] || d
+}
+
 export function HomeScreen({ setActive }) {
   const { t, lang } = useLanguage()
   const [userName, setUserName] = useState('ರಾಮಪ್ಪ ಗೌಡ')
   const [userDistrict, setUserDistrict] = useState('Mysuru')
   const [userTaluk, setUserTaluk] = useState('Mysuru Taluk')
   const [roleMode, setRoleMode] = useState('farmer')
-  const [livePrices, setLivePrices] = useState(BASELINE_PRICES)
+  const [livePrices, setLivePrices] = useState(districtPricesMap['Mysuru'] || BASELINE_PRICES)
   const [lastUpdated, setLastUpdated] = useState(new Date())
   const [priceFlash, setPriceFlash] = useState({})
-  const [priceSource, setPriceSource] = useState('baseline') // 'live' | 'baseline'
+  const [priceSource, setPriceSource] = useState('district') // 'live' | 'baseline' | 'district'
   const [loadingPrices, setLoadingPrices] = useState(true)
   const [selectedCropInfo, setSelectedCropInfo] = useState(null)
 
@@ -151,17 +161,12 @@ export function HomeScreen({ setActive }) {
 
   // Fetch real AGMARKNET prices on mount, then apply micro-tick every 60s
   const refreshPrices = async (forceApi = false) => {
-    if (forceApi) clearPriceCache()
     setLoadingPrices(true)
-    const live = await fetchLivePrices()
-    if (live && live.length) {
-      setLivePrices(live)
-      setPriceSource('live')
-    } else {
-      setPriceSource('baseline')
-    }
+    const distData = districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || BASELINE_PRICES
+    setLivePrices(distData)
+    setPriceSource('district')
     setLastUpdated(new Date())
-    setLoadingPrices(false)
+    setTimeout(() => setLoadingPrices(false), 400)
   }
 
   useEffect(() => {
@@ -180,7 +185,10 @@ export function HomeScreen({ setActive }) {
     const sDist = window.localStorage.getItem('citizen_district')
     const sTaluk = window.localStorage.getItem('citizen_taluk')
     if (sName) setUserName(sName)
-    if (sDist) setUserDistrict(sDist)
+    if (sDist) {
+      setUserDistrict(sDist)
+      setLivePrices(districtPricesMap[normalizeDistrict(sDist)] || districtPricesMap['Mysuru'])
+    }
     if (sTaluk) setUserTaluk(sTaluk)
   }
 
@@ -196,7 +204,7 @@ export function HomeScreen({ setActive }) {
         <div className="welcome-banner-bg" />
         <div className="welcome-banner-bg2" />
         <div className="welcome-banner-text">
-          <h2 style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <h2 style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             {lang === 'kn' ? `${userName} ಅವರಿಗೆ ಸ್ವಾಗತ!` : `Welcome, ${userName}!`}
             <Sparkles size={20} style={{ color: '#fbbf24', flexShrink: 0 }} />
           </h2>
@@ -443,9 +451,7 @@ export function HomeScreen({ setActive }) {
               <table className="market-table">
                 <thead><tr><th>{t('cropCol')}</th><th>{t('priceCol')}</th><th>{t('changeCol')}</th></tr></thead>
                 <tbody>
-                  {(livePrices.filter(p => p.districts && p.districts.includes(userDistrict)).length > 0
-                    ? livePrices.filter(p => p.districts && p.districts.includes(userDistrict)).slice(0, 5)
-                    : livePrices.slice(0, 5)).map((p, i) => (
+                  {livePrices.slice(0, 5).map((p, i) => (
                     <tr key={i} style={{
                       transition: 'background 0.5s',
                       background: priceFlash[i] === 'up' ? 'rgba(34,197,94,0.12)' : priceFlash[i] === 'down' ? 'rgba(239,68,68,0.1)' : ''
@@ -1720,15 +1726,7 @@ export function MarketScreen() {
   }
 
   // District name aliases (handles spelling variants from login data)
-  const normalizeDistrict = (d) => {
-    const aliases = {
-      'Chikkaballapura': 'Chikkaballapur', 'Bengaluru': 'Bengaluru Urban',
-      'Davangere': 'Davanagere', 'Dharwar': 'Dharwad', 'Gulbarga': 'Kalaburagi',
-      'Bijapur': 'Vijayapura', 'Bellary': 'Ballari', 'Belgaum': 'Belagavi',
-      'Shimoga': 'Shivamogga', 'Tumkur': 'Tumakuru', 'Dakshin Kannada': 'Dakshina Kannada',
-    }
-    return aliases[d] || d
-  }
+  // normalizeDistrict is now at the top of the file
 
   // My District: 10 crops from PDF dataset | All Karnataka: famous state-wide crops
   const sourcePrices = viewMode === 'district'
