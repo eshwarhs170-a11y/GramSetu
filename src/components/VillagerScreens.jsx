@@ -444,7 +444,7 @@ export function HomeScreen({ setActive }) {
                 <thead><tr><th>{t('cropCol')}</th><th>{t('priceCol')}</th><th>{t('changeCol')}</th></tr></thead>
                 <tbody>
                   {(livePrices.filter(p => p.districts && p.districts.includes(userDistrict)).length > 0
-                    ? livePrices.filter(p => p.districts && p.districts.includes(userDistrict))
+                    ? livePrices.filter(p => p.districts && p.districts.includes(userDistrict)).slice(0, 5)
                     : livePrices.slice(0, 5)).map((p, i) => (
                     <tr key={i} style={{
                       transition: 'background 0.5s',
@@ -455,7 +455,7 @@ export function HomeScreen({ setActive }) {
                           <img src={p.img} alt={p.crop} style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'cover' }} onError={e => { e.target.style.display='none' }} />
                           <div>
                             <div style={{ fontWeight: 600, fontSize: 13 }}>{p.crop}</div>
-                            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{p.market}</div>
+                            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{userDistrict} APMC</div>
                           </div>
                         </div>
                       </td>
@@ -527,7 +527,7 @@ export function HomeScreen({ setActive }) {
               </div>
             </div>
             <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0, textAlign: 'justify' }}>
-              {selectedCropInfo.description}
+              {typeof selectedCropInfo.description === 'string' ? selectedCropInfo.description : (selectedCropInfo.description[lang] || selectedCropInfo.description.en)}
             </p>
           </div>
         </div>

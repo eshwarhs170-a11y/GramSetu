@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 import { ArrowLeft, MapPin } from 'lucide-react'
 import { districtData } from '../data/districtsData'
 import districtImages from '../data/districtImages.json'
@@ -99,6 +100,7 @@ const getTopicImage = (icon) => {
 export default function DistrictPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { lang } = useLanguage()
   const [selectedCropInfo, setSelectedCropInfo] = useState(null)
   
   const district = districtData[id]
@@ -302,7 +304,7 @@ export default function DistrictPage() {
               </div>
             </div>
             <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, margin: 0, textAlign: 'justify' }}>
-              {selectedCropInfo.description}
+              {typeof selectedCropInfo.description === 'string' ? selectedCropInfo.description : (selectedCropInfo.description[lang] || selectedCropInfo.description.en)}
             </p>
           </div>
         </div>
