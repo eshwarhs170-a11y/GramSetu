@@ -1305,11 +1305,31 @@ input, textarea, select { font-family: inherit; outline: none; }
   /* ── Stats Row on Home Screen ── */
   .stats-grid {
     grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
   }
+  .stat-card {
+    padding: 14px !important;
+    gap: 12px !important;
+  }
+  .stat-icon {
+    width: 44px !important;
+    height: 44px !important;
+  }
+  .stat-card:last-child:nth-child(odd) {
+    grid-column: span 2 !important;
+  }
+  .stat-info p:first-child { font-size: 12px !important; line-height: 1.2 !important; margin-bottom: 4px !important; }
+  .stat-info p:last-of-type { font-size: 20px !important; }
+  .stat-info span { font-size: 11px !important; display: block; margin-top: 4px; }
 
   /* ── Schemes Grid ── */
   .schemes-grid {
     grid-template-columns: 1fr !important;
+  }
+
+  /* ── Extra padding for mobile scrolling ── */
+  .main-content, .page-content {
+    padding-bottom: 80px !important;
   }
 
   /* ── Landing Page Nav (mobile) ── */
