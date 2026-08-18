@@ -3429,6 +3429,19 @@
       "unit": "per quintal",
       "date": "28 Jul 2026",
       "status": "ESTIMATED"
+    },
+    {
+      "crop": "Arecanut",
+      "market": "Tumakuru APMC",
+      "min": "₹28,500",
+      "max": "₹34,200",
+      "price": "₹32,000",
+      "trend": "up",
+      "change": "+₹150",
+      "img": "/crops/Arecanut.jpg",
+      "unit": "per quintal",
+      "date": "28 Jul 2026",
+      "status": "ESTIMATED"
     }
   ],
   "Udupi": [
