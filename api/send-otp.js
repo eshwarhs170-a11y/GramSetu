@@ -29,55 +29,19 @@ export default async function handler(req, res) {
   });
 
   const htmlBody = `
-    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb;">
-      <!-- Header -->
-      <div style="background: linear-gradient(135deg, #15803d 0%, #166534 100%); padding: 28px 32px; text-align: center;">
-        <h1 style="color: #ffffff; font-size: 22px; margin: 0; font-weight: 700; letter-spacing: 0.5px;">
-          🌾 GramSetu — ಗ್ರಾಮ ಸೇತು
-        </h1>
-        <p style="color: rgba(255,255,255,0.8); font-size: 13px; margin: 6px 0 0 0;">
-          Karnataka Citizen Services Portal
-        </p>
+    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+      <h2 style="color: #166534; margin-bottom: 20px;">GramSetu Login</h2>
+      <p style="color: #333; font-size: 16px;">Namaskara,</p>
+      <p style="color: #555; font-size: 15px;">Your one-time password (OTP) for GramSetu is:</p>
+      
+      <div style="margin: 30px 0; padding: 15px; background-color: #f0fdf4; border-radius: 6px; text-align: center;">
+        <span style="font-size: 32px; font-weight: bold; color: #15803d; letter-spacing: 5px;">${otp}</span>
       </div>
-
-      <!-- Body -->
-      <div style="padding: 32px;">
-        <p style="color: #374151; font-size: 15px; margin: 0 0 8px 0;">
-          Namaskara / ನಮಸ್ಕಾರ,
-        </p>
-        <p style="color: #6b7280; font-size: 14px; margin: 0 0 24px 0; line-height: 1.5;">
-          Your one-time verification code for GramSetu login is:
-        </p>
-
-        <!-- OTP Box -->
-        <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 10px; padding: 20px; text-align: center; margin: 0 0 24px 0;">
-          <div style="display: inline-block; background: #fff; border: 1px dashed #4ade80; padding: 10px 20px; border-radius: 8px; margin-bottom: 12px;">
-            <span style="font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #15803d; font-family: 'Courier New', monospace; user-select: all;">${otp}</span>
-          </div>
-          <div>
-            <span style="display: inline-block; background: #16a34a; color: #fff; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
-              👆 Double-click code to copy
-            </span>
-          </div>
-          <p style="font-size: 12px; color: #6b7280; margin: 12px 0 0 0;">
-            Valid until <strong>${expiryTime}</strong> IST (10 minutes)
-          </p>
-        </div>
-
-        <p style="color: #6b7280; font-size: 13px; line-height: 1.5; margin: 0 0 6px 0;">
-          🔒 For your security, <strong>do not share this code</strong> with anyone. GramSetu staff will never ask for your OTP.
-        </p>
-        <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-          If you did not request this code, please ignore this email.
-        </p>
-      </div>
-
-      <!-- Footer -->
-      <div style="background: #f9fafb; padding: 16px 32px; border-top: 1px solid #e5e7eb; text-align: center;">
-        <p style="color: #9ca3af; font-size: 11px; margin: 0;">
-          GramSetu — Bridging Rural Karnataka 🌿 | gramsetu.vercel.app
-        </p>
-      </div>
+      
+      <p style="color: #666; font-size: 14px;">This code is valid until ${expiryTime}.</p>
+      <p style="color: #888; font-size: 12px; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
+        For your security, do not share this code. If you did not request this OTP, please ignore this email.
+      </p>
     </div>
   `;
 
