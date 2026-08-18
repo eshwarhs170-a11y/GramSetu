@@ -734,7 +734,8 @@ export const schemesSuccessStories = [
       kn: 'ಕೃಷಿ ಹೊಂಡ ನಿರ್ಮಿಸಿದ್ದರಿಂದ ಮಳೆ ಕೈಕೊಟ್ಟಾಗಲೂ ನವಣೆ ಬೆಳೆಯನ್ನು ಉಳಿಸಿಕೊಳ್ಳಲು ಸಾಧ್ಯವಾಯಿತು. ಎಪಿಎಂಸಿಯಲ್ಲಿ ಉತ್ತಮ ಧಾರಣೆ ಜತೆಗೆ ಸರ್ಕಾರದ ಪ್ರೋತ್ಸಾಹಧನವೂ ಖಾತೆಗೆ ಜಮೆಯಾಯಿತು.',
       hi: 'कृषि होंडा (खेत तालाब) ने सूखे के समय फसल को बचाया। नवणे बाजरे की खेती से अच्छा मुनाफा और ₹10,000/हेक्टेयर की सब्सिडी मिली।'
     },
-    image: 'https://images.unsplash.com/photo-1544027429-de982703fb7a?w=400&q=80',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
+    bannerImage: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&q=80',
     stat: '₹1.4L Net Income'
   },
   {

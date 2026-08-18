@@ -1187,11 +1187,22 @@ export function SchemesScreen() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
             {schemesSuccessStories.map(story => (
               <div className="card" key={story.id} style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {story.bannerImage && (
+                  <div style={{ height: 130, borderRadius: 10, overflow: 'hidden', marginBottom: 2 }}>
+                    <img
+                      src={story.bannerImage}
+                      alt={story.name}
+                      onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'; }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                )}
                 <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
                   <img
                     src={story.image}
                     alt={story.name}
-                    style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)' }}
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80'; }}
+                    style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)', flexShrink: 0 }}
                   />
                   <div>
                     <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>{story.name}</h4>
