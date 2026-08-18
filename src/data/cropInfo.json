@@ -1,222 +1,398 @@
 {
   "Maize": {
     "name": "Maize",
-    "description": "Maize, also known as corn, is a tall stout grass that produces cereal grain. The leafy stalk of the plant gives rise to male inflorescences or tassels which produce pollen, and female inflorescences called ears. The ears yield grain, known as kernels or seeds. In modern commercial varieties, these are usually yellow or white; other varieties can be of many colors. Maize was domesticated by indigenous peoples in southern Mexico about 9,000 years ago from wild teosinte. Native Americans planted it alongside beans and squashes in the Three Sisters polyculture. That is, those three vegetables were the main staple crops of the time.",
+    "description": {
+      "en": "Maize (Corn) is a major staple cereal crop. It is used for human consumption (roti, sweet corn), animal feed, and industrial products like ethanol and starch. It grows well in well-drained soils and requires moderate rainfall.",
+      "kn": "ಮೆಕ್ಕೆಜೋಳವು ಪ್ರಮುಖ ಏಕದಳ ಬೆಳೆಯಾಗಿದೆ. ಇದನ್ನು ಮಾನವ ಆಹಾರವಾಗಿ (ರೊಟ್ಟಿ, ಸ್ವೀಟ್ ಕಾರ್ನ್), ಜಾನುವಾರು ಮೇವು ಮತ್ತು ಕೈಗಾರಿಕಾ ಉತ್ಪನ್ನಗಳಾದ ಎಥೆನಾಲ್ ಮತ್ತು ಪಿಷ್ಟಕ್ಕಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ. ಇದು ಉತ್ತಮವಾಗಿ ನೀರು ಬಸಿದು ಹೋಗುವ ಮಣ್ಣಿನಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ.",
+      "hi": "मक्का एक प्रमुख अनाज फसल है। इसका उपयोग मानव उपभोग (रोटी, स्वीट कॉर्न), पशु चारा और इथेनॉल और स्टार्च जैसे औद्योगिक उत्पादों के लिए किया जाता है। यह अच्छी जल निकासी वाली मिट्टी में अच्छी तरह से बढ़ता है।"
+    },
     "image": "/crops/Maize.jpg"
   },
   "Bengal gram": {
     "name": "Bengal gram",
-    "description": "The chickpea or chick pea is an annual legume of the family Fabaceae, subfamily Faboideae, cultivated for its edible seeds. Its different types are variously known as gram, Bengal gram, chana (চানা), garbanzo, garbanzo bean, or Egyptian pea. It is one of the earliest cultivated legumes, the oldest archaeological evidence of which was found in Syria.",
+    "description": {
+      "en": "Bengal gram (Chickpea) is a highly nutritious pulse crop rich in protein. It is widely used in cooking (dal, besan). It improves soil fertility by fixing atmospheric nitrogen and is mostly grown as a rabi crop.",
+      "kn": "ಕಡಲೆ (ಬೆಂಗಾಲ್ ಗ್ರಾಂ) ಪ್ರೋಟೀನ್ ಸಮೃದ್ಧವಾಗಿರುವ ಹೆಚ್ಚು ಪೌಷ್ಟಿಕಾಂಶದ ದ್ವಿದಳ ಧಾನ್ಯವಾಗಿದೆ. ಇದನ್ನು ಅಡುಗೆಯಲ್ಲಿ (ಬೇಳೆ, ಕಡಲೆ ಹಿಟ್ಟು) ವ್ಯಾಪಕವಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ. ಇದು ವಾತಾವರಣದ ಸಾರಜನಕವನ್ನು ಹೀರಿಕೊಳ್ಳುವ ಮೂಲಕ ಮಣ್ಣಿನ ಫಲವತ್ತತೆಯನ್ನು ಸುಧಾರಿಸುತ್ತದೆ.",
+      "hi": "चना एक अत्यधिक पौष्टिक दलहन फसल है जो प्रोटीन से भरपूर होती है। इसका उपयोग खाना पकाने (दाल, बेसन) में व्यापक रूप से किया जाता है। यह वायुमंडलीय नाइट्रोजन को ठीक करके मिट्टी की उर्वरता में सुधार करता है।"
+    },
     "image": "/crops/Bengal_gram.jpg"
   },
   "Groundnut": {
     "name": "Groundnut",
-    "description": "Groundnut may refer to:Seeds that ripen underground, of the following plants, all in the Faboideae subfamily of the legumes:\nArachis hypogaea, the peanut\nArachis villosulicarpa, a perennial peanut species\nVigna subterranea, the Bambara groundnut\nMacrotyloma geocarpum, the Hausa groundnut\nRoots and tubers:\nApios americana, the American groundnut or potato-bean\nConopodium majus, called the kippernut among many other names\nPanax trifolius, or dwarf ginseng",
+    "description": {
+      "en": "Groundnut (Peanut) is a major oilseed crop. It is used for extracting cooking oil, making peanut butter, and as direct food. The leftover cake is an excellent protein-rich animal feed. It thrives in sandy loam soils.",
+      "kn": "ಕಡಲೆಕಾಯಿ ಪ್ರಮುಖ ಎಣ್ಣೆಕಾಳು ಬೆಳೆಯಾಗಿದೆ. ಇದನ್ನು ಅಡುಗೆ ಎಣ್ಣೆ ತೆಗೆಯಲು ಮತ್ತು ನೇರ ಆಹಾರವಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ. ಉಳಿದ ಹಿಂಡಿ ಪ್ರೋಟೀನ್-ಭರಿತ ಜಾನುವಾರು ಮೇವಾಗಿದೆ. ಇದು ಮರಳು ಮಿಶ್ರಿತ ಮಣ್ಣಿನಲ್ಲಿ ಚೆನ್ನಾಗಿ ಬೆಳೆಯುತ್ತದೆ.",
+      "hi": "मूंगफली एक प्रमुख तिलहन फसल है। इसका उपयोग खाना पकाने का तेल निकालने और सीधे भोजन के रूप में किया जाता है। बचा हुआ केक एक उत्कृष्ट प्रोटीन युक्त पशु चारा है। यह बलुई दोमट मिट्टी में पनपता है।"
+    },
     "image": "/crops/Groundnut.jpg"
   },
   "Sunflower": {
     "name": "Sunflower",
-    "description": "The common sunflower is a large annual forb in the daisy family Asteraceae. The domesticated form of common sunflower is harvested for its edible seeds, which come in two types: oil and confectionary seeds. Oilseed sunflowers are widely grown globally and represent the fourth most used vegetable oil in the world. They also are used widely as bird food or as food for livestock. In contrast, confectionary sunflower seeds are often eaten as a snack food or in baking. There also are horticultural sunflower varieties that are used as plantings in domestic gardens for aesthetics. Wild plants are known for their multiple flower heads, whereas the domestic sunflower often possesses a single large flower head atop an unbranched stem.",
+    "description": {
+      "en": "Sunflower is a prominent oilseed crop known for its high-quality cooking oil. The seeds are also consumed as healthy snacks. It is a highly adaptable crop that can be grown throughout the year in suitable climates.",
+      "kn": "ಸೂರ್ಯಕಾಂತಿ ಉತ್ತಮ ಗುಣಮಟ್ಟದ ಅಡುಗೆ ಎಣ್ಣೆಗೆ ಹೆಸರುವಾಸಿಯಾದ ಪ್ರಮುಖ ಎಣ್ಣೆಕಾಳು ಬೆಳೆಯಾಗಿದೆ. ಬೀಜಗಳನ್ನು ಆರೋಗ್ಯಕರ ತಿಂಡಿಯಾಗಿಯೂ ಬಳಸಲಾಗುತ್ತದೆ. ಇದು ಸೂಕ್ತ ಹವಾಮಾನದಲ್ಲಿ ವರ್ಷಪೂರ್ತಿ ಬೆಳೆಯಬಹುದಾದ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "सूरजमुखी एक प्रमुख तिलहन फसल है जो अपने उच्च गुणवत्ता वाले खाना पकाने के तेल के लिए जानी जाती है। इसके बीजों को स्वस्थ स्नैक्स के रूप में भी खाया जाता है। यह एक अत्यधिक अनुकूलनीय फसल है।"
+    },
     "image": "/crops/Sunflower.jpg"
   },
   "Jowar": {
     "name": "Jowar",
-    "description": "Sorghum bicolor, commonly called sorghum and also known as broomcorn, great millet, Indian millet, Guinea corn, jowar, or milo, is a species in the grass genus Sorghum. It is typically an annual, but some cultivars are perennial. It grows in clumps that may reach over 4 metres (13 ft) high. The grain is 2 to 4 millimetres in diameter.",
+    "description": {
+      "en": "Jowar (Sorghum) is a staple millet crop in dry regions. It is gluten-free and rich in fiber, making it excellent for human health (jowar roti). It also serves as an important fodder crop for livestock.",
+      "kn": "ಜೋಳವು ಒಣ ಪ್ರದೇಶಗಳಲ್ಲಿ ಬೆಳೆಯುವ ಪ್ರಮುಖ ಸಿರಿಧಾನ್ಯವಾಗಿದೆ. ಇದು ಗ್ಲುಟನ್ ಮುಕ್ತ ಮತ್ತು ನಾರಿನಂಶದಿಂದ ಸಮೃದ್ಧವಾಗಿದೆ (ಜೋಳದ ರೊಟ್ಟಿ). ಇದು ಜಾನುವಾರುಗಳಿಗೆ ಪ್ರಮುಖ ಮೇವಿನ ಬೆಳೆಯಾಗಿಯೂ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ.",
+      "hi": "ज्वार शुष्क क्षेत्रों में एक प्रमुख बाजरा फसल है। यह ग्लूटेन मुक्त और फाइबर से भरपूर है (ज्वार की रोटी)। यह पशुओं के लिए एक महत्वपूर्ण चारा फसल के रूप में भी कार्य करता है।"
+    },
     "image": "/crops/Jowar.jpg"
   },
   "Bajra": {
     "name": "Bajra",
-    "description": "Pearl millet is the most widely grown type of millet. It has been grown in Africa and the Indian subcontinent since prehistoric times. The center of diversity and suggested area of domestication for the crop is in the Sahel zone of West Africa.",
+    "description": {
+      "en": "Bajra (Pearl Millet) is a hardy crop highly resistant to drought. It is extremely nutritious, high in iron and fiber, and is a staple diet in arid regions. It is also used as poultry and cattle feed.",
+      "kn": "ಸಜ್ಜೆ (ಬಾಜ್ರಾ) ಬರಗಾಲವನ್ನು ತಡೆದುಕೊಳ್ಳುವ ಕಠಿಣ ಬೆಳೆಯಾಗಿದೆ. ಇದು ಹೆಚ್ಚು ಪೌಷ್ಟಿಕವಾಗಿದೆ, ಕಬ್ಬಿಣ ಮತ್ತು ನಾರಿನಂಶದಿಂದ ಸಮೃದ್ಧವಾಗಿದೆ. ಇದನ್ನು ಕೋಳಿ ಮತ್ತು ಜಾನುವಾರುಗಳ ಮೇವಿಗಾಗಿಯೂ ಬಳಸಲಾಗುತ್ತದೆ.",
+      "hi": "बाजरा सूखे के प्रति अत्यधिक प्रतिरोधी एक कठोर फसल है। यह बेहद पौष्टिक है, इसमें आयरन और फाइबर उच्च मात्रा में होता है। इसका उपयोग मुर्गी और मवेशियों के चारे के रूप में भी किया जाता है।"
+    },
     "image": "/crops/Bajra.jpg"
   },
   "Wheat": {
     "name": "Wheat",
-    "description": "Wheat is a group of wild and domesticated grasses of the genus Triticum. As cereals, they are cultivated for their grains, which are staple foods around the world. Well-known wheat species and hybrids include the most widely grown common wheat, spelt, durum, emmer, einkorn, and Khorasan or Kamut. The archaeological record suggests that wheat was first cultivated in the regions of the Fertile Crescent around 9600 BC.",
+    "description": {
+      "en": "Wheat is one of the world's most important cereal crops. It is the primary ingredient for bread, chapati, and pasta. It is typically grown as a rabi (winter) crop and requires cool weather for growth.",
+      "kn": "ಗೋಧಿ ಪ್ರಪಂಚದ ಪ್ರಮುಖ ಏಕದಳ ಬೆಳೆಗಳಲ್ಲಿ ಒಂದಾಗಿದೆ. ಇದು ಚಪಾತಿ, ಬ್ರೆಡ್ ತಯಾರಿಸಲು ಮುಖ್ಯ ಪದಾರ್ಥವಾಗಿದೆ. ಇದನ್ನು ಸಾಮಾನ್ಯವಾಗಿ ಹಿಂಗಾರು (ಚಳಿಗಾಲ) ಬೆಳೆಯಾಗಿ ಬೆಳೆಯಲಾಗುತ್ತದೆ ಮತ್ತು ಬೆಳವಣಿಗೆಗೆ ತಂಪಾದ ಹವಾಮಾನದ ಅಗತ್ಯವಿದೆ.",
+      "hi": "गेहूं दुनिया की सबसे महत्वपूर्ण अनाज फसलों में से एक है। यह रोटी और ब्रेड के लिए प्राथमिक सामग्री है। इसे आमतौर पर रबी (सर्दियों) की फसल के रूप में उगाया जाता है।"
+    },
     "image": "/crops/Wheat.jpg"
   },
   "Tur": {
     "name": "Tur",
-    "description": "The pigeon pea is a perennial legume from the family Fabaceae native to the Eastern Hemisphere. The pigeon pea is widely cultivated in tropical and semitropical regions around the world, being commonly consumed in the Indian Subcontinent, Southeast Asia, Africa, Latin America and the Caribbean.",
+    "description": {
+      "en": "Tur (Pigeon Pea / Togari) is a major pulse crop in India, used primarily to make dal. It is rich in protein and essential amino acids. The crop also improves soil structure and fertility due to its deep root system.",
+      "kn": "ತೊಗರಿ ಭಾರತದ ಪ್ರಮುಖ ದ್ವಿದಳ ಧಾನ್ಯವಾಗಿದೆ, ಇದನ್ನು ಮುಖ್ಯವಾಗಿ ಬೇಳೆ ಮಾಡಲು ಬಳಸಲಾಗುತ್ತದೆ. ಇದು ಪ್ರೋಟೀನ್‌ನಿಂದ ಸಮೃದ್ಧವಾಗಿದೆ. ಈ ಬೆಳೆಯು ಆಳವಾದ ಬೇರಿನ ವ್ಯವಸ್ಥೆಯಿಂದಾಗಿ ಮಣ್ಣಿನ ಫಲವತ್ತತೆಯನ್ನು ಸುಧಾರಿಸುತ್ತದೆ.",
+      "hi": "अरहर (तूर) भारत में एक प्रमुख दलहन फसल है, जिसका उपयोग मुख्य रूप से दाल बनाने के लिए किया जाता है। यह प्रोटीन से भरपूर है। यह फसल मिट्टी की संरचना और उर्वरता में भी सुधार करती है।"
+    },
     "image": "/crops/Tur.jpg"
   },
   "Chilli": {
     "name": "Chilli",
-    "description": "Chili peppers, also spelled chile or chilli, are varieties of berry-fruit plants from the genus Capsicum, which are members of the nightshade family Solanaceae, cultivated for their pungency. They are used as a spice to add pungency in many cuisines. Capsaicin and the related capsaicinoids give chili peppers their intensity when ingested or applied topically. Chili peppers exhibit a range of heat and flavors. This diversity is the reason behind the availability of different types of chili powder, each offering its own taste and heat level.",
+    "description": {
+      "en": "Chilli is an essential spice crop globally known for its pungency and color. It is used fresh or dried in various cuisines. It is a cash crop that requires warm, humid climate and well-drained soil.",
+      "kn": "ಮೆಣಸಿನಕಾಯಿ ಜಾಗತಿಕವಾಗಿ ಖಾರ ಮತ್ತು ಬಣ್ಣಕ್ಕೆ ಹೆಸರುವಾಸಿಯಾದ ಪ್ರಮುಖ ಮಸಾಲೆ ಬೆಳೆಯಾಗಿದೆ. ಇದನ್ನು ವಿವಿಧ ಅಡುಗೆಗಳಲ್ಲಿ ಬಳಸಲಾಗುತ್ತದೆ. ಇದು ಬೆಚ್ಚಗಿನ, ಆರ್ದ್ರ ವಾತಾವರಣದ ಅಗತ್ಯವಿರುವ ವಾಣಿಜ್ಯ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "मिर्च एक आवश्यक मसाला फसल है जो अपने तीखेपन और रंग के लिए विश्व स्तर पर जानी जाती है। इसका उपयोग विभिन्न व्यंजनों में ताजा या सूखा किया जाता है। यह एक नकदी फसल है।"
+    },
     "image": "/crops/Chilli.jpg"
   },
   "Cotton": {
     "name": "Cotton",
-    "description": "Cotton is a soft, fluffy staple fiber that grows in a boll, or protective case, around the seeds of the cotton plants of the genus Gossypium in the mallow family Malvaceae. The fiber is almost pure cellulose and may contain minor percentages of waxes, fats, pectins, and water. Under natural conditions, cotton bolls facilitate the dispersal of the seeds.",
+    "description": {
+      "en": "Cotton is the most important fiber crop used extensively in the textile industry. Its seeds are crushed to extract edible cotton seed oil, and the byproduct is used as animal feed. It grows well in black cotton soils.",
+      "kn": "ಹತ್ತಿ ಜವಳಿ ಉದ್ಯಮದಲ್ಲಿ ವ್ಯಾಪಕವಾಗಿ ಬಳಸಲಾಗುವ ಪ್ರಮುಖ ನಾರಿನ ಬೆಳೆಯಾಗಿದೆ. ಇದರ ಬೀಜಗಳನ್ನು ಎಣ್ಣೆ ತೆಗೆಯಲು ಬಳಸಲಾಗುತ್ತದೆ ಮತ್ತು ಉಪಉತ್ಪನ್ನವನ್ನು ಜಾನುವಾರು ಮೇವಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ. ಇದು ಕಪ್ಪು ಮಣ್ಣಿನಲ್ಲಿ ಚೆನ್ನಾಗಿ ಬೆಳೆಯುತ್ತದೆ.",
+      "hi": "कपास कपड़ा उद्योग में व्यापक रूप से उपयोग की जाने वाली सबसे महत्वपूर्ण फाइबर फसल है। इसके बीजों को खाद्य तेल निकालने के लिए कुचला जाता है, और उपोत्पाद का उपयोग पशु चारे के रूप में किया जाता है।"
+    },
     "image": "/crops/Cotton.jpg"
   },
   "Paddy": {
     "name": "Paddy",
-    "description": "Rice is a cereal grain and, in its domesticated form, is the staple food of over half of the world's population, particularly in Africa and Asia. Rice is the seed of the grass species Oryza sativa —or, less commonly, Oryza glaberrima. Asian rice was domesticated in China some 13,500 to 8,200 years ago; African rice was domesticated independently in West Africa about 3,000 years ago. Rice has become commonplace in many cultures worldwide; in 2023, 800 million tons were produced, placing it third after sugarcane and maize. Only some 8% of rice is traded internationally. China, India, and Indonesia are the largest consumers of rice. A substantial amount of the rice produced in developing nations is lost after harvest through factors such as poor transport and storage. Rice yields can be reduced by pests including insects, rodents, and birds, as well as by weeds, and by diseases such as rice blast. Traditional rice polycultures such as rice-duck farming, and modern integrated pest management seek to control damage from pests in a sustainable way.",
+    "description": {
+      "en": "Paddy (Rice) is the staple food for more than half the world's population. It is grown in waterlogged fields. Besides grain, the straw is an essential livestock fodder and is used for thatching and paper making.",
+      "kn": "ಭತ್ತವು (ಅಕ್ಕಿ) ಪ್ರಪಂಚದ ಅರ್ಧದಷ್ಟು ಜನಸಂಖ್ಯೆಯ ಪ್ರಮುಖ ಆಹಾರವಾಗಿದೆ. ಇದನ್ನು ನೀರಿನಿಂದ ಆವೃತವಾದ ಗದ್ದೆಗಳಲ್ಲಿ ಬೆಳೆಯಲಾಗುತ್ತದೆ. ಕಾಳಿನ ಜೊತೆಗೆ, ಹುಲ್ಲು ಜಾನುವಾರುಗಳ ಮೇವಾಗಿ ಮತ್ತು ಕಾಗದ ತಯಾರಿಕೆಯಲ್ಲಿ ಬಳಕೆಯಾಗುತ್ತದೆ.",
+      "hi": "धान (चावल) दुनिया की आधी से अधिक आबादी का मुख्य भोजन है। यह जलमग्न खेतों में उगाया जाता है। अनाज के अलावा, पुआल एक आवश्यक पशु चारा है।"
+    },
     "image": "/crops/Paddy.jpg"
   },
   "Sugarcane": {
     "name": "Sugarcane",
-    "description": "Sugarcane or sugar cane is a species of tall, perennial grass that is used for sugar production. The plants are 2–7 m tall with stout, jointed, fibrous stalks that are rich in sucrose, which accumulates in the stalk internodes. Sugarcanes belong to the grass family, Poaceae, an economically important flowering plant family that includes maize, wheat, rice, and sorghum, and many forage crops. It is native to New Guinea.",
+    "description": {
+      "en": "Sugarcane is a major cash crop cultivated primarily for sugar and jaggery production. Its by-products like molasses and bagasse are used for ethanol production and generating bio-electricity.",
+      "kn": "ಕಬ್ಬು ಮುಖ್ಯವಾಗಿ ಸಕ್ಕರೆ ಮತ್ತು ಬೆಲ್ಲ ಉತ್ಪಾದನೆಗಾಗಿ ಬೆಳೆಯಲಾಗುವ ಪ್ರಮುಖ ವಾಣಿಜ್ಯ ಬೆಳೆಯಾಗಿದೆ. ಕಾಕಂಬಿ ಮತ್ತು ಸಿಪ್ಪೆಯಂತಹ ಉಪ-ಉತ್ಪನ್ನಗಳನ್ನು ಎಥೆನಾಲ್ ಉತ್ಪಾದನೆಗೆ ಬಳಸಲಾಗುತ್ತದೆ.",
+      "hi": "गन्ना मुख्य रूप से चीनी और गुड़ उत्पादन के लिए खेती की जाने वाली एक प्रमुख नकदी फसल है। इसके उप-उत्पादों जैसे गुड़ और खोई का उपयोग इथेनॉल उत्पादन के लिए किया जाता है।"
+    },
     "image": "/crops/Sugarcane.jpg"
   },
   "Soybean": {
     "name": "Soybean",
-    "description": "The soybean, soy bean, or soya bean is a species of legume native to East Asia, widely grown for its edible bean. Soy is a staple crop, the world's most grown legume, and an important animal feed.",
+    "description": {
+      "en": "Soybean is a miracle crop containing both high protein and oil. It is used to produce cooking oil, soy milk, tofu, and animal feed. It is a leguminous crop that enhances soil nitrogen levels.",
+      "kn": "ಸೋಯಾಬೀನ್ ಹೆಚ್ಚಿನ ಪ್ರೋಟೀನ್ ಮತ್ತು ಎಣ್ಣೆಯನ್ನು ಹೊಂದಿರುವ ಪವಾಡ ಬೆಳೆಯಾಗಿದೆ. ಇದನ್ನು ಅಡುಗೆ ಎಣ್ಣೆ, ಸೋಯಾ ಹಾಲು ತಯಾರಿಸಲು ಬಳಸಲಾಗುತ್ತದೆ. ಇದು ಮಣ್ಣಿನ ಸಾರಜನಕ ಮಟ್ಟವನ್ನು ಹೆಚ್ಚಿಸುತ್ತದೆ.",
+      "hi": "सोयाबीन एक चमत्कारिक फसल है जिसमें उच्च प्रोटीन और तेल दोनों होते हैं। इसका उपयोग खाना पकाने का तेल, सोया दूध, टोफू और पशु चारा बनाने के लिए किया जाता है।"
+    },
     "image": "/crops/Soybean.jpg"
   },
   "Ragi": {
     "name": "Ragi",
-    "description": "Finger millet is an annual herbaceous plant. It is a tetraploid and self-pollinating species probably evolved from its wild relative Eleusine africana.",
+    "description": {
+      "en": "Ragi (Finger Millet) is an exceptionally healthy crop, highly rich in calcium, iron, and fiber. It is widely consumed in Karnataka as Ragi Mudde. It is highly drought-resistant and requires minimal chemical inputs.",
+      "kn": "ರಾಗಿ ಅತ್ಯಂತ ಆರೋಗ್ಯಕರ ಬೆಳೆಯಾಗಿದ್ದು, ಕ್ಯಾಲ್ಸಿಯಂ, ಕಬ್ಬಿಣ ಮತ್ತು ನಾರಿನಂಶದಿಂದ ಸಮೃದ್ಧವಾಗಿದೆ. ಕರ್ನಾಟಕದಲ್ಲಿ ಇದನ್ನು ರಾಗಿ ಮುದ್ದೆಯಾಗಿ ವ್ಯಾಪಕವಾಗಿ ಸೇವಿಸಲಾಗುತ್ತದೆ. ಇದು ಬರ-ನಿರೋಧಕ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "रागी (फिंगर बाजरा) एक असाधारण रूप से स्वस्थ फसल है, जो कैल्शियम, आयरन और फाइबर से भरपूर है। कर्नाटक में इसका व्यापक रूप से रागी मुड्डे के रूप में सेवन किया जाता है।"
+    },
     "image": "/crops/Ragi.jpg"
   },
   "Tomato": {
     "name": "Tomato",
-    "description": "The tomato is a plant whose fruit is an edible berry that is eaten as a vegetable. The tomato is a member of the nightshade family that includes tobacco, potato, and chili peppers. It originated from western South America, and may have been domesticated there, in Mexico, or in Central America. The Spanish introduced tomatoes to Eurasia in the Columbian exchange in the 16th century.",
+    "description": {
+      "en": "Tomato is a globally popular vegetable crop, consumed fresh in salads or processed into ketchups, sauces, and purees. It is rich in Vitamin C and Lycopene, a powerful antioxidant.",
+      "kn": "ಟೊಮೇಟೊ ಜಾಗತಿಕವಾಗಿ ಜನಪ್ರಿಯವಾದ ತರಕಾರಿ ಬೆಳೆಯಾಗಿದೆ, ಇದನ್ನು ತಾಜಾವಾಗಿ ಅಥವಾ ಸಾಸ್, ಪ್ಯೂರಿಗಳಾಗಿ ಸಂಸ್ಕರಿಸಿ ಬಳಸಲಾಗುತ್ತದೆ. ಇದು ವಿಟಮಿನ್ ಸಿ ಮತ್ತು ಲೈಕೋಪೀನ್ ಎಂಬ ಉತ್ಕರ್ಷಣ ನಿರೋಧಕದಿಂದ ಸಮೃದ್ಧವಾಗಿದೆ.",
+      "hi": "टमाटर विश्व स्तर पर एक लोकप्रिय सब्जी फसल है, जिसे सलाद में ताजा खाया जाता है या केचप और सॉस में संसाधित किया जाता है। यह विटामिन सी और लाइकोपीन से भरपूर है।"
+    },
     "image": "/crops/Tomato.jpg"
   },
   "Potato": {
     "name": "Potato",
-    "description": "The potato is a starchy tuberous vegetable native to the Americas that is consumed as a staple food in many parts of the world. Potatoes are underground stem tubers of the plant Solanum tuberosum, a perennial in the nightshade family Solanaceae.",
+    "description": {
+      "en": "Potato is a vital tuber crop and a universal dietary staple. It is energy-rich, easy to grow, and used in an endless variety of dishes. It requires cool climates and loose, friable soil.",
+      "kn": "ಆಲೂಗಡ್ಡೆ ಪ್ರಮುಖ ಗೆಡ್ಡೆ ಬೆಳೆ ಮತ್ತು ಸಾರ್ವತ್ರಿಕ ಆಹಾರವಾಗಿದೆ. ಇದು ಶಕ್ತಿಯುತವಾಗಿದೆ, ಬೆಳೆಯಲು ಸುಲಭ ಮತ್ತು ವಿವಿಧ ಖಾದ್ಯಗಳಲ್ಲಿ ಬಳಸಲಾಗುತ್ತದೆ. ಇದಕ್ಕೆ ತಂಪಾದ ಹವಾಮಾನ ಮತ್ತು ಸಡಿಲವಾದ ಮಣ್ಣು ಬೇಕು.",
+      "hi": "आलू एक महत्वपूर्ण कंद फसल और एक सार्वभौमिक आहार प्रधान है। यह ऊर्जा से भरपूर है, उगाने में आसान है, और कई प्रकार के व्यंजनों में उपयोग किया जाता है।"
+    },
     "image": "/crops/Potato.jpg"
   },
   "Onion": {
     "name": "Onion",
-    "description": "The onion, also known as the bulb onion or common onion, is a vegetable that is the most widely cultivated species of the genus Allium. The shallot is a botanical variety of the onion which was classified as a separate species until 2011. The onion's close relatives include garlic, scallion, leek, and chives.",
+    "description": {
+      "en": "Onion is an indispensable culinary ingredient used in almost all Indian cooking for flavor. It also has medicinal properties, particularly antibacterial qualities. It is a highly traded cash crop.",
+      "kn": "ಈರುಳ್ಳಿ ಬಹುಪಾಲು ಭಾರತೀಯ ಅಡುಗೆಗಳಲ್ಲಿ ರುಚಿಗೆ ಬಳಸುವ ಅನಿವಾರ್ಯ ಪದಾರ್ಥವಾಗಿದೆ. ಇದು ಬ್ಯಾಕ್ಟೀರಿಯಾ ವಿರೋಧಿ ಗುಣಗಳನ್ನು ಹೊಂದಿದೆ ಮತ್ತು ಹೆಚ್ಚಿನ ಬೇಡಿಕೆಯ ವಾಣಿಜ್ಯ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "प्याज एक अपरिहार्य पाक सामग्री है जिसका उपयोग लगभग सभी भारतीय खाना पकाने में स्वाद के लिए किया जाता है। इसमें औषधीय गुण भी हैं। यह एक अत्यधिक व्यापार वाली नकदी फसल है।"
+    },
     "image": "/crops/Onion.jpg"
   },
   "Beans": {
     "name": "Beans",
-    "description": "A bean is the seed of plants in many genera of the legume family (Fabaceae) used as a vegetable for human consumption or animal feed. The seeds are sold fresh or preserved through drying. Beans have been cultivated since the seventh millennium BCE in Thailand, and since the second millennium BCE in Europe and in Peru. Most beans, with the exception of peas, are summer crops. As legumes, the plants fix nitrogen and form seeds with a high protein content. They are produced on a scale of millions of tons annually in many countries, with India as the largest producer.",
+    "description": {
+      "en": "Beans are widely cultivated leguminous vegetables consumed for their tender pods and seeds. They are an excellent source of plant protein and dietary fiber, and improve soil fertility.",
+      "kn": "ಬೀನ್ಸ್ (ಹುರುಳಿಕಾಯಿ) ವ್ಯಾಪಕವಾಗಿ ಬೆಳೆಯಲಾಗುವ ತರಕಾರಿಯಾಗಿದ್ದು, ಅವುಗಳ ಎಳೆ ಕಾಯಿ ಮತ್ತು ಬೀಜಗಳಿಗಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ. ಅವು ಸಸ್ಯ ಪ್ರೋಟೀನ್‌ನ ಉತ್ತಮ ಮೂಲವಾಗಿವೆ ಮತ್ತು ಮಣ್ಣಿನ ಫಲವತ್ತತೆಯನ್ನು ಸುಧಾರಿಸುತ್ತವೆ.",
+      "hi": "बीन्स व्यापक रूप से उगाई जाने वाली फलीदार सब्जियां हैं जो उनकी निविदा फलियों और बीजों के लिए खाई जाती हैं। वे पौधों के प्रोटीन और फाइबर का एक उत्कृष्ट स्रोत हैं।"
+    },
     "image": "/crops/Beans.jpg"
   },
   "Mulberry": {
     "name": "Mulberry",
-    "description": "Morus, a genus of flowering plants in the family Moraceae, consists of 19 species of deciduous trees commonly known as mulberries, growing wild and under cultivation in many temperate world regions. Generally, the genus has 64 subordinate taxa, though the three most common are referred to as white, red, and black, originating from the color of their dormant buds and not necessarily the fruit color, with numerous cultivars and some taxa currently unchecked and awaiting taxonomic scrutiny. M. alba is native to South Asia, but is widely distributed across Europe, Southern Africa, South America, and North America. M. alba is also the species most preferred by the silkworm. It is regarded as an invasive species in Brazil, the United States and some states of Australia.",
+    "description": {
+      "en": "Mulberry is a key commercial crop grown specifically for sericulture. Its leaves are the sole food source for silkworms, which produce precious silk. The fruits are also edible and nutritious.",
+      "kn": "ಹಿಪ್ಪುನೇರಳೆ ರೇಷ್ಮೆ ಕೃಷಿಗಾಗಿ ವಿಶೇಷವಾಗಿ ಬೆಳೆಯಲಾಗುವ ಪ್ರಮುಖ ವಾಣಿಜ್ಯ ಬೆಳೆಯಾಗಿದೆ. ಇದರ ಎಲೆಗಳು ಬೆಲೆಬಾಳುವ ರೇಷ್ಮೆಯನ್ನು ಉತ್ಪಾದಿಸುವ ರೇಷ್ಮೆ ಹುಳುಗಳಿಗೆ ಏಕೈಕ ಆಹಾರ ಮೂಲವಾಗಿದೆ.",
+      "hi": "शहतूत एक प्रमुख व्यावसायिक फसल है जिसे विशेष रूप से रेशम उत्पादन के लिए उगाया जाता है। इसके पत्ते रेशम के कीड़ों के लिए एकमात्र खाद्य स्रोत हैं, जो कीमती रेशम का उत्पादन करते हैं।"
+    },
     "image": "/crops/Mulberry.jpg"
   },
   "Finger millet": {
     "name": "Finger millet",
-    "description": "Finger millet is an annual herbaceous plant. It is a tetraploid and self-pollinating species probably evolved from its wild relative Eleusine africana.",
+    "description": {
+      "en": "Finger millet (Ragi) is a super grain recognized for its high nutritional value. It is vital for farmers in semi-arid zones due to its hardiness and ability to yield even under tough conditions.",
+      "kn": "ರಾಗಿಯು ಹೆಚ್ಚಿನ ಪೌಷ್ಟಿಕಾಂಶದ ಮೌಲ್ಯಕ್ಕಾಗಿ ಗುರುತಿಸಲ್ಪಟ್ಟ ಸೂಪರ್ ಧಾನ್ಯವಾಗಿದೆ. ಕಠಿಣ ಪರಿಸ್ಥಿತಿಗಳಲ್ಲಿಯೂ ಸಹ ಇಳುವರಿ ನೀಡುವ ಸಾಮರ್ಥ್ಯದಿಂದಾಗಿ ಇದು ಒಣ ಪ್ರದೇಶದ ರೈತರಿಗೆ ಪ್ರಮುಖವಾಗಿದೆ.",
+      "hi": "फिंगर बाजरा (रागी) एक सुपर अनाज है जिसे इसके उच्च पोषण मूल्य के लिए पहचाना जाता है। कठिन परिस्थितियों में भी उपज देने की क्षमता के कारण यह अर्ध-शुष्क क्षेत्रों में किसानों के लिए महत्वपूर्ण है।"
+    },
     "image": "/crops/Finger_millet.jpg"
   },
   "Rice": {
     "name": "Rice",
-    "description": "Rice is a cereal grain and, in its domesticated form, is the staple food of over half of the world's population, particularly in Africa and Asia. Rice is the seed of the grass species Oryza sativa —or, less commonly, Oryza glaberrima. Asian rice was domesticated in China some 13,500 to 8,200 years ago; African rice was domesticated independently in West Africa about 3,000 years ago. Rice has become commonplace in many cultures worldwide; in 2023, 800 million tons were produced, placing it third after sugarcane and maize. Only some 8% of rice is traded internationally. China, India, and Indonesia are the largest consumers of rice. A substantial amount of the rice produced in developing nations is lost after harvest through factors such as poor transport and storage. Rice yields can be reduced by pests including insects, rodents, and birds, as well as by weeds, and by diseases such as rice blast. Traditional rice polycultures such as rice-duck farming, and modern integrated pest management seek to control damage from pests in a sustainable way.",
+    "description": {
+      "en": "Rice is the primary cereal grain consumed by humans globally. It requires significant water to cultivate and plays a crucial role in food security and cultural traditions in many countries.",
+      "kn": "ಅಕ್ಕಿಯು ಜಾಗತಿಕವಾಗಿ ಮನುಷ್ಯರು ಸೇವಿಸುವ ಪ್ರಾಥಮಿಕ ಏಕದಳ ಧಾನ್ಯವಾಗಿದೆ. ಇದನ್ನು ಬೆಳೆಸಲು ಸಾಕಷ್ಟು ನೀರಿನ ಅಗತ್ಯವಿದೆ ಮತ್ತು ಅನೇಕ ದೇಶಗಳಲ್ಲಿ ಆಹಾರ ಭದ್ರತೆಯಲ್ಲಿ ನಿರ್ಣಾಯಕ ಪಾತ್ರ ವಹಿಸುತ್ತದೆ.",
+      "hi": "चावल विश्व स्तर पर मनुष्यों द्वारा खाया जाने वाला प्राथमिक अनाज है। इसकी खेती के लिए पर्याप्त पानी की आवश्यकता होती है और कई देशों में खाद्य सुरक्षा में महत्वपूर्ण भूमिका निभाता है।"
+    },
     "image": "/crops/Rice.jpg"
   },
   "Green gram": {
     "name": "Green gram",
-    "description": "The mung bean or green gram is a plant species in the legume family. It is mainly cultivated in East, Southeast, and in South Asia and used as an ingredient in both savoury and sweet dishes.",
+    "description": {
+      "en": "Green gram (Mung bean) is a short-duration pulse crop. It is easily digestible, rich in protein, and commonly consumed as sprouts or dal. It is an excellent intercrop that restores soil health.",
+      "kn": "ಹೆಸರುಕಾಳು ಅಲ್ಪಾವಧಿಯ ದ್ವಿದಳ ಧಾನ್ಯ ಬೆಳೆಯಾಗಿದೆ. ಇದು ಸುಲಭವಾಗಿ ಜೀರ್ಣವಾಗುತ್ತದೆ, ಪ್ರೋಟೀನ್‌ನಿಂದ ಸಮೃದ್ಧವಾಗಿದೆ. ಮಣ್ಣಿನ ಆರೋಗ್ಯವನ್ನು ಮರುಸ್ಥಾಪಿಸುವ ಅತ್ಯುತ್ತಮ ಅಂತರ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "मूंग (हरी मूंग) एक कम अवधि वाली दलहन फसल है। यह आसानी से पचने योग्य, प्रोटीन से भरपूर है। यह एक बेहतरीन अंतर-फसल है जो मिट्टी के स्वास्थ्य को बहाल करती है।"
+    },
     "image": "/crops/Green_gram.jpg"
   },
   "Black gram": {
     "name": "Black gram",
-    "description": "The black gram is a bean grown in South Asia. Like its relative the mung bean, it has been reclassified from the genus Phaseolus to Vigna. The product sold as black gram is usually the whole bean, whereas the split bean is called white lentil. It should not be confused with the much smaller true black lentil.",
+    "description": {
+      "en": "Black gram (Urad dal) is a highly valued pulse crop, famous as the primary ingredient in Idli and Dosa batters. It is highly nutritious and extensively used in Indian cuisine.",
+      "kn": "ಉದ್ದಿನಬೇಳೆ ಹೆಚ್ಚು ಮೌಲ್ಯಯುತವಾದ ದ್ವಿದಳ ಧಾನ್ಯದ ಬೆಳೆಯಾಗಿದೆ, ಇಡ್ಲಿ ಮತ್ತು ದೋಸೆ ಹಿಟ್ಟಿನಲ್ಲಿ ಪ್ರಾಥಮಿಕ ಪದಾರ್ಥವಾಗಿ ಪ್ರಸಿದ್ಧವಾಗಿದೆ. ಇದು ಹೆಚ್ಚು ಪೌಷ್ಟಿಕವಾಗಿದೆ ಮತ್ತು ಭಾರತೀಯ ಅಡುಗೆಯಲ್ಲಿ ವ್ಯಾಪಕವಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ.",
+      "hi": "उड़द दाल एक अत्यधिक मूल्यवान दलहन फसल है, जो इडली और डोसा के घोल में प्राथमिक घटक के रूप में प्रसिद्ध है। यह अत्यधिक पौष्टिक है और भारतीय व्यंजनों में बड़े पैमाने पर उपयोग किया जाता है।"
+    },
     "image": "/crops/Black_gram.jpg"
   },
   "Dry chilli": {
     "name": "Dry chilli",
-    "description": "Chili peppers, also spelled chile or chilli, are varieties of berry-fruit plants from the genus Capsicum, which are members of the nightshade family Solanaceae, cultivated for their pungency. They are used as a spice to add pungency in many cuisines. Capsaicin and the related capsaicinoids give chili peppers their intensity when ingested or applied topically. Chili peppers exhibit a range of heat and flavors. This diversity is the reason behind the availability of different types of chili powder, each offering its own taste and heat level.",
+    "description": {
+      "en": "Dry chilli is the ripened, sun-dried version of chilli peppers. It is powdered to make red chilli powder, the core spice of Indian curries. Byadagi dry chilli is famous for its color and mild heat.",
+      "kn": "ಒಣ ಮೆಣಸಿನಕಾಯಿಯನ್ನು ಹಣ್ಣಾದ ಮೆಣಸಿನಕಾಯಿಯನ್ನು ಸೂರ್ಯನ ಬಿಸಿಲಿನಲ್ಲಿ ಒಣಗಿಸಿ ಮಾಡಲಾಗುತ್ತದೆ. ಬ್ಯಾಡಗಿ ಮೆಣಸಿನಕಾಯಿ ಅದರ ಬಣ್ಣ ಮತ್ತು ಸೌಮ್ಯವಾದ ಖಾರಕ್ಕೆ ಪ್ರಸಿದ್ಧವಾಗಿದೆ.",
+      "hi": "सूखी मिर्च पकी हुई, धूप में सुखाई गई मिर्च है। इसका उपयोग लाल मिर्च पाउडर बनाने के लिए किया जाता है। ब्याडगी सूखी मिर्च अपने रंग और हल्के तीखेपन के लिए प्रसिद्ध है।"
+    },
     "image": "/crops/Dry_chilli.jpg"
   },
   "Turmeric": {
     "name": "Turmeric",
-    "description": "Turmeric, or Curcuma longa, is a flowering plant in the ginger family Zingiberaceae. It is a perennial, rhizomatous, herbaceous plant native to the Indian subcontinent and Southeast Asia that requires temperatures between 20 and 30 °C and high annual rainfall to thrive. Plants are gathered each year for their rhizomes, some for propagation in the following season and some for consumption or dyeing.",
+    "description": {
+      "en": "Turmeric is a revered spice crop known for its brilliant yellow color and powerful medicinal properties (Curcumin). It is used as an anti-inflammatory agent, food dye, and in religious ceremonies.",
+      "kn": "ಅರಿಶಿನವು ಅದರ ಅದ್ಭುತವಾದ ಹಳದಿ ಬಣ್ಣ ಮತ್ತು ಪ್ರಬಲವಾದ ಔಷಧೀಯ ಗುಣಗಳಿಗೆ (ಕುರ್ಕುಮಿನ್) ಹೆಸರುವಾಸಿಯಾದ ಪೂಜ್ಯ ಮಸಾಲೆ ಬೆಳೆಯಾಗಿದೆ. ಇದನ್ನು ಆಹಾರದಲ್ಲಿ, ಮತ್ತು ಧಾರ್ಮಿಕ ಆಚರಣೆಗಳಲ್ಲಿ ಬಳಸಲಾಗುತ್ತದೆ.",
+      "hi": "हल्दी एक श्रद्धेय मसाला फसल है जो अपने शानदार पीले रंग और शक्तिशाली औषधीय गुणों के लिए जानी जाती है। इसका उपयोग एक खाद्य रंग, और धार्मिक समारोहों में किया जाता है।"
+    },
     "image": "/crops/Turmeric.jpg"
   },
   "Tamarind": {
     "name": "Tamarind",
-    "description": "Tamarind is a leguminous tree bearing edible fruit that is indigenous to tropical Africa and naturalized in Asia. The genus Tamarindus is monotypic, meaning that it contains only this species. It belongs to the family Fabaceae.",
+    "description": {
+      "en": "Tamarind is a long-lived tree crop whose tangy pulp is essential in South Indian cuisine (sambar, rasam). The seeds and timber also hold commercial and industrial value.",
+      "kn": "ಹುಣಿಸೇಹಣ್ಣು ದೀರ್ಘಕಾಲ ಬದುಕುವ ಮರ-ಬೆಳೆಯಾಗಿದ್ದು, ಇದರ ಹುಳಿ ತಿರುಳು ದಕ್ಷಿಣ ಭಾರತದ ಅಡುಗೆಗಳಲ್ಲಿ (ಸಾಂಬಾರ್, ರಸಂ) ಅತ್ಯಗತ್ಯ. ಬೀಜಗಳು ಮತ್ತು ಮರವೂ ಸಹ ವಾಣಿಜ್ಯ ಮೌಲ್ಯವನ್ನು ಹೊಂದಿವೆ.",
+      "hi": "इमली एक लंबे समय तक जीवित रहने वाली पेड़ की फसल है जिसका तीखा गूदा दक्षिण भारतीय व्यंजनों (सांभर, रसम) में आवश्यक है। इसके बीज और लकड़ी का भी वाणिज्यिक महत्व है।"
+    },
     "image": "/crops/Tamarind.jpg"
   },
   "Sesame": {
     "name": "Sesame",
-    "description": "Sesame is a plant in the genus Sesamum, also called benne. Numerous wild relatives occur in Africa and a smaller number in India. It is widely naturalized in tropical regions around the world and is cultivated for its edible seeds, which grow in pods. World production in 2024 was 6.7 million tonnes, with India, Myanmar, and Sudan as the largest producers.",
+    "description": {
+      "en": "Sesame is one of the oldest oilseed crops. Its seeds are consumed directly in sweets and bakery items, or crushed to yield premium sesame oil known for its health benefits.",
+      "kn": "ಎಳ್ಳು ಅತ್ಯಂತ ಹಳೆಯ ಎಣ್ಣೆಕಾಳು ಬೆಳೆಗಳಲ್ಲಿ ಒಂದಾಗಿದೆ. ಇದರ ಬೀಜಗಳನ್ನು ಸಿಹಿತಿಂಡಿಗಳಲ್ಲಿ ನೇರ ಆಹಾರವಾಗಿ ಸೇವಿಸಲಾಗುತ್ತದೆ, ಅಥವಾ ಎಳ್ಳೆಣ್ಣೆ ತಯಾರಿಸಲು ಬಳಸಲಾಗುತ್ತದೆ.",
+      "hi": "तिल सबसे पुरानी तिलहन फसलों में से एक है। इसके बीजों को मिठाई और बेकरी की वस्तुओं में सीधे खाया जाता है, या तिल का तेल प्राप्त करने के लिए कुचला जाता है।"
+    },
     "image": "/crops/Sesame.jpg"
   },
   "Coconut": {
     "name": "Coconut",
-    "description": "The coconut is a member of the palm family (Arecaceae) and the only living species of the genus Cocos. The term \"coconut\" can denote the whole coconut palm tree or the large hard fruit. Originally native to the Central Indo-Pacific, they are ubiquitous in coastal tropical regions.",
+    "description": {
+      "en": "Coconut is a versatile plantation crop. Every part of the tree is useful: coconut water is a refreshing drink, the meat is used in cooking, dried copra yields oil, and the husk is used for coir making.",
+      "kn": "ತೆಂಗು ಬಹು-ಉಪಯೋಗಿ ಬೆಳೆಯಾಗಿದೆ. ಮರದ ಪ್ರತಿಯೊಂದು ಭಾಗವೂ ಉಪಯುಕ್ತವಾಗಿದೆ: ಎಳನೀರು, ಅಡುಗೆಗೆ ಕಾಯಿ, ಎಣ್ಣೆಗೆ ಕೊಬ್ಬರಿ, ಮತ್ತು ಸಿಪ್ಪೆಯನ್ನು ಹಗ್ಗ ತಯಾರಿಸಲು ಬಳಸಲಾಗುತ್ತದೆ.",
+      "hi": "नारियल एक बहुमुखी वृक्षारोपण फसल है। पेड़ का हर हिस्सा उपयोगी है: नारियल का पानी, मांस का उपयोग खाना पकाने में, और भूसी का उपयोग कॉयर बनाने के लिए किया जाता है।"
+    },
     "image": "/crops/Coconut.jpg"
   },
   "Arecanut": {
     "name": "Arecanut",
-    "description": "The areca nut, also called betel nut, is the seed of a palm belonging to the areca genus. The palm is originally native to the Philippines, but was carried widely through the tropics by the Austronesian migrations and trade since at least 1500 BCE due to its use in betel nut chewing. It is widespread in cultivation and is considered naturalized in much of the tropical Pacific, South Asia, Southeast Asia, and parts of east Africa. It is not to be confused with betel leaves that are often used to wrap it. The practice of betel nut chewing, often together with other herbs as a stimulant drug, dates back thousands of years, and continues to the present day in many countries.",
+    "description": {
+      "en": "Arecanut (Betel nut) is a major commercial plantation crop in Karnataka. It is widely used for chewing with betel leaves and in religious ceremonies. It is a highly lucrative crop for farmers.",
+      "kn": "ಅಡಿಕೆ ಕರ್ನಾಟಕದ ಪ್ರಮುಖ ವಾಣಿಜ್ಯ ತೋಟಗಾರಿಕೆ ಬೆಳೆಯಾಗಿದೆ. ವೀಳ್ಯದೆಲೆಯೊಂದಿಗೆ ಜಗಿಯಲು ಮತ್ತು ಧಾರ್ಮಿಕ ಆಚರಣೆಗಳಲ್ಲಿ ಇದನ್ನು ವ್ಯಾಪಕವಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ. ರೈತರಿಗೆ ಇದು ಹೆಚ್ಚು ಲಾಭದಾಯಕ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "सुपारी कर्नाटक में एक प्रमुख व्यावसायिक वृक्षारोपण फसल है। इसका व्यापक रूप से पान के पत्तों के साथ चबाने और धार्मिक समारोहों में उपयोग किया जाता है। यह एक अत्यधिक आकर्षक फसल है।"
+    },
     "image": "/crops/Arecanut.jpg"
   },
   "Green chilli": {
     "name": "Green chilli",
-    "description": "Chili peppers, also spelled chile or chilli, are varieties of berry-fruit plants from the genus Capsicum, which are members of the nightshade family Solanaceae, cultivated for their pungency. They are used as a spice to add pungency in many cuisines. Capsaicin and the related capsaicinoids give chili peppers their intensity when ingested or applied topically. Chili peppers exhibit a range of heat and flavors. This diversity is the reason behind the availability of different types of chili powder, each offering its own taste and heat level.",
+    "description": {
+      "en": "Green chilli is harvested fresh for daily cooking to add sharp heat and flavor. It is a vital everyday vegetable crop across India, cultivated round the year.",
+      "kn": "ಹಸಿರು ಮೆಣಸಿನಕಾಯಿಯನ್ನು ದೈನಂದಿನ ಅಡುಗೆಗೆ ಖಾರ ಮತ್ತು ಪರಿಮಳವನ್ನು ಸೇರಿಸಲು ತಾಜಾವಾಗಿ ಕಟಾವು ಮಾಡಲಾಗುತ್ತದೆ. ಇದು ಭಾರತದಾದ್ಯಂತ ಪ್ರತಿದಿನ ಬಳಸುವ ಪ್ರಮುಖ ತರಕಾರಿ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "हरी मिर्च को रोजमर्रा के खाना पकाने के लिए ताजा काटा जाता है ताकि तीखापन और स्वाद मिल सके। यह पूरे भारत में एक महत्वपूर्ण रोजमर्रा की सब्जी फसल है।"
+    },
     "image": "/crops/Green_chilli.jpg"
   },
   "Lime": {
     "name": "Lime",
-    "description": "Lime most commonly refers to:Lime (fruit), a green citrus fruit\nLime (material), inorganic materials containing calcium, usually calcium oxide or calcium hydroxide\nLime (color), a color between yellow and green",
+    "description": {
+      "en": "Lime is a popular citrus fruit packed with Vitamin C. It is used to make refreshing juices, pickles, and as a natural preservative and flavor enhancer in food.",
+      "kn": "ನಿಂಬೆ ವಿಟಮಿನ್ ಸಿ ಯಿಂದ ಸಮೃದ್ಧವಾದ ಜನಪ್ರಿಯ ಸಿಟ್ರಸ್ ಹಣ್ಣಾಗಿದೆ. ತಾಜಾ ಜ್ಯೂಸ್, ಉಪ್ಪಿನಕಾಯಿ ತಯಾರಿಸಲು ಮತ್ತು ಆಹಾರದಲ್ಲಿ ಪರಿಮಳವನ್ನು ಹೆಚ್ಚಿಸಲು ಇದನ್ನು ಬಳಸಲಾಗುತ್ತದೆ.",
+      "hi": "नींबू एक लोकप्रिय खट्टा फल है जो विटामिन सी से भरपूर होता है। इसका उपयोग ताज़ा रस, अचार बनाने और भोजन में स्वाद बढ़ाने वाले के रूप में किया जाता है।"
+    },
     "image": "/crops/Lime.jpg"
   },
   "Coffee": {
     "name": "Coffee",
-    "description": "Coffee is a beverage brewed from roasted ground coffee beans. Darkly colored and bitter, coffee has a stimulating effect on humans due to its caffeine content, but decaffeinated coffee is also commercially available. There are also various coffee substitutes.",
+    "description": {
+      "en": "Coffee is a highly valued global beverage crop, grown extensively in the Western Ghats of Karnataka (Kodagu, Chikkamagaluru). It drives significant export revenue.",
+      "kn": "ಕಾಫಿ ಜಾಗತಿಕವಾಗಿ ಅತಿ ಹೆಚ್ಚು ಮೌಲ್ಯಯುತವಾದ ಪಾನೀಯ ಬೆಳೆಯಾಗಿದ್ದು, ಕರ್ನಾಟಕದ ಪಶ್ಚಿಮ ಘಟ್ಟಗಳಲ್ಲಿ (ಕೊಡಗು, ಚಿಕ್ಕಮಗಳೂರು) ವ್ಯಾಪಕವಾಗಿ ಬೆಳೆಯಲಾಗುತ್ತದೆ. ಇದು ಗಮನಾರ್ಹ ರಫ್ತು ಆದಾಯವನ್ನು ತರುತ್ತದೆ.",
+      "hi": "कॉफी एक अत्यधिक मूल्यवान वैश्विक पेय फसल है, जिसे कर्नाटक के पश्चिमी घाटों में बड़े पैमाने पर उगाया जाता है। यह महत्वपूर्ण निर्यात राजस्व लाता है।"
+    },
     "image": "/crops/Coffee.jpg"
   },
   "Castor seed": {
     "name": "Castor seed",
-    "description": "Ricinus communis, the castor bean or castor oil plant, is a species of perennial flowering plant in the spurge family, Euphorbiaceae. It is the sole species in the monotypic genus, Ricinus, and subtribe, Ricininae.",
+    "description": {
+      "en": "Castor seed is an important non-edible oilseed crop. Castor oil is used industrially as a high-grade lubricant, in cosmetics, and in medicine. The crop is very hardy and drought-tolerant.",
+      "kn": "ಹರಳು ಪ್ರಮುಖ ಖಾದ್ಯವಲ್ಲದ ಎಣ್ಣೆಕಾಳು ಬೆಳೆಯಾಗಿದೆ. ಹರಳೆಣ್ಣೆಯನ್ನು ಕೈಗಾರಿಕಾ ಲೂಬ್ರಿಕಂಟ್, ಸೌಂದರ್ಯವರ್ಧಕಗಳು ಮತ್ತು ಔಷಧದಲ್ಲಿ ಬಳಸಲಾಗುತ್ತದೆ. ಇದು ಬರವನ್ನು ತಡೆದುಕೊಳ್ಳುವ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "अरंडी के बीज एक महत्वपूर्ण गैर-खाद्य तिलहन फसल है। अरंडी के तेल का उपयोग औद्योगिक रूप से उच्च श्रेणी के स्नेहक के रूप में, सौंदर्य प्रसाधनों और चिकित्सा में किया जाता है।"
+    },
     "image": "/crops/Castor_seed.jpg"
   },
   "Horse gram": {
     "name": "Horse gram",
-    "description": "Macrotyloma uniflorum is a legume native to tropical southern Asia. Known for its distinct taste and texture, its rich nutrients and reputed medicinal properties, it is widely used in many cuisines. It is also commonly grown for horse feed, hence the name \"horse gram\". Horse gram is grown in parts of India, Nepal, Malaysia, Sri Lanka, and the West Indies. Consumed whole, sprouted, or ground, it is also allowed to be eaten on some Hindu fasting days. Medical uses of these legumes are described in the Ayurveda.",
+    "description": {
+      "en": "Horse gram is a super-hardy pulse crop grown in poor soils with minimal rainfall. It is highly protein-rich and is traditionally used as both human food (to cure colds/coughs) and cattle feed.",
+      "kn": "ಹುರುಳಿಕಾಳು ಅತಿ ಕಡಿಮೆ ಮಳೆ ಮತ್ತು ಕಳಪೆ ಮಣ್ಣಿನಲ್ಲಿ ಬೆಳೆಯುವ ಕಠಿಣ ದ್ವಿದಳ ಧಾನ್ಯ ಬೆಳೆಯಾಗಿದೆ. ಇದು ಪ್ರೋಟೀನ್-ಭರಿತವಾಗಿದ್ದು, ಸಾಂಪ್ರದಾಯಿಕವಾಗಿ ಮನುಷ್ಯರ ಆಹಾರವಾಗಿ ಮತ್ತು ಜಾನುವಾರು ಮೇವಾಗಿ ಬಳಸಲ್ಪಡುತ್ತದೆ.",
+      "hi": "कुल्थी एक बहुत ही कठोर दलहन फसल है जो कम वर्षा वाली खराब मिट्टी में उगाई जाती है। यह अत्यधिक प्रोटीन युक्त है और पारंपरिक रूप से मानव भोजन और पशु चारे दोनों के रूप में उपयोग की जाती है।"
+    },
     "image": "/crops/Horse_gram.jpg"
   },
   "Cashew": {
     "name": "Cashew",
-    "description": "Cashew is the common name of a tropical evergreen tree Anacardium occidentale, in the family Anacardiaceae. It is the source of the cashew nut and the cashew apple. The tree can grow as tall as 14 meters.",
+    "description": {
+      "en": "Cashew is a premium cash crop yielding nutritious edible nuts and the fleshy cashew apple. It is a major export commodity and grows well in coastal and hilly regions.",
+      "kn": "ಗೋಡಂಬಿ ಪೌಷ್ಟಿಕ ಬೀಜಗಳು ಮತ್ತು ಮಾಂಸಲ ಗೋಡಂಬಿ ಹಣ್ಣನ್ನು ನೀಡುವ ಪ್ರಮುಖ ವಾಣಿಜ್ಯ ಬೆಳೆಯಾಗಿದೆ. ಇದು ಪ್ರಮುಖ ರಫ್ತು ವಸ್ತುವಾಗಿದ್ದು, ಕರಾವಳಿ ಮತ್ತು ಗುಡ್ಡಗಾಡು ಪ್ರದೇಶಗಳಲ್ಲಿ ಚೆನ್ನಾಗಿ ಬೆಳೆಯುತ್ತದೆ.",
+      "hi": "काजू एक प्रीमियम नकदी फसल है जिससे पौष्टिक खाद्य मेवे मिलते हैं। यह एक प्रमुख निर्यात वस्तु है और तटीय और पहाड़ी क्षेत्रों में अच्छी तरह से बढ़ती है।"
+    },
     "image": "/crops/Cashew.jpg"
   },
   "Black pepper": {
     "name": "Black pepper",
-    "description": "Black pepper is a flowering vine in the family Piperaceae, cultivated for its fruit, which is usually dried and used as a spice and seasoning. The fruit is a drupe (stonefruit) which is about 5 mm in diameter, dark red, and contains a stone which encloses a single pepper seed. Peppercorns and the ground pepper derived from them may be described simply as pepper, or more precisely as black pepper, green pepper, or white pepper.",
+    "description": {
+      "en": "Black pepper, known as the 'King of Spices', is a trailing vine crop. It is highly valued globally for its pungent flavor and medicinal properties. Often grown as a mixed crop with Arecanut or Coffee.",
+      "kn": "ಕರಿಮೆಣಸು 'ಮಸಾಲೆಗಳ ರಾಜ' ಎಂದು ಕರೆಯಲ್ಪಡುವ ಬಳ್ಳಿ ಬೆಳೆಯಾಗಿದೆ. ಇದರ ತೀಕ್ಷ್ಣವಾದ ಪರಿಮಳ ಮತ್ತು ಔಷಧೀಯ ಗುಣಗಳಿಗಾಗಿ ಜಾಗತಿಕವಾಗಿ ಮೌಲ್ಯಯುತವಾಗಿದೆ. ಅಡಿಕೆ ಅಥವಾ ಕಾಫಿಯೊಂದಿಗೆ ಮಿಶ್ರ ಬೆಳೆಯಾಗಿ ಬೆಳೆಯಲಾಗುತ್ತದೆ.",
+      "hi": "काली मिर्च, जिसे 'मसालों का राजा' कहा जाता है, एक बेल की फसल है। अपने तीखे स्वाद और औषधीय गुणों के लिए इसे विश्व स्तर पर अत्यधिक महत्व दिया जाता है।"
+    },
     "image": "/crops/Black_pepper.jpg"
   },
   "Banana": {
     "name": "Banana",
-    "description": "A banana is an elongated, edible fruit that is botanically a berry produced by several kinds of large treelike herbaceous flowering plants in the genus Musa. In some countries, cooking bananas are called plantains, distinguishing them from dessert bananas. The fruit is variable in size, color and firmness, but is usually elongated and curved, with soft flesh rich in starch covered with a peel, which may have a variety of colors when ripe. It grows upward in clusters near the top of the plant. Almost all modern edible seedless (parthenocarp) cultivated bananas come from two wild species – Musa acuminata and Musa balbisiana, or their hybrids.",
+    "description": {
+      "en": "Banana is a fast-growing, high-yielding fruit crop. Eaten as a fresh fruit or cooked as a vegetable (plantains). The leaves are used as eco-friendly plates, and the stem is also edible.",
+      "kn": "ಬಾಳೆಹಣ್ಣು ವೇಗವಾಗಿ ಬೆಳೆಯುವ, ಅತಿ ಹೆಚ್ಚು ಇಳುವರಿ ನೀಡುವ ಹಣ್ಣಿನ ಬೆಳೆಯಾಗಿದೆ. ಎಲೆಗಳನ್ನು ಊಟದ ಎಲೆಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ ಮತ್ತು ಕಾಂಡವು ಸಹ ತಿನ್ನಲು ಯೋಗ್ಯವಾಗಿದೆ.",
+      "hi": "केला एक तेजी से बढ़ने वाली, उच्च उपज देने वाली फलों की फसल है। पत्तियों का उपयोग पर्यावरण के अनुकूल प्लेटों के रूप में किया जाता है, और तना भी खाने योग्य होता है।"
+    },
     "image": "/crops/Banana.jpg"
   },
   "Ginger": {
     "name": "Ginger",
-    "description": "Ginger is a flowering plant whose rhizome, ginger root or ginger, is widely used as a spice and a folk medicine. It is an herbaceous perennial that grows annual pseudostems about one meter tall, bearing narrow leaf blades. The inflorescences bear flowers having pale yellow petals with purple edges, and arise directly from the rhizome on separate shoots.",
+    "description": {
+      "en": "Ginger is an underground rhizome used extensively as a spice and herbal medicine. It is essential in tea and daily cooking to aid digestion and cure respiratory ailments.",
+      "kn": "ಶುಂಠಿಯು ಮಸಾಲೆಯಾಗಿ ಮತ್ತು ಗಿಡಮೂಲಿಕೆ ಔಷಧಿಯಾಗಿ ವ್ಯಾಪಕವಾಗಿ ಬಳಸಲಾಗುವ ಭೂಗತ ಕಾಂಡವಾಗಿದೆ. ಜೀರ್ಣಕ್ರಿಯೆಗೆ ಸಹಾಯ ಮಾಡಲು ಮತ್ತು ಶೀತವನ್ನು ಗುಣಪಡಿಸಲು ಇದು ಪ್ರತಿದಿನದ ಅಡುಗೆಯಲ್ಲಿ ಅತ್ಯಗತ್ಯವಾಗಿದೆ.",
+      "hi": "अदरक एक भूमिगत प्रकंद है जिसका उपयोग व्यापक रूप से मसाले और हर्बल दवा के रूप में किया जाता है। पाचन में सहायता और श्वसन संबंधी बीमारियों को ठीक करने के लिए यह आवश्यक है।"
+    },
     "image": "/crops/Ginger.jpg"
   },
   "Cocoa": {
     "name": "Cocoa",
-    "description": "Cocoa may refer to:",
+    "description": {
+      "en": "Cocoa is the primary ingredient for making chocolate. It is a commercial plantation crop that grows well in humid tropical climates, often as an intercrop in Arecanut and Coconut gardens.",
+      "kn": "ಕೋಕೋ ಚಾಕೊಲೇಟ್ ತಯಾರಿಸಲು ಪ್ರಾಥಮಿಕ ವಸ್ತುವಾಗಿದೆ. ಇದು ಅಡಿಕೆ ಮತ್ತು ತೆಂಗಿನ ತೋಟಗಳಲ್ಲಿ ಅಂತರ ಬೆಳೆಯಾಗಿ ಬೆಳೆಯಲಾಗುವ ವಾಣಿಜ್ಯ ತೋಟಗಾರಿಕೆ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "कोको चॉकलेट बनाने के लिए प्राथमिक घटक है। यह एक व्यावसायिक वृक्षारोपण फसल है जो आर्द्र उष्णकटिबंधीय जलवायु में अच्छी तरह से बढ़ती है।"
+    },
     "image": "/crops/Cocoa.jpg"
   },
   "Rubber": {
     "name": "Rubber",
-    "description": "Rubber, also called India rubber, latex, Amazonian rubber, caucho, or caoutchouc, as initially produced, consists of polymers of the organic compound isoprene, with minor impurities of other organic compounds.",
+    "description": {
+      "en": "Natural rubber is obtained by tapping the latex of the rubber tree. It is a vital industrial crop used in manufacturing tires, footwear, and various industrial goods.",
+      "kn": "ನೈಸರ್ಗಿಕ ರಬ್ಬರ್ ಅನ್ನು ರಬ್ಬರ್ ಮರದ ಹಾಲಿನಿಂದ ಪಡೆಯಲಾಗುತ್ತದೆ. ಇದು ಟೈರ್‌ಗಳು, ಪಾದರಕ್ಷೆಗಳು ಮತ್ತು ವಿವಿಧ ಕೈಗಾರಿಕಾ ಸರಕುಗಳನ್ನು ತಯಾರಿಸಲು ಬಳಸುವ ಪ್ರಮುಖ ಕೈಗಾರಿಕಾ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "प्राकृतिक रबर रबर के पेड़ के लेटेक्स को टैप करके प्राप्त किया जाता है। यह एक महत्वपूर्ण औद्योगिक फसल है जिसका उपयोग टायर, जूते आदि के निर्माण में किया जाता है।"
+    },
     "image": "/crops/Rubber.jpg"
   },
   "Mango": {
     "name": "Mango",
-    "description": "A mango is an edible stone fruit produced by the tropical tree Mangifera indica. It originated in the northeastern part of the South Asia, in what is now Bangladesh, northeastern India and Myanmar. M. indica has been cultivated in South and Southeast Asia since ancient times, resulting in two modern mango cultivar lineages: the \"Indian\" and the \"Southeast Asian\" types. Other species in the genus Mangifera also produce edible fruit called \"mangoes\", most of which are found in the Malesian ecoregion.",
+    "description": {
+      "en": "Mango, the 'King of Fruits', is a highly prized commercial fruit crop. It is consumed fresh, juiced, or pickled. It drives a massive seasonal market and export industry.",
+      "kn": "ಮಾವಿನ ಹಣ್ಣು, 'ಹಣ್ಣುಗಳ ರಾಜ', ಬಹು ಬೇಡಿಕೆಯ ವಾಣಿಜ್ಯ ಹಣ್ಣಿನ ಬೆಳೆಯಾಗಿದೆ. ಇದನ್ನು ತಾಜಾವಾಗಿ, ರಸವಾಗಿ ಅಥವಾ ಉಪ್ಪಿನಕಾಯಿಯಾಗಿ ಸೇವಿಸಲಾಗುತ್ತದೆ. ಇದು ದೊಡ್ಡ ರಫ್ತು ಮಾರುಕಟ್ಟೆಯನ್ನು ಹೊಂದಿದೆ.",
+      "hi": "आम, 'फलों का राजा', एक अत्यधिक बेशकीमती वाणिज्यिक फल फसल है। इसका सेवन ताजा, जूस या अचार के रूप में किया जाता है।"
+    },
     "image": "/crops/Mango.jpg"
   },
   "Tobacco": {
     "name": "Tobacco",
-    "description": "Tobacco is the common name of several plants in the genus Nicotiana of the family Solanaceae, and the general term for any product prepared from the cured leaves of these plants. Seventy-nine species of tobacco are known, but the chief commercial crop is N. tabacum. The more potent variant N. rustica is also used in some countries.",
+    "description": {
+      "en": "Tobacco is a major commercial cash crop whose cured leaves are used primarily for smoking and chewing products. It is highly regulated but remains a lucrative crop for farmers in specific zones.",
+      "kn": "ತಂಬಾಕು ಪ್ರಮುಖ ವಾಣಿಜ್ಯ ಬೆಳೆಯಾಗಿದ್ದು, ಇದರ ಒಣಗಿದ ಎಲೆಗಳನ್ನು ಮುಖ್ಯವಾಗಿ ಧೂಮಪಾನ ಮತ್ತು ಜಗಿಯುವ ಉತ್ಪನ್ನಗಳಿಗೆ ಬಳಸಲಾಗುತ್ತದೆ. ಇದು ನಿರ್ದಿಷ್ಟ ಪ್ರದೇಶಗಳಲ್ಲಿ ಬೆಳೆಯಲಾಗುವ ಲಾಭದಾಯಕ ಬೆಳೆಯಾಗಿದೆ.",
+      "hi": "तंबाकू एक प्रमुख व्यावसायिक नकदी फसल है जिसके पत्तों का उपयोग मुख्य रूप से धूम्रपान और चबाने वाले उत्पादों के लिए किया जाता है।"
+    },
     "image": "/crops/Tobacco.jpg"
   },
   "Cardamom": {
     "name": "Cardamom",
-    "description": "Cardamom, sometimes cardamon or cardamum, is a spice made from the seeds of several plants in the genera Elettaria and Amomum in the family Zingiberaceae. Both genera are native to the Indian subcontinent and Indonesia. They are recognized by their small seed pods: triangular in cross-section and spindle-shaped, with a thin, papery outer shell and small, black seeds; Elettaria pods are light green and smaller, while Amomum pods are dark brown and larger.",
+    "description": {
+      "en": "Cardamom is an exotic and expensive spice known as the 'Queen of Spices'. It is highly prized for its aroma and is used in sweets, curries, and teas. Grown mainly in dense shade.",
+      "kn": "ಏಲಕ್ಕಿ 'ಮಸಾಲೆಗಳ ರಾಣಿ' ಎಂದು ಕರೆಯಲ್ಪಡುವ ದುಬಾರಿ ಮಸಾಲೆಯಾಗಿದೆ. ಅದರ ಪರಿಮಳಕ್ಕಾಗಿ ಇದು ಹೆಚ್ಚು ಬೇಡಿಕೆಯಲ್ಲಿದೆ, ಸಿಹಿತಿಂಡಿಗಳು ಮತ್ತು ಚಹಾಗಳಲ್ಲಿ ಬಳಸಲಾಗುತ್ತದೆ.",
+      "hi": "इलायची एक महंगा मसाला है जिसे 'मसालों की रानी' के रूप में जाना जाता है। इसे इसकी सुगंध के लिए अत्यधिक महत्व दिया जाता है और इसका उपयोग मिठाइयों, करी और चाय में किया जाता है।"
+    },
     "image": "/crops/Cardamom.jpg"
   },
   "Pineapple": {
     "name": "Pineapple",
-    "description": "The pineapple is a tropical plant with an edible fruit; it is the most economically significant plant in the family Bromeliaceae.",
+    "description": {
+      "en": "Pineapple is a tropical fruit crop known for its sweet-tart flavor. It is consumed fresh and heavily processed into jams, squashes, and canned slices.",
+      "kn": "ಅನಾನಸ್ ತನ್ನ ಸಿಹಿ-ಹುಳಿ ರುಚಿಗೆ ಹೆಸರುವಾಸಿಯಾದ ಉಷ್ಣವಲಯದ ಹಣ್ಣಿನ ಬೆಳೆಯಾಗಿದೆ. ಇದನ್ನು ತಾಜಾವಾಗಿ ಸೇವಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಜಾಮ್, ಜ್ಯೂಸ್‌ಗಳಾಗಿ ಸಂಸ್ಕರಿಸಲಾಗುತ್ತದೆ.",
+      "hi": "अनानास एक उष्णकटिबंधीय फल फसल है जो अपने खट्टे-मीठे स्वाद के लिए जानी जाती है। इसका सेवन ताजा किया जाता है और जैम और डिब्बाबंद स्लाइस में भारी रूप से संसाधित किया जाता है।"
+    },
     "image": "/crops/Pineapple.jpg"
   }
 }
