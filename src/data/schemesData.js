@@ -614,6 +614,7 @@ export const kaSchemes = [
 export const agriFinancialAssistance = [
   {
     id: 'kcc-crop-loan',
+    img: 'https://images.unsplash.com/photo-1589828135898-d14fb4081c70?w=600&q=80',
     title: { en: 'Kisan Credit Card (KCC) Short-Term Crop Loan', kn: 'ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ (KCC) ಅಲ್ಪಾವಧಿ ಬೆಳೆ ಸಾಲ', hi: 'किसान क्रेडिट कार्ड अल्पकालिक फसल ऋण' },
     category: 'Crop Loan',
     interestRate: '4% p.a. (with prompt repayment incentive)',
@@ -629,6 +630,7 @@ export const agriFinancialAssistance = [
   },
   {
     id: 'pmfby-insurance-detail',
+    img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&q=80',
     title: { en: 'PMFBY Crop Insurance Slabs & Settlement Guide', kn: 'ಪಿಎಂ ಫಸಲ್ ಬಿಮಾ ಯೋಜನೆ ಪ್ರೀಮಿಯಂ ದರಗಳು & ಪರಿಹಾರ', hi: 'पीएम फसल बीमा प्रीमियम दरें और दावा प्रक्रिया' },
     category: 'Insurance',
     interestRate: 'Subsidized premium by GoI & Govt of Karnataka',
@@ -645,6 +647,7 @@ export const agriFinancialAssistance = [
   },
   {
     id: 'nabard-startup-grant',
+    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80',
     title: { en: 'NABARD Agri-Startup & FPO Capital Grants', kn: 'ನಬಾರ್ಡ್ ಕೃಷಿ ಸ್ಟಾರ್ಟ್‌ಅಪ್ & ಎಫ್‌ಪಿಒ ಅನುದಾನಗಳು', hi: 'नाबार्ड कृषि स्टार्टअप और FPO अनुदान' },
     category: 'Grants & Startups',
     interestRate: 'Grants (0% repayment) & Subsidized Term Loans',
@@ -666,6 +669,7 @@ export const agriFinancialAssistance = [
 export const agriAdvisoryAndCenters = [
   {
     type: 'RSK',
+    img: 'https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?w=600&q=80',
     title: { en: 'Raitha Samparka Kendra (RSK) Network', kn: 'ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರ (RSK) ಜಾಲ', hi: 'रायथा संपर्क केंद्र (RSK) नेटवर्क' },
     desc: { en: 'Over 745+ RSKs across all taluks providing subsidized seeds, soil sample collection, fertilizers, and pest management advisory.', kn: 'ರಾಜ್ಯದ ಎಲ್ಲಾ ತಾಲೂಕುಗಳಲ್ಲಿ 745+ ಆರ್‌ಎಸ್‌ಕೆಗಳು ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿದ್ದು ರಿಯಾಯಿತಿ ಬೀಜ, ಮಣ್ಣು ಪರೀಕ್ಷೆ ಹಾಗೂ ರೋಗ ನಿಯಂತ್ರಣ ಮಾಹಿತಿ ನೀಡುತ್ತವೆ.', hi: 'कर्नाटक की सभी तहसीलों में 745+ केंद्र जहां सब्सिडी वाले बीज, उर्वरक और कृषि सलाह मिलती है।' },
     contact: 'Kisan Call Centre Toll-Free: 1800-180-1551 / 080-22212804',
@@ -674,6 +678,7 @@ export const agriAdvisoryAndCenters = [
   },
   {
     type: 'KVK',
+    img: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&q=80',
     title: { en: 'Krishi Vigyan Kendras (ICAR - KVKs)', kn: 'ಕೃಷಿ ವಿಜ್ಞಾನ ಕೇಂದ್ರಗಳು (KVK)', hi: 'कृषि विज्ञान केंद्र (KVK)' },
     desc: { en: '33+ ICAR-KVKs in Karnataka conducting Krishi Melas, live field demonstrations, drone training, and certified seed production workshops.', kn: 'ಕರ್ನಾಟಕದಲ್ಲಿ 33+ ಕೆವಿಕೆಗಳು ಕೃಷಿ ಮೇಳ, ಡ್ರೋನ್ ತರಬೇತಿ, ಸುಧಾರಿತ ತಳಿಗಳ ಪ್ರದರ್ಶನ ಹಾಗೂ ಕಾರ್ಯಾಗಾರಗಳನ್ನು ಆಯೋಜಿಸುತ್ತವೆ.', hi: 'कर्नाटक में 33+ केंद्र जो कृषि मेला, ड्रोन प्रशिक्षण और उन्नत तकनीकों का लाइव प्रदर्शन करते हैं।' },
     contact: 'UAS Bengaluru: 080-23330153 | UAS Dharwad: 0836-2448321',
@@ -682,6 +687,7 @@ export const agriAdvisoryAndCenters = [
   },
   {
     type: 'SoilCard',
+    img: 'https://images.unsplash.com/photo-1627920769852-5c21f5fb3d0f?w=600&q=80',
     title: { en: 'Digital Soil Health Portal & Testing Labs', kn: 'ಡಿಜಿಟಲ್ ಮಣ್ಣು ಪರೀಕ್ಷೆ & ಪ್ರಯೋಗಾಲಯ', hi: 'डिजिटल मृदा स्वास्थ्य और प्रयोगशाला' },
     desc: { en: 'Access your parcel-wise Soil Health Card, get micro-nutrient recommendations, and find the nearest government testing lab.', kn: 'ನಿಮ್ಮ ಸರ್ವೆ ನಂಬರ್‌ನ ಮಣ್ಣಿನ ಪರೀಕ್ಷಾ ವರದಿ ಪರಿಶೀಲಿಸಿ ಹಾಗೂ ಹತ್ತಿರದ ಜಿಲ್ಲಾ ಮಣ್ಣು ಪರೀಕ್ಷಾ ಕೇಂದ್ರದ ಮಾಹಿತಿ ಪಡೆಯಿರಿ.', hi: 'अपने खेत का मृदा स्वास्थ्य कार्ड डाउनलोड करें और अनुशंसित उर्वरक मात्रा जानें।' },
     contact: 'Helpline: 011-23381012',
@@ -690,6 +696,7 @@ export const agriAdvisoryAndCenters = [
   },
   {
     type: 'WeatherAlert',
+    img: 'https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=600&q=80',
     title: { en: 'KSNDMC Varuna Mitra Weather & Agromet Advisory', kn: 'ವರುಣ ಮಿತ್ರ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ (KSNDMC)', hi: 'वरुण मित्र मौसम एवं कृषि सलाह' },
     desc: { en: 'Gram Panchayat level rain forecasts, drought alerts, and crop-specific advisory updated every 15 minutes by KSNDMC.', kn: 'ಗ್ರಾಮ ಪಂಚಾಯತ್ ಮಟ್ಟದ ಮಳೆ ಮುನ್ಸೂಚನೆ, ಬರ ಎಚ್ಚರಿಕೆ ಹಾಗೂ ಬೆಳೆವಾರು ಹವಾಮಾನ ಸಲಹೆಗಳನ್ನು 24x7 ಪಡೆಯಿರಿ.', hi: 'ग्राम पंचायत स्तर पर वर्षा पूर्वानुमान और सूखा अलर्ट 24x7 उपलब्ध।' },
     contact: 'Varuna Mitra 24x7 Helpline: 9243345433',

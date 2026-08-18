@@ -261,6 +261,7 @@ const translations = {
     filterObjectiveMechanization: 'Mechanization',
     filterObjectiveOrganic: 'Organic Farming',
     filterObjectivePostHarvest: 'Post-Harvest & Storage',
+    filterObjectiveExport: 'Export Promotion & Trade',
 
     filterStageAll: 'All Stages',
     filterStagePre: 'Pre-Harvest (Seeds & Inputs)',
@@ -521,6 +522,7 @@ const translations = {
     filterObjectiveMechanization: 'ಕೃಷಿ ಯಾಂತ್ರೀಕರಣ',
     filterObjectiveOrganic: 'ಸಾವಯವ ಸಿರಿಧಾನ್ಯ',
     filterObjectivePostHarvest: 'ಕೊಯ್ಲೋತ್ತರ & ಶೇಖರಣೆ',
+    filterObjectiveExport: 'ರಫ್ತು ಪ್ರೋತ್ಸಾಹಧನ & ವ್ಯಾಪಾರ',
 
     filterStageAll: 'ಎಲ್ಲಾ ಹಂತಗಳು',
     filterStagePre: 'ಬಿತ್ತನೆ ಪೂರ್ವ (ಬೀಜ & ಗೊಬ್ಬರ)',
@@ -781,6 +783,7 @@ const translations = {
     filterObjectiveMechanization: 'कृषि यंत्रीकरण',
     filterObjectiveOrganic: 'जैविक व मोटा अनाज',
     filterObjectivePostHarvest: 'कटाई उपरांत व भंडारण',
+    filterObjectiveExport: 'निर्यात प्रोत्साहन व व्यापार',
 
     filterStageAll: 'सभी चरण',
     filterStagePre: 'बुवाई पूर्व (बीज व खाद)',
