@@ -259,7 +259,7 @@ export const districtData = {
     crop: 'Maize & Grapes',
     highlights: [
       { icon: '🌄', title: 'Nandi Hills', desc: 'An ancient hill fortress and immensely popular sunrise viewpoint.' },
-      { icon: '🥔', title: 'Potato & Maize', desc: 'A major agricultural hub for potatoes, maize, and grapes.' },
+      { icon: '⛰️', title: 'Avalabetta', desc: 'A scenic hilltop known for its dramatic rocky overhang and panoramic views. Often called the Nandi Hills of the North.' },
       { icon: '🗿', title: 'Isha Foundation (Adiyogi)', desc: 'Home to the massive Adiyogi Shiva bust, attracting spiritual seekers.' },
       { icon: '💧', title: 'Bhoga Nandeeshwara', desc: 'Stunning 9th-century temple complex at the base of Nandi Hills.' },
       { icon: '🐛', title: 'Silk Cocoon Market', desc: 'One of the leading silk cocoon trading centers in the state.' }

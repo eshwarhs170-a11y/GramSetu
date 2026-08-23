@@ -394,5 +394,14 @@
       "hi": "अनानास एक उष्णकटिबंधीय फल फसल है जो अपने खट्टे-मीठे स्वाद के लिए जानी जाती है। इसका सेवन ताजा किया जाता है और जैम और डिब्बाबंद स्लाइस में भारी रूप से संसाधित किया जाता है।"
     },
     "image": "/crops/Pineapple.jpg"
+  },
+  "Silk Cocoon": {
+    "name": "Silk Cocoon",
+    "description": {
+      "en": "Silk Cocoon (Mulberry Silk) is the raw material for India's premium silk fabric. Silkworms (Bombyx mori) are reared on mulberry leaves and spin cocoons that are reeled into fine silk thread. Karnataka is India's largest silk-producing state, with Tumkuru, Ramanagara and Mysuru being the top districts. The silk cocoon market at Ramanagara is Asia's largest.",
+      "kn": "ರೇಷ್ಮೆ ಗೂಡು (ಮಲ್ಬೆರಿ ರೇಷ್ಮೆ) ಭಾರತದ ಪ್ರೀಮಿಯಂ ರೇಷ್ಮೆ ಬಟ್ಟೆಗೆ ಕಚ್ಚಾ ವಸ್ತುವಾಗಿದೆ. ರೇಷ್ಮೆ ಹುಳುಗಳನ್ನು ಮಲ್ಬೆರಿ ಎಲೆಗಳ ಮೇಲೆ ಸಾಕಲಾಗುತ್ತದೆ ಮತ್ತು ಅವು ನೂಲಿನ ಗೂಡುಗಳನ್ನು ನೇಯ್ದು ನೂಲನ್ನು ರಚಿಸುತ್ತವೆ. ಕರ್ನಾಟಕ ಭಾರತದ ಅತಿದೊಡ್ಡ ರೇಷ್ಮೆ ಉತ್ಪಾದಕ ರಾಜ್ಯವಾಗಿದ್ದು, ತುಮಕೂರು, ರಾಮನಗರ ಮತ್ತು ಮೈಸೂರು ಪ್ರಮುಖ ಜಿಲ್ಲೆಗಳಾಗಿವೆ.",
+      "hi": "रेशम कोकून (मलबरी सिल्क) भारत के प्रीमियम रेशमी कपड़े का कच्चा माल है। रेशम के कीड़ों को शहतूत की पत्तियों पर पाला जाता है और वे कोकून बुनते हैं जिन्हें महीन रेशम धागे में बदला जाता है। कर्नाटक भारत का सबसे बड़ा रेशम उत्पादक राज्य है, जिसमें तुमकुरू, रामनगर और मैसूर शीर्ष जिले हैं।"
+    },
+    "image": "/crops/Silk_Cocoon.jpg"
   }
 }
