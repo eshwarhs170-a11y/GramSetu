@@ -90,12 +90,23 @@ Never say you cannot help — always give a useful response and guide them to th
     return { type: 'chat', response: responseText.trim() };
   } catch (error) {
     console.error('Gemini API Error:', error);
-    // Show the actual error to help debug
+    
+    // Check if it's a rate limit error (429)
+    if (error.message && error.message.includes('429')) {
+      return {
+        type: 'chat',
+        response: lang === 'kn'
+          ? 'ನಾನು ಈಗ ಹೆಚ್ಚು ಪ್ರಶ್ನೆಗಳನ್ನು ಸ್ವೀಕರಿಸುತ್ತಿದ್ದೇನೆ. ದಯವಿಟ್ಟು ಒಂದು ನಿಮಿಷದ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.'
+          : 'I am getting too many questions right now! Please wait a minute before asking again.'
+      };
+    }
+
+    // Show the actual error for other types of failures
     return {
       type: 'chat',
       response: lang === 'kn'
-        ? `ಕ್ಷಮಿಸಿ, ದೋಷ ಉಂಟಾಗಿದೆ: ${error.message}`
-        : `Error: ${error.message}`
+        ? `ಕ್ಷಮಿಸಿ, ದೋಷ ಉಂಟಾಗಿದೆ: ${error.message.substring(0, 50)}...`
+        : `Error: ${error.message.substring(0, 50)}...`
     };
   }
 }
