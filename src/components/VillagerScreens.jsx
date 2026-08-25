@@ -1127,8 +1127,144 @@ export function SchemesScreen() {
                     </div>
                   )}
 
+                  {/* Inline Scheme Details (Opens nearby area inside the card) */}
+                  {selectedScheme && selectedScheme.id === s.id && (
+                    <div style={{
+                      marginTop: 16,
+                      paddingTop: 16,
+                      borderTop: '1px dashed var(--border-light)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 14,
+                      textAlign: 'left'
+                    }}>
+                      {/* TTS Audio */}
+                      <button
+                        className="btn btn-sm btn-outline"
+                        onClick={() => handleToggleVoice(s)}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 6, borderRadius: 8, fontSize: 12, width: 'fit-content' }}
+                      >
+                        <Volume2 size={14} />
+                        {isSpeaking ? t('stopAudio') || 'Stop Audio' : t('voiceReadout') || 'Listen'}
+                      </button>
+
+                      {/* Full description */}
+                      <div>
+                        <h5 style={{ fontWeight: 700, fontSize: 13, marginBottom: 4, color: 'var(--text-primary)' }}>Description</h5>
+                        <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                          {getLangText(s.desc)}
+                        </p>
+                      </div>
+
+                      {/* Benefits */}
+                      {s.benefits && (
+                        <div style={{
+                          background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)',
+                          padding: 12,
+                          borderRadius: 10,
+                          border: '1px solid #a7f3d0',
+                          fontSize: 12,
+                          color: '#064e3b'
+                        }}>
+                          <h5 style={{ color: '#065f46', fontWeight: 800, fontSize: 13, margin: '0 0 6px 0', display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <IndianRupee size={14} /> Benefit & Subsidy Structure
+                          </h5>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                            <div><strong>Subsidy:</strong> {s.benefits.subsidyPercent || s.benefits.maxLimit}</div>
+                            {s.benefits.mode && <div><strong>Mode:</strong> {s.benefits.mode}</div>}
+                            {s.benefits.interestSubvention && s.benefits.interestSubvention !== 'N/A' && (
+                              <div><strong>Interest Subvention:</strong> {s.benefits.interestSubvention}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Eligibility */}
+                      <div style={{ background: 'var(--bg-main)', padding: 12, borderRadius: 10, border: '1px solid var(--border-light)', fontSize: 12 }}>
+                        <h5 style={{ fontWeight: 700, fontSize: 13, color: 'var(--primary)', margin: '0 0 4px 0' }}>
+                          Eligibility Criteria
+                        </h5>
+                        <p style={{ margin: 0, color: 'var(--text-primary)', lineHeight: 1.4 }}>
+                          {getLangText(s.eligibility)}
+                        </p>
+                      </div>
+
+                      {/* Exclusions */}
+                      {s.exclusions && (
+                        <div style={{ background: '#fef2f2', padding: 12, borderRadius: 10, border: '1px solid #fecaca', fontSize: 12 }}>
+                          <h5 style={{ fontWeight: 700, fontSize: 12, color: '#991b1b', margin: '0 0 4px 0' }}>
+                            Exclusions
+                          </h5>
+                          <p style={{ margin: 0, color: '#7f1d1d', lineHeight: 1.4 }}>
+                            {getLangText(s.exclusions)}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Documents */}
+                      <div>
+                        <h5 style={{ fontWeight: 700, fontSize: 13, marginBottom: 4, color: 'var(--text-primary)' }}>Required Documents</h5>
+                        <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0, lineHeight: 1.4 }}>
+                          {getLangText(s.documents)}
+                        </p>
+                      </div>
+
+                      {/* Process Steps */}
+                      {s.processSteps && (
+                        <div>
+                          <h5 style={{ fontWeight: 700, fontSize: 13, marginBottom: 8, color: 'var(--text-primary)' }}>Application Process</h5>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                            {s.processSteps.map(st => (
+                              <div key={st.step} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                                <span style={{
+                                  width: 20,
+                                  height: 20,
+                                  borderRadius: '50%',
+                                  background: 'var(--primary)',
+                                  color: '#fff',
+                                  fontSize: 10,
+                                  fontWeight: 700,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  flexShrink: 0
+                                }}>
+                                  {st.step}
+                                </span>
+                                <div style={{ fontSize: 12 }}>
+                                  <strong>{getLangText(st.title)}: </strong>
+                                  <span style={{ color: 'var(--text-secondary)' }}>{getLangText(st.desc)}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Timeline */}
+                      {s.timeline && (
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                          Processing Timeline: <strong>{s.timeline}</strong>
+                        </div>
+                      )}
+
+                      {/* Tracker URL */}
+                      {s.trackerUrl && (
+                        <a
+                          href={s.trackerUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-outline btn-xs"
+                          style={{ textDecoration: 'none', justifyContent: 'center', fontSize: 11, width: 'fit-content', marginTop: 6 }}
+                        >
+                          Track Portal Status ↗
+                        </a>
+                      )}
+                    </div>
+                  )}
+
                   {/* Action Buttons */}
-                  <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
+                  <div style={{ display: 'flex', gap: 8, marginTop: selectedScheme && selectedScheme.id === s.id ? 16 : 'auto' }}>
                     <a
                       href={s.applyLink || 'https://sevasindhuservices.karnataka.gov.in/'}
                       target="_blank"
@@ -1140,10 +1276,10 @@ export function SchemesScreen() {
                     </a>
                     <button
                       className="btn btn-outline btn-sm"
-                      onClick={() => setSelectedScheme(s)}
+                      onClick={() => setSelectedScheme(selectedScheme && selectedScheme.id === s.id ? null : s)}
                       style={{ fontSize: 13 }}
                     >
-                      {t('learnMore') || 'Details'}
+                      {selectedScheme && selectedScheme.id === s.id ? 'Close' : (t('learnMore') || 'Details')}
                     </button>
                   </div>
                 </div>
@@ -1423,229 +1559,10 @@ export function SchemesScreen() {
       )}
 
       {/* ============================================================ */}
-      {/* DETAILED SCHEME VIEW MODAL */}
-      {/* ============================================================ */}
-      {selectedScheme && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0,0,0,0.65)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1100,
-            padding: 16,
-            backdropFilter: 'blur(4px)'
-          }}
-        >
-          <div
-            className="card animate-fadeInUp"
-            style={{
-              maxWidth: 680,
-              width: '100%',
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              padding: '24px 28px',
-              position: 'relative',
-              borderRadius: 20
-            }}
-          >
-            <button
-              onClick={() => {
-                if (isSpeaking) {
-                  window.speechSynthesis.cancel()
-                  setIsSpeaking(false)
-                }
-                setSelectedScheme(null)
-              }}
-              style={{
-                position: 'absolute',
-                top: 16,
-                right: 16,
-                background: 'var(--bg-main)',
-                border: 'none',
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                fontSize: 16,
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                color: 'var(--text-primary)'
-              }}
-            >
-              <X className="inline" size={16} />
-            </button>
-
-            {/* Scheme Image Banner */}
-            <div style={{ height: 180, borderRadius: 12, overflow: 'hidden', marginBottom: 16 }}>
-              <img
-                src={selectedScheme.img || 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'}
-                alt={getLangText(selectedScheme.title)}
-                onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'; }}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </div>
-
-            {/* Scheme Header */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              <span className="badge badge-primary">{selectedScheme.level || 'Central/State'}</span>
-              <span className="badge badge-info">{selectedScheme.category}</span>
-            </div>
-            <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', margin: '4px 0' }}>
-              {getLangText(selectedScheme.title)}
-            </h3>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 14 }}>
-              {getLangText(selectedScheme.ministry)}
-            </p>
-
-            {/* Accessibility Audio TTS Readout */}
-            <button
-              className="btn btn-sm btn-outline"
-              onClick={() => handleToggleVoice(selectedScheme)}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 16, borderRadius: 8, fontSize: 12 }}
-            >
-              <Volume2 size={14} />
-              {isSpeaking ? t('stopAudio') || 'Stop Audio' : t('voiceReadout') || 'Listen'}
-            </button>
-
-            {/* Section 1: Overview */}
-            <div style={{ marginBottom: 16 }}>
-              <h5 style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Description / ವಿವರಣೆ</h5>
-              <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                {getLangText(selectedScheme.desc)}
-              </p>
-            </div>
-
-            {/* Section 2: Benefit Details & Subsidy Structure */}
-            {selectedScheme.benefits && (
-              <div style={{
-                background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)',
-                padding: 16,
-                borderRadius: 12,
-                border: '1px solid #a7f3d0',
-                marginBottom: 16
-              }}>
-                <h5 style={{ color: '#065f46', fontWeight: 800, fontSize: 14, margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <IndianRupee className="inline mr-1 text-emerald-500" size={16} /> {t('benefitDetails') || 'Benefit & Subsidy Structure'}
-                </h5>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, fontSize: 12, color: '#064e3b' }}>
-                  <div><strong>Subsidy Percentage:</strong> {selectedScheme.benefits.subsidyPercent || 'N/A'}</div>
-                  <div><strong>Maximum Limit:</strong> {selectedScheme.benefits.maxLimit || 'N/A'}</div>
-                  <div><strong>Payment Mode:</strong> {selectedScheme.benefits.mode || 'DBT'}</div>
-                  <div><strong>Interest Subvention:</strong> {selectedScheme.benefits.interestSubvention || 'N/A'}</div>
-                </div>
-              </div>
-            )}
-
-            {/* Section 3: Eligibility Criteria */}
-            <div style={{ background: 'var(--bg-main)', padding: 14, borderRadius: 12, marginBottom: 14, border: '1px solid var(--border-light)' }}>
-              <h5 style={{ fontWeight: 700, fontSize: 14, color: 'var(--primary)', margin: '0 0 4px 0' }}>
-                {t('eligibilityCriteria') || 'Eligibility Criteria'}
-              </h5>
-              <p style={{ fontSize: 13, margin: 0, color: 'var(--text-primary)' }}>
-                {getLangText(selectedScheme.eligibility)}
-              </p>
-            </div>
-
-            {/* Section 4: Exclusions */}
-            {selectedScheme.exclusions && (
-              <div style={{ background: '#fef2f2', padding: 14, borderRadius: 12, marginBottom: 14, border: '1px solid #fecaca' }}>
-                <h5 style={{ fontWeight: 700, fontSize: 13, color: '#991b1b', margin: '0 0 4px 0' }}>
-                  {t('exclusionsTitle') || 'Exclusions'}
-                </h5>
-                <p style={{ fontSize: 12, margin: 0, color: '#7f1d1d' }}>
-                  {getLangText(selectedScheme.exclusions)}
-                </p>
-              </div>
-            )}
-
-            {/* Section 5: Required Documents */}
-            <div style={{ marginBottom: 16 }}>
-              <h5 style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
-                {t('requiredDocs') || 'Required Documents'}
-              </h5>
-              <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
-                {getLangText(selectedScheme.documents)}
-              </p>
-            </div>
-
-            {/* Section 6: Application Process & Steps */}
-            {selectedScheme.processSteps && (
-              <div style={{ marginBottom: 16 }}>
-                <h5 style={{ fontWeight: 700, fontSize: 14, marginBottom: 10 }}>
-                  {t('stepByStepProcess') || 'Application Process'}
-                </h5>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {selectedScheme.processSteps.map(st => (
-                    <div key={st.step} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                      <span style={{
-                        width: 24,
-                        height: 24,
-                        borderRadius: '50%',
-                        background: 'var(--primary)',
-                        color: '#fff',
-                        fontSize: 12,
-                        fontWeight: 700,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0
-                      }}>
-                        {st.step}
-                      </span>
-                      <div style={{ fontSize: 13 }}>
-                        <strong>{getLangText(st.title)}: </strong>
-                        <span style={{ color: 'var(--text-secondary)' }}>{getLangText(st.desc)}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Section 7: Timeline */}
-            {selectedScheme.timeline && (
-              <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span>{t('expectedTimeline') || 'Processing Timeline'}: <strong>{selectedScheme.timeline}</strong></span>
-              </div>
-            )}
-
-            {/* Modal Actions */}
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <a
-                href={selectedScheme.applyLink || 'https://sevasindhuservices.karnataka.gov.in/'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary"
-                style={{ flex: 1, textDecoration: 'none', justifyContent: 'center', fontWeight: 700 }}
-              >
-                {t('directApply') || 'Apply Online ↗'}
-              </a>
-              {selectedScheme.trackerUrl && (
-                <a
-                  href={selectedScheme.trackerUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline"
-                  style={{ textDecoration: 'none', justifyContent: 'center' }}
-                >
-                  Track Portal Status ↗
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      
     </div>
   )
 }
-
-
 
 export function MarketScreen() {
   const { t } = useLanguage()
