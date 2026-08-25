@@ -1,13 +1,76 @@
 import React, { useState, useEffect } from 'react'
-import { useLanguage } from '../context/LanguageContext'
 import {
-  Landmark, TrendingUp, Megaphone, ClipboardList, IndianRupee,
-  Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2, MapPin,
-  Camera, Phone, Home, Map, Search,
-  Building2, Wheat, ArrowUp, ArrowDown, Minus,
-  Bell, ShieldCheck, RefreshCw, Sparkles, CheckCircle2, Star,
-  Cloud, CloudRain, Sun, Thermometer, Wind, ShieldAlert, AlertTriangle, Stethoscope, Clock, CheckCircle, Info, PhoneCall, FileText, PlayCircle, Volume2, Send, Bot, MessageCircle, AlertCircle
+  Activity,
+  AlertCircle,
+  AlertTriangle,
+  ArrowDown,
+  ArrowRight,
+  ArrowUp,
+  Ban,
+  Bell,
+  BookOpen,
+  Bot,
+  Building2,
+  Calculator,
+  Calendar,
+  Camera,
+  Check,
+  CheckCircle,
+  CheckCircle2,
+  ClipboardList,
+  Clock,
+  Cloud,
+  CloudRain,
+  CreditCard,
+  Droplets,
+  Edit3,
+  FileText,
+  Folder,
+  Globe,
+  GraduationCap,
+  Hand,
+  HelpCircle,
+  Home,
+  Hourglass,
+  IndianRupee,
+  Info,
+  KeyRound,
+  Landmark,
+  Lock,
+  Map,
+  MapPin,
+  Megaphone,
+  MessageCircle,
+  Minus,
+  Phone,
+  PhoneCall,
+  PhoneOff,
+  Pin,
+  PlayCircle,
+  Radio,
+  RefreshCw,
+  Route,
+  Scale,
+  Search,
+  Send,
+  ShieldAlert,
+  ShieldCheck,
+  Sparkles,
+  Sprout,
+  Star,
+  Stethoscope,
+  Sun,
+  Thermometer,
+  Ticket,
+  Trash2,
+  TrendingUp,
+  Volume2,
+  Wheat,
+  Wind,
+  X,
+  Zap
 } from 'lucide-react'
+import { useLanguage, Trans } from '../context/LanguageContext'
 
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
@@ -247,7 +310,7 @@ export function HomeScreen({ setActive }) {
                 transition: 'all 0.2s'
               }}
             >
-              🌾 {lang === 'kn' ? 'ರೈತ' : 'Farmer'}
+              <Sprout className="inline mr-1 text-emerald-500" size={16} /> {lang === 'kn' ? 'ರೈತ' : 'Farmer'}
             </button>
             <button
               onClick={() => setRoleMode('student')}
@@ -258,7 +321,7 @@ export function HomeScreen({ setActive }) {
                 transition: 'all 0.2s'
               }}
             >
-              🎓 {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿ' : 'Student'}
+              <GraduationCap className="inline mr-1 text-purple-500" size={16} /> {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿ' : 'Student'}
             </button>
           </div>
         </div>
@@ -303,10 +366,10 @@ export function HomeScreen({ setActive }) {
         <div className="animate-fadeInUp card" style={{ marginBottom: 20, border: '1.5px solid var(--primary-light)', background: 'var(--bg-card)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 22 }}>🎓</span>
+              <span style={{ fontSize: 22 }}><GraduationCap className="inline mr-1 text-purple-500" size={16} /></span>
               <div>
                 <h4 style={{ fontSize: 16, fontWeight: 700, color: 'var(--primary-dark)', margin: 0 }}>
-                  🎓 Scholarships & Eligibility
+                  <GraduationCap className="inline mr-1 text-purple-500" size={16} /> Scholarships & Eligibility
                 </h4>
                 <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
                   {lang === 'kn'
@@ -320,7 +383,7 @@ export function HomeScreen({ setActive }) {
               onClick={() => setActive && setActive('schemes')}
               style={{ fontSize: 12 }}
             >
-              🎓 {lang === 'kn' ? 'ಎಲ್ಲಾ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ವೀಕ್ಷಿಸಿ' : 'View All Scholarships'} ➔
+              <GraduationCap className="inline mr-1 text-purple-500" size={16} /> {lang === 'kn' ? 'ಎಲ್ಲಾ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ವೀಕ್ಷಿಸಿ' : 'View All Scholarships'} <ArrowRight className="inline ml-1" size={14} />
             </button>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
@@ -378,10 +441,10 @@ export function HomeScreen({ setActive }) {
                 <div>
                   <h5 style={{ fontSize: 14, fontWeight: 700, margin: '0 0 10px 0', color: 'var(--text-primary)', lineHeight: 1.3 }}>{sch.title}</h5>
                   <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 6px 0', fontWeight: 500 }}>
-                    <strong>📚 Class:</strong> {sch.classReq}
+                    <strong><BookOpen className="inline mr-1 text-blue-500" size={16} /> Class:</strong> {sch.classReq}
                   </p>
                   <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 14px 0', fontWeight: 500 }}>
-                    <strong>💰 Family Income Limit:</strong> {sch.incomeLimit}
+                    <strong><IndianRupee className="inline mr-1 text-emerald-500" size={16} /> Family Income Limit:</strong> {sch.incomeLimit}
                   </p>
                 </div>
                 <a
@@ -429,7 +492,7 @@ export function HomeScreen({ setActive }) {
             <h3>{t('todayPrices')} ({userDistrict})</h3>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               {loadingPrices ? (
-                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>⏳ Fetching...</span>
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}><Hourglass className="inline mr-1 text-amber-500" size={16} /> Fetching...</span>
               ) : (
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: priceSource === 'live' ? 'var(--success)' : 'var(--text-muted)', fontWeight: 600 }}>
                   <span style={{ width: 7, height: 7, borderRadius: '50%', background: priceSource === 'live' ? 'var(--success)' : '#aaa', display: 'inline-block', animation: priceSource === 'live' ? 'pulse 1.5s infinite' : 'none' }} />
@@ -522,7 +585,7 @@ export function HomeScreen({ setActive }) {
             <button
               onClick={() => setSelectedCropInfo(null)}
               style={{ position: 'absolute', top: 12, right: 12, background: 'var(--bg-main)', border: 'none', width: 32, height: 32, borderRadius: 16, fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)' }}
-            >✕</button>
+            ><X className="inline" size={16} /></button>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
               <div style={{ width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', border: '2px solid var(--primary)' }}>
                 <img src={selectedCropInfo.image} alt={selectedCropInfo.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -746,13 +809,13 @@ export function SchemesScreen() {
         overflow: 'hidden'
       }}>
         <div style={{ position: 'absolute', right: -20, bottom: -20, opacity: 0.15, fontSize: 160 }}>
-          🌾
+          <Sprout className="inline mr-1 text-emerald-500" size={16} />
         </div>
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
             <div>
               <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', marginBottom: 8, padding: '4px 10px', fontSize: 12 }}>
-                🏛️ Karnataka &amp; Central Agri Portal
+                <Landmark className="inline mr-1 text-blue-500" size={16} /> Karnataka &amp; Central Agri Portal
               </span>
               <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
                 {t('schemesTitle') || 'Government Schemes'}
@@ -782,7 +845,7 @@ export function SchemesScreen() {
                   gap: 6
                 }}
               >
-                🍈 FRUITS Karnataka ↗
+                <Sprout className="inline mr-1 text-emerald-500" size={16} /> FRUITS Karnataka ↗
               </a>
             </div>
           </div>
@@ -826,11 +889,11 @@ export function SchemesScreen() {
         borderBottom: '1px solid var(--border-light)'
       }}>
         {[
-          { id: 'directory', label: t('tabAllSchemes') || '🏛️ All Schemes' },
-          { id: 'loans', label: t('tabLoansInsurance') || '💳 Loans & Insurance' },
-          { id: 'advisory', label: t('tabAdvisoryKVK') || '🌾 Advisory & KVK' },
-          { id: 'stories', label: t('tabSuccessStories') || '🌟 Success Stories' },
-          { id: 'grievance', label: t('tabGrievanceFAQ') || '⚖️ Grievance & Help' }
+          { id: 'directory', label: t('tabAllSchemes') || 'All Schemes' },
+          { id: 'loans', label: t('tabLoansInsurance') || 'Loans & Insurance' },
+          { id: 'advisory', label: t('tabAdvisoryKVK') || 'Advisory & KVK' },
+          { id: 'stories', label: t('tabSuccessStories') || 'Success Stories' },
+          { id: 'grievance', label: t('tabGrievanceFAQ') || 'Grievance & Help' }
         ].map(tab => (
           <button
             key={tab.id}
@@ -849,7 +912,22 @@ export function SchemesScreen() {
               border: activeTab === tab.id ? 'none' : '1px solid var(--border-light)'
             }}
           >
-            {tab.label}
+            {(() => {
+              const tabIconMap = {
+                directory: Landmark,
+                loans: CreditCard,
+                advisory: Sprout,
+                stories: Star,
+                grievance: Scale
+              };
+              const TabIcon = tabIconMap[tab.id] || MapPin;
+              return (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <TabIcon size={14} />
+                  <Trans k={tab.labelKey} />
+                </span>
+              );
+            })()}
           </button>
         ))}
       </div>
@@ -882,7 +960,7 @@ export function SchemesScreen() {
                   style={{ width: '100%', padding: '9px 12px', fontSize: 13, borderRadius: 10 }}
                 >
                   {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat === 'All' ? '🏛️ All Categories' : cat === 'Scholarship' ? '🎓 Scholarships' : cat}</option>
+                    <option key={cat} value={cat}>{cat === 'All' ? 'All Categories' : cat === 'Scholarship' ? 'Scholarships' : cat}</option>
                   ))}
                 </select>
               </div>
@@ -955,7 +1033,7 @@ export function SchemesScreen() {
                   }}>
                     {s.level && (
                       <span className="badge" style={{ background: s.level === 'Central' ? '#1e3a8a' : '#c2410c', color: '#fff', fontSize: 11 }}>
-                        {s.level === 'Central' ? '🇮🇳 Central' : '🟡 Karnataka'}
+                        {s.level === 'Central' ? 'Central' : 'Karnataka'}
                       </span>
                     )}
                     {s.badge && (
@@ -999,7 +1077,7 @@ export function SchemesScreen() {
                       fontSize: 12
                     }}>
                       <div style={{ color: 'var(--primary-dark)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <span>💰 {s.benefits.subsidyPercent || s.benefits.maxLimit}</span>
+                        <span><IndianRupee className="inline mr-1 text-emerald-500" size={16} /> {s.benefits.subsidyPercent || s.benefits.maxLimit}</span>
                       </div>
                       {s.benefits.mode && (
                         <div style={{ color: 'var(--text-muted)', fontSize: 11, marginTop: 2 }}>
@@ -1035,7 +1113,7 @@ export function SchemesScreen() {
 
           {filteredSchemes.length === 0 && (
             <div className="card" style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>
-              <span style={{ fontSize: 44, display: 'block', marginBottom: 12 }}>🔍</span>
+              <span style={{ fontSize: 44, display: 'block', marginBottom: 12 }}><Search className="inline mr-1 text-blue-500" size={16} /></span>
               <h3>No matching schemes found</h3>
               <p>Try resetting filters or searching with a different term.</p>
             </div>
@@ -1050,7 +1128,7 @@ export function SchemesScreen() {
         <div className="animate-fadeInUp" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div className="card" style={{ padding: '20px 24px', background: 'var(--bg-card)' }}>
             <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 8, color: 'var(--text-primary)' }}>
-              💳 Agricultural Credit, Kisan Credit Cards (KCC) &amp; Crop Insurance
+              <CreditCard className="inline mr-1 text-indigo-500" size={16} /> Agricultural Credit, Kisan Credit Cards (KCC) &amp; Crop Insurance
             </h3>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
               Transparent interest rates, scale of finance limits, moratorium periods, and claim guidelines for Karnataka farmers.
@@ -1120,7 +1198,7 @@ export function SchemesScreen() {
         <div className="animate-fadeInUp" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div className="card" style={{ padding: '20px 24px' }}>
             <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 6 }}>
-              🌾 Agri-Advisory, Soil Testing &amp; KVK Training Centers
+              <Sprout className="inline mr-1 text-emerald-500" size={16} /> Agri-Advisory, Soil Testing &amp; KVK Training Centers
             </h3>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
               Connect with 745+ Raitha Samparka Kendras (RSK), 33+ ICAR Krishi Vigyan Kendras, and 24x7 Weather Advisories across Karnataka.
@@ -1141,7 +1219,7 @@ export function SchemesScreen() {
                   </div>
                 )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ fontSize: 24 }}>🏛️</span>
+                  <span style={{ fontSize: 24 }}><Landmark className="inline mr-1 text-blue-500" size={16} /></span>
                   <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>
                     {getLangText(adv.title)}
                   </h4>
@@ -1152,7 +1230,7 @@ export function SchemesScreen() {
                 </p>
 
                 <div style={{ background: 'var(--bg-main)', padding: 10, borderRadius: 8, fontSize: 12, color: 'var(--text-primary)', fontWeight: 600 }}>
-                  📞 {adv.contact}
+                  <Phone className="inline mr-1 text-emerald-500" size={16} /> {adv.contact}
                 </div>
 
                 <a
@@ -1177,7 +1255,7 @@ export function SchemesScreen() {
         <div className="animate-fadeInUp" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div className="card" style={{ padding: '20px 24px' }}>
             <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 6 }}>
-              🌟 Real Beneficiary Success Stories &amp; Ground Impact
+              <Star className="inline mr-1 text-amber-500" size={16} /> Real Beneficiary Success Stories &amp; Ground Impact
             </h3>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
               Inspiring real experiences of Karnataka farmers transforming their livelihoods with government schemes.
@@ -1206,13 +1284,13 @@ export function SchemesScreen() {
                   />
                   <div>
                     <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>{story.name}</h4>
-                    <p style={{ margin: '2px 0 0 0', fontSize: 12, color: 'var(--text-muted)' }}>📍 {story.village}</p>
+                    <p style={{ margin: '2px 0 0 0', fontSize: 12, color: 'var(--text-muted)' }}><MapPin className="inline mr-1 text-red-500" size={16} /> {story.village}</p>
                     <span className="badge badge-success" style={{ marginTop: 4, fontSize: 10 }}>{story.stat}</span>
                   </div>
                 </div>
 
                 <div style={{ background: 'var(--bg-main)', padding: '10px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, color: 'var(--primary-dark)' }}>
-                  🌾 {story.scheme}: {story.benefitReceived}
+                  <Sprout className="inline mr-1 text-emerald-500" size={16} /> {story.scheme}: {story.benefitReceived}
                 </div>
 
                 <p style={{ fontSize: 13, color: 'var(--text-secondary)', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>
@@ -1232,14 +1310,14 @@ export function SchemesScreen() {
           {/* Helpdesk Contacts */}
           <div className="card" style={{ padding: '20px 24px' }}>
             <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 12 }}>
-              ⚖️ Official Grievance Portals &amp; 24x7 Helplines
+              <Scale className="inline mr-1 text-blue-500" size={16} /> Official Grievance Portals &amp; 24x7 Helplines
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
               {grievanceHelpdesks.map((desk, idx) => (
                 <div key={idx} style={{ background: 'var(--bg-main)', padding: 14, borderRadius: 12, border: '1px solid var(--border-light)' }}>
                   <h4 style={{ margin: '0 0 4px 0', fontSize: 14, fontWeight: 700 }}>{desk.name}</h4>
-                  <p style={{ margin: '0 0 4px 0', fontSize: 13, color: 'var(--primary)', fontWeight: 700 }}>📞 {desk.tollFree}</p>
-                  <p style={{ margin: '0 0 10px 0', fontSize: 11, color: 'var(--text-muted)' }}>🕒 {desk.timings}</p>
+                  <p style={{ margin: '0 0 4px 0', fontSize: 13, color: 'var(--primary)', fontWeight: 700 }}><Phone className="inline mr-1 text-emerald-500" size={16} /> {desk.tollFree}</p>
+                  <p style={{ margin: '0 0 10px 0', fontSize: 11, color: 'var(--text-muted)' }}><Clock className="inline mr-1 text-slate-500" size={16} /> {desk.timings}</p>
                   <a
                     href={desk.portalUrl}
                     target="_blank"
@@ -1257,7 +1335,7 @@ export function SchemesScreen() {
           {/* Interactive FAQs Accordion */}
           <div className="card" style={{ padding: '20px 24px' }}>
             <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 16 }}>
-              ❓ Frequently Asked Questions (FAQs)
+              <HelpCircle className="inline mr-1 text-blue-500" size={16} /> Frequently Asked Questions (FAQs)
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {schemesFaqs.map((faq, fIdx) => (
@@ -1360,7 +1438,7 @@ export function SchemesScreen() {
                 color: 'var(--text-primary)'
               }}
             >
-              ✕
+              <X className="inline" size={16} />
             </button>
 
             {/* Scheme Image Banner */}
@@ -1413,7 +1491,7 @@ export function SchemesScreen() {
                 marginBottom: 16
               }}>
                 <h5 style={{ color: '#065f46', fontWeight: 800, fontSize: 14, margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  💰 {t('benefitDetails') || 'Benefit & Subsidy Structure'}
+                  <IndianRupee className="inline mr-1 text-emerald-500" size={16} /> {t('benefitDetails') || 'Benefit & Subsidy Structure'}
                 </h5>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, fontSize: 12, color: '#064e3b' }}>
                   <div><strong>Subsidy Percentage:</strong> {selectedScheme.benefits.subsidyPercent || 'N/A'}</div>
@@ -1659,7 +1737,7 @@ export function MarketScreen() {
               <div className="card" style={{ background: 'linear-gradient(135deg, #ede9fe, #ddd6fe)', border: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <div style={{ fontSize: 12, color: '#5b21b6', fontWeight: 600, marginBottom: 4 }}>Data Source</div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: '#4c1d95' }}>
-                  📋 Karnataka APMC Price Sheet
+                  <ClipboardList className="inline mr-1 text-indigo-500" size={16} /> Karnataka APMC Price Sheet
                 </div>
                 <div style={{ fontSize: 11, color: '#6d28d9', marginTop: 4 }}>
                   31 districts × 10 crops · Modal prices · Aug 2026
@@ -1676,7 +1754,7 @@ export function MarketScreen() {
       {/* Estimator */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 24, marginBottom: 24 }}>
         <div className="card">
-          <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12, color: 'var(--primary)' }}>🧮 Crop Yield & Income Estimator</h4>
+          <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12, color: 'var(--primary)' }}><Calculator className="inline mr-1 text-blue-500" size={16} /> Crop Yield & Income Estimator</h4>
           <form onSubmit={calculateEstimate} style={{ display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'flex-end' }}>
             <div className="form-group" style={{ flex: 1, minWidth: 150 }}>
               <label className="form-label" style={{ fontSize: 12 }}>Land Size (Acres) / ಜಮೀನು (ಎಕರೆ)</label>
@@ -1857,7 +1935,7 @@ export function MarketScreen() {
                           border: `1px solid ${p.status === 'ACTUAL' ? '#bbf7d0' : '#e5e7eb'}`,
                           borderRadius: 6, padding: '2px 6px'
                         }}>
-                          {p.status === 'ACTUAL' ? '✓ Verified' : '~ Estimated'}
+                          {p.status === 'ACTUAL' ? '<Check className="inline mr-1 text-emerald-500" size={16} /> Verified' : '~ Estimated'}
                         </div>
                       )}
                     </div>
@@ -1958,7 +2036,7 @@ export function AnnouncementsScreen() {
           className="btn btn-outline btn-sm"
           onClick={() => setSelectedAnnounce({ id: 'subscribe-widget' })}
         >
-          🔔 Subscribe to SMS Alerts
+          <Bell className="inline mr-1 text-amber-500" size={16} /> Subscribe to SMS Alerts
         </button>
       </div>
 
@@ -1998,7 +2076,7 @@ export function AnnouncementsScreen() {
               onClick={() => setSelectedAnnounce(null)}
               style={{ position: 'absolute', top: 16, right: 16, fontSize: 20, cursor: 'pointer', fontWeight: 'bold' }}
             >
-              ✕
+              <X className="inline" size={16} />
             </button>
             <div style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
               {selectedAnnounce.urgent && <span className="badge badge-danger">{t('urgent')}</span>}
@@ -2020,9 +2098,9 @@ export function AnnouncementsScreen() {
               onClick={() => setSelectedAnnounce(null)}
               style={{ position: 'absolute', top: 16, right: 16, fontSize: 20, cursor: 'pointer', fontWeight: 'bold' }}
             >
-              ✕
+              <X className="inline" size={16} />
             </button>
-            <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 12 }}>🔔 Get Local Alerts via SMS</h3>
+            <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 12 }}><Bell className="inline mr-1 text-amber-500" size={16} /> Get Local Alerts via SMS</h3>
             
             {!isSubscribed ? (
               <form onSubmit={handleSubscribeSubmit} className="login-form">
@@ -2046,7 +2124,7 @@ export function AnnouncementsScreen() {
               </form>
             ) : (
               <div style={{ textAlign: 'center', padding: '12px 0' }}>
-                <span style={{ fontSize: 48 }}>✅</span>
+                <span style={{ fontSize: 48 }}><CheckCircle2 className="inline mr-1 text-emerald-500" size={16} /></span>
                 <h4 style={{ fontWeight: 700, marginTop: 8 }}>Subscribed Successfully!</h4>
                 <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>You will now receive village alerts on +91 {phoneSub}</p>
                 <button className="btn btn-outline w-full" style={{ marginTop: 20, justifyContent: 'center' }} onClick={() => { setSelectedAnnounce(null); setIsSubscribed(false); setPhoneSub(''); }}>Done</button>
@@ -2211,7 +2289,7 @@ export function ComplaintScreen() {
   if (submitted) {
     return (
       <div className="animate-fadeInUp" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', textAlign: 'center' }}>
-        <div style={{ fontSize: 72, marginBottom: 20 }}>✅</div>
+        <div style={{ fontSize: 72, marginBottom: 20 }}><CheckCircle2 className="inline mr-1 text-emerald-500" size={16} /></div>
         <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 8 }}>{t('complaintSubmitted')}</h2>
         <p style={{ color: 'var(--text-secondary)', marginBottom: 8 }}>
           {t('complaintId')}: <strong>{newComplaintId}</strong>
@@ -2298,7 +2376,7 @@ export function ComplaintScreen() {
               {/* ── REAL CAMERA SECTION ── */}
               <div className="form-group">
                 <label className="form-label">
-                  📷 {t('attachPhoto')} / ಫೋಟೋ ತೆಗೆಯಿರಿ
+                  <Camera className="inline mr-1 text-blue-500" size={16} /> {t('attachPhoto')} / ಫೋಟೋ ತೆಗೆಯಿರಿ
                   <span style={{ fontWeight: 400, color: 'var(--text-muted)', marginLeft: 6 }}>(Optional)</span>
                 </label>
 
@@ -2307,11 +2385,11 @@ export function ComplaintScreen() {
                   <div style={{ border: '1px solid var(--border-light)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
                     {/* Guide banner */}
                     <div style={{ background: 'linear-gradient(135deg, #f0fdf4, #dcfce7)', padding: '14px 18px', borderBottom: '1px solid #bbf7d0' }}>
-                      <p style={{ fontSize: 13, fontWeight: 700, color: '#15803d', marginBottom: 6 }}>📋 How to take a complaint photo / ಫೋಟೋ ಹೇಗೆ ತೆಗೆಯಬೇಕು:</p>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: '#15803d', marginBottom: 6 }}><ClipboardList className="inline mr-1 text-indigo-500" size={16} /> How to take a complaint photo / ಫೋಟೋ ಹೇಗೆ ತೆಗೆಯಬೇಕು:</p>
                       <ol style={{ fontSize: 12, color: '#166534', paddingLeft: 18, margin: 0, lineHeight: 2 }}>
                         <li>Click <strong>"Open Camera"</strong> — allow camera permission when browser asks</li>
                         <li>Point your camera at the <strong>problem area</strong> clearly</li>
-                        <li>Click the <strong>📸 Capture</strong> button to take the photo</li>
+                        <li>Click the <strong><Camera className="inline mr-1 text-blue-500" size={16} /> Capture</strong> button to take the photo</li>
                         <li>Review the photo — retake if needed</li>
                       </ol>
                     </div>
@@ -2333,7 +2411,7 @@ export function ComplaintScreen() {
                           fontWeight: 600, color: 'var(--text-secondary)', background: '#fff', transition: 'all 0.2s'
                         }}
                       >
-                        📁 Upload File
+                        <Folder className="inline mr-1 text-blue-500" size={16} /> Upload File
                         <input type="file" accept="image/*" onChange={handleFileUpload} style={{ display: 'none' }} />
                       </label>
                     </div>
@@ -2343,10 +2421,10 @@ export function ComplaintScreen() {
                 {/* Requesting permission */}
                 {cameraMode === 'requesting' && (
                   <div style={{ border: '2px dashed var(--primary)', borderRadius: 'var(--radius-md)', padding: 24, textAlign: 'center', background: 'var(--primary-glow)' }}>
-                    <div style={{ fontSize: 32, marginBottom: 10 }}>📡</div>
+                    <div style={{ fontSize: 32, marginBottom: 10 }}><Radio className="inline mr-1 text-amber-500" size={16} /></div>
                     <p style={{ fontWeight: 700, color: 'var(--primary)', fontSize: 14 }}>Requesting camera permission...</p>
                     <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 6 }}>
-                      ✋ Your browser will ask for camera access — click <strong>"Allow"</strong> to continue
+                      <Hand className="inline mr-1 text-amber-500" size={16} /> Your browser will ask for camera access — click <strong>"Allow"</strong> to continue
                     </p>
                   </div>
                 )}
@@ -2373,7 +2451,7 @@ export function ComplaintScreen() {
                         style={{ flex: 1, justifyContent: 'center', maxWidth: 200 }}
                         onClick={capturePhoto}
                       >
-                        📸 Capture Photo / ಚಿತ್ರ ತೆಗೆಯಿರಿ
+                        <Camera className="inline mr-1 text-blue-500" size={16} /> Capture Photo / ಚಿತ್ರ ತೆಗೆಯಿರಿ
                       </button>
                       <button
                         type="button"
@@ -2394,14 +2472,14 @@ export function ComplaintScreen() {
                 {cameraMode === 'captured' && photoUri && (
                   <div style={{ border: '2px solid var(--success)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
                     <div style={{ background: '#f0fdf4', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: '1px solid #bbf7d0' }}>
-                      <span style={{ color: '#15803d', fontWeight: 700, fontSize: 13 }}>✅ Photo Captured Successfully!</span>
+                      <span style={{ color: '#15803d', fontWeight: 700, fontSize: 13 }}><CheckCircle2 className="inline mr-1 text-emerald-500" size={16} /> Photo Captured Successfully!</span>
                       <button type="button" onClick={retakePhoto} style={{ marginLeft: 'auto', color: 'var(--primary)', fontSize: 12, fontWeight: 600, cursor: 'pointer', border: 'none', background: 'none' }}>
-                        🔄 Retake / ಮತ್ತೆ ತೆಗೆಯಿರಿ
+                        <RefreshCw className="inline mr-1 text-blue-500" size={16} /> Retake / ಮತ್ತೆ ತೆಗೆಯಿರಿ
                       </button>
                     </div>
                     <img src={photoUri} alt="Complaint evidence" style={{ width: '100%', maxHeight: 280, objectFit: 'cover', display: 'block' }} />
                     <div style={{ padding: '10px 14px', background: '#f9fafb', fontSize: 12, color: 'var(--text-muted)' }}>
-                      📌 This photo will be attached to your complaint as evidence
+                      <Pin className="inline mr-1 text-red-500" size={16} /> This photo will be attached to your complaint as evidence
                     </div>
                   </div>
                 )}
@@ -2410,13 +2488,13 @@ export function ComplaintScreen() {
                 {(cameraMode === 'denied' || cameraMode === 'unsupported') && (
                   <div style={{ border: '1px solid #fecaca', borderRadius: 'var(--radius-md)', padding: 16, background: '#fff5f5' }}>
                     <p style={{ color: '#dc2626', fontWeight: 700, fontSize: 14, marginBottom: 8 }}>
-                      {cameraMode === 'denied' ? '🚫 Camera Permission Denied' : '📵 Camera Not Available'}
+                      {cameraMode === 'denied' ? '<Ban className="inline mr-1 text-red-500" size={16} /> Camera Permission Denied' : '<PhoneOff className="inline mr-1 text-red-500" size={16} /> Camera Not Available'}
                     </p>
                     <p style={{ color: '#7f1d1d', fontSize: 13, marginBottom: 14 }}>{cameraError}</p>
                     {cameraMode === 'denied' && (
                       <div style={{ background: '#fff', border: '1px solid #fecaca', borderRadius: 8, padding: '10px 14px', marginBottom: 12, fontSize: 12, color: '#374151' }}>
                         <strong>How to allow camera in Chrome:</strong><br />
-                        1. Click the 🔒 lock icon in the browser address bar<br />
+                        1. Click the <Lock className="inline mr-1 text-red-500" size={16} /> lock icon in the browser address bar<br />
                         2. Find "Camera" → select "Allow"<br />
                         3. Refresh the page and try again
                       </div>
@@ -2427,7 +2505,7 @@ export function ComplaintScreen() {
                       borderRadius: 'var(--radius-md)', cursor: 'pointer', fontSize: 14,
                       fontWeight: 600, background: '#fff', color: 'var(--primary)'
                     }}>
-                      📁 Upload Photo Instead
+                      <Folder className="inline mr-1 text-blue-500" size={16} /> Upload Photo Instead
                       <input type="file" accept="image/*" onChange={handleFileUpload} style={{ display: 'none' }} />
                     </label>
                   </div>
@@ -2496,7 +2574,7 @@ export function ComplaintStatusScreen() {
     <div className="animate-fadeInUp">
       <div style={{ marginBottom: 20 }}>
         <div className="form-input" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px' }}>
-          <span>🔍</span>
+          <span><Search className="inline mr-1 text-blue-500" size={16} /></span>
           <input 
             style={{ border: 'none', outline: 'none', width: '100%', fontSize: 15 }} 
             placeholder={t('searchComplaint')} 
@@ -2528,23 +2606,23 @@ export function ComplaintStatusScreen() {
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap', marginBottom: 4 }}>
-                    <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--text-muted)' }}>🎫 {c.id}</span>
+                    <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--text-muted)' }}><Ticket className="inline mr-1 text-pink-500" size={16} /> {c.id}</span>
                     <span className={`badge ${
                       c.status === 'resolved' ? 'badge-success'
                       : isEscalated ? 'badge-warning'
                       : c.status === 'inprogress' ? 'badge-info'
                       : 'badge-warning'}`} style={{ fontSize: 10 }}>
-                      {c.status === 'resolved' ? '✅ ' + t('resolved')
-                        : isEscalated ? '🔼 Escalated'
-                        : c.status === 'inprogress' ? '🔄 ' + t('inProgress')
-                        : '⏳ ' + t('pending')}
+                      {c.status === 'resolved' ? '<CheckCircle2 className="inline mr-1 text-emerald-500" size={16} /> ' + t('resolved')
+                        : isEscalated ? '<ArrowUp className="inline mr-1 text-emerald-500" size={16} /> Escalated'
+                        : c.status === 'inprogress' ? '<RefreshCw className="inline mr-1 text-blue-500" size={16} /> ' + t('inProgress')
+                        : '<Hourglass className="inline mr-1 text-amber-500" size={16} /> ' + t('pending')}
                     </span>
                   </div>
                   <h4 style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 700 }}>{c.title}</h4>
                   <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                    <span>📁 {c.category}</span>
-                    <span>📅 {c.date}</span>
-                    <span>🏛️ {c.assignedTo}</span>
+                    <span><Folder className="inline mr-1 text-blue-500" size={16} /> {c.category}</span>
+                    <span><Calendar className="inline mr-1 text-blue-500" size={16} /> {c.date}</span>
+                    <span><Landmark className="inline mr-1 text-blue-500" size={16} /> {c.assignedTo}</span>
                   </div>
                 </div>
               </div>
@@ -2556,7 +2634,7 @@ export function ComplaintStatusScreen() {
                   background: '#fef3c7', border: '1px solid #fcd34d',
                   fontSize: 12, color: '#92400e', display: 'flex', alignItems: 'center', gap: 6
                 }}>
-                  <span style={{ fontSize: 16 }}>🔼</span>
+                  <span style={{ fontSize: 16 }}><ArrowUp className="inline mr-1 text-emerald-500" size={16} /></span>
                   <div>
                     <strong>Complaint Escalated</strong>
                     <p style={{ margin: 0 }}>
@@ -2570,7 +2648,7 @@ export function ComplaintStatusScreen() {
               {hasResponse ? (
                 <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px dashed var(--border-light)' }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 8 }}>
-                    📋 Official Responses ({c.responses.length})
+                    <ClipboardList className="inline mr-1 text-indigo-500" size={16} /> Official Responses ({c.responses.length})
                   </div>
                   {c.responses.map((r, ri) => (
                     <div key={ri} style={{
@@ -2580,7 +2658,7 @@ export function ComplaintStatusScreen() {
                     }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, flexWrap: 'wrap', gap: 4 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                          <span style={{ fontSize: 13 }}>👮</span>
+                          <span style={{ fontSize: 13 }}><ShieldAlert className="inline mr-1 text-blue-500" size={16} /></span>
                           <strong style={{ fontSize: 12 }}>{r.respondedBy}</strong>
                           {r.role && <span style={{ fontSize: 10, color: 'var(--text-muted)', background: 'var(--bg-card)', padding: '1px 6px', borderRadius: 4 }}>{r.role}</span>}
                         </div>
@@ -2724,7 +2802,7 @@ export function ProfileScreen() {
     const activeDistrictObj = districtsOfKarnataka.find(d => d.name === editDistrict) || districtsOfKarnataka[0]
     return (
       <form onSubmit={handleSave} className="animate-fadeInUp card" style={{ maxWidth: 650, margin: '0 auto', padding: 24 }}>
-        <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 20, color: 'var(--primary)' }}>✏️ Edit Profile Details</h3>
+        <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 20, color: 'var(--primary)' }}><Edit3 className="inline mr-1 text-blue-500" size={16} /> Edit Profile Details</h3>
         
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
           <div className="form-group">
@@ -2823,7 +2901,7 @@ export function ProfileScreen() {
             <h3 style={{ fontSize: 20, fontWeight: 800 }}>{userName || 'Villager'}</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2 }}>{userVillage}{userVillage && userGp ? ', ' : ''}{userGp && `${userGp} GP`}</p>
             <p style={{ color: 'var(--text-muted)', fontSize: 11, marginTop: 2 }}>{userTaluk}{userTaluk && ', '}{userDistrict}{userDistrict && ', Karnataka'}</p>
-            <button className="btn btn-outline" onClick={startEditing} style={{ marginTop: 16 }}>✏️ {t('edit')}</button>
+            <button className="btn btn-outline" onClick={startEditing} style={{ marginTop: 16 }}><Edit3 className="inline mr-1 text-blue-500" size={16} /> {t('edit')}</button>
           </div>
           <div className="card">
             <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 14 }}>{t('personalDetails')}</h4>

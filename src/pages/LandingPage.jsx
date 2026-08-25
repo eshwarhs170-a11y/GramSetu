@@ -8,7 +8,7 @@ import ThemeToggle from '../components/ThemeToggle'
 import { db } from '../firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import {
-  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink, Building2, GraduationCap, X
+  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink, Building2, GraduationCap, X, Check, Copyright
 } from 'lucide-react'
 
 // ── District Knowledge Base ──────────────────────────────────
@@ -297,7 +297,9 @@ export default function LandingPage() {
               style={{ width: '100%', height: 260, objectFit: 'cover', display: 'block' }}
             />
             <div style={{ background: 'rgba(15,23,42,0.85)', backdropFilter: 'blur(8px)', padding: '14px 18px' }}>
-              <div style={{ color: '#4ade80', fontSize: 12, fontWeight: 700, marginBottom: 4 }}>✓ LIVE — Karnataka Portal</div>
+              <div style={{ color: '#4ade80', fontSize: 12, fontWeight: 700, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <Check size={12} strokeWidth={3} /> LIVE — Karnataka Portal
+              </div>
               <div style={{ color: '#fff', fontWeight: 700, fontSize: 15 }}>ಸಾವಿರಾರು ರೈತರು ಸಂಪರ್ಕಿತರು</div>
             </div>
           </div>
@@ -364,7 +366,7 @@ export default function LandingPage() {
           maxWidth: 960, margin: '0 auto' 
         }}>
           {districtList.map(d => {
-            const info = districtData[d] || { emoji: '📍', bg: '#333' }
+            const info = districtData[d] || { emoji: 'MapPin', bg: '#333' }
             return (
               <Link
                 key={d}
@@ -652,7 +654,7 @@ export default function LandingPage() {
                 }}
               >
                 {newsletterStatus === 'Joined' ? (
-                  <><span style={{ fontSize: 18 }}>✓</span><span>Subscribed</span></>
+                  <><Check size={16} /><span>Subscribed</span></>
                 ) : newsletterStatus === 'Loading' ? 'Subscribing...' : 'Subscribe'}
               </button>
             </div>
@@ -662,8 +664,8 @@ export default function LandingPage() {
         
         {/* Bottom Bar */}
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 24, display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, textAlign: 'center' }}>
-            © {new Date().getFullYear()} Karnataka e-Governance Services Ltd. (KeGSL). All rights reserved.
+          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <Copyright size={14} /> {new Date().getFullYear()} Karnataka e-Governance Services Ltd. (KeGSL). All rights reserved.
           </div>
         </div>
       </footer>

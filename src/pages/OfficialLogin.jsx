@@ -346,8 +346,8 @@ export default function OfficialLogin() {
                 </div>
               </div>
               
-              <div style={{ marginTop: 6, fontSize: 11, color: 'var(--text-muted)' }}>
-                📍 Jurisdiction: {gp ? `${gp} GP, ` : ''}{taluk} Taluk, {district}
+              <div style={{ marginTop: 6, fontSize: 11, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                <MapPin size={12} /> Jurisdiction: {gp ? `${gp} GP, ` : ''}{taluk} Taluk, {district}
               </div>
 
               <button

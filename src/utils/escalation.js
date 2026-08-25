@@ -15,7 +15,7 @@ export const ESCALATION_LEVELS = [
     roleKn: 'ಪಿಡಿಒ / ಗ್ರಾಮ ಪಂಚಾಯತ್ ಕಾರ್ಯದರ್ಶಿ',
     dept: 'Gram Panchayat / PDO',
     slaDays: 7,
-    icon: '🏘️',
+    icon: 'Home',
   },
   {
     level: 1,
@@ -23,7 +23,7 @@ export const ESCALATION_LEVELS = [
     roleKn: 'ತಾಲೂಕ್ ಪಂಚಾಯತ್ ಕಾರ್ಯನಿರ್ವಾಹಕ ಅಧಿಕಾರಿ',
     dept: 'Taluk Panchayat',
     slaDays: 7,
-    icon: '🏛️',
+    icon: 'Landmark',
   },
   {
     level: 2,
@@ -31,7 +31,7 @@ export const ESCALATION_LEVELS = [
     roleKn: 'ಜಿಲ್ಲಾ ಪಂಚಾಯತ್ ಮುಖ್ಯ ಕಾರ್ಯನಿರ್ವಾಹಕ / ಉಪ ಆಯುಕ್ತ',
     dept: 'Zilla Panchayat',
     slaDays: 7,
-    icon: '🏢',
+    icon: 'Building2',
   },
   {
     level: 3,
@@ -39,7 +39,7 @@ export const ESCALATION_LEVELS = [
     roleKn: 'ಆಯುಕ್ತ, ಆರ್‌ಡಿಪಿಆರ್ (ರಾಜ್ಯ ಮಟ್ಟ)',
     dept: 'RDPR Karnataka',
     slaDays: null, // Final level
-    icon: '⭐',
+    icon: 'Star',
   },
 ]
 

@@ -10,8 +10,9 @@ import {
   TrendingUp, Clock, RefreshCw, CheckCircle, Bell, Search,
   Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2,
   MapPin, Phone, Home, ShieldCheck, Mail, Map, Building2, User,
-  Star, Tag, Calendar, Menu, X
+  Star, Tag, Calendar, Menu, X, Hourglass, Folder, FileText, AlertTriangle, Send, ArrowUp, Check, Edit3
 } from 'lucide-react'
+import * as Icons from 'lucide-react'
 
 import { db } from '../firebase'
 import { collection, onSnapshot, query, orderBy, deleteDoc, doc, addDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore'
@@ -173,8 +174,8 @@ function OverviewScreen({ onPendingClick, onResolvedClick, sessionData, pendingC
             <span className="badge badge-danger" onClick={onPendingClick} style={{ cursor: 'pointer' }}>{pendingCount} {t('pendingComplaints')}</span>
             <span className="badge badge-success" onClick={onResolvedClick} style={{ cursor: 'pointer' }}>{resolvedCount} {t('resolvedComplaints')} This Week</span>
             <span className="badge" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>{sessionData.district} District</span>
-            {sessionData.taluk && <span className="badge" style={{ background: 'rgba(255,255,255,0.12)', color: '#93c5fd' }}>📍 {sessionData.taluk}</span>}
-            {sessionData.gp && <span className="badge" style={{ background: 'rgba(255,255,255,0.10)', color: '#bbf7d0' }}>🏘️ {sessionData.gp}</span>}
+            {sessionData.taluk && <span className="badge" style={{ background: 'rgba(255,255,255,0.12)', color: '#93c5fd', display: 'inline-flex', alignItems: 'center', gap: 4 }}><MapPin size={12} /> {sessionData.taluk}</span>}
+            {sessionData.gp && <span className="badge" style={{ background: 'rgba(255,255,255,0.10)', color: '#bbf7d0', display: 'inline-flex', alignItems: 'center', gap: 4 }}><Home size={12} /> {sessionData.gp}</span>}
           </div>
         </div>
         <div className="welcome-banner-img">
@@ -214,7 +215,9 @@ function AnalyticsScreen({ sessionData, pendingCount, resolvedCount }) {
   return (
     <div className="animate-fadeInUp">
       <div style={{ marginBottom: 20 }}>
-        <h2 style={{ fontSize: 24, fontWeight: 700 }}>📈 Analytics & Reports</h2>
+        <h2 style={{ fontSize: 24, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <TrendingUp size={24} style={{ color: '#22c55e' }} /> Analytics & Reports
+        </h2>
         <p style={{ color: 'var(--text-secondary)' }}>Performance and trends for {sessionData.district} District</p>
       </div>
 
@@ -259,7 +262,9 @@ function AnalyticsScreen({ sessionData, pendingCount, resolvedCount }) {
 
       {/* Category breakdown summary */}
       <div className="card" style={{ marginTop: 20 }}>
-        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>📊 Complaints by Category</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <BarChart3 size={18} style={{ color: '#6366f1' }} /> Complaints by Category
+        </h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 12 }}>
           {[
             { cat: 'Water', count: Math.floor((pendingCount+resolvedCount)*0.3) || 32, color: '#3b82f6', Icon: Droplets },
@@ -330,7 +335,7 @@ function RespondModal({ complaint, onClose, onSaved }) {
       <div className="card animate-fadeInUp" style={{ maxWidth: 520, width: '100%', padding: 28, borderRadius: 20, boxShadow: '0 24px 60px rgba(0,0,0,0.3)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
           <div>
-            <h3 style={{ fontWeight: 800, fontSize: 17, margin: 0 }}>📋 Official Response</h3>
+            <h3 style={{ fontWeight: 800, fontSize: 17, margin: 0, display: 'flex', alignItems: 'center', gap: 6 }}><ClipboardList size={18} style={{ color: '#6366f1' }} /> Official Response</h3>
             <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '4px 0 0' }}>{complaint.id} — {complaint.title}</p>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
@@ -341,9 +346,9 @@ function RespondModal({ complaint, onClose, onSaved }) {
         <div className="form-group" style={{ marginBottom: 14 }}>
           <label className="form-label">Update Status / ಸ್ಥಿತಿ</label>
           <select className="form-input" value={newStatus} onChange={e => setNewStatus(e.target.value)}>
-            <option value="pending">⏳ Pending — Under Review</option>
-            <option value="inprogress">🔄 In Progress — Work Started</option>
-            <option value="resolved">✅ Resolved — Issue Fixed</option>
+            <option value="pending">Pending — Under Review</option>
+            <option value="inprogress">In Progress — Work Started</option>
+            <option value="resolved">Resolved — Issue Fixed</option>
           </select>
         </div>
 
@@ -378,7 +383,7 @@ function RespondModal({ complaint, onClose, onSaved }) {
 
         <div style={{ display: 'flex', gap: 10 }}>
           <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleSave} disabled={saving || !responseText.trim()}>
-            {saving ? '⏳ Saving...' : '📤 Submit Response'}
+            {saving ? 'Saving...' : <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Send size={14} /> Submit Response</span>}
           </button>
           <button className="btn btn-outline" onClick={onClose}>Cancel</button>
         </div>
@@ -402,10 +407,16 @@ function EscalationBadge({ complaint }) {
         background: level === 0 ? '#dbeafe' : level === 1 ? '#fef3c7' : level === 2 ? '#fee2e2' : '#fce7f3',
         color: level === 0 ? '#1d4ed8' : level === 1 ? '#92400e' : level === 2 ? '#991b1b' : '#9d174d',
       }}>
-        {info.icon} {info.role.split('/')[0].trim()}
+        {(() => {
+          const IconComp = Icons[info.icon] || MapPin;
+          return <IconComp size={10} />;
+        })()}
+        <span>{info.role.split('/')[0].trim()}</span>
       </span>
       {overdue ? (
-        <span style={{ fontSize: 10, color: '#ef4444', fontWeight: 700 }}>⚠️ {days}d overdue</span>
+        <span style={{ fontSize: 10, color: '#ef4444', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+          <AlertTriangle size={10} /> {days}d overdue
+        </span>
       ) : (
         <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{days}d / {info.slaDays ?? '—'}d SLA</span>
       )}
@@ -508,7 +519,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
           borderRadius: 12, padding: '12px 16px', marginBottom: 18,
           display: 'flex', alignItems: 'center', gap: 12
         }}>
-          <span style={{ fontSize: 22 }}>⚠️</span>
+          <AlertTriangle size={22} className="text-red-500" />
           <div>
             <strong style={{ color: '#991b1b', fontSize: 14 }}>{overdueCount} complaint(s) past SLA deadline!</strong>
             <p style={{ margin: 0, fontSize: 12, color: '#b91c1c' }}>
@@ -528,7 +539,10 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
             color: lvl.level === 0 ? '#1d4ed8' : lvl.level === 1 ? '#92400e' : lvl.level === 2 ? '#991b1b' : '#9d174d',
             fontWeight: 700
           }}>
-            {lvl.icon} L{lvl.level}: {lvl.role.split('/')[0].trim()}
+            {(() => {
+              const IconComp = Icons[lvl.icon] || Landmark;
+              return <IconComp size={12} />;
+            })()} L{lvl.level}: {lvl.role.split('/')[0].trim()}
             {lvl.slaDays && <span style={{ fontWeight: 400, opacity: 0.7 }}>({lvl.slaDays}d)</span>}
           </div>
         ))}
@@ -574,24 +588,32 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                         : c.status === 'escalated' ? 'badge-warning'
                         : c.status === 'inprogress' ? 'badge-info'
                         : 'badge-warning'}`} style={{ fontSize: 10 }}>
-                        {c.status === 'resolved' ? '✅ Resolved'
-                          : c.status === 'escalated' ? '🔼 Escalated'
-                          : c.status === 'inprogress' ? '🔄 In Progress'
-                          : '⏳ Pending'}
+                        {(() => {
+                          if (c.status === 'resolved') {
+                            return <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><CheckCircle2 size={12} /> Resolved</span>;
+                          }
+                          if (c.status === 'escalated') {
+                            return <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><ArrowUp size={12} /> Escalated</span>;
+                          }
+                          if (c.status === 'inprogress') {
+                            return <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><RefreshCw size={12} className="animate-spin" /> In Progress</span>;
+                          }
+                          return <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><Hourglass size={12} /> Pending</span>;
+                        })()}
                       </span>
-                      {overdue && <span className="badge badge-danger" style={{ fontSize: 10 }}>🚨 OVERDUE</span>}
+                      {overdue && <span className="badge badge-danger" style={{ fontSize: 10, display: 'inline-flex', alignItems: 'center', gap: 3 }}><AlertTriangle size={10} /> OVERDUE</span>}
                       {c.status === 'escalated' && (
-                        <span style={{ fontSize: 10, color: '#92400e', fontWeight: 700 }}>
-                          → {ESCALATION_LEVELS[c.escalationLevel ?? 0]?.role}
+                        <span style={{ fontSize: 10, color: '#92400e', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                          <ArrowRight size={10} /> {ESCALATION_LEVELS[c.escalationLevel ?? 0]?.role}
                         </span>
                       )}
                     </div>
                     <h4 style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 700 }}>{c.title}</h4>
                     <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                      <span>📁 {c.category}</span>
-                      <span>📍 {c.village || c.taluk || c.district}</span>
-                      <span>📅 {c.date || (c.createdAt?.toDate?.()?.toLocaleDateString()) || 'Unknown'}</span>
-                      {c.submittedBy && <span>👤 {c.submittedBy}</span>}
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Folder size={12} /> {c.category}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><MapPin size={12} /> {c.village || c.taluk || c.district}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Calendar size={12} /> {c.date || (c.createdAt?.toDate?.()?.toLocaleDateString()) || 'Unknown'}</span>
+                      {c.submittedBy && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><User size={12} /> {c.submittedBy}</span>}
                     </div>
                   </div>
                   <EscalationBadge complaint={c} />
@@ -600,7 +622,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                 {/* Official response thread */}
                 {c.responses && c.responses.length > 0 && (
                   <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 700, marginBottom: 6 }}>📝 Response History</div>
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 700, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}><FileText size={12} /> Response History</div>
                     {c.responses.map((r, ri) => (
                       <div key={ri} style={{
                         background: 'var(--bg-main)', borderRadius: 8, padding: '8px 12px',
@@ -612,7 +634,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                           <span style={{ color: 'var(--text-muted)', fontSize: 10 }}>{new Date(r.timestamp).toLocaleDateString()}</span>
                         </div>
                         <p style={{ margin: 0, color: 'var(--text-primary)' }}>{r.message}</p>
-                        {r.etaDays && <span style={{ fontSize: 10, color: '#3b82f6', fontWeight: 700 }}>⏱️ ETA: {r.etaDays} days</span>}
+                        {r.etaDays && <span style={{ fontSize: 10, color: '#3b82f6', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Clock size={10} /> ETA: {r.etaDays} days</span>}
                       </div>
                     ))}
                   </div>
@@ -621,7 +643,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                 {/* Last response summary if no thread shown */}
                 {(!c.responses || c.responses.length === 0) && c.lastUpdate && (
                   <div style={{ marginTop: 8, fontSize: 12, color: 'var(--text-secondary)', fontStyle: 'italic' }}>
-                    ℹ️ {c.lastUpdate}
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><AlertTriangle size={12} className="text-amber-500" /> {c.lastUpdate}</span>
                   </div>
                 )}
 
@@ -632,7 +654,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                     onClick={() => setRespondingTo(c)}
                     style={{ fontSize: 12 }}
                   >
-                    📤 Respond / ಉತ್ತರ
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Send size={12} /> Respond / ಉತ್ತರ</span>
                   </button>
                   {overdue && next && (
                     <button
@@ -644,12 +666,19 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                         }
                       }}
                     >
-                      🔼 Escalate to {next.icon} {next.role.split('/')[0].trim()}
+                      {(() => {
+                        const IconComp = Icons[next.icon] || Landmark;
+                        return (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                            <ArrowUp size={12} /> Escalate to <IconComp size={12} /> {next.role.split('/')[0].trim()}
+                          </span>
+                        );
+                      })()}
                     </button>
                   )}
                   {c.status === 'escalated' && (
-                    <span style={{ fontSize: 11, color: '#92400e', alignSelf: 'center' }}>
-                      ⬆️ Now with {ESCALATION_LEVELS[c.escalationLevel ?? 0]?.role}
+                    <span style={{ fontSize: 11, color: '#92400e', alignSelf: 'center', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                      <ArrowUp size={12} /> Now with {ESCALATION_LEVELS[c.escalationLevel ?? 0]?.role}
                     </span>
                   )}
                 </div>
@@ -727,7 +756,7 @@ function OfficialAnnouncements({ onEdit }) {
     <div className="animate-fadeInUp">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
-          <h3>📢 {t('Announcements')}</h3>
+          <h3 style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Megaphone size={18} className="text-pink-500" /> {t('Announcements')}</h3>
           <p style={{ color: 'var(--text-secondary)' }}>View and manage official government notices.</p>
         </div>
       </div>
@@ -817,7 +846,7 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
   if (submitted) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', textAlign: 'center' }} className="animate-fadeInUp">
-        <div style={{ fontSize: 72, marginBottom: 20 }}>📢</div>
+        <div style={{ marginBottom: 20 }}><Megaphone size={72} className="text-pink-500" /></div>
         <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 8 }}>{t('announcePublished')}</h2>
         <p style={{ color: 'var(--text-secondary)', marginBottom: 20 }}>{t('announceMsg')}</p>
         <button className="btn btn-primary" onClick={() => { setSubmitted(false); setTitle(''); setMessage(''); }}>{t('publishAnother')}</button>
@@ -863,11 +892,11 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
               <label className="form-label">{t('targetVillages')} / ಗುರಿ ಪ್ರದೇಶ</label>
               <select className="form-input" value={target} onChange={e => setTarget(e.target.value)}>
                 {/* Smart: official's own jurisdiction first */}
-                {session.gp && <option value={session.gp}>🏘️ My GP: {session.gp}</option>}
-                {session.taluk && <option value={session.taluk}>📍 My Taluk: {session.taluk}</option>}
-                {session.district && <option value={session.district}>🗺️ My District: {session.district}</option>}
-                <option value="All Districts">🌐 All Districts (State-wide)</option>
-                <option value="All Villages">🏡 All Villages</option>
+                {session.gp && <option value={session.gp}>My GP: {session.gp}</option>}
+                {session.taluk && <option value={session.taluk}>My Taluk: {session.taluk}</option>}
+                {session.district && <option value={session.district}>My District: {session.district}</option>}
+                <option value="All Districts">All Districts (State-wide)</option>
+                <option value="All Villages">All Villages</option>
                 <option disabled>──────────────</option>
                 {allDistricts.map((d, i) => (
                   <option key={i}>{d}</option>
@@ -1023,16 +1052,16 @@ function SettingsScreen() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <User size={18} color="var(--primary)" />
-            <h4 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>👤 Officer Profile / ಅಧಿಕಾರಿ ಪ್ರೊಫೈಲ್</h4>
+            <h4 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>Officer Profile / ಅಧಿಕಾರಿ ಪ್ರೊಫೈಲ್</h4>
           </div>
           {editingProfile ? (
             <div style={{ display: 'flex', gap: 8 }}>
-              <button className="btn btn-primary btn-sm" onClick={saveProfile}>Save ✓</button>
+              <button className="btn btn-primary btn-sm" onClick={saveProfile} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Check size={14} /> Save</button>
               <button className="btn btn-outline btn-sm" onClick={() => { setDraftProfile({ ...profile }); setEditingProfile(false) }}>Cancel</button>
             </div>
           ) : (
-            <button className="btn btn-outline btn-sm" onClick={() => { setDraftProfile({ ...profile }); setEditingProfile(true) }}>
-              {t('edit')} ✏️
+            <button className="btn btn-outline btn-sm" onClick={() => { setDraftProfile({ ...profile }); setEditingProfile(true) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              {t('edit')} <Edit3 size={12} />
             </button>
           )}
         </div>
@@ -1057,7 +1086,7 @@ function SettingsScreen() {
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
           <Bell size={18} color="var(--primary)" />
-          <h4 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>🔔 Notification Preferences / ಅಧಿಸೂಚನೆ</h4>
+          <h4 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>Notification Preferences / ಅಧಿಸೂಚನೆ</h4>
         </div>
         {notifRows.map(({ key, label }) => (
           <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border-light)', fontSize: 14 }}>

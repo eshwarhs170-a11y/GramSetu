@@ -16,3 +16,6 @@ export function LanguageProvider({ children }) {
 export function useLanguage() {
   return useContext(LanguageContext)
 }
+
+export { default as Trans } from '../components/Trans'
+
