@@ -64,6 +64,12 @@ export function VoiceProvider({ children }) {
 
   const startListening = useCallback(async () => {
     try {
+      // Immediately stop any ongoing AI speech so the user can speak without interruption
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+      }
+
       // Force the browser to ask for microphone permission if not already granted
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
