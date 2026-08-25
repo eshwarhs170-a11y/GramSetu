@@ -116,22 +116,83 @@ export default function DistrictPage() {
 
   return (
     <div style={{ background: '#0f172a', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
+      <style>{`
+        .district-content-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 48px;
+        }
+        .district-page-hero {
+          background: ${district.bg};
+          padding: 80px 48px;
+          position: relative;
+          overflow: hidden;
+          color: #fff;
+        }
+        .district-hero-inner {
+          display: flex;
+          gap: 24px;
+          align-items: center;
+        }
+        .district-info-tape {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 24px 48px;
+          display: flex;
+          gap: 40px;
+        }
+        .crops-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+          gap: 24px;
+        }
+        .highlights-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+          gap: 32px;
+        }
+
+        @media (max-width: 768px) {
+          .district-content-container {
+            padding: 0 16px !important;
+          }
+          .district-page-hero {
+            padding: 40px 16px !important;
+          }
+          .district-hero-inner {
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 16px !important;
+          }
+          .district-info-tape {
+            padding: 16px !important;
+            flex-direction: column !important;
+            gap: 16px !important;
+          }
+          .crops-grid {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+            gap: 12px !important;
+          }
+          .crop-card-img {
+            width: 60px !important;
+            height: 60px !important;
+          }
+          .highlights-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+        }
+      `}</style>
       
       {/* ── HERO SECTION ── */}
-      <div className="district-page-hero" style={{ 
-        background: district.bg, 
-        padding: '80px 48px', 
-        position: 'relative',
-        overflow: 'hidden',
-        color: '#fff'
-      }}>
+      <div className="district-page-hero">
         {/* Subtle patterned overlay */}
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
           backgroundImage: 'radial-gradient(circle at 20% 150%, rgba(255,255,255,0.1) 0%, transparent 50%)',
           pointerEvents: 'none'
         }}></div>
-
+ 
         <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 10 }}>
           <button
             onClick={() => navigate('/')}
@@ -146,13 +207,14 @@ export default function DistrictPage() {
           >
             <ArrowLeft size={16} /> Back to Map
           </button>
-
-          <div className="district-hero-inner" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+ 
+          <div className="district-hero-inner">
             <div className="district-hero-emoji" style={{ 
               fontSize: 72, background: 'rgba(255,255,255,0.15)', 
               borderRadius: 24, width: 120, height: 120, 
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 16px 40px rgba(0,0,0,0.2)'
+              boxShadow: '0 16px 40px rgba(0,0,0,0.2)',
+              flexShrink: 0
             }}>
               {district.emoji}
             </div>
@@ -170,10 +232,10 @@ export default function DistrictPage() {
           </div>
         </div>
       </div>
-
+ 
       {/* ── INFO TAPE ── */}
       <div style={{ background: '#1e293b', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <div className="district-info-tape" style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 48px', display: 'flex', gap: 40 }}>
+        <div className="district-info-tape">
           <div>
             <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Primary Agriculture</div>
             <div style={{ fontSize: 16, color: '#4ade80', fontWeight: 700 }}>🌿 {district.crop}</div>
@@ -184,12 +246,12 @@ export default function DistrictPage() {
           </div>
         </div>
       </div>
-
+ 
       {/* ── MAJOR CROPS SECTION ── */}
       {districtCropsMap[id] && (
-        <div style={{ maxWidth: 1200, margin: '64px auto 0', padding: '0 48px' }}>
+        <div className="district-content-container" style={{ marginTop: 64 }}>
           <h2 style={{ color: '#fff', fontSize: 28, fontWeight: 800, marginBottom: 24 }}>Major Crops in {id}</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 24 }}>
+          <div className="crops-grid">
             {districtCropsMap[id].map((crop, idx) => (
               <div 
                 key={idx} 
@@ -208,7 +270,7 @@ export default function DistrictPage() {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
                 }}
               >
-                <div style={{ width: 80, height: 80, borderRadius: '50%', margin: '0 auto 12px', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.1)' }}>
+                <div className="crop-card-img" style={{ width: 80, height: 80, borderRadius: '50%', margin: '0 auto 12px', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.1)', transition: 'all 0.2s ease' }}>
                   <img 
                     src={cropImageMap[crop] || cropInfoMap[crop]?.image || `/crops/${crop.replace(/\s+/g, '_')}.jpg`} 
                     alt={crop} 
@@ -221,12 +283,12 @@ export default function DistrictPage() {
           </div>
         </div>
       )}
-
+ 
       {/* ── HIGHLIGHTS GRID ── */}
-      <div className="district-highlights-container" style={{ maxWidth: 1200, margin: '64px auto', padding: '0 48px' }}>
+      <div className="district-content-container" style={{ marginTop: 64, marginBottom: 64 }}>
         <h2 style={{ color: '#fff', fontSize: 28, fontWeight: 800, marginBottom: 32 }}>Explore {id}</h2>
         
-        <div className="district-highlights-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 32 }}>
+        <div className="highlights-grid">
           {district.highlights.map((h, i) => (
             <div key={i} style={{ 
               background: 'rgba(255,255,255,0.03)', 
