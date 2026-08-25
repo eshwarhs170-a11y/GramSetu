@@ -3,6 +3,7 @@ import VillagerSidebar from '../components/VillagerSidebar'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
 import { useLanguage } from '../context/LanguageContext'
+import { useVoice } from '../context/VoiceContext'
 import {
   HomeScreen, SchemesScreen, MarketScreen, AnnouncementsScreen,
   ComplaintScreen, ComplaintStatusScreen, ProfileScreen,
@@ -22,6 +23,18 @@ export default function VillagerDashboard() {
   const [notifExpanded, setNotifExpanded] = useState(null)
   const [announcements, setAnnouncements] = useState([])
   const { t } = useLanguage()
+  const { speak } = useVoice()
+
+  useEffect(() => {
+    if (!window.sessionStorage.getItem('villager_welcomed')) {
+      const name = window.localStorage.getItem('citizen_name') || 'User'
+      setTimeout(() => {
+        speak(`Namaskara ${name}`)
+        window.sessionStorage.setItem('villager_welcomed', 'true')
+      }, 1000)
+    }
+  }, [speak])
+
 
   const pageMeta = {
     home:          { titleKey: 'dashTitle',      subKey: 'dashSub' },

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
+import { useVoice } from '../context/VoiceContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
 import {
@@ -1103,6 +1104,17 @@ export default function OfficialDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [editingAnnouncement, setEditingAnnouncement] = useState(null)
+  const { speak } = useVoice()
+
+  useEffect(() => {
+    if (!window.sessionStorage.getItem('official_welcomed')) {
+      const name = window.localStorage.getItem('official_name') || 'Official'
+      setTimeout(() => {
+        speak(`Namaskara ${name}`)
+        window.sessionStorage.setItem('official_welcomed', 'true')
+      }, 1000)
+    }
+  }, [speak])
 
   const handleEditAnnouncement = (announcement) => {
     setEditMode(true)
