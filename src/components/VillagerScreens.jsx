@@ -4,6 +4,7 @@ import {
   AlertCircle,
   AlertTriangle,
   ArrowDown,
+  ArrowLeft,
   ArrowRight,
   ArrowUp,
   Ban,
@@ -833,6 +834,197 @@ export function SchemesScreen() {
     if (!field) return ''
     if (typeof field === 'string') return field
     return field[lang] || field.en || field.kn || field.hi || ''
+  }
+
+  if (selectedScheme) {
+    return (
+      <div className="animate-fadeInUp" style={{ padding: '24px', background: 'var(--bg-card)', borderRadius: 20, border: '1px solid var(--border-light)', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', paddingBottom: 40 }}>
+        {/* Back Button */}
+        <button
+          onClick={() => {
+            if (isSpeaking) {
+              window.speechSynthesis.cancel()
+              setIsSpeaking(false)
+            }
+            setSelectedScheme(null)
+          }}
+          className="btn btn-outline"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, borderRadius: 10, padding: '8px 16px', fontWeight: 600 }}
+        >
+          <ArrowLeft size={16} /> Back to Schemes List
+        </button>
+
+        {/* Scheme Image Banner */}
+        <div style={{ height: 280, borderRadius: 16, overflow: 'hidden', marginBottom: 24, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+          <img
+            src={selectedScheme.img || 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'}
+            alt={getLangText(selectedScheme.title)}
+            onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'; }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        </div>
+
+        {/* Header Metadata */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+          <span className="badge" style={{ background: selectedScheme.level === 'Central' ? '#1e3a8a' : '#c2410c', color: '#fff', padding: '4px 10px', fontSize: 12 }}>
+            {selectedScheme.level === 'Central' ? 'Central Scheme' : 'Karnataka State Scheme'}
+          </span>
+          <span className="badge badge-info" style={{ padding: '4px 10px', fontSize: 12 }}>{selectedScheme.category}</span>
+          {selectedScheme.badge && (
+            <span className={'badge ' + (selectedScheme.badgeClass || 'badge-success')} style={{ padding: '4px 10px', fontSize: 12 }}>
+              {getLangText(selectedScheme.badge)}
+            </span>
+          )}
+        </div>
+
+        <h1 style={{ fontSize: 26, fontWeight: 800, color: 'var(--text-primary)', margin: '8px 0', lineHeight: 1.3 }}>
+          {getLangText(selectedScheme.title)}
+        </h1>
+        <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 20, fontWeight: 600 }}>
+          {getLangText(selectedScheme.ministry)}
+        </p>
+
+        {/* TTS Voice Readout */}
+        <button
+          className="btn btn-outline"
+          onClick={() => handleToggleVoice(selectedScheme)}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 24, borderRadius: 10, fontSize: 13, padding: '10px 18px' }}
+        >
+          <Volume2 size={16} />
+          {isSpeaking ? 'Stop Audio Guide' : 'Listen to Scheme Details'}
+        </button>
+
+        {/* Details List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 30 }}>
+          
+          {/* Overview Card */}
+          <div style={{ background: 'var(--bg-main)', padding: 20, borderRadius: 14, border: '1px solid var(--border-light)' }}>
+            <h3 style={{ fontWeight: 800, fontSize: 15, marginBottom: 10, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <FileText size={18} className="text-emerald-600" /> Description / ವಿವರಣೆ
+            </h3>
+            <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
+              {getLangText(selectedScheme.desc)}
+            </p>
+          </div>
+
+          {/* Benefits Structure */}
+          {selectedScheme.benefits && (
+            <div style={{
+              background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)',
+              padding: 20,
+              borderRadius: 14,
+              border: '1px solid #a7f3d0'
+            }}>
+              <h3 style={{ color: '#065f46', fontWeight: 800, fontSize: 15, margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <IndianRupee size={18} className="text-emerald-700" /> Benefit &amp; Subsidy Structure
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12, fontSize: 13, color: '#064e3b' }}>
+                <div><strong>Subsidy:</strong> {selectedScheme.benefits.subsidyPercent || selectedScheme.benefits.maxLimit}</div>
+                {selectedScheme.benefits.mode && <div><strong>Payment Mode:</strong> {selectedScheme.benefits.mode}</div>}
+                {selectedScheme.benefits.interestSubvention && selectedScheme.benefits.interestSubvention !== 'N/A' && (
+                  <div><strong>Interest Subvention:</strong> {selectedScheme.benefits.interestSubvention}</div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Eligibility Criteria */}
+          <div style={{ background: 'var(--bg-main)', padding: 20, borderRadius: 14, border: '1px solid var(--border-light)' }}>
+            <h3 style={{ fontWeight: 800, fontSize: 15, color: 'var(--primary)', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <CheckCircle2 size={18} className="text-emerald-600" /> Eligibility Criteria
+            </h3>
+            <p style={{ fontSize: 14, margin: 0, color: 'var(--text-primary)', lineHeight: 1.5 }}>
+              {getLangText(selectedScheme.eligibility)}
+            </p>
+          </div>
+
+          {/* Exclusions */}
+          {selectedScheme.exclusions && (
+            <div style={{ background: '#fef2f2', padding: 20, borderRadius: 14, border: '1px solid #fecaca' }}>
+              <h3 style={{ fontWeight: 800, fontSize: 15, color: '#991b1b', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <AlertTriangle size={18} className="text-red-600" /> Exclusions
+              </h3>
+              <p style={{ fontSize: 13, margin: 0, color: '#7f1d1d', lineHeight: 1.5 }}>
+                {getLangText(selectedScheme.exclusions)}
+              </p>
+            </div>
+          )}
+
+          {/* Required Documents */}
+          <div style={{ background: 'var(--bg-main)', padding: 20, borderRadius: 14, border: '1px solid var(--border-light)' }}>
+            <h3 style={{ fontWeight: 800, fontSize: 15, marginBottom: 8, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <ClipboardList size={18} className="text-emerald-600" /> Required Documents
+            </h3>
+            <p style={{ fontSize: 14, color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
+              {getLangText(selectedScheme.documents)}
+            </p>
+          </div>
+
+          {/* Process Steps */}
+          {selectedScheme.processSteps && (
+            <div style={{ background: 'var(--bg-main)', padding: 20, borderRadius: 14, border: '1px solid var(--border-light)' }}>
+              <h3 style={{ fontWeight: 800, fontSize: 15, marginBottom: 16, color: 'var(--text-primary)' }}>Application Process</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {selectedScheme.processSteps.map(st => (
+                  <div key={st.step} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                    <span style={{
+                      width: 26,
+                      height: 26,
+                      borderRadius: '50%',
+                      background: 'var(--primary)',
+                      color: '#fff',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      {st.step}
+                    </span>
+                    <div style={{ fontSize: 13, lineHeight: 1.5 }}>
+                      <strong style={{ color: 'var(--text-primary)' }}>{getLangText(st.title)}: </strong>
+                      <span style={{ color: 'var(--text-secondary)' }}>{getLangText(st.desc)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Timeline */}
+          {selectedScheme.timeline && (
+            <div style={{ fontSize: 13, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span>Expected Timeline: <strong>{selectedScheme.timeline}</strong></span>
+            </div>
+          )}
+        </div>
+
+        {/* Action Buttons */}
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', borderTop: '1px solid var(--border-light)', paddingTop: 24 }}>
+          <a
+            href={selectedScheme.applyLink || 'https://sevasindhuservices.karnataka.gov.in/'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary"
+            style={{ flex: 1, textDecoration: 'none', justifyContent: 'center', fontWeight: 700, padding: '12px 24px', fontSize: 15 }}
+          >
+            Apply on Official Portal ↗
+          </a>
+          {selectedScheme.trackerUrl && (
+            <a
+              href={selectedScheme.trackerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-outline"
+              style={{ textDecoration: 'none', justifyContent: 'center', padding: '12px 24px', fontSize: 15 }}
+            >
+              Track Status ↗
+            </a>
+          )}
+        </div>
+      </div>
+    )
   }
 
   return (
