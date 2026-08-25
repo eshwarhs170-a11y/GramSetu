@@ -34,9 +34,15 @@ export default async function handler(req, res) {
       <p style="color: #333; font-size: 16px;">Namaskara,</p>
       <p style="color: #555; font-size: 15px;">Your one-time password (OTP) for GramSetu is:</p>
       
-      <div style="margin: 30px 0; padding: 15px; background-color: #f0fdf4; border-radius: 6px; text-align: center;">
-        <span style="font-size: 32px; font-weight: bold; color: #15803d; letter-spacing: 5px;">${otp}</span>
-      </div>
+      <div style="margin: 30px 0; padding: 20px; background-color: #f0fdf4; border: 2px solid #86efac; border-radius: 10px; text-align: center;">
+        <div style="display: inline-block; background: #fff; border: 1px dashed #4ade80; padding: 10px 20px; border-radius: 8px; margin-bottom: 12px;">
+          <span style="font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #15803d; font-family: 'Courier New', monospace; user-select: all;">${otp}</span>
+        </div>
+        <div>
+          <span style="display: inline-block; background: #16a34a; color: #fff; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+            👆 Double-click code to copy
+          </span>
+        </div>
       
       <p style="color: #666; font-size: 14px;">This code is valid until ${expiryTime}.</p>
       <p style="color: #888; font-size: 12px; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">

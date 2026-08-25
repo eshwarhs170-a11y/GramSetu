@@ -435,6 +435,42 @@ export function HomeScreen({ setActive }) {
                 classReq: lang === 'kn' ? 'ಪದವಿ / ಡಿಪ್ಲೊಮಾ / ಎಂಜಿನಿಯರಿಂಗ್' : 'UG Degree / Diploma / Tech',
                 incomeLimit: lang === 'kn' ? '₹೮.೦ ಲಕ್ಷಕ್ಕಿಂತ ಹೆಚ್ಚು/ಯಾವುದೇ ಆದಾಯ ಮಿತಿಯಿಲ್ಲ (Above ₹8.0L / Open)' : 'Above ₹8.0 Lakh / Open to All',
                 link: 'https://www.reliancefoundation.org/'
+              },
+              {
+                title: lang === 'kn' ? 'ಇನ್‌ಸ್ಪೈರ್ ವಿದ್ಯಾರ್ಥಿವೇತನ (SHE)' : 'INSPIRE Scholarship for Higher Education (SHE)',
+                classReq: lang === 'kn' ? 'ಮೂಲ ವಿಜ್ಞಾನ UG/PG' : 'Basic/Natural Sciences UG/PG',
+                incomeLimit: lang === 'kn' ? 'ಮೆರಿಟ್ ಆಧಾರ — ₹80,000/ವರ್ಷ' : 'Merit-based — ₹80,000/year',
+                link: 'https://online-inspire.gov.in/'
+              },
+              {
+                title: lang === 'kn' ? 'AICTE ಸಕ್ಷಮ್ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'AICTE Saksham Scholarship (Differently-Abled)',
+                classReq: lang === 'kn' ? 'ತಾಂತ್ರಿಕ ಡಿಪ್ಲೊಮಾ / ಪದವಿ' : 'Technical Diploma / UG Degree',
+                incomeLimit: lang === 'kn' ? '₹8.0 ಲಕ್ಷ/ವರ್ಷ — ₹50,000/ವರ್ಷ' : '₹8.0 Lakh/year — ₹50,000/year award',
+                link: 'https://scholarships.gov.in/'
+              },
+              {
+                title: lang === 'kn' ? 'PG ಅಧ್ಯಯನಕ್ಕೆ ರಾಷ್ಟ್ರೀಯ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'National Fellowship for PG Studies (UGC)',
+                classReq: lang === 'kn' ? 'ಸ್ನಾತಕೋತ್ತರ (PG)' : 'Postgraduate (PG)',
+                incomeLimit: lang === 'kn' ? 'ಮೆರಿಟ್ ಆಧಾರ — ₹15,000/ತಿಂಗಳು' : 'Merit-based — ₹15,000/month',
+                link: 'https://scholarships.gov.in/'
+              },
+              {
+                title: lang === 'kn' ? 'ಮೌಲಾನಾ ಆಜಾದ್ ರಾಷ್ಟ್ರೀಯ ಫೆಲೋಶಿಪ್ (MANF)' : 'Maulana Azad National Fellowship (MANF)',
+                classReq: lang === 'kn' ? 'ಅಲ್ಪಸಂಖ್ಯಾತ ಸಂಶೋಧನಾ ವಿದ್ಯಾರ್ಥಿಗಳು (M.Phil/PhD)' : 'Minority Research Scholars (M.Phil/PhD)',
+                incomeLimit: lang === 'kn' ? 'UGC ನಿಯಮಗಳ ಪ್ರಕಾರ' : 'As per UGC norms',
+                link: 'https://scholarships.gov.in/'
+              },
+              {
+                title: lang === 'kn' ? 'ಎಚ್‌ಡಿಎಫ್‌ಸಿ ಬ್ಯಾಂಕ್ ಪರಿವರ್ತನ್ ECSS' : 'HDFC Bank Parivartan ECSS Scholarship',
+                classReq: lang === 'kn' ? '6ನೇ ತರಗತಿಯಿಂದ ಸ್ನಾತಕೋತ್ತರ' : 'Class 6 to Postgraduate',
+                incomeLimit: lang === 'kn' ? '₹2.5 ಲಕ್ಷ/ವರ್ಷ — ₹75,000 ವರೆಗೆ' : '₹2.5 Lakh/year — up to ₹75,000 award',
+                link: 'https://www.buddy4study.com/'
+              },
+              {
+                title: lang === 'kn' ? 'SBI ಫೌಂಡೇಶನ್ ಆಶಾ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'SBI Foundation Asha Scholarship',
+                classReq: lang === 'kn' ? '6ನೇ ತರಗತಿಯಿಂದ ಪದವಿ' : 'Class 6 to Undergraduate',
+                incomeLimit: lang === 'kn' ? '₹3.0 ಲಕ್ಷ/ವರ್ಷ — ₹15,000 ರಿಂದ ₹5,00,000' : '₹3.0 Lakh/year — ₹15,000 to ₹5,00,000 award',
+                link: 'https://www.buddy4study.com/'
               }
             ].map((sch, sIdx) => (
               <div key={sIdx} style={{ background: 'var(--bg-main)', borderRadius: 12, padding: 16, border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 2px 6px rgba(0,0,0,0.04)' }}>
