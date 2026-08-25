@@ -54,6 +54,52 @@ export default function LandingPage() {
 
   return (
     <div style={{ fontFamily: "'Inter', 'Noto Sans Kannada', sans-serif", overflowX: 'hidden' }}>
+      <style>{`
+        @keyframes float {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+          100% { transform: translateY(0px); }
+        }
+        @keyframes floatReverse {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(8px); }
+          100% { transform: translateY(0px); }
+        }
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes pulseGlow {
+          0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+          70% { box-shadow: 0 0 0 12px rgba(74, 222, 128, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+        .animate-fade-in {
+          animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-float {
+          animation: float 5s ease-in-out infinite;
+        }
+        .animate-float-reverse {
+          animation: floatReverse 6s ease-in-out infinite;
+        }
+        .pulse-green {
+          animation: pulseGlow 2s infinite;
+        }
+        .hover-lift {
+          transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+        }
+        .hover-lift:hover {
+          transform: translateY(-4px) scale(1.02);
+          box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+        }
+      `}</style>
 
       {/* ── TOP GOV BANNER ── */}
       <div style={{
@@ -93,12 +139,12 @@ export default function LandingPage() {
           <ThemeToggle />
           <button
             onClick={() => navigate('/login/villager')}
+            className="hover-lift"
             style={{
               background: 'linear-gradient(135deg, #16a34a, #15803d)',
               color: '#fff', border: 'none', borderRadius: 10,
               padding: '10px 16px', fontWeight: 700, fontSize: 14,
               cursor: 'pointer', boxShadow: '0 4px 12px rgba(22,163,74,0.3)',
-              transition: 'all 0.2s ease',
               whiteSpace: 'nowrap'
             }}
           >
@@ -111,15 +157,15 @@ export default function LandingPage() {
       <section className="landing-hero-section" style={{
         display: 'flex', alignItems: 'center', flexWrap: 'wrap',
         background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0d4b2f 100%)',
-        position: 'relative', overflow: 'hidden', padding: '40px 24px', gap: 32
+        position: 'relative', overflow: 'hidden', padding: '60px 24px', gap: 32
       }}>
         {/* Decorative orbs */}
         <div style={{ position: 'absolute', top: -80, left: -80, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -100, right: -80, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(22,163,74,0.25) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Left content */}
-        <div style={{ flex: '1 1 280px', maxWidth: 580, position: 'relative', zIndex: 1 }}>
-          <div style={{
+        <div className="animate-fade-in" style={{ flex: '1 1 280px', maxWidth: 580, position: 'relative', zIndex: 1 }}>
+          <div className="pulse-green" style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             background: 'rgba(22,163,74,0.15)', border: '1px solid rgba(22,163,74,0.3)',
             borderRadius: 50, padding: '6px 16px', marginBottom: 28
@@ -147,7 +193,7 @@ export default function LandingPage() {
               { val: t('stat2Val'), label: t('stat2Label') },
               { val: t('stat3Val'), label: t('stat3Label') },
             ].map((s, i) => (
-              <div key={i}>
+              <div key={i} className="hover-lift" style={{ cursor: 'default' }}>
                 <div style={{ fontSize: 26, fontWeight: 900, color: '#fff' }}>{s.val}</div>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 500, marginTop: 2 }}>{s.label}</div>
               </div>
@@ -180,6 +226,7 @@ export default function LandingPage() {
                       : 'transparent',
                     color: selectedRole === role.id ? '#fff' : 'rgba(255,255,255,0.6)',
                     boxShadow: selectedRole === role.id ? '0 4px 16px rgba(0,0,0,0.3)' : 'none',
+                    transform: selectedRole === role.id ? 'scale(1.02)' : 'scale(1)'
                   }}
                 >
                   <RoleIcon size={15} strokeWidth={2} />
@@ -193,6 +240,7 @@ export default function LandingPage() {
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
             <button
               onClick={() => navigate(selectedRole === 'farmer' ? '/login/villager' : '/login/official')}
+              className="hover-lift"
               style={{
                 background: selectedRole === 'farmer'
                   ? 'linear-gradient(135deg, #16a34a, #15803d)'
@@ -202,8 +250,7 @@ export default function LandingPage() {
                 cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8,
                 boxShadow: selectedRole === 'farmer'
                   ? '0 8px 24px rgba(22,163,74,0.4)'
-                  : '0 8px 24px rgba(59,130,246,0.4)',
-                transition: 'all 0.3s ease'
+                  : '0 8px 24px rgba(59,130,246,0.4)'
               }}
             >
               {selectedRole === 'farmer' ? t('ctaVillager') : t('ctaOfficial')} <ArrowRight size={16} />
@@ -212,7 +259,7 @@ export default function LandingPage() {
         </div>
 
         {/* Right image */}
-        <div className="hero-right-img" style={{ flex: '1 1 300px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', minHeight: 300 }}>
+        <div className="hero-right-img animate-float" style={{ flex: '1 1 300px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', minHeight: 300 }}>
           <div style={{
             position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)',
             width: 340, borderRadius: 20, overflow: 'hidden',
@@ -220,8 +267,8 @@ export default function LandingPage() {
             border: '1px solid rgba(255,255,255,0.1)'
           }}>
             <img
-              src="https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=800&q=80"
-              alt="Karnataka farmers"
+              src="https://images.unsplash.com/photo-1592997573562-5766a4a27f15?w=800&q=80"
+              alt="Karnataka agricultural fields"
               style={{ width: '100%', height: 260, objectFit: 'cover', display: 'block' }}
             />
             <div style={{ background: 'rgba(15,23,42,0.85)', backdropFilter: 'blur(8px)', padding: '14px 18px' }}>
@@ -231,7 +278,7 @@ export default function LandingPage() {
           </div>
 
           {/* Floating stat card — users not scheme data */}
-          <div style={{
+          <div className="animate-float-reverse" style={{
             position: 'absolute', left: 20, top: 40,
             background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(16px)',
             border: '1px solid rgba(255,255,255,0.15)',
@@ -249,7 +296,7 @@ export default function LandingPage() {
           </div>
 
           {/* Floating schemes card */}
-          <div style={{
+          <div className="animate-float" style={{
             position: 'absolute', left: 0, bottom: 20,
             background: 'rgba(59,130,246,0.15)', backdropFilter: 'blur(16px)',
             border: '1px solid rgba(59,130,246,0.3)',
