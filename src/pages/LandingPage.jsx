@@ -37,10 +37,19 @@ export default function LandingPage() {
   }, [navigate])
 
   // Welcome message — fires on every page load and again on language switch
-  const lastSpokenLang = useRef(null)
+  // Welcome message — greets only once per session, but responds to manual language switches
+  const prevLang = useRef(lang)
   useEffect(() => {
-    if (lastSpokenLang.current === lang) return // already spoken for this lang
-    lastSpokenLang.current = lang
+    const sessionWelcomed = sessionStorage.getItem('gramsetu_welcomed')
+    const isLangChange = prevLang.current !== lang
+    prevLang.current = lang
+
+    // Skip greeting if already welcomed in this session and they didn't just click to change language
+    if (sessionWelcomed && !isLangChange) {
+      return
+    }
+
+    sessionStorage.setItem('gramsetu_welcomed', 'true')
 
     const welcomeMsg = lang === 'kn'
       ? 'ಗ್ರಾಮ ಸೇತುಗೆ ಸ್ವಾಗತ. ನೀವು ಇಲ್ಲಿ ಸರ್ಕಾರಿ ಯೋಜನೆ ಮಾಹಿತಿ, ಮಾರುಕಟ್ಟೆ ಬೆಲೆ, ಮತ್ತು ದೂರು ಸಲ್ಲಿಸಬಹುದು. ಮೈಕ್ ಒತ್ತಿ ಮಾತನಾಡಿ.'
@@ -49,7 +58,8 @@ export default function LandingPage() {
       : 'Welcome to GramSetu. Here you can access government schemes, APMC market prices, and file complaints. Tap the microphone to talk to me anytime.'
 
     // Start speaking almost immediately (500ms) after the page loads
-    setTimeout(() => speak(welcomeMsg), 500)
+    const timer = setTimeout(() => speak(welcomeMsg), 500)
+    return () => clearTimeout(timer)
   }, [lang, speak])
 
   return (
@@ -267,7 +277,7 @@ export default function LandingPage() {
             border: '1px solid rgba(255,255,255,0.1)'
           }}>
             <img
-              src="https://images.unsplash.com/photo-1592997573562-5766a4a27f15?w=800&q=80"
+              src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=800&q=80"
               alt="Karnataka agricultural fields"
               style={{ width: '100%', height: 260, objectFit: 'cover', display: 'block' }}
             />
