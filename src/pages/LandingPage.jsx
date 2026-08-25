@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { districtData } from '../data/districtsData'
 import { useLanguage } from '../context/LanguageContext'
+import { useVoice } from '../context/VoiceContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
 import {
@@ -23,7 +24,8 @@ const testimonials = [
 
 export default function LandingPage() {
   const navigate = useNavigate()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const { speak } = useVoice()
   const [selectedRole, setSelectedRole] = useState('farmer')
 
   useEffect(() => {
@@ -33,6 +35,22 @@ export default function LandingPage() {
       navigate('/dashboard/villager')
     }
   }, [navigate])
+
+  // Welcome message — plays on first visit and again whenever language changes
+  useEffect(() => {
+    const lastWelcomedLang = window.sessionStorage.getItem('site_welcomed_lang')
+    if (lastWelcomedLang === lang) return // already welcomed in this language
+
+    window.sessionStorage.setItem('site_welcomed_lang', lang)
+
+    const welcomeMsg = lang === 'kn'
+      ? 'ಗ್ರಾಮ ಸೇತುಗೆ ಸ್ವಾಗತ. ನೀವು ಇಲ್ಲಿ ಸರ್ಕಾರಿ ಯೋಜನೆ ಮಾಹಿತಿ, ಮಾರುಕಟ್ಟೆ ಬೆಲೆ, ಮತ್ತು ದೂರು ಸಲ್ಲಿಸಬಹುದು. ಮೈಕ್ ಒತ್ತಿ ಮಾತನಾಡಿ.'
+      : lang === 'hi'
+      ? 'ग्राम सेतु में आपका स्वागत है. यहाँ आप सरकारी योजनाएं, बाजार भाव और शिकायत सेवा पा सकते हैं. माइक दबाकर बात करें.'
+      : 'Welcome to GramSetu. Here you can access government schemes, APMC market prices, and file complaints. Tap the microphone to talk to me anytime.'
+
+    setTimeout(() => speak(welcomeMsg), 800)
+  }, [lang, speak])
 
   return (
     <div style={{ fontFamily: "'Inter', 'Noto Sans Kannada', sans-serif", overflowX: 'hidden' }}>
