@@ -12,6 +12,7 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@google/genai": "^2.18.0",
+    "@google/generative-ai": "^0.24.1",
     "firebase": "^12.16.0",
     "lucide-react": "^1.27.0",
     "nodemailer": "^9.0.5",
