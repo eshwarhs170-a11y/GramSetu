@@ -642,7 +642,11 @@ export function SchemesScreen() {
               merged.push(local)
             }
           })
-          setSchemes(merged)
+          // Always use local img so schemesData.js images take effect
+          const localImgMap = {}
+          kaSchemes.forEach(s => { if (s.img) localImgMap[s.id] = s.img })
+          const withLocalImgs = merged.map(s => localImgMap[s.id] ? { ...s, img: localImgMap[s.id] } : s)
+          setSchemes(withLocalImgs)
         }
       })
       .catch(() => {/* silent fallback */})
@@ -924,7 +928,7 @@ export function SchemesScreen() {
               return (
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                   <TabIcon size={14} />
-                  <Trans k={tab.labelKey} />
+                  {tab.label}
                 </span>
               );
             })()}

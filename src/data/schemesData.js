@@ -44,7 +44,7 @@ export const kaSchemes = [
       { step: 4, title: { en: 'DBT Credit', kn: 'ನೇರ ನಗದು ಜಮೆ', hi: 'डीबीटी भुगतान' }, desc: { en: 'Direct credit into Aadhaar-linked NPCI mapped bank account every 4 months.', kn: 'ಪ್ರತಿ 4 ತಿಂಗಳಿಗೊಮ್ಮೆ ಆಧಾರ್ ಲಿಂಕ್ಡ್ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ನೇರ ಹಣ ವರ್ಗಾವಣೆ.', hi: 'हर 4 महीने में बैंक खाते में ₹2,000 की किस्त ट्रांसफर।' } }
     ],
     timeline: '15 - 30 Days for verification & inclusion in upcoming cycle',
-    img: 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80',
     badge: { en: 'Central DBT', kn: 'ಕೇಂದ್ರ DBT', hi: 'केंद्रीय डीबीटी' },
     badgeClass: 'badge-success',
     ministry: { en: 'Ministry of Agriculture & Farmers Welfare, GoI', kn: 'ಕೃಷಿ ಮತ್ತು ರೈತರ ಕಲ್ಯಾಣ ಸಚಿವಾಲಯ, ಭಾರತ', hi: 'कृषि एवं किसान कल्याण मंत्रालय, भारत सरकार' },
@@ -93,7 +93,7 @@ export const kaSchemes = [
       { step: 4, title: { en: 'Claim Disbursement', kn: 'ಪರಿಹಾರ ಬಿಡುಗಡೆ', hi: 'दावा निपटान' }, desc: { en: 'Automatic claim transfer post crop-cutting experiments and joint survey.', kn: 'ಬೆಳೆ ಕಟಾವು ಪ್ರಯೋಗ ಹಾಗೂ ಸರ್ವೇ ನಂತರ ನೇರವಾಗಿ ಖಾತೆಗೆ ಪರಿಹಾರ.', hi: 'संयुक्त सर्वेक्षण के बाद खाते में सीधे दावा राशि का भुगतान।' } }
     ],
     timeline: 'Cutoff seasonal; Claim settlement within 30-45 days of survey',
-    img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&q=80',
     badge: { en: 'Crop Cover', kn: 'ಬೆಳೆ ರಕ್ಷಣೆ', hi: 'फसल बीमा' },
     badgeClass: 'badge-warning',
     ministry: { en: 'Ministry of Agriculture & Farmers Welfare, GoI', kn: 'ಕೃಷಿ ಸಚಿವಾಲಯ, ಭಾರತ ಸರ್ಕಾರ', hi: 'कृषि एवं किसान कल्याण मंत्रालय' },
@@ -141,7 +141,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Card & Limit Sanction', kn: 'ಕಾರ್ಡ್ ವಿತರಣೆ', hi: 'कार्ड स्वीकृति' }, desc: { en: 'RuPay KCC Card issued with valid credit limit linked to cropping pattern.', kn: 'ಬೆಳೆ ಪದ್ಧತಿಗೆ ಅನುಗುಣವಾಗಿ ರುಪೇ ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ವಿತರಣೆ.', hi: 'फसल चक्र के अनुसार निर्धारित सीमा वाला RuPay KCC जारी किया जाता है।' } }
     ],
     timeline: '14 Days guaranteed under RBI Citizen Charter',
-    img: 'https://images.unsplash.com/photo-1589828135898-d14fb4081c70?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80',
     badge: { en: '4% Interest Loan', kn: '೪% ಬಡ್ಡಿ ಸಾಲ', hi: '4% ब्याज ऋण' },
     badgeClass: 'badge-info',
     ministry: { en: 'Ministry of Finance & NABARD', kn: 'ಹಣಕಾಸು ಸಚಿವಾಲಯ ಮತ್ತು ನಬಾರ್ಡ್', hi: 'वित्त मंत्रालय एवं नाबार्ड' },
@@ -189,7 +189,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'DBT Installment Release', kn: 'ಹಣ ಜಮೆ', hi: 'डीबीटी भुगतान' }, desc: { en: '₹6,000 after seedling establishment + ₹4,000 at flowering stage.', kn: 'ಮೊದಲ ಹಂತದಲ್ಲಿ ₹6,000 ಮತ್ತು ಬೆಳೆ ಬಂದ ನಂತರ ₹4,000 ಖಾತೆಗೆ ಜಮೆ.', hi: 'दो किस्तों (₹6,000 + ₹4,000) में खाते में सीधे भुगतान।' } }
     ],
     timeline: '21 Days post crop survey validation',
-    img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1612392062631-94cc28c80e53?w=800&q=80',
     badge: { en: 'State Incentive', kn: 'ರಾಜ್ಯ ಪ್ರೋತ್ಸಾಹಧನ', hi: 'राज्य प्रोत्साहन' },
     badgeClass: 'badge-success',
     ministry: { en: 'Dept. of Agriculture, Govt of Karnataka', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ ಸರ್ಕಾರ', hi: 'कृषि विभाग, कर्नाटक सरकार' },
@@ -238,7 +238,7 @@ export const kaSchemes = [
       { step: 4, title: { en: 'Verification & Fund Release', kn: 'ಪರಿಶೀಲನೆ & ಹಣ ಬಿಡುಗಡೆ', hi: 'अंतिम सत्यापन व भुगतान' }, desc: { en: 'GPS camera measurement and direct DBT reimbursement to farmer account.', kn: 'ಅಧಿಕಾರಿಗಳ ಅಂತಿಮ ತಪಾಸಣೆ ನಂತರ ರೈತರ ಖಾತೆಗೆ ಸಹಾಯಧನ ಜಮೆ.', hi: 'जीपीएस फोटो सत्यापन के बाद सीधे खाते में सब्सिडी का भुगतान।' } }
     ],
     timeline: '30 - 45 Days from application to sanction',
-    img: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800&q=80',
     badge: { en: '90% Subsidy', kn: '೯೦% ಸಹಾಯಧನ', hi: '90% सब्सिडी' },
     badgeClass: 'badge-primary',
     ministry: { en: 'Dept. of Agriculture, Karnataka', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ ಸರ್ಕಾರ', hi: 'कृषि विभाग, कर्नाटक' },
@@ -286,7 +286,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Solar Panel & Pump Installation', kn: 'ಸೋಲಾರ್ ಪ್ಯಾನಲ್ ಅಳವಡಿಕೆ', hi: 'सोलर पंप स्थापना' }, desc: { en: 'Certified agency delivers panels, structure, controller and DC pump.', kn: 'ಅಧಿಕೃತ ಕಂಪನಿಯು ಸೋಲಾರ್ ಪ್ಯಾನಲ್ ಮತ್ತು ಮೋಟಾರ್ ಅಳವಡಿಕೆ ಮಾಡುತ್ತದೆ.', hi: 'अधिकृत एजेंसी द्वारा सोलर पैनल, मोटर और कंट्रोलर की स्थापना।' } }
     ],
     timeline: '45 - 60 Days for site inspection & complete installation',
-    img: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?w=800&q=80',
     badge: { en: '60% Subsidy', kn: '೬೦% ಸಬ್ಸಿಡಿ', hi: '60% सब्सिडी' },
     badgeClass: 'badge-success',
     ministry: { en: 'Ministry of New & Renewable Energy & KREDL', kn: 'ನವೀಕರಿಸಬಹುದಾದ ಇಂಧನ ಸಚಿವಾಲಯ & KREDL', hi: 'नवीन एवं नवीकरणीय ऊर्जा मंत्रालय' },
@@ -334,7 +334,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'GPS Physical Verification', kn: 'ಭೌತಿಕ ಪರಿಶೀಲನೆ', hi: 'भौतिक सत्यापन' }, desc: { en: 'Chassis number verification by Assistant Director of Agriculture (ADA).', kn: 'ಕೃಷಿ ಅಧಿಕಾರಿಗಳಿಂದ ಯಂತ್ರದ ಚಾಸಿಸ್ ಸಂಖ್ಯೆ ಹಾಗೂ ಲೈವ್ ಫೋಟೋ ಪರಿಶೀಲನೆ.', hi: 'सहायक कृषि निदेशक द्वारा चेसिस नंबर और जीपीएस फोटो सत्यापन।' } }
     ],
     timeline: '30 Days from token allocation',
-    img: 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1592837330752-6a68393b4822?w=800&q=80',
     badge: { en: '50% Subsidy', kn: '೫೦% ಸಹಾಯಧನ', hi: '50% सब्सिडी' },
     badgeClass: 'badge-warning',
     ministry: { en: 'Dept. of Agriculture, Karnataka & MoA GoI', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ', hi: 'कृषि विभाग, कर्नाटक' },
@@ -382,7 +382,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Grant Credit & Operations', kn: 'ಅನುದಾನ ಬಿಡುಗಡೆ', hi: 'राशि आवंटन' }, desc: { en: 'Funds released directly to FPO bank account for machinery and procurement.', kn: 'ರೈತರ ಉತ್ಪನ್ನ ಖರೀದಿ ಹಾಗೂ ಗ್ರೇಡಿಂಗ್ ಘಟಕಕ್ಕೆ ನೇರ ನಿಧಿ ಬಿಡುಗಡೆ.', hi: 'खरीद और प्रसंस्करण इकाई के लिए FPO खाते में फंड ट्रांसफर।' } }
     ],
     timeline: '45 - 90 Days for committee approval',
-    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?w=800&q=80',
     badge: { en: '₹15 Lakh Grant', kn: '₹೧೫ ಲಕ್ಷ ಅನುದಾನ', hi: '₹15 लाख अनुदान' },
     badgeClass: 'badge-primary',
     ministry: { en: 'Ministry of Agriculture & NABARD', kn: 'ಕೃಷಿ ಸಚಿವಾಲಯ ಮತ್ತು ನಬಾರ್ಡ್', hi: 'कृषि मंत्रालय एवं नाबार्ड' },
@@ -430,7 +430,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Disbursement & Interest Rebate', kn: 'ಸಾಲ ವಿತರಣೆ & ಬಡ್ಡಿ ರಿಯಾಯಿತಿ', hi: 'ऋण व ब्याज छूट' }, desc: { en: 'Bank disburses loan and interest subvention gets credited automatically.', kn: 'ಬ್ಯಾಂಕ್ ಸಾಲ ಬಿಡುಗಡೆ ಮಾಡುತ್ತದೆ ಮತ್ತು 3% ಬಡ್ಡಿ ರಿಯಾಯಿತಿ ನೇರವಾಗಿ ಅನ್ವಯವಾಗುತ್ತದೆ.', hi: 'बैंक ऋण जारी करता है और 3% ब्याज छूट सीधे लागू होती है।' } }
     ],
     timeline: '30 - 45 Days for complete bank sanction',
-    img: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&q=80',
     badge: { en: '3% Interest Rebate', kn: '೩% ಬಡ್ಡಿ ರಿಯಾಯಿತಿ', hi: '3% ब्याज छूट' },
     badgeClass: 'badge-success',
     ministry: { en: 'Ministry of Agriculture & Farmers Welfare, GoI', kn: 'ಕೃಷಿ ಸಚಿವಾಲಯ, ಭಾರತ ಸರ್ಕಾರ', hi: 'कृषि एवं किसान कल्याण मंत्रालय' },
@@ -478,7 +478,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Card Generation & Delivery', kn: 'ಕಾರ್ಡ್ ವಿತರಣೆ', hi: 'कार्ड वितरण' }, desc: { en: 'Laminated card and crop fertilizer advisory handed over at Gram Panchayat / RSK.', kn: 'ಗ್ರಾಮ ಪಂಚಾಯತ್ ಅಥವಾ ಆರ್‌ಎಸ್‌ಕೆ ಮೂಲಕ ರಸಗೊಬ್ಬರ ಶಿಫಾರಸು ಕಾರ್ಡ್ ವಿತರಣೆ.', hi: 'ग्राम पंचायत या RSK द्वारा लैमिनेटेड कार्ड व उर्वरक सलाह पत्र वितरण।' } }
     ],
     timeline: '14 - 21 Days from sample submission',
-    img: 'https://images.unsplash.com/photo-1627920769852-5c21f5fb3d0f?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800&q=80',
     badge: { en: '100% Free', kn: 'ಉಚಿತ ಪರೀಕ್ಷೆ', hi: '100% मुफ्त' },
     badgeClass: 'badge-primary',
     ministry: { en: 'Dept. of Agriculture, Karnataka & GoI', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ', hi: 'कृषि विभाग, भारत सरकार' },
@@ -526,7 +526,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Fund Disbursement', kn: 'ಸಹಾಯಧನ ಜಮೆ', hi: 'अनुदान भुगतान' }, desc: { en: 'Subsidy credited directly post installation.', kn: 'ಯಂತ್ರ ಅಳವಡಿಕೆ ಪೂರ್ಣಗೊಂಡ ನಂತರ ಖಾತೆಗೆ ಸಬ್ಸಿಡಿ ಜಮೆ.', hi: 'कार्य पूरा होने के बाद सीधे खाते में सब्सिडी।' } }
     ],
     timeline: '30 Days post field inspection',
-    img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&q=80',
     badge: { en: 'Malnad Region', kn: 'ಮಲೆನಾಡು', hi: 'मलनाड क्षेत्र' },
     badgeClass: 'badge-success',
     ministry: { en: 'Coffee Board of India, Ministry of Commerce', kn: 'ಕಾಫಿ ಮಂಡಳಿ, ವಾಣಿಜ್ಯ ಸಚಿವಾಲಯ', hi: 'कॉफी बोर्ड, वाणिज्य मंत्रालय' },
@@ -578,7 +578,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Monthly DBT Credit', kn: 'ಮಾಸಿಕ ಹಣ ಜಮೆ', hi: 'मासिक डीबीटी' }, desc: { en: '₹2,000 credited automatically every month to NPCI-mapped account.', kn: 'ಪ್ರತಿ ತಿಂಗಳು ₹2,000 ನೇರವಾಗಿ ಆಧಾರ್ ಜೋಡಿತ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ಜಮೆ.', hi: 'हर माह सीधे बैंक खाते में ₹2,000 का ट्रांसफर।' } }
     ],
     timeline: 'Immediate token generation; Approval in 15 days',
-    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80',
     badge: { en: '₹2,000/Month', kn: '₹೨,೦೦೦/ತಿಂಗಳಿಗೆ', hi: '₹2,000/माह' },
     badgeClass: 'badge-success',
     ministry: { en: 'Dept. of Women & Child Development, Karnataka', kn: 'ಮಹಿಳಾ ಮತ್ತು ಮಕ್ಕಳ ಅಭಿವೃದ್ಧಿ ಇಲಾಖೆ', hi: 'महिला एवं बाल विकास विभाग' },
@@ -599,7 +599,7 @@ export const kaSchemes = [
       kn: 'ಗ್ರಾಮೀಣ ಮಹಿಳೆಯರನ್ನು ಸ್ವಸಹಾಯ ಸಂಘಗಳಾಗಿ (SHG) ಸಂಘಟಿಸಿ ₹25,000 ಸುತ್ತು ನಿಧಿ ಹಾಗೂ ಶೂನ್ಯ ಬಡ್ಡಿದರದ ಆರ್ಥಿಕ ನೆರವು ನೀಡಿ ಸಬಲೀಕರಣಗೊಳಿಸುವ ಯೋಜನೆ.', 
       hi: 'ग्रामीण महिलाओं के स्वयं सहायता समूहों (SHG) को ₹25,000 रिवाल्विंग फंड और कम ब्याज वाले सूक्ष्म ऋण प्रदान करना।' 
     },
-    img: 'https://images.unsplash.com/photo-1603597395015-8167f1dc219d?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80',
     badge: { en: 'SHG Loan @ 0%', kn: 'ಶೂನ್ಯ ಬಡ್ಡಿ ಸಾಲ', hi: '0% ब्याज ऋण' },
     badgeClass: 'badge-info',
     ministry: { en: 'Women & Child Development Dept., Karnataka', kn: 'ಮಹಿಳಾ ಮತ್ತು ಮಕ್ಕಳ ಕಲ್ಯಾಣ ಇಲಾಖೆ', hi: 'महिला एवं बाल विकास विभाग' },
@@ -614,7 +614,7 @@ export const kaSchemes = [
 export const agriFinancialAssistance = [
   {
     id: 'kcc-crop-loan',
-    img: 'https://images.unsplash.com/photo-1589828135898-d14fb4081c70?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80',
     title: { en: 'Kisan Credit Card (KCC) Short-Term Crop Loan', kn: 'ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ (KCC) ಅಲ್ಪಾವಧಿ ಬೆಳೆ ಸಾಲ', hi: 'किसान क्रेडिट कार्ड अल्पकालिक फसल ऋण' },
     category: 'Crop Loan',
     interestRate: '4% p.a. (with prompt repayment incentive)',
@@ -630,7 +630,7 @@ export const agriFinancialAssistance = [
   },
   {
     id: 'pmfby-insurance-detail',
-    img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&q=80',
     title: { en: 'PMFBY Crop Insurance Slabs & Settlement Guide', kn: 'ಪಿಎಂ ಫಸಲ್ ಬಿಮಾ ಯೋಜನೆ ಪ್ರೀಮಿಯಂ ದರಗಳು & ಪರಿಹಾರ', hi: 'पीएम फसल बीमा प्रीमियम दरें और दावा प्रक्रिया' },
     category: 'Insurance',
     interestRate: 'Subsidized premium by GoI & Govt of Karnataka',
@@ -647,7 +647,7 @@ export const agriFinancialAssistance = [
   },
   {
     id: 'nabard-startup-grant',
-    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80',
+    img: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80',
     title: { en: 'NABARD Agri-Startup & FPO Capital Grants', kn: 'ನಬಾರ್ಡ್ ಕೃಷಿ ಸ್ಟಾರ್ಟ್‌ಅಪ್ & ಎಫ್‌ಪಿಒ ಅನುದಾನಗಳು', hi: 'नाबार्ड कृषि स्टार्टअप और FPO अनुदान' },
     category: 'Grants & Startups',
     interestRate: 'Grants (0% repayment) & Subsidized Term Loans',
@@ -825,5 +825,204 @@ export const grievanceHelpdesks = [
     portalUrl: 'https://daccrowd.dac.gov.in/',
     timings: '6:00 AM - 10:00 PM (All 7 Days, 22 Languages)',
     type: 'AgriSpecial'
+  },
+// ==========================================
+  // SCHOLARSHIPS & EDUCATION (Buddy4Study)
+  // ==========================================
+  {
+    id: 'vidyasiri-scholarship',
+    category: 'Scholarship',
+    level: 'State',
+    beneficiary: ['Students (Backward Classes)'],
+    objective: 'Food & Accommodation',
+    stage: 'College/Hostel',
+    districtSpecific: ['All'],
+    title: { en: 'Vidyasiri Food and Accommodation Scholarship', kn: 'ವಿದ್ಯಾಸಿರಿ ಊಟ ಮತ್ತು ವಸತಿ ವಿದ್ಯಾರ್ಥಿವೇತನ', hi: 'विद्यासिरी भोजन और आवास छात्रवृत्ति' },
+    desc: { 
+      en: 'Provides boarding and lodging assistance for students from backward classes studying in post-matric courses who did not get hostel admission.', 
+      kn: 'ವಿದ್ಯಾರ್ಥಿನಿಲಯಗಳಲ್ಲಿ ಪ್ರವೇಶ ಪಡೆಯದ ಹಿಂದುಳಿದ ವರ್ಗಗಳ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಊಟ ಮತ್ತು ವಸತಿ ಸಹಾಯ ಒದಗಿಸುವ ಯೋಜನೆ.', 
+      hi: 'पिछड़े वर्गों के छात्रों के लिए भोजन और आवास सहायता।' 
+    },
+    eligibility: {
+      en: 'Students belonging to backward classes in Karnataka pursuing post-matric courses without hostel accommodation.',
+      kn: 'ಹಾಸ್ಟೆಲ್ ಸೌಲಭ್ಯ ಪಡೆಯದ ಕರ್ನಾಟಕದ ಹಿಂದುಳಿದ ವರ್ಗಗಳ ವಿದ್ಯಾರ್ಥಿಗಳು.',
+      hi: 'कर्नाटक में पिछड़े वर्गों के छात्र जिन्हें हॉस्टल नहीं मिला है।'
+    },
+    exclusions: {
+      en: 'Students already residing in government/aided hostels.',
+      kn: 'ಈಗಾಗಲೇ ಸರ್ಕಾರಿ ಹಾಸ್ಟೆಲ್‌ಗಳಲ್ಲಿ ವಾಸಿಸುತ್ತಿರುವ ವಿದ್ಯಾರ್ಥಿಗಳು.',
+      hi: 'सरकारी हॉस्टल में रहने वाले छात्र।'
+    },
+    benefits: {
+      subsidyPercent: 'Monthly Stipend',
+      maxLimit: '₹1,500 / month (10 months)',
+      mode: 'DBT to Aadhaar linked bank account',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Aadhaar, Caste/Income Certificate, College Admission Proof, Bank Details.',
+      kn: 'ಆಧಾರ್, ಜಾತಿ/ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ, ಕಾಲೇಜು ಪ್ರವೇಶ ಪುರಾವೆ, ಬ್ಯಾಂಕ್ ವಿವರಗಳು.',
+      hi: 'आधार, जाति/आय प्रमाण पत्र, कॉलेज प्रवेश प्रमाण, बैंक विवरण।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Online Application', kn: 'ಆನ್‌ಲೈನ್ ಅರ್ಜಿ', hi: 'ऑनलाइन आवेदन' }, desc: { en: 'Apply through State Scholarship Portal (SSP).', kn: 'ರಾಜ್ಯ ವಿದ್ಯಾರ್ಥಿವೇತನ ಪೋರ್ಟಲ್ (SSP) ಮೂಲಕ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ.', hi: 'SSP पोर्टल के माध्यम से आवेदन करें।' } },
+      { step: 2, title: { en: 'Verification', kn: 'ಪರಿಶೀಲನೆ', hi: 'सत्यापन' }, desc: { en: 'Document verification by college and department officials.', kn: 'ಕಾಲೇಜು ಮತ್ತು ಇಲಾಖೆ ಅಧಿಕಾರಿಗಳಿಂದ ದಾಖಲೆ ಪರಿಶೀಲನೆ.', hi: 'कॉलेज और विभाग द्वारा दस्तावेज़ सत्यापन।' } },
+      { step: 3, title: { en: 'Approval', kn: 'ಅನುಮೋದನೆ', hi: 'मंजूरी' }, desc: { en: 'Final approval from Backward Classes Welfare Department.', kn: 'ಹಿಂದುಳಿದ ವರ್ಗಗಳ ಕಲ್ಯಾಣ ಇಲಾಖೆಯಿಂದ ಅಂತಿಮ ಅನುಮೋದನೆ.', hi: 'अंतिम मंजूरी।' } },
+      { step: 4, title: { en: 'Fund Disbursement', kn: 'ಹಣ ಬಿಡುಗಡೆ', hi: 'फंड वितरण' }, desc: { en: 'Amount credited directly to bank account via DBT.', kn: 'ಹಣ ನೇರವಾಗಿ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ಜಮೆ.', hi: 'सीधे बैंक खाते में ट्रांसफर।' } }
+    ],
+    timeline: 'Application deadline: August 31, 2026',
+    img: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80',
+    badge: { en: 'Student Aid', kn: 'ವಿದ್ಯಾರ್ಥಿ ನೆರವು', hi: 'छात्र सहायता' },
+    badgeClass: 'badge-info',
+    ministry: { en: 'Dept of Backward Classes Welfare', kn: 'ಹಿಂದುಳಿದ ವರ್ಗಗಳ ಕಲ್ಯಾಣ ಇಲಾಖೆ', hi: 'पिछड़ा वर्ग कल्याण विभाग' },
+    applyLink: 'https://ssp.postmatric.karnataka.gov.in/',
+    trackerUrl: 'https://ssp.postmatric.karnataka.gov.in/'
+  },
+  {
+    id: 'pre-matric-st',
+    category: 'Scholarship',
+    level: 'State',
+    beneficiary: ['ST Students (Class 9-10)'],
+    objective: 'Education Support',
+    stage: 'School',
+    districtSpecific: ['All'],
+    title: { en: 'Pre-Matric Scholarships for ST Students', kn: 'ಪರಿಶಿಷ್ಟ ಪಂಗಡದ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಮೆಟ್ರಿಕ್-ಪೂರ್ವ ವಿದ್ಯಾರ್ಥಿವೇತನ', hi: 'एसटी छात्रों के लिए प्री-मैट्रिक छात्रवृत्ति' },
+    desc: { 
+      en: 'Financial assistance for Scheduled Tribe students studying in classes 9 and 10 to reduce dropout rates and support education.', 
+      kn: '೯ ಮತ್ತು ೧೦ನೇ ತರಗತಿಯಲ್ಲಿ ಓದುತ್ತಿರುವ ಪರಿಶಿಷ್ಟ ಪಂಗಡದ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಆರ್ಥಿಕ ನೆರವು.', 
+      hi: '9वीं और 10वीं कक्षा में पढ़ने वाले एसटी छात्रों के लिए वित्तीय सहायता।' 
+    },
+    eligibility: {
+      en: 'ST students studying in Class 9-10 in recognized schools with family income below ₹2 Lakh.',
+      kn: 'ಕುಟುಂಬದ ಆದಾಯ ₹೨ ಲಕ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ ಇರುವ ೯-೧೦ನೇ ತರಗತಿಯ ಪರಿಶಿಷ್ಟ ಪಂಗಡದ ವಿದ್ಯಾರ್ಥಿಗಳು.',
+      hi: 'कक्षा 9-10 में पढ़ने वाले एसटी छात्र, पारिवारिक आय ₹2 लाख से कम।'
+    },
+    exclusions: {
+      en: 'Students studying in unrecognised schools or receiving other state scholarships.',
+      kn: 'ಮಾನ್ಯತೆ ಪಡೆಯದ ಶಾಲೆಗಳಲ್ಲಿ ಓದುತ್ತಿರುವವರು.',
+      hi: 'गैर-मान्यता प्राप्त स्कूलों के छात्र।'
+    },
+    benefits: {
+      subsidyPercent: 'Annual Grant',
+      maxLimit: '₹2,250 to ₹3,000 / year (plus adhoc grant)',
+      mode: 'DBT',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Aadhaar, Caste Certificate, Income Certificate, School ID.',
+      kn: 'ಆಧಾರ್, ಜಾತಿ, ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ, ಶಾಲಾ ಗುರುತಿನ ಚೀಟಿ.',
+      hi: 'आधार, जाति, आय प्रमाण पत्र, स्कूल आईडी।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Apply Online', kn: 'ಆನ್‌ಲೈನ್ ಅರ್ಜಿ', hi: 'ऑनलाइन आवेदन' }, desc: { en: 'Apply via SSP portal.', kn: 'SSP ಪೋರ್ಟಲ್ ಮೂಲಕ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ.', hi: 'SSP पोर्टल के माध्यम से आवेदन करें।' } },
+      { step: 2, title: { en: 'School Verification', kn: 'ಶಾಲಾ ಪರಿಶೀಲನೆ', hi: 'स्कूल सत्यापन' }, desc: { en: 'Headmaster verifies student details and attendance.', kn: 'ಮುಖ್ಯೋಪಾಧ್ಯಾಯರಿಂದ ಪರಿಶೀಲನೆ.', hi: 'हेडमास्टर द्वारा सत्यापन।' } },
+      { step: 3, title: { en: 'Department Approval', kn: 'ಇಲಾಖೆ ಅನುಮೋದನೆ', hi: 'विभाग मंजूरी' }, desc: { en: 'Tribal Welfare department approves the list.', kn: 'ಬುಡಕಟ್ಟು ಕಲ್ಯಾಣ ಇಲಾಖೆಯಿಂದ ಅನುಮೋದನೆ.', hi: 'आदिवासी कल्याण विभाग द्वारा मंजूरी।' } },
+      { step: 4, title: { en: 'Disbursement', kn: 'ಹಣ ಬಿಡುಗಡೆ', hi: 'वितरण' }, desc: { en: 'Credited directly to student bank account.', kn: 'ವಿದ್ಯಾರ್ಥಿಯ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ಜಮೆ.', hi: 'छात्र के बैंक खाते में जमा।' } }
+    ],
+    timeline: 'Application deadline: September 30, 2026',
+    img: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&q=80',
+    badge: { en: 'Pre-Matric', kn: 'ಮೆಟ್ರಿಕ್ ಪೂರ್ವ', hi: 'प्री-मैट्रिक' },
+    badgeClass: 'badge-primary',
+    ministry: { en: 'Tribal Welfare Department', kn: 'ಬುಡಕಟ್ಟು ಕಲ್ಯಾಣ ಇಲಾಖೆ', hi: 'आदिवासी कल्याण विभाग' },
+    applyLink: 'https://ssp.postmatric.karnataka.gov.in/',
+    trackerUrl: 'https://ssp.postmatric.karnataka.gov.in/'
+  },
+  {
+    id: 'vidyadhan-scholarship',
+    category: 'Scholarship',
+    level: 'NGO/Private',
+    beneficiary: ['Class 11 & 12 Students'],
+    objective: 'Higher Education',
+    stage: 'PUC/Class 11-12',
+    districtSpecific: ['All'],
+    title: { en: 'Vidyadhan Scholarship Program', kn: 'ವಿದ್ಯಾಧನ್ ವಿದ್ಯಾರ್ಥಿವೇತನ ಕಾರ್ಯಕ್ರಮ', hi: 'विद्याधन छात्रवृत्ति कार्यक्रम' },
+    desc: { 
+      en: 'Provided by Sarojini Damodaran Foundation for economically backward students who have completed Class 10 to pursue Class 11 & 12.', 
+      kn: '೧೦ನೇ ತರಗತಿ ಪಾಸಾದ ಆರ್ಥಿಕವಾಗಿ ಹಿಂದುಳಿದ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ೧೧ ಮತ್ತು ೧೨ನೇ ತರಗತಿ ಓದಲು ನೆರವು.', 
+      hi: '10वीं पास आर्थिक रूप से पिछड़े छात्रों को 11वीं और 12वीं पढ़ने के लिए सहायता।' 
+    },
+    eligibility: {
+      en: 'Completed Class 10 with 90% marks (85% for disabled) and family income below ₹2 Lakh.',
+      kn: '೧೦ನೇ ತರಗತಿಯಲ್ಲಿ ಶೇ.೯೦ ಅಂಕಗಳೊಂದಿಗೆ ಉತ್ತೀರ್ಣರಾದವರು, ಕುಟುಂಬದ ಆದಾಯ ₹೨ ಲಕ್ಷದೊಳಗೆ.',
+      hi: '90% अंकों के साथ 10वीं पास, आय ₹2 लाख से कम।'
+    },
+    exclusions: {
+      en: 'Students not meeting the merit criteria or income limit.',
+      kn: 'ಅರ್ಹತಾ ಮಾನದಂಡ ತಲುಪದವರು.',
+      hi: 'मेरिट और आय मानदंड को पूरा न करने वाले छात्र।'
+    },
+    benefits: {
+      subsidyPercent: 'Financial Grant',
+      maxLimit: '₹10,000 / year (Class 11 & 12)',
+      mode: 'Bank Transfer',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Class 10 Marksheet, Income Certificate, Passport Size Photo.',
+      kn: '೧೦ನೇ ತರಗತಿ ಅಂಕಪಟ್ಟಿ, ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ, ಫೋಟೋ.',
+      hi: '10वीं की मार्कशीट, आय प्रमाण पत्र, फोटो।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Apply Online', kn: 'ಆನ್‌ಲೈನ್ ಅರ್ಜಿ', hi: 'ऑनलाइन आवेदन' }, desc: { en: 'Register on Vidyadhan portal.', kn: 'ವಿದ್ಯಾಧನ್ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ನೋಂದಾಯಿಸಿ.', hi: 'विद्याधन पोर्टल पर रजिस्टर करें।' } },
+      { step: 2, title: { en: 'Shortlisting', kn: 'ಶಾರ್ಟ್‌ಲಿಸ್ಟಿಂಗ್', hi: 'शॉर्टलिस्टिंग' }, desc: { en: 'Candidates shortlisted based on academic merit and income.', kn: 'ಅಂಕಗಳ ಆಧಾರದ ಮೇಲೆ ಆಯ್ಕೆ.', hi: 'मेरिट के आधार पर शॉर्टलिस्टिंग।' } },
+      { step: 3, title: { en: 'Interview', kn: 'ಸಂದರ್ಶನ', hi: 'साक्षात्कार' }, desc: { en: 'Online or in-person interview.', kn: 'ಸಂದರ್ಶನ ಪ್ರಕ್ರಿಯೆ.', hi: 'इंटरव्यू प्रक्रिया।' } },
+      { step: 4, title: { en: 'Selection', kn: 'ಆಯ್ಕೆ', hi: 'चयन' }, desc: { en: 'Final selection and fund disbursement.', kn: 'ಅಂತಿಮ ಆಯ್ಕೆ ಮತ್ತು ಹಣ ಬಿಡುಗಡೆ.', hi: 'अंतिम चयन और फंड वितरण।' } }
+    ],
+    timeline: 'Ongoing / Refer Official Website',
+    img: 'https://images.unsplash.com/photo-1546410531-ea4cea477149?w=800&q=80',
+    badge: { en: 'Merit Scholarship', kn: 'ಮೆರಿಟ್ ಸ್ಕಾಲರ್‌ಶಿಪ್', hi: 'मेरिट छात्रवृत्ति' },
+    badgeClass: 'badge-warning',
+    ministry: { en: 'Sarojini Damodaran Foundation', kn: 'ಸರೋಜಿನಿ ದಾಮೋದರನ್ ಫೌಂಡೇಶನ್', hi: 'सरोजिनी दामोदरन फाउंडेशन' },
+    applyLink: 'https://www.vidyadhan.org/apply',
+    trackerUrl: 'https://www.vidyadhan.org/'
+  },
+  {
+    id: 'b4s-college-scholarship',
+    category: 'Scholarship',
+    level: 'NGO/Private',
+    beneficiary: ['College/UG Students'],
+    objective: 'Higher Education Fee Waiver',
+    stage: 'Undergraduate',
+    districtSpecific: ['All'],
+    title: { en: 'Buddy4Study College Admission Scholarship', kn: 'ಬಡ್ಡಿ4ಸ್ಟಡಿ ಕಾಲೇಜು ಪ್ರವೇಶ ವಿದ್ಯಾರ್ಥಿವೇತನ', hi: 'Buddy4Study कॉलेज एडमिशन छात्रवृत्ति' },
+    desc: { 
+      en: 'A special program by Buddy4Study offering tuition fee waivers and scholarships for Class 12 passed students seeking admission to partner colleges.', 
+      kn: '೧೨ನೇ ತರಗತಿ ಪಾಸಾದ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಕಾಲೇಜು ಪ್ರವೇಶಕ್ಕಾಗಿ ಬಡ್ಡಿ4ಸ್ಟಡಿ ನೀಡುವ ವಿದ್ಯಾರ್ಥಿವೇತನ.', 
+      hi: '12वीं पास छात्रों के लिए कॉलेज एडमिशन के लिए Buddy4Study छात्रवृत्ति।' 
+    },
+    eligibility: {
+      en: 'Class 12 passed students looking for UG admissions in 2026-27 session.',
+      kn: '೨೦೨೬-೨೭ ಸಾಲಿನಲ್ಲಿ ಪದವಿ ಪ್ರವೇಶ ಪಡೆಯಬಯಸುವ ೧೨ನೇ ತರಗತಿ ಪಾಸಾದ ವಿದ್ಯಾರ್ಥಿಗಳು.',
+      hi: '2026-27 में यूजी एडमिशन चाहने वाले 12वीं पास छात्र।'
+    },
+    exclusions: {
+      en: 'Students already enrolled in non-partner institutions without applying.',
+      kn: 'ಅರ್ಜಿ ಸಲ್ಲಿಸದೆ ಪ್ರವೇಶ ಪಡೆದವರು.',
+      hi: 'बिना आवेदन किए प्रवेश लेने वाले छात्र।'
+    },
+    benefits: {
+      subsidyPercent: 'Fee Waiver / Grant',
+      maxLimit: 'Up to 100% Tuition Fee Waiver',
+      mode: 'Direct to Institute / Bank',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Class 12 Marksheet, ID Proof, Address Proof.',
+      kn: '೧೨ನೇ ತರಗತಿ ಅಂಕಪಟ್ಟಿ, ಗುರುತಿನ ಚೀಟಿ.',
+      hi: '12वीं की मार्कशीट, आईडी प्रूफ।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Registration', kn: 'ನೋಂದಣಿ', hi: 'पंजीकरण' }, desc: { en: 'Register on Buddy4Study portal.', kn: 'ಬಡ್ಡಿ4ಸ್ಟಡಿ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ನೋಂದಾಯಿಸಿ.', hi: 'Buddy4Study पोर्टल पर रजिस्टर करें।' } },
+      { step: 2, title: { en: 'Counseling', kn: 'ಕೌನ್ಸೆಲಿಂಗ್', hi: 'काउंसलिंग' }, desc: { en: 'Attend counseling session for institute selection.', kn: 'ಕಾಲೇಜು ಆಯ್ಕೆಗಾಗಿ ಕೌನ್ಸೆಲಿಂಗ್.', hi: 'कॉलेज चयन के लिए काउंसलिंग।' } },
+      { step: 3, title: { en: 'Admission', kn: 'ಪ್ರವೇಶ', hi: 'प्रवेश' }, desc: { en: 'Complete admission formalities.', kn: 'ಪ್ರವೇಶ ಪ್ರಕ್ರಿಯೆ ಪೂರ್ಣಗೊಳಿಸಿ.', hi: 'प्रवेश प्रक्रिया पूरी करें।' } },
+      { step: 4, title: { en: 'Scholarship Award', kn: 'ವಿದ್ಯಾರ್ಥಿವೇತನ ಮಂಜೂರು', hi: 'छात्रवृत्ति पुरस्कार' }, desc: { en: 'Fee waiver applied to college tuition.', kn: 'ಕಾಲೇಜು ಶುಲ್ಕದಲ್ಲಿ ವಿನಾಯಿತಿ.', hi: 'कॉलेज ट्यूशन में छूट।' } }
+    ],
+    timeline: 'Application deadline: August 31, 2026',
+    img: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80',
+    badge: { en: 'Fee Waiver', kn: 'ಶುಲ್ಕ ವಿನಾಯಿತಿ', hi: 'फीस छूट' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Buddy4Study Partners', kn: 'ಬಡ್ಡಿ4ಸ್ಟಡಿ ಪಾಲುದಾರರು', hi: 'Buddy4Study पार्टनर्स' },
+    applyLink: 'https://www.buddy4study.com/',
+    trackerUrl: 'https://www.buddy4study.com/'
   }
 ];
