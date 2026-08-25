@@ -825,10 +825,10 @@ export const grievanceHelpdesks = [
     portalUrl: 'https://daccrowd.dac.gov.in/',
     timings: '6:00 AM - 10:00 PM (All 7 Days, 22 Languages)',
     type: 'AgriSpecial'
-  },
-// ==========================================
-  // SCHOLARSHIPS & EDUCATION (Buddy4Study)
-  // ==========================================
+  }
+];
+
+export const kaScholarships = [
   {
     id: 'vidyasiri-scholarship',
     category: 'Scholarship',
