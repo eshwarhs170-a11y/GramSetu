@@ -690,6 +690,28 @@ export function SchemesScreen() {
       .finally(() => setLoadingSchemes(false))
   }, [])
 
+  // Sync selectedScheme with browser URL hash history (allows native browser Back button)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#scheme-')) {
+        const schemeId = hash.replace('#scheme-', '');
+        const found = schemes.find(s => s.id === schemeId);
+        if (found) {
+          setSelectedScheme(found);
+          return;
+        }
+      }
+      setSelectedScheme(null);
+    };
+
+    // Run once on load to support direct linking
+    handleHashChange();
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [schemes]);
+
   // Text to Speech for Accessibility
   const handleToggleVoice = (scheme) => {
     if (!('speechSynthesis' in window)) {
@@ -846,7 +868,11 @@ export function SchemesScreen() {
               window.speechSynthesis.cancel()
               setIsSpeaking(false)
             }
-            setSelectedScheme(null)
+            if (window.location.hash.startsWith('#scheme-')) {
+              window.history.back();
+            } else {
+              setSelectedScheme(null);
+            }
           }}
           className="btn btn-outline"
           style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, borderRadius: 10, padding: '8px 16px', fontWeight: 600 }}
@@ -1468,10 +1494,12 @@ export function SchemesScreen() {
                     </a>
                     <button
                       className="btn btn-outline btn-sm"
-                      onClick={() => setSelectedScheme(selectedScheme && selectedScheme.id === s.id ? null : s)}
+                      onClick={() => {
+                        window.location.hash = 'scheme-' + s.id;
+                      }}
                       style={{ fontSize: 13 }}
                     >
-                      {selectedScheme && selectedScheme.id === s.id ? 'Close' : (t('learnMore') || 'Details')}
+                      {t('learnMore') || 'Details'}
                     </button>
                   </div>
                 </div>
