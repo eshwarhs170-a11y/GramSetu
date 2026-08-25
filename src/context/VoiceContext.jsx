@@ -87,26 +87,67 @@ export function VoiceProvider({ children }) {
   }, [recognition]);
 
   const speak = useCallback((text) => {
-    if ('speechSynthesis' in window) {
-      // cancel any ongoing speech
-      window.speechSynthesis.cancel();
-      
-      const utterance = new SpeechSynthesisUtterance(text);
+    if (!('speechSynthesis' in window)) {
+      console.warn("Speech Synthesis API is not supported in this browser.");
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const doSpeak = () => {
+      const voices = window.speechSynthesis.getVoices();
+      let targetVoice = null;
+      let textToSpeak = text;
+
       if (lang === 'kn') {
-        utterance.lang = 'kn-IN';
+        targetVoice = voices.find(v => v.lang.toLowerCase().includes('kn') && v.name.includes('Google'))
+                   || voices.find(v => v.lang.toLowerCase().includes('kn'));
+        
+        if (!targetVoice) {
+          // NO KANNADA VOICE (Windows Laptop) -> Fallback to English Voice & English Text
+          targetVoice = voices.find(v => v.lang.toLowerCase().includes('en-in') && v.name.includes('Google'))
+                     || voices.find(v => v.lang.toLowerCase().startsWith('en'));
+          
+          if (textToSpeak.includes('ಗ್ರಾಮ ಸೇತುಗೆ ಸ್ವಾಗತ')) {
+             textToSpeak = 'Welcome to GramSetu. Here you can access government schemes, APMC market prices, and file complaints. Tap the microphone to talk to me anytime.';
+          } else {
+             textToSpeak = 'Kannada voice is not supported on this device. Please use English, or open this website on a mobile phone.';
+          }
+        }
       } else if (lang === 'hi') {
-        utterance.lang = 'hi-IN';
+        targetVoice = voices.find(v => v.lang.toLowerCase().includes('hi') && v.name.includes('Google'))
+                   || voices.find(v => v.lang.toLowerCase().includes('hi'));
       } else {
-        utterance.lang = 'en-IN';
+        targetVoice = voices.find(v => v.lang.toLowerCase().includes('en-in') && v.name.includes('Google'))
+                   || voices.find(v => v.lang.toLowerCase().includes('en-gb') && v.name.includes('Google'))
+                   || voices.find(v => v.lang.toLowerCase().startsWith('en') && v.name.includes('Google'));
       }
 
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      if (targetVoice) {
+        utterance.voice = targetVoice;
+        utterance.lang = targetVoice.lang;
+      } else {
+        utterance.lang = lang === 'hi' ? 'hi-IN' : 'en-IN';
+      }
+
+      utterance.rate = 0.95;  // slightly slower for clarity
       utterance.onstart = () => setIsSpeaking(true);
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);
-      
+
       window.speechSynthesis.speak(utterance);
+    };
+
+    // Voices may not be loaded yet — wait for them
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      doSpeak();
     } else {
-      console.warn("Speech Synthesis API is not supported in this browser.");
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.onvoiceschanged = null;
+        doSpeak();
+      };
     }
   }, [lang]);
 

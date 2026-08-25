@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { districtData } from '../data/districtsData'
 import { useLanguage } from '../context/LanguageContext'
@@ -36,12 +36,11 @@ export default function LandingPage() {
     }
   }, [navigate])
 
-  // Welcome message — plays on first visit and again whenever language changes
+  // Welcome message — fires on every page load and again on language switch
+  const lastSpokenLang = useRef(null)
   useEffect(() => {
-    const lastWelcomedLang = window.sessionStorage.getItem('site_welcomed_lang')
-    if (lastWelcomedLang === lang) return // already welcomed in this language
-
-    window.sessionStorage.setItem('site_welcomed_lang', lang)
+    if (lastSpokenLang.current === lang) return // already spoken for this lang
+    lastSpokenLang.current = lang
 
     const welcomeMsg = lang === 'kn'
       ? 'ಗ್ರಾಮ ಸೇತುಗೆ ಸ್ವಾಗತ. ನೀವು ಇಲ್ಲಿ ಸರ್ಕಾರಿ ಯೋಜನೆ ಮಾಹಿತಿ, ಮಾರುಕಟ್ಟೆ ಬೆಲೆ, ಮತ್ತು ದೂರು ಸಲ್ಲಿಸಬಹುದು. ಮೈಕ್ ಒತ್ತಿ ಮಾತನಾಡಿ.'
@@ -49,7 +48,7 @@ export default function LandingPage() {
       ? 'ग्राम सेतु में आपका स्वागत है. यहाँ आप सरकारी योजनाएं, बाजार भाव और शिकायत सेवा पा सकते हैं. माइक दबाकर बात करें.'
       : 'Welcome to GramSetu. Here you can access government schemes, APMC market prices, and file complaints. Tap the microphone to talk to me anytime.'
 
-    setTimeout(() => speak(welcomeMsg), 800)
+    setTimeout(() => speak(welcomeMsg), 1500)
   }, [lang, speak])
 
   return (

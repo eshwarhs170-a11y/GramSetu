@@ -1,33 +1,26 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 // Rule-based navigation + Gemini AI for general questions
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-async function callGemini(prompt, systemInstruction) {
-  // Use v1 stable endpoint with gemini-1.5-flash
-  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-  
-  const body = {
-    system_instruction: {
-      parts: [{ text: systemInstruction }]
-    },
-    contents: [{
-      parts: [{ text: prompt }]
-    }]
-  };
+// Initialize SDK
+const genAI = new GoogleGenerativeAI(apiKey);
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+export async function callGemini(prompt, systemInstruction) {
+  try {
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction: systemInstruction,
+    });
 
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err?.error?.message || `HTTP ${res.status}`);
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    throw error;
   }
-
-  const data = await res.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 }
 
 export async function processVoiceCommand(transcript, lang = 'en') {
