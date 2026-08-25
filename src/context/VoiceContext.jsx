@@ -162,17 +162,27 @@ export function VoiceProvider({ children }) {
     setTranscript('');
   }, []);
 
+  const stopSpeaking = useCallback(() => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+  }, []);
+
+  const value = {
+    isListening,
+    isSpeaking,
+    transcript,
+    error,
+    startListening,
+    stopListening,
+    speak,
+    stopSpeaking,
+    clearTranscript
+  };
+
   return (
-    <VoiceContext.Provider value={{
-      isListening,
-      isSpeaking,
-      transcript,
-      startListening,
-      stopListening,
-      speak,
-      clearTranscript,
-      error
-    }}>
+    <VoiceContext.Provider value={value}>
       {children}
     </VoiceContext.Provider>
   );

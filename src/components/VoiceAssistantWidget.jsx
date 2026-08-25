@@ -3,10 +3,10 @@ import { useVoice } from '../context/VoiceContext';
 import { useLanguage } from '../context/LanguageContext';
 import { processVoiceCommand } from '../utils/voiceCommands';
 import { useNavigate } from 'react-router-dom';
-import { Mic, MicOff, Loader2 } from 'lucide-react';
+import { Mic, MicOff, Loader2, Square } from 'lucide-react';
 
 export default function VoiceAssistantWidget() {
-  const { isListening, isSpeaking, transcript, startListening, stopListening, speak, clearTranscript, error } = useVoice();
+  const { isListening, isSpeaking, transcript, startListening, stopListening, speak, stopSpeaking, clearTranscript, error } = useVoice();
   const { lang, t } = useLanguage();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +40,10 @@ export default function VoiceAssistantWidget() {
   }, [transcript, isListening, navigate, speak, clearTranscript, lang]);
 
   const toggleListening = () => {
-    if (isListening) {
+    if (isSpeaking) {
+      // If AI is currently talking, clicking the button should just STOP it from talking
+      stopSpeaking();
+    } else if (isListening) {
       stopListening();
     } else {
       startListening();
@@ -73,7 +76,7 @@ export default function VoiceAssistantWidget() {
           animation: 'fadeInUp 0.3s ease-out'
         }}>
           <div style={{ fontSize: '13px', fontWeight: '600', color: 'var(--primary, #16a34a)', marginBottom: '8px' }}>
-            Voice Assistant
+            GramSetu AI
           </div>
           
           <div style={{ fontSize: '14px', color: 'var(--text-main, #1e293b)' }}>
@@ -116,7 +119,7 @@ export default function VoiceAssistantWidget() {
           width: '56px',
           height: '56px',
           borderRadius: '50%',
-          background: isListening ? '#ef4444' : 'var(--primary, #16a34a)',
+          background: isSpeaking ? '#f59e0b' : isListening ? '#ef4444' : 'var(--primary, #16a34a)',
           color: '#fff',
           border: 'none',
           boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
@@ -129,7 +132,7 @@ export default function VoiceAssistantWidget() {
         onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'}
         onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
       >
-        {isListening ? <MicOff size={24} /> : <Mic size={24} />}
+        {isSpeaking ? <Square size={20} fill="currentColor" /> : isListening ? <MicOff size={24} /> : <Mic size={24} />}
       </button>
       <style>{`
         @keyframes fadeInUp {
