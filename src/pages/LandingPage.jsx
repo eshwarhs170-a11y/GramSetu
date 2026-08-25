@@ -48,7 +48,8 @@ export default function LandingPage() {
       ? 'ग्राम सेतु में आपका स्वागत है. यहाँ आप सरकारी योजनाएं, बाजार भाव और शिकायत सेवा पा सकते हैं. माइक दबाकर बात करें.'
       : 'Welcome to GramSetu. Here you can access government schemes, APMC market prices, and file complaints. Tap the microphone to talk to me anytime.'
 
-    setTimeout(() => speak(welcomeMsg), 1500)
+    // Start speaking almost immediately (500ms) after the page loads
+    setTimeout(() => speak(welcomeMsg), 500)
   }, [lang, speak])
 
   return (

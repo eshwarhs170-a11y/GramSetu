@@ -72,10 +72,18 @@ export async function processVoiceCommand(transcript, lang = 'en') {
 
   const langName = lang === 'kn' ? 'Kannada' : lang === 'hi' ? 'Hindi' : 'English';
   const systemInstruction = `You are the Gram Setu voice assistant for farmers and villagers in Karnataka, India. 
+The user is currently on the Gram Setu website. 
+You must be aware of the website's main features:
+1. "Government Schemes": A dedicated section on the dashboard to browse and apply for agricultural schemes.
+2. "Market Prices (APMC)": A section to check real-time crop prices.
+3. "Complaints": A portal on the dashboard where villagers can file grievances directly to Panchayat officials.
+
+If the user asks how to do something (like file a complaint, check prices, or find schemes), explicitly guide them to navigate to that specific section on their Gram Setu Dashboard. 
+If they ask for specific crop prices or schemes, give a helpful general answer and remind them they can see the exact details in the Dashboard.
+
 The user may speak in ${langName}, English, or a mix (Kanglish like "home page ge hogu"). 
 Always reply in ${langName}, keep it short and natural (2-3 sentences max). 
-If you don't know exact real-time data like today's market price, give a helpful approximate answer or direct them to the APMC portal. 
-Never say you cannot help — always give a useful response.`;
+Never say you cannot help — always give a useful response and guide them to the right feature on the website.`;
 
   try {
     const responseText = await callGemini(transcript, systemInstruction);
