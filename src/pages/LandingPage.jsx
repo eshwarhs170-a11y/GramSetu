@@ -5,8 +5,10 @@ import { useLanguage } from '../context/LanguageContext'
 import { useVoice } from '../context/VoiceContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
+import { db } from '../firebase'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import {
-  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink, Building2, GraduationCap
+  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink, Building2, GraduationCap, X
 } from 'lucide-react'
 
 // ── District Knowledge Base ──────────────────────────────────
@@ -27,6 +29,28 @@ export default function LandingPage() {
   const { t, lang } = useLanguage()
   const { speak } = useVoice()
   const [selectedRole, setSelectedRole] = useState('farmer')
+  const [newsletterPhone, setNewsletterPhone] = useState('')
+  const [newsletterStatus, setNewsletterStatus] = useState('Join') // 'Join' | 'Loading' | 'Joined'
+  const [infoModal, setInfoModal] = useState({ isOpen: false, title: '', content: '' })
+
+  const handleNewsletterJoin = async () => {
+    if (!newsletterPhone || newsletterPhone.trim().length < 10) {
+      alert(lang === 'kn' ? 'ದಯವಿಟ್ಟು ಮಾನ್ಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ.' : 'Please enter a valid mobile number.')
+      return
+    }
+    setNewsletterStatus('Loading')
+    try {
+      await addDoc(collection(db, 'newsletter_subscribers'), {
+        phone: newsletterPhone.trim(),
+        timestamp: serverTimestamp()
+      })
+      setNewsletterStatus('Joined')
+    } catch (e) {
+      console.error("Error saving subscriber:", e)
+      alert(lang === 'kn' ? 'ದೋಷ ಉಂಟಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.' : 'An error occurred. Please try again.')
+      setNewsletterStatus('Join')
+    }
+  }
 
   useEffect(() => {
     if (window.localStorage.getItem('official_id')) {
@@ -325,7 +349,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── DISTRICT EXPLORER ── */}
-      <section className="district-explorer-section" style={{ background: '#0f172a', padding: '48px 24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <section className="district-explorer-section" id="district-explorer" style={{ background: '#0f172a', padding: '48px 24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <div style={{
             display: 'inline-block', background: 'rgba(22,163,74,0.12)', color: '#4ade80',
@@ -522,7 +546,11 @@ export default function LandingPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 32, maxWidth: 1200, margin: '0 auto', marginBottom: 32 }}>
           
           {/* Brand Col */}
-          <div>
+          <div onClick={() => setInfoModal({
+            isOpen: true,
+            title: 'GramSetu',
+            content: 'GramSetu is a unified digital gateway designed to connect rural citizens and farmers with Karnataka government services, APMC daily market prices, and secure grievance registration.'
+          })} style={{ cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
               <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #16a34a, #15803d)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Wheat size={20} color="#fff" />
@@ -537,9 +565,9 @@ export default function LandingPage() {
             </p>
             <div style={{ display: 'flex', gap: 16 }}>
               {[Globe, MessageCircle, Share2].map((Icon, idx) => (
-                <a key={idx} href="#" style={{ color: 'rgba(255,255,255,0.4)', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#fff'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.4)'}>
+                <span key={idx} style={{ color: 'rgba(255,255,255,0.4)', transition: 'color 0.2s' }}>
                   <Icon size={20} />
-                </a>
+                </span>
               ))}
             </div>
           </div>
@@ -548,30 +576,53 @@ export default function LandingPage() {
           <div>
             <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20, color: '#fff' }}>Quick Links</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {['Home', 'About GramSetu', 'State Schemes', 'District Explorer', 'APMC Daily Rates'].map(l => (
-                <a key={l} href="#" style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
-                  {l}
-                </a>
-              ))}
+              <span onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
+                Home
+              </span>
+              <span onClick={() => setInfoModal({
+                isOpen: true,
+                title: 'About GramSetu',
+                content: 'GramSetu is a unified digital portal developed by the Government of Karnataka to bridge the gap between rural citizens and essential services. It simplifies access to agricultural schemes, crop market prices (APMC), and grievance redressal.'
+              })} style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
+                About GramSetu
+              </span>
+              <span onClick={() => navigate('/login/villager')} style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
+                State Schemes
+              </span>
+              <span onClick={(e) => { e.preventDefault(); document.getElementById('district-explorer')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
+                District Explorer
+              </span>
+              <span onClick={() => navigate('/login/villager')} style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
+                APMC Daily Rates
+              </span>
             </div>
           </div>
 
-          {/* Contact */}
+          {/* Legal & Policies (replaces Contact Us) */}
           <div>
-            <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20, color: '#fff' }}>Contact Us</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                <MapPin size={18} color="#4ade80" style={{ flexShrink: 0, marginTop: 2 }} />
-                <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, lineHeight: 1.5 }}>Vidhana Soudha, Dr Ambedkar Veedhi, Bengaluru, Karnataka 560001</span>
-              </div>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <Phone size={18} color="#4ade80" style={{ flexShrink: 0 }} />
-                <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14 }}>1902 (Toll Free Kisan Helpline)</span>
-              </div>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <Mail size={18} color="#4ade80" style={{ flexShrink: 0 }} />
-                <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14 }}>support@gramsetu.karnataka.gov.in</span>
-              </div>
+            <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20, color: '#fff' }}>Legal & Policies</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <span onClick={() => setInfoModal({
+                isOpen: true,
+                title: 'Privacy Policy',
+                content: 'We value your privacy. GramSetu does not sell or share citizen data. All information submitted (such as complaints, phone numbers, and land details) is encrypted and processed securely through official government databases.'
+              })} style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
+                Privacy Policy
+              </span>
+              <span onClick={() => setInfoModal({
+                isOpen: true,
+                title: 'Terms of Use',
+                content: 'By using GramSetu, you agree to access official government portals and services in accordance with fair-use guidelines. Misuse of the grievance system or submitting false complaints is subject to review by local officials.'
+              })} style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
+                Terms of Use
+              </span>
+              <span onClick={() => setInfoModal({
+                isOpen: true,
+                title: 'Accessibility Statement',
+                content: 'GramSetu is built to be accessible to all, including users with visual or physical impairments. It features multilingual support, custom text-to-speech AI guidance, and optimized high-contrast components.'
+              })} style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
+                Accessibility
+              </span>
             </div>
           </div>
 
@@ -582,25 +633,98 @@ export default function LandingPage() {
               Subscribe to SMS alerts for Krishi Melas and MSP procurement dates.
             </p>
             <div style={{ display: 'flex', gap: 8 }}>
-              <input type="text" placeholder="Mobile Number" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 14px', borderRadius: 8, color: '#fff', fontSize: 14, width: '100%', outline: 'none' }} />
-              <button style={{ background: '#16a34a', color: '#fff', border: 'none', padding: '10px 16px', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>Join</button>
+              <input 
+                type="text" 
+                placeholder="Mobile Number" 
+                value={newsletterPhone}
+                onChange={e => setNewsletterPhone(e.target.value)}
+                disabled={newsletterStatus === 'Joined' || newsletterStatus === 'Loading'}
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 14px', borderRadius: 8, color: '#fff', fontSize: 14, width: '100%', outline: 'none' }} 
+              />
+              <button 
+                onClick={handleNewsletterJoin}
+                disabled={newsletterStatus === 'Joined' || newsletterStatus === 'Loading'}
+                style={{ 
+                  background: newsletterStatus === 'Joined' ? '#15803d' : newsletterStatus === 'Loading' ? '#4b5563' : '#16a34a', 
+                  color: '#fff', 
+                  border: 'none', 
+                  padding: '10px 16px', 
+                  borderRadius: 8, 
+                  fontWeight: 600, 
+                  cursor: newsletterStatus === 'Joined' ? 'default' : 'pointer',
+                  minWidth: '80px',
+                  transition: 'background 0.2s ease'
+                }}
+              >
+                {newsletterStatus === 'Joined' ? 'Joined ✓' : newsletterStatus === 'Loading' ? 'Subscribing...' : 'Join'}
+              </button>
             </div>
           </div>
 
         </div>
         
         {/* Bottom Bar */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 24, display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, textAlign: 'center' }}>
             © {new Date().getFullYear()} Karnataka e-Governance Services Ltd. (KeGSL). All rights reserved.
-          </div>
-          <div style={{ display: 'flex', gap: 24 }}>
-            {['Privacy Policy', 'Terms of Use', 'Accessibility'].map(l => (
-              <a key={l} href="#" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, textDecoration: 'none' }}>{l}</a>
-            ))}
           </div>
         </div>
       </footer>
+
+      {/* ── INFO MODAL DIALOG ── */}
+      {infoModal.isOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.65)',
+          backdropFilter: 'blur(5px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 10000,
+          padding: '20px'
+        }} onClick={() => setInfoModal({ isOpen: false, title: '', content: '' })}>
+          <div style={{
+            background: '#fff',
+            color: '#1e293b',
+            padding: '28px',
+            borderRadius: '20px',
+            maxWidth: '450px',
+            width: '100%',
+            border: '1px solid rgba(0,0,0,0.05)',
+            boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)',
+            position: 'relative'
+          }} onClick={e => e.stopPropagation()}>
+            <button
+              onClick={() => setInfoModal({ isOpen: false, title: '', content: '' })}
+              style={{
+                position: 'absolute',
+                top: 20, right: 20,
+                background: '#f1f5f9',
+                border: 'none',
+                width: 32, height: 32,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#64748b',
+                transition: 'background 0.2s'
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = '#e2e8f0'}
+              onMouseLeave={e => e.currentTarget.style.background = '#f1f5f9'}
+            >
+              <X size={16} />
+            </button>
+            <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#0f172a', marginBottom: '16px', marginTop: 0 }}>
+              {infoModal.title}
+            </h3>
+            <p style={{ fontSize: '15px', color: '#475569', lineHeight: 1.7, margin: 0 }}>
+              {infoModal.content}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
