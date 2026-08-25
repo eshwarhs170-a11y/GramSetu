@@ -135,16 +135,7 @@ export default function LandingPage() {
         }
       `}</style>
 
-      {/* ── TOP GOV BANNER ── */}
-      <div style={{
-        background: 'linear-gradient(90deg, #FF6B35, #F7931E, #16a34a)',
-        color: '#fff', fontSize: 13, fontWeight: 600,
-        padding: '8px 24px', textAlign: 'center', letterSpacing: 0.4,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
-      }}>
-        <Building2 size={14} />
-        &nbsp;ಕರ್ನಾಟಕ ಸರ್ಕಾರ &nbsp;|&nbsp; Government of Karnataka &nbsp;|&nbsp; कर्नाटक सरकार
-      </div>
+
 
       {/* ── NAV ── */}
       <nav className="landing-top-nav" style={{
@@ -653,10 +644,16 @@ export default function LandingPage() {
                   fontWeight: 600, 
                   cursor: newsletterStatus === 'Joined' ? 'default' : 'pointer',
                   minWidth: '80px',
-                  transition: 'background 0.2s ease'
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px'
                 }}
               >
-                {newsletterStatus === 'Joined' ? 'Joined ✓' : newsletterStatus === 'Loading' ? 'Subscribing...' : 'Join'}
+                {newsletterStatus === 'Joined' ? (
+                  <><span style={{ fontSize: 18 }}>✓</span><span>Subscribed</span></>
+                ) : newsletterStatus === 'Loading' ? 'Subscribing...' : 'Subscribe'}
               </button>
             </div>
           </div>
