@@ -1,8 +1,6 @@
 import React, { useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { Printer, Download } from 'lucide-react';
-
-const BASE_URL = window.location.origin;
+import { Printer } from 'lucide-react';
 
 const CARDS = [
   {
@@ -39,6 +37,11 @@ const CARDS = [
 
 export default function GenerateQRCards() {
   const printRef = useRef();
+  // Compute base URL here so it's always inside React's render cycle
+  const BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? `http://10.202.247.12:${window.location.port || '5173'}`
+    : window.location.origin;
+
 
   const handlePrint = () => {
     const win = window.open('', '_blank');
