@@ -108,12 +108,32 @@ export default function GenerateQRCards() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  // Download QR as a clean white PNG with padding — always scannable
   const downloadQrPng = (card) => {
-    const canvas = document.getElementById(`qr-canvas-${card.id}`);
-    if (!canvas) return;
-    const pngUrl = canvas.toDataURL('image/png');
+    const url = getCardUrl(card, publicDomain);
+    const qrSize = 320;  // inner QR module size
+    const padding = 28;  // white quiet zone
+    const total = qrSize + padding * 2;
+
+    // Create an offscreen canvas with white background
+    const offscreen = document.createElement('canvas');
+    offscreen.width = total;
+    offscreen.height = total;
+    const ctx = offscreen.getContext('2d');
+
+    // Fill white background (REQUIRED for scanners)
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, total, total);
+
+    // Use the hidden QRCodeCanvas element already rendered
+    const sourceCanvas = document.getElementById(`qr-canvas-${card.id}`);
+    if (sourceCanvas) {
+      ctx.drawImage(sourceCanvas, padding, padding, qrSize, qrSize);
+    }
+
+    // Download
     const link = document.createElement('a');
-    link.href = pngUrl;
+    link.href = offscreen.toDataURL('image/png');
     link.download = `GramSetu-QR-${card.name.replace(/\s+/g, '-')}.png`;
     link.click();
   };
@@ -148,7 +168,12 @@ export default function GenerateQRCards() {
               <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(59,130,246,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(59,130,246,0.3)', color: '#3b82f6' }}>
                 <Sparkles size={24} />
               </div>
-              <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 800, background: isDark ? 'linear-gradient(135deg, #fff, #38bdf8)' : 'linear-gradient(135deg, #0f172a, #0284c7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <h1 style={{
+                margin: 0,
+                fontSize: '2rem',
+                fontWeight: 800,
+                color: isDark ? '#f8fafc' : '#0f172a',
+              }}>
                 Public Magic QR Passes
               </h1>
             </div>
@@ -336,16 +361,19 @@ export default function GenerateQRCards() {
                   <QRCodeSVG
                     value={url}
                     size={180}
-                    level="H"
+                    level="M"
                     bgColor="#ffffff"
                     fgColor="#0f172a"
                   />
+                  {/* Hidden canvas for PNG download — white bg, M error level = less dense, always scannable */}
                   <div style={{ display: 'none' }}>
                     <QRCodeCanvas
                       id={`qr-canvas-${card.id}`}
                       value={url}
-                      size={400}
-                      level="H"
+                      size={320}
+                      level="M"
+                      bgColor="#ffffff"
+                      fgColor="#000000"
                     />
                   </div>
                 </div>
