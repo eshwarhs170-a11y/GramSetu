@@ -427,6 +427,8 @@ input, textarea, select { font-family: inherit; outline: none; }
 .main-content {
   margin-left: var(--sidebar-width);
   flex: 1;
+  min-width: 0;
+  width: calc(100% - var(--sidebar-width));
   min-height: 100vh;
   display: flex;
   flex-direction: column;
