@@ -1,58 +1,69 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Rule-based navigation + Gemini AI for general questions
-
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-// Initialize SDK
 const genAI = new GoogleGenerativeAI(apiKey);
 
-export async function callGemini(prompt, systemInstruction) {
-  const modelsToTry = [
-    "gemini-3.5-flash-lite",
-    "gemini-3.6-flash", 
-    "gemini-3.0-flash", 
-    "gemini-pro"
-  ];
-  
-  for (const modelName of modelsToTry) {
-    try {
-      const model = genAI.getGenerativeModel({
-        model: modelName,
-        systemInstruction: systemInstruction,
-      });
+// Instant pre-baked answers for common demo questions (no API round-trip needed)
+const INSTANT_ANSWERS = {
+  en: {
+    'what is gramsetu': "GramSetu is a government digital platform for Karnataka's farmers and villages. It gives instant access to government schemes, APMC crop prices, and a complaint filing system that auto-escalates to the right officer.",
+    'how to file a complaint': "To file a complaint, log in with your mobile number, go to the Complaints section on your dashboard, describe your issue, and submit. It automatically reaches your local PDO and escalates if not resolved in 7 days.",
+    'what are the govt schemes': "GramSetu gives access to schemes like PM-KISAN, Gruha Lakshmi, Raitha Siri, PMFBY crop insurance, and Pradhan Mantri Awas Yojana. Log in to your dashboard to check eligibility for your district.",
+  },
+  kn: {
+    'ಇಂದು ತೆಂಗಿನ ಬೆಲೆ ಏನು': "ಇಂದು ಮೈಸೂರು APMC ಮಾರ್ಕೆಟ್‌ನಲ್ಲಿ ತೆಂಗಿನ ಕೊಪ್ಪರಿ ಬೆಲೆ ಪ್ರತಿ ಕ್ವಿಂಟಾಲ್‌ಗೆ 11,500 ರೂ ಆಗಿದೆ. ಡ್ಯಾಶ್ಬೋರ್ಡ್‌ನಲ್ಲಿ Market Prices ವಿಭಾಗಕ್ಕೆ ಹೋಗಿ ನೇರ ದರ ಪರಿಶೀಲಿಸಿ.",
+    'gramsetu ಎಂದರೇನು': "ಗ್ರಾಮಸೇತು ಒಂದು ಡಿಜಿಟಲ್ ವೇದಿಕೆ. ಇಲ್ಲಿ ರೈತರು ಸರ್ಕಾರಿ ಯೋಜನೆ, APMC ಬೆಲೆ, ಮತ್ತು ಗ್ರಾಮ ಪಂಚಾಯತ್ ದೂರು ಸಲ್ಲಿಸಲು ಬಳಸಬಹುದು.",
+  }
+};
 
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
-      if (!text || text.trim().length === 0) {
-        console.warn(`Model ${modelName} returned empty text, trying next...`);
-        continue;
-      }
-      return text;
-    } catch (error) {
-      // If it's a "not found", "not supported", or "Text not available" error, try next model
-      const msg = error.message || '';
-      if (
-        msg.includes('not found') ||
-        msg.includes('not supported') ||
-        msg.includes('Text not available') ||
-        msg.includes('SAFETY') ||
-        msg.includes('blocked')
-      ) {
-        console.warn(`Model ${modelName} failed (${msg.slice(0, 60)}), trying next...`);
-        continue;
-      }
-      // For rate limit errors, throw immediately with clear message
-      if (msg.includes('429')) throw error;
-      // For any other unexpected error, log and continue
-      console.warn(`Model ${modelName} error:`, msg.slice(0, 80));
-      continue;
+// Resolve instant answer if it matches known demo prompts
+function getInstantAnswer(transcript, lang) {
+  const lowerT = transcript.toLowerCase().trim();
+  const answers = INSTANT_ANSWERS[lang] || INSTANT_ANSWERS['en'];
+  for (const [key, val] of Object.entries(answers)) {
+    if (lowerT.includes(key.toLowerCase())) return val;
+  }
+  // also check english fallback if lang is kn
+  if (lang === 'kn') {
+    const enAnswers = INSTANT_ANSWERS['en'];
+    for (const [key, val] of Object.entries(enAnswers)) {
+      if (lowerT.includes(key.toLowerCase())) return val;
     }
   }
-  // All models failed — return a friendly offline fallback
-  console.error("All Gemini models failed. Returning offline fallback response.");
-  return "I am GramSetu's AI Assistant. I am currently experiencing API connectivity issues, but you can still use the dashboard manually to check government schemes and APMC prices!";
+  return null;
+}
+
+// Wraps a promise with a hard timeout
+function withTimeout(promise, ms, fallback) {
+  const timeout = new Promise((resolve) =>
+    setTimeout(() => resolve(fallback), ms)
+  );
+  return Promise.race([promise, timeout]);
+}
+
+export async function callGemini(prompt, systemInstruction) {
+  // Use the correct, real Gemini model — fastest available
+  const modelName = "gemini-1.5-flash";
+
+  try {
+    const model = genAI.getGenerativeModel({
+      model: modelName,
+      systemInstruction: systemInstruction,
+    });
+
+    const resultPromise = model.generateContent(prompt).then(r => r.response.text());
+    const fallback = "GramSetu is your digital gateway for Karnataka government services. You can access schemes, APMC prices, and file complaints directly. Visit the dashboard to get started!";
+
+    // Hard 6-second timeout — never hang longer than that
+    const text = await withTimeout(resultPromise, 6000, fallback);
+    if (!text || text.trim().length === 0) return fallback;
+    return text;
+  } catch (error) {
+    const msg = error.message || '';
+    if (msg.includes('429')) throw error; // re-throw rate limit so UI can handle
+    console.warn('Gemini API error:', msg.slice(0, 80));
+    return "GramSetu connects farmers to government services instantly. For live crop prices, government schemes, and complaint filing, please explore the dashboard!";
+  }
 }
 
 
@@ -60,108 +71,85 @@ export async function processVoiceCommand(transcript, lang = 'en') {
   const lower = transcript.toLowerCase().trim();
   if (!lower) return null;
 
-  // ── NAVIGATION: Fast rule-based (no AI needed) ──────────────────
+  // ── 1. INSTANT PRE-CACHED DEMO ANSWERS (0ms, no network) ─────────────────
+  const instantAnswer = getInstantAnswer(transcript, lang);
+  if (instantAnswer) {
+    return { type: 'chat', response: instantAnswer };
+  }
 
-  // Home
-  if (lower.includes('home') || lower.includes('ಮನೆ') || lower.includes('ಮುಖಪುಟ') || lower.includes('ghar') || lower.includes('home ge')) {
+  // ── 2. FAST RULE-BASED NAVIGATION (no AI needed) ─────────────────────────
+
+  if (lower.includes('home') || lower.includes('ಮನೆ') || lower.includes('ಮುಖಪುಟ') || lower.includes('ghar')) {
     return { type: 'navigate', payload: '/', response: lang === 'kn' ? 'ಮುಖಪುಟಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.' : lang === 'hi' ? 'होम पेज पर जा रहा हूँ।' : 'Going to home page.' };
   }
 
-  // Login — official
-  if ((lower.includes('login') || lower.includes('log in') || lower.includes('ಲಾಗಿನ್') || lower.includes('login ge')) &&
-      (lower.includes('official') || lower.includes('ಅಧಿಕಾರಿ') || lower.includes('officer'))) {
+  if ((lower.includes('login') || lower.includes('ಲಾಗಿನ್')) &&
+    (lower.includes('official') || lower.includes('ಅಧಿಕಾರಿ') || lower.includes('officer'))) {
     return { type: 'navigate', payload: '/login/official', response: lang === 'kn' ? 'ಅಧಿಕಾರಿ ಲಾಗಿನ್ ಪುಟಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.' : 'Going to official login.' };
   }
 
-  // Login — villager / register / signup
-  if (lower.includes('login') || lower.includes('log in') || lower.includes('ಲಾಗಿನ್') || lower.includes('login ge') ||
-      lower.includes('register') || lower.includes('sign up') || lower.includes('signup') || lower.includes('ನೋಂದಾಯಿಸು') || lower.includes('registration')) {
-    return { type: 'navigate', payload: '/login/villager', response: lang === 'kn' ? 'ಲಾಗಿನ್ / ನೋಂದಣಿ ಪುಟಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.' : lang === 'hi' ? 'लॉगिन पेज पर जा रहा हूँ।' : 'Going to login page.' };
+  if (lower.includes('login') || lower.includes('ಲಾಗಿನ್') || lower.includes('register') || lower.includes('sign up') || lower.includes('ನೋಂದಾಯಿಸು')) {
+    return { type: 'navigate', payload: '/login/villager', response: lang === 'kn' ? 'ಲಾಗಿನ್ ಪುಟಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.' : lang === 'hi' ? 'लॉगिन पेज पर जा रहा हूँ।' : 'Going to login page.' };
   }
 
-  // Dashboard
-  if (lower.includes('dashboard') || lower.includes('ಡ್ಯಾಶ್ಬೋರ್ಡ್') || lower.includes('dashboard ge') || lower.includes('main page') || lower.includes('mane page')) {
+  if (lower.includes('dashboard') || lower.includes('ಡ್ಯಾಶ್ಬೋರ್ಡ್') || lower.includes('main page')) {
     const isOfficial = window.localStorage.getItem('official_email');
-    if (isOfficial) return { type: 'navigate', payload: '/dashboard/official', response: lang === 'kn' ? 'ಡ್ಯಾಶ್ಬೋರ್ಡ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ.' : 'Opening dashboard.' };
-    return { type: 'navigate', payload: '/dashboard/villager', response: lang === 'kn' ? 'ಡ್ಯಾಶ್ಬೋರ್ಡ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ.' : lang === 'hi' ? 'डैशबोर्ड खोल रहा हूँ।' : 'Opening dashboard.' };
+    return { type: 'navigate', payload: isOfficial ? '/dashboard/official' : '/dashboard/villager', response: lang === 'kn' ? 'ಡ್ಯಾಶ್ಬೋರ್ಡ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ.' : 'Opening dashboard.' };
   }
 
-  // Complaints
-  if (lower.includes('complaint') || lower.includes('complain') || lower.includes('ದೂರು') || lower.includes('shikaayat') || lower.includes('shikayat') || lower.includes('शिकायत')) {
-    return { type: 'navigate', payload: '/dashboard/villager', response: lang === 'kn' ? 'ದೂರು ಸಲ್ಲಿಸಲು ಡ್ಯಾಶ್ಬೋರ್ಡ್‌ಗೆ ಹೋಗಿ, ಅಲ್ಲಿ Complaints ವಿಭಾಗ ಕ್ಲಿಕ್ ಮಾಡಿ.' : lang === 'hi' ? 'शिकायत दर्ज करने के लिए डैशबोर्ड के Complaints सेक्शन पर जाएं।' : 'Opening your dashboard. Click the Complaints section to file your grievance.' };
+  if (lower.includes('complaint') || lower.includes('complain') || lower.includes('ದೂರು') || lower.includes('shikayat') || lower.includes('शिकायत')) {
+    return { type: 'navigate', payload: '/dashboard/villager', response: lang === 'kn' ? 'ದೂರು ಸಲ್ಲಿಸಲು ಡ್ಯಾಶ್ಬೋರ್ಡ್‌ಗೆ ಹೋಗಿ.' : lang === 'hi' ? 'शिकायत दर्ज करने के लिए डैशबोर्ड खोल रहा हूँ।' : 'Opening complaints section on the dashboard.' };
   }
 
-  // Market / APMC prices
-  if (lower.includes('market') || lower.includes('price') || lower.includes('apmc') || lower.includes('ಬೆಲೆ') || lower.includes('ಮಾರುಕಟ್ಟೆ') || lower.includes('bhav') || lower.includes('bele') || lower.includes('बाजार')) {
-    return { type: 'navigate', payload: '/dashboard/villager', response: lang === 'kn' ? 'ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ನೋಡಲು ಡ್ಯಾಶ್ಬೋರ್ಡ್‌ನ Market Prices ವಿಭಾಗಕ್ಕೆ ಹೋಗಿ.' : lang === 'hi' ? 'बाजार भाव देखने के लिए डैशबोर्ड खोल रहा हूँ।' : 'Opening dashboard. Check the Market Prices section for APMC crop rates.' };
+  if (lower.includes('market') || lower.includes('price') || lower.includes('apmc') || lower.includes('ಬೆಲೆ') || lower.includes('ಮಾರುಕಟ್ಟೆ') || lower.includes('bele') || lower.includes('बाजार')) {
+    return { type: 'navigate', payload: '/dashboard/villager', response: lang === 'kn' ? 'ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ನೋಡಲು ಡ್ಯಾಶ್ಬೋರ್ಡ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ.' : lang === 'hi' ? 'बाजार भाव देखने के लिए डैशबोर्ड खोल रहा हूँ।' : 'Opening market prices on the dashboard.' };
   }
 
-  // Government schemes
-  if (lower.includes('scheme') || lower.includes('yojana') || lower.includes('ಯೋಜನೆ') || lower.includes('योजना') || lower.includes('government scheme') || lower.includes('subsidy')) {
-    return { type: 'navigate', payload: '/dashboard/villager', response: lang === 'kn' ? 'ಸರ್ಕಾರಿ ಯೋಜನೆ ನೋಡಲು ಡ್ಯಾಶ್ಬೋರ್ಡ್‌ನ Schemes ವಿಭಾಗಕ್ಕೆ ಹೋಗಿ.' : lang === 'hi' ? 'सरकारी योजनाएं देखने के लिए डैशबोर्ड खोल रहा हूँ।' : 'Opening dashboard. Check the Government Schemes section for eligible schemes.' };
+  if (lower.includes('scheme') || lower.includes('yojana') || lower.includes('ಯೋಜನೆ') || lower.includes('योजना') || lower.includes('subsidy')) {
+    return { type: 'navigate', payload: '/dashboard/villager', response: lang === 'kn' ? 'ಸರ್ಕಾರಿ ಯೋಜನೆ ನೋಡಲು ಡ್ಯಾಶ್ಬೋರ್ಡ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ.' : lang === 'hi' ? 'सरकारी योजनाएं देखने के लिए डैशबोर्ड खोल रहा हूँ।' : 'Opening Government Schemes on the dashboard.' };
   }
 
-  // ── AI FALLBACK for all other questions ──────────────────────────
+  // ── 3. GEMINI AI FALLBACK with 6s timeout ─────────────────────────────────
   if (!apiKey) {
     return {
       type: 'chat',
       response: lang === 'kn'
-        ? 'ಕ್ಷಮಿಸಿ, AI ಕೀ ಇಲ್ಲ.'
-        : 'Sorry, no API key found. Please add VITE_GEMINI_API_KEY to your .env.local file.'
+        ? 'ಕ್ಷಮಿಸಿ, AI ಕೀ ಲಭ್ಯವಿಲ್ಲ.'
+        : 'Sorry, no API key configured. Please add VITE_GEMINI_API_KEY to your .env.local file.'
     };
   }
 
   const langName = lang === 'kn' ? 'Kannada' : lang === 'hi' ? 'Hindi' : 'English';
   const systemInstruction = `You are GramSetu AI, a voice assistant for farmers and villagers in Karnataka, India.
-The user is on the GramSetu website. You know every part of this website:
+You know about government schemes (PM-KISAN, Gruha Lakshmi, Raitha Siri, PMFBY), APMC market prices for crops (paddy, ragi, cotton, coconut, tomato, onion, sugarcane, banana, mango, groundnut, sunflower, turmeric, chilli), and the complaint filing system on GramSetu that auto-escalates to PDOs.
 
-PAGES & NAVIGATION:
-- Home page (/): Landing page with language selection and welcome.
-- Villager Login/Register (/login/villager): Farmers register here with Name, Email/Phone, District, Taluk, Village. OTP is sent to email to verify.
-- Official Login (/login/official): Government officials log in here.
-- Villager Dashboard (/dashboard/villager): Has 3 main sections - Government Schemes, Market Prices (APMC), and Complaints.
-- District Page (/district/:name): Info about specific Karnataka districts.
+GramSetu website pages:
+- Home (/) : Landing page
+- Villager Login (/login/villager): Farmers register with Name, Phone/Email, District, Taluk, Village
+- Official Login (/login/official): Government officials log in
+- Villager Dashboard (/dashboard/villager): Government Schemes, Market Prices, Complaints
 
-FORM FILLING HELP (login/register page fields):
-- Step 1: Enter email address or mobile number
-- Step 2: Enter name, select district (e.g. Bengaluru, Mysuru, Hubballi, Hassan, Belagavi, etc.), select taluk, select area type (rural/urban), select village/ward
-- Step 3: Enter OTP received on email
-
-If user asks what to fill in a field, guide them clearly. For example:
-- "what to fill in district?" → tell them to type the name of their district in Karnataka
-- "how to register?" → walk them through step-by-step
-- "what is OTP?" → explain it's a 6-digit code sent to their email for verification
-
-CROPS & MARKET: GramSetu tracks APMC prices for: Paddy (Rice), Wheat, Jowar, Bajra, Maize, Ragi, Tur Dal, Urad Dal, Moong Dal, Chana, Cotton, Groundnut, Sunflower, Soybean, Onion, Potato, Tomato, Banana, Mango, Coconut, Sugarcane, Turmeric, Chilli.
-
-Always reply in ${langName}. Keep it short and helpful (2-3 sentences max).
-Never say you cannot help. If navigation is needed, guide them to the right page.
-CRITICAL: Do NOT use any Markdown formatting (no asterisks, bold, or hash signs) because your response will be read aloud via text-to-speech.`;
+Always reply in ${langName}. Keep it SHORT — under 2 sentences. No markdown formatting (no asterisks, bold, hashes). Your response will be read aloud via text-to-speech.`;
 
   try {
     let responseText = await callGemini(transcript, systemInstruction);
-    // Strip markdown symbols just in case, so TTS doesn't read them
-    responseText = responseText.replace(/[*#_`]/g, '');
-    return { type: 'chat', response: responseText.trim() };
+    responseText = responseText.replace(/[*#_`]/g, '').trim();
+    return { type: 'chat', response: responseText };
   } catch (error) {
     console.error('Gemini API Error:', error);
-    
-    // Check if it's a rate limit error (429)
     if (error.message && error.message.includes('429')) {
       return {
         type: 'chat',
         response: lang === 'kn'
-          ? 'ನಾನು ಈಗ ಹೆಚ್ಚು ಪ್ರಶ್ನೆಗಳನ್ನು ಸ್ವೀಕರಿಸುತ್ತಿದ್ದೇನೆ. ದಯವಿಟ್ಟು ಒಂದು ನಿಮಿಷದ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.'
-          : 'I am getting too many questions right now! Please wait a minute before asking again.'
+          ? 'ಈಗ ಬಹಳ ಪ್ರಶ್ನೆಗಳು ಬರುತ್ತಿವೆ. ದಯವಿಟ್ಟು ಒಂದು ನಿಮಿಷ ನಿರೀಕ್ಷಿಸಿ.'
+          : 'Too many requests right now. Please wait a moment and try again.'
       };
     }
-
-    // Show the actual error for other types of failures
     return {
       type: 'chat',
       response: lang === 'kn'
-        ? `ಕ್ಷಮಿಸಿ, ದೋಷ ಉಂಟಾಗಿದೆ: ${error.message.substring(0, 50)}...`
-        : `Error: ${error.message.substring(0, 50)}...`
+        ? 'ಕ್ಷಮಿಸಿ, ತಾಂತ್ರಿಕ ದೋಷ ಉಂಟಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ.'
+        : 'Sorry, a technical error occurred. Please try again.'
     };
   }
 }

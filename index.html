@@ -39,16 +39,79 @@
     <!-- 4. Referrer policy — don't leak URL in referrer headers -->
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <!-- 5. Permissions policy — disable unnecessary browser APIs -->
+    <!-- 5. Permissions policy — disable unnecessary browser APIs (mic kept allowed for voice feature) -->
     <meta http-equiv="Permissions-Policy"
-      content="camera=(), microphone=(), geolocation=(), payment=()" />
+      content="camera=(), geolocation=(), payment=()" />
 
-    <!-- 6. Cache-Control — prevent caching of sensitive pages -->
-    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
+    <!-- 6. Cache-Control — allow browser to cache static assets for faster loads -->
+    <meta http-equiv="Cache-Control" content="max-age=0, must-revalidate" />
   </head>
   <body>
+    <!-- Instant loading splash — visible before React JS bundle loads (no blank page on QR scan) -->
+    <div id="gs-splash" style="
+      position:fixed; inset:0; z-index:99999;
+      background:linear-gradient(135deg,#f0fdf4 0%,#f8fafc 100%);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      font-family:'Inter',system-ui,sans-serif; gap:20px;
+    ">
+      <!-- Logo -->
+      <div style="
+        width:64px; height:64px; border-radius:16px;
+        background:linear-gradient(135deg,#16a34a,#15803d);
+        display:flex; align-items:center; justify-content:center;
+        box-shadow:0 8px 24px rgba(22,163,74,0.35);
+        font-size:1.6rem; font-weight:900; color:#fff;
+        animation:gs-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+      ">GS</div>
+
+      <!-- App name -->
+      <div style="text-align:center; animation:gs-fade 0.5s 0.2s ease both;">
+        <div style="font-size:1.5rem; font-weight:800; color:#0f172a; letter-spacing:-0.02em;">GramSetu</div>
+        <div style="font-size:0.85rem; color:#64748b; font-weight:600; margin-top:4px;">ಗ್ರಾಮೀಣ ಸೇತು ಕರ್ನಾಟಕ</div>
+      </div>
+
+      <!-- Spinner -->
+      <div style="
+        width:36px; height:36px;
+        border:3px solid rgba(22,163,74,0.2);
+        border-top-color:#16a34a;
+        border-radius:50%;
+        animation:gs-spin 0.75s linear infinite;
+      "></div>
+
+      <div style="font-size:0.8rem; color:#94a3b8; animation:gs-fade 0.5s 0.4s ease both;">
+        Loading your dashboard...
+      </div>
+
+      <style>
+        @keyframes gs-spin  { to { transform:rotate(360deg); } }
+        @keyframes gs-pop   { from { transform:scale(0.6); opacity:0; } to { transform:scale(1); opacity:1; } }
+        @keyframes gs-fade  { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+      </style>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Remove splash as soon as React's root element renders its first child -->
+    <script>
+      (function() {
+        var splash = document.getElementById('gs-splash');
+        if (!splash) return;
+        // Use MutationObserver to detect when React injects content into #root
+        var observer = new MutationObserver(function() {
+          var root = document.getElementById('root');
+          if (root && root.childElementCount > 0) {
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 0.3s ease';
+            setTimeout(function() { splash.remove(); }, 320);
+            observer.disconnect();
+          }
+        });
+        observer.observe(document.getElementById('root') || document.body, { childList:true, subtree:true });
+        // Failsafe: remove after 8 seconds regardless
+        setTimeout(function() { splash && splash.remove(); }, 8000);
+      })();
+    </script>
   </body>
 </html>

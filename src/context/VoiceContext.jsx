@@ -17,7 +17,7 @@ export function VoiceProvider({ children }) {
     if (SpeechRecognition) {
       const rec = new SpeechRecognition();
       rec.continuous = false;
-      rec.interimResults = false;
+      rec.interimResults = true; // Show live transcript as user speaks
       
       // Set language based on context
       if (lang === 'kn') {
@@ -34,9 +34,22 @@ export function VoiceProvider({ children }) {
       };
 
       rec.onresult = (event) => {
-        const current = event.resultIndex;
-        const result = event.results[current][0].transcript;
-        setTranscript(result);
+        let interimTranscript = '';
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const t = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += t;
+          } else {
+            interimTranscript += t;
+          }
+        }
+        // Show interim immediately for live feel; final sets the processed transcript
+        if (finalTranscript) {
+          setTranscript(finalTranscript);
+        } else if (interimTranscript) {
+          setTranscript(interimTranscript);
+        }
       };
 
       rec.onend = () => {
@@ -62,27 +75,20 @@ export function VoiceProvider({ children }) {
     }
   }, [lang]); // Reinitialize if language changes
 
-  const startListening = useCallback(async () => {
-    try {
-      // Immediately stop any ongoing AI speech so the user can speak without interruption
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        setIsSpeaking(false);
-      }
-
-      // Force the browser to ask for microphone permission if not already granted
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        // We just needed the permission, stop the stream tracks immediately
-        stream.getTracks().forEach(track => track.stop());
-      }
-      
-      if (recognition) {
+  const startListening = useCallback(() => {
+    // Cancel any ongoing speech immediately — zero delay
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+    setError('');
+    if (recognition) {
+      try {
         recognition.start();
+      } catch (e) {
+        // already started — ignore
+        console.warn('Recognition already running:', e.message);
       }
-    } catch (e) {
-      console.error("Microphone access denied or error:", e);
-      setError(`Mic Error: ${e.name || e.message || 'Permission denied'}`);
     }
   }, [recognition]);
 
