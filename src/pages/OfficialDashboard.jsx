@@ -966,7 +966,7 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
   const handlePublish = async () => {
     if (!title || !message) return alert('Please fill required fields')
     if (editMode) {
-      await setDoc(doc(db, 'announcements', editingAnnouncement.id), {
+      await updateDoc(doc(db, 'announcements', editingAnnouncement.id), {
         title, category, priority, message, target,
         district: getSessionData().district,
         taluk: getSessionData().taluk,
