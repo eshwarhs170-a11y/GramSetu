@@ -12,12 +12,12 @@
 ### **ಗ್ರಾಮ ಸೇತು — Village Bridge**
 *The official digital gateway connecting Karnataka's rural citizens to government*
 
-![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)
-![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)
-![Firebase](https://img.shields.io/badge/Firebase-12-FFCA28?style=flat-square&logo=firebase&logoColor=black)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
-![Districts](https://img.shields.io/badge/Karnataka-31_Districts-FF6B35?style=flat-square)
-![Languages](https://img.shields.io/badge/Languages-EN_|_ಕನ್ನಡ_|_हिन्दी-blue?style=flat-square)
+[![Live Site](https://img.shields.io/badge/Live_Site-gram--setu--one.vercel.app-22c55e?style=for-the-badge&logo=vercel&logoColor=white)](https://gram-setu-one.vercel.app)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Firebase](https://img.shields.io/badge/Firebase-Firestore_%26_Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
+[![Google Gemini AI](https://img.shields.io/badge/Gemini_AI-Voice_%26_Language-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
+[![Languages](https://img.shields.io/badge/Languages-EN_|_ಕನ್ನಡ_|_हिन्दी-blue?style=for-the-badge)](#-multilingual-support)
 
 </div>
 
@@ -25,194 +25,180 @@
 
 ## 🌉 What is GramSetu?
 
-**GramSetu** (ಗ್ರಾಮ ಸೇತು) means *Village Bridge* in Kannada. It is a bilingual civic-tech web app built to bridge the gap between Karnataka's **6 crore rural citizens** and government services — no bureaucratic maze, no language barriers, no confusion.
+**GramSetu** (*ಗ್ರಾಮ ಸೇತು* · *Village Bridge*) is a civic-tech web platform designed to bridge the digital and administrative divide for Karnataka's **6+ crore rural citizens and farmers (ರೈತರು)**. 
 
-> Think of it as a one-stop digital gram panchayat in your pocket.
-
----
-
-## ✨ Features at a Glance
-
-### 👤 For Villagers / Raitas
-| Feature | Description |
-|---|---|
-| 🌾 **Government Schemes** | Browse PM-KISAN, PM Awas, Fasal Bima & more with eligibility checker |
-| 📋 **Complaint Filing** | Photo-supported complaints routed strictly to relevant Taluk / GP departments |
-| 📈 **APMC Prices** | Live market prices for rice, maize, sunflower, groundnut |
-| 🌦️ **Weather** | 7-day forecast for your village |
-| 🚑 **Emergency SOS** | One-tap ambulance, police, fire & toll-free helplines |
-| 🔄 **Complaint Tracking** | View response threads, ETA updates, and SLA details in real-time |
-| 📰 **Village Bulletin** | Scoped announcements and notices published by officials |
-
-### 🏛️ For Government Officials
-| Feature | Description |
-|---|---|
-| 📊 **Dashboard** | Scoped overview of complaints, announcements & statistics based on officer department |
-| 📣 **Publish Bulletins** | Scoped announcements targetable specifically to Taluk, GP, or District |
-| 📥 **Complaint Management** | Specific line department views (Agriculture, Electricity, PHC, BEO, etc.) |
-| ⚡ **Escalation Engine** | 4-tier RDPR escalation (PDO ➔ Taluk Panchayat ➔ Zilla Panchayat ➔ RDPR Commissioner) with 7-day SLA tracker |
-| 💬 **Response Portal** | Respond with ETA and detailed updates to notify citizens |
-| 📤 **Export Lists** | Download beneficiary lists and reports |
-
-### 🗺️ Explore Karnataka
-- **31 District Pages** — each with local highlights, tourist spots & cultural identity
-- Beautiful image cards for landmarks, cuisine, wildlife & heritage
-- Dark / Light theme, smooth animations
+Built with accessibility, voice-first interaction, and real-time grievance escalation at its core, GramSetu eliminates bureaucratic friction and language barriers through an intuitive digital interface.
 
 ---
 
-## 🗂️ Project Structure
+## ✨ Key Features & Innovations
+
+### 🎙️ GramSetu AI Voice Assistant (ಧ್ವನಿ ಸಹಾಯಕ)
+- **Multilingual Speech-to-Speech:** Native recognition and synthesis for **Kannada (`kn-IN`)**, **English (`en-IN`)**, and **Hindi (`hi-IN`)**.
+- **Voice-Powered Navigation:** Hands-free voice commands to navigate the platform (*"Take me to login"*, *"Open APMC prices"*).
+- **Domain-Specific AI Advice:** Answers questions regarding Karnataka crop prices, MSP, and government subsidies powered by Google Gemini AI with automatic multi-model fallback.
+- **Dynamic Waveform Visualizer:** Centered mirrored frequency spectrum visualizer rendered via the **Web Audio API**.
+
+---
+
+### 📋 Smart Grievance Escalation Engine
+- **Photo-Verified Submissions:** Camera capture with real-time client-side compression.
+- **Geographic & Departmental Isolation:** Complaints are strictly routed by District, Taluk, and Gram Panchayat to ensure relevant line officers handle them.
+- **4-Tier SLA Auto-Escalation:**
+  $$\text{PDO (GP)} \xrightarrow{7\text{ days}} \text{Taluk Panchayat (EO)} \xrightarrow{14\text{ days}} \text{Zilla Panchayat (CEO)} \xrightarrow{21\text{ days}} \text{RDPR Commissioner}$$
+- **Real-Time Citizen Tracking:** Status history, official response logs, and resolution timestamps updated live.
+
+---
+
+### 📈 Live APMC Market Intelligence
+- **District-Specific Feeds:** Real-time prices for Copra, Paddy, Arecanut, Ragi, Maize, Cotton, Turmeric, Tomato & more across all 31 Karnataka districts.
+- **Micro-Tick Fluctuations:** Simulates active intraday trading movements with color-coded flash indicators.
+
+---
+
+### 🌾 Comprehensive Scheme Discovery & Eligibility Engine
+- **Smart Filtering:** Browse Central & Karnataka State schemes (*PM-KISAN, Raitha Siri, Krishi Bhagya, PM Fasal Bima Yojana, Ganga Kalyana, Vidyasiri, Raita Vidyanidhi*).
+- **Text-to-Speech:** Listen to scheme guidelines and eligibility criteria spoken aloud in the selected language.
+
+---
+
+### 🎫 Open Day Live Interactive Suite
 
 ```
-gram-setu/
-├── public/
-│   ├── district-images/      ← 170 locally cached district images (fast loading)
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   ├── VillagerScreens.jsx   ← All villager dashboard screens
-│   │   ├── VillagerSidebar.jsx
-│   │   ├── LanguageSwitcher.jsx
-│   │   └── ThemeToggle.jsx
-│   ├── context/
-│   │   └── ThemeContext.jsx
-│   ├── data/
-│   │   ├── districtsData.js      ← Karnataka district info & highlights
-│   │   └── districtImages.json   ← Local image paths for each district
-│   ├── pages/
-│   │   ├── LandingPage.jsx
-│   │   ├── DistrictPage.jsx
-│   │   ├── VillagerLogin.jsx
-│   │   ├── VillagerDashboard.jsx
-│   │   ├── OfficialLogin.jsx
-│   │   ├── OfficialDashboard.jsx
-│   │   └── FeatureDetails.jsx
-│   └── translations/
-│       └── translations.js       ← EN | ಕನ್ನಡ | हिन्दी strings
-├── download_images.cjs           ← Script: initial image download
-├── retry_images.cjs              ← Script: retry failed downloads
-└── vite.config.js
+                               ┌────────────────────────────────┐
+                               │   Magic QR Printable Cards     │
+                               │   (/demo/qr-cards)             │
+                               └───────────────┬────────────────┘
+                                               │
+                                 Scan with Smartphone Camera
+                                               │
+                                               ▼
+                              ┌──────────────────────────────────┐
+                              │     Instant OTP-Bypass Login     │
+                              │     (/magic-login?role=...)      │
+                              └────────┬─────────────────┬───────┘
+                                       │                 │
+              Farmer (Mysuru / Kodagu) │                 │ PDO Official
+                                       ▼                 ▼
+                        ┌────────────────────┐     ┌──────────────────────┐
+                        │ Villager Dashboard │     │  Official Dashboard  │
+                        │ & Complaint Filing │     │  & Auto-Escalations  │
+                        └─────────┬──────────┘     └──────────┬───────────┘
+                                  │                           │
+                                  └─────────────┬─────────────┘
+                                                │
+                                    Firestore Real-Time Sync
+                                                │
+                                                ▼
+                               ┌────────────────────────────────┐
+                               │   Big Screen Live Escalation   │
+                               │   (/demo/dashboard)            │
+                               │   ⚡ Web Audio Chime Alert      │
+                               └────────────────────────────────┘
 ```
+
+1. **🎫 Magic QR Passes (`/demo/qr-cards`):** High-resolution printable badges for **Ramappa Gowda (Mysuru Farmer)**, **Kaveri Amma (Kodagu Farmer)**, and **S. R. Patil (PDO Mysuru)**. Scanning instantly bypasses OTP and loads their full profile context.
+2. **⚡ Big Screen Escalation Monitor (`/demo/dashboard`):** Designed for projectors/TVs. As soon as audience members file a grievance, it pops up in real-time with an audible Web Audio chime alert and dynamic status badges.
+3. **🎙️ Dedicated AI Voice Showcase (`/demo/voice`):** Interactive voice testing arena with quick-action chips and live visualizer.
+
+---
+
+## 🗺️ Explore Karnataka
+
+- **31 District Hubs:** Interactive showcases covering local agriculture, heritage, cultural identity, and administration for every Karnataka district.
+- **High-Performance Image Cache:** Over 170 locally cached cultural landmarks and agricultural assets.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
+| Layer | Technology / Service |
 |---|---|
-| **Framework** | React 19 + Vite 8 |
-| **Routing** | React Router DOM v7 |
-| **Backend / Auth** | Firebase v12 (Firestore + Auth) |
-| **Icons** | Lucide React |
-| **Email** | EmailJS |
-| **Linting** | OxLint |
-| **Deployment** | Vercel |
-| **Styling** | Pure CSS (no framework) |
+| **Frontend Framework** | [React 19](https://react.dev) + [Vite 8](https://vitejs.dev) |
+| **Routing** | [React Router DOM v7](https://reactrouter.com) |
+| **Realtime Database** | [Google Cloud Firestore](https://firebase.google.com/docs/firestore) |
+| **Authentication** | [Firebase Auth](https://firebase.google.com/docs/auth) + Magic QR Tokenless Bypass |
+| **Artificial Intelligence** | [Google Generative AI (Gemini 2.5/3.0/3.5/3.6)](https://ai.google.dev/) |
+| **Voice & Speech** | Web Speech API (`webkitSpeechRecognition` + `SpeechSynthesis`) |
+| **Audio Synthesis** | Web Audio API (OscillatorNode two-tone alert chimes) |
+| **Icons & Visuals** | [Lucide React](https://lucide.dev) |
+| **QR Code Engine** | `qrcode.react` (High-density SVG vectors) |
+| **PDF Generation** | `jspdf` + `jspdf-autotable` |
+| **Hosting & CI/CD** | [Vercel](https://vercel.com) |
 
 ---
 
-## 🚀 Getting Started
+## 🌐 Application Routes
 
-### Prerequisites
-- Node.js ≥ 18
-- npm ≥ 9
+| Route | Purpose | Audience |
+|---|---|---|
+| `/` | Landing Page & Overview | Public |
+| `/district/:id` | Karnataka District Explorer | Public |
+| `/login/villager` | Citizen OTP / Email Login | Villagers & Farmers |
+| `/login/official` | Administrative Department Login | Govt Officials |
+| `/dashboard/villager/*` | Citizen Dashboard (Schemes, APMC, Complaints, SOS) | Logged-in Villagers |
+| `/dashboard/official/*` | Line Department & PDO Management Dashboard | Logged-in Officials |
+| `/demo/qr-cards` | Printable Magic QR Passes (A4 / A5 layout) | Open Day / Evaluators |
+| `/demo/dashboard` | Big Screen Real-Time Complaint Monitor + Audio Chimes | Presentation Displays |
+| `/demo/voice` | Standalone GramSetu AI Voice Assistant Demonstration | All |
+| `/magic-login` | Tokenless instant role-playing entry point | QR Code Scanners |
 
-### Install & Run
+---
 
+## 🚀 Local Development Setup
+
+### 1. Clone the Repository
 ```bash
-# 1. Clone the repo
-git clone https://github.com/your-username/gram-setu.git
-cd gram-setu
+git clone https://github.com/eshwarhs170-a11y/GramSetu.git
+cd GramSetu
+```
 
-# 2. Install dependencies
+### 2. Install Dependencies
+```bash
 npm install
+```
 
-# 3. (First time only) Download district images locally
-node download_images.cjs
-# If some fail due to rate limits, retry:
-node retry_images.cjs
+### 3. Configure Environment Variables
+Create a `.env` file in the root directory:
+```env
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_GEMINI_API_KEY=your_google_gemini_api_key
+```
 
-# 4. Start dev server
+### 4. Start Development Server
+```bash
 npm run dev
 ```
-
-The app will be live at **http://localhost:5173** 🎉
-
-### Build for Production
-
-```bash
-npm run build
-npm run preview
-```
+Open **`http://localhost:5173`** in your browser.
 
 ---
 
-## 🌐 Routes
+## 🌍 Multilingual Support
 
-| Path | Page |
-|---|---|
-| `/` | Landing Page |
-| `/district/:id` | District Explorer (e.g. `/district/Mysuru`) |
-| `/login/villager` | Villager / Raita Login |
-| `/login/official` | Government Official Login |
-| `/dashboard/villager/*` | Villager Dashboard |
-| `/dashboard/official/*` | Official Dashboard |
-| `/feature/:id` | Feature Detail Page |
+GramSetu supports instant language switching across the entire platform:
 
----
-
-## 🌍 Language Support
-
-GramSetu speaks your language:
-
-| Code | Language | Script |
+| Language | Native Script | Coverage |
 |---|---|---|
-| `en` | English | Latin |
-| `kn` | Kannada | ಕನ್ನಡ |
-| `hi` | Hindi | हिन्दी |
-
-Switch languages anytime using the 🌐 button in the navbar — all UI strings update instantly.
+| **English** | Latin (`en`) | 100% UI strings, schemes, navigation & voice |
+| **Kannada** | ಕನ್ನಡ (`kn`) | 100% UI strings, APMC names, schemes, complaints & voice |
+| **Hindi** | हिन्दी (`hi`) | 100% UI strings, schemes & text-to-speech |
 
 ---
 
-## 🖼️ Image Pipeline
+## 👥 Authors & Team
 
-District images are sourced from Wikimedia Commons and **downloaded locally** into `public/district-images/` for fast loading:
+Built with ❤️ for Karnataka's rural empowerment at **Marvel Open Day 2026**.
 
-```bash
-# Download all 170 district images
-node download_images.cjs
-
-# Retry any that failed (Wikipedia rate-limits fast downloads)
-node retry_images.cjs
-```
-
-Images are served directly by Vite — **no external requests at runtime**.
+* **GitHub:** [@eshwarhs170-a11y](https://github.com/eshwarhs170-a11y)
+* **Live Deployment:** [gram-setu-one.vercel.app](https://gram-setu-one.vercel.app)
 
 ---
 
-## 🤝 Contributing
+## 📄 License
 
-Pull requests are welcome! For major changes, please open an issue first.
-
-1. Fork the repo
-2. Create your branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
----
-
-## 📜 License
-
-MIT © 2026 GramSetu Team
-
----
-
-<div align="center">
-
-*Made with ❤️ for Karnataka's villages*
-
-**ಜೈ ಕರ್ನಾಟಕ 🌾**
-
-</div>
+This project is licensed under the [MIT License](LICENSE).
