@@ -296,6 +296,18 @@ function RespondModal({ complaint, onClose, onSaved }) {
   const [etaDays, setEtaDays] = useState('')
   const [saving, setSaving] = useState(false)
 
+  // Close on backdrop click
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) onClose()
+  }
+
+  // Close on Escape key
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
   const handleSave = async () => {
     if (!responseText.trim()) return
     setSaving(true)
@@ -309,7 +321,6 @@ function RespondModal({ complaint, onClose, onSaved }) {
       timestamp: new Date().toISOString(),
     }
     try {
-      // complaint._docId is the Firestore doc ID
       if (complaint._docId) {
         await updateDoc(doc(db, 'complaints', complaint._docId), {
           status: newStatus,
@@ -327,65 +338,197 @@ function RespondModal({ complaint, onClose, onSaved }) {
     onClose()
   }
 
+  const statusColor = newStatus === 'resolved' ? '#10b981' : newStatus === 'inprogress' ? '#3b82f6' : '#f59e0b'
+
   return (
-    <div style={{
-      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 9999,
-      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16
-    }}>
-      <div className="card animate-fadeInUp" style={{ maxWidth: 520, width: '100%', padding: 28, borderRadius: 20, boxShadow: '0 24px 60px rgba(0,0,0,0.3)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-          <div>
-            <h3 style={{ fontWeight: 800, fontSize: 17, margin: 0, display: 'flex', alignItems: 'center', gap: 6 }}><ClipboardList size={18} style={{ color: '#6366f1' }} /> Official Response</h3>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '4px 0 0' }}>{complaint.id} — {complaint.title}</p>
+    <div
+      onClick={handleBackdropClick}
+      style={{
+        position: 'fixed', inset: 0,
+        background: 'rgba(15, 23, 42, 0.65)',
+        backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)',
+        zIndex: 99999,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '16px',
+        overflowY: 'auto',
+      }}
+    >
+      <div
+        className="animate-fadeInUp"
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: 'var(--bg-card)',
+          borderRadius: 20,
+          boxShadow: '0 32px 80px rgba(0,0,0,0.35)',
+          width: '100%',
+          maxWidth: 540,
+          overflow: 'hidden',
+          border: '1px solid var(--border)',
+          display: 'flex',
+          flexDirection: 'column',
+          maxHeight: 'calc(100vh - 32px)',
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          padding: '20px 24px 16px',
+          borderBottom: '1px solid var(--border)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12,
+          flexShrink: 0,
+        }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+              <div style={{ background: '#6366f120', borderRadius: 8, padding: '6px', display: 'flex' }}>
+                <ClipboardList size={16} style={{ color: '#6366f1' }} />
+              </div>
+              <h3 style={{ fontWeight: 800, fontSize: 16, margin: 0, color: 'var(--text-primary)' }}>
+                Official Response
+              </h3>
+            </div>
+            <p style={{
+              fontSize: 12, color: 'var(--text-muted)', margin: 0,
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>
+              <span style={{ fontFamily: 'monospace', color: '#6366f1' }}>{complaint.id}</span>
+              {' — '}{complaint.title}
+            </p>
           </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
-            <X size={20} />
+          <button
+            onClick={onClose}
+            style={{
+              background: 'var(--bg-main)', border: '1px solid var(--border)',
+              borderRadius: 8, padding: '6px', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'var(--text-muted)', flexShrink: 0,
+            }}
+          >
+            <X size={16} />
           </button>
         </div>
 
-        <div className="form-group" style={{ marginBottom: 14 }}>
-          <label className="form-label">Update Status / ಸ್ಥಿತಿ</label>
-          <select className="form-input" value={newStatus} onChange={e => setNewStatus(e.target.value)}>
-            <option value="pending">Pending — Under Review</option>
-            <option value="inprogress">In Progress — Work Started</option>
-            <option value="resolved">Resolved — Issue Fixed</option>
-          </select>
-        </div>
+        {/* Scrollable Body */}
+        <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1 }}>
 
-        {(newStatus === 'pending' || newStatus === 'inprogress') && (
-          <div className="form-group" style={{ marginBottom: 14 }}>
-            <label className="form-label">Expected Resolution (Days) / ನಿರೀಕ್ಷಿತ ದಿನಗಳು</label>
-            <input
-              type="number" min="1" max="365"
+          {/* Status selector */}
+          <div style={{ marginBottom: 16 }}>
+            <label className="form-label" style={{ marginBottom: 8 }}>Update Status / ಸ್ಥಿತಿ</label>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {[
+                { value: 'pending',    label: 'Pending',     color: '#f59e0b', bg: '#fef3c7' },
+                { value: 'inprogress', label: 'In Progress', color: '#3b82f6', bg: '#dbeafe' },
+                { value: 'resolved',   label: 'Resolved',    color: '#10b981', bg: '#d1fae5' },
+              ].map(opt => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setNewStatus(opt.value)}
+                  style={{
+                    padding: '8px 16px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+                    cursor: 'pointer', transition: 'all 0.15s',
+                    border: newStatus === opt.value ? `2px solid ${opt.color}` : '2px solid var(--border)',
+                    background: newStatus === opt.value ? opt.bg : 'var(--bg-main)',
+                    color: newStatus === opt.value ? opt.color : 'var(--text-muted)',
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* ETA */}
+          {(newStatus === 'pending' || newStatus === 'inprogress') && (
+            <div style={{ marginBottom: 16 }}>
+              <label className="form-label" style={{ marginBottom: 8 }}>
+                Expected Resolution (Days) / ನಿರೀಕ್ಷಿತ ದಿನಗಳು
+              </label>
+              <input
+                type="number" min="1" max="365"
+                className="form-input"
+                placeholder="e.g. 7"
+                value={etaDays}
+                onChange={e => setEtaDays(e.target.value)}
+              />
+            </div>
+          )}
+
+          {/* Response textarea */}
+          <div style={{ marginBottom: 16 }}>
+            <label className="form-label" style={{ marginBottom: 8 }}>
+              Your Response / ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆ *
+            </label>
+            <textarea
               className="form-input"
-              placeholder="e.g. 7"
-              value={etaDays}
-              onChange={e => setEtaDays(e.target.value)}
+              rows={5}
+              placeholder="e.g. Inspection has been scheduled for 20 Aug. The water pump will be repaired within 5 working days..."
+              value={responseText}
+              onChange={e => setResponseText(e.target.value)}
+              style={{ resize: 'vertical', minHeight: 110 }}
             />
           </div>
-        )}
 
-        <div className="form-group" style={{ marginBottom: 20 }}>
-          <label className="form-label">Your Response / ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆ *</label>
-          <textarea
-            className="form-input"
-            rows={4}
-            placeholder="e.g. Inspection has been scheduled for 20 Aug. The water pump will be repaired within 5 working days..."
-            value={responseText}
-            onChange={e => setResponseText(e.target.value)}
-            style={{ resize: 'vertical' }}
-          />
+          {/* Officer info chip */}
+          <div style={{
+            background: 'var(--bg-main)', borderRadius: 10,
+            padding: '10px 14px', fontSize: 12,
+            color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 8,
+            border: '1px solid var(--border)',
+          }}>
+            <div style={{
+              width: 28, height: 28, borderRadius: '50%',
+              background: `${statusColor}20`, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <span style={{ fontSize: 13, fontWeight: 800, color: statusColor }}>
+                {(session.name || 'O')[0].toUpperCase()}
+              </span>
+            </div>
+            <div>
+              <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{session.name || 'You'}</span>
+              <span style={{ color: 'var(--text-muted)' }}> • {session.department}</span>
+              {(session.taluk || session.district) && (
+                <span style={{ color: 'var(--text-muted)' }}> • {session.taluk || session.district}</span>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div style={{ background: 'var(--bg-main)', borderRadius: 10, padding: '10px 14px', fontSize: 12, color: 'var(--text-muted)', marginBottom: 18 }}>
-          <strong>{session.name || 'You'}</strong> • {session.department} • {session.taluk || session.district}
-        </div>
-
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleSave} disabled={saving || !responseText.trim()}>
-            {saving ? 'Saving...' : <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Send size={14} /> Submit Response</span>}
+        {/* Footer with action buttons */}
+        <div style={{
+          padding: '16px 24px',
+          borderTop: '1px solid var(--border)',
+          display: 'flex', gap: 10, flexShrink: 0,
+          background: 'var(--bg-card)',
+        }}>
+          <button
+            onClick={handleSave}
+            disabled={saving || !responseText.trim()}
+            style={{
+              flex: 1, padding: '12px 20px', borderRadius: 12,
+              background: responseText.trim() ? '#6366f1' : 'var(--bg-main)',
+              color: responseText.trim() ? '#fff' : 'var(--text-muted)',
+              border: 'none', cursor: responseText.trim() ? 'pointer' : 'not-allowed',
+              fontWeight: 700, fontSize: 14, display: 'flex', alignItems: 'center',
+              justifyContent: 'center', gap: 8, transition: 'all 0.2s',
+            }}
+          >
+            {saving
+              ? <><RefreshCw size={14} className="animate-spin" /> Saving...</>
+              : <><Send size={14} /> Submit Response</>
+            }
           </button>
-          <button className="btn btn-outline" onClick={onClose}>Cancel</button>
+          <button
+            onClick={onClose}
+            style={{
+              padding: '12px 20px', borderRadius: 12,
+              background: 'var(--bg-main)', border: '1px solid var(--border)',
+              color: 'var(--text-secondary)', cursor: 'pointer',
+              fontWeight: 600, fontSize: 14,
+            }}
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
