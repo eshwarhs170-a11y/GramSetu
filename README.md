@@ -62,46 +62,7 @@ Built with accessibility, voice-first interaction, and real-time grievance escal
 
 ---
 
-### 🎫 Open Day Live Interactive Suite
 
-```
-                               ┌────────────────────────────────┐
-                               │   Magic QR Printable Cards     │
-                               │   (/demo/qr-cards)             │
-                               └───────────────┬────────────────┘
-                                               │
-                                 Scan with Smartphone Camera
-                                               │
-                                               ▼
-                              ┌──────────────────────────────────┐
-                              │     Instant OTP-Bypass Login     │
-                              │     (/magic-login?role=...)      │
-                              └────────┬─────────────────┬───────┘
-                                       │                 │
-              Farmer (Mysuru / Kodagu) │                 │ PDO Official
-                                       ▼                 ▼
-                        ┌────────────────────┐     ┌──────────────────────┐
-                        │ Villager Dashboard │     │  Official Dashboard  │
-                        │ & Complaint Filing │     │  & Auto-Escalations  │
-                        └─────────┬──────────┘     └──────────┬───────────┘
-                                  │                           │
-                                  └─────────────┬─────────────┘
-                                                │
-                                    Firestore Real-Time Sync
-                                                │
-                                                ▼
-                               ┌────────────────────────────────┐
-                               │   Big Screen Live Escalation   │
-                               │   (/demo/dashboard)            │
-                               │   ⚡ Web Audio Chime Alert      │
-                               └────────────────────────────────┘
-```
-
-1. **🎫 Magic QR Passes (`/demo/qr-cards`):** High-resolution printable badges for **Ramappa Gowda (Mysuru Farmer)**, **Kaveri Amma (Kodagu Farmer)**, and **S. R. Patil (PDO Mysuru)**. Scanning instantly bypasses OTP and loads their full profile context.
-2. **⚡ Big Screen Escalation Monitor (`/demo/dashboard`):** Designed for projectors/TVs. As soon as audience members file a grievance, it pops up in real-time with an audible Web Audio chime alert and dynamic status badges.
-3. **🎙️ Dedicated AI Voice Showcase (`/demo/voice`):** Interactive voice testing arena with quick-action chips and live visualizer.
-
----
 
 ## 🗺️ Explore Karnataka
 
