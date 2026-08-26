@@ -86,6 +86,22 @@ export default function LandingPage() {
     return () => clearTimeout(timer)
   }, [lang, speak])
 
+  const logoTapCount = useRef(0)
+  const logoTapTimer = useRef(null)
+
+  const handleLogoSecretTap = () => {
+    logoTapCount.current += 1
+    if (logoTapTimer.current) clearTimeout(logoTapTimer.current)
+    if (logoTapCount.current >= 3) {
+      logoTapCount.current = 0
+      navigate('/demo')
+      return
+    }
+    logoTapTimer.current = setTimeout(() => {
+      logoTapCount.current = 0
+    }, 1200)
+  }
+
   return (
     <div style={{ fontFamily: "'Inter', 'Noto Sans Kannada', sans-serif", overflowX: 'hidden' }}>
       <style>{`
@@ -135,8 +151,6 @@ export default function LandingPage() {
         }
       `}</style>
 
-
-
       {/* ── NAV ── */}
       <nav className="landing-top-nav" style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -145,7 +159,12 @@ export default function LandingPage() {
         position: 'sticky', top: 0, zIndex: 100,
         boxShadow: '0 1px 12px rgba(0,0,0,0.06)'
       }}>
-        <div className="landing-nav-left" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div
+          className="landing-nav-left"
+          onClick={handleLogoSecretTap}
+          style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', userSelect: 'none' }}
+          title="Triple tap for Demo Hub"
+        >
           <div style={{
             width: 38, height: 38, borderRadius: 10, flexShrink: 0,
             background: 'linear-gradient(135deg, #16a34a, #15803d)',
