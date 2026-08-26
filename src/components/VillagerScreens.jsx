@@ -151,9 +151,9 @@ export const kaAnnouncements = [
 ]
 
 export const initialComplaints = [
-  { id: 'GS-KA-0456', title: 'Hand Pump Not Working — Ward 3', status: 'inprogress', date: '2 Aug 2026', category: 'Water Supply', assignedTo: 'Gram Panchayat, Ramanagar', lastUpdate: 'Inspection scheduled for 10 Aug by AEE', photo: null },
-  { id: 'GS-KA-0389', title: 'Street Light Broken — Mysuru Road', status: 'resolved', date: '20 Jul 2026', category: 'Electricity / BESCOM', assignedTo: 'BESCOM', lastUpdate: 'Resolved on 28 Jul 2026', photo: null },
-  { id: 'GS-KA-0312', title: 'School Building Roof Leaking — GPS Ramanagar', status: 'pending', date: '15 Jul 2026', category: 'Schools / DDPI', assignedTo: 'DDPI Office, Mysuru', lastUpdate: 'Pending review', photo: null },
+  { id: 'GS-KA-0456', title: 'Hand Pump Not Working — Ward 3', status: 'inprogress', date: '2 Aug 2026', category: 'Water Supply', assignedTo: 'Gram Panchayat, Mysuru', lastUpdate: 'Inspection scheduled for 10 Aug by AEE', photo: null, district: 'Mysuru', taluk: 'Mysuru', submittedBy: 'Ramappa Gowda' },
+  { id: 'GS-KA-0389', title: 'Street Light Broken — Madikeri Road', status: 'resolved', date: '20 Jul 2026', category: 'Electricity / BESCOM', assignedTo: 'BESCOM', lastUpdate: 'Resolved on 28 Jul 2026', photo: null, district: 'Kodagu', taluk: 'Madikeri', submittedBy: 'Kaveri Amma' },
+  { id: 'GS-KA-0312', title: 'School Building Roof Leaking — GPS Bilikere', status: 'pending', date: '15 Jul 2026', category: 'Schools / DDPI', assignedTo: 'DDPI Office, Mysuru', lastUpdate: 'Pending review', photo: null, district: 'Mysuru', taluk: 'Mysuru', submittedBy: 'Ramappa Gowda' },
 ]
 
 const kaComplaintCategories = [
@@ -2436,10 +2436,13 @@ export function ComplaintScreen() {
       category: selected,
       assignedTo: `Taluk Office, ${taluk}`,
       lastUpdate: 'Assigned to nodal officer',
-      submittedBy: userName || 'Anonymous',
-      district: userDistrict,
-      taluk,
+      submittedBy: userName || window.localStorage.getItem('citizen_name') || 'Anonymous',
+      submittedPhone: window.localStorage.getItem('citizen_phone') || '',
+      submittedEmail: window.localStorage.getItem('citizen_email') || '',
+      district: userDistrict || window.localStorage.getItem('citizen_district') || 'Mysuru',
+      taluk: taluk || window.localStorage.getItem('citizen_taluk') || 'Mysuru',
       gp: window.localStorage.getItem('citizen_gp') || '',
+      village: window.localStorage.getItem('citizen_village') || '',
       createdAt: serverTimestamp()
     }
 
@@ -2738,13 +2741,28 @@ export function ComplaintStatusScreen() {
   }, [])
 
   const myTaluk = window.localStorage.getItem('citizen_taluk') || ''
+  const myDistrict = window.localStorage.getItem('citizen_district') || ''
+  const myName = window.localStorage.getItem('citizen_name') || ''
+
   const filteredComplaints = complaints.filter(c => {
-    const searchMatch = c.title?.toLowerCase().includes(search.toLowerCase()) ||
+    const searchMatch = !search || c.title?.toLowerCase().includes(search.toLowerCase()) ||
                         c.id?.toLowerCase().includes(search.toLowerCase()) ||
                         c.category?.toLowerCase().includes(search.toLowerCase())
-    // Only show complaints from the same taluk as the logged-in villager
-    const talukMatch = myTaluk ? (c.taluk === myTaluk) : true
-    return searchMatch && talukMatch
+
+    // If complaint was submitted by current user (e.g. Ramappa or Kaveri Amma), always show
+    const isOwner = myName && c.submittedBy && (
+      c.submittedBy.toLowerCase().includes(myName.toLowerCase()) ||
+      myName.toLowerCase().includes(c.submittedBy.toLowerCase())
+    )
+
+    // District filter: complaints from this citizen's district only
+    const cDist = (c.district || c.village || '').toLowerCase()
+    const distMatch = myDistrict ? (
+      cDist.includes(myDistrict.toLowerCase()) ||
+      myDistrict.toLowerCase().includes(cDist)
+    ) : true
+
+    return searchMatch && (distMatch || isOwner)
   })
 
   return (
@@ -2928,19 +2946,24 @@ export function ProfileScreen() {
   }
 
   useEffect(() => {
-    const sName = window.localStorage.getItem('citizen_name')
-    const sDist = window.localStorage.getItem('citizen_district')
-    const sTaluk = window.localStorage.getItem('citizen_taluk')
-    const sGp = window.localStorage.getItem('citizen_gp')
-    const sVillage = window.localStorage.getItem('citizen_village')
-    const sPhone = window.localStorage.getItem('citizen_phone')
+    const loadProfile = () => {
+      const sName = window.localStorage.getItem('citizen_name')
+      const sDist = window.localStorage.getItem('citizen_district')
+      const sTaluk = window.localStorage.getItem('citizen_taluk')
+      const sGp = window.localStorage.getItem('citizen_gp')
+      const sVillage = window.localStorage.getItem('citizen_village')
+      const sPhone = window.localStorage.getItem('citizen_phone')
 
-    if (sName) setUserName(sName)
-    if (sDist) setUserDistrict(sDist)
-    if (sTaluk) setUserTaluk(sTaluk)
-    if (sGp) setUserGp(sGp)
-    if (sVillage) setUserVillage(sVillage)
-    if (sPhone) setUserPhone(sPhone.startsWith('+91') ? sPhone : '+91 ' + sPhone.slice(0, 5) + ' ' + sPhone.slice(5))
+      if (sName) setUserName(sName)
+      if (sDist) setUserDistrict(sDist)
+      if (sTaluk) setUserTaluk(sTaluk)
+      if (sGp) setUserGp(sGp)
+      if (sVillage) setUserVillage(sVillage)
+      if (sPhone) setUserPhone(sPhone.startsWith('+91') ? sPhone : '+91 ' + sPhone.slice(0, 5) + ' ' + sPhone.slice(5))
+    }
+    loadProfile()
+    window.addEventListener('profileUpdate', loadProfile)
+    return () => window.removeEventListener('profileUpdate', loadProfile)
   }, [])
 
   const startEditing = () => {

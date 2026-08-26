@@ -619,8 +619,15 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
 
   const displayedComplaints = (() => {
     let list = stateOverview ? liveComplaints : liveComplaints.filter(c => {
-      const distMatch = session.district ? (c.district || c.village || '').toLowerCase().includes(session.district.toLowerCase()) : true
-      const talukMatch = session.taluk ? (c.taluk || '').toLowerCase() === session.taluk.toLowerCase() : true
+      const distMatch = session.district ? (
+        (c.district || c.village || '').toLowerCase().includes(session.district.toLowerCase()) ||
+        session.district.toLowerCase().includes((c.district || '').toLowerCase())
+      ) : true
+      const sTalukClean = (session.taluk || '').replace(/ taluk/i, '').trim().toLowerCase()
+      const cTalukClean = (c.taluk || '').replace(/ taluk/i, '').trim().toLowerCase()
+      const talukMatch = sTalukClean ? (
+        !cTalukClean || cTalukClean.includes(sTalukClean) || sTalukClean.includes(cTalukClean)
+      ) : true
       const gpMatch = session.gp ? (c.gp || '').toLowerCase() === session.gp.toLowerCase() : true
       const statusMatch = filter ? (c.status === filter) : true
       // Also show escalated complaints that reached this level

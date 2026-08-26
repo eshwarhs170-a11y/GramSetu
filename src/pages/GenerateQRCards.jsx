@@ -7,33 +7,67 @@ const CARDS = [
     role: 'villager',
     name: 'Ramappa Gowda',
     district: 'Mysuru',
+    taluk: 'Mysuru',
+    gp: 'Varuna',
+    village: 'Varuna Village',
+    phone: '9845123456',
+    email: 'ramappa.gowda@gramsetu.in',
+    areaType: 'rural',
     label: 'Farmer · ರೈತ',
     emoji: '🌾',
     color: '#22c55e',
     bg: 'linear-gradient(135deg, #14532d, #166534)',
-    desc: 'Scan to experience GramSetu as a farmer from Mysuru',
+    desc: 'Scan to experience GramSetu as a farmer from Varuna, Mysuru',
   },
   {
     role: 'villager',
     name: 'Kaveri Amma',
     district: 'Kodagu',
+    taluk: 'Madikeri',
+    gp: 'Suntikoppa',
+    village: 'Murnad Village',
+    phone: '9845987654',
+    email: 'kaveri.amma@gramsetu.in',
+    areaType: 'rural',
     label: 'Farmer · ರೈತ',
     emoji: '🌿',
     color: '#34d399',
     bg: 'linear-gradient(135deg, #064e3b, #065f46)',
-    desc: 'Scan to experience GramSetu as a farmer from Kodagu',
+    desc: 'Scan to experience GramSetu as a farmer from Madikeri, Kodagu',
   },
   {
     role: 'official',
-    name: 'PDO Mysuru',
+    name: 'S. R. Patil',
     district: 'Mysuru',
+    taluk: 'Mysuru',
+    gp: '',
+    department: 'Rural Development & Panchayat Raj',
+    email: 'pdo.mysuru@karnataka.gov.in',
+    id: 'KA-MYS-PDO-2026-042',
+    phone: '9448012345',
     label: 'Govt Official · ಅಧಿಕಾರಿ',
     emoji: '🏛️',
     color: '#6366f1',
     bg: 'linear-gradient(135deg, #1e1b4b, #312e81)',
-    desc: 'Scan to experience GramSetu as a Government Official',
+    desc: 'Scan to experience GramSetu as PDO Mysuru (Govt Official)',
   },
 ];
+
+export const getCardUrl = (card, baseUrl) => {
+  const params = new URLSearchParams()
+  params.set('role', card.role)
+  params.set('name', card.name)
+  params.set('district', card.district)
+  if (card.taluk) params.set('taluk', card.taluk)
+  if (card.gp) params.set('gp', card.gp)
+  if (card.village) params.set('village', card.village)
+  if (card.phone) params.set('phone', card.phone)
+  if (card.email) params.set('email', card.email)
+  if (card.areaType) params.set('areaType', card.areaType)
+  if (card.department) params.set('department', card.department)
+  if (card.id) params.set('id', card.id)
+  return `${baseUrl}/magic-login?${params.toString()}`
+}
 
 export default function GenerateQRCards() {
   const printRef = useRef();
@@ -114,7 +148,7 @@ export default function GenerateQRCards() {
         {/* Cards Grid */}
         <div ref={printRef} style={{ display: 'flex', gap: 24, flexWrap: 'wrap', justifyContent: 'center' }}>
           {CARDS.map((card) => {
-            const url = `${BASE_URL}/magic-login?role=${card.role}&name=${encodeURIComponent(card.name)}&district=${encodeURIComponent(card.district)}`;
+            const url = getCardUrl(card, BASE_URL);
             return (
               <div key={card.name} style={{
                 background: card.bg,
@@ -136,8 +170,8 @@ export default function GenerateQRCards() {
                   <div style={{ fontSize: '0.8rem', color: card.color, fontWeight: 700, letterSpacing: '0.08em', marginTop: 4 }}>
                     {card.label}
                   </div>
-                  <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>
-                    📍 {card.district}, Karnataka
+                  <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)', marginTop: 2 }}>
+                    📍 {card.village ? `${card.village}, ` : ''}{card.district}
                   </div>
                 </div>
 
@@ -157,14 +191,14 @@ export default function GenerateQRCards() {
                   />
                 </div>
 
-                <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>
+                <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>
                   {card.desc}
                 </div>
 
                 {/* GramSetu branding */}
                 <div style={{ borderTop: `1px solid ${card.color}33`, paddingTop: 12, width: '100%' }}>
                   <div style={{ fontSize: '0.8rem', fontWeight: 700, color: card.color }}>GramSetu</div>
-                  <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)' }}>ಗ್ರಾಮ ಸೇತು · Connecting Villages</div>
+                  <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)' }}>ಗ್ರಾಮ ಸೇತು · Connecting Villages</div>
                 </div>
               </div>
             );
@@ -177,7 +211,7 @@ export default function GenerateQRCards() {
             GENERATED MAGIC LINKS
           </h3>
           {CARDS.map(card => {
-            const url = `${BASE_URL}/magic-login?role=${card.role}&name=${encodeURIComponent(card.name)}&district=${encodeURIComponent(card.district)}`;
+            const url = getCardUrl(card, BASE_URL);
             return (
               <div key={card.name} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12, background: 'rgba(255,255,255,0.03)', borderRadius: 10, padding: '10px 16px', border: '1px solid rgba(255,255,255,0.06)' }}>
                 <span style={{ fontSize: '1.2rem' }}>{card.emoji}</span>
