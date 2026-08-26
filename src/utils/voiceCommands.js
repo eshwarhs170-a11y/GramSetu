@@ -120,11 +120,13 @@ If user asks what to fill in a field, guide them clearly. For example:
 CROPS & MARKET: GramSetu tracks APMC prices for: Paddy (Rice), Wheat, Jowar, Bajra, Maize, Ragi, Tur Dal, Urad Dal, Moong Dal, Chana, Cotton, Groundnut, Sunflower, Soybean, Onion, Potato, Tomato, Banana, Mango, Coconut, Sugarcane, Turmeric, Chilli.
 
 Always reply in ${langName}. Keep it short and helpful (2-3 sentences max).
-Never say you cannot help. If navigation is needed, guide them to the right page.`;
-
+Never say you cannot help. If navigation is needed, guide them to the right page.
+CRITICAL: Do NOT use any Markdown formatting (no asterisks, bold, or hash signs) because your response will be read aloud via text-to-speech.`;
 
   try {
-    const responseText = await callGemini(transcript, systemInstruction);
+    let responseText = await callGemini(transcript, systemInstruction);
+    // Strip markdown symbols just in case, so TTS doesn't read them
+    responseText = responseText.replace(/[*#_`]/g, '');
     return { type: 'chat', response: responseText.trim() };
   } catch (error) {
     console.error('Gemini API Error:', error);
