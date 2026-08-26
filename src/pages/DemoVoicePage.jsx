@@ -56,6 +56,32 @@ export default function DemoVoicePage() {
     }
   }, [transcript, isListening, speak, clearTranscript, lang, navigate]);
 
+  // Handle clicking a hint chip — send directly to AI without mic
+  const handleHintClick = async (text) => {
+    if (status === 'thinking' || status === 'listening') return;
+    if (isSpeaking) stopSpeaking();
+    setLastResponse('');
+    setMicError(null);
+    setStatus('thinking');
+    setLastResponse(lang === 'kn' ? 'ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ...' : 'Thinking...');
+    try {
+      const action = await processVoiceCommand(text, lang);
+      if (action) {
+        if (action.response) {
+          setLastResponse(action.response);
+          setStatus('speaking');
+          speak(action.response);
+        }
+        if (action.type === 'navigate' && action.payload) {
+          setTimeout(() => navigate(action.payload), 1500);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus('idle');
+    }
+  };
+
   useEffect(() => {
     if (!isSpeaking && status === 'speaking') {
       setStatus('idle');
@@ -373,12 +399,51 @@ export default function DemoVoicePage() {
           {statusLabels[status]}
         </div>
 
-        {/* Language hints */}
-        <div style={{ marginTop: 32, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
-          {['ಇಂದು ತೆಂಗಿನ ಬೆಲೆ ಏನು?', 'What are the govt schemes?', 'Take me to login page'].map(hint => (
-            <div key={hint} style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: 20, padding: '6px 14px', fontSize: '0.8rem', color: '#94a3b8', cursor: 'default' }}>
-              "{hint}"
-            </div>
+        {/* Clickable hint chips */}
+        <div style={{ marginTop: 32, display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+          {[
+            { label: 'What is GramSetu?', icon: '🌾' },
+            { label: 'ಇಂದು ತೆಂಗಿನ ಬೆಲೆ ಏನು?', icon: '💰' },
+            { label: 'How to file a complaint?', icon: '📋' },
+          ].map(({ label, icon }) => (
+            <button
+              key={label}
+              onClick={() => handleHintClick(label)}
+              disabled={status === 'thinking' || status === 'listening'}
+              style={{
+                background: 'rgba(34,197,94,0.08)',
+                border: '1px solid rgba(34,197,94,0.25)',
+                borderRadius: 24,
+                padding: '10px 18px',
+                fontSize: '0.85rem',
+                color: '#94a3b8',
+                cursor: (status === 'thinking' || status === 'listening') ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                transition: 'all 0.2s ease',
+                outline: 'none',
+                fontFamily: "'Inter', sans-serif",
+                opacity: (status === 'thinking' || status === 'listening') ? 0.5 : 1,
+              }}
+              onMouseEnter={e => {
+                if (status !== 'thinking' && status !== 'listening') {
+                  e.currentTarget.style.background = 'rgba(34,197,94,0.18)';
+                  e.currentTarget.style.color = '#22c55e';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(34,197,94,0.2)';
+                }
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(34,197,94,0.08)';
+                e.currentTarget.style.color = '#94a3b8';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              <span>{icon}</span>
+              <span>"{label}"</span>
+            </button>
           ))}
         </div>
       </div>
