@@ -74,7 +74,8 @@ export default function CropScanner({ onClose }) {
   const [cameraError, setCameraError] = useState(false);
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState(null);
-  const [targetIndex, setTargetIndex] = useState(0); // For demo purposes, let presenter choose the target
+  const [targetIndex, setTargetIndex] = useState(-1); // Default to -1 (No Crop) so it doesn't give random answers
+
   const videoRef = useRef(null);
   const { lang } = useLanguage();
   const { speak, stopSpeaking, isSpeaking } = useVoice();
@@ -122,8 +123,11 @@ export default function CropScanner({ onClose }) {
     setResult(null);
     setTimeout(() => {
       setScanning(false);
-      // Pick the disease the presenter pre-selected for the demo
-      setResult(CROP_DISEASES[targetIndex]);
+      if (targetIndex === -1) {
+        setResult('NO_CROP');
+      } else {
+        setResult(CROP_DISEASES[targetIndex]);
+      }
     }, 2500);
   };
 
@@ -131,7 +135,7 @@ export default function CropScanner({ onClose }) {
     if (isSpeaking) {
       stopSpeaking();
     } else {
-      if (!result) return;
+      if (!result || result === 'NO_CROP') return;
       const textToSpeak = lang === 'kn' 
         ? `ರೋಗ ಪತ್ತೆಯಾಗಿದೆ: ${result.disease}. ಪರಿಹಾರ: ${result.remedy}. ಸೂಕ್ತವಾದ ಯೋಜನೆ: ${result.scheme}.`
         : `Disease detected: ${result.disease}. Remedy: ${result.remedy}. Applicable scheme: ${result.scheme}.`;
@@ -187,6 +191,7 @@ export default function CropScanner({ onClose }) {
                  padding: '6px 10px', borderRadius: 8, fontSize: 11, backdropFilter: 'blur(4px)', outline: 'none'
                }}
              >
+               <option value={-1} style={{ color: '#000' }}>Demo: Invalid / No Crop</option>
                {CROP_DISEASES.map((d, i) => (
                  <option key={i} value={i} style={{ color: '#000' }}>Demo: {d.crop.split(' ')[0]}</option>
                ))}
@@ -299,6 +304,38 @@ export default function CropScanner({ onClose }) {
                     {lang === 'kn' ? 'ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ' : 'Start Scan'}
                   </>
                 )}
+              </button>
+            </div>
+          ) : result === 'NO_CROP' ? (
+            <div className="animate-fadeInUp" style={{ paddingBottom: 10, textAlign: 'center' }}>
+              <div style={{ width: 40, height: 4, background: '#cbd5e1', borderRadius: 4, margin: '0 auto 16px' }} />
+              
+              <div style={{
+                width: 64, height: 64, borderRadius: 24, background: '#fee2e2',
+                color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 16px', boxShadow: '0 8px 20px rgba(239, 68, 68, 0.2)'
+              }}>
+                <X size={32} strokeWidth={2.5} />
+              </div>
+              
+              <h3 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 900, color: '#0f172a' }}>
+                {lang === 'kn' ? 'ಬೆಳೆ ಕಂಡುಬಂದಿಲ್ಲ' : 'No Crop Detected'}
+              </h3>
+              <p style={{ margin: '0 0 24px', color: '#64748b', fontSize: 15, lineHeight: 1.5 }}>
+                {lang === 'kn' ? 'ದಯವಿಟ್ಟು ಕ್ಯಾಮರಾವನ್ನು ನೇರವಾಗಿ ಬೆಳೆಯ ಎಲೆಗಳತ್ತ ತೋರಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.' : 'Please ensure the crop leaf is clearly visible in the frame and try again.'}
+              </p>
+
+              <button
+                onClick={() => setResult(null)}
+                style={{
+                  background: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)', color: '#fff', border: 'none', borderRadius: 16,
+                  padding: '16px 24px', fontSize: 16, fontWeight: 800, cursor: 'pointer', width: '100%',
+                  boxShadow: '0 8px 20px rgba(15, 23, 42, 0.3)', transition: 'transform 0.1s'
+                }}
+                onMouseDown={e => e.currentTarget.style.transform = 'scale(0.97)'}
+                onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                {lang === 'kn' ? 'ಮತ್ತೆ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ' : 'Try Again'}
               </button>
             </div>
           ) : (
