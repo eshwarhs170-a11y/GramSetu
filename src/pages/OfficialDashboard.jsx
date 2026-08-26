@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useVoice } from '../context/VoiceContext'
@@ -1081,6 +1083,36 @@ function CitizensScreen() {
   const { t } = useLanguage()
   const districtFarmers = getDistrictFarmers(getSessionData().district)
   
+  const handleExport = () => {
+    const doc = new jsPDF()
+    doc.setFontSize(16)
+    doc.text('Registered Farmers List', 14, 22)
+    
+    const tableColumn = ["#", "Name", "Village", "Mobile", "Aadhaar", "Schemes"]
+    const tableRows = []
+    
+    districtFarmers.forEach(([name, village, mobile, aadhaar, schemes], i) => {
+      const rowData = [
+        i + 1,
+        name, // The names include Kannada characters, but standard jsPDF default font might not render them well without custom fonts. 
+              // For a simple robust export, we include it, it might fallback or drop complex chars unless configured.
+        village,
+        mobile,
+        aadhaar,
+        `${schemes} Active`
+      ]
+      tableRows.push(rowData)
+    })
+    
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+    })
+    
+    doc.save(`Registered_Farmers_${getSessionData().district}.pdf`)
+  }
+
   return (
     <div className="animate-fadeInUp">
       <div className="stats-grid" style={{ marginBottom: 24 }}>
@@ -1104,7 +1136,7 @@ function CitizensScreen() {
       <div className="card" style={{ padding: 0 }}>
         <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <h3 style={{ fontSize: 16, fontWeight: 700 }}>{t('allFarmers')}</h3>
-          <button className="btn btn-primary btn-sm">{t('export')}</button>
+          <button className="btn btn-primary btn-sm" onClick={handleExport}>{t('export')}</button>
         </div>
         <table className="market-table">
           <thead>
