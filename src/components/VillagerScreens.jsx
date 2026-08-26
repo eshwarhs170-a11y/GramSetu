@@ -83,7 +83,6 @@ import {
   agriFinancialAssistance,
   agriAdvisoryAndCenters,
   schemesSuccessStories,
-  schemesImpactStats,
   schemesFaqs,
   grievanceHelpdesks
 } from '../data/schemesData'
@@ -1108,32 +1107,7 @@ export function SchemesScreen() {
             </div>
           </div>
 
-          {/* Quick Metrics Strip */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-            gap: 12,
-            marginTop: 20,
-            paddingTop: 16,
-            borderTop: '1px solid rgba(255,255,255,0.2)'
-          }}>
-            <div>
-              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats?.totalBeneficiaries || '12.8M+'}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Beneficiaries Covered</div>
-            </div>
-            <div>
-              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats?.totalDisbursed || '₹18,400+ Cr'}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Funds Disbursed</div>
-            </div>
-            <div>
-              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats?.solarPumpsInstalled || '85,000+'}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Solar Pumps Installed</div>
-            </div>
-            <div>
-              <div style={{ fontSize: 20, fontWeight: 800, color: '#fef08a' }}>{schemesImpactStats?.activeFPOs || '1,240+'}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Active Agri FPOs</div>
-            </div>
-          </div>
+
         </div>
       </div>
 

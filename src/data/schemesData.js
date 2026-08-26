@@ -1,4 +1,4 @@
-﻿export const kaSchemes = [
+export const kaSchemes = [
   // ==========================================
   // AGRICULTURE & ALLIED
   // ==========================================
@@ -753,13 +753,7 @@ export const schemesSuccessStories = [
   }
 ];
 
-export const schemesImpactStats = {
-  totalBeneficiaries: '54.2 Lakh',
-  totalDisbursed: 'â‚¹18,450 Cr',
-  solarPumpsInstalled: '42,800+',
-  insuredLandArea: '36.5 Lakh Hectares',
-  activeFPOs: '850+ Registered'
-};
+
 
 // ============================================================
 // 8. GRIEVANCE REDRESSAL & FAQS
