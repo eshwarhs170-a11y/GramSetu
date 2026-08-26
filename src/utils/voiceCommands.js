@@ -24,22 +24,37 @@ export async function callGemini(prompt, systemInstruction) {
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      return response.text();
-    } catch (error) {
-      // If it's a "not found" error, continue to the next model in the fallback list
-      if (error.message?.includes("not found") || error.message?.includes("not supported")) {
-        console.warn(`Model ${modelName} failed, trying next...`);
+      const text = response.text();
+      if (!text || text.trim().length === 0) {
+        console.warn(`Model ${modelName} returned empty text, trying next...`);
         continue;
       }
-      // For any other error (like bad API key), throw immediately
-      console.error("Gemini API Error:", error);
-      throw error;
+      return text;
+    } catch (error) {
+      // If it's a "not found", "not supported", or "Text not available" error, try next model
+      const msg = error.message || '';
+      if (
+        msg.includes('not found') ||
+        msg.includes('not supported') ||
+        msg.includes('Text not available') ||
+        msg.includes('SAFETY') ||
+        msg.includes('blocked')
+      ) {
+        console.warn(`Model ${modelName} failed (${msg.slice(0, 60)}), trying next...`);
+        continue;
+      }
+      // For rate limit errors, throw immediately with clear message
+      if (msg.includes('429')) throw error;
+      // For any other unexpected error, log and continue
+      console.warn(`Model ${modelName} error:`, msg.slice(0, 80));
+      continue;
     }
   }
-  // If absolutely all models fail, return a friendly fallback string instead of crashing
+  // All models failed — return a friendly offline fallback
   console.error("All Gemini models failed. Returning offline fallback response.");
   return "I am GramSetu's AI Assistant. I am currently experiencing API connectivity issues, but you can still use the dashboard manually to check government schemes and APMC prices!";
 }
+
 
 export async function processVoiceCommand(transcript, lang = 'en') {
   const lower = transcript.toLowerCase().trim();
