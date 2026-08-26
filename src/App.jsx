@@ -9,6 +9,7 @@ import FeatureDetails from './pages/FeatureDetails'
 import { VoiceProvider } from './context/VoiceContext'
 import VoiceAssistantWidget from './components/VoiceAssistantWidget'
 import DemoVoicePage from './pages/DemoVoicePage'
+import DemoEventDashboard from './pages/DemoEventDashboard'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/dashboard/official/*" element={<OfficialDashboard />} />
         <Route path="/feature/:id" element={<FeatureDetails />} />
         <Route path="/demo/voice" element={<DemoVoicePage />} />
+        <Route path="/demo/dashboard" element={<DemoEventDashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </VoiceProvider>
