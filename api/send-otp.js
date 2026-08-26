@@ -41,11 +41,8 @@ export default async function handler(req, res) {
       <div style="margin: 30px 0; padding: 20px; background-color: #f0fdf4; border: 2px solid #86efac; border-radius: 10px; text-align: center;">
         <div style="display: inline-block; background: #fff; border: 1px dashed #4ade80; padding: 10px 20px; border-radius: 8px; margin-bottom: 12px; vertical-align: middle;">
           <span style="font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #15803d; font-family: 'Courier New', monospace; user-select: all; vertical-align: middle;">${otp}</span>
-          <a href="${copyUrl}" target="_blank" style="text-decoration: none; display: inline-block; vertical-align: middle; margin-left: 8px;" title="Click to copy OTP">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: block;">
-              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
-              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
-            </svg>
+          <a href="${copyUrl}" target="_blank" style="text-decoration: none; display: inline-block; vertical-align: middle; margin-left: 12px; background: #e6f4ea; border: 1px solid #4ade80; padding: 6px 10px; border-radius: 6px; color: #15803d; font-size: 14px; font-weight: bold; font-family: sans-serif;" title="Click to copy OTP">
+            📋 Copy
           </a>
         </div>
         <div>
