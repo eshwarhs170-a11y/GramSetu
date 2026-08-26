@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { Printer, Globe, Copy, Check, Download, Sparkles, ExternalLink } from 'lucide-react';
+import {
+  Printer, Globe, Copy, Check, Download,
+  Wheat, Sprout, Landmark, ShieldCheck, MapPin, Sparkles
+} from 'lucide-react';
 
 const CARDS = [
   {
@@ -16,7 +19,8 @@ const CARDS = [
     areaType: 'rural',
     label: 'Farmer · ರೈತ',
     kannadaName: 'ರಾಮಪ್ಪ ಗೌಡ',
-    emoji: '🌾',
+    icon: Wheat,
+    iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 10-10"/><path d="M16 8a4 4 0 0 0-4 4v0a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4v0a4 4 0 0 0-4-4Z"/><path d="M7 17a4 4 0 0 0-4 4"/><path d="M12 12a4 4 0 0 0-4 4"/><path d="m20 4-3.5 3.5"/><path d="M16 4a4 4 0 0 0-4 4"/></svg>',
     themeColor: '#16a34a',
     accentColor: '#22c55e',
     borderColor: '#4ade80',
@@ -35,7 +39,8 @@ const CARDS = [
     areaType: 'rural',
     label: 'Farmer · ರೈತ',
     kannadaName: 'ಕಾವೇರಿ ಅಮ್ಮ',
-    emoji: '🌿',
+    icon: Sprout,
+    iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>',
     themeColor: '#0d9488',
     accentColor: '#14b8a6',
     borderColor: '#2dd4bf',
@@ -54,7 +59,8 @@ const CARDS = [
     phone: '9448012345',
     label: 'Govt Official · ಅಧಿಕಾರಿ',
     kannadaName: 'ಎಸ್. ಆರ್. ಪಾಟೀಲ್ (ಪಿಡಿಒ ಮೈಸೂರು)',
-    emoji: '🏛️',
+    icon: Landmark,
+    iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>',
     themeColor: '#4f46e5',
     accentColor: '#6366f1',
     borderColor: '#818cf8',
@@ -86,8 +92,13 @@ export default function GenerateQRCards() {
   );
   const [copiedId, setCopiedId] = useState(null);
 
+  const getSvgHtml = (cardId) => {
+    const el = document.getElementById(`qr-svg-${cardId}`);
+    return el ? el.outerHTML : '';
+  };
+
   const printSingleCard = (card) => {
-    const url = getCardUrl(card, publicDomain);
+    const qrSvg = getSvgHtml(card.id);
     const win = window.open('', '_blank');
     win.document.write(`
       <!DOCTYPE html>
@@ -127,20 +138,30 @@ export default function GenerateQRCards() {
             letter-spacing: 0.05em;
             margin-bottom: 16px;
           }
-          .avatar { font-size: 44px; margin-bottom: 4px; }
+          .icon-wrap {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: ${card.themeColor}15;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+          }
           .name { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 2px; }
           .kn-name { font-size: 16px; color: #475569; font-weight: 600; margin-bottom: 6px; }
           .meta { font-size: 14px; color: #64748b; margin-bottom: 16px; font-weight: 500; }
           .qr-box {
             display: inline-block;
-            padding: 14px;
+            padding: 16px;
             background: #ffffff;
             border: 2px dashed ${card.themeColor};
             border-radius: 16px;
             margin-bottom: 14px;
           }
+          .qr-box svg { width: 220px; height: 220px; display: block; }
           .instructions {
-            font-size: 13px;
+            font-size: 14px;
             color: #1e293b;
             font-weight: 700;
             margin-bottom: 4px;
@@ -160,26 +181,21 @@ export default function GenerateQRCards() {
           <div class="header-bar">
             ${card.role === 'official' ? '🏛️ GOVERNMENT OF KARNATAKA' : '🌾 GRAMSETU DEMO PASS'}
           </div>
-          <div class="avatar">${card.emoji}</div>
+          <div class="icon-wrap">${card.iconSvg}</div>
           <div class="name">${card.name}</div>
           <div class="kn-name">${card.kannadaName}</div>
           <div class="meta">📍 ${card.village ? `${card.village}, ` : ''}${card.district} District</div>
           <div class="qr-box">
-            <svg id="qr-target" width="220" height="220"></svg>
+            ${qrSvg}
           </div>
           <div class="instructions">📷 Scan with Phone Camera to Login Instantly</div>
           <div class="sub-inst">Bypasses OTP · Automatically loads user profile & complaints</div>
           <div class="footer">GramSetu · ಗ್ರಾಮೀಣ ಸೇತು ಕರ್ನಾಟಕ · Open Day Demo</div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
         <script>
-          QRCode.toCanvas(document.createElement('canvas'), "${url}", { width: 220, margin: 1 }, function (error, canvas) {
-            if (!error) {
-              const svg = document.getElementById('qr-target');
-              svg.parentNode.replaceChild(canvas, svg);
-              setTimeout(() => { window.print(); }, 400);
-            }
-          });
+          window.onload = () => {
+            setTimeout(() => { window.print(); }, 250);
+          };
         </script>
       </body>
       </html>
@@ -190,20 +206,22 @@ export default function GenerateQRCards() {
   const printAllCards = () => {
     const win = window.open('', '_blank');
     const cardsHtml = CARDS.map(card => {
-      const url = getCardUrl(card, publicDomain);
+      const qrSvg = getSvgHtml(card.id);
       return `
         <div class="card-badge" style="border-color: ${card.themeColor};">
           <div class="header-bar" style="background: ${card.themeColor};">
-            ${card.role === 'official' ? '🏛️ GOVERNMENT OF KARNATAKA' : '🌾 GRAMSETU DEMO PASS'}
+            ${card.role === 'official' ? 'GOVERNMENT OF KARNATAKA' : 'GRAMSETU DEMO PASS'}
           </div>
-          <div class="avatar">${card.emoji}</div>
+          <div class="icon-wrap" style="background: ${card.themeColor}15;">
+            ${card.iconSvg}
+          </div>
           <div class="name">${card.name}</div>
           <div class="kn-name">${card.kannadaName}</div>
           <div class="meta">📍 ${card.village ? `${card.village}, ` : ''}${card.district} District</div>
           <div class="qr-box" style="border-color: ${card.themeColor};">
-            <canvas id="qr-${card.id}" width="180" height="180"></canvas>
+            ${qrSvg}
           </div>
-          <div class="instructions">📷 Scan with Phone Camera to Login Instantly</div>
+          <div class="instructions">📷 Scan with Camera to Login</div>
           <div class="sub-inst">Bypasses OTP · Loads profile & complaints</div>
           <div class="footer">GramSetu · Open Day Demo</div>
         </div>
@@ -216,25 +234,25 @@ export default function GenerateQRCards() {
       <head>
         <title>GramSetu - All 3 Magic QR Cards</title>
         <style>
-          @page { size: A4 landscape; margin: 8mm; }
+          @page { size: A4 landscape; margin: 6mm; }
           body {
             margin: 0;
-            padding: 10px;
+            padding: 8px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #fff;
             color: #0f172a;
           }
           .grid-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
+            flex-wrap: nowrap;
+            gap: 14px;
             justify-content: center;
           }
           .card-badge {
-            width: 290px;
+            width: 300px;
             border: 2px solid #000;
             border-radius: 18px;
-            padding: 18px 14px;
+            padding: 16px 12px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             page-break-inside: avoid;
@@ -250,10 +268,18 @@ export default function GenerateQRCards() {
             letter-spacing: 0.05em;
             margin-bottom: 8px;
           }
-          .avatar { font-size: 32px; margin-bottom: 2px; }
+          .icon-wrap {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+          }
           .name { font-size: 17px; font-weight: 800; color: #0f172a; }
           .kn-name { font-size: 12px; color: #475569; font-weight: 600; margin-bottom: 4px; }
-          .meta { font-size: 11px; color: #64748b; margin-bottom: 10px; }
+          .meta { font-size: 11px; color: #64748b; margin-bottom: 8px; }
           .qr-box {
             display: inline-block;
             padding: 8px;
@@ -262,8 +288,9 @@ export default function GenerateQRCards() {
             border-radius: 12px;
             margin-bottom: 8px;
           }
+          .qr-box svg { width: 170px; height: 170px; display: block; }
           .instructions { font-size: 11px; color: #1e293b; font-weight: 700; }
-          .sub-inst { font-size: 9px; color: #64748b; margin-bottom: 8px; }
+          .sub-inst { font-size: 9px; color: #64748b; margin-bottom: 6px; }
           .footer {
             border-top: 1px solid #e2e8f0;
             padding-top: 6px;
@@ -276,34 +303,10 @@ export default function GenerateQRCards() {
         <div class="grid-container">
           ${cardsHtml}
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
         <script>
-          const cards = ${JSON.stringify(CARDS)};
-          const domain = "${publicDomain.replace(/\/$/, '')}";
-          let done = 0;
-          cards.forEach(card => {
-            const params = new URLSearchParams();
-            params.set('role', card.role);
-            params.set('name', card.name);
-            params.set('district', card.district);
-            if (card.taluk) params.set('taluk', card.taluk);
-            if (card.gp) params.set('gp', card.gp);
-            if (card.village) params.set('village', card.village);
-            if (card.phone) params.set('phone', card.phone);
-            if (card.email) params.set('email', card.email);
-            if (card.areaType) params.set('areaType', card.areaType);
-            if (card.department) params.set('department', card.department);
-            if (card.idNum) params.set('id', card.idNum);
-            const url = domain + '/magic-login?' + params.toString();
-
-            const canvas = document.getElementById('qr-' + card.id);
-            QRCode.toCanvas(canvas, url, { width: 170, margin: 1 }, function() {
-              done++;
-              if (done === cards.length) {
-                setTimeout(() => window.print(), 500);
-              }
-            });
-          });
+          window.onload = () => {
+            setTimeout(() => { window.print(); }, 250);
+          };
         </script>
       </body>
       </html>
@@ -331,14 +334,16 @@ export default function GenerateQRCards() {
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: '1.8rem' }}>🎫</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(34,197,94,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(34,197,94,0.3)' }}>
+                <Sparkles size={24} color="#22c55e" />
+              </div>
               <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 800, background: 'linear-gradient(135deg, #fff, #22c55e)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                Public Magic QR Cards
+                Public Magic QR Passes
               </h1>
             </div>
             <p style={{ margin: '6px 0 0', color: '#94a3b8', fontSize: '0.95rem' }}>
-              Print these 3 individual cards. Anyone scanning them from any phone/network will instantly log in without OTP!
+              Print these 3 individual passes. Anyone scanning them from any phone will instantly log in without OTP!
             </p>
           </div>
 
@@ -439,6 +444,7 @@ export default function GenerateQRCards() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24, marginBottom: 48 }}>
           {CARDS.map(card => {
             const url = getCardUrl(card, publicDomain);
+            const IconComp = card.icon;
             return (
               <div
                 key={card.id}
@@ -472,8 +478,22 @@ export default function GenerateQRCards() {
                   {card.label}
                 </div>
 
-                {/* Avatar & Name */}
-                <div style={{ fontSize: '3rem', marginBottom: 4 }}>{card.emoji}</div>
+                {/* Lucide Icon & Name */}
+                <div style={{
+                  width: 68,
+                  height: 68,
+                  borderRadius: '50%',
+                  background: `${card.themeColor}20`,
+                  border: `1px solid ${card.borderColor}44`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 12,
+                  color: card.accentColor,
+                }}>
+                  <IconComp size={34} strokeWidth={2} />
+                </div>
+
                 <h3 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 800, color: '#fff' }}>{card.name}</h3>
                 <div style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600, marginTop: 2 }}>{card.kannadaName}</div>
                 <div style={{ color: '#64748b', fontSize: '0.8rem', marginTop: 4 }}>
@@ -489,6 +509,7 @@ export default function GenerateQRCards() {
                   boxShadow: `0 0 30px ${card.themeColor}33`,
                 }}>
                   <QRCodeSVG
+                    id={`qr-svg-${card.id}`}
                     value={url}
                     size={180}
                     level="H"
