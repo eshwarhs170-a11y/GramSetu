@@ -1,9 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { QRCodeSVG, QRCodeCanvas } from 'qrcode.react';
+import { useTheme } from '../context/ThemeContext';
 import {
   Printer, Globe, Copy, Check, Download,
-  Wheat, Sprout, Landmark, Sparkles, ShieldCheck, MapPin
+  Wheat, Sprout, Landmark, Sparkles, ExternalLink, ArrowUpRight
 } from 'lucide-react';
+import DemoNavHeader from '../components/DemoNavHeader';
 
 const CARDS = [
   {
@@ -82,13 +84,15 @@ export const getCardUrl = (card, baseUrl) => {
 };
 
 export default function GenerateQRCards() {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [publicDomain, setPublicDomain] = useState(
     window.location.hostname.includes('vercel.app')
       ? window.location.origin
       : 'https://gram-setu-one.vercel.app'
   );
   const [copiedId, setCopiedId] = useState(null);
-  const [printTarget, setPrintTarget] = useState('all'); // 'all' | 'ramappa' | 'kaveri' | 'pdo'
+  const [printTarget, setPrintTarget] = useState('all');
 
   const handlePrint = (targetId) => {
     setPrintTarget(targetId);
@@ -114,37 +118,49 @@ export default function GenerateQRCards() {
     link.click();
   };
 
+  const openMagicLoginNewTab = (card) => {
+    const url = getCardUrl(card, window.location.origin);
+    window.open(url, '_blank');
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0a0f1e 0%, #0f172a 100%)',
-      color: '#fff',
+      background: isDark
+        ? 'radial-gradient(ellipse at top, #0a0f1e 0%, #060913 100%)'
+        : 'radial-gradient(ellipse at top, #f0fdf4 0%, #f8fafc 100%)',
+      color: isDark ? '#fff' : '#0f172a',
       fontFamily: "'Inter', sans-serif",
-      padding: '32px 24px',
+      padding: '24px 16px',
+      boxSizing: 'border-box',
+      transition: 'background 0.3s ease, color 0.3s ease',
     }}>
+      {/* Shared Nav Header */}
+      <DemoNavHeader currentPhase="qr" />
+
       {/* ─── SCREEN VIEW (Hidden when printing) ─── */}
-      <div className="no-print" style={{ maxWidth: 1060, margin: '0 auto' }}>
+      <div className="no-print" style={{ maxWidth: 1100, margin: '0 auto' }}>
         
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(34,197,94,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(34,197,94,0.3)' }}>
-                <Sparkles size={24} color="#22c55e" />
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(59,130,246,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(59,130,246,0.3)', color: '#3b82f6' }}>
+                <Sparkles size={24} />
               </div>
-              <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 800, background: 'linear-gradient(135deg, #fff, #22c55e)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 800, background: isDark ? 'linear-gradient(135deg, #fff, #38bdf8)' : 'linear-gradient(135deg, #0f172a, #0284c7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Public Magic QR Passes
               </h1>
             </div>
-            <p style={{ margin: '6px 0 0', color: '#94a3b8', fontSize: '0.95rem' }}>
-              Print these passes for your Open Day stall. Anyone scanning them from any phone logs in instantly!
+            <p style={{ margin: '6px 0 0', color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.95rem' }}>
+              Phase 3 · Scan with smartphone camera OR click "Open in New Tab" to test instantly without OTP!
             </p>
           </div>
 
           <button
             onClick={() => handlePrint('all')}
             style={{
-              background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+              background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
               color: '#fff',
               border: 'none',
               borderRadius: 14,
@@ -155,7 +171,7 @@ export default function GenerateQRCards() {
               display: 'flex',
               alignItems: 'center',
               gap: 10,
-              boxShadow: '0 8px 24px rgba(34,197,94,0.3)',
+              boxShadow: '0 8px 24px rgba(59,130,246,0.3)',
               transition: 'all 0.2s ease',
             }}
           >
@@ -165,21 +181,22 @@ export default function GenerateQRCards() {
 
         {/* Public Domain Selector */}
         <div style={{
-          background: 'rgba(30, 41, 59, 0.7)',
-          border: '1px solid rgba(255,255,255,0.1)',
+          background: isDark ? 'rgba(30, 41, 59, 0.7)' : 'rgba(255, 255, 255, 0.85)',
+          border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
           borderRadius: 20,
           padding: '20px 24px',
           marginBottom: 36,
           backdropFilter: 'blur(12px)',
+          boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 30px rgba(0,0,0,0.04)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Globe size={20} color="#22c55e" />
+              <Globe size={20} color="#3b82f6" />
               <div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#f8fafc' }}>
+                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: isDark ? '#f8fafc' : '#0f172a' }}>
                   Target Website URL
                 </div>
-                <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                <div style={{ fontSize: '0.8rem', color: isDark ? '#64748b' : '#94a3b8' }}>
                   The QR codes will encode this URL so any phone on 4G/5G data can open it.
                 </div>
               </div>
@@ -195,13 +212,15 @@ export default function GenerateQRCards() {
                   key={opt.url}
                   onClick={() => setPublicDomain(opt.url)}
                   style={{
-                    background: publicDomain === opt.url ? 'rgba(34, 197, 94, 0.2)' : 'rgba(255,255,255,0.05)',
-                    border: `1px solid ${publicDomain === opt.url ? '#22c55e' : 'rgba(255,255,255,0.1)'}`,
+                    background: publicDomain === opt.url
+                      ? (isDark ? 'rgba(59, 130, 246, 0.25)' : 'rgba(59, 130, 246, 0.15)')
+                      : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)'),
+                    border: `1px solid ${publicDomain === opt.url ? '#3b82f6' : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)')}`,
                     borderRadius: 10,
                     padding: '8px 14px',
                     fontSize: '0.82rem',
-                    color: publicDomain === opt.url ? '#22c55e' : '#94a3b8',
-                    fontWeight: 600,
+                    color: publicDomain === opt.url ? '#3b82f6' : (isDark ? '#94a3b8' : '#64748b'),
+                    fontWeight: 700,
                     cursor: 'pointer',
                     transition: 'all 0.15s ease',
                   }}
@@ -219,11 +238,11 @@ export default function GenerateQRCards() {
               onChange={e => setPublicDomain(e.target.value)}
               style={{
                 width: '100%',
-                background: 'rgba(15, 23, 42, 0.8)',
-                border: '1px solid rgba(34, 197, 94, 0.3)',
+                background: isDark ? 'rgba(15, 23, 42, 0.8)' : 'rgba(248, 250, 252, 0.9)',
+                border: '1px solid rgba(59, 130, 246, 0.4)',
                 borderRadius: 10,
                 padding: '10px 14px',
-                color: '#22c55e',
+                color: isDark ? '#38bdf8' : '#0284c7',
                 fontSize: '0.9rem',
                 fontFamily: 'monospace',
                 outline: 'none',
@@ -243,22 +262,33 @@ export default function GenerateQRCards() {
               <div
                 key={card.id}
                 style={{
-                  background: 'rgba(15, 23, 42, 0.85)',
-                  border: `2px solid ${card.borderColor}44`,
+                  background: isDark ? 'rgba(15, 23, 42, 0.85)' : 'rgba(255, 255, 255, 0.95)',
+                  border: `2px solid ${card.borderColor}55`,
                   borderRadius: 28,
                   padding: '28px 24px',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   textAlign: 'center',
-                  boxShadow: `0 12px 36px ${card.themeColor}22`,
+                  boxShadow: isDark
+                    ? `0 12px 36px ${card.themeColor}22`
+                    : `0 12px 30px rgba(0,0,0,0.06)`,
                   position: 'relative',
                   backdropFilter: 'blur(16px)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = `0 18px 40px ${card.themeColor}33`;
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = isDark ? `0 12px 36px ${card.themeColor}22` : `0 12px 30px rgba(0,0,0,0.06)`;
                 }}
               >
                 {/* Header Tag */}
                 <div style={{
-                  background: `${card.themeColor}22`,
+                  background: `${card.themeColor}18`,
                   border: `1px solid ${card.borderColor}66`,
                   color: card.accentColor,
                   borderRadius: 20,
@@ -288,9 +318,9 @@ export default function GenerateQRCards() {
                   <IconComp size={34} strokeWidth={2} />
                 </div>
 
-                <h3 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 800, color: '#fff' }}>{card.name}</h3>
-                <div style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600, marginTop: 2 }}>{card.kannadaName}</div>
-                <div style={{ color: '#64748b', fontSize: '0.8rem', marginTop: 4 }}>
+                <h3 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 800, color: isDark ? '#fff' : '#0f172a' }}>{card.name}</h3>
+                <div style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.85rem', fontWeight: 600, marginTop: 2 }}>{card.kannadaName}</div>
+                <div style={{ color: isDark ? '#64748b' : '#94a3b8', fontSize: '0.8rem', marginTop: 4 }}>
                   📍 {card.village ? `${card.village}, ` : ''}{card.district} District
                 </div>
 
@@ -301,6 +331,7 @@ export default function GenerateQRCards() {
                   background: '#ffffff',
                   borderRadius: 20,
                   boxShadow: `0 0 30px ${card.themeColor}33`,
+                  border: `2px dashed ${card.themeColor}66`,
                 }}>
                   <QRCodeSVG
                     value={url}
@@ -309,7 +340,6 @@ export default function GenerateQRCards() {
                     bgColor="#ffffff"
                     fgColor="#0f172a"
                   />
-                  {/* Hidden canvas for PNG export */}
                   <div style={{ display: 'none' }}>
                     <QRCodeCanvas
                       id={`qr-canvas-${card.id}`}
@@ -320,74 +350,97 @@ export default function GenerateQRCards() {
                   </div>
                 </div>
 
-                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: 20, lineHeight: 1.4 }}>
+                <div style={{ fontSize: '0.8rem', color: isDark ? '#94a3b8' : '#64748b', marginBottom: 20, lineHeight: 1.4 }}>
                   {card.desc}
                 </div>
 
-                {/* Action Buttons */}
-                <div style={{ display: 'flex', gap: 8, width: '100%', marginTop: 'auto', flexWrap: 'wrap' }}>
+                {/* Clickable Action Buttons */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%', marginTop: 'auto' }}>
+                  {/* Click to open direct in browser tab */}
                   <button
-                    onClick={() => handlePrint(card.id)}
+                    onClick={() => openMagicLoginNewTab(card)}
                     style={{
-                      flex: 1,
-                      minWidth: '120px',
-                      background: card.themeColor,
-                      color: '#fff',
-                      border: 'none',
+                      background: 'rgba(59, 130, 246, 0.15)',
+                      border: '1px solid rgba(59, 130, 246, 0.4)',
+                      color: '#3b82f6',
                       borderRadius: 12,
                       padding: '10px 14px',
                       fontSize: '0.85rem',
-                      fontWeight: 700,
+                      fontWeight: 800,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: 6,
-                      boxShadow: `0 4px 14px ${card.themeColor}44`,
                     }}
                   >
-                    <Printer size={16} /> Print Card
+                    <ArrowUpRight size={16} />
+                    Open Dashboard in New Tab
                   </button>
 
-                  <button
-                    onClick={() => downloadQrPng(card)}
-                    title="Download PNG QR Code"
-                    style={{
-                      background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
-                      color: '#cbd5e1',
-                      borderRadius: 12,
-                      padding: '10px 12px',
-                      fontSize: '0.85rem',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 4,
-                    }}
-                  >
-                    <Download size={16} />
-                  </button>
+                  <div style={{ display: 'flex', gap: 8, width: '100%' }}>
+                    <button
+                      onClick={() => handlePrint(card.id)}
+                      style={{
+                        flex: 1,
+                        background: card.themeColor,
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: 12,
+                        padding: '10px 14px',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6,
+                        boxShadow: `0 4px 14px ${card.themeColor}44`,
+                      }}
+                    >
+                      <Printer size={16} /> Print Card
+                    </button>
 
-                  <button
-                    onClick={() => copyLink(card)}
-                    title="Copy Magic Link"
-                    style={{
-                      background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
-                      color: copiedId === card.id ? '#22c55e' : '#cbd5e1',
-                      borderRadius: 12,
-                      padding: '10px 14px',
-                      fontSize: '0.85rem',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 4,
-                    }}
-                  >
-                    {copiedId === card.id ? <Check size={16} /> : <Copy size={16} />}
-                    {copiedId === card.id ? 'Copied' : 'Link'}
-                  </button>
+                    <button
+                      onClick={() => downloadQrPng(card)}
+                      title="Download PNG QR Code"
+                      style={{
+                        background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+                        border: isDark ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(0,0,0,0.08)',
+                        color: isDark ? '#cbd5e1' : '#475569',
+                        borderRadius: 12,
+                        padding: '10px 12px',
+                        fontSize: '0.85rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4,
+                      }}
+                    >
+                      <Download size={16} />
+                    </button>
+
+                    <button
+                      onClick={() => copyLink(card)}
+                      title="Copy Magic Link"
+                      style={{
+                        background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+                        border: isDark ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(0,0,0,0.08)',
+                        color: copiedId === card.id ? '#22c55e' : (isDark ? '#cbd5e1' : '#475569'),
+                        borderRadius: 12,
+                        padding: '10px 14px',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4,
+                      }}
+                    >
+                      {copiedId === card.id ? <Check size={16} /> : <Copy size={16} />}
+                      {copiedId === card.id ? 'Copied' : 'Link'}
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -396,7 +449,7 @@ export default function GenerateQRCards() {
 
       </div>
 
-      {/* ─── DEDICATED NATIVE PRINT CONTAINER (Visible ONLY when printing) ─── */}
+      {/* ─── DEDICATED NATIVE PRINT CONTAINER ─── */}
       <div id="print-sheet" className="print-only">
         <div className={`print-grid ${printTarget === 'all' ? 'print-all-layout' : 'print-single-layout'}`}>
           {CARDS.filter(c => printTarget === 'all' || printTarget === c.id).map(card => {
@@ -433,7 +486,6 @@ export default function GenerateQRCards() {
                 <div className="print-kn-name">{card.kannadaName}</div>
                 <div className="print-meta">📍 {card.village ? `${card.village}, ` : ''}{card.district} District</div>
 
-                {/* QR Code directly rendered by React Canvas & SVG in print DOM */}
                 <div className="print-qr-box" style={{ borderColor: card.themeColor }}>
                   <QRCodeSVG
                     value={url}
@@ -460,15 +512,12 @@ export default function GenerateQRCards() {
         </div>
       </div>
 
-      {/* ─── PRINT CSS RULES ─── */}
       <style>{`
-        /* Hide print sheet on regular screen */
         .print-only {
           display: none;
         }
 
         @media print {
-          /* Hide all screen chrome */
           body {
             background: #ffffff !important;
             color: #000000 !important;

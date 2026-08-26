@@ -1,249 +1,599 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { AlertTriangle, Clock, MapPin, Tag, Zap, Wifi, Users, Activity, Bell } from 'lucide-react';
+import { collection, onSnapshot, query, orderBy, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useTheme } from '../context/ThemeContext';
+import {
+  Bell, Activity, Clock, ShieldAlert, CheckCircle2, AlertTriangle,
+  TrendingUp, Radio, Volume2, VolumeX, Maximize2, Minimize2,
+  ExternalLink, Sparkles, MapPin, User, Tag, Calendar, X, PlusCircle
+} from 'lucide-react';
+import DemoNavHeader from '../components/DemoNavHeader';
+import { playLoudNotificationChime } from '../utils/audioAlert';
 
-// Play a ding sound using Web Audio API (no MP3 file needed)
-function playDing() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o1 = ctx.createOscillator();
-    const o2 = ctx.createOscillator();
-    const gain = ctx.createGain();
-    o1.connect(gain); o2.connect(gain); gain.connect(ctx.destination);
-    o1.frequency.value = 880; o2.frequency.value = 1100;
-    o1.type = 'sine'; o2.type = 'sine';
-    gain.gain.setValueAtTime(0.4, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
-    o1.start(ctx.currentTime); o2.start(ctx.currentTime + 0.05);
-    o1.stop(ctx.currentTime + 1.2); o2.stop(ctx.currentTime + 1.2);
-  } catch (e) { console.warn('Audio not available:', e); }
-}
-
-const CATEGORY_COLORS = {
-  Water: '#3b82f6',
-  Roads: '#f59e0b',
-  Electricity: '#eab308',
-  Agriculture: '#22c55e',
-  Education: '#8b5cf6',
-  Health: '#ef4444',
-  Sanitation: '#06b6d4',
-  default: '#64748b',
-};
-
-const PRIORITY_COLORS = {
-  high: '#ef4444',
-  medium: '#f59e0b',
-  low: '#22c55e',
-};
-
-function timeAgo(ts) {
-  if (!ts) return 'Just now';
-  const date = ts.toDate ? ts.toDate() : new Date(ts);
-  const diff = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (diff < 60) return `${diff}s ago`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  return `${Math.floor(diff / 86400)}d ago`;
-}
+const INITIAL_MOCK_COMPLAINTS = [
+  {
+    id: 'GS-KA-0501',
+    title: 'Hand Pump Broken — RSK Varuna',
+    village: 'Varuna Village',
+    district: 'Mysuru',
+    taluk: 'Mysuru',
+    status: 'pending',
+    category: 'Water Supply',
+    date: 'Just now',
+    priority: 'high',
+    submittedBy: 'Ramappa Gowda',
+    submittedPhone: '+91 98451 23456',
+  },
+  {
+    id: 'GS-KA-0498',
+    title: 'Pothole on Main Road near Bus Stand',
+    village: 'Murnad Village',
+    district: 'Kodagu',
+    taluk: 'Madikeri',
+    status: 'inprogress',
+    category: 'Roads & Paths',
+    date: '4m ago',
+    priority: 'medium',
+    submittedBy: 'Kaveri Amma',
+    submittedPhone: '+91 98459 87654',
+  },
+  {
+    id: 'GS-KA-0489',
+    title: 'Street Light Transformer Fuse Blown',
+    village: 'Siddalingapura',
+    district: 'Mysuru',
+    taluk: 'Mysuru',
+    status: 'pending',
+    category: 'Electricity / BESCOM',
+    date: '10m ago',
+    priority: 'high',
+    submittedBy: 'Nagaraj M',
+    submittedPhone: '+91 94481 12233',
+  },
+];
 
 export default function DemoEventDashboard() {
-  const [complaints, setComplaints] = useState([]);
-  const [newIds, setNewIds] = useState(new Set());
-  const [stats, setStats] = useState({ total: 0, pending: 0, inprogress: 0, resolved: 0 });
-  const [isLive, setIsLive] = useState(false);
-  const prevCountRef = useRef(0);
-  const tickRef = useRef(null);
-  const [tick, setTick] = useState(0);
+  const [complaints, setComplaints] = useState(INITIAL_MOCK_COMPLAINTS);
+  const [newestId, setNewestId] = useState(null);
+  const [activeComplaintModal, setActiveComplaintModal] = useState(null);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [filter, setFilter] = useState('all'); // 'all' | 'pending' | 'inprogress' | 'resolved'
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  const isFirstLoad = useRef(true);
 
-  // Tick every second to keep "time ago" fresh
-  useEffect(() => {
-    tickRef.current = setInterval(() => setTick(t => t + 1), 5000);
-    return () => clearInterval(tickRef.current);
-  }, []);
+  // Trigger loud 2-second chime
+  const playChime = () => {
+    if (!soundEnabled) return;
+    playLoudNotificationChime();
+  };
 
+  // Real-time Firestore sync
   useEffect(() => {
     const q = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'));
-    const unsub = onSnapshot(q, (snap) => {
-      setIsLive(true);
-      const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      
-      // Detect new complaints vs previous render
-      if (prevCountRef.current > 0 && docs.length > prevCountRef.current) {
-        const newlyAdded = docs.slice(0, docs.length - prevCountRef.current);
-        const newIdSet = new Set(newlyAdded.map(d => d.id));
-        setNewIds(newIdSet);
-        playDing();
-        // Remove highlight after 4s
-        setTimeout(() => setNewIds(new Set()), 4000);
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        const fetched = snapshot.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.data().id || doc.id,
+          _docId: doc.id,
+        }));
+
+        const merged = [...fetched, ...INITIAL_MOCK_COMPLAINTS].filter(
+          (v, i, a) => a.findIndex(t => t.id === v.id) === i
+        );
+
+        setComplaints(merged);
+
+        if (!isFirstLoad.current && fetched.length > 0) {
+          const newest = fetched[0];
+          setNewestId(newest.id);
+          playChime();
+
+          const timer = setTimeout(() => setNewestId(null), 15000);
+          return () => clearTimeout(timer);
+        }
+        isFirstLoad.current = false;
       }
-      prevCountRef.current = docs.length;
-
-      setComplaints(docs.slice(0, 12)); // show latest 12
-      setStats({
-        total: docs.length,
-        pending: docs.filter(d => d.status === 'pending').length,
-        inprogress: docs.filter(d => d.status === 'inprogress').length,
-        resolved: docs.filter(d => d.status === 'resolved').length,
-      });
+    }, (err) => {
+      console.warn('Firestore live listener error:', err);
     });
-    return () => unsub();
-  }, []);
 
-  const statCards = [
-    { label: 'Total Complaints', value: stats.total, icon: <Activity size={22} />, color: '#6366f1' },
-    { label: 'Pending', value: stats.pending, icon: <Clock size={22} />, color: '#ef4444' },
-    { label: 'In Progress', value: stats.inprogress, icon: <Zap size={22} />, color: '#f59e0b' },
-    { label: 'Resolved', value: stats.resolved, icon: <Bell size={22} />, color: '#22c55e' },
-  ];
+    return () => unsubscribe();
+  }, [soundEnabled]);
+
+  // Toggle Fullscreen
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+      setIsFullscreen(false);
+    }
+  };
+
+  // Simulate complaint from audience
+  const handleSimulate = async () => {
+    const randomId = 'GS-LIVE-' + Math.floor(100 + Math.random() * 900);
+    const mock = {
+      id: randomId,
+      title: 'Water Pipeline Burst near Gram Panchayat',
+      village: 'Varuna Village',
+      district: 'Mysuru',
+      taluk: 'Mysuru',
+      status: 'pending',
+      category: 'Water Supply',
+      date: 'Just now',
+      priority: 'high',
+      submittedBy: 'Audience Participant',
+      submittedPhone: '+91 98450 00111',
+      createdAt: serverTimestamp(),
+    };
+
+    try {
+      await addDoc(collection(db, 'complaints'), mock);
+    } catch (e) {
+      setComplaints(prev => [mock, ...prev]);
+      setNewestId(mock.id);
+      playChime();
+    }
+  };
+
+  const pendingCount = complaints.filter(c => c.status === 'pending').length;
+  const inprogressCount = complaints.filter(c => c.status === 'inprogress').length;
+  const resolvedCount = complaints.filter(c => c.status === 'resolved').length;
+
+  const filteredComplaints = complaints.filter(c => {
+    if (filter === 'all') return true;
+    return c.status === filter;
+  });
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0a0f1e 0%, #0f172a 60%, #0a1628 100%)',
-      color: '#fff',
+      background: isDark
+        ? 'radial-gradient(ellipse at top, #0a0f1e 0%, #060913 100%)'
+        : 'radial-gradient(ellipse at top, #f0fdf4 0%, #f8fafc 100%)',
+      color: isDark ? '#f8fafc' : '#0f172a',
+      padding: '24px 16px',
       fontFamily: "'Inter', sans-serif",
-      padding: '24px',
+      boxSizing: 'border-box',
+      transition: 'background 0.3s ease, color 0.3s ease',
     }}>
+      {/* Shared Nav Header */}
+      <DemoNavHeader currentPhase="dashboard" />
 
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Activity size={26} color="#22c55e" />
-          </div>
-          <div>
-            <h1 style={{ margin: 0, fontSize: '1.8rem', fontWeight: 800, background: 'linear-gradient(135deg, #fff 0%, #22c55e 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              GramSetu Live
-            </h1>
-            <p style={{ margin: 0, color: '#64748b', fontSize: '0.85rem', fontWeight: 600, letterSpacing: '0.05em' }}>
-              REAL-TIME COMPLAINT MONITOR · KARNATAKA
-            </p>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          {/* Live badge */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: isLive ? 'rgba(34,197,94,0.1)' : 'rgba(100,116,139,0.1)', border: `1px solid ${isLive ? 'rgba(34,197,94,0.4)' : 'rgba(100,116,139,0.3)'}`, borderRadius: 20, padding: '6px 14px' }}>
-            <div style={{ width: 8, height: 8, borderRadius: '50%', background: isLive ? '#22c55e' : '#64748b', boxShadow: isLive ? '0 0 8px #22c55e' : 'none', animation: isLive ? 'livePulse 2s infinite' : 'none' }} />
-            <Wifi size={14} color={isLive ? '#22c55e' : '#64748b'} />
-            <span style={{ color: isLive ? '#22c55e' : '#64748b', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em' }}>
-              {isLive ? 'LIVE' : 'CONNECTING...'}
-            </span>
-          </div>
-          <div style={{ color: '#334155', fontSize: '0.8rem' }}>
-            <Users size={14} style={{ display: 'inline', marginRight: 4 }} />
-            Showing latest {complaints.length} complaints
-          </div>
-        </div>
-      </div>
-
-      {/* Stat Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 32 }}>
-        {statCards.map(card => (
-          <div key={card.label} style={{
-            background: 'rgba(15, 23, 42, 0.8)',
-            border: `1px solid ${card.color}22`,
-            borderRadius: 16,
-            padding: '20px 24px',
-            backdropFilter: 'blur(12px)',
-            boxShadow: `0 0 20px ${card.color}11`,
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
-              <div style={{ color: '#64748b', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{card.label}</div>
-              <div style={{ color: card.color, opacity: 0.7 }}>{card.icon}</div>
-            </div>
-            <div style={{ fontSize: '2.5rem', fontWeight: 800, color: card.color, lineHeight: 1 }}>{card.value}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Complaint Cards Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 16 }}>
-        {complaints.length === 0 ? (
-          <div style={{ gridColumn: '1/-1', textAlign: 'center', color: '#334155', padding: '80px 0', fontSize: '1.2rem' }}>
-            <AlertTriangle size={48} style={{ display: 'block', margin: '0 auto 16px', opacity: 0.3 }} />
-            No complaints yet. Have the audience submit one!
-          </div>
-        ) : complaints.map((c, i) => {
-          const isNew = newIds.has(c.id);
-          const catColor = CATEGORY_COLORS[c.category] || CATEGORY_COLORS.default;
-          const priColor = PRIORITY_COLORS[c.priority] || '#64748b';
-          return (
-            <div key={c.id} style={{
-              background: isNew ? 'rgba(239,68,68,0.08)' : 'rgba(15, 23, 42, 0.7)',
-              border: `1px solid ${isNew ? 'rgba(239,68,68,0.5)' : 'rgba(255,255,255,0.06)'}`,
-              borderRadius: 16,
-              padding: '20px',
-              backdropFilter: 'blur(12px)',
-              transition: 'all 0.5s ease',
-              boxShadow: isNew ? '0 0 30px rgba(239,68,68,0.2), 0 0 0 2px rgba(239,68,68,0.3)' : 'none',
-              animation: isNew ? 'flashIn 0.6s ease-out' : 'none',
-              position: 'relative',
-              overflow: 'hidden',
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        
+        {/* Mission Control Top Bar */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 16,
+          marginBottom: 24,
+          padding: '20px 24px',
+          borderRadius: '24px',
+          background: isDark ? 'rgba(15, 23, 42, 0.75)' : 'rgba(255, 255, 255, 0.85)',
+          border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)',
+          backdropFilter: 'blur(16px)',
+          boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.4)' : '0 10px 30px rgba(0,0,0,0.05)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{
+              width: 48,
+              height: 48,
+              borderRadius: 14,
+              background: 'rgba(239, 68, 68, 0.15)',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#ef4444',
             }}>
-              {isNew && (
-                <div style={{ position: 'absolute', top: 12, right: 12, background: '#ef4444', color: '#fff', fontSize: '0.65rem', fontWeight: 800, padding: '3px 8px', borderRadius: 20, letterSpacing: '0.1em', animation: 'flashIn 0.3s ease' }}>
-                  🔴 NEW
+              <Activity size={26} />
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <h1 style={{
+                  margin: 0,
+                  fontSize: '1.6rem',
+                  fontWeight: 800,
+                  background: isDark
+                    ? 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)'
+                    : 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}>
+                  Live Escalation Race
+                </h1>
+                <span style={{
+                  background: 'rgba(34, 197, 94, 0.15)',
+                  border: '1px solid rgba(34, 197, 94, 0.4)',
+                  color: '#22c55e',
+                  borderRadius: 20,
+                  padding: '3px 10px',
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.05em',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 5,
+                }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e', animation: 'ping 1.5s infinite' }} />
+                  2s CHIME ACTIVE
+                </span>
+              </div>
+              <p style={{ margin: '2px 0 0', color: isDark ? '#64748b' : '#94a3b8', fontSize: '0.82rem' }}>
+                Phase 2 · Big Screen Real-Time Complaint Escalation Monitor
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <button
+              onClick={handleSimulate}
+              style={{
+                background: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(220,38,38,0.3))',
+                border: '1px solid rgba(239,68,68,0.5)',
+                color: '#f87171',
+                borderRadius: 12,
+                padding: '10px 16px',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+              }}
+            >
+              <PlusCircle size={16} />
+              Simulate Mobile Complaint
+            </button>
+
+            <button
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              style={{
+                background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.08)',
+                color: soundEnabled ? '#22c55e' : '#64748b',
+                borderRadius: 12,
+                padding: '10px 14px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                fontSize: '0.85rem',
+                fontWeight: 700,
+              }}
+            >
+              {soundEnabled ? <Volume2 size={17} /> : <VolumeX size={17} />}
+              {soundEnabled ? '2s Chime ON' : 'Muted'}
+            </button>
+
+            <button
+              onClick={toggleFullscreen}
+              style={{
+                background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.08)',
+                color: isDark ? '#cbd5e1' : '#475569',
+                borderRadius: 12,
+                padding: '10px 14px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                fontSize: '0.85rem',
+                fontWeight: 600,
+              }}
+            >
+              {isFullscreen ? <Minimize2 size={17} /> : <Maximize2 size={17} />}
+              {isFullscreen ? 'Exit Fullscreen' : 'Big Screen'}
+            </button>
+          </div>
+        </div>
+
+        {/* Clickable Stat Counters */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: 16,
+          marginBottom: 24,
+        }}>
+          {[
+            { id: 'all', label: 'All Incidents', count: complaints.length, color: '#3b82f6', icon: Activity },
+            { id: 'pending', label: 'Action Required', count: pendingCount, color: '#ef4444', icon: Clock },
+            { id: 'inprogress', label: 'In Progress (Line Officer)', count: inprogressCount, color: '#f59e0b', icon: TrendingUp },
+            { id: 'resolved', label: 'Resolved Cases', count: resolvedCount, color: '#22c55e', icon: CheckCircle2 },
+          ].map(stat => {
+            const IconComp = stat.icon;
+            const isSelected = filter === stat.id;
+            return (
+              <div
+                key={stat.id}
+                onClick={() => setFilter(stat.id)}
+                style={{
+                  background: isDark ? 'rgba(15, 23, 42, 0.7)' : 'rgba(255, 255, 255, 0.85)',
+                  border: isSelected
+                    ? `2px solid ${stat.color}`
+                    : (isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)'),
+                  borderRadius: 18,
+                  padding: '18px 20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  boxShadow: isSelected ? `0 0 20px ${stat.color}33` : 'none',
+                  transition: 'all 0.2s ease',
+                  transform: isSelected ? 'translateY(-2px)' : 'none',
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: isDark ? '#64748b' : '#94a3b8', letterSpacing: '0.04em' }}>
+                    {stat.label.toUpperCase()}
+                  </div>
+                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: stat.color, marginTop: 4 }}>
+                    {stat.count}
+                  </div>
+                  <div style={{ fontSize: '0.72rem', color: isSelected ? stat.color : (isDark ? '#475569' : '#94a3b8'), fontWeight: 600 }}>
+                    {isSelected ? '✓ Showing this filter' : 'Click to filter'}
+                  </div>
                 </div>
-              )}
-
-              {/* Left color stripe */}
-              <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 4, borderRadius: '16px 0 0 16px', background: catColor }} />
-
-              <div style={{ paddingLeft: 8 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                  <span style={{ background: `${catColor}22`, color: catColor, border: `1px solid ${catColor}44`, fontSize: '0.72rem', fontWeight: 700, padding: '3px 10px', borderRadius: 12 }}>
-                    <Tag size={10} style={{ display: 'inline', marginRight: 4 }} />
-                    {c.category || 'General'}
-                  </span>
-                  <span style={{ background: `${priColor}15`, color: priColor, fontSize: '0.68rem', fontWeight: 700, padding: '3px 8px', borderRadius: 10, textTransform: 'uppercase' }}>
-                    {c.priority || 'Normal'}
-                  </span>
-                  <span style={{ marginLeft: 'auto', color: '#475569', fontSize: '0.72rem' }}>
-                    #{String(i + 1).padStart(3, '0')}
-                  </span>
-                </div>
-
-                <h3 style={{ margin: '0 0 10px', fontSize: '0.95rem', fontWeight: 700, color: '#e2e8f0', lineHeight: 1.4 }}>
-                  {c.title || c.description?.slice(0, 60) || 'Untitled Complaint'}
-                </h3>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-                  {c.village && (
-                    <span style={{ color: '#64748b', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <MapPin size={12} /> {c.village}
-                    </span>
-                  )}
-                  <span style={{ color: '#475569', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 4, marginLeft: 'auto' }}>
-                    <Clock size={12} /> {timeAgo(c.createdAt)}
-                  </span>
-                </div>
-
-                {/* Status pill */}
-                <div style={{ marginTop: 12 }}>
-                  <span style={{
-                    fontSize: '0.72rem', fontWeight: 700, padding: '4px 10px', borderRadius: 10,
-                    background: c.status === 'resolved' ? 'rgba(34,197,94,0.15)' : c.status === 'inprogress' ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)',
-                    color: c.status === 'resolved' ? '#22c55e' : c.status === 'inprogress' ? '#f59e0b' : '#ef4444',
-                  }}>
-                    {c.status === 'resolved' ? '✓ RESOLVED' : c.status === 'inprogress' ? '⟳ IN PROGRESS' : '● PENDING'}
-                  </span>
+                <div style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  background: `${stat.color}15`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: stat.color,
+                }}>
+                  <IconComp size={22} />
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
+        {/* Complaints Grid (Clickable Cards) */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+          gap: 16,
+        }}>
+          {filteredComplaints.map(c => {
+            const isNew = c.id === newestId;
+            let statusColor = '#f59e0b';
+            if (c.status === 'resolved') statusColor = '#22c55e';
+            else if (c.status === 'pending') statusColor = '#ef4444';
+
+            return (
+              <div
+                key={c.id}
+                onClick={() => setActiveComplaintModal(c)}
+                style={{
+                  background: isNew
+                    ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(220, 38, 38, 0.15))'
+                    : (isDark ? 'rgba(15, 23, 42, 0.65)' : 'rgba(255, 255, 255, 0.85)'),
+                  border: isNew
+                    ? '2px solid #ef4444'
+                    : (isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)'),
+                  borderRadius: 20,
+                  padding: '20px',
+                  cursor: 'pointer',
+                  boxShadow: isNew
+                    ? '0 0 35px rgba(239, 68, 68, 0.5)'
+                    : (isDark ? '0 4px 20px rgba(0,0,0,0.2)' : '0 4px 15px rgba(0,0,0,0.04)'),
+                  transition: 'all 0.2s ease',
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-3px)';
+                  e.currentTarget.style.borderColor = statusColor;
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = isNew ? '#ef4444' : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)');
+                }}
+              >
+                {/* Header Tag */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{
+                      fontSize: '0.72rem',
+                      fontWeight: 800,
+                      color: statusColor,
+                      background: `${statusColor}18`,
+                      border: `1px solid ${statusColor}33`,
+                      borderRadius: 8,
+                      padding: '3px 8px',
+                      textTransform: 'uppercase',
+                    }}>
+                      {c.status || 'pending'}
+                    </span>
+                    {isNew && (
+                      <span style={{
+                        background: '#ef4444',
+                        color: '#fff',
+                        borderRadius: 8,
+                        padding: '3px 8px',
+                        fontSize: '0.7rem',
+                        fontWeight: 900,
+                        animation: 'pulse 1s infinite',
+                      }}>
+                        ⚡ NEW LIVE
+                      </span>
+                    )}
+                  </div>
+                  <span style={{ fontSize: '0.75rem', color: isDark ? '#64748b' : '#94a3b8', fontWeight: 600 }}>
+                    {c.date || 'Today'}
+                  </span>
+                </div>
+
+                <h3 style={{
+                  margin: '0 0 10px',
+                  fontSize: '1.05rem',
+                  fontWeight: 800,
+                  color: isDark ? '#f8fafc' : '#0f172a',
+                  lineHeight: 1.4,
+                }}>
+                  {c.title}
+                </h3>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: '0.8rem', color: isDark ? '#94a3b8' : '#64748b' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <MapPin size={14} color="#3b82f6" />
+                    <span>{c.village ? `${c.village}, ` : ''}{c.district} ({c.taluk || c.district})</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <User size={14} color="#22c55e" />
+                    <span>Submitted by: <strong>{c.submittedBy || 'Citizen'}</strong></span>
+                  </div>
+                </div>
+
+                <div style={{
+                  marginTop: 14,
+                  paddingTop: 10,
+                  borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: '0.75rem',
+                  color: '#3b82f6',
+                  fontWeight: 700,
+                }}>
+                  <span>Inspect SLA & Response Details</span>
+                  <ExternalLink size={14} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
       </div>
 
+      {/* ─── CLICKABLE COMPLAINT INSPECTOR MODAL ─── */}
+      {activeComplaintModal && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'rgba(0,0,0,0.75)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 100,
+          padding: '20px',
+        }}>
+          <div style={{
+            background: isDark ? '#0f172a' : '#ffffff',
+            border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(0,0,0,0.1)',
+            borderRadius: 24,
+            width: '100%',
+            maxWidth: 600,
+            padding: '28px',
+            boxShadow: '0 25px 50px rgba(0,0,0,0.5)',
+            position: 'relative',
+            color: isDark ? '#fff' : '#0f172a',
+          }}>
+            <button
+              onClick={() => setActiveComplaintModal(null)}
+              style={{
+                position: 'absolute',
+                top: 20,
+                right: 20,
+                background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+                border: 'none',
+                color: isDark ? '#94a3b8' : '#64748b',
+                borderRadius: 10,
+                width: 36,
+                height: 36,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+              }}
+            >
+              <X size={20} />
+            </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+              <span style={{
+                background: 'rgba(34, 197, 94, 0.15)',
+                color: '#22c55e',
+                borderRadius: 8,
+                padding: '4px 10px',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+              }}>
+                ID: {activeComplaintModal.id}
+              </span>
+              <span style={{ fontSize: '0.8rem', color: isDark ? '#64748b' : '#94a3b8' }}>
+                {activeComplaintModal.category}
+              </span>
+            </div>
+
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, margin: '0 0 16px' }}>
+              {activeComplaintModal.title}
+            </h2>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
+              <div style={{ background: isDark ? 'rgba(30, 41, 59, 0.5)' : 'rgba(241, 245, 249, 0.8)', padding: '12px', borderRadius: 12 }}>
+                <div style={{ fontSize: '0.75rem', color: isDark ? '#64748b' : '#94a3b8' }}>SUBMITTED BY</div>
+                <div style={{ fontSize: '0.95rem', fontWeight: 700, marginTop: 2 }}>{activeComplaintModal.submittedBy || 'Citizen'}</div>
+                <div style={{ fontSize: '0.75rem', color: '#22c55e', marginTop: 2 }}>{activeComplaintModal.submittedPhone || '—'}</div>
+              </div>
+
+              <div style={{ background: isDark ? 'rgba(30, 41, 59, 0.5)' : 'rgba(241, 245, 249, 0.8)', padding: '12px', borderRadius: 12 }}>
+                <div style={{ fontSize: '0.75rem', color: isDark ? '#64748b' : '#94a3b8' }}>LOCATION</div>
+                <div style={{ fontSize: '0.95rem', fontWeight: 700, marginTop: 2 }}>{activeComplaintModal.district} District</div>
+                <div style={{ fontSize: '0.75rem', color: isDark ? '#94a3b8' : '#64748b', marginTop: 2 }}>{activeComplaintModal.taluk || 'Taluk'}</div>
+              </div>
+            </div>
+
+            <div style={{
+              background: 'rgba(239, 68, 68, 0.08)',
+              border: '1px solid rgba(239, 68, 68, 0.25)',
+              borderRadius: 14,
+              padding: '14px 18px',
+              marginBottom: 20,
+            }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#ef4444', marginBottom: 4 }}>
+                ⚡ 4-TIER AUTO-ESCALATION STATUS:
+              </div>
+              <div style={{ fontSize: '0.85rem', color: isDark ? '#e2e8f0' : '#334155' }}>
+                Assigned to <strong>PDO ({activeComplaintModal.district})</strong>. 7-Day SLA active. If unresolved, automatically escalates to Taluk Panchayat Executive Officer.
+              </div>
+            </div>
+
+            <button
+              onClick={() => setActiveComplaintModal(null)}
+              style={{
+                width: '100%',
+                background: '#22c55e',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 12,
+                padding: '12px',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+              }}
+            >
+              Close Inspector
+            </button>
+          </div>
+        </div>
+      )}
+
       <style>{`
-        @keyframes livePulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.3; }
-        }
-        @keyframes flashIn {
-          0% { transform: scale(1.04); box-shadow: 0 0 60px rgba(239,68,68,0.4); }
-          100% { transform: scale(1); }
+        @keyframes ping {
+          75%, 100% { transform: scale(2); opacity: 0; }
         }
       `}</style>
     </div>
