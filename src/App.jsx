@@ -12,6 +12,7 @@ import DemoVoicePage from './pages/DemoVoicePage'
 import DemoEventDashboard from './pages/DemoEventDashboard'
 import MagicLogin from './pages/MagicLogin'
 import GenerateQRCards from './pages/GenerateQRCards'
+import LiveHeatmap from './pages/LiveHeatmap'
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
         <Route path="/demo/voice" element={<DemoVoicePage />} />
         <Route path="/demo/dashboard" element={<DemoEventDashboard />} />
         <Route path="/demo/qr-cards" element={<GenerateQRCards />} />
+        <Route path="/demo/map" element={<LiveHeatmap />} />
+        <Route path="/live-map" element={<LiveHeatmap />} />
         <Route path="/magic-login" element={<MagicLogin />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -13,7 +13,7 @@ export default function VoiceAssistantWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [lastResponse, setLastResponse] = useState('');
 
-  if (location.pathname.startsWith('/demo')) return null;
+  if (location.pathname.startsWith('/demo') || location.pathname === '/live-map' || location.pathname === '/magic-login') return null;
 
   useEffect(() => {
     if (transcript && !isListening) {
