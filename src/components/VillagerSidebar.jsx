@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import {
@@ -27,6 +27,22 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
     return () => window.removeEventListener('profileUpdate', refresh)
   }, [])
 
+  const logoTapCount = useRef(0)
+  const logoTapTimer = useRef(null)
+
+  const handleLogoSecretTap = () => {
+    logoTapCount.current += 1
+    if (logoTapTimer.current) clearTimeout(logoTapTimer.current)
+    if (logoTapCount.current >= 3) {
+      logoTapCount.current = 0
+      navigate('/demo')
+      return
+    }
+    logoTapTimer.current = setTimeout(() => {
+      logoTapCount.current = 0
+    }, 1200)
+  }
+
   const navItems = [
     { id: 'home',          icon: LayoutDashboard, labelKey: 'sNavDashboard' },
     { id: 'schemes',       icon: Landmark,        labelKey: 'sNavSchemes' },
@@ -43,7 +59,11 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
   return (
     <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
       <div className="sidebar-logo">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div 
+          onClick={handleLogoSecretTap}
+          style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', userSelect: 'none' }}
+          title="Triple tap for Demo Hub"
+        >
           <div className="sidebar-logo-icon">
             <Wheat size={22} strokeWidth={2} />
           </div>

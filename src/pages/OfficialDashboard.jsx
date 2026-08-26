@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
@@ -83,6 +83,22 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
   const navigate = useNavigate()
   const { t } = useLanguage()
 
+  const logoTapCount = useRef(0)
+  const logoTapTimer = useRef(null)
+
+  const handleLogoSecretTap = () => {
+    logoTapCount.current += 1
+    if (logoTapTimer.current) clearTimeout(logoTapTimer.current)
+    if (logoTapCount.current >= 3) {
+      logoTapCount.current = 0
+      navigate('/demo')
+      return
+    }
+    logoTapTimer.current = setTimeout(() => {
+      logoTapCount.current = 0
+    }, 1200)
+  }
+
   const navItems = [
     { id: 'overview',   icon: LayoutDashboard, labelKey: 'sNavOverview',      badge: null },
     { id: 'complaints', icon: ClipboardList,   labelKey: 'sNavNewComplaints',  badge: '28' },
@@ -98,7 +114,11 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
   return (
     <div className={`sidebar ${sidebarOpen ? 'open' : ''}`} style={{ background: '#0f172a' }}>
       <div className="sidebar-logo">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div 
+          onClick={handleLogoSecretTap}
+          style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', userSelect: 'none' }}
+          title="Triple tap for Demo Hub"
+        >
           <div className="sidebar-logo-icon" style={{ background: '#3b82f6', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Landmark size={20} strokeWidth={2} />
           </div>

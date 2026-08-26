@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { QRCodeSVG, QRCodeCanvas } from 'qrcode.react';
 import { useTheme } from '../context/ThemeContext';
 import {
@@ -93,6 +93,14 @@ export default function GenerateQRCards() {
   );
   const [copiedId, setCopiedId] = useState(null);
   const [printTarget, setPrintTarget] = useState('all');
+  const [mounted, setMounted] = useState(false);
+
+  // Wait for component to be fully attached to DOM before rendering QR codes
+  // This fixes the blank-until-refresh issue with qrcode.react on SPA navigation
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 50);
+    return () => clearTimeout(t);
+  }, []);
 
   const handlePrint = (targetId) => {
     setPrintTarget(targetId);
@@ -158,6 +166,8 @@ export default function GenerateQRCards() {
       {/* Shared Nav Header */}
       <DemoNavHeader currentPhase="qr" />
 
+      {/* Shimmer keyframe for QR skeleton */}
+      <style>{`@keyframes gs-shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }`}</style>
       {/* ─── SCREEN VIEW (Hidden when printing) ─── */}
       <div className="no-print" style={{ maxWidth: 1100, margin: '0 auto' }}>
         
@@ -349,7 +359,7 @@ export default function GenerateQRCards() {
                   📍 {card.village ? `${card.village}, ` : ''}{card.district} District
                 </div>
 
-                {/* Visible QR Code (SVG) */}
+                {/* Visible QR Code (SVG) — only render after DOM is ready to fix blank-on-navigation */}
                 <div style={{
                   margin: '20px 0',
                   padding: 16,
@@ -357,25 +367,44 @@ export default function GenerateQRCards() {
                   borderRadius: 20,
                   boxShadow: `0 0 30px ${card.themeColor}33`,
                   border: `2px dashed ${card.themeColor}66`,
+                  minHeight: 212,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}>
-                  <QRCodeSVG
-                    value={url}
-                    size={180}
-                    level="M"
-                    bgColor="#ffffff"
-                    fgColor="#0f172a"
-                  />
-                  {/* Hidden canvas for PNG download — white bg, M error level = less dense, always scannable */}
-                  <div style={{ display: 'none' }}>
-                    <QRCodeCanvas
-                      id={`qr-canvas-${card.id}`}
-                      value={url}
-                      size={320}
-                      level="M"
-                      bgColor="#ffffff"
-                      fgColor="#000000"
-                    />
-                  </div>
+                  {mounted ? (
+                    <>
+                      <QRCodeSVG
+                        key={`svg-${card.id}-${url}`}
+                        value={url}
+                        size={180}
+                        level="M"
+                        bgColor="#ffffff"
+                        fgColor="#0f172a"
+                      />
+                      {/* Hidden canvas for PNG download */}
+                      <div style={{ display: 'none' }}>
+                        <QRCodeCanvas
+                          key={`canvas-${card.id}-${url}`}
+                          id={`qr-canvas-${card.id}`}
+                          value={url}
+                          size={320}
+                          level="M"
+                          bgColor="#ffffff"
+                          fgColor="#000000"
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    /* Skeleton while mounting */
+                    <div style={{
+                      width: 180, height: 180,
+                      borderRadius: 8,
+                      background: 'linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%)',
+                      backgroundSize: '400% 100%',
+                      animation: 'gs-shimmer 1.2s ease infinite',
+                    }} />
+                  )}
                 </div>
 
                 <div style={{ fontSize: '0.8rem', color: isDark ? '#94a3b8' : '#64748b', marginBottom: 20, lineHeight: 1.4 }}>
