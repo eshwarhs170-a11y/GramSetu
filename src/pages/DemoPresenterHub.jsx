@@ -7,6 +7,8 @@ import {
   Sun, Moon, Home, Radio, HelpCircle, Lightbulb, Target
 } from 'lucide-react';
 import { playLoudNotificationChime } from '../utils/audioAlert';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const PHASES = [
   {
@@ -58,6 +60,20 @@ export default function DemoPresenterHub() {
 
   const openInNewWindow = (route) => {
     window.open(route, '_blank', 'width=1280,height=800');
+  };
+
+  const triggerMarketBoom = async () => {
+    try {
+      await addDoc(collection(db, 'demoAlerts'), {
+        type: 'MARKET_BOOM',
+        title: '🚨 Market Spike Alert!',
+        message: 'Tomato prices in Kolar just spiked by ₹20/kg! Sell now for maximum profit.',
+        createdAt: serverTimestamp(),
+      });
+      playLoudNotificationChime();
+    } catch (e) {
+      console.error('Error triggering market boom:', e);
+    }
   };
 
   return (
@@ -140,6 +156,25 @@ export default function DemoPresenterHub() {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button
+              onClick={triggerMarketBoom}
+              style={{
+                background: 'linear-gradient(135deg, rgba(245,158,11,0.2), rgba(217,119,6,0.3))',
+                border: '1px solid rgba(245,158,11,0.5)',
+                color: '#f59e0b',
+                borderRadius: '12px',
+                padding: '9px 14px',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              <Activity size={16} />
+              <span>Mass Market Boom Alert</span>
+            </button>
             <button
               onClick={playLoudNotificationChime}
               style={{

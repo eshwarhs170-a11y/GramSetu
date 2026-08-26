@@ -13,6 +13,7 @@ import { Menu, Search, Bell, X, AlertTriangle, IndianRupee } from 'lucide-react'
 
 import { db } from '../firebase'
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
+import { playLoudNotificationChime } from '../utils/audioAlert'
 
 export default function VillagerDashboard() {
   const [active, setActive] = useState('home')
@@ -22,8 +23,29 @@ export default function VillagerDashboard() {
   const [notifOpen, setNotifOpen] = useState(false)
   const [notifExpanded, setNotifExpanded] = useState(null)
   const [announcements, setAnnouncements] = useState([])
+  const [marketAlert, setMarketAlert] = useState(null)
   const { t } = useLanguage()
   const { speak } = useVoice()
+
+  useEffect(() => {
+    const mountTime = new Date()
+    const q = query(collection(db, 'demoAlerts'), orderBy('createdAt', 'desc'))
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        const latestDoc = snapshot.docs[0]
+        const latest = latestDoc.data()
+        if (latest.createdAt && latest.createdAt.toDate() > mountTime && latest.type === 'MARKET_BOOM') {
+          // If we haven't seen this exact alert yet
+          if (window.sessionStorage.getItem('last_alert_id') !== latestDoc.id) {
+            window.sessionStorage.setItem('last_alert_id', latestDoc.id)
+            setMarketAlert(latest)
+            playLoudNotificationChime()
+          }
+        }
+      }
+    })
+    return () => unsubscribe()
+  }, [])
 
   useEffect(() => {
     if (!window.sessionStorage.getItem('villager_welcomed')) {
@@ -109,6 +131,35 @@ export default function VillagerDashboard() {
 
       {/* Overlay to close drawer on mobile */}
       {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={() => setSidebarOpen(false)} />}
+
+      {/* MASSIVE MARKET BOOM ALERT */}
+      {marketAlert && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 99999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, backdropFilter: 'blur(10px)'
+        }}>
+          <div className="animate-fadeInUp" style={{
+            background: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)',
+            borderRadius: 32, padding: '40px 32px', textAlign: 'center', maxWidth: 450,
+            boxShadow: '0 25px 50px -12px rgba(239, 68, 68, 0.5)',
+            border: '2px solid #f87171', color: '#fff'
+          }}>
+            <div style={{ fontSize: 72, marginBottom: 16, animation: 'pulse 1s infinite' }}>🚨</div>
+            <h1 style={{ fontSize: 32, fontWeight: 900, marginBottom: 16, lineHeight: 1.2 }}>{marketAlert.title}</h1>
+            <p style={{ fontSize: 18, fontWeight: 500, opacity: 0.9, marginBottom: 32 }}>{marketAlert.message}</p>
+            <button 
+              onClick={() => setMarketAlert(null)}
+              style={{
+                background: '#fff', color: '#b91c1c', border: 'none', padding: '16px 32px',
+                borderRadius: 16, fontSize: 18, fontWeight: 800, cursor: 'pointer',
+                boxShadow: '0 10px 25px rgba(0,0,0,0.2)', width: '100%'
+              }}
+            >
+              Acknowledge & Close
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="main-content">
         <header className="topbar">
