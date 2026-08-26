@@ -34,7 +34,7 @@ export default function MagicLogin() {
       window.localStorage.setItem('official_phone', phone);
       window.localStorage.setItem('official_loggedIn', 'true');
       window.dispatchEvent(new Event('profileUpdate'));
-      navigate('/dashboard/official', { replace: true });
+      window.location.replace('/dashboard/official');
     } else {
       // Citizen profile keys used by VillagerScreens & VillagerDashboard
       window.localStorage.setItem('citizen_name', name);
@@ -59,7 +59,7 @@ export default function MagicLogin() {
       // Clear welcome sound flag so greeting plays for new session
       window.sessionStorage.removeItem('villager_welcomed');
       window.dispatchEvent(new Event('profileUpdate'));
-      navigate('/dashboard/villager', { replace: true });
+      window.location.replace('/dashboard/villager');
     }
   }, [params, navigate]);
 
