@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useVoice } from '../context/VoiceContext'
@@ -289,6 +290,8 @@ function AnalyticsScreen({ sessionData, pendingCount, resolvedCount }) {
 }
 
 // ===== Respond Modal =====
+// Rendered via React Portal so position:fixed covers the full viewport
+// regardless of parent overflow / transform stacking contexts.
 function RespondModal({ complaint, onClose, onSaved }) {
   const session = getSessionData()
   const [responseText, setResponseText] = useState('')
@@ -340,7 +343,7 @@ function RespondModal({ complaint, onClose, onSaved }) {
 
   const statusColor = newStatus === 'resolved' ? '#10b981' : newStatus === 'inprogress' ? '#3b82f6' : '#f59e0b'
 
-  return (
+  return createPortal(
     <div
       onClick={handleBackdropClick}
       style={{
@@ -494,7 +497,7 @@ function RespondModal({ complaint, onClose, onSaved }) {
           </div>
         </div>
 
-        {/* Footer with action buttons */}
+        {/* Footer */}
         <div style={{
           padding: '16px 24px',
           borderTop: '1px solid var(--border)',
@@ -531,9 +534,11 @@ function RespondModal({ complaint, onClose, onSaved }) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
+
 
 // ===== Escalation badge =====
 function EscalationBadge({ complaint }) {
