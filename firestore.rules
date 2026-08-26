@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Users Collection
+    // Allow reading/writing user profiles for authenticated users
+    match /users/{userId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // 2. Announcements Collection
+    // Anyone (even visitors) can read announcements.
+    // Only authenticated users can write/edit/delete announcements.
+    match /announcements/{announcementId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 3. Complaints Collection
+    // Allow authenticated users (villagers and officials) to read and write complaints.
+    match /complaints/{complaintId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // 4. Newsletter Subscribers Collection
+    // Anyone can subscribe (create), but they cannot read, update, or delete other subscriptions.
+    match /newsletter_subscribers/{subscriberId} {
+      allow create: if true;
+      allow read, write: if false;
+    }
+  }
+}
