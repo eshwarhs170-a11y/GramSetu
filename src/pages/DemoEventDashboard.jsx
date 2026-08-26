@@ -304,10 +304,11 @@ export default function DemoEventDashboard() {
           marginBottom: 24,
         }}>
           {[
-            { id: 'all', label: 'All Incidents', count: complaints.length, color: '#3b82f6', icon: Activity },
-            { id: 'pending', label: 'Action Required', count: pendingCount, color: '#ef4444', icon: Clock },
-            { id: 'inprogress', label: 'In Progress (Line Officer)', count: inprogressCount, color: '#f59e0b', icon: TrendingUp },
-            { id: 'resolved', label: 'Resolved Cases', count: resolvedCount, color: '#22c55e', icon: CheckCircle2 },
+            { id: 'all', label: 'TOTAL GRIEVANCES', subtext: 'Across 31 Districts', count: complaints.length, color: '#3b82f6', icon: Activity },
+            { id: 'pending', label: 'ACTION REQUIRED', subtext: 'Pending Line Officer', count: pendingCount, color: '#f59e0b', icon: Clock },
+            { id: 'inprogress', label: 'ACTIVE ESCALATIONS', subtext: 'Tier-2+ SLA Threshold', count: inprogressCount, color: '#ef4444', icon: AlertTriangle },
+            { id: 'resolved', label: 'RESOLVED CASES', subtext: '17% Resolution Rate', count: resolvedCount, color: '#22c55e', icon: CheckCircle2 },
+
           ].map(stat => {
             const IconComp = stat.icon;
             const isSelected = filter === stat.id;
@@ -339,7 +340,7 @@ export default function DemoEventDashboard() {
                     {stat.count}
                   </div>
                   <div style={{ fontSize: '0.72rem', color: isSelected ? stat.color : (isDark ? '#475569' : '#94a3b8'), fontWeight: 600 }}>
-                    {isSelected ? '✓ Showing this filter' : 'Click to filter'}
+                    {stat.subtext}
                   </div>
                 </div>
                 <div style={{

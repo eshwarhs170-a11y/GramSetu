@@ -4,7 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import {
   Mic, Activity, QrCode, Map, Play, ExternalLink,
   ShieldCheck, Volume2, Sparkles, Printer, ArrowRight,
-  Sun, Moon, Home, Radio, HelpCircle
+  Sun, Moon, Home, Radio, HelpCircle, Lightbulb, Target
 } from 'lucide-react';
 import { playLoudNotificationChime } from '../utils/audioAlert';
 
@@ -178,8 +178,8 @@ export default function DemoPresenterHub() {
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
-            <Link
-              to="/"
+            <a
+              href="/"
               style={{
                 background: '#22c55e',
                 color: '#fff',
@@ -195,7 +195,7 @@ export default function DemoPresenterHub() {
             >
               <Home size={15} />
               <span>Main Website</span>
-            </Link>
+            </a>
           </div>
         </div>
 
@@ -289,13 +289,14 @@ export default function DemoPresenterHub() {
                   lineHeight: 1.4,
                   borderLeft: `3px solid ${p.color}`,
                 }}>
-                  💡 <strong>Demo Tip:</strong> {p.talkingPoint}
+                  <Lightbulb size={14} style={{ display: 'inline', marginRight: 4, position: 'relative', top: 2 }} color={p.color} />
+                  <strong>Demo Tip:</strong> {p.talkingPoint}
                 </div>
 
                 {/* Action Buttons */}
                 <div style={{ display: 'flex', gap: 10, marginTop: 'auto' }}>
-                  <Link
-                    to={p.route}
+                  <a
+                    href={p.route}
                     style={{
                       flex: 1,
                       background: p.color,
@@ -314,7 +315,7 @@ export default function DemoPresenterHub() {
                   >
                     <Play size={16} fill="#fff" />
                     <span>Launch</span>
-                  </Link>
+                  </a>
 
                   <button
                     onClick={() => openInNewWindow(p.route)}
@@ -348,8 +349,9 @@ export default function DemoPresenterHub() {
           padding: '24px 28px',
           backdropFilter: 'blur(12px)',
         }}>
-          <h3 style={{ margin: '0 0 14px', fontSize: '1.1rem', fontWeight: 800, color: isDark ? '#fff' : '#0f172a' }}>
-            🎯 3-Minute Live Demo Walkthrough Formula
+          <h3 style={{ margin: '0 0 14px', fontSize: '1.1rem', fontWeight: 800, color: isDark ? '#fff' : '#0f172a', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Target size={20} color="#3b82f6" />
+            3-Minute Live Demo Walkthrough Formula
           </h3>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 16 }}>
