@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useVoice } from '../context/VoiceContext';
 import { useLanguage } from '../context/LanguageContext';
 import { processVoiceCommand } from '../utils/voiceCommands';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Mic, MicOff, Loader2, Square } from 'lucide-react';
 
 export default function VoiceAssistantWidget() {
   const { isListening, isSpeaking, transcript, startListening, stopListening, speak, stopSpeaking, clearTranscript, error } = useVoice();
   const { lang, t } = useLanguage();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [lastResponse, setLastResponse] = useState('');
+
+  if (location.pathname.startsWith('/demo')) return null;
 
   useEffect(() => {
     if (transcript && !isListening) {
