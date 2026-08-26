@@ -12,7 +12,8 @@ export default function DemoVoicePage() {
   const navigate = useNavigate();
   const [lastResponse, setLastResponse] = useState('');
   const [micError, setMicError] = useState(null);
-  const [status, setStatus] = useState('idle'); // idle | listening | thinking | speaking
+  const [status, setStatus] = useState('idle');
+  const [cooldown, setCooldown] = useState(0); // seconds remaining
   
   const canvasRef = useRef(null);
   const audioContextRef = useRef(null);
@@ -58,7 +59,7 @@ export default function DemoVoicePage() {
 
   // Handle clicking a hint chip — send directly to AI without mic
   const handleHintClick = async (text) => {
-    if (status === 'thinking' || status === 'listening') return;
+    if (status === 'thinking' || status === 'listening' || cooldown > 0) return;
     if (isSpeaking) stopSpeaking();
     setLastResponse('');
     setMicError(null);
@@ -79,6 +80,15 @@ export default function DemoVoicePage() {
     } catch (err) {
       console.error(err);
       setStatus('idle');
+    } finally {
+      // Start 8-second cooldown
+      let secs = 8;
+      setCooldown(secs);
+      const interval = setInterval(() => {
+        secs -= 1;
+        setCooldown(secs);
+        if (secs <= 0) clearInterval(interval);
+      }, 1000);
     }
   };
 
@@ -405,47 +415,61 @@ export default function DemoVoicePage() {
             { label: 'What is GramSetu?', icon: '🌾' },
             { label: 'ಇಂದು ತೆಂಗಿನ ಬೆಲೆ ಏನು?', icon: '💰' },
             { label: 'How to file a complaint?', icon: '📋' },
-          ].map(({ label, icon }) => (
-            <button
-              key={label}
-              onClick={() => handleHintClick(label)}
-              disabled={status === 'thinking' || status === 'listening'}
-              style={{
-                background: 'rgba(34,197,94,0.08)',
-                border: '1px solid rgba(34,197,94,0.25)',
-                borderRadius: 24,
-                padding: '10px 18px',
-                fontSize: '0.85rem',
-                color: '#94a3b8',
-                cursor: (status === 'thinking' || status === 'listening') ? 'not-allowed' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                transition: 'all 0.2s ease',
-                outline: 'none',
-                fontFamily: "'Inter', sans-serif",
-                opacity: (status === 'thinking' || status === 'listening') ? 0.5 : 1,
-              }}
-              onMouseEnter={e => {
-                if (status !== 'thinking' && status !== 'listening') {
-                  e.currentTarget.style.background = 'rgba(34,197,94,0.18)';
-                  e.currentTarget.style.color = '#22c55e';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(34,197,94,0.2)';
-                }
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(34,197,94,0.08)';
-                e.currentTarget.style.color = '#94a3b8';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-              <span>{icon}</span>
-              <span>"{label}"</span>
-            </button>
-          ))}
+          ].map(({ label, icon }) => {
+            const isDisabled = status === 'thinking' || status === 'listening' || cooldown > 0;
+            return (
+              <button
+                key={label}
+                onClick={() => handleHintClick(label)}
+                disabled={isDisabled}
+                style={{
+                  background: isDisabled ? 'rgba(100,116,139,0.08)' : 'rgba(34,197,94,0.08)',
+                  border: `1px solid ${isDisabled ? 'rgba(100,116,139,0.2)' : 'rgba(34,197,94,0.25)'}`,
+                  borderRadius: 24,
+                  padding: '10px 18px',
+                  fontSize: '0.85rem',
+                  color: isDisabled ? '#475569' : '#94a3b8',
+                  cursor: isDisabled ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  transition: 'all 0.2s ease',
+                  outline: 'none',
+                  fontFamily: "'Inter', sans-serif",
+                  opacity: isDisabled ? 0.6 : 1,
+                  position: 'relative',
+                }}
+                onMouseEnter={e => {
+                  if (!isDisabled) {
+                    e.currentTarget.style.background = 'rgba(34,197,94,0.18)';
+                    e.currentTarget.style.color = '#22c55e';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(34,197,94,0.2)';
+                  }
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = isDisabled ? 'rgba(100,116,139,0.08)' : 'rgba(34,197,94,0.08)';
+                  e.currentTarget.style.color = isDisabled ? '#475569' : '#94a3b8';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <span>{icon}</span>
+                <span>"{label}"</span>
+                {cooldown > 0 && (
+                  <span style={{ marginLeft: 4, background: 'rgba(239,68,68,0.2)', color: '#ef4444', borderRadius: 10, padding: '1px 7px', fontSize: '0.72rem', fontWeight: 700 }}>
+                    {cooldown}s
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
+        {cooldown > 0 && (
+          <div style={{ marginTop: 12, color: '#475569', fontSize: '0.75rem', textAlign: 'center' }}>
+            ⏱ Cooling down to avoid API rate limits... ({cooldown}s)
+          </div>
+        )}
       </div>
 
       <style>{`

@@ -10,6 +10,8 @@ import { VoiceProvider } from './context/VoiceContext'
 import VoiceAssistantWidget from './components/VoiceAssistantWidget'
 import DemoVoicePage from './pages/DemoVoicePage'
 import DemoEventDashboard from './pages/DemoEventDashboard'
+import MagicLogin from './pages/MagicLogin'
+import GenerateQRCards from './pages/GenerateQRCards'
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/feature/:id" element={<FeatureDetails />} />
         <Route path="/demo/voice" element={<DemoVoicePage />} />
         <Route path="/demo/dashboard" element={<DemoEventDashboard />} />
+        <Route path="/demo/qr-cards" element={<GenerateQRCards />} />
+        <Route path="/magic-login" element={<MagicLogin />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </VoiceProvider>
