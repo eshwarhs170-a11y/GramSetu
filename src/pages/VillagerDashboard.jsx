@@ -10,6 +10,7 @@ import {
   WeatherScreen, EmergencySOSScreen, TutorialsScreen
 } from '../components/VillagerScreens'
 import { Menu, Search, Bell, X, AlertTriangle, IndianRupee } from 'lucide-react'
+import CropScanner from '../components/CropScanner'
 
 import { db } from '../firebase'
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
@@ -24,6 +25,7 @@ export default function VillagerDashboard() {
   const [notifExpanded, setNotifExpanded] = useState(null)
   const [announcements, setAnnouncements] = useState([])
   const [marketAlert, setMarketAlert] = useState(null)
+  const [cropScannerOpen, setCropScannerOpen] = useState(false)
   const { t } = useLanguage()
   const { speak } = useVoice()
 
@@ -124,7 +126,15 @@ export default function VillagerDashboard() {
     <div className={`app-layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
       <VillagerSidebar
         active={active}
-        setActive={(pageId) => { setActive(pageId); setSidebarOpen(false) }}
+        setActive={(pageId) => {
+          if (pageId === 'crop-doctor') {
+            setCropScannerOpen(true)
+            setSidebarOpen(false)
+            return
+          }
+          setActive(pageId)
+          setSidebarOpen(false)
+        }}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
       />
@@ -160,6 +170,9 @@ export default function VillagerDashboard() {
           </div>
         </div>
       )}
+
+      {/* Crop Doctor (AR) Scanner */}
+      {cropScannerOpen && <CropScanner onClose={() => setCropScannerOpen(false)} />}
 
       <div className="main-content">
         <header className="topbar">

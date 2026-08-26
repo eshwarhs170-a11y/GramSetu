@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext'
 import {
   LayoutDashboard, Landmark, TrendingUp, Megaphone,
   ClipboardList, SearchCheck, UserCircle, Wheat,
-  X, LogOut, ChevronRight, Cloud, ShieldAlert, PlayCircle
+  X, LogOut, ChevronRight, Cloud, ShieldAlert, PlayCircle, Camera
 } from 'lucide-react'
 
 export default function VillagerSidebar({ active, setActive, sidebarOpen, setSidebarOpen }) {
@@ -35,7 +35,7 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
     if (logoTapTimer.current) clearTimeout(logoTapTimer.current)
     if (logoTapCount.current >= 3) {
       logoTapCount.current = 0
-      navigate('/demo')
+      window.location.href = '/demo'
       return
     }
     logoTapTimer.current = setTimeout(() => {
@@ -48,6 +48,7 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
     { id: 'schemes',       icon: Landmark,        labelKey: 'sNavSchemes' },
     { id: 'market',        icon: TrendingUp,      labelKey: 'sNavMarket' },
     { id: 'weather',       icon: Cloud,           labelKey: 'sNavWeather' },
+    { id: 'crop-doctor',   icon: Camera,          labelKey: 'sNavCropDoctor', badge: 'AR' },
     { id: 'sos',           icon: ShieldAlert,     labelKey: 'sNavSOS' },
     { id: 'tutorials',     icon: PlayCircle,      labelKey: 'sNavTutorials' },
     { id: 'announcements', icon: Megaphone,        labelKey: 'sNavAnnounce' },
@@ -100,7 +101,12 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
               onClick={() => setActive(item.id)}
             >
               <Icon size={18} strokeWidth={1.8} style={{ flexShrink: 0 }} />
-              <span>{t(item.labelKey)}</span>
+              <span>{t(item.labelKey) || (item.id === 'crop-doctor' ? 'Crop Doctor (AR)' : item.labelKey)}</span>
+              {item.badge && (
+                <span style={{ marginLeft: 6, background: '#16a34a', color: '#fff', fontSize: 9, fontWeight: 800, padding: '2px 6px', borderRadius: 6, letterSpacing: '0.05em', flexShrink: 0 }}>
+                  {item.badge}
+                </span>
+              )}
               {active === item.id && <ChevronRight size={14} style={{ marginLeft: 'auto', opacity: 0.7 }} />}
             </div>
           )

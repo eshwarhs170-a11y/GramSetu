@@ -524,44 +524,7 @@ export function HomeScreen({ setActive }) {
         ))}
       </div>
 
-      {/* Crop Doctor (AR) Banner */}
-      <div
-        onClick={() => setIsScannerOpen(true)}
-        className="animate-fadeInUp"
-        style={{
-          margin: '0 0 20px 0',
-          padding: '20px 24px',
-          background: 'linear-gradient(135deg, #14532d 0%, #166534 60%, #15803d 100%)',
-          borderRadius: 20,
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 16,
-          boxShadow: '0 10px 30px rgba(22, 163, 74, 0.3)',
-          border: '1px solid rgba(74, 222, 128, 0.3)',
-          transition: 'transform 0.2s, box-shadow 0.2s',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 14px 36px rgba(22,163,74,0.45)'; }}
-        onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 10px 30px rgba(22, 163, 74, 0.3)'; }}
-      >
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-            <span style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 10, padding: '4px 10px', fontSize: 11, fontWeight: 800, color: '#86efac', letterSpacing: '0.05em' }}>
-              NEW · AR FEATURE
-            </span>
-          </div>
-          <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 4 }}>
-            {lang === 'kn' ? 'ಬೆಳೆ ವೈದ್ಯ (AR)' : 'Crop Doctor (AR)'}
-          </h3>
-          <p style={{ margin: 0, fontSize: 13, color: 'rgba(255,255,255,0.75)' }}>
-            {lang === 'kn' ? 'ಎಲೆಯ ಫೋಟೋ ತೆಗೆಯಿರಿ → ರೋಗ ಪತ್ತೆ → ಪರಿಹಾರ ಮತ್ತು ಯೋಜನೆ ಪಡೆಯಿರಿ' : 'Snap a photo → Detect disease → Get remedy & scheme instantly'}
-          </p>
-        </div>
-        <div style={{ flexShrink: 0, width: 56, height: 56, borderRadius: 18, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.25)' }}>
-          <Camera size={28} color="#86efac" />
-        </div>
-      </div>
+
 
       {/* CropScanner Modal */}
       {isScannerOpen && <CropScanner onClose={() => setIsScannerOpen(false)} />}
