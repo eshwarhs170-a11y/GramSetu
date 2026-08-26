@@ -725,7 +725,8 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                 style={{
                   animationDelay: `${i * 0.05}s`,
                   borderLeft: `4px solid ${overdue ? '#ef4444' : c.status === 'resolved' ? '#10b981' : c.status === 'escalated' ? '#f59e0b' : '#3b82f6'}`,
-                  padding: '16px 18px'
+                  padding: '16px 18px',
+                  flexDirection: 'column',
                 }}>
                 <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
                   <div style={{ flex: 1, minWidth: 180 }}>
