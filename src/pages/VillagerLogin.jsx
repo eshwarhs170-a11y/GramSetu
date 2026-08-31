@@ -155,16 +155,14 @@ export default function VillagerLogin() {
     const newOtp = Math.floor(100000 + Math.random() * 900000).toString()
     setGeneratedOtp(newOtp)
     
-    try {
-      await sendOtpEmail(email, newOtp)
-      setOtpSentAlert(true)
-      setStep(2)
-    } catch (error) {
-      console.error('OTP send error:', error);
-      setErrorMsg(error.message || 'Failed to send OTP to email. Please try again.')
-    } finally {
-      setLoading(false)
-    }
+    // Fire and forget to avoid blocking UI for SMTP latency
+    sendOtpEmail(email, newOtp).catch(error => {
+      console.error('OTP send error in background:', error);
+    });
+
+    setOtpSentAlert(true)
+    setStep(2)
+    setLoading(false)
   }
 
   // ── OTP verify ─────────────────────────────────────────────────
