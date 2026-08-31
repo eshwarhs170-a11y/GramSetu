@@ -2813,10 +2813,10 @@ export function ComplaintStatusScreen() {
                       : isEscalated ? 'badge-warning'
                       : c.status === 'inprogress' ? 'badge-info'
                       : 'badge-warning'}`} style={{ fontSize: 10 }}>
-                      {c.status === 'resolved' ? '<CheckCircle2 className="inline mr-1 text-emerald-500" size={16} /> ' + t('resolved')
-                        : isEscalated ? '<ArrowUp className="inline mr-1 text-emerald-500" size={16} /> Escalated'
-                        : c.status === 'inprogress' ? '<RefreshCw className="inline mr-1 text-blue-500" size={16} /> ' + t('inProgress')
-                        : '<Hourglass className="inline mr-1 text-amber-500" size={16} /> ' + t('pending')}
+                      {c.status === 'resolved' ? <><CheckCircle2 className="inline mr-1 text-emerald-500" size={16} /> {t('resolved')}</>
+                        : isEscalated ? <><ArrowUp className="inline mr-1 text-emerald-500" size={16} /> Escalated</>
+                        : c.status === 'inprogress' ? <><RefreshCw className="inline mr-1 text-blue-500" size={16} /> {t('inProgress')}</>
+                        : <><Hourglass className="inline mr-1 text-amber-500" size={16} /> {t('pending')}</>}
                     </span>
                   </div>
                   <h4 style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 700 }}>{c.title}</h4>

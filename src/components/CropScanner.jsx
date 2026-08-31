@@ -525,6 +525,13 @@ export default function CropScanner() {
   const [uploadedImage, setUploadedImage] = useState(null); // base64 data URL
   const [scanMode, setScanMode] = useState('camera'); // 'camera' | 'image'
   const fileInputRef = useRef(null);
+  
+  // Image Panning
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStart = useRef({ x: 0, y: 0 });
+  const currentPan = useRef({ x: 0, y: 0 });
+
   // Q&A Chat
   const [qaChat, setQaChat] = useState([]);
   const [qaInput, setQaInput] = useState('');
@@ -615,6 +622,8 @@ export default function CropScanner() {
     setScanMode('camera');
     setQaChat([]);
     setQaInput('');
+    setPan({ x: 0, y: 0 });
+    currentPan.current = { x: 0, y: 0 };
   };
 
   const toggleVoice = () => {
@@ -636,6 +645,8 @@ export default function CropScanner() {
       setScanMode('image');
       setResult(null);
       setScanPhase('idle');
+      setPan({ x: 0, y: 0 });
+      currentPan.current = { x: 0, y: 0 };
     };
     reader.readAsDataURL(file);
   };
@@ -810,14 +821,47 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
         <div style={{ flex: 1, position: 'relative', overflow: 'hidden', background: '#111', display: result ? 'none' : undefined }}>
           {/* Uploaded image preview */}
           {scanMode === 'image' && uploadedImage ? (
-            <img
-              src={uploadedImage} alt="Uploaded crop"
+            <div
               style={{
-                width: '100%', height: '100%', objectFit: 'cover',
-                filter: scanning ? 'brightness(0.5) saturate(0.8)' : 'brightness(1)',
-                transition: 'filter 0.5s'
+                width: '100%', height: '100%',
+                position: 'relative', overflow: 'hidden',
+                cursor: isDragging ? 'grabbing' : 'grab',
+                touchAction: 'none' // Prevent default browser panning on mobile
               }}
-            />
+              onPointerDown={(e) => {
+                setIsDragging(true);
+                dragStart.current = { x: e.clientX, y: e.clientY };
+              }}
+              onPointerMove={(e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - dragStart.current.x;
+                const dy = e.clientY - dragStart.current.y;
+                setPan({ x: currentPan.current.x + dx, y: currentPan.current.y + dy });
+              }}
+              onPointerUp={() => {
+                setIsDragging(false);
+                currentPan.current = pan;
+              }}
+              onPointerLeave={() => {
+                if (isDragging) {
+                  setIsDragging(false);
+                  currentPan.current = pan;
+                }
+              }}
+            >
+              <img
+                src={uploadedImage} alt="Uploaded crop"
+                draggable={false}
+                style={{
+                  width: '100%', height: '100%', objectFit: 'contain',
+                  transform: `translate(${pan.x}px, ${pan.y}px) scale(1.5)`,
+                  filter: scanning ? 'brightness(0.5) saturate(0.8)' : 'brightness(1)',
+                  transition: isDragging ? 'none' : 'filter 0.5s',
+                  userSelect: 'none',
+                  WebkitUserDrag: 'none'
+                }}
+              />
+            </div>
           ) : cameraError ? (
             <div style={{
               width: '100%', height: '100%',
@@ -1062,8 +1106,8 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
               </h3>
               <p style={{ margin: '0 0 10px', color: '#64748b', fontSize: 14, lineHeight: 1.5 }}>
                 {lang === 'kn'
-                  ? 'ಕ್ಯಾಮರಾವನ್ನು ನೇರವಾಗಿ ಬೆಳೆಯ ಎಲೆ ಅಥವಾ ಹಣ್ಣಿನ ಮೇಲೆ ಇರಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.'
-                  : 'This doesn\'t appear to be a crop leaf. Please point camera directly at the affected plant leaf or fruit part.'}
+                  ? 'ಕ್ಯಾಮರಾವನ್ನು ನೇರವಾಗಿ ಬೆಳೆಯ ಎಲೆ ಅಥವಾ ಹಣ್ಣಿನ ಮೇಲೆ ಇರಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಸರಿಯಾದ ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.'
+                  : 'Please upload a proper image or crop. This doesn\'t appear to be a crop leaf.'}
               </p>
               
               <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: '12px 16px', marginBottom: 16, textAlign: 'left' }}>
