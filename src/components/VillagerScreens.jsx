@@ -2539,6 +2539,30 @@ export function ComplaintScreen() {
 
   return (
     <div className="animate-fadeInUp">
+      {/* Hero Banner */}
+      <div style={{
+        background: 'linear-gradient(135deg, #7c2d12 0%, #c2410c 50%, #ea580c 100%)',
+        borderRadius: 20,
+        padding: '24px 28px',
+        color: '#fff',
+        marginBottom: 24,
+        boxShadow: '0 10px 25px rgba(234, 88, 12, 0.2)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', marginBottom: 8, padding: '4px 10px', fontSize: 12 }}>
+            <ClipboardList size={14} className="inline mr-1 text-orange-300" /> {lang === 'kn' ? 'ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ದೂರು ವ್ಯವಸ್ಥೆ' : 'Gram Panchayat Grievance System'}
+          </span>
+          <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
+            {lang === 'kn' ? 'ದೂರು ದಾಖಲಿಸಿ' : 'Register a Complaint'}
+          </h2>
+          <p style={{ margin: 0, fontSize: 14, color: 'rgba(255,255,255,0.9)', maxWidth: 620 }}>
+            {lang === 'kn' ? 'ರಸ್ತೆ, ನೀರು, ವಿದ್ಯುತ್ ಅಥವಾ ಇತರ ಸಮಸ್ಯೆಗಳ ಬಗ್ಗೆ ನಿಮ್ಮ ದೂರನ್ನು ಇಲ್ಲಿ ದಾಖಲಿಸಿ' : 'Report road, water, electricity or other issues to your local Gram Panchayat'}
+          </p>
+        </div>
+      </div>
+
       <div className="complaint-form">
         {/* Step 1: Category */}
         <div className="card" style={{ marginBottom: 20 }}>
@@ -2760,7 +2784,7 @@ export function ComplaintScreen() {
 }
 
 export function ComplaintStatusScreen() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const [complaints, setComplaints] = useState([...globalComplaints])
   const [search, setSearch] = useState('')
 
@@ -2822,6 +2846,30 @@ export function ComplaintStatusScreen() {
 
   return (
     <div className="animate-fadeInUp">
+      {/* Hero Banner */}
+      <div style={{
+        background: 'linear-gradient(135deg, #1e3a5f 0%, #1e40af 50%, #2563eb 100%)',
+        borderRadius: 20,
+        padding: '24px 28px',
+        color: '#fff',
+        marginBottom: 24,
+        boxShadow: '0 10px 25px rgba(37, 99, 235, 0.2)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', marginBottom: 8, padding: '4px 10px', fontSize: 12 }}>
+            <SearchCheck size={14} className="inline mr-1 text-blue-300" /> {lang === 'kn' ? 'ದೂರು ಟ್ರ್ಯಾಕಿಂಗ್ ವ್ಯವಸ್ಥೆ' : 'Grievance Tracking System'}
+          </span>
+          <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
+            {lang === 'kn' ? 'ದೂರು ಸ್ಥಿತಿ ಪರಿಶೀಲನೆ' : 'Complaint Status Tracker'}
+          </h2>
+          <p style={{ margin: 0, fontSize: 14, color: 'rgba(255,255,255,0.9)', maxWidth: 620 }}>
+            {lang === 'kn' ? 'ನಿಮ್ಮ ಎಲ್ಲಾ ದೂರುಗಳ ಪ್ರಗತಿ, ಅಧಿಕಾರಿ ಪ್ರತಿಕ್ರಿಯೆ ಮತ್ತು ಪರಿಹಾರ ಸ್ಥಿತಿಯನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ' : 'Track progress, official responses & resolution status of all your complaints'}
+          </p>
+        </div>
+      </div>
+
       <div style={{ marginBottom: 20 }}>
         <div className="form-input" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px' }}>
           <span><Search className="inline mr-1 text-blue-500" size={16} /></span>
