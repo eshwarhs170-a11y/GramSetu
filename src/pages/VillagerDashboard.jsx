@@ -167,8 +167,8 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
 
       <div className="main-content">
         <header className="topbar">
-          {/* ── Row 1 Left: Hamburger + Brand ── */}
-          <div className="topbar-row1-left">
+          {/* ── Brand & Hamburger ── */}
+          <div className="topbar-left">
             <button
               type="button"
               className="hamburger-btn"
@@ -188,8 +188,14 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
             </div>
           </div>
 
-          {/* ── Row 1 Right: Search + Bell + Profile ── */}
-          <div className="topbar-row1-right">
+          {/* ── Language & Theme (Middle on desktop, Bottom row on mobile) ── */}
+          <div className="topbar-row2-mobile">
+            <LanguageSwitcher variant="topbar-style" />
+            <ThemeToggle />
+          </div>
+
+          {/* ── Actions (Right on desktop, Top-Right on mobile) ── */}
+          <div className="topbar-actions">
             <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
               <Search size={18} strokeWidth={2} />
             </button>
@@ -264,12 +270,6 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
                 {storedName.charAt(0)}
               </div>
             </button>
-          </div>
-
-          {/* ── Row 2: Language (left) + Theme (right) — mobile only ── */}
-          <div className="topbar-row2">
-            <LanguageSwitcher variant="topbar-style" />
-            <ThemeToggle />
           </div>
         </header>
 
