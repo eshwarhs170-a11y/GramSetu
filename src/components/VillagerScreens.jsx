@@ -293,39 +293,41 @@ export function HomeScreen({ setActive }) {
 
       {/* Dynamic Profile Selector in Home Screen */}
       <div className="card" style={{ marginBottom: 20, padding: '16px 20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
-          <div>
-            <h4 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>
-              {lang === 'kn' ? 'ನಿಮ್ಮ ವರ್ಗವನ್ನು ಆಯ್ಕೆಮಾಡಿ:' : 'Select Your Category:'}
-            </h4>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
-              {lang === 'kn' ? 'ಹೆಚ್ಚಿನ ವಿವರಗಳಿಗಾಗಿ ರೈತ ಅಥವಾ ವಿದ್ಯಾರ್ಥಿ ಮೋಡ್ ಆಯ್ಕೆಮಾಡಿ' : 'Select Farmer or Student mode to customize your view'}
-            </p>
-          </div>
-          <div style={{ display: 'inline-flex', background: 'var(--bg-main)', padding: 4, borderRadius: 10, border: '1px solid var(--border-light)' }}>
-            <button
-              onClick={() => setRoleMode('farmer')}
-              style={{
-                padding: '6px 14px', borderRadius: 8, fontSize: 13, fontWeight: 700,
-                background: roleMode === 'farmer' ? 'var(--primary)' : 'transparent',
-                color: roleMode === 'farmer' ? '#fff' : 'var(--text-secondary)',
-                transition: 'all 0.2s'
-              }}
-            >
-              <Sprout className="inline mr-1 text-emerald-500" size={16} /> {lang === 'kn' ? 'ರೈತ' : 'Farmer'}
-            </button>
-            <button
-              onClick={() => setRoleMode('student')}
-              style={{
-                padding: '6px 14px', borderRadius: 8, fontSize: 13, fontWeight: 700,
-                background: roleMode === 'student' ? 'var(--primary)' : 'transparent',
-                color: roleMode === 'student' ? '#fff' : 'var(--text-secondary)',
-                transition: 'all 0.2s'
-              }}
-            >
-              <GraduationCap className="inline mr-1 text-purple-500" size={16} /> {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿ' : 'Student'}
-            </button>
-          </div>
+        <div>
+          <h4 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 4px 0' }}>
+            {lang === 'kn' ? 'ನಿಮ್ಮ ವರ್ಗವನ್ನು ಆಯ್ಕೆಮಾಡಿ:' : 'Select Your Category:'}
+          </h4>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
+            {lang === 'kn' ? 'ಹೆಚ್ಚಿನ ವಿವರಗಳಿಗಾಗಿ ರೈತ ಅಥವಾ ವಿದ್ಯಾರ್ಥಿ ಮೋಡ್ ಆಯ್ಕೆಮಾಡಿ' : 'Select Farmer or Student mode to customize your view'}
+          </p>
+        </div>
+        <div style={{ width: '100%', marginTop: 14, display: 'flex', background: 'var(--bg-main)', padding: 4, borderRadius: 12, border: '1px solid var(--border-light)' }}>
+          <button
+            onClick={() => setRoleMode('farmer')}
+            style={{
+              flex: 1,
+              padding: '8px 14px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+              background: roleMode === 'farmer' ? 'var(--primary)' : 'transparent',
+              color: roleMode === 'farmer' ? '#fff' : 'var(--text-secondary)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              border: 'none', cursor: 'pointer', transition: 'all 0.2s'
+            }}
+          >
+            <Sprout className={roleMode === 'farmer' ? 'text-white' : 'text-emerald-500'} size={16} /> {lang === 'kn' ? 'ರೈತ' : 'Farmer'}
+          </button>
+          <button
+            onClick={() => setRoleMode('student')}
+            style={{
+              flex: 1,
+              padding: '8px 14px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+              background: roleMode === 'student' ? 'var(--primary)' : 'transparent',
+              color: roleMode === 'student' ? '#fff' : 'var(--text-secondary)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              border: 'none', cursor: 'pointer', transition: 'all 0.2s'
+            }}
+          >
+            <GraduationCap className={roleMode === 'student' ? 'text-white' : 'text-purple-500'} size={16} /> {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿ' : 'Student'}
+          </button>
         </div>
       </div>
 

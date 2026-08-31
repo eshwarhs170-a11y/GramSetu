@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, X, CheckCircle2, AlertTriangle, ShieldCheck, Volume2, Info, Scan, Leaf, AlertCircle, Microscope, Droplets, FlaskConical, Sprout, ChevronRight, Upload, MessageCircle, Send, ImagePlus, ChevronsDown, Loader2, TriangleAlert, CircleCheck, ScanLine, Image, Crop, Layers, Bot, Pill, Building2, ListChecks, RefreshCw, ArrowRight } from 'lucide-react';
+import { Camera, X, CheckCircle2, AlertTriangle, ShieldCheck, Volume2, Info, Scan, Leaf, AlertCircle, Microscope, Droplets, FlaskConical, Sprout, ChevronRight, Upload, MessageCircle, Send, ImagePlus, ChevronsDown, Loader2, TriangleAlert, CircleCheck, ScanLine, Image, Crop, Layers, Bot, Pill, Building2, ListChecks, RefreshCw, ArrowRight, Wheat, Zap, Lightbulb } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useVoice } from '../context/VoiceContext';
 import { callGemini } from '../utils/voiceCommands';
@@ -653,132 +653,419 @@ export default function CropScanner() {
     reader.readAsDataURL(file);
   };
 
+  const getSmartFallbackAnswer = (q, res, currentLang) => {
+    const qLower = q.toLowerCase();
+    const isKn = currentLang === 'kn';
+
+    // 1. Scheme / Insurance Application
+    if (/scheme|apply|yojana|insurance|pmfby|midh|ಅರ್ಜಿ|ಯೋಜನೆ|ವಿಮೆ|ಹೇಗೆ/i.test(qLower)) {
+      if (isKn) {
+        return `ಅರ್ಜಿ ಸಲ್ಲಿಸಲು, ನಿಮ್ಮ RTC (ಪಹಣಿ), ಆಧಾರ್ ಕಾರ್ಡ್ ಮತ್ತು ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್‌ನೊಂದಿಗೆ ಹತ್ತಿರದ ಗ್ರಾಮ ಒನ್ (Grama One) ಕೇಂದ್ರಕ್ಕೆ ಭೇಟಿ ನೀಡಿ ಅಥವಾ ${res.schemeLink || 'pmfby.gov.in'} ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ನೇರವಾಗಿ ನೋಂದಾಯಿಸಿ.`;
+      }
+      return `To apply for ${res.scheme || 'the government crop scheme'}, visit your nearest Grama One center or apply online at ${res.schemeLink || 'https://pmfby.gov.in/'} with your Pahani (RTC), Aadhaar card, and bank passbook.`;
+    }
+
+    // 2. Organic / Natural
+    if (/organic|natural|bio|neem|home|ಸಾವಯವ|ನೈಸರ್ಗಿಕ/i.test(qLower)) {
+      if (isKn) {
+        return `${res.diseaseKn || res.disease} ನೈಸರ್ಗಿಕ ನಿಯಂತ್ರಣಕ್ಕೆ: ${res.organicTip || 'ಬೆಳಗಿನ ಜಾವ 5% ಬೇವಿನ ಬೀಜದ ಕಷಾಯ ಅಥವಾ ಟ್ರೈಕೋಡರ್ಮಾ ವರ್ಡೆ ಸಿಂಪಡಿಸಿ.'}`;
+      }
+      return `For organic management of ${res.disease}: ${res.organicTip || 'Spray Neem Seed Kernel Extract (NSKE 5%) or Trichoderma viride early morning.'}`;
+    }
+
+    // 3. Prevention / Spread
+    if (/prevent|spread|stop|avoid|control|ತಡೆ|ಹರಡುವಿಕೆ|ನಿರ್ವಹಣೆ/i.test(qLower)) {
+      if (isKn) {
+        return `${res.diseaseKn || res.disease} ಹರಡುವುದನ್ನು ತಡೆಯಲು: ${res.prevention || 'ಸೂಕ್ತ ಗಿಡಗಳ ಅಂತರ ಕಾಯ್ದುಕೊಳ್ಳಿ, ಅಧಿಕ ಸಾರಜನಕ ಗೊಬ್ಬರ ತಪ್ಪಿಸಿ ಮತ್ತು ಸೋಂಕಿತ ಎಲೆಗಳನ್ನು ತೆಗೆದುಹಾಕಿ.'}`;
+      }
+      return `To prevent spread of ${res.disease}: ${res.prevention || 'Maintain good plant spacing, avoid excess nitrogen fertilizers, and remove infected crop debris.'}`;
+    }
+
+    // 4. Fertilizer / Nutrition
+    if (/fertilizer|npk|manure|nutrition|soil|ಗೊಬ್ಬರ|ಪೋಷಕಾಂಶ/i.test(qLower)) {
+      if (isKn) {
+        return `${res.crop} ಪೋಷಕಾಂಶ ನಿರ್ವಹಣೆ: ${res.fertilizer || 'ಸಮತೋಲಿತ NPK ಗೊಬ್ಬರವನ್ನು ಕಂತುಗಳಲ್ಲಿ ನೀಡಿ.'}`;
+      }
+      return `Nutritional guidance for ${res.crop}: ${res.fertilizer || 'Apply balanced NPK fertilizers in split doses.'}`;
+    }
+
+    // 5. Symptoms / Causes / Takeaways
+    if (/symptom|cause|reason|why|spot|leaf|rot|yellow|ಲಕ್ಷಣ|ಕಾರಣ|ಅಂಶ/i.test(qLower)) {
+      const takeaways = res.keyTakeaways ? res.keyTakeaways.join('. ') : '';
+      if (isKn) {
+        return `${res.crop} ನಲ್ಲಿ ${res.diseaseKn || res.disease} ಮುಖ್ಯ ಲಕ್ಷಣಗಳು: ${takeaways || res.remedy}`;
+      }
+      return `Symptoms & key info for ${res.disease} on ${res.crop}: ${takeaways || res.remedy}`;
+    }
+
+    // 6. Dosage / Spraying
+    if (/dose|quantity|how much|spray|gram|liter|ಪ್ರಮಾಣ|ಎಷ್ಟು/i.test(qLower)) {
+      if (isKn) {
+        return `${res.diseaseKn || res.disease} ಗೆ ಔಷಧ ಸಿಂಪಡಣೆ ಪ್ರಮಾಣ: ${res.remedy}`;
+      }
+      return `Recommended dosage for ${res.disease}: ${res.remedy}`;
+    }
+
+    // 7. Compensation / Crop Loss
+    if (/loss|nuksan|compensation|claim|damage|ನಷ್ಟ|ಪರಿಹಾರ/i.test(qLower)) {
+      if (isKn) {
+        return `${res.crop} ನಲ್ಲಿ ${res.diseaseKn || res.disease} ನಷ್ಟ ಉಂಟಾದರೆ, ${res.scheme || 'PMFBY'} ಯೋಜನೆಯಡಿ 72 ಗಂಟೆಗಳ ಒಳಗೆ ಸ್ಥಳೀಯ ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರದಲ್ಲಿ ವರದಿ ಮಾಡಿ.`;
+      }
+      return `If ${res.disease} causes severe damage to your ${res.crop}, report to your local Raitha Samparka Kendra (RSK) within 72 hours to claim compensation under ${res.scheme || 'PMFBY'}.`;
+    }
+
+    // 8. Default Treatment Answer
+    if (isKn) {
+      return `${res.diseaseKn || res.disease} ರೋಗದ ನಿಯಂತ್ರಣಕ್ಕೆ: ${res.remedy}`;
+    }
+    return `For ${res.disease} on ${res.crop}: ${res.remedy}`;
+  };
+
   const handleQaAsk = async () => {
     if (!qaInput.trim() || !result || result === 'NO_CROP') return;
     const question = qaInput.trim();
-    setQaInput(''); setQaChat(prev => [...prev, { role: 'user', text: question }]); setQaLoading(true);
+    setQaInput('');
+    setQaChat(prev => [...prev, { role: 'user', text: question }]);
+    setQaLoading(true);
+
     const langName = lang === 'kn' ? 'Kannada' : 'English';
-    const sys = `Expert agricultural assistant for Karnataka. Disease: ${result.disease} on ${result.crop}. Remedy: ${result.remedy}. Reply in ${langName}. 2-3 sentences max. No markdown.`;
+    const sys = `You are an expert agricultural AI assistant for Karnataka farmers. Disease: ${result.disease} on crop ${result.crop}. Chemical remedy: ${result.remedy}. Prevention: ${result.prevention || 'N/A'}. Organic tip: ${result.organicTip || 'N/A'}. Applicable Scheme: ${result.scheme || 'PMFBY'} (${result.schemeLink || 'pmfby.gov.in'}). Reply in ${langName}. Keep response under 3 concise sentences. No markdown formatting.`;
+
     try {
       let answer = await callGemini(question, sys);
-      if (!answer) answer = `For ${result.disease}: ${result.remedy}`;
+      if (!answer || answer.trim().length === 0) {
+        answer = getSmartFallbackAnswer(question, result, lang);
+      }
       answer = answer.replace(/[*#_`]/g, '').trim();
-      setQaChat(prev => [...prev, { role: 'ai', text: answer }]); speak(answer);
+      setQaChat(prev => [...prev, { role: 'ai', text: answer }]);
+      speak(answer);
     } catch {
-      setQaChat(prev => [...prev, { role: 'ai', text: lang === 'kn' ? 'ಉತ್ತರ ನೀಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.' : 'Could not get an answer. Please try again.' }]);
-    } finally { setQaLoading(false); }
+      const fallback = getSmartFallbackAnswer(question, result, lang);
+      setQaChat(prev => [...prev, { role: 'ai', text: fallback }]);
+      speak(fallback);
+    } finally {
+      setQaLoading(false);
+    }
   };
 
   // ─────────────── PAGE 1: HOME ───────────────
   if (page === 'home') {
     const demoCards = [
-      { emoji: '🌾', crop: 'Paddy', disease: 'Blast Disease', severity: 'High', color: '#f59e0b', remedy: 'Spray Tricyclazole 75 WP @ 0.6 g/L' },
-      { emoji: '🍅', crop: 'Tomato', disease: 'Late Blight', severity: 'High', color: '#f97316', remedy: 'Mancozeb 75 WP @ 2 g/L every 7 days' },
-      { emoji: '🌽', crop: 'Maize', disease: 'Fall Armyworm', severity: 'High', color: '#eab308', remedy: 'Emamectin Benzoate 5 SG @ 0.4 g/L' },
-      { emoji: '🥥', crop: 'Coconut', disease: 'Rhinoceros Beetle', severity: 'High', color: '#14b8a6', remedy: 'Pheromone traps @ 1/acre + Sevidol' },
+      {
+        crop: 'Paddy / Rice (ಭತ್ತ)',
+        icon: <Wheat size={13} color="#fff" />,
+        disease: 'Blast Disease (Pyricularia oryzae)',
+        diseaseKn: 'ಬೆಂಕಿ ರೋಗ (ತೀವ್ರ ಹಂತ)',
+        severity: 'High',
+        image: '/crops/rice_blast.png',
+        fallbackImage: '/crops/Paddy.jpg',
+        remedy: 'Spray Tricyclazole 75 WP @ 0.6 g/L or Carbendazim 50 WP @ 1 g/L at tillering stage.',
+        prevention: 'Avoid excessive nitrogen fertilizer. Maintain standing water level (2-5 cm). Burn or bury infected crop debris after harvest to prevent spore survival.',
+        fertilizer: 'Apply 120:60:60 kg NPK/ha in split doses. Avoid heavy N top-dressing during cool cloudy weather.',
+        organicTip: 'Spray Pseudomonas fluorescens @ 2.5 kg/ha or Neem Seed Kernel Extract (NSKE 5%) as a preventive foliar spray.',
+        scheme: 'PMFBY Pradhan Mantri Fasal Bima Yojana',
+        schemeLink: 'https://pmfby.gov.in/',
+        color: '#ea580c',
+        keyTakeaways: [
+          'Affects leaves, leaf sheath, neck, and panicles causing spindle-shaped spots',
+          'High humidity (>90%) and cool night temperatures favor rapid disease outbreak',
+          'Plant disease-resistant varieties like BPT 5204 or KMP 101'
+        ],
+      },
+      {
+        crop: 'Tomato (ಟೊಮೇಟೊ)',
+        icon: <Sprout size={13} color="#fff" />,
+        disease: 'Late Blight (Phytophthora infestans)',
+        diseaseKn: 'ಲೇಟ್ ಬ್ಲೈಟ್ ಅಂಗಮಾರಿ ರೋಗ',
+        severity: 'High',
+        image: '/crops/tomato_late_blight.png',
+        fallbackImage: '/crops/Tomato.jpg',
+        remedy: 'Spray Mancozeb 75 WP @ 2 g/L or Metalaxyl 8% + Mancozeb 64% WP @ 2 g/L at 7-day intervals during wet weather.',
+        prevention: 'Ensure wider plant spacing for air ventilation. Use drip irrigation instead of overhead sprinklers. Remove and destroy lower infected leaves immediately.',
+        fertilizer: 'Apply Calcium Nitrate @ 5 kg/acre to strengthen cell wall structure against fungal hyphae penetration.',
+        organicTip: 'Spray Trichoderma viride @ 5g/L + Copper Oxychloride @ 2g/L. Apply bio-formulations early morning.',
+        scheme: 'Mission for Integrated Development of Horticulture (MIDH)',
+        schemeLink: 'https://midh.gov.in/',
+        color: '#dc2626',
+        keyTakeaways: [
+          'Causes dark, water-soaked lesions on leaves and white fungal bloom underneath in humid conditions',
+          'Can destroy an entire tomato crop within 7 to 10 days if left unmanaged',
+          'Practice strict crop rotation with non-solanaceous crops'
+        ],
+      }
     ];
+
     return (
-      <div style={{ width: '100%', minHeight: '100vh', background: 'linear-gradient(160deg,#0a2e1a 0%,#052e16 60%,#064e3b 100%)', fontFamily: "'Inter',sans-serif", overflowY: 'auto' }}>
-        {/* Header */}
-        <div style={{ padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ background: 'rgba(34,197,94,0.2)', borderRadius: 12, padding: '8px 10px', border: '1px solid rgba(34,197,94,0.35)', display: 'flex', alignItems: 'center', gap: 7 }}>
-              <Microscope size={18} color="#22c55e" />
-              <span style={{ fontSize: 14, fontWeight: 800, color: '#22c55e' }}>Crop Doctor</span>
+      <div style={{
+        width: '100%', minHeight: '100vh',
+        background: 'var(--bg-main, #f0f7f3)',
+        color: 'var(--text-primary, #1a2e1f)',
+        fontFamily: "'Inter', sans-serif",
+        paddingBottom: 40,
+        overflowY: 'auto'
+      }}>
+        {/* Top Header */}
+        <div style={{
+          padding: '14px 20px',
+          background: '#ffffff',
+          borderBottom: '1px solid var(--border, #d1e8db)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+          position: 'sticky', top: 0, zIndex: 50
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button onClick={() => navigate(-1)} style={{
+              background: '#f0f7f3', border: '1px solid #d1e8db', borderRadius: 10,
+              padding: '6px 12px', color: '#1a2e1f', cursor: 'pointer', fontSize: 13,
+              fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6
+            }}>
+              ← Back
+            </button>
+            <div>
+              <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: '#1a2e1f', lineHeight: 1.2 }}>
+                {lang === 'kn' ? 'ಬೆಳೆ ವೈದ್ಯ' : 'Crop Doctor'}
+              </h2>
+              <p style={{ margin: 0, fontSize: 11, color: '#4b7a5c', fontWeight: 500 }}>
+                {lang === 'kn' ? 'ಎಐ ಬೆಳೆ ರೋಗ ಪತ್ತೆದಾರ' : 'AI Crop Disease Scanner'}
+              </p>
             </div>
-            <span style={{ fontSize: 10, background: 'rgba(34,197,94,0.15)', color: '#4ade80', padding: '3px 8px', borderRadius: 20, fontWeight: 700, border: '1px solid rgba(34,197,94,0.3)' }}>AI POWERED</span>
           </div>
-          <button onClick={() => navigate(-1)} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', cursor: 'pointer' }}>
-            <X size={18} />
-          </button>
+          <span style={{ fontSize: 11, background: '#d1fae5', color: '#10b981', padding: '4px 10px', borderRadius: 20, fontWeight: 800, border: '1px solid #a7f3d0' }}>
+            AI POWERED
+          </span>
         </div>
 
-        {/* Hero */}
-        <div style={{ padding: '10px 20px 24px', textAlign: 'center' }}>
-          <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg,#16a34a,#22c55e)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 0 40px rgba(34,197,94,0.4)' }}>
-            <span style={{ fontSize: 40 }}>🔬</span>
+        <div style={{ maxWidth: 800, margin: '0 auto', padding: '16px' }}>
+
+          {/* Hero Banner */}
+          <div style={{
+            background: 'linear-gradient(135deg, #1a7c4a 0%, #145f38 100%)',
+            borderRadius: 20,
+            padding: '24px 20px',
+            color: '#ffffff',
+            boxShadow: '0 8px 24px rgba(26, 124, 74, 0.25)',
+            textAlign: 'center',
+            marginBottom: 20
+          }}>
+            <div style={{
+              width: 64, height: 64, borderRadius: 20,
+              background: 'rgba(255,255,255,0.18)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 14px'
+            }}>
+              <Microscope size={32} color="#ffffff" />
+            </div>
+            <h1 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 900, lineHeight: 1.2 }}>
+              {lang === 'kn' ? 'ಬೆಳೆ ವೈದ್ಯ ವಿಶ್ಲೇಷಣೆ' : 'AI Crop Disease Scanner'}
+            </h1>
+            <p style={{ margin: '0 auto 18px', fontSize: 13, color: 'rgba(255,255,255,0.9)', lineHeight: 1.5, maxWidth: 440 }}>
+              {lang === 'kn'
+                ? 'ಕ್ಯಾಮರಾ ಬಳಸಿ ಬೆಳೆ ರೋಗ ಗುರುತಿಸಿ. ಪರಿಹಾರ ಮತ್ತು ಸರ್ಕಾರಿ ಯೋಜನೆ ಮಾಹಿತಿ ಪಡೆಯಿರಿ.'
+                : 'Point your camera at a diseased crop leaf to instantly detect diseases, get treatment advice & government scheme alerts.'}
+            </p>
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
+              {[
+                { icon: <Bot size={12} />, label: lang === 'kn' ? '33+ ರೋಗಗಳು' : '33+ Diseases' },
+                { icon: <Pill size={12} />, label: lang === 'kn' ? 'ಸ್ಮಾರ್ಟ್ ಪರಿಹಾರ' : 'Smart Remedy' },
+                { icon: <Building2 size={12} />, label: lang === 'kn' ? 'ಸರ್ಕಾರಿ ಯೋಜನೆ' : 'Govt Schemes' },
+                { icon: <MessageCircle size={12} />, label: 'AI Q&A' },
+              ].map((f, i) => (
+                <span key={i} style={{ background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: 20, padding: '4px 12px', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  {f.icon} {f.label}
+                </span>
+              ))}
+            </div>
           </div>
-          <h1 style={{ color: '#fff', fontSize: 26, fontWeight: 900, margin: '0 0 8px', lineHeight: 1.2 }}>
-            {lang === 'kn' ? 'ಬೆಳೆ ವೈದ್ಯ' : 'AI Crop Disease Scanner'}
-          </h1>
-          <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 14, margin: '0 0 20px', lineHeight: 1.6, maxWidth: 320, marginLeft: 'auto', marginRight: 'auto' }}>
-            {lang === 'kn' ? 'ಕ್ಯಾಮರಾ ಬಳಸಿ ಬೆಳೆ ರೋಗ ಗುರುತಿಸಿ. ಪರಿಹಾರ ಮತ್ತು ಸರ್ಕಾರಿ ಯೋಜನೆ ಮಾಹಿತಿ ಪಡೆಯಿರಿ.' : 'Point your camera at a diseased crop leaf to instantly detect the disease, get treatment advice & government scheme alerts.'}
-          </p>
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
-            {[{ icon: <Bot size={12} />, label: lang === 'kn' ? '33+ ರೋಗಗಳು' : '33+ Diseases' }, { icon: <Pill size={12} />, label: lang === 'kn' ? 'ಸ್ಮಾರ್ಟ್ ಪರಿಹಾರ' : 'Smart Remedy' }, { icon: <Building2 size={12} />, label: lang === 'kn' ? 'ಯೋಜನೆ' : 'Scheme Alerts' }, { icon: <MessageCircle size={12} />, label: 'AI Q&A' }].map((f, i) => (
-              <div key={i} style={{ background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.25)', borderRadius: 20, padding: '5px 12px', display: 'flex', alignItems: 'center', gap: 5, color: '#4ade80', fontSize: 12, fontWeight: 700 }}>
-                {f.icon}{f.label}
+
+          {/* Crop Selector Card — Main CTA */}
+          <div style={{
+            background: '#ffffff',
+            borderRadius: 18,
+            padding: '20px',
+            border: '1px solid var(--border, #d1e8db)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+            marginBottom: 20
+          }}>
+            <label style={{ fontSize: 14, fontWeight: 800, color: '#1a2e1f', display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+              <Crop size={18} color="#1a7c4a" />
+              {lang === 'kn' ? 'ಹಂತ 1 — ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ' : 'Step 1 — Select your crop'}
+            </label>
+
+            <select
+              value={selectedCrop}
+              onChange={e => setSelectedCrop(e.target.value)}
+              style={{
+                width: '100%', padding: '13px 14px', borderRadius: 12, fontSize: 14, fontWeight: 700,
+                border: `2px solid ${selectedCrop === 'NO_CROP' ? '#fca5a5' : '#1a7c4a'}`,
+                background: selectedCrop === 'NO_CROP' ? '#fff5f5' : '#f0f7f3',
+                color: selectedCrop === 'NO_CROP' ? '#dc2626' : '#145f38',
+                outline: 'none', cursor: 'pointer', marginBottom: 16,
+                WebkitAppearance: 'none'
+              }}
+            >
+              <option value="NO_CROP" style={{ color: '#dc2626', background: '#fff' }}>
+                {lang === 'kn' ? '— ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ —' : '— Select crop to scan —'}
+              </option>
+              {UNIQUE_CROPS.map((crop, i) => (
+                <option key={i} value={crop} style={{ color: '#1a2e1f', background: '#fff' }}>
+                  {crop}
+                </option>
+              ))}
+            </select>
+
+            <button
+              onClick={() => { if (selectedCrop !== 'NO_CROP') setPage('scanner'); }}
+              disabled={selectedCrop === 'NO_CROP'}
+              style={{
+                width: '100%', padding: '14px', borderRadius: 12, border: 'none', fontSize: 15, fontWeight: 800,
+                cursor: selectedCrop === 'NO_CROP' ? 'not-allowed' : 'pointer',
+                background: selectedCrop === 'NO_CROP' ? '#e2e8f0' : 'linear-gradient(135deg, #1a7c4a, #145f38)',
+                color: selectedCrop === 'NO_CROP' ? '#94a3b8' : '#ffffff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 10,
+                boxShadow: selectedCrop !== 'NO_CROP' ? '0 4px 15px rgba(26, 124, 74, 0.3)' : 'none',
+                transition: 'all 0.2s'
+              }}
+            >
+              <Camera size={18} />
+              {selectedCrop === 'NO_CROP'
+                ? (lang === 'kn' ? 'ಮೊದಲು ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ' : 'Select a crop first')
+                : (lang === 'kn' ? 'ಕ್ಯಾಮರಾ ತೆರೆಯಿರಿ ಮತ್ತು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ' : 'Open Camera & Scan')}
+            </button>
+
+            <button
+              onClick={() => { if (selectedCrop !== 'NO_CROP') { fileInputRef.current?.click(); } }}
+              disabled={selectedCrop === 'NO_CROP'}
+              style={{
+                width: '100%', padding: '12px', borderRadius: 12,
+                border: '1.5px dashed ' + (selectedCrop === 'NO_CROP' ? '#cbd5e1' : '#1a7c4a'),
+                fontSize: 13, fontWeight: 700,
+                cursor: selectedCrop === 'NO_CROP' ? 'not-allowed' : 'pointer',
+                background: '#ffffff',
+                color: selectedCrop === 'NO_CROP' ? '#94a3b8' : '#1a7c4a',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
+              }}
+            >
+              <ImagePlus size={16} />
+              {lang === 'kn' ? 'ಅಥವಾ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ' : 'Or upload a photo instead'}
+            </button>
+
+            <p style={{ margin: '12px 0 0', textAlign: 'center', color: '#64748b', fontSize: 11, fontWeight: 500 }}>
+              <Layers size={11} style={{ verticalAlign: 'middle', marginRight: 4 }} />
+              {UNIQUE_CROPS.length} Karnataka crops · {CROP_DISEASES.length}+ disease patterns
+            </p>
+          </div>
+
+          {/* How It Works Card */}
+          <div style={{
+            background: '#ffffff',
+            borderRadius: 16,
+            padding: '18px 20px',
+            border: '1px solid var(--border, #d1e8db)',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            marginBottom: 20
+          }}>
+            <h3 style={{ color: '#1a7c4a', fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Zap size={14} color="#1a7c4a" />
+              {lang === 'kn' ? 'ಹೇಗೆ ಬಳಸುವುದು' : 'How it works'}
+            </h3>
+            {[
+              { n: '1', icon: <Crop size={15} color="#1a7c4a" />, t: lang === 'kn' ? 'ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ' : 'Select your crop', d: lang === 'kn' ? '20+ ಕರ್ನಾಟಕ ಬೆಳೆಗಳು ಬೆಂಬಲಿತವಾಗಿವೆ' : '20+ Karnataka crops supported' },
+              { n: '2', icon: <Camera size={15} color="#1a7c4a" />, t: lang === 'kn' ? 'ಕ್ಯಾಮರಾ ತೆರೆಯಿರಿ & ಸ್ಕ್ಯಾನ್ ಮಾಡಿ' : 'Open camera & scan', d: lang === 'kn' ? 'ಎಲೆ ಅಥವಾ ಹಣ್ಣಿನ ಮೇಲೆ ಗಮನ ಹರಿಸಿ' : 'Point at the diseased leaf or upload a photo' },
+              { n: '3', icon: <ScanLine size={15} color="#1a7c4a" />, t: lang === 'kn' ? 'ತ್ವರಿತ ಫಲಿತಾಂಶ ಪಡೆಯಿರಿ' : 'Get instant results', d: lang === 'kn' ? 'ರೋಗ, ಪರಿಹಾರ & ಯೋಜನೆ ಮಾಹಿತಿ' : 'Disease name, remedy & applicable govt scheme' },
+            ].map((s, i) => (
+              <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: i < 2 ? 14 : 0 }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#f0f7f3', border: '1px solid #a7f3d0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, color: '#1a7c4a', flexShrink: 0 }}>
+                  {s.n}
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                    {s.icon}
+                    <span style={{ color: '#1a2e1f', fontSize: 13, fontWeight: 700 }}>{s.t}</span>
+                  </div>
+                  <p style={{ margin: 0, color: '#4b7a5c', fontSize: 12, lineHeight: 1.4 }}>{s.d}</p>
+                </div>
               </div>
             ))}
           </div>
-        </div>
 
-        {/* How it works */}
-        <div style={{ margin: '0 16px 20px', background: 'rgba(255,255,255,0.05)', borderRadius: 18, padding: '16px 18px', border: '1px solid rgba(255,255,255,0.1)' }}>
-          <p style={{ color: '#4ade80', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 14px' }}>⚡ {lang === 'kn' ? 'ಹೇಗೆ ಬಳಸುವುದು' : 'How it works'}</p>
-          {[
-            { n: '1', icon: <Crop size={15} color="#22c55e" />, t: lang === 'kn' ? 'ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ' : 'Select your crop', d: lang === 'kn' ? '20+ ಕರ್ನಾಟಕ ಬೆಳೆಗಳು' : '20+ Karnataka crops supported' },
-            { n: '2', icon: <Camera size={15} color="#22c55e" />, t: lang === 'kn' ? 'ಕ್ಯಾಮರಾ ತೆರೆಯಿರಿ' : 'Open camera & scan', d: lang === 'kn' ? 'ರೋಗಗ್ರಸ್ತ ಎಲೆಯ ಮೇಲೆ ಗಮನ ಕೇಂದ್ರೀಕರಿಸಿ' : 'Point at the diseased leaf or upload a photo' },
-            { n: '3', icon: <ScanLine size={15} color="#22c55e" />, t: lang === 'kn' ? 'ಫಲಿತಾಂಶ ಪಡೆಯಿರಿ' : 'Get instant results', d: lang === 'kn' ? 'ರೋಗ, ಪರಿಹಾರ, ಯೋಜನೆ' : 'Disease, remedy & govt scheme' },
-          ].map((s, i) => (
-            <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: i < 2 ? 14 : 0 }}>
-              <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg,#16a34a,#22c55e)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, color: '#fff', flexShrink: 0 }}>{s.n}</div>
-              <div><div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>{s.icon}<span style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>{s.t}</span></div><p style={{ margin: 0, color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{s.d}</p></div>
+          {/* Exactly 2 Clickable Example Detections */}
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <h3 style={{ color: '#1a2e1f', fontSize: 13, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Leaf size={15} color="#1a7c4a" />
+                {lang === 'kn' ? 'ಉದಾಹರಣೆ ರೋಗಗಳು (ಕ್ಲಿಕ್ ಮಾಡಿ)' : 'Sample Disease Cases — Tap to View Full Info'}
+              </h3>
+              <span style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 700, background: '#e8f5ee', padding: '2px 8px', borderRadius: 10 }}>
+                2 Demo Examples
+              </span>
             </div>
-          ))}
-        </div>
 
-        {/* Demo disease cards */}
-        <div style={{ padding: '0 16px 20px' }}>
-          <p style={{ color: '#4ade80', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 12px' }}>🌿 {lang === 'kn' ? 'ಉದಾಹರಣೆ ಪರಿಣಾಮಗಳು' : 'Example scan results'}</p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            {demoCards.map((d, i) => (
-              <div key={i} style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 14, padding: '12px', border: `1px solid ${d.color}30` }}>
-                <div style={{ fontSize: 24, marginBottom: 6 }}>{d.emoji}</div>
-                <div style={{ fontSize: 10, color: d.color, fontWeight: 800, marginBottom: 3 }}>⚠️ {d.severity}</div>
-                <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', marginBottom: 3, lineHeight: 1.3 }}>{d.disease}</div>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>{d.crop}</div>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4, background: 'rgba(0,0,0,0.25)', borderRadius: 8, padding: '6px 8px' }}>💊 {d.remedy.slice(0, 40)}…</div>
-              </div>
-            ))}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14 }}>
+              {demoCards.map((d, i) => (
+                <div
+                  key={i}
+                  onClick={() => {
+                    setSelectedCrop(d.crop);
+                    setResult(d);
+                    setActiveTab('remedy');
+                    setPage('result');
+                  }}
+                  style={{
+                    background: '#ffffff',
+                    borderRadius: 16,
+                    border: '1.5px solid #a7f3d0',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(26, 124, 74, 0.08)',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {/* Image Header */}
+                  <div style={{ height: 130, width: '100%', position: 'relative', overflow: 'hidden', background: '#e2e8f0' }}>
+                    <img
+                      src={d.image}
+                      alt=""
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        if (d.fallbackImage && e.currentTarget.src !== d.fallbackImage) {
+                          e.currentTarget.src = d.fallbackImage;
+                        }
+                      }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(0,0,0,0.7)', borderRadius: 20, padding: '4px 10px', color: '#fff', fontSize: 11, fontWeight: 700, backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', gap: 5, zIndex: 2 }}>
+                      {d.icon} {d.crop.split('/')[0].trim()}
+                    </div>
+                    <div style={{ position: 'absolute', bottom: 8, right: 8, background: 'linear-gradient(135deg, #1a7c4a, #145f38)', color: '#fff', fontSize: 10, fontWeight: 800, padding: '4px 8px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 3, zIndex: 2 }}>
+                      View Details <ChevronRight size={12} />
+                    </div>
+                  </div>
+
+                  {/* Body Content */}
+                  <div style={{ padding: '14px' }}>
+                    <div style={{ fontSize: 10, background: '#fee2e2', color: '#b91c1c', fontWeight: 800, padding: '2px 8px', borderRadius: 10, display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 6 }}>
+                      <AlertTriangle size={11} color="#b91c1c" /> {d.severity} Severity
+                    </div>
+                    <div style={{ fontSize: 14, fontWeight: 900, color: '#1a2e1f', marginBottom: 2, lineHeight: 1.3 }}>
+                      {d.disease}
+                    </div>
+                    <div style={{ fontSize: 11, color: '#4b7a5c', fontWeight: 600, marginBottom: 8 }}>
+                      {d.diseaseKn}
+                    </div>
+
+                    <div style={{ fontSize: 11, color: '#334155', background: '#f0f7f3', borderRadius: 8, padding: '8px 10px', border: '1px solid #d1e8db', lineHeight: 1.4, display: 'flex', alignItems: 'flex-start', gap: 5 }}>
+                      <Pill size={13} color="#1a7c4a" style={{ flexShrink: 0, marginTop: 1 }} />
+                      <div>
+                        <span style={{ fontWeight: 800, color: '#1a7c4a' }}>Treatment: </span>
+                        {d.remedy.slice(0, 48)}…
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Crop Selector + CTA */}
-        <div style={{ margin: '0 16px 36px', background: 'rgba(255,255,255,0.06)', borderRadius: 20, padding: '20px', border: '1px solid rgba(255,255,255,0.12)' }}>
-          <p style={{ color: '#fff', fontSize: 14, fontWeight: 800, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Crop size={16} color="#22c55e" />{lang === 'kn' ? 'Step 1 — ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ' : 'Step 1 — Select your crop'}
-          </p>
-          <select
-            value={selectedCrop}
-            onChange={e => setSelectedCrop(e.target.value)}
-            style={{ width: '100%', padding: '12px 14px', borderRadius: 12, fontSize: 14, fontWeight: 700, border: `2px solid ${selectedCrop === 'NO_CROP' ? '#fca5a5' : '#4ade80'}`, background: selectedCrop === 'NO_CROP' ? '#1a0a0a' : '#0a2e1a', color: selectedCrop === 'NO_CROP' ? '#f87171' : '#4ade80', outline: 'none', cursor: 'pointer', marginBottom: 14, WebkitAppearance: 'none' }}
-          >
-            <option value="NO_CROP" style={{ color: '#dc2626', background: '#111' }}>{lang === 'kn' ? '— ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ —' : '— Select crop to scan —'}</option>
-            {UNIQUE_CROPS.map((crop, i) => { const em = CROP_DISEASES.find(d => d.crop === crop)?.emoji || '🌿'; return <option key={i} value={crop} style={{ color: '#000', background: '#fff' }}>{em} {crop}</option>; })}
-          </select>
-
-          <button
-            onClick={() => { if (selectedCrop !== 'NO_CROP') setPage('scanner'); }}
-            disabled={selectedCrop === 'NO_CROP'}
-            style={{ width: '100%', padding: '15px', borderRadius: 14, border: 'none', fontSize: 16, fontWeight: 900, cursor: selectedCrop === 'NO_CROP' ? 'not-allowed' : 'pointer', background: selectedCrop === 'NO_CROP' ? 'rgba(255,255,255,0.1)' : 'linear-gradient(135deg,#16a34a,#22c55e)', color: selectedCrop === 'NO_CROP' ? 'rgba(255,255,255,0.3)' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 10, boxShadow: selectedCrop !== 'NO_CROP' ? '0 8px 30px rgba(34,197,94,0.4)' : 'none', transition: 'all 0.2s' }}
-          >
-            <Camera size={20} />
-            {selectedCrop === 'NO_CROP' ? (lang === 'kn' ? 'ಮೊದಲು ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ' : 'Select a crop first') : (lang === 'kn' ? 'ಕ್ಯಾಮರಾ ತೆರೆಯಿರಿ ಮತ್ತು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ' : 'Open Camera & Scan')}
-          </button>
-
-          <button
-            onClick={() => { if (selectedCrop !== 'NO_CROP') { fileInputRef.current?.click(); } }}
-            disabled={selectedCrop === 'NO_CROP'}
-            style={{ width: '100%', padding: '12px', borderRadius: 12, border: '1.5px dashed rgba(255,255,255,0.25)', fontSize: 13, fontWeight: 700, cursor: selectedCrop === 'NO_CROP' ? 'not-allowed' : 'pointer', background: 'transparent', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
-          >
-            <ImagePlus size={16} />{lang === 'kn' ? 'ಅಥವಾ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ' : 'Or upload a photo instead'}
-          </button>
-
-          <p style={{ margin: '10px 0 0', textAlign: 'center', color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>
-            <Layers size={11} style={{ verticalAlign: 'middle', marginRight: 4 }} />
-            {UNIQUE_CROPS.length} crops · {CROP_DISEASES.length}+ disease patterns
-          </p>
         </div>
 
         <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => { handleImageUpload(e); if (selectedCrop !== 'NO_CROP') setPage('scanner'); }} />
@@ -793,7 +1080,7 @@ export default function CropScanner() {
         {/* Header */}
         <div style={{ padding: '14px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(180deg,rgba(0,0,0,1),transparent)', position: 'absolute', top: 0, left: 0, right: 0, zIndex: 60 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button onClick={() => setPage('home')} style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 10, padding: '6px 10px', color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>← Back</button>
+            <button onClick={() => setPage('home')} style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 10, padding: '6px 12px', color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>← Back</button>
             <div style={{ background: 'rgba(34,197,94,0.2)', borderRadius: 10, padding: '5px 10px', border: '1px solid rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', gap: 6 }}>
               <Microscope size={13} color="#22c55e" />
               <span style={{ fontSize: 12, fontWeight: 700, color: '#22c55e' }}>{CROP_DISEASES.find(d => d.crop === selectedCrop)?.emoji} {selectedCrop.split('/')[0].trim()}</span>
@@ -851,7 +1138,7 @@ export default function CropScanner() {
         </div>
 
         {/* Scan button panel */}
-        <div style={{ background: 'rgba(255,255,255,0.97)', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: '16px 20px 28px', boxShadow: '0 -10px 40px rgba(0,0,0,0.4)' }}>
+        <div style={{ background: '#ffffff', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: '16px 20px 28px', boxShadow: '0 -10px 40px rgba(0,0,0,0.15)' }}>
           <div style={{ width: 36, height: 4, background: '#cbd5e1', borderRadius: 4, margin: '0 auto 14px' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
             <div style={{ fontSize: 22 }}>{CROP_DISEASES.find(d => d.crop === selectedCrop)?.emoji || '🌿'}</div>
@@ -861,7 +1148,7 @@ export default function CropScanner() {
           <button
             onClick={scanMode === 'image' && uploadedImage ? handleImageScan : handleScan}
             disabled={scanning}
-            style={{ width: '100%', padding: '15px', borderRadius: 14, border: 'none', fontSize: 16, fontWeight: 900, background: scanning ? '#94a3b8' : 'linear-gradient(135deg,#16a34a,#15803d)', color: '#fff', cursor: scanning ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, boxShadow: scanning ? 'none' : '0 8px 24px rgba(22,163,74,0.4)', transition: 'all 0.2s' }}
+            style={{ width: '100%', padding: '15px', borderRadius: 14, border: 'none', fontSize: 16, fontWeight: 900, background: scanning ? '#94a3b8' : 'linear-gradient(135deg,#1a7c4a,#145f38)', color: '#fff', cursor: scanning ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, boxShadow: scanning ? 'none' : '0 8px 24px rgba(26, 124, 74, 0.3)', transition: 'all 0.2s' }}
           >
             {scanning ? <><Loader2 size={20} style={{ animation: 'spin 0.8s linear infinite' }} />{lang === 'kn' ? 'AI ವಿಶ್ಲೇಷಿಸುತ್ತಿದೆ...' : 'AI Analyzing...'}</>
               : scanMode === 'image' && uploadedImage ? <><Microscope size={20} />{lang === 'kn' ? 'ಫೋಟೋ ವಿಶ್ಲೇಷಿಸಿ' : 'Analyze Photo'}</>
@@ -876,119 +1163,216 @@ export default function CropScanner() {
 
   // ─────────────── PAGE 3: RESULT ───────────────
   return (
-    <div style={{ width: '100%', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter',sans-serif", overflowY: 'auto' }}>
-      {/* Result header */}
-      <div style={{ background: result && result !== 'NO_CROP' ? `linear-gradient(135deg,${result.color}18,${result.color}06)` : '#fee2e2', padding: '20px 20px 24px', borderBottom: `3px solid ${result && result !== 'NO_CROP' ? result.color + '35' : '#fca5a5'}` }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <button onClick={() => setPage('scanner')} style={{ background: 'rgba(0,0,0,0.07)', border: 'none', borderRadius: 10, padding: '7px 12px', fontSize: 12, fontWeight: 700, color: '#475569', cursor: 'pointer' }}>← {lang === 'kn' ? 'ಹಿಂದೆ' : 'Back'}</button>
-          <button onClick={handleReset} style={{ background: 'linear-gradient(135deg,#16a34a,#15803d)', border: 'none', borderRadius: 10, padding: '7px 14px', fontSize: 12, fontWeight: 700, color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5 }}>
-            <RefreshCw size={13} />{lang === 'kn' ? 'ಮತ್ತೆ ಸ್ಕ್ಯಾನ್' : 'Scan Another'}
-          </button>
-        </div>
-
-        {result === 'NO_CROP' ? (
-          <div style={{ textAlign: 'center', padding: '10px 0' }}>
-            <div style={{ width: 64, height: 64, borderRadius: 20, background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><AlertCircle size={32} color="#ef4444" /></div>
-            <h2 style={{ margin: '0 0 8px', fontSize: 20, fontWeight: 900, color: '#0f172a' }}>{lang === 'kn' ? 'ಬೆಳೆ ಕಂಡುಬಂದಿಲ್ಲ' : 'No Crop Leaf Detected'}</h2>
-            <p style={{ margin: '0 0 16px', color: '#64748b', fontSize: 14, lineHeight: 1.6 }}>{lang === 'kn' ? 'ಸರಿಯಾದ ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಅಥವಾ ಬೆಳೆಯ ಎಲೆ ಮೇಲೆ ಕ್ಯಾಮರಾ ಇರಿಸಿ.' : 'Please upload a proper crop image or point the camera directly at the diseased leaf.'}</p>
-          </div>
-        ) : (
-          <>
-            <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <div style={{ width: 60, height: 60, borderRadius: 18, background: `${result.color}18`, border: `2px solid ${result.color}35`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0 }}>{result.emoji}</div>
-              <div style={{ flex: 1 }}>
-                <span style={{ background: SEVERITY_CONFIG[result.severity]?.bg, color: SEVERITY_CONFIG[result.severity]?.text, fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20, display: 'inline-block', marginBottom: 6 }}>{SEVERITY_CONFIG[result.severity]?.label}</span>
-                <h2 style={{ margin: '0 0 3px', fontSize: 17, fontWeight: 900, color: '#0f172a', lineHeight: 1.25 }}>{result.disease}</h2>
-                {result.diseaseKn && <p style={{ margin: '0 0 4px', fontSize: 13, color: '#94a3b8', fontWeight: 600 }}>{result.diseaseKn}</p>}
-                <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}><Leaf size={12} />{lang === 'kn' ? 'ಬೆಳೆ' : 'Crop'}: {result.crop}</div>
-              </div>
-            </div>
-            <div style={{ marginTop: 16, background: 'rgba(255,255,255,0.7)', borderRadius: 10, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#475569', flexShrink: 0 }}>AI Confidence</span>
-              <div style={{ flex: 1, background: '#e2e8f0', borderRadius: 4, height: 7 }}><div style={{ width: '87%', height: '100%', background: 'linear-gradient(90deg,#16a34a,#22c55e)', borderRadius: 4 }} /></div>
-              <span style={{ fontSize: 12, fontWeight: 800, color: '#16a34a', flexShrink: 0 }}>87%</span>
-            </div>
-          </>
-        )}
+    <div style={{
+      width: '100%', minHeight: '100vh',
+      background: 'var(--bg-main, #f0f7f3)',
+      fontFamily: "'Inter',sans-serif",
+      paddingBottom: 40,
+      overflowY: 'auto'
+    }}>
+      {/* Top Header */}
+      <div style={{
+        padding: '14px 20px',
+        background: '#ffffff',
+        borderBottom: '1px solid var(--border, #d1e8db)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+        position: 'sticky', top: 0, zIndex: 50
+      }}>
+        <button onClick={() => setPage('scanner')} style={{ background: '#f0f7f3', border: '1px solid #d1e8db', borderRadius: 10, padding: '7px 12px', fontSize: 12, fontWeight: 700, color: '#1a2e1f', cursor: 'pointer' }}>
+          ← {lang === 'kn' ? 'ಹಿಂದೆ' : 'Back to Scanner'}
+        </button>
+        <button onClick={handleReset} style={{ background: 'linear-gradient(135deg,#1a7c4a,#145f38)', border: 'none', borderRadius: 10, padding: '7px 14px', fontSize: 12, fontWeight: 700, color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5 }}>
+          <RefreshCw size={13} />{lang === 'kn' ? 'ಮತ್ತೆ ಸ್ಕ್ಯಾನ್' : 'Scan Another'}
+        </button>
       </div>
 
-      {result && result !== 'NO_CROP' && (
-        <div style={{ padding: '20px' }}>
-          {/* Action buttons */}
-          <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
-            <button onClick={toggleVoice} style={{ flex: 1, padding: '13px', borderRadius: 12, border: 'none', background: isSpeaking ? '#ef4444' : '#1e293b', color: '#fff', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-              <Volume2 size={18} />{isSpeaking ? (lang === 'kn' ? 'ನಿಲ್ಲಿಸು' : 'Stop') : (lang === 'kn' ? 'ಓದಿ ಹೇಳಿ' : 'Read Aloud')}
-            </button>
-            <button onClick={handleReset} style={{ padding: '13px 16px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#16a34a,#15803d)', color: '#fff', fontWeight: 800, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <RefreshCw size={15} />{lang === 'kn' ? 'ಮತ್ತೆ' : 'Rescan'}
-            </button>
-          </div>
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: '16px' }}>
 
-          {/* Tabs */}
-          <div style={{ display: 'flex', gap: 4, marginBottom: 14, background: '#f1f5f9', borderRadius: 12, padding: 4 }}>
-            {[{ key: 'remedy', label: '💊 ' + (lang === 'kn' ? 'ಪರಿಹಾರ' : 'Remedy') }, { key: 'fertilizer', label: '🌱 ' + (lang === 'kn' ? 'ಗೊಬ್ಬರ' : 'Nutrition') }, { key: 'tips', label: '💡 ' + (lang === 'kn' ? 'ಸಲಹೆ' : 'Tips') }].map(tab => (
-              <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{ flex: 1, padding: '9px 4px', borderRadius: 9, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700, background: activeTab === tab.key ? '#fff' : 'transparent', color: activeTab === tab.key ? '#0f172a' : '#64748b', boxShadow: activeTab === tab.key ? '0 1px 4px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.15s' }}>{tab.label}</button>
-            ))}
-          </div>
-
-          {/* Tab content */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 16, padding: 16, marginBottom: 14 }}>
-            {activeTab === 'remedy' && <div>
-              <p style={{ fontSize: 10, color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>{lang === 'kn' ? 'ರಾಸಾಯನಿಕ ನಿಯಂತ್ರಣ' : 'Chemical Treatment'}</p>
-              <p style={{ margin: '0 0 12px', fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.remedy}</p>
-              {result.organicTip && <div style={{ background: '#f0fdf4', borderRadius: 10, padding: '10px 12px', border: '1px solid #bbf7d0' }}><p style={{ fontSize: 11, fontWeight: 800, color: '#15803d', margin: '0 0 4px' }}>🌿 {lang === 'kn' ? 'ಸಾವಯವ ಪರ್ಯಾಯ' : 'Organic Alternative'}</p><p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>{result.organicTip}</p></div>}
-            </div>}
-            {activeTab === 'fertilizer' && <div>
-              <p style={{ fontSize: 10, color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>{lang === 'kn' ? 'ಪೋಷಕಾಂಶ ನಿರ್ವಹಣೆ' : 'Nutrition Management'}</p>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.fertilizer}</p>
-            </div>}
-            {activeTab === 'tips' && result.keyTakeaways && <div>
-              <p style={{ fontSize: 10, color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>{lang === 'kn' ? 'ಪ್ರಮುಖ ಅಂಶಗಳು' : 'Key Takeaways'}</p>
-              {result.keyTakeaways.map((tip, i) => (<div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}><div style={{ width: 18, height: 18, borderRadius: '50%', background: result.color + '20', color: result.color, fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{i+1}</div><p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5, fontWeight: 500 }}>{tip}</p></div>))}
-            </div>}
-          </div>
-
-          {/* Scheme */}
-          {result.scheme ? (
-            <a href={result.schemeLink || '#'} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'linear-gradient(90deg,#f0fdf4,#ecfdf5)', border: '1px solid #86efac', borderRadius: 16, padding: '14px 16px', marginBottom: 20, textDecoration: 'none', boxShadow: '0 4px 12px rgba(22,163,74,0.1)' }}>
-              <div style={{ background: '#16a34a', borderRadius: 10, padding: 10, color: '#fff', flexShrink: 0 }}><ShieldCheck size={20} /></div>
-              <div style={{ flex: 1 }}><p style={{ margin: '0 0 2px', fontSize: 10, color: '#15803d', fontWeight: 800, textTransform: 'uppercase' }}>🏛️ {lang === 'kn' ? 'ಅರ್ಹ ಸರ್ಕಾರಿ ಯೋಜನೆ — ಅರ್ಜಿ ಸಲ್ಲಿಸಿ' : 'Eligible Govt Scheme — Tap to Apply'}</p><p style={{ margin: 0, fontSize: 14, fontWeight: 800, color: '#14532d' }}>{result.scheme}</p></div>
-              <ChevronRight size={18} color="#16a34a" />
-            </a>
+        {/* Result Header Banner */}
+        <div style={{
+          background: result && result !== 'NO_CROP' ? '#ffffff' : '#fee2e2',
+          borderRadius: 18,
+          padding: '20px',
+          border: `1px solid ${result && result !== 'NO_CROP' ? '#d1e8db' : '#fca5a5'}`,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+          marginBottom: 16
+        }}>
+          {result === 'NO_CROP' ? (
+            <div style={{ textAlign: 'center', padding: '10px 0' }}>
+              <div style={{ width: 64, height: 64, borderRadius: 20, background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+                <AlertCircle size={32} color="#ef4444" />
+              </div>
+              <h2 style={{ margin: '0 0 8px', fontSize: 20, fontWeight: 900, color: '#0f172a' }}>
+                {lang === 'kn' ? 'ಬೆಳೆ ಕಂಡುಬಂದಿಲ್ಲ' : 'No Crop Leaf Detected'}
+              </h2>
+              <p style={{ margin: '0 0 16px', color: '#64748b', fontSize: 14, lineHeight: 1.6 }}>
+                {lang === 'kn' ? 'ಸರಿಯಾದ ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಅಥವಾ ಬೆಳೆಯ ಎಲೆ ಮೇಲೆ ಕ್ಯಾಮರಾ ಇರಿಸಿ.' : 'Please upload a proper crop image or point the camera directly at the diseased leaf.'}
+              </p>
+            </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14, padding: '12px 16px', marginBottom: 20 }}>
-              <Info size={16} color="#94a3b8" /><p style={{ margin: 0, fontSize: 13, color: '#94a3b8', lineHeight: 1.5 }}>{lang === 'kn' ? 'ಈ ರೋಗಕ್ಕೆ ನಿರ್ದಿಷ್ಟ ಯೋಜನೆ ಇಲ್ಲ. ಸ್ಥಳೀಯ KVK ಸಂಪರ್ಕಿಸಿ.' : 'No specific govt scheme. Contact your local Krishi Vigyan Kendra (KVK).'}</p>
-            </div>
-          )}
+            <>
+              {/* Optional Disease Image Banner */}
+              {result.image && (
+                <div style={{ width: '100%', height: 220, borderRadius: 14, overflow: 'hidden', marginBottom: 16, border: '1px solid #d1e8db', position: 'relative', background: '#e2e8f0' }}>
+                  <img
+                    src={result.image}
+                    alt=""
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      if (result.fallbackImage && e.currentTarget.src !== result.fallbackImage) {
+                        e.currentTarget.src = result.fallbackImage;
+                      }
+                    }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  <div style={{ position: 'absolute', bottom: 10, left: 10, background: 'rgba(0,0,0,0.7)', color: '#fff', padding: '4px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700, backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', gap: 5, zIndex: 2 }}>
+                    <Camera size={13} color="#fff" /> Diagnostic Sample Image
+                  </div>
+                </div>
+              )}
 
-          {/* AI Q&A */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 16, padding: '16px' }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <MessageCircle size={14} color="#16a34a" />{lang === 'kn' ? 'AI ಸಹಾಯಕ' : 'AI Assistant — Ask a follow-up'}
-            </div>
-            {qaChat.length === 0 && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
-                {[lang === 'kn' ? 'ಸಾವಯವ ಪರ್ಯಾಯ?' : 'Any organic alternative?', lang === 'kn' ? 'ಹರಡುವ ತಡೆ?' : 'How to prevent spread?', lang === 'kn' ? 'ಯೋಜನೆ ಅರ್ಜಿ ಹೇಗೆ?' : 'How to apply for scheme?'].map((q, i) => (
-                  <button key={i} onClick={() => setQaInput(q)} style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 20, padding: '5px 12px', fontSize: 12, color: '#15803d', fontWeight: 600, cursor: 'pointer' }}>{q}</button>
-                ))}
+              <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                <div style={{ width: 56, height: 56, borderRadius: 16, background: `${result.color || '#1a7c4a'}15`, border: `2px solid ${result.color || '#1a7c4a'}35`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {result.icon || <Leaf size={28} color={result.color || '#1a7c4a'} />}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <span style={{ background: SEVERITY_CONFIG[result.severity]?.bg || '#fee2e2', color: SEVERITY_CONFIG[result.severity]?.text || '#b91c1c', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20, display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 6 }}>
+                    <AlertTriangle size={11} color="#b91c1c" /> {SEVERITY_CONFIG[result.severity]?.label || 'High Severity'}
+                  </span>
+                  <h2 style={{ margin: '0 0 3px', fontSize: 18, fontWeight: 900, color: '#1a2e1f', lineHeight: 1.25 }}>{result.disease}</h2>
+                  {result.diseaseKn && <p style={{ margin: '0 0 4px', fontSize: 13, color: '#4b7a5c', fontWeight: 600 }}>{result.diseaseKn}</p>}
+                  <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Leaf size={12} />{lang === 'kn' ? 'ಬೆಳೆ' : 'Crop'}: {result.crop}
+                  </div>
+                </div>
               </div>
-            )}
-            {qaChat.length > 0 && (
-              <div style={{ background: '#f8fafc', borderRadius: 12, padding: '10px', marginBottom: 10, maxHeight: 200, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {qaChat.map((msg, i) => (<div key={i} style={{ display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}><div style={{ maxWidth: '85%', padding: '8px 12px', borderRadius: msg.role === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px', background: msg.role === 'user' ? 'linear-gradient(135deg,#16a34a,#15803d)' : '#fff', color: msg.role === 'user' ? '#fff' : '#1e293b', fontSize: 13, lineHeight: 1.5, boxShadow: '0 1px 4px rgba(0,0,0,0.07)' }}>{msg.text}</div></div>))}
-                {qaLoading && <div style={{ display: 'flex', gap: 4, padding: '6px 10px' }}>{[0,1,2].map(i => <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: '#94a3b8', animation: `typingDot 1.2s ${i*0.2}s infinite` }} />)}</div>}
-                <div ref={qaChatEndRef} />
+              <div style={{ marginTop: 16, background: '#f0f7f3', borderRadius: 10, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10, border: '1px solid #d1e8db' }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: '#1a2e1f', flexShrink: 0 }}>AI Confidence</span>
+                <div style={{ flex: 1, background: '#cbd5e1', borderRadius: 4, height: 7 }}>
+                  <div style={{ width: '92%', height: '100%', background: 'linear-gradient(90deg,#16a34a,#22c55e)', borderRadius: 4 }} />
+                </div>
+                <span style={{ fontSize: 12, fontWeight: 800, color: '#16a34a', flexShrink: 0 }}>92%</span>
               </div>
-            )}
-            <div style={{ display: 'flex', gap: 8 }}>
-              <input value={qaInput} onChange={e => setQaInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleQaAsk()} placeholder={lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಟೈಪ್ ಮಾಡಿ...' : 'Ask anything about this disease...'} style={{ flex: 1, border: '1.5px solid #e2e8f0', borderRadius: 10, padding: '10px 12px', fontSize: 13, outline: 'none', background: '#f8fafc', color: '#1e293b' }} onFocus={e => e.target.style.borderColor = '#16a34a'} onBlur={e => e.target.style.borderColor = '#e2e8f0'} />
-              <button onClick={handleQaAsk} disabled={!qaInput.trim() || qaLoading} style={{ background: qaInput.trim() ? '#16a34a' : '#e2e8f0', border: 'none', borderRadius: 10, padding: '0 14px', cursor: qaInput.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center' }}>
-                <Send size={16} color={qaInput.trim() ? '#fff' : '#94a3b8'} />
+            </>
+          )}
+        </div>
+
+        {result && result !== 'NO_CROP' && (
+          <div>
+            {/* Action buttons */}
+            <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
+              <button onClick={toggleVoice} style={{ flex: 1, padding: '13px', borderRadius: 12, border: 'none', background: isSpeaking ? '#ef4444' : '#1a2e1f', color: '#fff', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                <Volume2 size={18} />{isSpeaking ? (lang === 'kn' ? 'ನಿಲ್ಲಿಸು' : 'Stop') : (lang === 'kn' ? 'ಓದಿ ಹೇಳಿ' : 'Read Aloud')}
+              </button>
+              <button onClick={handleReset} style={{ padding: '13px 16px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#1a7c4a,#145f38)', color: '#fff', fontWeight: 800, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <RefreshCw size={15} />{lang === 'kn' ? 'ಮತ್ತೆ' : 'Rescan'}
               </button>
             </div>
+
+            {/* Tabs */}
+            <div style={{ display: 'flex', gap: 4, marginBottom: 14, background: '#ffffff', border: '1px solid #d1e8db', borderRadius: 12, padding: 4 }}>
+              {[
+                { key: 'remedy', icon: <Pill size={13} />, label: lang === 'kn' ? 'ಪರಿಹಾರ & ತಡೆ' : 'Treatment & Control' },
+                { key: 'fertilizer', icon: <Sprout size={13} />, label: lang === 'kn' ? 'ಗೊಬ್ಬರ' : 'Nutrition' },
+                { key: 'tips', icon: <Lightbulb size={13} />, label: lang === 'kn' ? 'ಸಲಹೆ' : 'Key Takeaways' }
+              ].map(tab => (
+                <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{ flex: 1, padding: '9px 4px', borderRadius: 9, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700, background: activeTab === tab.key ? '#f0f7f3' : 'transparent', color: activeTab === tab.key ? '#1a7c4a' : '#64748b', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                  {tab.icon} {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab content */}
+            <div style={{ background: '#fff', border: '1px solid #d1e8db', borderRadius: 16, padding: 18, marginBottom: 14 }}>
+              {activeTab === 'remedy' && <div>
+                {/* Chemical Treatment */}
+                <div style={{ marginBottom: 14 }}>
+                  <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 6px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <Pill size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ರಾಸಾಯನಿಕ ನಿಯಂತ್ರಣ (Chemical Treatment)' : 'Chemical Treatment'}
+                  </p>
+                  <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.remedy}</p>
+                </div>
+
+                {/* Prevention */}
+                {result.prevention && (
+                  <div style={{ marginBottom: 14, background: '#f8fafc', borderRadius: 12, padding: '12px 14px', border: '1px solid #e2e8f0' }}>
+                    <p style={{ fontSize: 11, color: '#0369a1', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <ShieldCheck size={14} color="#0369a1" /> {lang === 'kn' ? 'ತಡೆಗಟ್ಟುವಿಕೆ & ನಿರ್ವಹಣೆ (Prevention & Control)' : 'Prevention & Cultural Control'}
+                    </p>
+                    <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>{result.prevention}</p>
+                  </div>
+                )}
+
+                {/* Organic Tip */}
+                {result.organicTip && <div style={{ background: '#f0fdf4', borderRadius: 12, padding: '12px 14px', border: '1px solid #bbf7d0' }}>
+                  <p style={{ fontSize: 11, fontWeight: 800, color: '#15803d', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <Leaf size={14} color="#15803d" /> {lang === 'kn' ? 'ಸಾವಯವ ಪರ್ಯಾಯ (Organic Alternative)' : 'Organic Alternative'}
+                  </p>
+                  <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>{result.organicTip}</p>
+                </div>}
+              </div>}
+              {activeTab === 'fertilizer' && <div>
+                <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <Sprout size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ಪೋಷಕಾಂಶ ನಿರ್ವಹಣೆ' : 'Nutrition Management'}
+                </p>
+                <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.fertilizer}</p>
+              </div>}
+              {activeTab === 'tips' && result.keyTakeaways && <div>
+                <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 10px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <Lightbulb size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ಪ್ರಮುಖ ಅಂಶಗಳು' : 'Key Takeaways'}
+                </p>
+                {result.keyTakeaways.map((tip, i) => (<div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}><div style={{ width: 18, height: 18, borderRadius: '50%', background: (result.color || '#1a7c4a') + '20', color: result.color || '#1a7c4a', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{i+1}</div><p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5, fontWeight: 500 }}>{tip}</p></div>))}
+              </div>}
+            </div>
+
+            {/* Scheme */}
+            {result.scheme ? (
+              <a href={result.schemeLink || '#'} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#ffffff', border: '1px solid #86efac', borderRadius: 16, padding: '14px 16px', marginBottom: 16, textDecoration: 'none', boxShadow: '0 2px 8px rgba(22,163,74,0.08)' }}>
+                <div style={{ background: '#16a34a', borderRadius: 10, padding: 10, color: '#fff', flexShrink: 0 }}><ShieldCheck size={20} /></div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ margin: '0 0 2px', fontSize: 10, color: '#15803d', fontWeight: 800, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Building2 size={12} color="#15803d" /> {lang === 'kn' ? 'ಅರ್ಹ ಸರ್ಕಾರಿ ಯೋಜನೆ — ಅರ್ಜಿ ಸಲ್ಲಿಸಿ' : 'Eligible Govt Scheme — Tap to Apply'}
+                  </p>
+                  <p style={{ margin: 0, fontSize: 14, fontWeight: 800, color: '#14532d' }}>{result.scheme}</p>
+                </div>
+                <ChevronRight size={18} color="#16a34a" />
+              </a>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 14, padding: '12px 16px', marginBottom: 16 }}>
+                <Info size={16} color="#94a3b8" /><p style={{ margin: 0, fontSize: 13, color: '#94a3b8', lineHeight: 1.5 }}>{lang === 'kn' ? 'ಈ ರೋಗಕ್ಕೆ ನಿರ್ದಿಷ್ಟ ಯೋಜನೆ ಇಲ್ಲ. ಸ್ಥಳೀಯ KVK ಸಂಪರ್ಕಿಸಿ.' : 'No specific govt scheme. Contact your local Krishi Vigyan Kendra (KVK).'}</p>
+              </div>
+            )}
+
+            {/* AI Q&A */}
+            <div style={{ background: '#fff', border: '1px solid #d1e8db', borderRadius: 16, padding: '16px' }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: '#1a2e1f', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <MessageCircle size={14} color="#1a7c4a" />{lang === 'kn' ? 'AI ಸಹಾಯಕ' : 'AI Assistant — Ask a follow-up'}
+              </div>
+              {qaChat.length === 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
+                  {[lang === 'kn' ? 'ಸಾವಯವ ಪರ್ಯಾಯ?' : 'Any organic alternative?', lang === 'kn' ? 'ಹರಡುವ ತಡೆ?' : 'How to prevent spread?', lang === 'kn' ? 'ಯೋಜನೆ ಅರ್ಜಿ ಹೇಗೆ?' : 'How to apply for scheme?'].map((q, i) => (
+                    <button key={i} onClick={() => setQaInput(q)} style={{ background: '#f0f7f3', border: '1px solid #bbf7d0', borderRadius: 20, padding: '5px 12px', fontSize: 12, color: '#15803d', fontWeight: 600, cursor: 'pointer' }}>{q}</button>
+                  ))}
+                </div>
+              )}
+              {qaChat.length > 0 && (
+                <div style={{ background: '#f0f7f3', borderRadius: 12, padding: '10px', marginBottom: 10, maxHeight: 200, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {qaChat.map((msg, i) => (<div key={i} style={{ display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}><div style={{ maxWidth: '85%', padding: '8px 12px', borderRadius: msg.role === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px', background: msg.role === 'user' ? 'linear-gradient(135deg,#1a7c4a,#145f38)' : '#fff', color: msg.role === 'user' ? '#fff' : '#1e293b', fontSize: 13, lineHeight: 1.5, boxShadow: '0 1px 4px rgba(0,0,0,0.07)' }}>{msg.text}</div></div>))}
+                  {qaLoading && <div style={{ display: 'flex', gap: 4, padding: '6px 10px' }}>{[0,1,2].map(i => <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: '#94a3b8', animation: `typingDot 1.2s ${i*0.2}s infinite` }} />)}</div>}
+                  <div ref={qaChatEndRef} />
+                </div>
+              )}
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input value={qaInput} onChange={e => setQaInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleQaAsk()} placeholder={lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಟೈಪ್ ಮಾಡಿ...' : 'Ask anything about this disease...'} style={{ flex: 1, border: '1.5px solid #d1e8db', borderRadius: 10, padding: '10px 12px', fontSize: 13, outline: 'none', background: '#f0f7f3', color: '#1e293b' }} onFocus={e => e.target.style.borderColor = '#1a7c4a'} onBlur={e => e.target.style.borderColor = '#d1e8db'} />
+                <button onClick={handleQaAsk} disabled={!qaInput.trim() || qaLoading} style={{ background: qaInput.trim() ? '#1a7c4a' : '#e2e8f0', border: 'none', borderRadius: 10, padding: '0 14px', cursor: qaInput.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center' }}>
+                  <Send size={16} color={qaInput.trim() ? '#fff' : '#94a3b8'} />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <style>{`@keyframes typingDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </div>
