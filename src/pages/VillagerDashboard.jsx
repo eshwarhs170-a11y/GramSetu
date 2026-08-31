@@ -10,7 +10,7 @@ import {
   ComplaintScreen, ComplaintStatusScreen, ProfileScreen,
   WeatherScreen, EmergencySOSScreen, TutorialsScreen
 } from '../components/VillagerScreens'
-import { Menu, Search, Bell, X, AlertTriangle, IndianRupee } from 'lucide-react'
+import { Menu, Search, Bell, X, AlertTriangle, IndianRupee, LayoutDashboard, Landmark, Microscope, ClipboardList, User } from 'lucide-react'
 
 import { db } from '../firebase'
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
@@ -25,7 +25,7 @@ export default function VillagerDashboard() {
   const [notifExpanded, setNotifExpanded] = useState(null)
   const [announcements, setAnnouncements] = useState([])
   const [marketAlert, setMarketAlert] = useState(null)
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const { speak } = useVoice()
   const navigate = useNavigate()
 
@@ -37,7 +37,6 @@ export default function VillagerDashboard() {
         const latestDoc = snapshot.docs[0]
         const latest = latestDoc.data()
         if (latest.createdAt && latest.createdAt.toDate() > mountTime && latest.type === 'MARKET_BOOM') {
-          // If we haven't seen this exact alert yet
           if (window.sessionStorage.getItem('last_alert_id') !== latestDoc.id) {
             window.sessionStorage.setItem('last_alert_id', latestDoc.id)
             setMarketAlert(latest)
@@ -58,7 +57,6 @@ export default function VillagerDashboard() {
       }, 1000)
     }
   }, [speak])
-
 
   const pageMeta = {
     home:          { titleKey: 'dashTitle',      subKey: 'dashSub' },
@@ -139,10 +137,8 @@ export default function VillagerDashboard() {
         setSidebarOpen={setSidebarOpen}
       />
 
-      {/* Overlay to close drawer on mobile */}
       {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={() => setSidebarOpen(false)} />}
 
-      {/* MASSIVE MARKET BOOM ALERT */}
       {marketAlert && (
         <div style={{
           position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 99999,
@@ -173,101 +169,109 @@ export default function VillagerDashboard() {
 
       <div className="main-content">
         <header className="topbar">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <button
-              type="button"
-              className="hamburger-btn"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              aria-label="Toggle Sidebar"
-            >
-              <Menu size={22} strokeWidth={2} />
-            </button>
-            <div>
-              <div className="topbar-title">{t(page.titleKey)}</div>
-              <div className="topbar-subtitle">
-                {active === 'home'
-                  ? `${t('dashSub')} ${storedName}`
-                  : t(page.subKey)}
+          {/* Row 1: Brand & Actions */}
+          <div className="topbar-row-1">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <button
+                type="button"
+                className="hamburger-btn"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                aria-label="Toggle Sidebar"
+              >
+                <Menu size={22} strokeWidth={2} />
+              </button>
+              <div>
+                <div className="topbar-title">{t(page.titleKey)}</div>
+                <div className="topbar-subtitle">
+                  {active === 'home' ? `${t('dashSub')} ${storedName}` : t(page.subKey)}
+                </div>
               </div>
+            </div>
+
+            <div className="topbar-right">
+              <div className="desktop-only-flex">
+                <LanguageSwitcher variant="topbar-style" />
+                <ThemeToggle />
+              </div>
+              <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
+                <Search size={18} strokeWidth={2} />
+              </button>
+              <div style={{ position: 'relative' }}>
+                <button className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
+                  <Bell size={18} strokeWidth={2} />
+                  <div className="notif-dot" />
+                </button>
+                {notifOpen && (() => {
+                  return (
+                    <div className="notif-dropdown animate-fadeInUp">
+                      <div className="notif-header">
+                        <h4>Notifications</h4>
+                        <button onClick={() => setNotifOpen(false)}><X size={14} /></button>
+                      </div>
+                      <div className="notif-list">
+                        {announcements.length === 0 ? (
+                          <div style={{ padding: 16, textAlign: 'center', color: 'var(--text-muted)' }}>No new notifications</div>
+                        ) : (
+                          announcements.map(n => (
+                            <div key={n.id}>
+                              <div
+                                className="notif-item unread"
+                                style={{ cursor: 'pointer', flexDirection: 'column', gap: 0, padding: 0 }}
+                                onClick={() => setNotifExpanded(notifExpanded === n.id ? null : n.id)}
+                              >
+                                <div style={{ display: 'flex', gap: 12, padding: '14px 16px' }}>
+                                  <div className={`notif-icon ${n.priority === 'Emergency / ತುರ್ತು' || n.priority === 'Urgent' ? 'bg-danger' : 'bg-info'}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    {n.priority === 'Emergency / ತುರ್ತು' || n.priority === 'Urgent' ? <AlertTriangle size={16} /> : <Bell size={16} />}
+                                  </div>
+                                  <div style={{ flex: 1 }}>
+                                    <p style={{ margin: 0 }}>{n.title}</p>
+                                    <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{n.category}</span>
+                                  </div>
+                                  <span style={{ fontSize: 11, color: 'var(--text-muted)', alignSelf: 'center' }}>
+                                    {notifExpanded === n.id ? '▲' : '▼'}
+                                  </span>
+                                </div>
+                                {notifExpanded === n.id && (
+                                  <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid var(--border-light)', paddingTop: 10 }}>
+                                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 10, lineHeight: 1.6 }}>{n.message}</p>
+                                    <div style={{ display: 'flex', gap: 8 }}>
+                                      <button
+                                        onClick={e => { e.stopPropagation(); setActive('announcements'); setNotifOpen(false); setNotifExpanded(null); }}
+                                        style={{ fontSize: 12, fontWeight: 600, color: '#fff', background: 'var(--primary)', border: 'none', borderRadius: 6, padding: '3px 10px', cursor: 'pointer' }}
+                                      >
+                                        View All →
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                      <button className="notif-view-all" onClick={() => { setActive('announcements'); setNotifOpen(false) }}>View All Alerts</button>
+                    </div>
+                  )
+                })()}
+              </div>
+
+              <button className="topbar-icon-btn" onClick={() => setActive('profile')}>
+                <div style={{
+                  width: 30, height: 30, borderRadius: '50%',
+                  background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#fff', fontWeight: 700, fontSize: 13, boxShadow: '0 2px 8px rgba(22,101,52,0.3)'
+                }}>
+                  {storedName.charAt(0)}
+                </div>
+              </button>
             </div>
           </div>
 
-          <div className="topbar-right">
+          {/* Row 2: Mobile Sub-Row with Language & Theme Toggle */}
+          <div className="topbar-sub-row">
             <LanguageSwitcher variant="topbar-style" />
             <ThemeToggle />
-            <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
-              <Search size={18} strokeWidth={2} />
-            </button>
-            <div style={{ position: 'relative' }}>
-              <button className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
-                <Bell size={18} strokeWidth={2} />
-                <div className="notif-dot" />
-              </button>
-              {notifOpen && (() => {
-                const unreadCount = announcements.length
-                return (
-                  <div className="notif-dropdown animate-fadeInUp">
-                    <div className="notif-header">
-                      <h4>Notifications</h4>
-                      <button onClick={() => setNotifOpen(false)}><X size={14} /></button>
-                    </div>
-                    <div className="notif-list">
-                      {announcements.length === 0 ? (
-                        <div style={{ padding: 16, textAlign: 'center', color: 'var(--text-muted)' }}>No new notifications</div>
-                      ) : (
-                        announcements.map(n => (
-                          <div key={n.id}>
-                            <div
-                              className="notif-item unread"
-                              style={{ cursor: 'pointer', flexDirection: 'column', gap: 0, padding: 0 }}
-                              onClick={() => setNotifExpanded(notifExpanded === n.id ? null : n.id)}
-                            >
-                              <div style={{ display: 'flex', gap: 12, padding: '14px 16px' }}>
-                                <div className={`notif-icon ${n.priority === 'Emergency / ತುರ್ತು' || n.priority === 'Urgent' ? 'bg-danger' : 'bg-info'}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                  {n.priority === 'Emergency / ತುರ್ತು' || n.priority === 'Urgent' ? <AlertTriangle size={16} /> : <Bell size={16} />}
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                  <p style={{ margin: 0 }}>{n.title}</p>
-                                  <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{n.category}</span>
-                                </div>
-                                <span style={{ fontSize: 11, color: 'var(--text-muted)', alignSelf: 'center' }}>
-                                  {notifExpanded === n.id ? '▲' : '▼'}
-                                </span>
-                              </div>
-                              {notifExpanded === n.id && (
-                                <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid var(--border-light)', paddingTop: 10 }}>
-                                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 10, lineHeight: 1.6 }}>{n.message}</p>
-                                  <div style={{ display: 'flex', gap: 8 }}>
-                                    <button
-                                      onClick={e => { e.stopPropagation(); setActive('announcements'); setNotifOpen(false); setNotifExpanded(null); }}
-                                      style={{ fontSize: 12, fontWeight: 600, color: '#fff', background: 'var(--primary)', border: 'none', borderRadius: 6, padding: '3px 10px', cursor: 'pointer' }}
-                                    >
-                                      View All →
-                                    </button>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                    <button className="notif-view-all" onClick={() => { setActive('announcements'); setNotifOpen(false) }}>View All Alerts</button>
-                  </div>
-                )
-              })()}
-
-            </div>
-            <button className="topbar-icon-btn" onClick={() => setActive('profile')}>
-              <div style={{
-                width: 30, height: 30, borderRadius: '50%',
-                background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: '#fff', fontWeight: 700, fontSize: 13, boxShadow: '0 2px 8px rgba(22,101,52,0.3)'
-              }}>
-                {storedName.charAt(0)}
-              </div>
-            </button>
           </div>
         </header>
 
@@ -275,6 +279,49 @@ export default function VillagerDashboard() {
           {renderScreen()}
         </main>
       </div>
+
+      {/* Sleek Mobile Bottom Navigation Bar */}
+      <nav className="mobile-bottom-nav">
+        <button
+          className={`mobile-nav-btn ${active === 'home' ? 'active' : ''}`}
+          onClick={() => setActive('home')}
+        >
+          <LayoutDashboard size={20} />
+          <span>{lang === 'kn' ? 'ಮುಖಪುಟ' : 'Home'}</span>
+        </button>
+
+        <button
+          className={`mobile-nav-btn ${active === 'schemes' ? 'active' : ''}`}
+          onClick={() => setActive('schemes')}
+        >
+          <Landmark size={20} />
+          <span>{lang === 'kn' ? 'ಯೋಜನೆಗಳು' : 'Schemes'}</span>
+        </button>
+
+        <button
+          className="mobile-nav-btn"
+          onClick={() => navigate('/crop-doctor')}
+        >
+          <Microscope size={20} style={{ color: 'var(--primary)' }} />
+          <span>{lang === 'kn' ? 'ಬೆಳೆ ವೈದ್ಯ' : 'Crop Doctor'}</span>
+        </button>
+
+        <button
+          className={`mobile-nav-btn ${active === 'complaint' || active === 'status' ? 'active' : ''}`}
+          onClick={() => setActive('complaint')}
+        >
+          <ClipboardList size={20} />
+          <span>{lang === 'kn' ? 'ದೂರುಗಳು' : 'Complaints'}</span>
+        </button>
+
+        <button
+          className={`mobile-nav-btn ${active === 'profile' ? 'active' : ''}`}
+          onClick={() => setActive('profile')}
+        >
+          <User size={20} />
+          <span>{lang === 'kn' ? 'ಪ್ರೊಫೈಲ್' : 'Profile'}</span>
+        </button>
+      </nav>
 
       {/* Search Modal */}
       {searchOpen && (
