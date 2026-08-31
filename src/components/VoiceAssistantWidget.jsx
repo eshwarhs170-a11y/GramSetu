@@ -124,7 +124,7 @@ export default function VoiceAssistantWidget() {
     : { boxShadow: '0 4px 16px rgba(22,163,74,0.3)' };
 
   return (
-    <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10, fontFamily: "'Inter', sans-serif" }}>
+    <div className="voice-fab-wrapper" style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10, fontFamily: "'Inter', sans-serif" }}>
 
       {/* ── Chat Panel ── */}
       {isOpen && (

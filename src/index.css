@@ -1378,6 +1378,12 @@ input, textarea, select { font-family: inherit; outline: none; }
   }
 }
 
+/* ── Voice FAB: lift above mobile bottom nav ── */
+@media (max-width: 768px) {
+  .voice-fab-wrapper {
+    bottom: 80px !important;
+  }
+}
 /* ══════════════════════════════════════════
    YOUTUBE-STYLE TOPBAR & MOBILE BOTTOM NAV
 ══════════════════════════════════════════ */
