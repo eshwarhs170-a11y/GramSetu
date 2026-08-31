@@ -1438,7 +1438,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 @media (max-width: 768px) {
   .topbar {
     padding: 0 12px !important;
-    height: 56px !important;
+    height: 62px !important;
     min-height: unset !important;
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -1475,13 +1475,23 @@ input, textarea, select { font-family: inherit; outline: none; }
   .lang-dropdown-container.topbar-style .lang-dropdown-trigger svg:last-child {
     display: none !important;
   }
-  .lang-dropdown-container.topbar-style .lang-dropdown-trigger {
+  
+  /* Increase mobile icon sizes (Globe, Theme, Search, Bell) */
+  .lang-dropdown-container.topbar-style .lang-dropdown-trigger,
+  .topbar-icon-btn {
     padding: 0 !important;
-    width: 36px !important;
-    height: 36px !important;
+    width: 42px !important;
+    height: 42px !important;
     justify-content: center !important;
     border: none !important;
     background: transparent !important;
+    border-radius: 8px !important;
+  }
+  
+  .lang-dropdown-container.topbar-style .lang-dropdown-trigger svg:first-child,
+  .topbar-icon-btn svg {
+    width: 22px !important;
+    height: 22px !important;
   }
 
   /* ── Right: search + bell (hide profile) ── */
