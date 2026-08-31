@@ -459,6 +459,12 @@ input, textarea, select { font-family: inherit; outline: none; }
 }
 .topbar-subtitle { font-size: 13px; color: var(--text-muted); }
 .topbar-right { display: flex; align-items: center; gap: 16px; }
+
+/* Desktop: new topbar classes — single row layout */
+.topbar-row1-left { display: flex; align-items: center; gap: 12px; }
+.topbar-row1-right { display: flex; align-items: center; gap: 8px; }
+/* On desktop, row2 holds language + theme and sits between left and right */
+.topbar-row2 { display: flex; align-items: center; gap: 10px; }
 .topbar-icon-btn {
   width: 38px; height: 38px;
   border-radius: var(--radius-sm);
@@ -1432,22 +1438,44 @@ input, textarea, select { font-family: inherit; outline: none; }
 
 @media (max-width: 768px) {
   .topbar {
-    padding: 6px 12px !important;
+    padding: 8px 12px 0 12px !important;
     height: auto !important;
     min-height: unset !important;
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: center !important;
-    justify-content: space-between !important;
-    gap: 4px !important;
+    gap: 0 !important;
     background: var(--bg-card);
     border-bottom: 1px solid var(--border-light);
   }
 
-  /* Row 1: hamburger + brand — takes full width */
-  .topbar > div:first-child {
+  /* ── Row 1 Left: hamburger + brand ── */
+  .topbar-row1-left {
     flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     min-width: 0;
+  }
+
+  /* ── Row 1 Right: search + bell + profile ── */
+  .topbar-row1-right {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ── Row 2: language + theme — full-width second line ── */
+  .topbar-row2 {
+    flex: 0 0 100%;
+    width: 100%;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0 8px;
+    border-top: 1px solid var(--border-light);
+    margin-top: 6px;
   }
 
   .topbar-brand-text {
@@ -1458,21 +1486,9 @@ input, textarea, select { font-family: inherit; outline: none; }
     display: none;
   }
 
-  /* Row 2: actions — pushed to its own line, full width */
-  .topbar-right {
-    flex: 0 0 100% !important;
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 0 !important;
-    padding: 2px 0 4px !important;
-    border-top: 1px solid var(--border-light);
-  }
-
   .topbar-icon-btn {
     width: 36px !important;
-    height: 34px !important;
+    height: 36px !important;
     border-radius: 8px !important;
   }
 

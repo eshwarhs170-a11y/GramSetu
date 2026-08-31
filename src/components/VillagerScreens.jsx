@@ -1793,7 +1793,7 @@ export function SchemesScreen() {
 }
 
 export function MarketScreen() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
   const [viewMode, setViewMode] = useState('district') // 'district' or 'all'
 

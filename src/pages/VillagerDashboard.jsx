@@ -167,15 +167,15 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
 
       <div className="main-content">
         <header className="topbar">
-          {/* Left: Hamburger & YouTube-style GramSetu Brand */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {/* ── Row 1 Left: Hamburger + Brand ── */}
+          <div className="topbar-row1-left">
             <button
               type="button"
               className="hamburger-btn"
               onClick={() => setSidebarOpen(!sidebarOpen)}
               aria-label="Toggle Sidebar"
             >
-              <Menu size={22} strokeWidth={2} />
+              <Menu size={26} strokeWidth={2} />
             </button>
 
             <div className="topbar-brand" onClick={() => setActive('home')} style={{ cursor: 'pointer' }}>
@@ -188,11 +188,8 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
             </div>
           </div>
 
-          {/* Right: Controls & Actions */}
-          <div className="topbar-right">
-            <LanguageSwitcher variant="topbar-style" />
-            <ThemeToggle />
-
+          {/* ── Row 1 Right: Search + Bell + Profile ── */}
+          <div className="topbar-row1-right">
             <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
               <Search size={18} strokeWidth={2} />
             </button>
@@ -267,6 +264,12 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
                 {storedName.charAt(0)}
               </div>
             </button>
+          </div>
+
+          {/* ── Row 2: Language (left) + Theme (right) — mobile only ── */}
+          <div className="topbar-row2">
+            <LanguageSwitcher variant="topbar-style" />
+            <ThemeToggle />
           </div>
         </header>
 
