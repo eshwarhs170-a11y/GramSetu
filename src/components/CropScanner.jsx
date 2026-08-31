@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, X, CheckCircle2, AlertTriangle, ShieldCheck, Volume2, Info, Scan, Leaf, AlertCircle, Microscope, Droplets, FlaskConical, Sprout, ChevronRight, Upload, MessageCircle, Send, ImagePlus } from 'lucide-react';
+import { Camera, X, CheckCircle2, AlertTriangle, ShieldCheck, Volume2, Info, Scan, Leaf, AlertCircle, Microscope, Droplets, FlaskConical, Sprout, ChevronRight, Upload, MessageCircle, Send, ImagePlus, ChevronsDown, Loader2, TriangleAlert, CircleCheck, ScanLine, Image, Crop, Layers, Bot, Pill, Building2, ListChecks, RefreshCw, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useVoice } from '../context/VoiceContext';
 import { callGemini } from '../utils/voiceCommands';
@@ -771,59 +771,40 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
           </button>
         </div>
 
-        {/* ── Top overlay: Mode Toggle + Crop Selector ── */}
+        {/* ── Top overlay: Mode Toggle Only ── */}
         {!result && !scanning && (
-          <div style={{ position: 'absolute', top: 64, left: 0, right: 0, zIndex: 60, padding: '0 16px' }}>
+          <div style={{ position: 'absolute', top: 64, left: 0, right: 0, zIndex: 60, padding: '0 14px' }}>
             {/* Mode toggle tabs */}
             <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
               <button onClick={() => { setScanMode('camera'); setUploadedImage(null); }}
-                style={{ flex: 1, padding: '7px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 700,
-                  background: scanMode === 'camera' ? 'rgba(34,197,94,0.9)' : 'rgba(0,0,0,0.55)',
-                  color: '#fff', backdropFilter: 'blur(4px)', transition: 'background 0.2s' }}>
-                📷 {lang === 'kn' ? 'ಲೈವ್ ಕ್ಯಾಮರಾ' : 'Live Camera'}
+                style={{ flex: 1, padding: '8px 6px', borderRadius: 10, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700,
+                  background: scanMode === 'camera' ? 'rgba(34,197,94,0.92)' : 'rgba(0,0,0,0.6)',
+                  color: '#fff', backdropFilter: 'blur(8px)', transition: 'all 0.2s',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                <Camera size={14} />
+                {lang === 'kn' ? 'ಲೈವ್ ಕ್ಯಾಮರಾ' : 'Live Camera'}
               </button>
               <button onClick={() => fileInputRef.current?.click()}
-                style={{ flex: 1, padding: '7px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 700,
-                  background: scanMode === 'image' ? 'rgba(34,197,94,0.9)' : 'rgba(0,0,0,0.55)',
-                  color: '#fff', backdropFilter: 'blur(4px)', transition: 'background 0.2s' }}>
-                🖼️ {lang === 'kn' ? 'ಫೋಟೋ ಅಪ್‌ಲೋಡ್' : 'Upload Photo'}
+                style={{ flex: 1, padding: '8px 6px', borderRadius: 10, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700,
+                  background: scanMode === 'image' ? 'rgba(34,197,94,0.92)' : 'rgba(0,0,0,0.6)',
+                  color: '#fff', backdropFilter: 'blur(8px)', transition: 'all 0.2s',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                <Image size={14} />
+                {lang === 'kn' ? 'ಫೋಟೋ ಅಪ್‌ಲೋಡ್' : 'Upload Photo'}
               </button>
               <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
             </div>
 
-            {/* Crop selector always visible to guide the demo */}
-            <div>
-              <div style={{ background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: 10, padding: '7px 10px', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Sprout size={13} color="#22c55e" />
-                <span style={{ fontSize: 11, color: '#86efac', fontWeight: 600 }}>
-                  {lang === 'kn'
-                    ? showSelectorHint && selectedCrop === 'NO_CROP'
-                      ? '⚠️ ನೀವು ಸ್ಕ್ಯಾನ್ ಮಾಡುತ್ತಿರುವ ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ'
-                      : '✓ ಬೆಳೆ ಆಯ್ಕೆಯಾಗಿದೆ — ವಿಶ್ಲೇಷಿಸಲು ಸ್ಕ್ಯಾನ್ ಒತ್ತಿ'
-                    : showSelectorHint && selectedCrop === 'NO_CROP'
-                    ? '⚠️ Select the crop you are targeting'
-                    : '✓ Target crop set — tap Scan'}
-                </span>
-              </div>
-              <select
-                value={selectedCrop}
-                onChange={(e) => { setSelectedCrop(e.target.value); setShowSelectorHint(false); }}
-                style={{
-                  background: selectedCrop === 'NO_CROP' ? 'rgba(239,68,68,0.85)' : 'rgba(0,0,0,0.82)',
-                  color: '#fff', border: selectedCrop === 'NO_CROP' ? '2px solid rgba(239,68,68,0.8)' : '1px solid rgba(255,255,255,0.18)',
-                  padding: '9px 12px', borderRadius: 10, fontSize: 12,
-                  backdropFilter: 'blur(8px)', outline: 'none', width: '100%',
-                  fontWeight: 600,
-                }}
-              >
-                <option value="NO_CROP" style={{ color: '#000' }}>👆 {lang === 'kn' ? '— ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ —' : '— Select target crop —'}</option>
-                {UNIQUE_CROPS.map((crop, i) => {
-                  const em = CROP_DISEASES.find(d => d.crop === crop)?.emoji || '🌿';
-                  return (
-                    <option key={i} value={crop} style={{ color: '#000' }}>{em} {crop}</option>
-                  );
-                })}
-              </select>
+            {/* Simple hint bar — no crop selector here */}
+            <div style={{ background: 'rgba(0,0,0,0.55)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 10, padding: '7px 12px', display: 'flex', alignItems: 'center', gap: 8, backdropFilter: 'blur(8px)' }}>
+              {scanMode === 'camera' ? <ScanLine size={13} color="#22c55e" /> : <Image size={13} color="#22c55e" />}
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.88)', fontWeight: 600 }}>
+                {scanMode === 'camera'
+                  ? (lang === 'kn' ? 'ರೋಗಗ್ರಸ್ತ ಎಲೆಯನ್ನು ಚೌಕಟ್ಟಿನಲ್ಲಿ ಇರಿಸಿ' : 'Hold diseased leaf in the frame, then tap Scan')
+                  : uploadedImage
+                    ? (lang === 'kn' ? 'ಫೋಟೋ ಲೋಡ್ ಆಗಿದೆ — ಕೆಳಗೆ ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ' : 'Photo loaded — select crop below & tap Analyze')
+                    : (lang === 'kn' ? 'ಮೇಲೆ "ಫೋಟೋ ಅಪ್‌ಲೋಡ್" ಒತ್ತಿ' : 'Tap Upload Photo to choose an image')}
+              </span>
             </div>
           </div>
         )}
@@ -967,64 +948,71 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
 
           {/* ── STATE: Idle (no result) ── */}
           {!result ? (
-            <div style={{ textAlign: 'center' }}>
-              <h3 style={{ margin: '0 0 6px', fontSize: 20, fontWeight: 800, color: '#0f172a' }}>
-                {lang === 'kn' ? 'ಬೆಳೆಯ ಆರೋಗ್ಯ ವಿಶ್ಲೇಷಿಸಿ' : 'Analyze Crop Health'}
-              </h3>
-              <p style={{ margin: '0 0 18px', color: '#64748b', fontSize: 13, lineHeight: 1.5 }}>
-                {lang === 'kn'
-                  ? 'ರೋಗ ಪತ್ತೆ, ಪರಿಹಾರ ಮತ್ತು ಸರ್ಕಾರಿ ಯೋಜನೆಗಳನ್ನು ಪಡೆಯಲು ಎಲೆಯನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ.'
-                  : 'Point camera at the affected leaf or plant part to detect disease, get treatment advice & check eligible govt schemes.'}
-              </p>
+            <div>
+              {/* Title row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg,#064e3b,#16a34a)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink: 0 }}>
+                  <Microscope size={18} color="#fff" />
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: 16, fontWeight: 900, color: '#0f172a', lineHeight: 1.2 }}>
+                    {lang === 'kn' ? 'ಬೆಳೆಯ ಆರೋಗ್ಯ ವಿಶ್ಲೇಷಿಸಿ' : 'Analyze Crop Health'}
+                  </h3>
+                  <p style={{ margin: 0, color: '#64748b', fontSize: 11, fontWeight: 500 }}>
+                    {lang === 'kn' ? 'AI ಮೂಲಕ ರೋಗ ಪತ್ತೆ ಮಾಡಿ' : 'AI-powered disease detection'}
+                  </p>
+                </div>
+              </div>
 
-              {/* AI info chips */}
-              <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 18 }}>
+              {/* Feature chips */}
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
                 {[
-                  { icon: '🔬', label: lang === 'kn' ? 'AI ರೋಗ ಗುರುತು' : 'AI Disease ID' },
-                  { icon: '💊', label: lang === 'kn' ? 'ಸ್ಮಾರ್ಟ್ ಪರಿಹಾರ' : 'Smart Remedy' },
-                  { icon: '🏛️', label: lang === 'kn' ? 'ಯೋಜನೆ ಶಿಫಾರಸು' : 'Scheme Alert' },
+                  { icon: <Bot size={11} />, label: lang === 'kn' ? 'AI ರೋಗ ಗುರುತು' : 'AI Disease ID' },
+                  { icon: <Pill size={11} />, label: lang === 'kn' ? 'ಸ್ಮಾರ್ಟ್ ಪರಿಹಾರ' : 'Smart Remedy' },
+                  { icon: <Building2 size={11} />, label: lang === 'kn' ? 'ಯೋಜನೆ ಶಿಫಾರಸು' : 'Scheme Alert' },
                 ].map((chip, i) => (
-                  <div key={i} style={{ background: '#f1f5f9', borderRadius: 20, padding: '5px 12px', fontSize: 11, fontWeight: 700, color: '#475569', display: 'flex', gap: 5, alignItems: 'center' }}>
-                    <span>{chip.icon}</span>{chip.label}
+                  <div key={i} style={{ background: '#f1f5f9', borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 700, color: '#475569', display: 'flex', gap: 5, alignItems: 'center' }}>
+                    {chip.icon}{chip.label}
                   </div>
                 ))}
               </div>
 
-              {/* Upload photo button + scan button */}
+              {/* Upload photo button */}
               <button
                 onClick={() => { fileInputRef.current?.click(); }}
                 style={{
-                  background: scanMode === 'image' && uploadedImage ? 'linear-gradient(135deg, #0ea5e9, #0284c7)' : '#f1f5f9',
+                  background: scanMode === 'image' && uploadedImage ? 'linear-gradient(135deg,#0ea5e9,#0284c7)' : '#f8fafc',
                   color: scanMode === 'image' && uploadedImage ? '#fff' : '#475569',
-                  border: '1.5px dashed ' + (scanMode === 'image' && uploadedImage ? '#0ea5e9' : '#cbd5e1'),
-                  borderRadius: 14, padding: '11px', fontSize: 13, fontWeight: 700, width: '100%',
+                  border: '1.5px dashed ' + (scanMode === 'image' && uploadedImage ? '#38bdf8' : '#cbd5e1'),
+                  borderRadius: 12, padding: '10px 14px', fontSize: 13, fontWeight: 700, width: '100%',
                   cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                   marginBottom: 10, transition: 'all 0.2s',
                 }}
               >
-                <ImagePlus size={18} />
+                {scanMode === 'image' && uploadedImage ? <CircleCheck size={16} /> : <ImagePlus size={16} />}
                 {scanMode === 'image' && uploadedImage
-                  ? (lang === 'kn' ? '✓ ಫೋಟೋ ಆಯ್ಕೆಯಾಗಿದೆ — ಬದಲಾಯಿಸಲು ಒತ್ತಿ' : '✓ Photo loaded — tap to change')
-                  : (lang === 'kn' ? '📤 ರೋಗಗ್ರಸ್ತ ಬೆಳೆ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ' : '📤 Upload Photo of Diseased Crop')}
+                  ? (lang === 'kn' ? 'ಫೋಟೋ ಆಯ್ಕೆಯಾಗಿದೆ — ಬದಲಾಯಿಸಲು ಒತ್ತಿ' : 'Photo loaded — tap to change')
+                  : (lang === 'kn' ? 'ರೋಗಗ್ರಸ್ತ ಬೆಳೆ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ' : 'Upload Photo of Diseased Crop')}
               </button>
 
-              {/* Show crop selector in bottom panel (for both modes) */}
+              {/* Crop selector — single instance, bottom panel only */}
               <div style={{ marginBottom: 10 }}>
-                <label style={{ fontSize: 11, fontWeight: 700, color: '#64748b', display: 'block', marginBottom: 5 }}>
-                  {lang === 'kn' ? '🌿 ಯಾವ ಬೆಳೆಯ ಫೋಟೋ?' : '🌿 Which crop are you scanning?'}
+                <label style={{ fontSize: 11, fontWeight: 700, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5, marginBottom: 6 }}>
+                  <Crop size={12} color="#16a34a" />
+                  {lang === 'kn' ? 'ಯಾವ ಬೆಳೆ ಸ್ಕ್ಯಾನ್ ಮಾಡುತ್ತಿದ್ದೀರಿ?' : 'Which crop are you scanning?'}
                 </label>
                 <select
                   value={selectedCrop}
                   onChange={(e) => { setSelectedCrop(e.target.value); setShowSelectorHint(false); }}
                   style={{
-                    background: selectedCrop === 'NO_CROP' ? '#fef2f2' : '#f0fdf4',
+                    background: selectedCrop === 'NO_CROP' ? '#fff1f2' : '#f0fdf4',
                     color: selectedCrop === 'NO_CROP' ? '#dc2626' : '#15803d',
                     border: `1.5px solid ${selectedCrop === 'NO_CROP' ? '#fca5a5' : '#86efac'}`,
-                    padding: '9px 12px', borderRadius: 10, fontSize: 13, fontWeight: 700,
-                    outline: 'none', width: '100%',
+                    padding: '10px 12px', borderRadius: 10, fontSize: 13, fontWeight: 700,
+                    outline: 'none', width: '100%', cursor: 'pointer',
                   }}
                 >
-                  <option value="NO_CROP" style={{ color: '#dc2626' }}>👆 {lang === 'kn' ? '— ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ —' : '— Select target crop —'}</option>
+                  <option value="NO_CROP" style={{ color: '#dc2626' }}>{lang === 'kn' ? '— ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ —' : '— Select crop to scan —'}</option>
                   {UNIQUE_CROPS.map((crop, i) => {
                     const em = CROP_DISEASES.find(d => d.crop === crop)?.emoji || '🌿';
                     return <option key={i} value={crop} style={{ color: '#000' }}>{em} {crop}</option>;
@@ -1032,49 +1020,49 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
                 </select>
               </div>
 
+              {/* Scan / Analyze button */}
               <button
                 onClick={scanMode === 'image' && uploadedImage ? handleImageScan : handleScan}
                 disabled={scanning}
                 style={{
                   background: scanning ? '#94a3b8'
                     : selectedCrop === 'NO_CROP'
-                    ? '#f59e0b'  // orange = needs crop selection first
-                    : 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
-                  color: '#fff', border: 'none', borderRadius: 16,
-                  padding: '15px 28px', fontSize: 17, fontWeight: 800, width: '100%',
+                    ? 'linear-gradient(135deg,#f59e0b,#d97706)'
+                    : 'linear-gradient(135deg,#16a34a,#15803d)',
+                  color: '#fff', border: 'none', borderRadius: 14,
+                  padding: '14px', fontSize: 15, fontWeight: 800, width: '100%',
                   cursor: scanning ? 'not-allowed' : 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                  boxShadow: scanning ? 'none' : '0 12px 30px rgba(22,163,74,0.35)',
+                  boxShadow: scanning || selectedCrop === 'NO_CROP' ? 'none' : '0 8px 24px rgba(22,163,74,0.35)',
                   transition: 'all 0.2s',
                 }}
               >
                 {scanning ? (
-                  <>
-                    <div style={{ width: 20, height: 20, border: '2.5px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-                    {lang === 'kn' ? 'AI ವಿಶ್ಲೇಷಿಸುತ್ತಿದೆ...' : 'AI is Analyzing...'}
+                  <><Loader2 size={20} style={{ animation: 'spin 0.8s linear infinite' }} />
+                    {lang === 'kn' ? 'AI ವಿಶ್ಲೇಷಿಸುತ್ತಿದೆ...' : 'AI Analyzing...'}
                   </>
                 ) : selectedCrop === 'NO_CROP' ? (
-                  <>
-                    <span>👆</span>
-                    {lang === 'kn' ? 'ಮೊದಲು ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ' : 'Select crop first (above)'}
+                  <><TriangleAlert size={18} />
+                    {lang === 'kn' ? 'ಮೊದಲು ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ' : 'Select a crop first'}
                   </>
                 ) : scanMode === 'image' && uploadedImage ? (
-                  <>
-                    <Microscope size={20} />
+                  <><Microscope size={20} />
                     {lang === 'kn' ? 'ಫೋಟೋ ವಿಶ್ಲೇಷಿಸಿ' : 'Analyze Photo'}
                   </>
                 ) : (
-                  <>
-                    <Scan size={22} />
+                  <><ScanLine size={20} />
                     {lang === 'kn' ? 'ಲೈವ್ ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ' : 'Start Live Scan'}
                   </>
                 )}
               </button>
 
               {/* Supported crops count */}
-              <p style={{ margin: '12px 0 0', fontSize: 11, color: '#94a3b8', fontWeight: 500 }}>
-                🌱 {lang === 'kn' ? `${UNIQUE_CROPS.length} ಕರ್ನಾಟಕ ಬೆಳೆಗಳನ್ನು ಬೆಂಬಲಿಸುತ್ತದೆ` : `Supports ${UNIQUE_CROPS.length} major Karnataka crops · ${CROP_DISEASES.length}+ disease patterns`}
-              </p>
+              <div style={{ margin: '10px 0 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                <Layers size={11} color="#94a3b8" />
+                <p style={{ margin: 0, fontSize: 11, color: '#94a3b8', fontWeight: 500 }}>
+                  {lang === 'kn' ? `${UNIQUE_CROPS.length} ಕರ್ನಾಟಕ ಬೆಳೆಗಳು · ${CROP_DISEASES.length}+ ರೋಗಗಳು` : `${UNIQUE_CROPS.length} Karnataka crops · ${CROP_DISEASES.length}+ disease patterns`}
+                </p>
+              </div>
             </div>
 
           ) : result === 'NO_CROP' ? (
