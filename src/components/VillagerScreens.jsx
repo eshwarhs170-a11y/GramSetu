@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Activity,
   AlertCircle,
@@ -90,7 +91,6 @@ import { districtCropsMap, cropImageMap, cropMeta, formatCropLabel } from '../da
 import cropInfoMap from '../data/cropInfo.json'
 import districtPricesMap from '../data/districtPrices.json'
 import { karnatakaPopularCrops } from '../data/karnatakaPopularCrops'
-import CropScanner from './CropScanner'
 
 // ===================== KARNATAKA DATA =====================
 
@@ -196,7 +196,7 @@ export function HomeScreen({ setActive }) {
   const [priceSource, setPriceSource] = useState('district') // 'live' | 'baseline' | 'district'
   const [loadingPrices, setLoadingPrices] = useState(true)
   const [selectedCropInfo, setSelectedCropInfo] = useState(null)
-  const [isScannerOpen, setIsScannerOpen] = useState(false)
+  const navigate = useNavigate()
 
   // Flash a row green/red when its price changes
   const flashRow = (idx, trend) => {
@@ -524,10 +524,35 @@ export function HomeScreen({ setActive }) {
         ))}
       </div>
 
-
-
-      {/* CropScanner Modal */}
-      {isScannerOpen && <CropScanner onClose={() => setIsScannerOpen(false)} />}
+      {/* ── Crop Doctor Quick Action ── */}
+      <div
+        className="animate-fadeInUp"
+        onClick={() => navigate('/crop-doctor')}
+        style={{
+          cursor: 'pointer',
+          background: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)',
+          borderRadius: 16, padding: '18px 20px', marginBottom: 20,
+          display: 'flex', alignItems: 'center', gap: 16,
+          boxShadow: '0 8px 24px rgba(6,78,59,0.25)',
+          border: '1px solid rgba(34,197,94,0.3)',
+          transition: 'transform 0.2s, box-shadow 0.2s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(6,78,59,0.35)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 8px 24px rgba(6,78,59,0.25)'; }}
+      >
+        <div style={{ background: 'rgba(34,197,94,0.2)', borderRadius: 12, padding: '10px 12px', border: '1px solid rgba(34,197,94,0.3)', flexShrink: 0 }}>
+          <span style={{ fontSize: 28 }}>🔬</span>
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 16, fontWeight: 900, color: '#fff', marginBottom: 2 }}>
+            {lang === 'kn' ? 'ಬೆಳೆ ವೈದ್ಯ — AI ರೋಗ ಪರೀಕ್ಷೆ' : 'Crop Doctor — AI Disease Scanner'}
+          </div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)', fontWeight: 500 }}>
+            {lang === 'kn' ? 'ಕ್ಯಾಮರಾ ಮೂಲಕ ಬೆಳೆ ರೋಗ ಗುರುತಿಸಿ' : 'Point camera at crop to detect disease instantly'}
+          </div>
+        </div>
+        <div style={{ color: '#22c55e', fontWeight: 800, fontSize: 20 }}>→</div>
+      </div>
 
       <div className="content-grid">
         <div>

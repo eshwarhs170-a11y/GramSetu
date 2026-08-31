@@ -3,6 +3,7 @@ import { Camera, X, CheckCircle2, AlertTriangle, ShieldCheck, Volume2, Info, Sca
 import { useLanguage } from '../context/LanguageContext';
 import { useVoice } from '../context/VoiceContext';
 import { callGemini } from '../utils/voiceCommands';
+import { useNavigate } from 'react-router-dom';
 
 // ─────────────────────────────────────────────────────────────────
 // COMPREHENSIVE KARNATAKA CROP DISEASE DATABASE
@@ -509,7 +510,8 @@ const SEVERITY_CONFIG = {
   Low:    { bg: '#dcfce7', text: '#14532d', label: '✅ Low Severity' },
 };
 
-export default function CropScanner({ onClose }) {
+export default function CropScanner() {
+  const navigate = useNavigate();
   const [stream, setStream] = useState(null);
   const [cameraError, setCameraError] = useState(false);
   const [scanning, setScanning] = useState(false);
@@ -729,18 +731,12 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
 
   return (
     <div style={{
-      position: 'fixed', inset: 0, zIndex: 99999,
-      background: 'rgba(0,0,0,0.92)', backdropFilter: 'blur(12px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '12px', fontFamily: "'Inter', sans-serif"
+      width: '100%', height: '100vh',
+      background: '#0a0a0a',
+      display: 'flex', flexDirection: 'column',
+      fontFamily: "'Inter', sans-serif",
+      overflow: 'hidden'
     }}>
-      <div style={{
-        background: '#0a0a0a', width: '100%', maxWidth: '480px',
-        height: '100%', maxHeight: '900px',
-        borderRadius: '28px', overflow: 'hidden',
-        position: 'relative', display: 'flex', flexDirection: 'column',
-        boxShadow: '0 0 0 1px rgba(34,197,94,0.2), 0 30px 80px rgba(0,0,0,0.8)'
-      }}>
 
         {/* ── Header ── */}
         <div style={{
@@ -762,7 +758,7 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
               </div>
             )}
           </div>
-          <button onClick={onClose} style={{
+          <button onClick={() => navigate(-1)} style={{
             background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)',
             borderRadius: '50%', width: 36, height: 36, display: 'flex', alignItems: 'center',
             justifyContent: 'center', color: '#fff', cursor: 'pointer'
@@ -809,8 +805,9 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
           </div>
         )}
 
-        {/* ── Camera View ── */}
-        <div style={{ flex: 1, position: 'relative', overflow: 'hidden', background: '#111' }}>
+        {/* ── Camera View — hidden when result is shown ── */}
+
+        <div style={{ flex: 1, position: 'relative', overflow: 'hidden', background: '#111', display: result ? 'none' : undefined }}>
           {/* Uploaded image preview */}
           {scanMode === 'image' && uploadedImage ? (
             <img
@@ -1263,7 +1260,7 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
               )}
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+              <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
                 <button
                   onClick={toggleVoice}
                   style={{
@@ -1280,14 +1277,15 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
                 <button
                   onClick={handleReset}
                   style={{
-                    background: '#f1f5f9', color: '#475569', border: 'none', borderRadius: 12,
-                    padding: '13px 16px', fontSize: 14, fontWeight: 800, cursor: 'pointer',
-                    transition: 'background 0.2s', flexShrink: 0
+                    background: 'linear-gradient(135deg, #16a34a, #15803d)', color: '#fff', border: 'none', borderRadius: 12,
+                    padding: '13px 16px', fontSize: 13, fontWeight: 800, cursor: 'pointer',
+                    transition: 'all 0.2s', flexShrink: 0,
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    boxShadow: '0 6px 16px rgba(22,163,74,0.3)'
                   }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#e2e8f0'}
-                  onMouseLeave={e => e.currentTarget.style.background = '#f1f5f9'}
                 >
-                  {lang === 'kn' ? 'ಮತ್ತೆ' : 'Rescan'}
+                  <RefreshCw size={15} />
+                  {lang === 'kn' ? 'ಮತ್ತೆ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ' : 'Scan Another Crop'}
                 </button>
               </div>
 
@@ -1371,8 +1369,6 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
             </div>
           )}
         </div>
-      </div>
-
       <style>{`
         @keyframes arScan {
           0%   { top: 0%;   opacity: 0; }

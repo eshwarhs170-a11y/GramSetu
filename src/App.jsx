@@ -15,6 +15,7 @@ import MagicLogin from './pages/MagicLogin'
 import GenerateQRCards from './pages/GenerateQRCards'
 import LiveHeatmap from './pages/LiveHeatmap'
 import DemoPresenterHub from './pages/DemoPresenterHub'
+import CropScanner from './components/CropScanner'
 
 function App() {
   const navigate = useNavigate()
@@ -42,6 +43,7 @@ function App() {
         <Route path="/dashboard/villager/*" element={<VillagerDashboard />} />
         <Route path="/dashboard/official/*" element={<OfficialDashboard />} />
         <Route path="/feature/:id" element={<FeatureDetails />} />
+        <Route path="/crop-doctor" element={<CropScanner />} />
         <Route path="/demo" element={<DemoPresenterHub />} />
         <Route path="/demo/voice" element={<DemoVoicePage />} />
         <Route path="/demo/dashboard" element={<DemoEventDashboard />} />
