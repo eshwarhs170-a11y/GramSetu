@@ -1437,15 +1437,16 @@ input, textarea, select { font-family: inherit; outline: none; }
 
 @media (max-width: 768px) {
   .topbar {
-    padding: 8px 12px 0 12px !important;
-    height: auto !important;
+    padding: 0 12px !important;
+    height: 56px !important;
     min-height: unset !important;
     display: flex !important;
-    flex-wrap: wrap !important;
+    flex-wrap: nowrap !important;
     align-items: center !important;
-    gap: 0 !important;
+    gap: 4px !important;
     background: var(--bg-card);
     border-bottom: 1px solid var(--border-light);
+    overflow-x: hidden;
   }
 
   /* ── Row 1 Left: hamburger + brand ── */
@@ -1453,33 +1454,47 @@ input, textarea, select { font-family: inherit; outline: none; }
     flex: 1 1 auto;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     min-width: 0;
-    order: 1;
   }
 
-  /* ── Row 1 Right: search + bell + profile ── */
+  /* ── Middle: language + theme ── */
+  .topbar-row2-mobile {
+    flex: 0 0 auto;
+    width: auto;
+    display: flex !important;
+    align-items: center;
+    gap: 2px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  /* Hide language text and chevron on mobile */
+  .lang-dropdown-container.topbar-style .lang-dropdown-trigger .lang-label,
+  .lang-dropdown-container.topbar-style .lang-dropdown-trigger svg:last-child {
+    display: none !important;
+  }
+  .lang-dropdown-container.topbar-style .lang-dropdown-trigger {
+    padding: 0 !important;
+    width: 36px !important;
+    height: 36px !important;
+    justify-content: center !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  /* ── Right: search + bell (hide profile) ── */
   .topbar-actions {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
     gap: 4px;
-    order: 2;
   }
 
-  /* ── Row 2: language + theme — full-width second line ── */
-  .topbar-row2-mobile {
-    flex: 0 0 100%;
-    width: 100%;
-    display: flex !important;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 0 8px;
-    border-top: 1px solid var(--border-light);
-    margin-top: 6px;
-    margin-left: 0;
-    margin-right: 0;
-    order: 3;
+  /* Hide profile icon on mobile */
+  .topbar-actions > button:last-child {
+    display: none !important;
   }
 
   .topbar-brand-text {
