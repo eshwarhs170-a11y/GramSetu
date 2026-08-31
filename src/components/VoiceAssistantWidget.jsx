@@ -243,13 +243,6 @@ export default function VoiceAssistantWidget() {
           : <Mic size={24} />}
       </button>
 
-      {/* Show open button if closed */}
-      {!isOpen && !isListening && !isSpeaking && (
-        <button onClick={() => setIsOpen(true)} style={{ background: 'rgba(22,163,74,0.1)', border: '1px solid rgba(22,163,74,0.2)', borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 700, color: '#15803d', cursor: 'pointer' }}>
-          {lang === 'kn' ? 'AI ಸಹಾಯ' : lang === 'hi' ? 'AI मदद' : 'AI Help'}
-        </button>
-      )}
-
       <style>{`
         @keyframes voiceFadeIn {
           from { opacity: 0; transform: translateY(12px) scale(0.97); }

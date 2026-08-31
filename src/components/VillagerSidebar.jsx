@@ -48,7 +48,7 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
     { id: 'schemes',       icon: Landmark,        labelKey: 'sNavSchemes' },
     { id: 'market',        icon: TrendingUp,      labelKey: 'sNavMarket' },
     { id: 'weather',       icon: Cloud,           labelKey: 'sNavWeather' },
-    { id: 'crop-doctor',   icon: Camera,          labelKey: 'sNavCropDoctor', badge: 'AR' },
+    { id: 'crop-doctor',   icon: Camera,          labelKey: 'sNavCropDoctor' },
     { id: 'sos',           icon: ShieldAlert,     labelKey: 'sNavSOS' },
     { id: 'tutorials',     icon: PlayCircle,      labelKey: 'sNavTutorials' },
     { id: 'announcements', icon: Megaphone,        labelKey: 'sNavAnnounce' },

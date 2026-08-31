@@ -10,14 +10,15 @@ import {
   ComplaintScreen, ComplaintStatusScreen, ProfileScreen,
   WeatherScreen, EmergencySOSScreen, TutorialsScreen
 } from '../components/VillagerScreens'
-import { Menu, Search, Bell, X, AlertTriangle, IndianRupee, LayoutDashboard, Landmark, Microscope, ClipboardList, User } from 'lucide-react'
+import CropScanner from '../components/CropScanner'
+import { Menu, Search, Bell, X, AlertTriangle, IndianRupee, LayoutDashboard, Landmark, Microscope, ClipboardList, User, Wheat } from 'lucide-react'
 
 import { db } from '../firebase'
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
 import { playLoudNotificationChime } from '../utils/audioAlert'
 
-export default function VillagerDashboard() {
-  const [active, setActive] = useState('home')
+export default function VillagerDashboard({ defaultTab = 'home' }) {
+  const [active, setActive] = useState(defaultTab)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -69,6 +70,7 @@ export default function VillagerDashboard() {
     weather:       { titleKey: 'weatherTitle',   subKey: 'weatherSub' },
     sos:           { titleKey: 'sosTitle',       subKey: 'sosSub' },
     tutorials:     { titleKey: 'tutorialTitle',  subKey: 'tutorialSub' },
+    'crop-doctor': { titleKey: 'sNavCropDoctor', subKey: 'dashSub' },
   }
   const page = pageMeta[active] || pageMeta.home
 
@@ -84,6 +86,7 @@ export default function VillagerDashboard() {
       case 'weather':       return <WeatherScreen />
       case 'sos':           return <EmergencySOSScreen />
       case 'tutorials':     return <TutorialsScreen />
+      case 'crop-doctor':   return <CropScanner />
       default:              return <HomeScreen />
     }
   }
@@ -125,11 +128,6 @@ export default function VillagerDashboard() {
       <VillagerSidebar
         active={active}
         setActive={(pageId) => {
-          if (pageId === 'crop-doctor') {
-            navigate('/crop-doctor')
-            setSidebarOpen(false)
-            return
-          }
           setActive(pageId)
           setSidebarOpen(false)
         }}
@@ -169,109 +167,106 @@ export default function VillagerDashboard() {
 
       <div className="main-content">
         <header className="topbar">
-          {/* Row 1: Brand & Actions */}
-          <div className="topbar-row-1">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <button
-                type="button"
-                className="hamburger-btn"
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                aria-label="Toggle Sidebar"
-              >
-                <Menu size={22} strokeWidth={2} />
-              </button>
-              <div>
-                <div className="topbar-title">{t(page.titleKey)}</div>
-                <div className="topbar-subtitle">
-                  {active === 'home' ? `${t('dashSub')} ${storedName}` : t(page.subKey)}
-                </div>
-              </div>
-            </div>
+          {/* Left: Hamburger & YouTube-style GramSetu Brand */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button
+              type="button"
+              className="hamburger-btn"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              aria-label="Toggle Sidebar"
+            >
+              <Menu size={22} strokeWidth={2} />
+            </button>
 
-            <div className="topbar-right">
-              <div className="desktop-only-flex">
-                <LanguageSwitcher variant="topbar-style" />
-                <ThemeToggle />
+            <div className="topbar-brand" onClick={() => setActive('home')} style={{ cursor: 'pointer' }}>
+              <div className="topbar-brand-icon">
+                <Wheat size={18} color="#fff" />
               </div>
-              <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
-                <Search size={18} strokeWidth={2} />
-              </button>
-              <div style={{ position: 'relative' }}>
-                <button className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
-                  <Bell size={18} strokeWidth={2} />
-                  <div className="notif-dot" />
-                </button>
-                {notifOpen && (() => {
-                  return (
-                    <div className="notif-dropdown animate-fadeInUp">
-                      <div className="notif-header">
-                        <h4>Notifications</h4>
-                        <button onClick={() => setNotifOpen(false)}><X size={14} /></button>
-                      </div>
-                      <div className="notif-list">
-                        {announcements.length === 0 ? (
-                          <div style={{ padding: 16, textAlign: 'center', color: 'var(--text-muted)' }}>No new notifications</div>
-                        ) : (
-                          announcements.map(n => (
-                            <div key={n.id}>
-                              <div
-                                className="notif-item unread"
-                                style={{ cursor: 'pointer', flexDirection: 'column', gap: 0, padding: 0 }}
-                                onClick={() => setNotifExpanded(notifExpanded === n.id ? null : n.id)}
-                              >
-                                <div style={{ display: 'flex', gap: 12, padding: '14px 16px' }}>
-                                  <div className={`notif-icon ${n.priority === 'Emergency / ತುರ್ತು' || n.priority === 'Urgent' ? 'bg-danger' : 'bg-info'}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    {n.priority === 'Emergency / ತುರ್ತು' || n.priority === 'Urgent' ? <AlertTriangle size={16} /> : <Bell size={16} />}
-                                  </div>
-                                  <div style={{ flex: 1 }}>
-                                    <p style={{ margin: 0 }}>{n.title}</p>
-                                    <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{n.category}</span>
-                                  </div>
-                                  <span style={{ fontSize: 11, color: 'var(--text-muted)', alignSelf: 'center' }}>
-                                    {notifExpanded === n.id ? '▲' : '▼'}
-                                  </span>
-                                </div>
-                                {notifExpanded === n.id && (
-                                  <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid var(--border-light)', paddingTop: 10 }}>
-                                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 10, lineHeight: 1.6 }}>{n.message}</p>
-                                    <div style={{ display: 'flex', gap: 8 }}>
-                                      <button
-                                        onClick={e => { e.stopPropagation(); setActive('announcements'); setNotifOpen(false); setNotifExpanded(null); }}
-                                        style={{ fontSize: 12, fontWeight: 600, color: '#fff', background: 'var(--primary)', border: 'none', borderRadius: 6, padding: '3px 10px', cursor: 'pointer' }}
-                                      >
-                                        View All →
-                                      </button>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          ))
-                        )}
-                      </div>
-                      <button className="notif-view-all" onClick={() => { setActive('announcements'); setNotifOpen(false) }}>View All Alerts</button>
-                    </div>
-                  )
-                })()}
+              <div className="topbar-brand-text">
+                GramSetu
               </div>
-
-              <button className="topbar-icon-btn" onClick={() => setActive('profile')}>
-                <div style={{
-                  width: 30, height: 30, borderRadius: '50%',
-                  background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#fff', fontWeight: 700, fontSize: 13, boxShadow: '0 2px 8px rgba(22,101,52,0.3)'
-                }}>
-                  {storedName.charAt(0)}
-                </div>
-              </button>
             </div>
           </div>
 
-          {/* Row 2: Mobile Sub-Row with Language & Theme Toggle */}
-          <div className="topbar-sub-row">
+          {/* Right: Controls & Actions */}
+          <div className="topbar-right">
             <LanguageSwitcher variant="topbar-style" />
             <ThemeToggle />
+
+            <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
+              <Search size={18} strokeWidth={2} />
+            </button>
+
+            <div style={{ position: 'relative' }}>
+              <button className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
+                <Bell size={18} strokeWidth={2} />
+                <div className="notif-dot" />
+              </button>
+
+              {notifOpen && (() => {
+                return (
+                  <div className="notif-dropdown animate-fadeInUp">
+                    <div className="notif-header">
+                      <h4>Notifications</h4>
+                      <button onClick={() => setNotifOpen(false)}><X size={14} /></button>
+                    </div>
+                    <div className="notif-list">
+                      {announcements.length === 0 ? (
+                        <div style={{ padding: 16, textAlign: 'center', color: 'var(--text-muted)' }}>No new notifications</div>
+                      ) : (
+                        announcements.map(n => (
+                          <div key={n.id}>
+                            <div
+                              className="notif-item unread"
+                              style={{ cursor: 'pointer', flexDirection: 'column', gap: 0, padding: 0 }}
+                              onClick={() => setNotifExpanded(notifExpanded === n.id ? null : n.id)}
+                            >
+                              <div style={{ display: 'flex', gap: 12, padding: '14px 16px' }}>
+                                <div className={`notif-icon ${n.priority === 'Emergency / ತುರ್ತು' || n.priority === 'Urgent' ? 'bg-danger' : 'bg-info'}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                  {n.priority === 'Emergency / ತುರ್ತು' || n.priority === 'Urgent' ? <AlertTriangle size={16} /> : <Bell size={16} />}
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                  <p style={{ margin: 0 }}>{n.title}</p>
+                                  <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{n.category}</span>
+                                </div>
+                                <span style={{ fontSize: 11, color: 'var(--text-muted)', alignSelf: 'center' }}>
+                                  {notifExpanded === n.id ? '▲' : '▼'}
+                                </span>
+                              </div>
+                              {notifExpanded === n.id && (
+                                <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid var(--border-light)', paddingTop: 10 }}>
+                                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 10, lineHeight: 1.6 }}>{n.message}</p>
+                                  <div style={{ display: 'flex', gap: 8 }}>
+                                    <button
+                                      onClick={e => { e.stopPropagation(); setActive('announcements'); setNotifOpen(false); setNotifExpanded(null); }}
+                                      style={{ fontSize: 12, fontWeight: 600, color: '#fff', background: 'var(--primary)', border: 'none', borderRadius: 6, padding: '3px 10px', cursor: 'pointer' }}
+                                    >
+                                      View All →
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                    <button className="notif-view-all" onClick={() => { setActive('announcements'); setNotifOpen(false) }}>View All Alerts</button>
+                  </div>
+                )
+              })()}
+            </div>
+
+            <button className="topbar-icon-btn" onClick={() => setActive('profile')}>
+              <div style={{
+                width: 30, height: 30, borderRadius: '50%',
+                background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#fff', fontWeight: 700, fontSize: 13, boxShadow: '0 2px 8px rgba(22,101,52,0.3)'
+              }}>
+                {storedName.charAt(0)}
+              </div>
+            </button>
           </div>
         </header>
 
@@ -299,8 +294,8 @@ export default function VillagerDashboard() {
         </button>
 
         <button
-          className="mobile-nav-btn"
-          onClick={() => navigate('/crop-doctor')}
+          className={`mobile-nav-btn ${active === 'crop-doctor' ? 'active' : ''}`}
+          onClick={() => setActive('crop-doctor')}
         >
           <Microscope size={20} style={{ color: 'var(--primary)' }} />
           <span>{lang === 'kn' ? 'ಬೆಳೆ ವೈದ್ಯ' : 'Crop Doctor'}</span>

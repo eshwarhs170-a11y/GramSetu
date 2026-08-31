@@ -47,12 +47,13 @@
     <meta http-equiv="Cache-Control" content="max-age=0, must-revalidate" />
   </head>
   <body>
-    <!-- Instant loading splash — visible before React JS bundle loads (no blank page on QR scan) -->
+    <!-- Instant loading splash — visible before React JS bundle loads -->
     <div id="gs-splash" style="
       position:fixed; inset:0; z-index:99999;
       background:linear-gradient(135deg,#f0fdf4 0%,#f8fafc 100%);
       display:flex; flex-direction:column; align-items:center; justify-content:center;
       font-family:'Inter',system-ui,sans-serif; gap:20px;
+      pointer-events:none;
     ">
       <!-- Logo -->
       <div style="
@@ -66,7 +67,7 @@
 
       <!-- App name -->
       <div style="text-align:center; animation:gs-fade 0.5s 0.2s ease both;">
-        <div style="font-size:1.5rem; font-weight:800; color:#0f172a; letter-spacing:-0.02em;">GramSetu</div>
+        <div style="font-size:1.6rem; font-weight:800; color:#16a34a; letter-spacing:-0.02em;">ಗ್ರಾಮಸೇತು</div>
         <div style="font-size:0.85rem; color:#64748b; font-weight:600; margin-top:4px;">ಗ್ರಾಮೀಣ ಸೇತು ಕರ್ನಾಟಕ</div>
       </div>
 
@@ -80,7 +81,7 @@
       "></div>
 
       <div style="font-size:0.8rem; color:#94a3b8; animation:gs-fade 0.5s 0.4s ease both;">
-        Loading your dashboard...
+        ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ...
       </div>
 
       <style>
@@ -93,24 +94,24 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Remove splash as soon as React's root element renders its first child -->
+    <!-- Remove splash immediately as soon as React or DOM is ready -->
     <script>
       (function() {
         var splash = document.getElementById('gs-splash');
         if (!splash) return;
-        // Use MutationObserver to detect when React injects content into #root
-        var observer = new MutationObserver(function() {
-          var root = document.getElementById('root');
-          if (root && root.childElementCount > 0) {
-            splash.style.opacity = '0';
-            splash.style.transition = 'opacity 0.3s ease';
-            setTimeout(function() { splash.remove(); }, 320);
-            observer.disconnect();
-          }
-        });
-        observer.observe(document.getElementById('root') || document.body, { childList:true, subtree:true });
-        // Failsafe: remove after 8 seconds regardless
-        setTimeout(function() { splash && splash.remove(); }, 8000);
+        var hide = function() {
+          if (!splash) return;
+          splash.style.opacity = '0';
+          splash.style.transition = 'opacity 0.15s ease';
+          setTimeout(function() { splash && splash.remove(); }, 150);
+        };
+        if (document.readyState === 'complete' || (document.getElementById('root') && document.getElementById('root').childElementCount > 0)) {
+          hide();
+        } else {
+          window.addEventListener('DOMContentLoaded', hide);
+          window.addEventListener('load', hide);
+          setTimeout(hide, 400);
+        }
       })();
     </script>
   </body>
