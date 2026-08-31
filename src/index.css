@@ -1098,11 +1098,8 @@ input, textarea, select { font-family: inherit; outline: none; }
   .content-grid-3 { grid-template-columns: 1fr; }
   .complaint-category-grid { grid-template-columns: repeat(2, 1fr); }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .topbar { padding: 0 12px; height: auto; min-height: var(--header-height); }
   .topbar-title { font-size: 14px; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .topbar-subtitle { display: none; }
-  .topbar-right { gap: 6px; }
-  .topbar-icon-btn { width: 34px; height: 34px; }
   .notif-dropdown { width: 280px; top: 46px; right: -20px; }
 }
 
@@ -1150,11 +1147,8 @@ input, textarea, select { font-family: inherit; outline: none; }
   .page-content { padding: 16px; }
 
   /* ── Topbar ── */
-  .topbar { padding: 0 16px; height: auto; min-height: var(--header-height); }
   .topbar-title { font-size: 15px; max-width: 170px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .topbar-subtitle { display: none; }
-  .topbar-right { gap: 8px; }
-  .topbar-icon-btn { width: 34px; height: 34px; }
   .notif-dropdown { width: 280px; top: 46px; right: -20px; }
 
   /* ── Grids ── */
@@ -1432,14 +1426,22 @@ input, textarea, select { font-family: inherit; outline: none; }
 
 @media (max-width: 768px) {
   .topbar {
-    padding: 0 12px !important;
-    height: 56px !important;
-    min-height: 56px !important;
+    padding: 6px 12px !important;
+    height: auto !important;
+    min-height: unset !important;
     display: flex !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
     justify-content: space-between !important;
+    gap: 4px !important;
     background: var(--bg-card);
     border-bottom: 1px solid var(--border-light);
+  }
+
+  /* Row 1: hamburger + brand — takes full width */
+  .topbar > div:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .topbar-brand-text {
@@ -1450,12 +1452,20 @@ input, textarea, select { font-family: inherit; outline: none; }
     display: none;
   }
 
+  /* Row 2: actions — pushed to its own line, full width */
   .topbar-right {
-    gap: 6px !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0 !important;
+    padding: 2px 0 4px !important;
+    border-top: 1px solid var(--border-light);
   }
 
   .topbar-icon-btn {
-    width: 34px !important;
+    width: 36px !important;
     height: 34px !important;
     border-radius: 8px !important;
   }

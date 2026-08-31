@@ -1891,7 +1891,30 @@ export function MarketScreen() {
 
   return (
     <div className="animate-fadeInUp">
-      
+      {/* Hero Banner */}
+      <div style={{
+        background: 'linear-gradient(135deg, #064e3b 0%, #047857 50%, #059669 100%)',
+        borderRadius: 20,
+        padding: '24px 28px',
+        color: '#fff',
+        marginBottom: 24,
+        boxShadow: '0 10px 25px rgba(5, 150, 105, 0.2)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', marginBottom: 8, padding: '4px 10px', fontSize: 12 }}>
+            <TrendingUp size={14} className="inline mr-1 text-emerald-300" /> {lang === 'kn' ? 'ಕರ್ನಾಟಕ APMC ಲೈವ್ ಧಾರಣೆ' : 'Karnataka APMC Live Market Feed'}
+          </span>
+          <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
+            {lang === 'kn' ? 'ಎಪಿಎಂಸಿ ಮಾರುಕಟ್ಟೆ ಧಾರಣೆಗಳು' : 'APMC Mandi Market Prices'}
+          </h2>
+          <p style={{ margin: 0, fontSize: 14, color: 'rgba(255,255,255,0.9)', maxWidth: 620 }}>
+            {lang === 'kn' ? 'ನಿಮ್ಮ ಜಿಲ್ಲೆ ಮತ್ತು ಕರ್ನಾಟಕದ ನೈಜ ಸಮಯದ ಬೆಳೆ ದರಗಳು ಮತ್ತು ಎಪಿಎಂಸಿ ಮಾರುಕಟ್ಟೆ ದರಗಳು' : 'Real-time crop modal prices & daily market trends across Karnataka APMC mandis'}
+          </p>
+        </div>
+      </div>
+
       {/* Top Highlights */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20, marginBottom: 24 }}>
         {(() => {
@@ -2204,6 +2227,30 @@ export function AnnouncementsScreen() {
 
   return (
     <div className="animate-fadeInUp">
+      {/* Hero Banner */}
+      <div style={{
+        background: 'linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%)',
+        borderRadius: 20,
+        padding: '24px 28px',
+        color: '#fff',
+        marginBottom: 24,
+        boxShadow: '0 10px 25px rgba(29, 78, 216, 0.2)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', marginBottom: 8, padding: '4px 10px', fontSize: 12 }}>
+            <Megaphone size={14} className="inline mr-1 text-blue-300" /> {lang === 'kn' ? 'ಸರ್ಕಾರದ ಪ್ರಕಟಣೆಗಳು' : 'Official Government Notices'}
+          </span>
+          <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
+            {lang === 'kn' ? 'ಅಧಿಕೃತ ಪ್ರಕಟಣೆಗಳು ಮತ್ತು ಎಚ್ಚರಿಕೆಗಳು' : 'Announcements & Alerts'}
+          </h2>
+          <p style={{ margin: 0, fontSize: 14, color: 'rgba(255,255,255,0.9)', maxWidth: 620 }}>
+            {lang === 'kn' ? 'ನಿಮ್ಮ ಜಿಲ್ಲೆ ಮತ್ತು ಗ್ರಾಮ ಪಂಚಾಯಿತಿಯ ಸುದ್ದಿ, ಕೃಷಿ ಎಚ್ಚರಿಕೆಗಳು ಮತ್ತು ತುರ್ತು ಮಾಹಿತಿಗಳು' : 'Official notices, weather alerts, MSP buying updates & local Gram Panchayat news'}
+          </p>
+        </div>
+      </div>
+
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 20 }}>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {filters.map(f => (
@@ -3434,9 +3481,31 @@ export function TutorialsScreen() {
 
   return (
     <div className="animate-fadeInUp">
+      {/* Hero Banner */}
+      <div style={{
+        background: 'linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #7c3aed 100%)',
+        borderRadius: 20,
+        padding: '24px 28px',
+        color: '#fff',
+        marginBottom: 24,
+        boxShadow: '0 10px 25px rgba(124, 58, 237, 0.2)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', marginBottom: 8, padding: '4px 10px', fontSize: 12 }}>
+            <PlayCircle size={14} className="inline mr-1 text-purple-300" /> {lang === 'kn' ? 'ಡಿಜಿಟಲ್ ಕಲಿಕೆ ಕೇಂದ್ರ' : 'Digital Learning Hub'}
+          </span>
+          <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
+            {lang === 'kn' ? 'ಡಿಜಿಟಲ್ ವೀಡಿಯೊ ಪಾಠಗಳು' : 'Digital Video Tutorials'}
+          </h2>
+          <p style={{ margin: 0, fontSize: 14, color: 'rgba(255,255,255,0.9)', maxWidth: 620 }}>
+            {lang === 'kn' ? 'ಡಿಜಿಟಲ್ ಉಪಕರಣಗಳು, ಯುಪಿಐ ಪಾವತಿಗಳು ಮತ್ತು ಸಾರ್ವಜನಿಕ ಸೇವೆಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಬಳಸುವುದು ಹೇಗೆ ಎಂದು ಕಲಿಯಿರಿ' : 'Learn how to use UPI payments, voter SIR forms, APMC price checking & digital tools safely'}
+          </p>
+        </div>
+      </div>
+
       <div style={{ marginBottom: 20 }}>
-        <p style={{ color: 'var(--text-secondary)', fontSize: 14, margin: 0 }}>{t('tutorialSub')}</p>
-        
         {/* Helper Note for the blocked issue */}
         <div style={{ background: '#fef3c7', color: '#b45309', padding: '12px', borderRadius: 8, marginTop: 12, fontSize: 13, border: '1px solid #fde68a', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
           <AlertCircle size={16} style={{ marginTop: 2, flexShrink: 0 }} />
