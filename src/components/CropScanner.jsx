@@ -935,10 +935,12 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
         {/* ── Bottom Panel ── */}
         <div style={{
           background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(20px)',
-          borderTopLeftRadius: 28, borderTopRightRadius: 28,
+          borderTopLeftRadius: result ? 0 : 28, borderTopRightRadius: result ? 0 : 28,
           padding: '20px 20px 24px', zIndex: 60,
-          boxShadow: '0 -10px 40px rgba(0,0,0,0.4)',
-          maxHeight: '55%', overflowY: 'auto',
+          boxShadow: result ? 'none' : '0 -10px 40px rgba(0,0,0,0.4)',
+          maxHeight: result ? '100%' : '55%', overflowY: 'auto',
+          flex: result ? 1 : 'none',
+          display: 'flex', flexDirection: 'column'
         }}>
           {/* Handle */}
           <div style={{ width: 36, height: 4, background: '#cbd5e1', borderRadius: 4, margin: '0 auto 16px' }} />
@@ -974,23 +976,6 @@ Always reply in ${langName}. Keep responses concise — 2-3 sentences max. No ma
                 ))}
               </div>
 
-              {/* Upload photo button */}
-              <button
-                onClick={() => { fileInputRef.current?.click(); }}
-                style={{
-                  background: scanMode === 'image' && uploadedImage ? 'linear-gradient(135deg,#0ea5e9,#0284c7)' : '#f8fafc',
-                  color: scanMode === 'image' && uploadedImage ? '#fff' : '#475569',
-                  border: '1.5px dashed ' + (scanMode === 'image' && uploadedImage ? '#38bdf8' : '#cbd5e1'),
-                  borderRadius: 12, padding: '10px 14px', fontSize: 13, fontWeight: 700, width: '100%',
-                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                  marginBottom: 10, transition: 'all 0.2s',
-                }}
-              >
-                {scanMode === 'image' && uploadedImage ? <CircleCheck size={16} /> : <ImagePlus size={16} />}
-                {scanMode === 'image' && uploadedImage
-                  ? (lang === 'kn' ? 'ಫೋಟೋ ಆಯ್ಕೆಯಾಗಿದೆ — ಬದಲಾಯಿಸಲು ಒತ್ತಿ' : 'Photo loaded — tap to change')
-                  : (lang === 'kn' ? 'ರೋಗಗ್ರಸ್ತ ಬೆಳೆ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ' : 'Upload Photo of Diseased Crop')}
-              </button>
 
               {/* Crop selector — single instance, bottom panel only */}
               <div style={{ marginBottom: 10 }}>
