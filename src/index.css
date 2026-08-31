@@ -1446,7 +1446,6 @@ input, textarea, select { font-family: inherit; outline: none; }
     gap: 4px !important;
     background: var(--bg-card);
     border-bottom: 1px solid var(--border-light);
-    overflow-x: hidden;
   }
 
   /* ── Row 1 Left: hamburger + brand ── */
