@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useLanguage } from './LanguageContext';
 
 const VoiceContext = createContext();
@@ -10,185 +10,152 @@ export function VoiceProvider({ children }) {
   const [transcript, setTranscript] = useState('');
   const [recognition, setRecognition] = useState(null);
   const [error, setError] = useState('');
+  const voicesRef = useRef([]);
+  const voicesLoadedRef = useRef(false);
+
+  // Pre-load voices as early as possible
+  useEffect(() => {
+    const loadVoices = () => {
+      voicesRef.current = window.speechSynthesis?.getVoices() || [];
+      voicesLoadedRef.current = voicesRef.current.length > 0;
+    };
+    loadVoices();
+    if (window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+    return () => {
+      if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, []);
 
   useEffect(() => {
-    // Initialize SpeechRecognition if available
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const rec = new SpeechRecognition();
-      rec.continuous = false;
-      rec.interimResults = true; // Show live transcript as user speaks
-      
-      // Set language based on context
-      if (lang === 'kn') {
-        rec.lang = 'kn-IN';
-      } else if (lang === 'hi') {
-        rec.lang = 'hi-IN';
-      } else {
-        rec.lang = 'en-IN';
-      }
-
-      rec.onstart = () => {
-        setIsListening(true);
-        setError('');
-      };
-
-      rec.onresult = (event) => {
-        let interimTranscript = '';
-        let finalTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const t = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-            finalTranscript += t;
-          } else {
-            interimTranscript += t;
-          }
-        }
-        // Show interim immediately for live feel; final sets the processed transcript
-        if (finalTranscript) {
-          setTranscript(finalTranscript);
-        } else if (interimTranscript) {
-          setTranscript(interimTranscript);
-        }
-      };
-
-      rec.onend = () => {
-        setIsListening(false);
-      };
-
-      rec.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
-        if (event.error === 'not-allowed') {
-          setError('Microphone permission denied. Please allow it in your browser settings.');
-        } else if (event.error === 'no-speech') {
-          setError('No speech detected. Please try again.');
-        } else {
-          setError('Error: ' + event.error);
-        }
-        setIsListening(false);
-      };
-
-      setRecognition(rec);
-    } else {
-      console.warn("Speech Recognition API is not supported in this browser.");
-      setError("Speech Recognition is not supported in your browser.");
+    if (!SpeechRecognition) {
+      setError('Speech Recognition is not supported in your browser.');
+      return;
     }
-  }, [lang]); // Reinitialize if language changes
+
+    const rec = new SpeechRecognition();
+    rec.continuous = false;
+    rec.interimResults = true;
+
+    // ── Language mapping ──
+    rec.lang = lang === 'kn' ? 'kn-IN' : lang === 'hi' ? 'hi-IN' : 'en-IN';
+
+    rec.onstart  = () => { setIsListening(true); setError(''); };
+    rec.onend    = () => setIsListening(false);
+    rec.onerror  = (ev) => {
+      setIsListening(false);
+      if (ev.error === 'not-allowed') setError('Microphone permission denied.');
+      else if (ev.error === 'no-speech') setError('No speech detected. Try again.');
+      else setError('Error: ' + ev.error);
+    };
+    rec.onresult = (ev) => {
+      let finalT = '', interimT = '';
+      for (let i = ev.resultIndex; i < ev.results.length; i++) {
+        const t = ev.results[i][0].transcript;
+        if (ev.results[i].isFinal) finalT += t;
+        else interimT += t;
+      }
+      setTranscript(finalT || interimT);
+    };
+
+    setRecognition(rec);
+  }, [lang]);
 
   const startListening = useCallback(() => {
-    // Cancel any ongoing speech immediately — zero delay
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-    }
+    if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); setIsSpeaking(false); }
     setError('');
     if (recognition) {
-      try {
-        recognition.start();
-      } catch (e) {
-        // already started — ignore
-        console.warn('Recognition already running:', e.message);
-      }
+      try { recognition.start(); } catch { /* already started */ }
     }
   }, [recognition]);
 
   const stopListening = useCallback(() => {
-    if (recognition) {
-      recognition.stop();
-    }
+    if (recognition) recognition.stop();
   }, [recognition]);
 
+  // ─────────────────────────────────────────────────────────────
+  // speak() — fully language-aware, with graceful Kannada fallback
+  // ─────────────────────────────────────────────────────────────
   const speak = useCallback((text) => {
-    if (!('speechSynthesis' in window)) {
-      console.warn("Speech Synthesis API is not supported in this browser.");
-      return;
-    }
-
+    if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
 
     const doSpeak = () => {
       const voices = window.speechSynthesis.getVoices();
+      voicesRef.current = voices;
+
       let targetVoice = null;
       let textToSpeak = text;
+      let langCode = 'en-IN';
 
       if (lang === 'kn') {
-        targetVoice = voices.find(v => v.lang.toLowerCase().includes('kn') && v.name.includes('Google'))
-                   || voices.find(v => v.lang.toLowerCase().includes('kn'));
-        
-        if (!targetVoice) {
-          // NO KANNADA VOICE (Windows Laptop) -> Fallback to English Voice & English Text
-          targetVoice = voices.find(v => v.lang.toLowerCase().includes('en-in') && v.name.includes('Google'))
-                     || voices.find(v => v.lang.toLowerCase().startsWith('en'));
-          
-          if (textToSpeak.includes('ಗ್ರಾಮ ಸೇತುಗೆ ಸ್ವಾಗತ')) {
-             textToSpeak = 'Welcome to GramSetu. Here you can access government schemes, APMC market prices, and file complaints. Tap the microphone to talk to me anytime.';
-          } else {
-             textToSpeak = 'Kannada voice is not supported on this device. Please use English, or open this website on a mobile phone.';
+        // ── Try Kannada voices (Android/Chrome mobile has them) ──
+        targetVoice =
+          voices.find(v => v.lang === 'kn-IN' && v.name.toLowerCase().includes('google')) ||
+          voices.find(v => v.lang === 'kn-IN') ||
+          voices.find(v => v.lang.startsWith('kn'));
+
+        if (targetVoice) {
+          langCode = 'kn-IN';
+          // Keep Kannada text as-is
+        } else {
+          // ── No Kannada TTS on this device → transliterate/fallback ──
+          // Use en-IN voice but keep the message meaningful in English
+          targetVoice =
+            voices.find(v => v.lang.startsWith('en-IN') && v.name.toLowerCase().includes('google')) ||
+            voices.find(v => v.lang.startsWith('en-IN')) ||
+            voices.find(v => v.lang.startsWith('en'));
+          langCode = targetVoice?.lang || 'en-IN';
+
+          // If the text is purely Kannada script, translate to English phonetically readable version
+          // We detect Kannada unicode range: \u0C80-\u0CFF
+          const hasKannadaScript = /[\u0C80-\u0CFF]/.test(text);
+          if (hasKannadaScript) {
+            // Map common Kannada phrases to English equivalents for TTS
+            textToSpeak = kannadaToEnglishTTS(text);
           }
         }
       } else if (lang === 'hi') {
-        targetVoice = voices.find(v => v.lang.toLowerCase().includes('hi') && v.name.includes('Google'))
-                   || voices.find(v => v.lang.toLowerCase().includes('hi'));
+        targetVoice =
+          voices.find(v => v.lang === 'hi-IN' && v.name.toLowerCase().includes('google')) ||
+          voices.find(v => v.lang === 'hi-IN') ||
+          voices.find(v => v.lang.startsWith('hi'));
+        langCode = 'hi-IN';
       } else {
-        targetVoice = voices.find(v => v.lang.toLowerCase().includes('en-in') && v.name.includes('Google'))
-                   || voices.find(v => v.lang.toLowerCase().includes('en-gb') && v.name.includes('Google'))
-                   || voices.find(v => v.lang.toLowerCase().startsWith('en') && v.name.includes('Google'));
+        targetVoice =
+          voices.find(v => v.lang.startsWith('en-IN') && v.name.toLowerCase().includes('google')) ||
+          voices.find(v => v.lang.startsWith('en-GB') && v.name.toLowerCase().includes('google')) ||
+          voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('google')) ||
+          voices.find(v => v.lang.startsWith('en'));
+        langCode = 'en-IN';
       }
 
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      if (targetVoice) {
-        utterance.voice = targetVoice;
-        utterance.lang = targetVoice.lang;
-      } else {
-        utterance.lang = lang === 'hi' ? 'hi-IN' : 'en-IN';
-      }
-
-      utterance.rate = 0.95;  // slightly slower for clarity
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => setIsSpeaking(false);
-
-      window.speechSynthesis.speak(utterance);
+      const utt = new SpeechSynthesisUtterance(textToSpeak);
+      if (targetVoice) { utt.voice = targetVoice; utt.lang = targetVoice.lang; }
+      else utt.lang = langCode;
+      utt.rate  = 0.92;
+      utt.pitch = 1.0;
+      utt.onstart = () => setIsSpeaking(true);
+      utt.onend   = () => setIsSpeaking(false);
+      utt.onerror = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utt);
     };
 
-    // Voices may not be loaded yet — wait for them
     const voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) {
-      doSpeak();
-    } else {
-      window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.onvoiceschanged = null;
-        doSpeak();
-      };
-    }
+    if (voices.length > 0) { doSpeak(); }
+    else { window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.onvoiceschanged = null; doSpeak(); }; }
   }, [lang]);
 
-  // Expose clear transcript to allow the widget to reset after processing
-  const clearTranscript = useCallback(() => {
-    setTranscript('');
-  }, []);
-
   const stopSpeaking = useCallback(() => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-    }
+    if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); setIsSpeaking(false); }
   }, []);
 
-  const value = {
-    isListening,
-    isSpeaking,
-    transcript,
-    error,
-    startListening,
-    stopListening,
-    speak,
-    stopSpeaking,
-    clearTranscript
-  };
+  const clearTranscript = useCallback(() => setTranscript(''), []);
 
   return (
-    <VoiceContext.Provider value={value}>
+    <VoiceContext.Provider value={{ isListening, isSpeaking, transcript, error, startListening, stopListening, speak, stopSpeaking, clearTranscript }}>
       {children}
     </VoiceContext.Provider>
   );
@@ -196,4 +163,80 @@ export function VoiceProvider({ children }) {
 
 export function useVoice() {
   return useContext(VoiceContext);
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Kannada → English TTS fallback mapper
+// Used when no Kannada TTS voice is available on the device
+// ─────────────────────────────────────────────────────────────────────
+function kannadaToEnglishTTS(kannadaText) {
+  const map = [
+    // Greetings & Common
+    ['ನಮಸ್ಕಾರ', 'Namaskara'],
+    ['ಸ್ವಾಗತ', 'Swagata'],
+    ['ಧನ್ಯವಾದ', 'Dhanyavada'],
+    ['ಕ್ಷಮಿಸಿ', 'Ksamisi'],
+    ['ಹೌದು', 'Haudu'],
+    ['ಇಲ್ಲ', 'Illa'],
+    // GramSetu
+    ['ಗ್ರಾಮಸೇತು', 'GramSetu'],
+    ['ಡ್ಯಾಶ್ಬೋರ್ಡ್', 'Dashboard'],
+    ['ಡ್ಯಾಶ್‌ಬೋರ್ಡ್', 'Dashboard'],
+    // Crops
+    ['ರಾಗಿ', 'Ragi'],
+    ['ಭತ್ತ', 'Bhatta'],
+    ['ತೊಗರಿ', 'Togari'],
+    ['ತೆಂಗು', 'Tengu'],
+    ['ಅಡಿಕೆ', 'Adike'],
+    ['ಕಾಫಿ', 'Coffee'],
+    ['ಕಬ್ಬು', 'Kabbu'],
+    ['ಟೊಮೇಟೊ', 'Tomato'],
+    ['ಮಾವು', 'Mavu'],
+    ['ಬಾಳೆ', 'Bale'],
+    ['ಈರುಳ್ಳಿ', 'Eerulli'],
+    ['ಹತ್ತಿ', 'Hatti'],
+    ['ಜೋಳ', 'Jola'],
+    ['ಗೋಧಿ', 'Godhi'],
+    // Diseases
+    ['ಬೆಂಕಿ ರೋಗ', 'Benki roga or Blast disease'],
+    ['ಅಂಗಮಾರಿ', 'Angamari or Blight disease'],
+    ['ತುಕ್ಕು', 'Tukku or Rust disease'],
+    ['ಸೊರಗು', 'Soragu or Wilt disease'],
+    ['ರೋಗ', 'disease'],
+    // Schemes
+    ['ಯೋಜನೆ', 'scheme'],
+    ['ಸರ್ಕಾರಿ', 'government'],
+    ['ರೈತ', 'farmer'],
+    ['ಕ್ಷಮಿಸಿ', 'Sorry'],
+    // Actions
+    ['ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ', 'Analyzing'],
+    ['ಸ್ಕ್ಯಾನ್', 'Scan'],
+    ['ಪ್ರಾರಂಭಿಸಿ', 'start'],
+    ['ಮತ್ತೆ', 'again'],
+    ['ಓದಿ ಹೇಳಿ', 'Read aloud'],
+    ['ನಿಲ್ಲಿಸು', 'Stop'],
+    ['ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ', 'Thinking'],
+    ['ಕೇಳಿಸಿಕೊಳ್ಳುತ್ತಿದ್ದೇನೆ', 'Listening'],
+    // Misc
+    ['ಮನೆ', 'Home'],
+    ['ಮುಖಪುಟ', 'Home page'],
+    ['ದೂರು', 'complaint'],
+    ['ಬೆಲೆ', 'price'],
+    ['ಮಾರುಕಟ್ಟೆ', 'market'],
+  ];
+
+  let result = kannadaText;
+  for (const [kn, en] of map) {
+    result = result.replaceAll(kn, en);
+  }
+
+  // If still has significant Kannada characters after replacement, 
+  // give a clean English summary message
+  const remainingKannada = (result.match(/[\u0C80-\u0CFF]/g) || []).length;
+  if (remainingKannada > 10) {
+    // Too much Kannada left — generate a clean English version
+    return `I understood your question. ${result.replace(/[\u0C80-\u0CFF]/g, '')}. Please switch to English for full voice support on this device.`;
+  }
+
+  return result;
 }

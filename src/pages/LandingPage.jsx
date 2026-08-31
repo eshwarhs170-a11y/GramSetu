@@ -94,7 +94,7 @@ export default function LandingPage() {
     if (logoTapTimer.current) clearTimeout(logoTapTimer.current)
     if (logoTapCount.current >= 3) {
       logoTapCount.current = 0
-      navigate('/demo')
+      window.location.href = '/demo'
       return
     }
     logoTapTimer.current = setTimeout(() => {

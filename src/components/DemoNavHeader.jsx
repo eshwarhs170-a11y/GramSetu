@@ -1,229 +1,191 @@
-import React from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import {
   Mic, Activity, QrCode, Map, Home, Sun, Moon,
-  Volume2, ChevronLeft, LayoutDashboard
+  Volume2, ChevronLeft, LayoutDashboard, ChevronDown
 } from 'lucide-react';
 import { playLoudNotificationChime } from '../utils/audioAlert';
 
-export default function DemoNavHeader({ currentPhase = 'voice' }) {
+const PHASES = [
+  { to: '/demo/voice',     label: 'Phase 1 · Voice AI',       shortLabel: '1. Voice AI',    icon: Mic,      color: '#22c55e' },
+  { to: '/demo/dashboard', label: 'Phase 2 · Live Monitor',    shortLabel: '2. Monitor',     icon: Activity, color: '#ef4444' },
+  { to: '/demo/qr-cards',  label: 'Phase 3 · Magic QR Passes', shortLabel: '3. QR Passes',   icon: QrCode,   color: '#3b82f6' },
+  { to: '/demo/map',       label: 'Phase 4 · State Heatmap',   shortLabel: '4. Heatmap',     icon: Map,      color: '#f59e0b' },
+];
+
+export default function DemoNavHeader() {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === 'dark';
-  const navigate = useNavigate();
+  const currentPath = window.location.pathname;
+  const currentPhase = PHASES.find(p => currentPath === p.to || currentPath.startsWith(p.to)) || PHASES[0];
 
-  const navLinks = [
-    { to: '/demo/voice',     label: '1. Voice AI',        icon: Mic,      color: '#22c55e' },
-    { to: '/demo/dashboard', label: '2. Live Monitor',     icon: Activity, color: '#ef4444' },
-    { to: '/demo/qr-cards',  label: '3. Magic QR Passes',  icon: QrCode,   color: '#3b82f6' },
-    { to: '/demo/map',       label: '4. State Heatmap',    icon: Map,      color: '#f59e0b' },
-  ];
-
-  const card = isDark
-    ? { bg: 'rgba(15, 23, 42, 0.82)', border: 'rgba(255,255,255,0.1)', shadow: '0 10px 30px rgba(0,0,0,0.4)' }
-    : { bg: 'rgba(255, 255, 255, 0.92)', border: 'rgba(0,0,0,0.08)', shadow: '0 10px 30px rgba(0,0,0,0.06)' };
-
-  const mutedBtn = {
-    background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
-    border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}`,
-    borderRadius: '10px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 5,
-    transition: 'all 0.15s ease',
-    fontFamily: "'Inter', sans-serif",
-  };
+  const barBg = isDark ? 'rgba(15,23,42,0.9)' : 'rgba(255,255,255,0.95)';
+  const barBorder = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)';
 
   return (
-    <header
-      className="no-print"
-      style={{
-        width: '100%',
-        maxWidth: '1200px',
-        margin: '0 auto 20px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 0,
-        boxSizing: 'border-box',
-      }}
-    >
-      {/* ── Row 1: Brand / Phase tabs / Utilities ── */}
+    <header className="no-print" style={{ width: '100%', maxWidth: 1200, margin: '0 auto 20px', fontFamily: "'Inter', sans-serif" }}>
+
+      {/* ── Row 1: Brand | Utilities ── */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: 10,
-        padding: '11px 18px',
-        borderRadius: '20px 20px 0 0',
-        background: card.bg,
-        border: `1px solid ${card.border}`,
-        borderBottom: 'none',
+        gap: 12,
+        padding: '10px 16px',
+        background: barBg,
+        border: `1px solid ${barBorder}`,
+        borderRadius: '18px 18px 0 0',
         backdropFilter: 'blur(16px)',
-        boxShadow: card.shadow,
+        boxShadow: isDark ? '0 6px 24px rgba(0,0,0,0.4)' : '0 6px 24px rgba(0,0,0,0.05)',
       }}>
 
         {/* Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Link
-            to="/demo"
-            title="Back to Presenter Control Hub"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              textDecoration: 'none',
-              color: isDark ? '#fff' : '#0f172a',
-              fontWeight: 800,
-              fontSize: '1.05rem',
-            }}
-          >
-            <div style={{
-              width: 32, height: 32, borderRadius: 8,
-              background: '#22c55e',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#fff', fontWeight: 900, fontSize: '0.9rem',
-            }}>
-              GS
-            </div>
-            <span>GramSetu</span>
-          </Link>
-
+        <a href="/demo" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', flexShrink: 0 }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 8,
+            background: 'linear-gradient(135deg,#22c55e,#16a34a)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#fff', fontWeight: 900, fontSize: '0.85rem',
+            boxShadow: '0 4px 12px rgba(34,197,94,0.35)',
+          }}>GS</div>
+          <span style={{ fontWeight: 800, fontSize: '1rem', color: isDark ? '#fff' : '#0f172a' }}>GramSetu</span>
           <span style={{
-            fontSize: '0.72rem', fontWeight: 700,
-            background: 'rgba(34,197,94,0.15)',
-            color: '#22c55e',
-            border: '1px solid rgba(34,197,94,0.3)',
-            borderRadius: 12, padding: '2px 8px', letterSpacing: '0.04em',
-          }}>
-            OPEN DAY SUITE
-          </span>
-        </div>
-
-        {/* Phase tabs */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-          {navLinks.map((item) => {
-            const IconComp = item.icon;
-            return (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                style={({ isActive }) => ({
-                  display: 'flex', alignItems: 'center', gap: 6,
-                  padding: '7px 13px', borderRadius: '12px',
-                  textDecoration: 'none', fontSize: '0.82rem', fontWeight: 700,
-                  transition: 'all 0.2s ease',
-                  background: isActive
-                    ? (isDark ? 'rgba(255,255,255,0.12)' : 'rgba(15,23,42,0.08)')
-                    : 'transparent',
-                  color: isActive ? item.color : (isDark ? '#94a3b8' : '#64748b'),
-                  border: isActive ? `1px solid ${item.color}55` : '1px solid transparent',
-                  boxShadow: isActive ? `0 0 12px ${item.color}22` : 'none',
-                })}
-              >
-                <IconComp size={15} />
-                <span>{item.label}</span>
-              </NavLink>
-            );
-          })}
-        </nav>
+            fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.05em',
+            background: 'rgba(34,197,94,0.15)', color: '#22c55e',
+            border: '1px solid rgba(34,197,94,0.3)', borderRadius: 10, padding: '2px 7px',
+          }}>DEMO</span>
+        </a>
 
         {/* Utilities */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {/* Chime tester */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+          {/* Chime */}
           <button
             onClick={playLoudNotificationChime}
-            title="Play 2-Second Loud Chime"
-            style={{ ...mutedBtn, color: isDark ? '#cbd5e1' : '#475569', padding: '7px 11px', fontSize: '0.78rem', fontWeight: 700 }}
-          >
-            <Volume2 size={14} color="#22c55e" />
-            <span>Test 2s Chime</span>
-          </button>
-
-          {/* Dark / Light toggle */}
-          <button
-            onClick={toggleTheme}
-            title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
-            style={{ ...mutedBtn, color: isDark ? '#facc15' : '#f59e0b', width: 34, height: 34, justifyContent: 'center', padding: 0 }}
-          >
-            {isDark ? <Sun size={17} /> : <Moon size={17} />}
-          </button>
-
-          {/* Exit Demo → goes to normal website */}
-          <Link
-            to="/"
-            title="Exit Demo — Open Normal GramSetu Website"
+            title="Test 2s Chime"
             style={{
-              ...mutedBtn,
-              background: isDark ? 'rgba(239,68,68,0.12)' : 'rgba(239,68,68,0.08)',
-              border: '1px solid rgba(239,68,68,0.3)',
-              color: '#ef4444',
-              padding: '7px 12px',
-              textDecoration: 'none',
+              display: 'flex', alignItems: 'center', gap: 5,
+              padding: '7px 11px', borderRadius: 10, cursor: 'pointer',
+              background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+              border: `1px solid ${barBorder}`,
+              color: isDark ? '#94a3b8' : '#64748b',
               fontSize: '0.78rem', fontWeight: 700,
             }}
           >
+            <Volume2 size={14} color="#22c55e" />
+            <span className="hide-xs">Test Chime</span>
+          </button>
+
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            title="Toggle Theme"
+            style={{
+              width: 34, height: 34, borderRadius: 10, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+              border: `1px solid ${barBorder}`,
+              color: isDark ? '#facc15' : '#f59e0b',
+            }}
+          >
+            {isDark ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+
+          {/* Exit Demo */}
+          <a
+            href="/"
+            title="Exit Demo — Go to Main Website"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              padding: '7px 12px', borderRadius: 10, cursor: 'pointer',
+              background: 'rgba(239,68,68,0.1)',
+              border: '1px solid rgba(239,68,68,0.3)',
+              color: '#ef4444',
+              fontSize: '0.78rem', fontWeight: 700, textDecoration: 'none',
+            }}
+          >
             <Home size={14} />
-            <span>Exit Demo</span>
-          </Link>
+            <span className="hide-xs">Exit Demo</span>
+          </a>
         </div>
       </div>
 
-      {/* ── Row 2: "← Back to Demo Hub" breadcrumb bar ── */}
+      {/* ── Row 2: Phase tabs ── */}
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '8px 20px',
-        borderRadius: '0 0 20px 20px',
-        background: isDark ? 'rgba(30, 41, 59, 0.7)' : 'rgba(241, 245, 249, 0.9)',
-        border: `1px solid ${card.border}`,
+        background: isDark ? 'rgba(15,23,42,0.75)' : 'rgba(248,250,252,0.95)',
+        border: `1px solid ${barBorder}`,
         borderTop: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.04)',
+        borderRadius: '0 0 18px 18px',
+        padding: '8px 12px',
         backdropFilter: 'blur(10px)',
       }}>
-        {/* Back to Hub button */}
-        <button
-          onClick={() => navigate('/demo')}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 7,
-            background: isDark ? 'rgba(255,255,255,0.07)' : 'rgba(15,23,42,0.06)',
-            border: isDark ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(15,23,42,0.1)',
-            borderRadius: 10,
-            color: isDark ? '#94a3b8' : '#475569',
-            padding: '6px 12px',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            transition: 'all 0.15s ease',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.color = '#22c55e';
-            e.currentTarget.style.borderColor = '#22c55e55';
-            e.currentTarget.style.background = 'rgba(34,197,94,0.1)';
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.color = isDark ? '#94a3b8' : '#475569';
-            e.currentTarget.style.borderColor = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(15,23,42,0.1)';
-            e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(15,23,42,0.06)';
-          }}
-        >
-          <ChevronLeft size={15} />
-          <span>Back to Demo Hub</span>
-          <LayoutDashboard size={13} style={{ marginLeft: 2, opacity: 0.7 }} />
-        </button>
 
-        {/* Breadcrumb label showing current phase */}
-        <div style={{ fontSize: '0.75rem', color: isDark ? '#64748b' : '#94a3b8', fontWeight: 600 }}>
-          {navLinks.find(l => {
-            const p = window.location.pathname;
-            return p === l.to || p.startsWith(l.to);
-          })?.label || 'Demo Suite'}
-          {' '}· Click any phase tab above to switch instantly
+        {/* Scrollable phase tabs row */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          overflowX: 'auto',
+          scrollbarWidth: 'none',
+          WebkitOverflowScrolling: 'touch',
+          paddingBottom: 2,
+        }}>
+          {/* Back to hub */}
+          <a
+            href="/demo"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0,
+              padding: '6px 12px', borderRadius: 10, textDecoration: 'none',
+              background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(15,23,42,0.06)',
+              border: `1px solid ${barBorder}`,
+              color: isDark ? '#94a3b8' : '#64748b',
+              fontSize: '0.78rem', fontWeight: 700,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <LayoutDashboard size={13} />
+            <span>Hub</span>
+          </a>
+
+          {/* Divider */}
+          <div style={{ width: 1, height: 24, background: barBorder, flexShrink: 0 }} />
+
+          {/* Phase tabs */}
+          {PHASES.map((phase) => {
+            const IconComp = phase.icon;
+            const isActive = currentPath === phase.to || currentPath.startsWith(phase.to);
+            return (
+              <a
+                key={phase.to}
+                href={phase.to}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0,
+                  padding: '7px 14px', borderRadius: 12, textDecoration: 'none',
+                  background: isActive
+                    ? (isDark ? `${phase.color}22` : `${phase.color}15`)
+                    : 'transparent',
+                  border: isActive
+                    ? `1px solid ${phase.color}55`
+                    : '1px solid transparent',
+                  color: isActive ? phase.color : (isDark ? '#64748b' : '#94a3b8'),
+                  fontSize: '0.82rem', fontWeight: 700,
+                  whiteSpace: 'nowrap',
+                  boxShadow: isActive ? `0 0 10px ${phase.color}22` : 'none',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <IconComp size={14} />
+                <span>{phase.shortLabel}</span>
+              </a>
+            );
+          })}
         </div>
       </div>
+
+      {/* Hide "hide-xs" text on very small screens */}
+      <style>{`
+        @media (max-width: 420px) { .hide-xs { display: none !important; } }
+        div::-webkit-scrollbar { display: none; }
+      `}</style>
     </header>
   );
 }

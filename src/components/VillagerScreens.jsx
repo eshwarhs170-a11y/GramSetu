@@ -3408,7 +3408,6 @@ export function TutorialsScreen() {
   return (
     <div className="animate-fadeInUp">
       <div style={{ marginBottom: 20 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 8px 0' }}>{t('tutorialTitle')}</h2>
         <p style={{ color: 'var(--text-secondary)', fontSize: 14, margin: 0 }}>{t('tutorialSub')}</p>
         
         {/* Helper Note for the blocked issue */}

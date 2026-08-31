@@ -1098,8 +1098,8 @@ input, textarea, select { font-family: inherit; outline: none; }
   .content-grid-3 { grid-template-columns: 1fr; }
   .complaint-category-grid { grid-template-columns: repeat(2, 1fr); }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .topbar { padding: 0 12px; }
-  .topbar-title { font-size: 15px; max-width: 160px; }
+  .topbar { padding: 0 12px; height: auto; min-height: var(--header-height); }
+  .topbar-title { font-size: 14px; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .topbar-subtitle { display: none; }
   .topbar-right { gap: 6px; }
   .topbar-icon-btn { width: 34px; height: 34px; }
@@ -1150,8 +1150,8 @@ input, textarea, select { font-family: inherit; outline: none; }
   .page-content { padding: 16px; }
 
   /* ── Topbar ── */
-  .topbar { padding: 0 16px; }
-  .topbar-title { font-size: 16px; }
+  .topbar { padding: 0 16px; height: auto; min-height: var(--header-height); }
+  .topbar-title { font-size: 15px; max-width: 170px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .topbar-subtitle { display: none; }
   .topbar-right { gap: 8px; }
   .topbar-icon-btn { width: 34px; height: 34px; }
