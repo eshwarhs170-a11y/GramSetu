@@ -101,6 +101,72 @@ export async function callGemini(prompt, systemInstruction) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// callGeminiVision — Sends an image to Gemini Vision and identifies crop disease
+// Returns: { isCrop, crop, disease, confidence, matchKey } or { isCrop: false }
+// Works with real photos, xerox/printed images, and Google image uploads
+// ─────────────────────────────────────────────────────────────────────────────
+export async function callGeminiVision(base64Image, mimeType = 'image/jpeg') {
+  if (!genAI) return null;
+
+  const prompt = `You are an expert plant pathologist AI for Karnataka, India. Analyze this image carefully.
+
+STEP 1 — Is this a crop/plant image?
+- It can be a real photo, a xerox/printed photo of a crop, a screenshot from Google, or an illustration.
+- If it shows a plant, crop, leaf, stem, fruit, or any agricultural subject (even in a printed/photocopied form), answer YES.
+- If it is clearly not related to crops (e.g., a person's face, a building, a vehicle, food that is fully processed), answer NO.
+
+STEP 2 — If YES, identify the crop and its disease from this list:
+CROPS AND DISEASES:
+- Paddy/Rice: Blast Disease (Pyricularia oryzae), Brown Plant Hopper, Sheath Blight
+- Ragi/Finger Millet: Blast Disease (Pyricularia grisea), Head Smut
+- Maize/Corn: Fall Armyworm, Northern Leaf Blight
+- Cotton: Pink Bollworm, Leaf Curl Virus
+- Tomato: Late Blight, Leaf Miner, Early Blight
+- Potato: Late Blight
+- Onion: Purple Blotch
+- Sugarcane: Red Rot, Smut
+- Coconut: Rhinoceros Beetle, Root Wilt, Yellow Leaf Disease
+- Arecanut: Yellow Leaf Disease, Bud Rot
+- Coffee: White Stem Borer, Coffee Leaf Rust
+- Banana: Panama Wilt / Fusarium Wilt, Sigatoka Leaf Spot
+- Mango: Anthracnose, Mango Hoppers
+- Groundnut: Early Leaf Spot
+- Sunflower: Downy Mildew
+- Soybean: Yellow Mosaic Virus
+- Wheat: Yellow Rust / Stripe Rust
+- Jowar/Sorghum: Grain Mold
+- Chickpea/Bengal Gram: Fusarium Wilt
+- Black Pepper: Phytophthora Foot Rot
+
+Respond ONLY with a JSON object. No markdown, no explanation, just JSON:
+
+If NOT a crop image:
+{"isCrop": false}
+
+If IS a crop image:
+{"isCrop": true, "cropName": "exact crop name from list above", "diseaseName": "exact disease name from list above", "confidence": "High|Medium|Low", "visualClues": "brief description of what you see in the image"}
+
+IMPORTANT: Match cropName and diseaseName EXACTLY to the list. If it is a healthy crop with no disease, still return isCrop: true with diseaseName: "Healthy - No disease detected".`;
+
+  try {
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const imagePart = { inlineData: { data: base64Image, mimeType } };
+    const resultPromise = model.generateContent([prompt, imagePart]).then(r => r.response.text());
+    const text = await withTimeout(resultPromise, 12000, null);
+    if (!text) return null;
+
+    // Extract JSON from the response
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return null;
+    const parsed = JSON.parse(jsonMatch[0]);
+    return parsed;
+  } catch (error) {
+    console.warn('Gemini Vision error:', error.message?.slice(0, 100));
+    return null;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // COMPREHENSIVE SYSTEM INSTRUCTION — Given to Gemini for all questions
 // ─────────────────────────────────────────────────────────────────────────────
 function buildSystemInstruction(lang) {

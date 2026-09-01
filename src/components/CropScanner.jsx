@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Camera, X, CheckCircle2, AlertTriangle, ShieldCheck, Volume2, Info, Scan, Leaf, AlertCircle, Microscope, Droplets, FlaskConical, Sprout, ChevronRight, Upload, MessageCircle, Send, ImagePlus, ChevronsDown, Loader2, TriangleAlert, CircleCheck, ScanLine, Image, Crop, Layers, Bot, Pill, Building2, ListChecks, RefreshCw, ArrowRight, Wheat, Zap, Lightbulb } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useVoice } from '../context/VoiceContext';
-import { callGemini } from '../utils/voiceCommands';
+import { callGemini, callGeminiVision } from '../utils/voiceCommands';
 import { useNavigate } from 'react-router-dom';
 
 // ─────────────────────────────────────────────────────────────────
@@ -526,6 +526,7 @@ export default function CropScanner() {
   const [result, setResult] = useState(null);
   const [selectedCrop, setSelectedCrop] = useState('NO_CROP');
   const [scanPhase, setScanPhase] = useState('idle');
+  const [notCropMsg, setNotCropMsg] = useState(null);
   const [scanProgress, setScanProgress] = useState(0);
   const [activeTab, setActiveTab] = useState('remedy');
 
@@ -576,59 +577,263 @@ export default function CropScanner() {
 
   useEffect(() => () => stopSpeaking(), [stopSpeaking]);
 
-  const handleScan = () => {
-    if (scanning) return;
-    setScanning(true); setResult(null); setScanPhase('scanning'); setScanProgress(0); setQaChat([]);
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.random() * 18 + 5;
-      if (progress >= 100) { progress = 100; clearInterval(interval); }
-      setScanProgress(Math.round(progress));
-    }, 150);
-    setTimeout(() => {
-      clearInterval(interval); setScanProgress(100);
-      setTimeout(() => {
-        setScanning(false); setScanPhase('done');
-        if (selectedCrop === 'NO_CROP') { setResult('NO_CROP'); }
-        else {
-          const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
-          if (matches.length > 0) { setResult(matches[Math.floor(Math.random() * matches.length)]); setActiveTab('remedy'); }
-          else setResult('NO_CROP');
+  // ── Helper: fuzzy-match AI crop/disease name to our CROP_DISEASES database ──
+  const matchAiToDatabase = (cropName, diseaseName) => {
+    if (!cropName) return null;
+    const cLower = cropName.toLowerCase();
+    const dLower = (diseaseName || '').toLowerCase();
+
+    // Map AI crop names → our DB crop keys (partial match)
+    const cropKeywords = [
+      { keys: ['paddy', 'rice', 'ಭತ್ತ'],            db: 'Paddy / Rice (ಭತ್ತ)' },
+      { keys: ['ragi', 'finger millet', 'ರಾಗಿ'],      db: 'Ragi / Finger Millet (ರಾಗಿ)' },
+      { keys: ['maize', 'corn', 'ಜೋಳ'],              db: 'Maize / Corn (ಜೋಳ)' },
+      { keys: ['cotton', 'ಹತ್ತಿ'],                   db: 'Cotton (ಹತ್ತಿ)' },
+      { keys: ['tomato', 'ಟೊಮೇಟೊ'],                  db: 'Tomato (ಟೊಮೇಟೊ)' },
+      { keys: ['potato', 'ಆಲೂ'],                     db: 'Potato (ಆಲೂಗಡ್ಡೆ)' },
+      { keys: ['onion', 'ಈರುಳ್ಳಿ'],                  db: 'Onion (ಈರುಳ್ಳಿ)' },
+      { keys: ['sugarcane', 'ಕಬ್ಬು'],                db: 'Sugarcane (ಕಬ್ಬು)' },
+      { keys: ['coconut', 'ತೆಂಗು'],                  db: 'Coconut (ತೆಂಗು)' },
+      { keys: ['arecanut', 'areca', 'ಅಡಿಕೆ'],        db: 'Arecanut (ಅಡಿಕೆ)' },
+      { keys: ['coffee', 'ಕಾಫಿ'],                    db: 'Coffee (ಕಾಫಿ)' },
+      { keys: ['banana', 'ಬಾಳೆ'],                    db: 'Banana (ಬಾಳೆ)' },
+      { keys: ['mango', 'ಮಾವು'],                     db: 'Mango (ಮಾವು)' },
+      { keys: ['groundnut', 'peanut', 'ಕಡಲೆಕಾಯಿ'],  db: 'Groundnut (ಕಡಲೆಕಾಯಿ)' },
+      { keys: ['sunflower', 'ಸೂರ್ಯಕಾಂತಿ'],           db: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ)' },
+      { keys: ['soybean', 'soya', 'ಸೋಯಾ'],           db: 'Soybean (ಸೋಯಾಬೀನ್)' },
+      { keys: ['wheat', 'ಗೋಧಿ'],                     db: 'Wheat (ಗೋಧಿ)' },
+      { keys: ['jowar', 'sorghum', 'ಜೋಳ'],           db: 'Jowar / Sorghum (ಜೋಳ)' },
+      { keys: ['chickpea', 'bengal gram', 'ಕಡಲೆ'],  db: 'Chickpea / Bengal Gram (ಕಡಲೆ)' },
+      { keys: ['pepper', 'black pepper', 'ಮೆಣಸು'],  db: 'Black Pepper (ಕರಿಮೆಣಸು)' },
+    ];
+
+    let matchedCropName = null;
+    for (const { keys, db } of cropKeywords) {
+      if (keys.some(k => cLower.includes(k.toLowerCase()))) { matchedCropName = db; break; }
+    }
+    if (!matchedCropName) return null;
+
+    const cropMatches = CROP_DISEASES.filter(d => d.crop === matchedCropName);
+    if (!cropMatches.length) return null;
+
+    // Try to match disease name too
+    if (dLower && !dLower.includes('healthy') && !dLower.includes('no disease')) {
+      const diseaseKeywords = [
+        ['blast', 'blast'],
+        ['brown plant hopper', 'brown plant hopper'],
+        ['sheath blight', 'sheath blight'],
+        ['head smut', 'head smut'],
+        ['fall armyworm', 'fall armyworm'],
+        ['northern leaf blight', 'northern leaf blight'],
+        ['pink bollworm', 'pink bollworm'],
+        ['leaf curl', 'leaf curl'],
+        ['late blight', 'late blight'],
+        ['leaf miner', 'leaf miner'],
+        ['early blight', 'early blight'],
+        ['purple blotch', 'purple blotch'],
+        ['red rot', 'red rot'],
+        ['smut', 'smut'],
+        ['rhinoceros', 'rhinoceros'],
+        ['root wilt', 'root wilt'],
+        ['yellow leaf', 'yellow leaf'],
+        ['bud rot', 'bud rot'],
+        ['stem borer', 'stem borer'],
+        ['leaf rust', 'leaf rust'],
+        ['fusarium wilt', 'fusarium wilt'],
+        ['panama wilt', 'panama wilt'],
+        ['sigatoka', 'sigatoka'],
+        ['anthracnose', 'anthracnose'],
+        ['hoppers', 'hoppers'],
+        ['leaf spot', 'leaf spot'],
+        ['downy mildew', 'downy mildew'],
+        ['mosaic', 'mosaic'],
+        ['yellow rust', 'yellow rust'],
+        ['stripe rust', 'stripe rust'],
+        ['grain mold', 'grain mold'],
+        ['foot rot', 'foot rot'],
+      ];
+      for (const [keyword] of diseaseKeywords) {
+        if (dLower.includes(keyword)) {
+          const diseaseMatch = cropMatches.find(d => d.disease.toLowerCase().includes(keyword));
+          if (diseaseMatch) return diseaseMatch;
         }
-        setPage('result');
-      }, 300);
-    }, 2800);
+      }
+    }
+    // Return the first disease for this crop as best match
+    return cropMatches[0];
   };
 
-  const handleImageScan = () => {
-    if (scanning || selectedCrop === 'NO_CROP') return;
+  // ── Capture a frame from the live camera video ──
+  const captureVideoFrame = () => {
+    if (!videoRef.current) return null;
+    const video = videoRef.current;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    // Return base64 without the data:image/jpeg;base64, prefix
+    return dataUrl.split(',')[1];
+  };
+
+  const handleScan = async () => {
+    if (scanning) return;
+    setNotCropMsg(null);
     setScanning(true); setResult(null); setScanPhase('scanning'); setScanProgress(0); setQaChat([]);
+
+    // Animate progress
     let progress = 0;
     const interval = setInterval(() => {
-      progress += Math.random() * 20 + 8;
-      if (progress >= 100) progress = 100;
+      progress += Math.random() * 10 + 4;
+      if (progress >= 85) { progress = 85; clearInterval(interval); }
       setScanProgress(Math.round(progress));
-      if (progress >= 100) clearInterval(interval);
-    }, 120);
-    setTimeout(() => {
-      clearInterval(interval); setScanProgress(100);
-      setTimeout(() => {
-        setScanning(false); setScanPhase('done');
+    }, 150);
+
+    try {
+      // Capture frame from camera
+      const base64Frame = captureVideoFrame();
+
+      let finalResult = null;
+
+      if (base64Frame) {
+        // Use AI vision to analyze the captured frame
+        const visionData = await callGeminiVision(base64Frame, 'image/jpeg');
+
+        if (visionData === null) {
+          // API unavailable — fall back to manual crop selection
+          if (selectedCrop !== 'NO_CROP') {
+            const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
+            if (matches.length > 0) finalResult = matches[Math.floor(Math.random() * matches.length)];
+          }
+        } else if (!visionData.isCrop) {
+          // AI says this is NOT a crop image
+          clearInterval(interval);
+          setScanProgress(100);
+          setScanning(false); setScanPhase('idle');
+          setNotCropMsg('🌿 This does not appear to be a crop image. Please point the camera at a crop leaf, stem, or fruit and try again.');
+          return;
+        } else {
+          // AI identified a crop — match to our database
+          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName);
+          finalResult = matched;
+          if (!finalResult && selectedCrop !== 'NO_CROP') {
+            const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
+            if (matches.length > 0) finalResult = matches[0];
+          }
+        }
+      } else if (selectedCrop !== 'NO_CROP') {
+        // No camera frame — use manual selection
         const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
-        if (matches.length > 0) {
-          let hash = 0;
-          if (uploadedImage) for (let i = 0; i < Math.min(uploadedImage.length, 5000); i++) { hash = (hash << 5) - hash + uploadedImage.charCodeAt(i); hash |= 0; }
-          setResult(matches[Math.abs(hash) % matches.length]); setActiveTab('remedy');
-        } else setResult('NO_CROP');
-        setPage('result');
-      }, 300);
-    }, 2400);
+        if (matches.length > 0) finalResult = matches[Math.floor(Math.random() * matches.length)];
+      }
+
+      clearInterval(interval);
+      setScanProgress(100);
+      await new Promise(r => setTimeout(r, 400));
+      setScanning(false); setScanPhase('done');
+
+      if (finalResult) {
+        setResult(finalResult); setActiveTab('remedy');
+      } else {
+        setResult('NO_CROP');
+      }
+      setPage('result');
+    } catch (err) {
+      clearInterval(interval);
+      setScanProgress(100);
+      setScanning(false); setScanPhase('idle');
+      console.error('Scan error:', err);
+      // Graceful fallback
+      if (selectedCrop !== 'NO_CROP') {
+        const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
+        if (matches.length > 0) { setResult(matches[0]); setActiveTab('remedy'); setPage('result'); }
+        else { setResult('NO_CROP'); setPage('result'); }
+      }
+    }
+  };
+
+  const handleImageScan = async () => {
+    if (scanning || !uploadedImage) return;
+    setNotCropMsg(null);
+    setScanning(true); setResult(null); setScanPhase('scanning'); setScanProgress(0); setQaChat([]);
+
+    // Animate progress
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.random() * 10 + 4;
+      if (progress >= 85) { progress = 85; clearInterval(interval); }
+      setScanProgress(Math.round(progress));
+    }, 120);
+
+    try {
+      // Extract base64 from the data URL
+      const base64 = uploadedImage.split(',')[1];
+      const mimeMatch = uploadedImage.match(/data:(image\/[^;]+);/);
+      const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+
+      let finalResult = null;
+
+      if (base64) {
+        const visionData = await callGeminiVision(base64, mimeType);
+
+        if (visionData === null) {
+          // API unavailable — fall back to manual selection
+          if (selectedCrop !== 'NO_CROP') {
+            const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
+            if (matches.length > 0) {
+              let hash = 0;
+              for (let i = 0; i < Math.min(uploadedImage.length, 5000); i++) { hash = (hash << 5) - hash + uploadedImage.charCodeAt(i); hash |= 0; }
+              finalResult = matches[Math.abs(hash) % matches.length];
+            }
+          }
+        } else if (!visionData.isCrop) {
+          clearInterval(interval);
+          setScanProgress(100);
+          setScanning(false); setScanPhase('idle');
+          setNotCropMsg('🌿 This does not appear to be a crop image. Please upload a photo of a crop leaf, stem, or fruit — including printed/xerox photos of diseased crops.');
+          return;
+        } else {
+          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName);
+          finalResult = matched;
+          if (!finalResult && selectedCrop !== 'NO_CROP') {
+            const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
+            let hash = 0;
+            for (let i = 0; i < Math.min(uploadedImage.length, 5000); i++) { hash = (hash << 5) - hash + uploadedImage.charCodeAt(i); hash |= 0; }
+            if (matches.length > 0) finalResult = matches[Math.abs(hash) % matches.length];
+          }
+        }
+      }
+
+      clearInterval(interval);
+      setScanProgress(100);
+      await new Promise(r => setTimeout(r, 400));
+      setScanning(false); setScanPhase('done');
+
+      if (finalResult) {
+        setResult(finalResult); setActiveTab('remedy');
+      } else {
+        setResult('NO_CROP');
+      }
+      setPage('result');
+    } catch (err) {
+      clearInterval(interval);
+      setScanProgress(100);
+      setScanning(false); setScanPhase('idle');
+      console.error('Image scan error:', err);
+      if (selectedCrop !== 'NO_CROP') {
+        const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
+        if (matches.length > 0) { setResult(matches[0]); setActiveTab('remedy'); setPage('result'); }
+        else { setResult('NO_CROP'); setPage('result'); }
+      }
+    }
   };
 
   const handleReset = () => {
     stopSpeaking(); setResult(null); setScanPhase('idle'); setScanProgress(0);
     setUploadedImage(null); setScanMode('camera'); setQaChat([]); setQaInput('');
     setPan({ x: 0, y: 0 }); currentPan.current = { x: 0, y: 0 };
+    setNotCropMsg(null);
     setPage('home');
   };
 
@@ -1136,6 +1341,24 @@ export default function CropScanner() {
           {!scanning && !uploadedImage && <div style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.7)', padding: '6px 16px', borderRadius: 20, color: 'rgba(255,255,255,0.8)', fontSize: 11, fontWeight: 600, backdropFilter: 'blur(8px)', whiteSpace: 'nowrap' }}>📷 {lang === 'kn' ? 'ಬೆಳೆಯ ಎಲೆಯನ್ನು ಚೌಕಟ್ಟಿನಲ್ಲಿ ಇರಿಸಿ' : 'Place crop leaf in the frame'}</div>}
           {scanning && <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 3 }}><div style={{ height: '100%', width: `${scanProgress}%`, background: 'linear-gradient(90deg,#16a34a,#22c55e)', transition: 'width 0.15s ease' }} /></div>}
         </div>
+
+        {/* Not-a-crop error banner */}
+        {notCropMsg && (
+          <div style={{ position: 'absolute', bottom: 160, left: 16, right: 16, background: 'rgba(239,68,68,0.95)', borderRadius: 14, padding: '12px 16px', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'flex-start', gap: 10, zIndex: 70, boxShadow: '0 4px 20px rgba(239,68,68,0.4)' }}>
+            <span style={{ fontSize: 22, flexShrink: 0 }}>⚠️</span>
+            <div style={{ flex: 1 }}>
+              <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 800, color: '#fff' }}>
+                {lang === 'kn' ? 'ಬೆಳೆ ಚಿತ್ರ ಅಲ್ಲ' : 'Not a Crop Image'}
+              </p>
+              <p style={{ margin: 0, fontSize: 12, color: 'rgba(255,255,255,0.9)', lineHeight: 1.5 }}>
+                {lang === 'kn'
+                  ? 'ದಯವಿಟ್ಟು ಬೆಳೆ ಎಲೆ, ಕಾಂಡ ಅಥವಾ ಹಣ್ಣಿನ ಚಿತ್ರ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ. ಮುದ್ರಿತ ಚಿತ್ರಗಳನ್ನು ಸಹ ಸ್ಕ್ಯಾನ್ ಮಾಡಬಹುದು.'
+                  : notCropMsg}
+              </p>
+            </div>
+            <button onClick={() => setNotCropMsg(null)} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 8, padding: '4px 8px', color: '#fff', cursor: 'pointer', fontSize: 16, fontWeight: 700, flexShrink: 0 }}>✕</button>
+          </div>
+        )}
 
         {/* Scan button panel */}
         <div style={{ background: '#ffffff', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: '16px 20px 28px', boxShadow: '0 -10px 40px rgba(0,0,0,0.15)' }}>
