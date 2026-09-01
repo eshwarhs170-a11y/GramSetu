@@ -28,6 +28,37 @@ export function VoiceProvider({ children }) {
     };
   }, []);
 
+  // ── Auto-unlock Audio Context on first user touch / click for mobile Chrome/Safari ──
+  useEffect(() => {
+    const unlockAudio = () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.resume();
+        const dummy = new SpeechSynthesisUtterance('');
+        dummy.volume = 0;
+        window.speechSynthesis.speak(dummy);
+      }
+    };
+    window.addEventListener('touchstart', unlockAudio, { once: true });
+    window.addEventListener('click', unlockAudio, { once: true });
+    return () => {
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('click', unlockAudio);
+    };
+  }, []);
+
+  // ── Keep Android Chrome TTS from pausing on long text ──
+  useEffect(() => {
+    let interval;
+    if (isSpeaking) {
+      interval = setInterval(() => {
+        if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+          window.speechSynthesis.resume();
+        }
+      }, 4000);
+    }
+    return () => clearInterval(interval);
+  }, [isSpeaking]);
+
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -76,10 +107,13 @@ export function VoiceProvider({ children }) {
   }, [recognition]);
 
   // ─────────────────────────────────────────────────────────────
-  // speak() — fully language-aware, with graceful Kannada fallback
+  // speak() — fully language-aware, with audio resume & mobile support
   // ─────────────────────────────────────────────────────────────
   const speak = useCallback((text) => {
-    if (!('speechSynthesis' in window)) return;
+    if (!('speechSynthesis' in window) || !text) return;
+    
+    // Force resume and clear queue
+    window.speechSynthesis.resume();
     window.speechSynthesis.cancel();
 
     const doSpeak = () => {
@@ -91,36 +125,26 @@ export function VoiceProvider({ children }) {
       let langCode = 'en-IN';
 
       if (lang === 'kn') {
-        // ── Try Kannada voices (Android/Chrome mobile has them) ──
         targetVoice =
-          voices.find(v => v.lang === 'kn-IN' && v.name.toLowerCase().includes('google')) ||
-          voices.find(v => v.lang === 'kn-IN') ||
+          voices.find(v => v.lang === 'kn-IN' || v.lang === 'kn_IN') ||
           voices.find(v => v.lang.startsWith('kn'));
 
         if (targetVoice) {
           langCode = 'kn-IN';
-          // Keep Kannada text as-is
         } else {
-          // ── No Kannada TTS on this device → transliterate/fallback ──
-          // Use en-IN voice but keep the message meaningful in English
           targetVoice =
             voices.find(v => v.lang.startsWith('en-IN') && v.name.toLowerCase().includes('google')) ||
             voices.find(v => v.lang.startsWith('en-IN')) ||
             voices.find(v => v.lang.startsWith('en'));
           langCode = targetVoice?.lang || 'en-IN';
 
-          // If the text is purely Kannada script, translate to English phonetically readable version
-          // We detect Kannada unicode range: \u0C80-\u0CFF
-          const hasKannadaScript = /[\u0C80-\u0CFF]/.test(text);
-          if (hasKannadaScript) {
-            // Map common Kannada phrases to English equivalents for TTS
+          if (/[\u0C80-\u0CFF]/.test(text)) {
             textToSpeak = kannadaToEnglishTTS(text);
           }
         }
       } else if (lang === 'hi') {
         targetVoice =
-          voices.find(v => v.lang === 'hi-IN' && v.name.toLowerCase().includes('google')) ||
-          voices.find(v => v.lang === 'hi-IN') ||
+          voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN') ||
           voices.find(v => v.lang.startsWith('hi'));
         langCode = 'hi-IN';
       } else {
@@ -133,19 +157,40 @@ export function VoiceProvider({ children }) {
       }
 
       const utt = new SpeechSynthesisUtterance(textToSpeak);
-      if (targetVoice) { utt.voice = targetVoice; utt.lang = targetVoice.lang; }
-      else utt.lang = langCode;
-      utt.rate  = 0.92;
-      utt.pitch = 1.0;
+      if (targetVoice) {
+        utt.voice = targetVoice;
+        utt.lang = targetVoice.lang;
+      } else {
+        utt.lang = langCode;
+      }
+
+      utt.rate   = 0.95;
+      utt.pitch  = 1.0;
+      utt.volume = 1.0;
+
       utt.onstart = () => setIsSpeaking(true);
       utt.onend   = () => setIsSpeaking(false);
-      utt.onerror = () => setIsSpeaking(false);
+      utt.onerror = (err) => {
+        console.warn('TTS error:', err);
+        setIsSpeaking(false);
+      };
+
+      window.speechSynthesis.resume();
       window.speechSynthesis.speak(utt);
     };
 
-    const voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) { doSpeak(); }
-    else { window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.onvoiceschanged = null; doSpeak(); }; }
+    setTimeout(() => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        doSpeak();
+      } else {
+        window.speechSynthesis.onvoiceschanged = () => {
+          window.speechSynthesis.onvoiceschanged = null;
+          doSpeak();
+        };
+        doSpeak();
+      }
+    }, 60);
   }, [lang]);
 
   const stopSpeaking = useCallback(() => {
