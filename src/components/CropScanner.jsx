@@ -581,9 +581,10 @@ export default function CropScanner() {
   useEffect(() => () => stopSpeaking(), [stopSpeaking]);
 
   // ── Helper: fuzzy-match AI crop/disease name to our CROP_DISEASES database ──
-  const matchAiToDatabase = (cropName, diseaseName) => {
-    if (!cropName) return null;
-    const cLower = cropName.toLowerCase();
+  const matchAiToDatabase = (cropName, diseaseName, userSelectedCrop = null) => {
+    const effectiveCrop = (userSelectedCrop && userSelectedCrop !== 'NO_CROP') ? userSelectedCrop : cropName;
+    if (!effectiveCrop) return null;
+    const cLower = effectiveCrop.toLowerCase();
     const dLower = (diseaseName || '').toLowerCase();
 
     // Map AI crop names → our DB crop keys (partial match)
@@ -593,7 +594,7 @@ export default function CropScanner() {
       { keys: ['maize', 'corn', 'ಜೋಳ'],              db: 'Maize / Corn (ಜೋಳ)' },
       { keys: ['cotton', 'ಹತ್ತಿ'],                   db: 'Cotton (ಹತ್ತಿ)' },
       { keys: ['tomato', 'ಟೊಮೇಟೊ'],                  db: 'Tomato (ಟೊಮೇಟೊ)' },
-      { keys: ['potato', 'ಆಲೂ'],                     db: 'Potato (ಆಲೂಗಡ್ಡೆ)' },
+      { keys: ['potato', 'ಆಲೂ', 'ಆಲೂಗಡ್ಡೆ'],         db: 'Potato (ಆಲೂಗಡ್ಡೆ)' },
       { keys: ['onion', 'ಈರುಳ್ಳಿ'],                  db: 'Onion (ಈರುಳ್ಳಿ)' },
       { keys: ['sugarcane', 'ಕಬ್ಬು'],                db: 'Sugarcane (ಕಬ್ಬು)' },
       { keys: ['coconut', 'ತೆಂಗು'],                  db: 'Coconut (ತೆಂಗು)' },
@@ -723,7 +724,7 @@ export default function CropScanner() {
           return;
         } else {
           // AI identified a crop — match to our database
-          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName);
+          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName, selectedCrop);
           finalResult = matched;
         }
       } else {
@@ -803,7 +804,7 @@ export default function CropScanner() {
             : '🌿 Not a crop image. Please upload a diseased crop photo — printed/xerox photos also work.');
           return;
         } else {
-          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName);
+          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName, selectedCrop);
           finalResult = matched;
         }
       }
