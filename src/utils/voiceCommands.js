@@ -64,7 +64,7 @@ const INSTANT_ANSWERS = {
 // Conversational / Audio Check / Greeting Handler
 function getConversationalAnswer(lowerT, lang) {
   // Audio check / Mic test
-  if (/audible|hear me|sound check|testing|can you hear|ಕೇಳಿಸ್ತಾ|ಕೇಳಿಸುತ್ತಿದೆಯೇ|ಮಾತನಾಡು|ಆಡಿಯೋ|आवाज|सुन पा रहे/i.test(lowerT)) {
+  if (/audible|hear me|sound check|testing|can you hear|ಕೇಳಿಸ್ತಾ|ಕೇಳಿಸುತ್ತಿದೆಯೇ|ಮಾತನಾಡು|ಆಡಿಯೋ|ಆವಾಜ್|सुन पा रहे/i.test(lowerT)) {
     if (lang === 'kn') return 'ಹೌದು! ನಿಮ್ಮ ಧ್ವನಿ ಅತ್ಯಂತ ಸ್ಪಷ್ಟವಾಗಿ ಕೇಳಿಸುತ್ತಿದೆ. ನಾನು ಗ್ರಾಮಸೇತು ಎಐ. ಇಂದು ನಿಮಗೆ ಬೆಳೆ, ಯೋಜನೆ ಅಥವಾ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳ ಬಗ್ಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಲಿ?';
     if (lang === 'hi') return 'हाँ! आपकी आवाज बिल्कुल साफ आ रही है। मैं ग्रामसेतु AI हूँ। आज मैं आपकी फसलों, मंडी भाव या योजनाओं में कैसे मदद कर सकता हूँ?';
     return 'Yes, I can hear you loud and clear! I am GramSetu AI, your voice assistant. How can I help you today with crops, market prices, or government schemes?';
@@ -87,7 +87,7 @@ function getConversationalAnswer(lowerT, lang) {
   // Thanks / Gratitude
   if (/thank|thanks|dhanyavad|ಧನ್ಯವಾದ|ಶುಕ್ರಿಯಾ|ಕೃತಜ್ಞತೆ/i.test(lowerT)) {
     if (lang === 'kn') return 'ನಿಮಗೆ ಸುಸ್ವಾಗತ! ಗ್ರಾಮಸೇತು ನಿಮ್ಮ ಕೃಷಿ ಸಹಾಯಕ್ಕೆ ಯಾವಾಗಲೂ ಇಲ್ಲಿದೆ. ಧನ್ಯವಾದಗಳು!';
-    if (lang === 'hi') return 'आपका बहुत-बहुत स्वागत है! ग्रामसेತು आपकी सहायता के लिए हमेशा उपलब्ध है।';
+    if (lang === 'hi') return 'आपका बहुत-बहुत स्वागत है! ग्रामसेतु आपकी सहायता के लिए हमेशा उपलब्ध है।';
     return "You're very welcome! GramSetu AI is always here to assist your farming needs. Have a great day!";
   }
 
@@ -101,14 +101,14 @@ function getConversationalAnswer(lowerT, lang) {
   // Weather / Rain
   if (/weather|rain|climate|hawa|ಮಳೆ|ಹವಾಮಾನ|ವಲಯ|मौसम|बारिश/i.test(lowerT)) {
     if (lang === 'kn') return 'ನಿಮ್ಮ ಜಿಲ್ಲೆಯ ಇಂದಿನ ಹವಾಮಾನ ಮತ್ತು ಮಳೆ ಮುನ್ಸೂಚನೆಯನ್ನು ನೋಡಲು ಗ್ರಾಮಸೇತು ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ನ Weather ವಿಭಾಗ ತೆರೆಯಿರಿ.';
-    if (lang === 'hi') return 'मौसम और बारिश का पूर्वानुमान देखने के लिए ग्रामसेतु डैशबोर्ड का वेदर सेक्शन देखें।';
+    if (lang === 'hi') return 'मौसम और बारिश का पूर्वानुमान देखने के लिए ग्रामसेतु डैशबोर्ड का वेदर सेक्शन देखें。';
     return 'You can check your district weather forecast and rainfall advisories in the Weather section of your GramSetu dashboard.';
   }
 
   // Fertilizer / Soil
   if (/fertilizer|soil|urea|npk|manure|ಗೊಬ್ಬರ|ಮಣ್ಣು|ಖಾತ|खाद|मिट्टी/i.test(lowerT)) {
     if (lang === 'kn') return 'ಮಣ್ಣಿನ ಫಲವತ್ತತೆಗೆ ರಾಗಿಗೆ 50:40:25 ಮತ್ತು ಭತ್ತಕ್ಕೆ 120:60:60 NPK ಗೊಬ್ಬರ ಸೂಕ್ತ. ಉಚಿತ ಮಣ್ಣು ಪರೀಕ್ಷೆಗೆ ಸ್ಥಳೀಯ ಕೃಷಿ ವಿಸ್ತರಣಾ ಕೇಂದ್ರ (RSK) ಸಂಪರ್ಕಿಸಿ.';
-    if (lang === 'hi') return 'मिट्टी स्वास्थ्य के लिए रागी में 50:40:25 और धान में 120:60:60 NPK खाद का उपयोग करें। मुफ्त मिट्टी जांच के लिए निकटतम RSK केंद्र जाएं।';
+    if (lang === 'hi') return 'मिट्टी स्वास्थ्य के लिए रागी में 50:40:25 और धान में 120:60:60 NPK खाद का उपयोग करें। मुफ्त मिट्टी जांच के लिए निकटतम RSK केंद्र जाएं。';
     return 'For balanced soil nutrition, use NPK 120:60:60 for Paddy and 50:40:25 for Ragi. Visit your local Raitha Samparka Kendra (RSK) for free soil testing.';
   }
 
@@ -134,11 +134,11 @@ function withTimeout(promise, ms, fallback) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// callGemini — calls Gemini 1.5 Flash with a comprehensive agriculture prompt
+// callGemini — calls Gemini 3.6 Flash / 2.5 Flash with a comprehensive prompt
 // ─────────────────────────────────────────────────────────────────────────────
 export async function callGemini(prompt, systemInstruction) {
   if (!genAI) return null;
-  const modelsToTry = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'];
+  const modelsToTry = ['gemini-3.6-flash', 'gemini-2.5-flash-latest', 'gemini-1.5-flash-002'];
   for (const modelName of modelsToTry) {
     try {
       const model = genAI.getGenerativeModel({
@@ -349,7 +349,7 @@ If IS a crop image: {"isCrop": true, "cropName": "exact crop name", "diseaseName
 
   // 1. Try Gemini Vision API models
   if (genAI) {
-    const modelsToTry = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'];
+    const modelsToTry = ['gemini-3.6-flash', 'gemini-2.5-flash-latest', 'gemini-1.5-flash-002'];
     for (const modelName of modelsToTry) {
       try {
         const model = genAI.getGenerativeModel({ model: modelName });
