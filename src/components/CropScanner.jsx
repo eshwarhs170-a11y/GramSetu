@@ -752,15 +752,12 @@ export default function CropScanner() {
       setPage('result');
     } catch (err) {
       clearInterval(interval);
-      setScanProgress(100);
+      setScanProgress(0);
       setScanning(false); setScanPhase('idle');
       console.error('Scan error:', err);
-      // Graceful fallback
-      if (selectedCrop !== 'NO_CROP') {
-        const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
-        if (matches.length > 0) { setResult(matches[0]); setActiveTab('remedy'); setPage('result'); }
-        else { setResult('NO_CROP'); setPage('result'); }
-      }
+      setNotCropMsg(lang === 'kn'
+        ? '⚠️ ವಿಶ್ಲೇಷಣೆ ವಿಫಲ. ದಯವಿಟ್ಟು ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ.'
+        : '⚠️ Analysis failed. Please try again.');
     }
   };
 
@@ -789,19 +786,13 @@ export default function CropScanner() {
         const visionData = await callGeminiVision(base64, mimeType);
 
         if (visionData === null) {
-          // AI timed out — fall back to selected crop from database
+          // AI timed out — cannot guess disease without AI, show retry message
           clearInterval(interval);
-          setScanProgress(100);
-          setScanning(false); setScanPhase('done');
-          const fallbackMatches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
-          if (fallbackMatches.length > 0) {
-            setResult(fallbackMatches[0]); setActiveTab('remedy'); setTranslatedRemedy(null);
-            if (lang === 'kn' && fallbackMatches[0].remedy) {
-              setIsTranslating(true);
-              callGeminiTranslate(fallbackMatches[0].remedy, 'kn').then(t => { if (t) setTranslatedRemedy(t); setIsTranslating(false); });
-            }
-          } else { setResult('NO_CROP'); }
-          setPage('result');
+          setScanProgress(0);
+          setScanning(false); setScanPhase('idle');
+          setNotCropMsg(lang === 'kn'
+            ? '📡 AI ಸ್ಲೋ ನೆಟ್‌ವರ್ಕ್ ಅಥವಾ ಲಭ್ಯವಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ.'
+            : '📡 AI could not analyze your image (slow internet). Please try again.');
           return;
         } else if (!visionData.isCrop) {
           clearInterval(interval);
@@ -834,14 +825,12 @@ export default function CropScanner() {
       setPage('result');
     } catch (err) {
       clearInterval(interval);
-      setScanProgress(100);
+      setScanProgress(0);
       setScanning(false); setScanPhase('idle');
       console.error('Image scan error:', err);
-      if (selectedCrop !== 'NO_CROP') {
-        const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
-        if (matches.length > 0) { setResult(matches[0]); setActiveTab('remedy'); setPage('result'); }
-        else { setResult('NO_CROP'); setPage('result'); }
-      }
+      setNotCropMsg(lang === 'kn'
+        ? '⚠️ ವಿಶ್ಲೇಷಣೆ ವಿಫಲ. ದಯವಿಟ್ಟು ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ.'
+        : '⚠️ Analysis failed. Please try again.');
     }
   };
 
