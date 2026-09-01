@@ -61,6 +61,32 @@ const INSTANT_ANSWERS = {
   }
 };
 
+// Conversational / Audio Check / Greeting Handler
+function getConversationalAnswer(lowerT, lang) {
+  // Audio check / Mic test
+  if (/audible|hear me|sound check|testing|can you hear|ಕೇಳಿಸ್ತಾ|ಕೇಳಿಸುತ್ತಿದೆಯೇ|ಮಾತನಾಡು|ಆಡಿಯೋ|आवाज|सुन पा रहे/i.test(lowerT)) {
+    if (lang === 'kn') return 'ಹೌದು! ನಿಮ್ಮ ಧ್ವನಿ ಅತ್ಯಂತ ಸ್ಪಷ್ಟವಾಗಿ ಕೇಳಿಸುತ್ತಿದೆ. ನಾನು ಗ್ರಾಮಸೇತು ಎಐ. ಇಂದು ನಿಮಗೆ ಬೆಳೆ, ಯೋಜನೆ ಅಥವಾ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳ ಬಗ್ಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಲಿ?';
+    if (lang === 'hi') return 'हाँ! आपकी आवाज बिल्कुल साफ आ रही है। मैं ग्रामसेतु AI हूँ। आज मैं आपकी फसलों, मंडी भाव या योजनाओं में कैसे मदद कर सकता हूँ?';
+    return 'Yes, I can hear you loud and clear! I am GramSetu AI, your voice assistant. How can I help you today with crops, market prices, or government schemes?';
+  }
+
+  // Greetings
+  if (/^(hi|hello|hey|namaskara|namaste|ನಮಸ್ಕಾರ|ಹಲೋ|नमस्ते)$/i.test(lowerT) || /^(good morning|good afternoon|good evening)/i.test(lowerT)) {
+    if (lang === 'kn') return 'ನಮಸ್ಕಾರ! ಗ್ರಾಮಸೇತುಗೆ ಸುಸ್ವಾಗತ. ಬೆಳೆ ರೋಗ, APMC ಮಾರುಕಟ್ಟೆ ದರ ಅಥವಾ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳ ಬಗ್ಗೆ ಏನು ಬೇಕಾದರೂ ಕೇಳಿ.';
+    if (lang === 'hi') return 'नमस्कार! ग्रामसेतु में आपका स्वागत है। फसल रोग, APMC मंडी भाव या सरकारी योजनाओं के बारे में कुछ भी पूछें।';
+    return 'Namaskara! Welcome to GramSetu. Ask me anything about crop diseases, APMC market prices, or government schemes in Karnataka.';
+  }
+
+  // Identity / Who are you
+  if (/who are you|what are you|your name|ನೀವು ಯಾರು|ನಿಮ್ಮ ಹೆಸರೇನು|तुम कौन हो|आपका नाम/i.test(lowerT)) {
+    if (lang === 'kn') return 'ನಾನು ಗ್ರಾಮಸೇತು ಎಐ — ಕರ್ನಾಟಕ ರೈತರು ಮತ್ತು ಗ್ರಾಮಸ್ಥರಿಗಾಗಿ ರೂಪಿಸಲಾದ ಎಐ ಧ್ವನಿ ಸಹಾಯಕ. ಮಾರುಕಟ್ಟೆ ದರ, ಬೆಳೆ ರೋಗ ಪರೀಕ್ಷೆ, ಯೋಜನೆಗಳು ಮತ್ತು ದೂರುಗಳ ಬಗ್ಗೆ ಮಾಹಿತಿ ನೀಡುತ್ತೇನೆ.';
+    if (lang === 'hi') return 'मैं ग्रामसेतु AI हूँ — कर्नाटक के किसानों और ग्रामीणों के लिए बनाया गया AI सहायक। मैं मंडी भाव, फसल रोग और सरकारी योजनाओं की जानकारी देता हूँ।';
+    return 'I am GramSetu AI — a smart digital assistant built for Karnataka farmers and villagers. I help you check daily APMC crop prices, diagnose plant diseases, apply for schemes, and file grievances.';
+  }
+
+  return null;
+}
+
 function getInstantAnswer(transcript, lang) {
   const lowerT = transcript.toLowerCase().trim();
   const answers = INSTANT_ANSWERS[lang] || {};
@@ -84,20 +110,22 @@ function withTimeout(promise, ms, fallback) {
 // ─────────────────────────────────────────────────────────────────────────────
 export async function callGemini(prompt, systemInstruction) {
   if (!genAI) return null;
-  try {
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
-      systemInstruction,
-    });
-    const resultPromise = model.generateContent(prompt).then(r => r.response.text());
-    const text = await withTimeout(resultPromise, 15000, null);
-    if (!text || text.trim().length === 0) return null;
-    return text;
-  } catch (error) {
-    if (error.message?.includes('429')) throw error;
-    console.warn('Gemini API error:', error.message?.slice(0, 80));
-    return null;
+  const modelsToTry = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'];
+  for (const modelName of modelsToTry) {
+    try {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        systemInstruction,
+      });
+      const resultPromise = model.generateContent(prompt).then(r => r.response.text());
+      const text = await withTimeout(resultPromise, 12000, null);
+      if (text && text.trim().length > 0) return text;
+    } catch (error) {
+      if (error.message?.includes('429')) throw error;
+      console.warn(`Gemini API error with ${modelName}:`, error.message?.slice(0, 80));
+    }
   }
+  return null;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -261,7 +289,10 @@ export async function processVoiceCommand(transcript, lang = 'en') {
   const lower = transcript.toLowerCase().trim();
   if (!lower) return null;
 
-  // ── 1. INSTANT PRE-CACHED ANSWERS (0ms) ──────────────────────────────────
+  // ── 1. INSTANT PRE-CACHED & CONVERSATIONAL ANSWERS (0ms) ──────────────────
+  const convAnswer = getConversationalAnswer(lower, lang);
+  if (convAnswer) return { type: 'chat', response: convAnswer };
+
   const instantAnswer = getInstantAnswer(transcript, lang);
   if (instantAnswer) return { type: 'chat', response: instantAnswer };
 
@@ -298,13 +329,31 @@ export async function processVoiceCommand(transcript, lang = 'en') {
   try {
     let responseText = await callGemini(transcript, systemInstruction);
     if (!responseText) {
-      // Gemini timed out or returned empty — give a useful contextual fallback
-      const fallbacks = {
-        en: `I can help with crop diseases, government schemes, and APMC prices in Karnataka. Please ask me specifically about a crop or scheme.`,
-        kn: `ನಾನು ಕರ್ನಾಟಕ ಬೆಳೆ ರೋಗಗಳು, ಸರ್ಕಾರಿ ಯೋಜನೆ, ಮತ್ತು APMC ಬೆಲೆ ಬಗ್ಗೆ ಮಾಹಿತಿ ನೀಡಬಲ್ಲೆ.`,
-        hi: `मैं फसल रोग, सरकारी योजनाओं और APMC भाव के बारे में जानकारी दे सकता हूँ।`,
+      // Intelligent keyword fallback if Gemini API is unreachable
+      if (/price|rate|apmc|market|ಬೆಲೆ|ಮಾರುಕಟ್ಟೆ|भाव|मंडी/i.test(lower)) {
+        const pMsg = {
+          en: 'You can check live APMC market rates for Arecanut, Ragi, Paddy, Coconut, Tomato and 40+ crops in the Market section of your GramSetu dashboard.',
+          kn: 'ಅಡಿಕೆ, ರಾಗಿ, ಭತ್ತ, ತೆಂಗು, ಟೊಮೇಟೊ ಮತ್ತಿತರ 40+ ಬೆಳೆಗಳ ನೇರ APMC ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳನ್ನು ನಿಮ್ಮ ಗ್ರಾಮಸೇತು ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ನ Market ವಿಭಾಗದಲ್ಲಿ ಪರಿಶೀಲಿಸಬಹುದು.',
+          hi: 'आप ग्रामसेतु डैशबोर्ड के मार्केट सेक्शन में सुपारी, रागी, धान, नारियल और 40+ फसलों के लाइव APMC भाव देख सकते हैं।',
+        };
+        return { type: 'chat', response: pMsg[lang] || pMsg.en };
+      }
+
+      if (/scheme|yojana|kisan|subsidy|ಯೋಜನೆ|योजना/i.test(lower)) {
+        const sMsg = {
+          en: 'Karnataka government provides schemes like PM-KISAN (₹6000/yr), Raitha Siri (₹10,000/ha), PMFBY crop insurance, and Raita Vidyanidhi. Visit the Schemes section on your dashboard for eligibility details.',
+          kn: 'ಕರ್ನಾಟಕ ಸರ್ಕಾರವು PM-KISAN (₹6000/ವರ್ಷ), ರೈತ ಸಿರಿ (₹10,000/ಹೆಕ್ಟೇರ್), PMFBY ಬೆಳೆ ವಿಮೆ ಮತ್ತು ರೈತ ವಿದ್ಯಾನಿಧಿ ಯೋಜನೆಗಳನ್ನು ನೀಡುತ್ತದೆ. ವಿವರಗಳಿಗೆ ಯೋಜನೆಗಳ ವಿಭಾಗ ನೋಡಿ.',
+          hi: 'कर्नाटक सरकार PM-KISAN, रायथा सिरी, PMFBY फसल बीमा जैसी योजनाएं प्रदान करती है। विवरण के लिए योजनाएं अनुभाग देखें।',
+        };
+        return { type: 'chat', response: sMsg[lang] || sMsg.en };
+      }
+
+      const defaultMsg = {
+        en: `I am GramSetu AI. You can ask me anything like "What is the price of Arecanut today?", "How to treat Ragi blast disease?", or "What is PM Kisan scheme?"`,
+        kn: `ನಾನು ಗ್ರಾಮಸೇತು ಎಐ. "ಇಂದು ಅಡಿಕೆ ಬೆಲೆ ಎಷ್ಟು?", "ರಾಗಿ ಬೆಂಕಿ ರೋಗಕ್ಕೆ ಮದ್ದು ಏನು?", ಅಥವಾ "PM ಕಿಸಾನ್ ಯೋಜನೆ ವಿವರಗಳು" ಎಂದು ನೀವು ನನ್ನನ್ನು ಕೇಳಬಹುದು.`,
+        hi: `मैं ग्रामसेतु AI हूँ। आप मुझसे पूछ सकते हैं जैसे "आज सुपारी का भाव क्या है?", "रागी रोग का इलाज क्या है?", या "PM किसान योजना क्या है?"`,
       };
-      return { type: 'chat', response: fallbacks[lang] || fallbacks.en };
+      return { type: 'chat', response: defaultMsg[lang] || defaultMsg.en };
     }
     responseText = responseText.replace(/[*#_`]/g, '').trim();
     return { type: 'chat', response: responseText };
