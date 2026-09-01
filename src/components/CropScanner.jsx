@@ -701,7 +701,7 @@ export default function CropScanner() {
 
       if (base64Frame) {
         // Use AI vision to analyze the captured frame
-        const visionData = await callGeminiVision(base64Frame, 'image/jpeg');
+        const visionData = await callGeminiVision(base64Frame, 'image/jpeg', selectedCrop);
 
         if (visionData === null) {
           // API unavailable — show error, do NOT silently show wrong results
@@ -783,7 +783,7 @@ export default function CropScanner() {
       let finalResult = null;
 
       if (base64) {
-        const visionData = await callGeminiVision(base64, mimeType);
+        const visionData = await callGeminiVision(base64, mimeType, selectedCrop);
 
         if (visionData === null) {
           // AI timed out — cannot guess disease without AI, show retry message
