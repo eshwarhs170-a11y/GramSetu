@@ -54,6 +54,7 @@ import {
   Route,
   Scale,
   Search,
+  SearchCheck,
   Send,
   ShieldAlert,
   ShieldCheck,
