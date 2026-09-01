@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_FIREBASE_API_KEY || "REDACTED_USE_ENV_VAR";
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -82,6 +82,34 @@ function getConversationalAnswer(lowerT, lang) {
     if (lang === 'kn') return 'ನಾನು ಗ್ರಾಮಸೇತು ಎಐ — ಕರ್ನಾಟಕ ರೈತರು ಮತ್ತು ಗ್ರಾಮಸ್ಥರಿಗಾಗಿ ರೂಪಿಸಲಾದ ಎಐ ಧ್ವನಿ ಸಹಾಯಕ. ಮಾರುಕಟ್ಟೆ ದರ, ಬೆಳೆ ರೋಗ ಪರೀಕ್ಷೆ, ಯೋಜನೆಗಳು ಮತ್ತು ದೂರುಗಳ ಬಗ್ಗೆ ಮಾಹಿತಿ ನೀಡುತ್ತೇನೆ.';
     if (lang === 'hi') return 'मैं ग्रामसेतु AI हूँ — कर्नाटक के किसानों और ग्रामीणों के लिए बनाया गया AI सहायक। मैं मंडी भाव, फसल रोग और सरकारी योजनाओं की जानकारी देता हूँ।';
     return 'I am GramSetu AI — a smart digital assistant built for Karnataka farmers and villagers. I help you check daily APMC crop prices, diagnose plant diseases, apply for schemes, and file grievances.';
+  }
+
+  // Thanks / Gratitude
+  if (/thank|thanks|dhanyavad|ಧನ್ಯವಾದ|ಶುಕ್ರಿಯಾ|ಕೃತಜ್ಞತೆ/i.test(lowerT)) {
+    if (lang === 'kn') return 'ನಿಮಗೆ ಸುಸ್ವಾಗತ! ಗ್ರಾಮಸೇತು ನಿಮ್ಮ ಕೃಷಿ ಸಹಾಯಕ್ಕೆ ಯಾವಾಗಲೂ ಇಲ್ಲಿದೆ. ಧನ್ಯವಾದಗಳು!';
+    if (lang === 'hi') return 'आपका बहुत-बहुत स्वागत है! ग्रामसेತು आपकी सहायता के लिए हमेशा उपलब्ध है।';
+    return "You're very welcome! GramSetu AI is always here to assist your farming needs. Have a great day!";
+  }
+
+  // General Help
+  if (/^help$|^help me$|ಸಹಾಯ|ಮದದ್|मदद/i.test(lowerT)) {
+    if (lang === 'kn') return 'ನಾನು ಸಹಾಯ ಮಾಡಲು ಸಿದ್ಧನಿದ್ದೇನೆ! "ಇಂದು ರಾಗಿ ಬೆಲೆ ಎಷ್ಟು?", "ಬೆಳೆ ರೋಗ ಪರೀಕ್ಷೆ ಹೇಗೆ?", ಅಥವಾ "PM ಕಿಸಾನ್ ಅರ್ಜಿ ಹೇಗೆ?" ಎಂದು ಕೇಳಿ.';
+    if (lang === 'hi') return 'मैं मदद के लिए तैयार हूँ! आप मुझसे फसल रोग, मंडी भाव या PM किसान योजना के बारे में पूछ सकते हैं।';
+    return 'I am ready to help! You can ask me about daily APMC crop prices, crop disease diagnosis, or government schemes like PM-KISAN.';
+  }
+
+  // Weather / Rain
+  if (/weather|rain|climate|hawa|ಮಳೆ|ಹವಾಮಾನ|ವಲಯ|मौसम|बारिश/i.test(lowerT)) {
+    if (lang === 'kn') return 'ನಿಮ್ಮ ಜಿಲ್ಲೆಯ ಇಂದಿನ ಹವಾಮಾನ ಮತ್ತು ಮಳೆ ಮುನ್ಸೂಚನೆಯನ್ನು ನೋಡಲು ಗ್ರಾಮಸೇತು ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ನ Weather ವಿಭಾಗ ತೆರೆಯಿರಿ.';
+    if (lang === 'hi') return 'मौसम और बारिश का पूर्वानुमान देखने के लिए ग्रामसेतु डैशबोर्ड का वेदर सेक्शन देखें।';
+    return 'You can check your district weather forecast and rainfall advisories in the Weather section of your GramSetu dashboard.';
+  }
+
+  // Fertilizer / Soil
+  if (/fertilizer|soil|urea|npk|manure|ಗೊಬ್ಬರ|ಮಣ್ಣು|ಖಾತ|खाद|मिट्टी/i.test(lowerT)) {
+    if (lang === 'kn') return 'ಮಣ್ಣಿನ ಫಲವತ್ತತೆಗೆ ರಾಗಿಗೆ 50:40:25 ಮತ್ತು ಭತ್ತಕ್ಕೆ 120:60:60 NPK ಗೊಬ್ಬರ ಸೂಕ್ತ. ಉಚಿತ ಮಣ್ಣು ಪರೀಕ್ಷೆಗೆ ಸ್ಥಳೀಯ ಕೃಷಿ ವಿಸ್ತರಣಾ ಕೇಂದ್ರ (RSK) ಸಂಪರ್ಕಿಸಿ.';
+    if (lang === 'hi') return 'मिट्टी स्वास्थ्य के लिए रागी में 50:40:25 और धान में 120:60:60 NPK खाद का उपयोग करें। मुफ्त मिट्टी जांच के लिए निकटतम RSK केंद्र जाएं।';
+    return 'For balanced soil nutrition, use NPK 120:60:60 for Paddy and 50:40:25 for Ragi. Visit your local Raitha Samparka Kendra (RSK) for free soil testing.';
   }
 
   return null;
