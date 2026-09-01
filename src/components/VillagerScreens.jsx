@@ -2501,9 +2501,9 @@ export function ComplaintScreen() {
       createdAt: serverTimestamp()
     }
 
-    // Save to Firestore (skip photo as it's base64 and too large)
+    // Save to Firestore (include compressed base64 photo so officials can see it)
     try {
-      await addDoc(collection(db, 'complaints'), { ...newComplaintObj, photo: null })
+      await addDoc(collection(db, 'complaints'), { ...newComplaintObj, photo: photoUri })
     } catch (err) {
       console.warn('Firestore write failed, saving locally:', err)
     }
@@ -2824,12 +2824,14 @@ export function ComplaintStatusScreen() {
   const myName = window.localStorage.getItem('citizen_name') || ''
 
   const filteredComplaints = complaints.filter(c => {
-    const searchMatch = !search || c.title?.toLowerCase().includes(search.toLowerCase()) ||
-                        c.id?.toLowerCase().includes(search.toLowerCase()) ||
-                        c.category?.toLowerCase().includes(search.toLowerCase())
+    const s = search.toLowerCase()
+    const searchMatch = !search || 
+                        (c.title && c.title.toLowerCase().includes(s)) ||
+                        (c.id && c.id.toLowerCase().includes(s)) ||
+                        (c.category && c.category.toLowerCase().includes(s))
 
     // If complaint was submitted by current user (e.g. Ramappa or Kaveri Amma), always show
-    const isOwner = myName && c.submittedBy && (
+    const isOwner = myName && c.submittedBy && typeof c.submittedBy === 'string' && (
       c.submittedBy.toLowerCase().includes(myName.toLowerCase()) ||
       myName.toLowerCase().includes(c.submittedBy.toLowerCase())
     )

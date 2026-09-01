@@ -90,7 +90,7 @@ export async function callGemini(prompt, systemInstruction) {
       systemInstruction,
     });
     const resultPromise = model.generateContent(prompt).then(r => r.response.text());
-    const text = await withTimeout(resultPromise, 8000, null);
+    const text = await withTimeout(resultPromise, 15000, null);
     if (!text || text.trim().length === 0) return null;
     return text;
   } catch (error) {
