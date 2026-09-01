@@ -38,6 +38,8 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
       window.location.href = '/demo'
       return
     }
+    setActive('home')
+    setSidebarOpen(false)
     logoTapTimer.current = setTimeout(() => {
       logoTapCount.current = 0
     }, 1200)

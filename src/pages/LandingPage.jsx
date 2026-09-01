@@ -97,6 +97,7 @@ export default function LandingPage() {
       window.location.href = '/demo'
       return
     }
+    navigate('/dashboard')
     logoTapTimer.current = setTimeout(() => {
       logoTapCount.current = 0
     }, 1200)

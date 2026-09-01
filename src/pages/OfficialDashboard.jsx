@@ -94,6 +94,8 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
       window.location.href = '/demo'
       return
     }
+    setActive('overview')
+    setSidebarOpen(false)
     logoTapTimer.current = setTimeout(() => {
       logoTapCount.current = 0
     }, 1200)

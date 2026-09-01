@@ -19,6 +19,12 @@ import { playLoudNotificationChime } from '../utils/audioAlert'
 
 export default function VillagerDashboard({ defaultTab = 'home' }) {
   const [active, setActive] = useState(defaultTab)
+
+  useEffect(() => {
+    if (defaultTab) {
+      setActive(defaultTab)
+    }
+  }, [defaultTab])
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')

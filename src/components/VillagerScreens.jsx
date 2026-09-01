@@ -505,7 +505,7 @@ export function HomeScreen({ setActive }) {
       <div className="stats-grid">
         {[
           { Icon: Landmark,         labelKey: 'activeSchemes',    value: '6',      color: '#dbeafe', iconColor: '#1d4ed8', trend: '+1 Raitha Siri', pageId: 'schemes' },
-          { Icon: ClipboardList,    labelKey: 'myComplaints',     value: String(globalComplaints.length), color: '#fee2e2', iconColor: '#dc2626', trend: `${globalComplaints.filter(c => c.status === 'resolved').length} resolved`, pageId: 'complaints' },
+          { Icon: ClipboardList,    labelKey: 'myComplaints',     value: String(globalComplaints.length), color: '#fee2e2', iconColor: '#dc2626', trend: `${globalComplaints.filter(c => c.status === 'resolved').length} resolved`, pageId: 'complaint' },
           { Icon: Bell,             labelKey: 'newAlerts',        value: '4',      color: '#fef3c7', iconColor: '#d97706', trend: '2 urgent', pageId: 'announcements' }
         ].map((s, i) => (
           <div 
@@ -529,7 +529,7 @@ export function HomeScreen({ setActive }) {
       {/* ── Crop Doctor Quick Action ── */}
       <div
         className="animate-fadeInUp"
-        onClick={() => navigate('/crop-doctor')}
+        onClick={() => setActive ? setActive('crop-doctor') : navigate('/crop-doctor')}
         style={{
           cursor: 'pointer',
           background: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)',
