@@ -789,12 +789,19 @@ export default function CropScanner() {
         const visionData = await callGeminiVision(base64, mimeType);
 
         if (visionData === null) {
+          // AI timed out — fall back to selected crop from database
           clearInterval(interval);
           setScanProgress(100);
-          setScanning(false); setScanPhase('idle');
-          setNotCropMsg(lang === 'kn'
-            ? '📡 AI ವಿಶ್ಲೇಷಣೆ ಲಭ್ಯವಿಲ್ಲ. ನಿಮ್ಮ ಇಂಟರ್ನೆಟ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.'
-            : '📡 AI unavailable. Check internet and try again.');
+          setScanning(false); setScanPhase('done');
+          const fallbackMatches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
+          if (fallbackMatches.length > 0) {
+            setResult(fallbackMatches[0]); setActiveTab('remedy'); setTranslatedRemedy(null);
+            if (lang === 'kn' && fallbackMatches[0].remedy) {
+              setIsTranslating(true);
+              callGeminiTranslate(fallbackMatches[0].remedy, 'kn').then(t => { if (t) setTranslatedRemedy(t); setIsTranslating(false); });
+            }
+          } else { setResult('NO_CROP'); }
+          setPage('result');
           return;
         } else if (!visionData.isCrop) {
           clearInterval(interval);
@@ -1053,7 +1060,7 @@ export default function CropScanner() {
           borderBottom: '1px solid var(--border, #d1e8db)',
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-          position: 'sticky', top: 0, zIndex: 50
+          position: 'relative', zIndex: 40
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <button onClick={() => navigate(-1)} style={{

@@ -701,7 +701,7 @@ export function SchemesScreen() {
 
   // Fetch from Firestore and merge cleanly with local kaSchemes
   useEffect(() => {
-    const q = query(collection(db, 'schemes'))
+    const q = collection(db, 'schemes')
     getDocs(q)
       .then(snap => {
         if (!snap.empty) {
@@ -2789,20 +2789,34 @@ export function ComplaintStatusScreen() {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    // Listen to Firestore complaints in real-time
-    const q = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
-    const unsubscribe = onSnapshot(q, (snap) => {
-      if (!snap.empty) {
-        const firestoreComplaints = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-        // Merge with local (local ones have photos which are not stored in Firestore)
-        const localIds = new Set(firestoreComplaints.map(c => c.id))
-        const localOnly = globalComplaints.filter(c => !localIds.has(c.id))
-        setComplaints([...localOnly, ...firestoreComplaints])
-      }
-    }, () => {
-      // On error, just show local complaints
+    let unsubscribe = () => {}
+    try {
+      // Listen to Firestore complaints in real-time (no orderBy to avoid index errors)
+      const q = collection(db, 'complaints')
+      unsubscribe = onSnapshot(q, (snap) => {
+        try {
+          if (!snap.empty) {
+            const firestoreComplaints = snap.docs
+              .map(d => ({ id: d.id, ...d.data() }))
+              .sort((a, b) => {
+                const ta = a.createdAt?.seconds || 0
+                const tb = b.createdAt?.seconds || 0
+                return tb - ta
+              })
+            const localIds = new Set(firestoreComplaints.map(c => c.id))
+            const localOnly = globalComplaints.filter(c => !localIds.has(c.id))
+            setComplaints([...localOnly, ...firestoreComplaints])
+          }
+        } catch (e) {
+          setComplaints([...globalComplaints])
+        }
+      }, () => {
+        // On error, just show local complaints
+        setComplaints([...globalComplaints])
+      })
+    } catch (e) {
       setComplaints([...globalComplaints])
-    })
+    }
 
     // Also listen to local updates
     window.onComplaintsUpdated = (updatedList) => {
@@ -2814,7 +2828,7 @@ export function ComplaintStatusScreen() {
     }
 
     return () => {
-      unsubscribe()
+      try { unsubscribe() } catch (e) {}
       window.onComplaintsUpdated = null
     }
   }, [])
