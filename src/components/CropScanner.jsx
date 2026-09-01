@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Camera, X, CheckCircle2, AlertTriangle, ShieldCheck, Volume2, Info, Scan, Leaf, AlertCircle, Microscope, Droplets, FlaskConical, Sprout, ChevronRight, Upload, MessageCircle, Send, ImagePlus, ChevronsDown, Loader2, TriangleAlert, CircleCheck, ScanLine, Image, Crop, Layers, Bot, Pill, Building2, ListChecks, RefreshCw, ArrowRight, Wheat, Zap, Lightbulb } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useVoice } from '../context/VoiceContext';
-import { callGemini, callGeminiVision } from '../utils/voiceCommands';
+import { callGemini, callGeminiVision, callGeminiTranslate } from '../utils/voiceCommands';
 import { useNavigate } from 'react-router-dom';
 
 // ─────────────────────────────────────────────────────────────────
@@ -529,6 +529,9 @@ export default function CropScanner() {
   const [notCropMsg, setNotCropMsg] = useState(null);
   const [scanProgress, setScanProgress] = useState(0);
   const [activeTab, setActiveTab] = useState('remedy');
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [translatedRemedy, setTranslatedRemedy] = useState(null);
+  const [isTranslating, setIsTranslating] = useState(false);
 
   // Image upload & panning
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -701,31 +704,35 @@ export default function CropScanner() {
         const visionData = await callGeminiVision(base64Frame, 'image/jpeg');
 
         if (visionData === null) {
-          // API unavailable — fall back to manual crop selection
-          if (selectedCrop !== 'NO_CROP') {
-            const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
-            if (matches.length > 0) finalResult = matches[Math.floor(Math.random() * matches.length)];
-          }
+          // API unavailable — show error, do NOT silently show wrong results
+          clearInterval(interval);
+          setScanProgress(100);
+          setScanning(false); setScanPhase('idle');
+          setNotCropMsg(lang === 'kn'
+            ? '📡 AI ವಿಶ್ಲೇಷಣೆ ಲಭ್ಯವಿಲ್ಲ. ನಿಮ್ಮ ಇಂಟರ್ನೆಟ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.'
+            : '📡 AI analysis unavailable. Please check your internet and try again.');
+          return;
         } else if (!visionData.isCrop) {
           // AI says this is NOT a crop image
           clearInterval(interval);
           setScanProgress(100);
           setScanning(false); setScanPhase('idle');
-          setNotCropMsg('🌿 This does not appear to be a crop image. Please point the camera at a crop leaf, stem, or fruit and try again.');
+          setNotCropMsg(lang === 'kn'
+            ? '🌿 ಇದು ಬೆಳೆ ಚಿತ್ರ ಅಲ್ಲ. ಬೆಳೆಯ ಎಲೆ, ಕಾಂಡ ಅಥವಾ ಹಣ್ಣಿನ ಮೇಲೆ ಕ್ಯಾಮರಾ ತಿರುಗಿಸಿ.'
+            : '🌿 Not a crop image. Please point the camera at a crop leaf, stem or fruit and try again.');
           return;
         } else {
           // AI identified a crop — match to our database
           const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName);
           finalResult = matched;
-          if (!finalResult && selectedCrop !== 'NO_CROP') {
-            const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
-            if (matches.length > 0) finalResult = matches[0];
-          }
         }
-      } else if (selectedCrop !== 'NO_CROP') {
-        // No camera frame — use manual selection
-        const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
-        if (matches.length > 0) finalResult = matches[Math.floor(Math.random() * matches.length)];
+      } else {
+        // No camera frame captured
+        clearInterval(interval);
+        setScanProgress(100);
+        setScanning(false); setScanPhase('idle');
+        setNotCropMsg(lang === 'kn' ? '📷 ಕ್ಯಾಮರಾ ಸಿದ್ಧವಾಗಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.' : '📷 Camera not ready. Please try again.');
+        return;
       }
 
       clearInterval(interval);
@@ -734,7 +741,11 @@ export default function CropScanner() {
       setScanning(false); setScanPhase('done');
 
       if (finalResult) {
-        setResult(finalResult); setActiveTab('remedy');
+        setResult(finalResult); setActiveTab('remedy'); setTranslatedRemedy(null);
+        if (lang === 'kn' && finalResult.remedy) {
+          setIsTranslating(true);
+          callGeminiTranslate(finalResult.remedy, 'kn').then(t => { if (t) setTranslatedRemedy(t); setIsTranslating(false); });
+        }
       } else {
         setResult('NO_CROP');
       }
@@ -778,30 +789,24 @@ export default function CropScanner() {
         const visionData = await callGeminiVision(base64, mimeType);
 
         if (visionData === null) {
-          // API unavailable — fall back to manual selection
-          if (selectedCrop !== 'NO_CROP') {
-            const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
-            if (matches.length > 0) {
-              let hash = 0;
-              for (let i = 0; i < Math.min(uploadedImage.length, 5000); i++) { hash = (hash << 5) - hash + uploadedImage.charCodeAt(i); hash |= 0; }
-              finalResult = matches[Math.abs(hash) % matches.length];
-            }
-          }
+          clearInterval(interval);
+          setScanProgress(100);
+          setScanning(false); setScanPhase('idle');
+          setNotCropMsg(lang === 'kn'
+            ? '📡 AI ವಿಶ್ಲೇಷಣೆ ಲಭ್ಯವಿಲ್ಲ. ನಿಮ್ಮ ಇಂಟರ್ನೆಟ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.'
+            : '📡 AI unavailable. Check internet and try again.');
+          return;
         } else if (!visionData.isCrop) {
           clearInterval(interval);
           setScanProgress(100);
           setScanning(false); setScanPhase('idle');
-          setNotCropMsg('🌿 This does not appear to be a crop image. Please upload a photo of a crop leaf, stem, or fruit — including printed/xerox photos of diseased crops.');
+          setNotCropMsg(lang === 'kn'
+            ? '🌿 ಇದು ಬೆಳೆ ಚಿತ್ರ ಅಲ್ಲ. ರೋಗ ಪೀಡಿತ ಬೆಳೆಯ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ — ಮುದ್ರಿತ ಚಿತ್ರಗಳನ್ನು ಸಹ ಅಪ್‌ಲೋಡ್ ಮಾಡಬಹುದು.'
+            : '🌿 Not a crop image. Please upload a diseased crop photo — printed/xerox photos also work.');
           return;
         } else {
           const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName);
           finalResult = matched;
-          if (!finalResult && selectedCrop !== 'NO_CROP') {
-            const matches = CROP_DISEASES.filter(d => d.crop === selectedCrop);
-            let hash = 0;
-            for (let i = 0; i < Math.min(uploadedImage.length, 5000); i++) { hash = (hash << 5) - hash + uploadedImage.charCodeAt(i); hash |= 0; }
-            if (matches.length > 0) finalResult = matches[Math.abs(hash) % matches.length];
-          }
         }
       }
 
@@ -811,7 +816,11 @@ export default function CropScanner() {
       setScanning(false); setScanPhase('done');
 
       if (finalResult) {
-        setResult(finalResult); setActiveTab('remedy');
+        setResult(finalResult); setActiveTab('remedy'); setTranslatedRemedy(null);
+        if (lang === 'kn' && finalResult.remedy) {
+          setIsTranslating(true);
+          callGeminiTranslate(finalResult.remedy, 'kn').then(t => { if (t) setTranslatedRemedy(t); setIsTranslating(false); });
+        }
       } else {
         setResult('NO_CROP');
       }
@@ -833,16 +842,26 @@ export default function CropScanner() {
     stopSpeaking(); setResult(null); setScanPhase('idle'); setScanProgress(0);
     setUploadedImage(null); setScanMode('camera'); setQaChat([]); setQaInput('');
     setPan({ x: 0, y: 0 }); currentPan.current = { x: 0, y: 0 };
-    setNotCropMsg(null);
+    setNotCropMsg(null); setTranslatedRemedy(null); setIsTranslating(false);
+    setZoomLevel(1);
     setPage('home');
   };
 
   const toggleVoice = () => {
     if (isSpeaking) { stopSpeaking(); return; }
     if (!result || result === 'NO_CROP') return;
-    const text = lang === 'kn'
-      ? `ರೋಗ: ${result.diseaseKn || result.disease}. ಪರಿಹಾರ: ${result.remedy}. ${result.scheme ? `ಯೋಜನೆ: ${result.scheme}` : ''}`
-      : `Disease: ${result.disease} on ${result.crop}. Remedy: ${result.remedy}. ${result.scheme ? `Scheme: ${result.scheme}` : 'No specific scheme. Contact KVK.'}`;
+    // Build natural-sounding text in selected language
+    let text;
+    if (lang === 'kn') {
+      // Use Kannada disease name + translated remedy if available, else speak meaningfully
+      const diseasePart = result.diseaseKn || result.disease;
+      const remedyPart = translatedRemedy || result.remedy;
+      text = `ರೋಗ: ${diseasePart}. ಬೆಳೆ: ${result.crop}. ಪರಿಹಾರ: ${remedyPart}. ${result.scheme ? `ಅರ್ಹ ಯೋಜನೆ: ${result.scheme}` : 'ಯಾವುದೇ ನಿರ್ದಿಷ್ಟ ಯೋಜನೆ ಇಲ್ಲ. ಸ್ಥಳೀಯ KVK ಸಂಪರ್ಕಿಸಿ.'}`;
+    } else if (lang === 'hi') {
+      text = `रोग: ${result.disease}. फसल: ${result.crop}. उपचार: ${result.remedy}. ${result.scheme ? `योजना: ${result.scheme}` : 'कोई विशिष्ट योजना नहीं। स्थानीय KVK से संपर्क करें।'}`;
+    } else {
+      text = `Disease detected: ${result.disease} on ${result.crop}. Severity: ${result.severity}. Treatment: ${result.remedy}. ${result.scheme ? `Eligible scheme: ${result.scheme}` : 'No specific government scheme. Contact your local Krishi Vigyan Kendra for support.'}`;
+    }
     speak(text);
   };
 
@@ -933,11 +952,29 @@ export default function CropScanner() {
     setQaChat(prev => [...prev, { role: 'user', text: question }]);
     setQaLoading(true);
 
-    const langName = lang === 'kn' ? 'Kannada' : 'English';
-    const sys = `You are an expert agricultural AI assistant for Karnataka farmers. Disease: ${result.disease} on crop ${result.crop}. Chemical remedy: ${result.remedy}. Prevention: ${result.prevention || 'N/A'}. Organic tip: ${result.organicTip || 'N/A'}. Applicable Scheme: ${result.scheme || 'PMFBY'} (${result.schemeLink || 'pmfby.gov.in'}). Reply in ${langName}. Keep response under 3 concise sentences. No markdown formatting.`;
+    const langName = lang === 'kn' ? 'Kannada' : lang === 'hi' ? 'Hindi' : 'English';
+    const historyText = qaChat.map(m => `${m.role === 'user' ? 'User' : 'AI'}: ${m.text}`).join('\n');
+    
+    const sys = `You are an expert agricultural AI assistant for farmers. 
+    Context: The user scanned a crop. 
+    Crop: ${result.crop}
+    Detected Disease: ${result.disease}
+    Chemical Remedy: ${result.remedy}
+    Prevention: ${result.prevention || 'N/A'}
+    Organic Alternative: ${result.organicTip || 'N/A'}
+    Scheme: ${result.scheme || 'N/A'}
+
+    INSTRUCTIONS:
+    - You must act as a conversational, helpful AI assistant (like ChatGPT/Gemini).
+    - Answer the user's question naturally based on the context above.
+    - If the user asks a follow-up question (e.g. "what are those brown spots", "how much time to recover"), use the context to answer it accurately.
+    - You MUST reply entirely in ${langName}.
+    - Keep the response conversational but concise (under 3-4 sentences). Do NOT use markdown.`;
+
+    const promptWithHistory = `Chat History:\n${historyText}\n\nUser: ${question}\n\nProvide the AI's next response:`;
 
     try {
-      let answer = await callGemini(question, sys);
+      let answer = await callGemini(promptWithHistory, sys);
       if (!answer || answer.trim().length === 0) {
         answer = getSmartFallbackAnswer(question, result, lang);
       }
@@ -1281,7 +1318,7 @@ export default function CropScanner() {
   // ─────────────── PAGE 2: SCANNER ───────────────
   if (page === 'scanner') {
     return (
-      <div style={{ width: '100%', height: '100vh', background: '#0a0a0a', display: 'flex', flexDirection: 'column', fontFamily: "'Inter',sans-serif", overflow: 'hidden' }}>
+      <div style={{ width: '100%', height: '100vh', background: '#0a0a0a', display: 'flex', flexDirection: 'column', fontFamily: "'Inter',sans-serif", overflow: 'hidden', userSelect: 'none' }}>
         {/* Header */}
         <div style={{ padding: '14px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(180deg,rgba(0,0,0,1),transparent)', position: 'absolute', top: 0, left: 0, right: 0, zIndex: 60 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -1309,36 +1346,43 @@ export default function CropScanner() {
           </div>
         )}
 
-        {/* Camera / Image area */}
-        <div style={{ flex: 1, position: 'relative', overflow: 'hidden', background: '#111' }}>
+        {/* Camera / Image area — fixed height so scan button always visible */}
+        <div style={{ height: '52vh', position: 'relative', overflow: 'hidden', background: '#111', flexShrink: 0 }}>
           {scanMode === 'image' && uploadedImage ? (
             <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden', cursor: isDragging ? 'grabbing' : 'grab', touchAction: 'none' }}
-              onPointerDown={e => { setIsDragging(true); dragStart.current = { x: e.clientX, y: e.clientY }; }}
-              onPointerMove={e => { if (!isDragging) return; setPan({ x: currentPan.current.x + e.clientX - dragStart.current.x, y: currentPan.current.y + e.clientY - dragStart.current.y }); }}
+              onPointerDown={e => { e.preventDefault(); setIsDragging(true); dragStart.current = { x: e.clientX, y: e.clientY }; }}
+              onPointerMove={e => { if (!isDragging) return; e.preventDefault(); setPan({ x: currentPan.current.x + e.clientX - dragStart.current.x, y: currentPan.current.y + e.clientY - dragStart.current.y }); }}
               onPointerUp={() => { setIsDragging(false); currentPan.current = pan; }}
               onPointerLeave={() => { if (isDragging) { setIsDragging(false); currentPan.current = pan; } }}>
-              <img src={uploadedImage} alt="crop" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain', transform: `translate(${pan.x}px,${pan.y}px) scale(1.5)`, filter: scanning ? 'brightness(0.5)' : 'brightness(1)', transition: isDragging ? 'none' : 'filter 0.5s', userSelect: 'none' }} />
-              {!scanning && <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.7)', color: 'rgba(255,255,255,0.8)', padding: '5px 14px', borderRadius: 20, fontSize: 11, fontWeight: 600, whiteSpace: 'nowrap' }}>👆 {lang === 'kn' ? 'ಎಳೆದು ಸ್ಥಾನಿಸಿ' : 'Drag to reposition'}</div>}
+              <img src={uploadedImage} alt="crop" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain', transform: `translate(${pan.x}px,${pan.y}px) scale(${zoomLevel})`, filter: scanning ? 'brightness(0.5)' : 'brightness(1)', transition: isDragging ? 'none' : 'filter 0.3s', userSelect: 'none', pointerEvents: 'none' }} />
             </div>
           ) : cameraError ? (
             <div style={{ width: '100%', height: '100%', background: 'url(https://images.unsplash.com/photo-1560493676-04071c5f467b?w=800&q=80) center/cover', filter: scanning ? 'brightness(0.5)' : 'brightness(0.75)' }}>
-              <div style={{ position: 'absolute', top: 130, left: '50%', transform: 'translateX(-50%)', background: 'rgba(239,68,68,0.85)', color: '#fff', padding: '5px 14px', borderRadius: 10, fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>📷 DEMO MODE</div>
+              <div style={{ position: 'absolute', top: 80, left: '50%', transform: 'translateX(-50%)', background: 'rgba(239,68,68,0.85)', color: '#fff', padding: '5px 14px', borderRadius: 10, fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>📷 DEMO MODE</div>
             </div>
           ) : (
             <video ref={videoRef} autoPlay playsInline muted style={{ width: '100%', height: '100%', objectFit: 'cover', filter: scanning ? 'brightness(0.6) saturate(1.2)' : 'brightness(1)', transition: 'filter 0.3s' }} />
           )}
 
-          {/* AR box */}
-          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '18%' }}>
-            <div style={{ position: 'relative', width: '100%', height: '65%', border: `2px solid ${scanning ? '#22c55e' : 'rgba(255,255,255,0.25)'}`, borderRadius: 20, boxShadow: scanning ? '0 0 40px rgba(34,197,94,0.15) inset' : 'none', overflow: 'hidden' }}>
-              {['tl','tr','bl','br'].map(c => (<div key={c} style={{ position: 'absolute', ...(c.includes('t') ? {top:-2} : {bottom:-2}), ...(c.includes('l') ? {left:-2} : {right:-2}), width: 28, height: 28, borderTop: c.includes('t') ? '3px solid #22c55e' : 'none', borderBottom: c.includes('b') ? '3px solid #22c55e' : 'none', borderLeft: c.includes('l') ? '3px solid #22c55e' : 'none', borderRight: c.includes('r') ? '3px solid #22c55e' : 'none', borderTopLeftRadius: c==='tl'?20:0, borderTopRightRadius: c==='tr'?20:0, borderBottomLeftRadius: c==='bl'?20:0, borderBottomRightRadius: c==='br'?20:0 }} />))}
+          {/* AR scanning box */}
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15%' }}>
+            <div style={{ position: 'relative', width: '100%', height: '80%', border: `2px solid ${scanning ? '#22c55e' : 'rgba(255,255,255,0.3)'}`, borderRadius: 20, boxShadow: scanning ? '0 0 40px rgba(34,197,94,0.15) inset' : 'none', overflow: 'hidden' }}>
+              {['tl','tr','bl','br'].map(c => (<div key={c} style={{ position: 'absolute', ...(c.includes('t') ? {top:-2} : {bottom:-2}), ...(c.includes('l') ? {left:-2} : {right:-2}), width: 24, height: 24, borderTop: c.includes('t') ? '3px solid #22c55e' : 'none', borderBottom: c.includes('b') ? '3px solid #22c55e' : 'none', borderLeft: c.includes('l') ? '3px solid #22c55e' : 'none', borderRight: c.includes('r') ? '3px solid #22c55e' : 'none', borderTopLeftRadius: c==='tl'?16:0, borderTopRightRadius: c==='tr'?16:0, borderBottomLeftRadius: c==='bl'?16:0, borderBottomRightRadius: c==='br'?16:0 }} />))}
               {scanning && <div style={{ position: 'absolute', left: 0, right: 0, height: 2, background: 'linear-gradient(90deg,transparent,#22c55e,transparent)', boxShadow: '0 0 20px 6px rgba(34,197,94,0.5)', animation: 'arScan 1.8s infinite ease-in-out' }} />}
-              {!scanning && !uploadedImage && <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><div style={{ position: 'relative', width: 24, height: 24 }}><div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 1, background: 'rgba(255,255,255,0.4)', transform: 'translateY(-50%)' }} /><div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: 'rgba(255,255,255,0.4)', transform: 'translateX(-50%)' }} /></div></div>}
-              {scanning && <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.7)', padding: '4px 14px', borderRadius: 20, color: '#22c55e', fontSize: 11, fontWeight: 700 }}>ANALYZING {scanProgress}%</div>}
+              {scanning && <div style={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.75)', padding: '3px 12px', borderRadius: 20, color: '#22c55e', fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>AI {lang === 'kn' ? 'ವಿಶ್ಲೇಷಿಸುತ್ತಿದೆ' : 'ANALYZING'} {scanProgress}%</div>}
             </div>
           </div>
 
-          {!scanning && !uploadedImage && <div style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.7)', padding: '6px 16px', borderRadius: 20, color: 'rgba(255,255,255,0.8)', fontSize: 11, fontWeight: 600, backdropFilter: 'blur(8px)', whiteSpace: 'nowrap' }}>📷 {lang === 'kn' ? 'ಬೆಳೆಯ ಎಲೆಯನ್ನು ಚೌಕಟ್ಟಿನಲ್ಲಿ ಇರಿಸಿ' : 'Place crop leaf in the frame'}</div>}
+          {/* Zoom controls */}
+          {!scanning && (
+            <div style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <button onClick={() => setZoomLevel(z => Math.min(z + 0.25, 3))} style={{ width: 36, height: 36, borderRadius: 10, border: 'none', background: 'rgba(255,255,255,0.85)', fontSize: 20, fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>+</button>
+              <button onClick={() => setZoomLevel(z => Math.max(z - 0.25, 0.5))} style={{ width: 36, height: 36, borderRadius: 10, border: 'none', background: 'rgba(255,255,255,0.85)', fontSize: 20, fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>−</button>
+              {zoomLevel !== 1 && <button onClick={() => { setZoomLevel(1); setPan({x:0,y:0}); currentPan.current={x:0,y:0}; }} style={{ width: 36, height: 36, borderRadius: 10, border: 'none', background: 'rgba(255,255,255,0.85)', fontSize: 9, fontWeight: 800, cursor: 'pointer', color: '#374151' }}>RESET</button>}
+            </div>
+          )}
+
+          {!scanning && !uploadedImage && <div style={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.7)', padding: '5px 14px', borderRadius: 20, color: 'rgba(255,255,255,0.85)', fontSize: 11, fontWeight: 600, backdropFilter: 'blur(8px)', whiteSpace: 'nowrap' }}>📷 {lang === 'kn' ? 'ಬೆಳೆಯ ಎಲೆ ಚೌಕಟ್ಟಿನಲ್ಲಿ ಇರಿಸಿ' : 'Place crop leaf in the frame'}</div>}
           {scanning && <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 3 }}><div style={{ height: '100%', width: `${scanProgress}%`, background: 'linear-gradient(90deg,#16a34a,#22c55e)', transition: 'width 0.15s ease' }} /></div>}
         </div>
 
@@ -1514,7 +1558,8 @@ export default function CropScanner() {
                   <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 6px', display: 'flex', alignItems: 'center', gap: 5 }}>
                     <Pill size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ರಾಸಾಯನಿಕ ನಿಯಂತ್ರಣ (Chemical Treatment)' : 'Chemical Treatment'}
                   </p>
-                  <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.remedy}</p>
+                  {isTranslating && lang !== 'en' && <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>}
+                  <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{(lang === 'kn' && translatedRemedy) ? translatedRemedy : result.remedy}</p>
                 </div>
 
                 {/* Prevention */}

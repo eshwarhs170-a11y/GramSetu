@@ -1494,15 +1494,15 @@ export default function OfficialDashboard() {
               <Search size={18} strokeWidth={2} />
             </button>
             <div style={{ position: 'relative' }}>
-              <button className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
+              <button type="button" className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
                 <Bell size={18} strokeWidth={2} />
-                <div className="notif-dot" />
+                <div className="notif-dot" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 'bold', color: '#fff' }}>2</div>
               </button>
               {notifOpen && (
                 <div className="notif-dropdown animate-fadeInUp" style={{ right: 0 }}>
                   <div className="notif-header">
                     <h4>Notifications</h4>
-                    <button onClick={() => setNotifOpen(false)}><X size={14} /></button>
+                    <button type="button" onClick={(e) => { e.stopPropagation(); setNotifOpen(false); }}><X size={14} /></button>
                   </div>
                   <div className="notif-list">
                     <div className="notif-item unread" onClick={() => { setActive('complaints'); setNotifOpen(false) }} style={{ cursor: 'pointer' }}>

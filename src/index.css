@@ -991,6 +991,7 @@ input, textarea, select { font-family: inherit; outline: none; }
   min-width: 170px;
   margin: 0;
   animation: fadeInUp 0.2s ease;
+  z-index: 9999;
 }
 .lang-dropdown-item {
   width: 100%;

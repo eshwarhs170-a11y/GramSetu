@@ -2834,14 +2834,8 @@ export function ComplaintStatusScreen() {
       myName.toLowerCase().includes(c.submittedBy.toLowerCase())
     )
 
-    // District filter: complaints from this citizen's district only
-    const cDist = (c.district || c.village || '').toLowerCase()
-    const distMatch = myDistrict ? (
-      cDist.includes(myDistrict.toLowerCase()) ||
-      myDistrict.toLowerCase().includes(cDist)
-    ) : true
-
-    return searchMatch && (distMatch || isOwner)
+    // Always show in demo mode if no search, or if search matches
+    return searchMatch
   })
 
   return (
@@ -3554,11 +3548,6 @@ export function TutorialsScreen() {
       </div>
 
       <div style={{ marginBottom: 20 }}>
-        {/* Helper Note for the blocked issue */}
-        <div style={{ background: '#fef3c7', color: '#b45309', padding: '12px', borderRadius: 8, marginTop: 12, fontSize: 13, border: '1px solid #fde68a', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-          <AlertCircle size={16} style={{ marginTop: 2, flexShrink: 0 }} />
-          <span>If videos say "Content is blocked", please <b>restart your development server</b> in the terminal (press Ctrl+C, then run <code>npm run dev</code>). The security policy needs a restart to apply.</span>
-        </div>
       </div>
 
       <div style={{ display: 'grid', gap: 20 }}>

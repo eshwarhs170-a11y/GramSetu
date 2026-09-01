@@ -259,15 +259,16 @@ export async function processVoiceCommand(transcript, lang = 'en') {
   const navCommands = [
     { triggers: ['home', 'ಮನೆ', 'ಮುಖಪುಟ', 'ghar', 'होम'], payload: '/', msgEn: 'Going to home page.', msgKn: 'ಮುಖಪುಟಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.', msgHi: 'होम पेज पर जा रहा हूँ।' },
     { triggers: ['dashboard', 'ಡ್ಯಾಶ್ಬೋರ್ಡ್', 'डैशबोर्ड'], payload: '/dashboard/villager', msgEn: 'Opening dashboard.', msgKn: 'ಡ್ಯಾಶ್ಬೋರ್ಡ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'डैशबोर्ड खोल रहा हूँ।' },
-    { triggers: ['complaint', 'ದೂರು', 'shikayat', 'शिकायत'], payload: '/dashboard/villager', msgEn: 'Opening complaints section.', msgKn: 'ದೂರು ವಿಭಾಗ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'शिकायत अनुभाग खोल रहा हूँ।' },
-    { triggers: ['market', 'price', 'apmc', 'ಬೆಲೆ', 'ಮಾರುಕಟ್ಟೆ', 'बाजार', 'भाव'], payload: '/dashboard/villager', msgEn: 'Opening market prices.', msgKn: 'ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'बाजार भाव खोल रहा हूँ।' },
-    { triggers: ['scheme', 'yojana', 'ಯೋಜನೆ', 'योजना', 'subsidy'], payload: '/dashboard/villager', msgEn: 'Opening Government Schemes.', msgKn: 'ಸರ್ಕಾರಿ ಯೋಜನೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'सरकारी योजनाएं खोल रहा हूँ।' },
+    { triggers: ['complaint', 'ದೂರು', 'shikayat', 'शिकायत'], payload: '/dashboard/villager', tab: 'complaints', msgEn: 'Opening complaints section.', msgKn: 'ದೂರು ವಿಭಾಗ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'शिकायत अनुभाग खोल रहा हूँ।' },
+    { triggers: ['market', 'price', 'apmc', 'ಬೆಲೆ', 'ಮಾರುಕಟ್ಟೆ', 'बाजार', 'भाव'], payload: '/dashboard/villager', tab: 'market', msgEn: 'Opening APMC market prices.', msgKn: 'APMC ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'APMC बाजार भाव खोल रहा हूँ।' },
+    { triggers: ['scheme', 'yojana', 'ಯೋಜನೆ', 'योजना', 'subsidy'], payload: '/dashboard/villager', tab: 'schemes', msgEn: 'Opening Government Schemes.', msgKn: 'ಸರ್ಕಾರಿ ಯೋಜನೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'सरकारी योजनाएं खोल रहा हूँ।' },
     { triggers: ['login', 'ಲಾಗಿನ್', 'register', 'नोंदणी'], payload: '/login/villager', msgEn: 'Going to login page.', msgKn: 'ಲಾಗಿನ್ ಪುಟಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.', msgHi: 'लॉगिन पेज पर जा रहा हूँ।' },
   ];
 
   for (const cmd of navCommands) {
     if (cmd.triggers.some(t => lower.includes(t.toLowerCase()))) {
       const msg = lang === 'kn' ? cmd.msgKn : lang === 'hi' ? cmd.msgHi : cmd.msgEn;
+      if (cmd.tab) window.dispatchEvent(new CustomEvent('gramSetuNavTab', { detail: { tab: cmd.tab } }));
       return { type: 'navigate', payload: cmd.payload, response: msg };
     }
   }

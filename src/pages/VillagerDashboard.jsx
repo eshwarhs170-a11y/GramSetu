@@ -59,6 +59,18 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
     }
   }, [speak])
 
+  useEffect(() => {
+    const handleNavTab = (e) => {
+      if (e.detail?.tab) {
+        // Map voice tab names to dashboard active keys
+        const tabMap = { complaints: 'complaint', market: 'market', schemes: 'schemes' }
+        setActive(tabMap[e.detail.tab] || e.detail.tab)
+      }
+    }
+    window.addEventListener('gramSetuNavTab', handleNavTab)
+    return () => window.removeEventListener('gramSetuNavTab', handleNavTab)
+  }, [])
+
   const pageMeta = {
     home:          { titleKey: 'dashTitle',      subKey: 'dashSub' },
     schemes:       { titleKey: 'schemesTitle',   subKey: 'schemesSub' },
@@ -201,9 +213,13 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
             </button>
 
             <div style={{ position: 'relative' }}>
-              <button className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
+              <button type="button" className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
                 <Bell size={18} strokeWidth={2} />
-                <div className="notif-dot" />
+                {announcements.length > 0 && (
+                  <div className="notif-dot" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 'bold', color: '#fff' }}>
+                    {announcements.length}
+                  </div>
+                )}
               </button>
 
               {notifOpen && (() => {
@@ -211,7 +227,7 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
                   <div className="notif-dropdown animate-fadeInUp">
                     <div className="notif-header">
                       <h4>Notifications</h4>
-                      <button onClick={() => setNotifOpen(false)}><X size={14} /></button>
+                      <button type="button" onClick={(e) => { e.stopPropagation(); setNotifOpen(false); }}><X size={14} /></button>
                     </div>
                     <div className="notif-list">
                       {announcements.length === 0 ? (

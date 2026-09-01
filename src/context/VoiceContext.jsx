@@ -230,13 +230,6 @@ function kannadaToEnglishTTS(kannadaText) {
     result = result.replaceAll(kn, en);
   }
 
-  // If still has significant Kannada characters after replacement, 
-  // give a clean English summary message
-  const remainingKannada = (result.match(/[\u0C80-\u0CFF]/g) || []).length;
-  if (remainingKannada > 10) {
-    // Too much Kannada left — generate a clean English version
-    return `I understood your question. ${result.replace(/[\u0C80-\u0CFF]/g, '')}. Please switch to English for full voice support on this device.`;
-  }
-
-  return result;
+  // Remove remaining untranslated Kannada chars gracefully
+  return result.replace(/[\u0C80-\u0CFF]/g, ' ').replace(/\s{2,}/g, ' ').trim();
 }
