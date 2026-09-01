@@ -167,6 +167,25 @@ IMPORTANT: Match cropName and diseaseName EXACTLY to the list. If it is a health
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// callGeminiTranslate — Translates agricultural text to target language
+// ─────────────────────────────────────────────────────────────────────────────
+export async function callGeminiTranslate(text, targetLang) {
+  if (!genAI || !text) return null;
+  const langName = targetLang === 'kn' ? 'Kannada' : targetLang === 'hi' ? 'Hindi' : 'English';
+  try {
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const prompt = `Translate the following agricultural advisory text into ${langName}. Keep technical terms like chemical names as-is. Return ONLY the translated text, no explanation:\n\n${text}`;
+    const resultPromise = model.generateContent(prompt).then(r => r.response.text());
+    const translated = await withTimeout(resultPromise, 10000, null);
+    if (!translated || translated.trim().length === 0) return null;
+    return translated.replace(/[*#_`]/g, '').trim();
+  } catch (error) {
+    console.warn('Gemini Translate error:', error.message?.slice(0, 80));
+    return null;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // COMPREHENSIVE SYSTEM INSTRUCTION — Given to Gemini for all questions
 // ─────────────────────────────────────────────────────────────────────────────
 function buildSystemInstruction(lang) {
@@ -219,6 +238,18 @@ GOVERNMENT SCHEMES:
 - MSP for Ragi 2024: 3846 rupees per quintal. Paddy Grade A: 2300 rupees per quintal. Cotton: 7121 rupees per quintal.
 
 ORGANIC FARMING: Use Trichoderma viride at 4-5 kg per hectare mixed with FYM. Spray Neem Seed Kernel Extract (NSKE 5 percent) as a natural repellent. Pseudomonas fluorescens at 2.5 kg per hectare for blast diseases.
+
+ABOUT GRAMSETU WEBSITE (gramsetu-one.vercel.app):
+GramSetu is a digital bridge connecting Karnataka's rural communities to government services. It has these sections:
+- Home Dashboard: Shows welcome screen, weather, quick stats for schemes and complaints, new alerts from government.
+- Schemes Tab: Browse and check eligibility for 15+ Karnataka and Central government schemes including PM-KISAN, PMFBY, Raitha Siri, Gruha Lakshmi.
+- Market Prices Tab: Live APMC market prices for 40+ crops across all 31 Karnataka districts — updated from data.gov.in API.
+- Crop Doctor: AI-powered scanner — take a photo of a diseased crop leaf and get instant diagnosis with remedy, prevention tips, organic alternatives, and eligible government schemes. Supports printed or xerox images too.
+- Complaints: File grievances about water supply, roads, electricity, schools — auto-escalates to PDO if not resolved in 7 days. Track status in real time.
+- Voice Assistant: This AI assistant you are talking to — supports Kannada, Hindi, and English voice input and output.
+- Digital Tutorials: Learn UPI payments, voter ID, and digital services through embedded video guides.
+- Profile: Manage your farmer profile, district, taluk, and language preferences.
+The website works on mobile phones and is designed for rural Karnataka farmers with limited digital literacy.
 
 If the user asks about something unrelated to agriculture, still try to answer helpfully based on your general knowledge.`;
 }
