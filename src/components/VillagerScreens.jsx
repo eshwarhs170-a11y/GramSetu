@@ -2833,9 +2833,29 @@ export function ComplaintStatusScreen() {
     }
   }, [])
 
-  const myTaluk = window.localStorage.getItem('citizen_taluk') || ''
-  const myDistrict = window.localStorage.getItem('citizen_district') || ''
+  const [scope, setScope] = useState('taluk') // 'taluk' | 'district' | 'all'
+
+  const rawTaluk = window.localStorage.getItem('citizen_taluk') || 'Mysuru'
+  const rawDistrict = window.localStorage.getItem('citizen_district') || 'Mysuru'
   const myName = window.localStorage.getItem('citizen_name') || ''
+
+  const userTaluk = rawTaluk.replace(/taluk/gi, '').trim()
+  const userDistrict = rawDistrict.replace(/district/gi, '').trim()
+
+  // Calculate scope counts
+  const talukCount = complaints.filter(c => {
+    if (!c.taluk) return true
+    const cTaluk = c.taluk.toLowerCase()
+    const uTaluk = userTaluk.toLowerCase()
+    return cTaluk.includes(uTaluk) || uTaluk.includes(cTaluk)
+  }).length
+
+  const districtCount = complaints.filter(c => {
+    if (!c.district) return true
+    const cDist = c.district.toLowerCase()
+    const uDist = userDistrict.toLowerCase()
+    return cDist.includes(uDist) || uDist.includes(cDist)
+  }).length
 
   const filteredComplaints = complaints.filter(c => {
     const s = search.toLowerCase()
@@ -2844,14 +2864,25 @@ export function ComplaintStatusScreen() {
                         (c.id && c.id.toLowerCase().includes(s)) ||
                         (c.category && c.category.toLowerCase().includes(s))
 
-    // If complaint was submitted by current user (e.g. Ramappa or Kaveri Amma), always show
+    // Owner check: farmer always sees their own complaints regardless of scope filter
     const isOwner = myName && c.submittedBy && typeof c.submittedBy === 'string' && (
       c.submittedBy.toLowerCase().includes(myName.toLowerCase()) ||
       myName.toLowerCase().includes(c.submittedBy.toLowerCase())
     )
 
-    // Always show in demo mode if no search, or if search matches
-    return searchMatch
+    // Scope filter check
+    let scopeMatch = true
+    if (scope === 'taluk') {
+      const cTaluk = (c.taluk || '').toLowerCase()
+      const uTaluk = userTaluk.toLowerCase()
+      scopeMatch = isOwner || !c.taluk || cTaluk.includes(uTaluk) || uTaluk.includes(cTaluk)
+    } else if (scope === 'district') {
+      const cDist = (c.district || '').toLowerCase()
+      const uDist = userDistrict.toLowerCase()
+      scopeMatch = isOwner || !c.district || cDist.includes(uDist) || uDist.includes(cDist)
+    }
+
+    return searchMatch && scopeMatch
   })
 
   return (
@@ -2878,6 +2909,102 @@ export function ComplaintStatusScreen() {
             {lang === 'kn' ? 'ನಿಮ್ಮ ಎಲ್ಲಾ ದೂರುಗಳ ಪ್ರಗತಿ, ಅಧಿಕಾರಿ ಪ್ರತಿಕ್ರಿಯೆ ಮತ್ತು ಪರಿಹಾರ ಸ್ಥಿತಿಯನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ' : 'Track progress, official responses & resolution status of all your complaints'}
           </p>
         </div>
+      </div>
+
+      {/* Location Filter Tabs — Default: Taluk */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+        <button
+          type="button"
+          onClick={() => setScope('taluk')}
+          style={{
+            padding: '8px 16px',
+            borderRadius: 20,
+            border: scope === 'taluk' ? '2px solid #2563eb' : '1px solid #e2e8f0',
+            background: scope === 'taluk' ? '#eff6ff' : '#ffffff',
+            color: scope === 'taluk' ? '#1d4ed8' : '#64748b',
+            fontSize: 13,
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            boxShadow: scope === 'taluk' ? '0 2px 8px rgba(37,99,235,0.15)' : 'none',
+            transition: 'all 0.2s'
+          }}
+        >
+          <span>📍</span>
+          <span>{lang === 'kn' ? `ನನ್ನ ತಾಲೂಕು (${userTaluk})` : `My Taluk (${userTaluk})`}</span>
+          <span style={{
+            background: scope === 'taluk' ? '#2563eb' : '#cbd5e1',
+            color: '#fff',
+            fontSize: 11,
+            borderRadius: 10,
+            padding: '1px 7px',
+            fontWeight: 800
+          }}>{talukCount}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setScope('district')}
+          style={{
+            padding: '8px 16px',
+            borderRadius: 20,
+            border: scope === 'district' ? '2px solid #2563eb' : '1px solid #e2e8f0',
+            background: scope === 'district' ? '#eff6ff' : '#ffffff',
+            color: scope === 'district' ? '#1d4ed8' : '#64748b',
+            fontSize: 13,
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            boxShadow: scope === 'district' ? '0 2px 8px rgba(37,99,235,0.15)' : 'none',
+            transition: 'all 0.2s'
+          }}
+        >
+          <span>🏛️</span>
+          <span>{lang === 'kn' ? `ನನ್ನ ಜಿಲ್ಲೆ (${userDistrict})` : `My District (${userDistrict})`}</span>
+          <span style={{
+            background: scope === 'district' ? '#2563eb' : '#cbd5e1',
+            color: '#fff',
+            fontSize: 11,
+            borderRadius: 10,
+            padding: '1px 7px',
+            fontWeight: 800
+          }}>{districtCount}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setScope('all')}
+          style={{
+            padding: '8px 16px',
+            borderRadius: 20,
+            border: scope === 'all' ? '2px solid #2563eb' : '1px solid #e2e8f0',
+            background: scope === 'all' ? '#eff6ff' : '#ffffff',
+            color: scope === 'all' ? '#1d4ed8' : '#64748b',
+            fontSize: 13,
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            boxShadow: scope === 'all' ? '0 2px 8px rgba(37,99,235,0.15)' : 'none',
+            transition: 'all 0.2s'
+          }}
+        >
+          <span>🌐</span>
+          <span>{lang === 'kn' ? 'ಎಲ್ಲಾ ದೂರುಗಳು (ಕರ್ನಾಟಕ)' : 'All Karnataka'}</span>
+          <span style={{
+            background: scope === 'all' ? '#2563eb' : '#cbd5e1',
+            color: '#fff',
+            fontSize: 11,
+            borderRadius: 10,
+            padding: '1px 7px',
+            fontWeight: 800
+          }}>{complaints.length}</span>
+        </button>
       </div>
 
       <div style={{ marginBottom: 20 }}>
