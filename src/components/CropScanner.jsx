@@ -1049,7 +1049,7 @@ export default function CropScanner() {
           borderBottom: '1px solid var(--border, #d1e8db)',
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-          position: 'relative', zIndex: 40
+          position: 'relative', zIndex: 1
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <button onClick={() => navigate(-1)} style={{
@@ -1314,9 +1314,9 @@ export default function CropScanner() {
   // ─────────────── PAGE 2: SCANNER ───────────────
   if (page === 'scanner') {
     return (
-      <div style={{ width: '100%', height: '100vh', background: '#0a0a0a', display: 'flex', flexDirection: 'column', fontFamily: "'Inter',sans-serif", overflow: 'hidden', userSelect: 'none' }}>
+      <div style={{ width: '100%', minHeight: '100vh', background: '#0a0a0a', display: 'flex', flexDirection: 'column', fontFamily: "'Inter',sans-serif", overflow: 'hidden', userSelect: 'none' }}>
         {/* Header */}
-        <div style={{ padding: '14px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(180deg,rgba(0,0,0,1),transparent)', position: 'absolute', top: 0, left: 0, right: 0, zIndex: 60 }}>
+        <div style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#111827', borderBottom: '1px solid #1f2937', position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button onClick={() => setPage('home')} style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 10, padding: '6px 12px', color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>← Back</button>
             <div style={{ background: 'rgba(34,197,94,0.2)', borderRadius: 10, padding: '5px 10px', border: '1px solid rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -1329,12 +1329,12 @@ export default function CropScanner() {
 
         {/* Mode toggle */}
         {!scanning && (
-          <div style={{ position: 'absolute', top: 62, left: 0, right: 0, zIndex: 60, padding: '0 14px' }}>
+          <div style={{ position: 'relative', zIndex: 1, padding: '10px 14px', background: '#111827' }}>
             <div style={{ display: 'flex', gap: 6 }}>
-              <button onClick={() => { setScanMode('camera'); setUploadedImage(null); }} style={{ flex: 1, padding: '8px', borderRadius: 10, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700, background: scanMode === 'camera' ? 'rgba(34,197,94,0.92)' : 'rgba(0,0,0,0.65)', color: '#fff', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+              <button onClick={() => { setScanMode('camera'); setUploadedImage(null); }} style={{ flex: 1, padding: '8px', borderRadius: 10, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700, background: scanMode === 'camera' ? 'rgba(34,197,94,0.92)' : 'rgba(255,255,255,0.1)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                 <Camera size={14} />{lang === 'kn' ? 'ಲೈವ್ ಕ್ಯಾಮರಾ' : 'Live Camera'}
               </button>
-              <button onClick={() => fileInputRef.current?.click()} style={{ flex: 1, padding: '8px', borderRadius: 10, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700, background: scanMode === 'image' ? 'rgba(34,197,94,0.92)' : 'rgba(0,0,0,0.65)', color: '#fff', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+              <button onClick={() => fileInputRef.current?.click()} style={{ flex: 1, padding: '8px', borderRadius: 10, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700, background: scanMode === 'image' ? 'rgba(34,197,94,0.92)' : 'rgba(255,255,255,0.1)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                 <Image size={14} />{uploadedImage ? '✓ Photo loaded' : (lang === 'kn' ? 'ಫೋಟೋ ಅಪ್‌ಲೋಡ್' : 'Upload Photo')}
               </button>
               <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
@@ -1440,7 +1440,7 @@ export default function CropScanner() {
         borderBottom: '1px solid var(--border, #d1e8db)',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-        position: 'sticky', top: 0, zIndex: 50
+        position: 'relative', zIndex: 1
       }}>
         <button onClick={() => setPage('scanner')} style={{ background: '#f0f7f3', border: '1px solid #d1e8db', borderRadius: 10, padding: '7px 12px', fontSize: 12, fontWeight: 700, color: '#1a2e1f', cursor: 'pointer' }}>
           ← {lang === 'kn' ? 'ಹಿಂದೆ' : 'Back to Scanner'}

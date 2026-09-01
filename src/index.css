@@ -975,6 +975,10 @@ input, textarea, select { font-family: inherit; outline: none; }
 .lang-dropdown-trigger:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+.lang-dropdown-container.topbar-style .lang-dropdown-container {
+  position: relative;
+  z-index: 999999;
+}
 .lang-dropdown-container.topbar-style .lang-dropdown-trigger:hover {
   background: var(--border-light);
 }
@@ -985,13 +989,13 @@ input, textarea, select { font-family: inherit; outline: none; }
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   padding: 6px 0;
   list-style: none;
   min-width: 170px;
   margin: 0;
   animation: fadeInUp 0.2s ease;
-  z-index: 9999;
+  z-index: 999999 !important;
 }
 .lang-dropdown-item {
   width: 100%;
