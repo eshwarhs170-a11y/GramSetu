@@ -1070,5 +1070,57 @@ export const kaScholarships = [
     applyLink: 'https://ssp.postmatric.karnataka.gov.in/',
     trackerUrl: 'https://ssp.postmatric.karnataka.gov.in/studentstatus.aspx'
   }
+  ,
+  {
+    id: 'hdfc-ecss',
+    category: 'Scholarship',
+    level: 'Central',
+    beneficiary: ['Underprivileged Students', 'General'],
+    objective: 'Higher Education',
+    stage: 'Class 1 to Post-Graduation',
+    districtSpecific: ['All'],
+    title: { en: 'HDFC Bank Parivartan ECSS', kn: 'ಎಚ್‌ಡಿಎಫ್‌ಸಿ ಬ್ಯಾಂಕ್ ಪರಿವರ್ತನ್ ವಿದ್ಯಾರ್ಥಿವೇತನ', hi: 'HDFC बैंक परिवर्तन ECSS' },
+    desc: { en: 'Scholarship for meritorious students from underprivileged backgrounds whose family income is less than ₹2.5 Lakhs. Covers school up to post-graduation.', kn: 'ಆರ್ಥಿಕವಾಗಿ ಹಿಂದುಳಿದ ಪ್ರತಿಭಾವಂತ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಶಾಲೆಯಿಂದ ಸ್ನಾತಕೋತ್ತರ ಪದವಿಯವರೆಗೆ ವಿದ್ಯಾರ್ಥಿವೇತನ.', hi: 'वंचित पृष्ठभूमि के मेधावी छात्रों के लिए छात्रवृत्ति।' },
+    eligibility: { en: 'Must have passed previous exam with at least 55% marks. Family income must be ≤ ₹2.5 Lakhs.', kn: 'ಹಿಂದಿನ ಪರೀಕ್ಷೆಯಲ್ಲಿ ಕನಿಷ್ಠ 55% ಅಂಕಗಳು. ಕುಟುಂಬದ ಆದಾಯ ₹2.5 ಲಕ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ.', hi: 'पिछले वर्ष 55% अंक और पारिवारिक आय ₹2.5 लाख से कम।' },
+    exclusions: { en: 'Students failing previous year.', kn: 'ಹಿಂದಿನ ವರ್ಷ ಅನುತ್ತೀರ್ಣರಾದವರು.', hi: 'पिछले वर्ष फेल होने वाले छात्र।' },
+    benefits: { subsidyPercent: 'Direct Grant', maxLimit: '₹15,000 to ₹75,000 depending on course', mode: 'DBT', interestSubvention: 'N/A' },
+    documents: { en: 'Marksheet, Aadhaar, Income Proof, Bank Passbook.', kn: 'ಅಂಕಪಟ್ಟಿ, ಆಧಾರ್, ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ.', hi: 'मार्कशीट, आधार, आय प्रमाण।' },
+    processSteps: [
+      { step: 1, title: { en: 'Apply Online', kn: 'ಆನ್‌ಲೈನ್ ಅರ್ಜಿ', hi: 'ऑनलाइन आवेदन' }, desc: { en: 'Apply through the Buddy4Study portal.', kn: 'Buddy4Study ಪೋರ್ಟಲ್ ಮೂಲಕ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ.', hi: 'Buddy4Study पोर्टल के माध्यम से आवेदन करें।' } }
+    ],
+    timeline: 'Annual cycle (Closes usually in October)',
+    img: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80',
+    badge: { en: 'Up to ₹75,000', kn: '₹ 75,000 ವರೆಗೆ', hi: '₹75,000 तक' },
+    badgeClass: 'badge-primary',
+    ministry: { en: 'HDFC Bank (Buddy4Study)', kn: 'ಎಚ್‌ಡಿಎಫ್‌ಸಿ ಬ್ಯಾಂಕ್', hi: 'HDFC बैंक' },
+    applyLink: 'https://www.buddy4study.com/page/hdfc-bank-parivartans-ecss-programme',
+    trackerUrl: 'https://www.buddy4study.com/'
+  },
+  {
+    id: 'reliance-ug',
+    category: 'Scholarship',
+    level: 'Central',
+    beneficiary: ['Undergraduate Students', 'Meritorious'],
+    objective: 'Higher Education',
+    stage: 'College (Undergraduate)',
+    districtSpecific: ['All'],
+    title: { en: 'Reliance Foundation UG Scholarship', kn: 'ರಿಲಯನ್ಸ್ ಫೌಂಡೇಶನ್ ವಿದ್ಯಾರ್ಥಿವೇತನ', hi: 'रिलायंस फाउंडेशन छात्रवृत्ति' },
+    desc: { en: 'Supports up to 5,000 meritorious undergraduate students with a grant to help them pursue their degree without financial burden.', kn: 'ಪದವಿ ಓದುತ್ತಿರುವ 5,000 ಪ್ರತಿಭಾವಂತ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಆರ್ಥಿಕ ನೆರವು.', hi: '5,000 मेधावी स्नातक छात्रों को वित्तीय सहायता।' },
+    eligibility: { en: '1st year UG students who scored min 60% in 12th standard with family income < ₹15 Lakhs (preference to < ₹2.5 Lakhs).', kn: '12ನೇ ತರಗತಿಯಲ್ಲಿ 60% ಅಂಕ ಪಡೆದ 1ನೇ ವರ್ಷದ ಪದವಿ ವಿದ್ಯಾರ್ಥಿಗಳು.', hi: '12वीं में 60% अंक वाले प्रथम वर्ष के स्नातक छात्र।' },
+    exclusions: { en: 'Students in 2nd/3rd year of UG are not eligible.', kn: '2 ಮತ್ತು 3ನೇ ವರ್ಷದ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಅನ್ವಯಿಸುವುದಿಲ್ಲ.', hi: 'द्वितीय/तृतीय वर्ष के छात्र पात्र नहीं हैं।' },
+    benefits: { subsidyPercent: 'Direct Grant', maxLimit: 'Up to ₹2,00,000 over the degree duration', mode: 'DBT', interestSubvention: 'N/A' },
+    documents: { en: '12th Marksheet, Income Proof, Admission Letter.', kn: '12ನೇ ಅಂಕಪಟ್ಟಿ, ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ, ಪ್ರವೇಶ ಪತ್ರ.', hi: '12वीं की मार्कशीट, आय प्रमाण, प्रवेश पत्र।' },
+    processSteps: [
+      { step: 1, title: { en: 'Aptitude Test', kn: 'ಪರೀಕ್ಷೆ', hi: 'योग्यता परीक्षा' }, desc: { en: 'Clear the mandatory online aptitude test.', kn: 'ಕಡ್ಡಾಯ ಆನ್‌ಲೈನ್ ಪರೀಕ್ಷೆಯಲ್ಲಿ ತೇರ್ಗಡೆಯಾಗಬೇಕು.', hi: 'अनिवार्य ऑनलाइन एप्टीट्यूड टेस्ट पास करें।' } }
+    ],
+    timeline: 'Annual cycle (Closes in October)',
+    img: 'https://images.unsplash.com/photo-1546410531-ea4cea477149?w=800&q=80',
+    badge: { en: 'Up to ₹2 Lakhs', kn: '₹ 2 ಲಕ್ಷದವರೆಗೆ', hi: '₹2 लाख तक' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Reliance Foundation', kn: 'ರಿಲಯನ್ಸ್ ಫೌಂಡೇಶನ್', hi: 'रिलायंस फाउंडेशन' },
+    applyLink: 'https://www.scholarships.reliancefoundation.org/',
+    trackerUrl: 'https://www.scholarships.reliancefoundation.org/'
+  }
+
 
 ];
