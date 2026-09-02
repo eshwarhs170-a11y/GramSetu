@@ -44,7 +44,7 @@ export const kaSchemes = [
       { step: 4, title: { en: 'DBT Credit', kn: 'ನೇರ ನಗದು ಜಮೆ', hi: 'डीबीटी भुगतान' }, desc: { en: 'Direct credit into Aadhaar-linked NPCI mapped bank account every 4 months.', kn: 'ಪ್ರತಿ 4 ತಿಂಗಳಿಗೊಮ್ಮೆ ಆಧಾರ್ ಲಿಂಕ್ಡ್ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ನೇರ ಹಣ ವರ್ಗಾವಣೆ.', hi: 'हर 4 महीने में बैंक खाते में ₹2,000 की किस्त ट्रांसफर।' } }
     ],
     timeline: '15 - 30 Days for verification & inclusion in upcoming cycle',
-    img: 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80',
+    img: '/schemes/pm-kisan.jpg',
     badge: { en: 'Central DBT', kn: 'ಕೇಂದ್ರ DBT', hi: 'केंद्रीय डीबीटी' },
     badgeClass: 'badge-success',
     ministry: { en: 'Ministry of Agriculture & Farmers Welfare, GoI', kn: 'ಕೃಷಿ ಮತ್ತು ರೈತರ ಕಲ್ಯಾಣ ಸಚಿವಾಲಯ, ಭಾರತ', hi: 'कृषि एवं किसान कल्याण मंत्रालय, भारत सरकार' },
@@ -93,7 +93,7 @@ export const kaSchemes = [
       { step: 4, title: { en: 'Claim Disbursement', kn: 'ಪರಿಹಾರ ಬಿಡುಗಡೆ', hi: 'दावा निपटान' }, desc: { en: 'Automatic claim transfer post crop-cutting experiments and joint survey.', kn: 'ಬೆಳೆ ಕಟಾವು ಪ್ರಯೋಗ ಹಾಗೂ ಸರ್ವೇ ನಂತರ ನೇರವಾಗಿ ಖಾತೆಗೆ ಪರಿಹಾರ.', hi: 'संयुक्त सर्वेक्षण के बाद खाते में सीधे दावा राशि का भुगतान।' } }
     ],
     timeline: 'Cutoff seasonal; Claim settlement within 30-45 days of survey',
-    img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&q=80',
+    img: '/schemes/pmfby.jpg',
     badge: { en: 'Crop Cover', kn: 'ಬೆಳೆ ರಕ್ಷಣೆ', hi: 'फसल बीमा' },
     badgeClass: 'badge-warning',
     ministry: { en: 'Ministry of Agriculture & Farmers Welfare, GoI', kn: 'ಕೃಷಿ ಸಚಿವಾಲಯ, ಭಾರತ ಸರ್ಕಾರ', hi: 'कृषि एवं किसान कल्याण मंत्रालय' },
@@ -141,7 +141,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Card & Limit Sanction', kn: 'ಕಾರ್ಡ್ ವಿತರಣೆ', hi: 'कार्ड स्वीकृति' }, desc: { en: 'RuPay KCC Card issued with valid credit limit linked to cropping pattern.', kn: 'ಬೆಳೆ ಪದ್ಧತಿಗೆ ಅನುಗುಣವಾಗಿ ರುಪೇ ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ವಿತರಣೆ.', hi: 'फसल चक्र के अनुसार निर्धारित सीमा वाला RuPay KCC जारी किया जाता है।' } }
     ],
     timeline: '14 Days guaranteed under RBI Citizen Charter',
-    img: 'https://images.unsplash.com/photo-1589828135898-d14fb4081c70?w=600&q=80',
+    img: '/schemes/kisan-credit-card.jpg',
     badge: { en: '4% Interest Loan', kn: '೪% ಬಡ್ಡಿ ಸಾಲ', hi: '4% ब्याज ऋण' },
     badgeClass: 'badge-info',
     ministry: { en: 'Ministry of Finance & NABARD', kn: 'ಹಣಕಾಸು ಸಚಿವಾಲಯ ಮತ್ತು ನಬಾರ್ಡ್', hi: 'वित्त मंत्रालय एवं नाबार्ड' },
@@ -189,7 +189,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'DBT Installment Release', kn: 'ಹಣ ಜಮೆ', hi: 'डीबीटी भुगतान' }, desc: { en: '₹6,000 after seedling establishment + ₹4,000 at flowering stage.', kn: 'ಮೊದಲ ಹಂತದಲ್ಲಿ ₹6,000 ಮತ್ತು ಬೆಳೆ ಬಂದ ನಂತರ ₹4,000 ಖಾತೆಗೆ ಜಮೆ.', hi: 'दो किस्तों (₹6,000 + ₹4,000) में खाते में सीधे भुगतान।' } }
     ],
     timeline: '21 Days post crop survey validation',
-    img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=600&q=80',
+    img: '/schemes/raitha-siri.jpg',
     badge: { en: 'State Incentive', kn: 'ರಾಜ್ಯ ಪ್ರೋತ್ಸಾಹಧನ', hi: 'राज्य प्रोत्साहन' },
     badgeClass: 'badge-success',
     ministry: { en: 'Dept. of Agriculture, Govt of Karnataka', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ ಸರ್ಕಾರ', hi: 'कृषि विभाग, कर्नाटक सरकार' },
@@ -238,7 +238,7 @@ export const kaSchemes = [
       { step: 4, title: { en: 'Verification & Fund Release', kn: 'ಪರಿಶೀಲನೆ & ಹಣ ಬಿಡುಗಡೆ', hi: 'अंतिम सत्यापन व भुगतान' }, desc: { en: 'GPS camera measurement and direct DBT reimbursement to farmer account.', kn: 'ಅಧಿಕಾರಿಗಳ ಅಂತಿಮ ತಪಾಸಣೆ ನಂತರ ರೈತರ ಖಾತೆಗೆ ಸಹಾಯಧನ ಜಮೆ.', hi: 'जीपीएस फोटो सत्यापन के बाद सीधे खाते में सब्सिडी का भुगतान।' } }
     ],
     timeline: '30 - 45 Days from application to sanction',
-    img: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&q=80',
+    img: '/schemes/krishi-bhagya.jpg',
     badge: { en: '90% Subsidy', kn: '೯೦% ಸಹಾಯಧನ', hi: '90% सब्सिडी' },
     badgeClass: 'badge-primary',
     ministry: { en: 'Dept. of Agriculture, Karnataka', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ ಸರ್ಕಾರ', hi: 'कृषि विभाग, कर्नाटक' },
@@ -286,7 +286,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Solar Panel & Pump Installation', kn: 'ಸೋಲಾರ್ ಪ್ಯಾನಲ್ ಅಳವಡಿಕೆ', hi: 'सोलर पंप स्थापना' }, desc: { en: 'Certified agency delivers panels, structure, controller and DC pump.', kn: 'ಅಧಿಕೃತ ಕಂಪನಿಯು ಸೋಲಾರ್ ಪ್ಯಾನಲ್ ಮತ್ತು ಮೋಟಾರ್ ಅಳವಡಿಕೆ ಮಾಡುತ್ತದೆ.', hi: 'अधिकृत एजेंसी द्वारा सोलर पैनल, मोटर और कंट्रोलर की स्थापना।' } }
     ],
     timeline: '45 - 60 Days for site inspection & complete installation',
-    img: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?w=600&q=80',
+    img: '/schemes/pm-kusum.jpg',
     badge: { en: '60% Subsidy', kn: '೬೦% ಸಬ್ಸಿಡಿ', hi: '60% सब्सिडी' },
     badgeClass: 'badge-success',
     ministry: { en: 'Ministry of New & Renewable Energy & KREDL', kn: 'ನವೀಕರಿಸಬಹುದಾದ ಇಂಧನ ಸಚಿವಾಲಯ & KREDL', hi: 'नवीन एवं नवीकरणीय ऊर्जा मंत्रालय' },
@@ -334,7 +334,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'GPS Physical Verification', kn: 'ಭೌತಿಕ ಪರಿಶೀಲನೆ', hi: 'भौतिक सत्यापन' }, desc: { en: 'Chassis number verification by Assistant Director of Agriculture (ADA).', kn: 'ಕೃಷಿ ಅಧಿಕಾರಿಗಳಿಂದ ಯಂತ್ರದ ಚಾಸಿಸ್ ಸಂಖ್ಯೆ ಹಾಗೂ ಲೈವ್ ಫೋಟೋ ಪರಿಶೀಲನೆ.', hi: 'सहायक कृषि निदेशक द्वारा चेसिस नंबर और जीपीएस फोटो सत्यापन।' } }
     ],
     timeline: '30 Days from token allocation',
-    img: 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80',
+    img: '/schemes/rkvy-mechanization.jpg',
     badge: { en: '50% Subsidy', kn: '೫೦% ಸಹಾಯಧನ', hi: '50% सब्सिडी' },
     badgeClass: 'badge-warning',
     ministry: { en: 'Dept. of Agriculture, Karnataka & MoA GoI', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ', hi: 'कृषि विभाग, कर्नाटक' },
@@ -382,7 +382,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Grant Credit & Operations', kn: 'ಅನುದಾನ ಬಿಡುಗಡೆ', hi: 'राशि आवंटन' }, desc: { en: 'Funds released directly to FPO bank account for machinery and procurement.', kn: 'ರೈತರ ಉತ್ಪನ್ನ ಖರೀದಿ ಹಾಗೂ ಗ್ರೇಡಿಂಗ್ ಘಟಕಕ್ಕೆ ನೇರ ನಿಧಿ ಬಿಡುಗಡೆ.', hi: 'खरीद और प्रसंस्करण इकाई के लिए FPO खाते में फंड ट्रांसफर।' } }
     ],
     timeline: '45 - 90 Days for committee approval',
-    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80',
+    img: '/schemes/fpo-formation.jpg',
     badge: { en: '₹15 Lakh Grant', kn: '₹೧೫ ಲಕ್ಷ ಅನುದಾನ', hi: '₹15 लाख अनुदान' },
     badgeClass: 'badge-primary',
     ministry: { en: 'Ministry of Agriculture & NABARD', kn: 'ಕೃಷಿ ಸಚಿವಾಲಯ ಮತ್ತು ನಬಾರ್ಡ್', hi: 'कृषि मंत्रालय एवं नाबार्ड' },
@@ -430,7 +430,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Disbursement & Interest Rebate', kn: 'ಸಾಲ ವಿತರಣೆ & ಬಡ್ಡಿ ರಿಯಾಯಿತಿ', hi: 'ऋण व ब्याज छूट' }, desc: { en: 'Bank disburses loan and interest subvention gets credited automatically.', kn: 'ಬ್ಯಾಂಕ್ ಸಾಲ ಬಿಡುಗಡೆ ಮಾಡುತ್ತದೆ ಮತ್ತು 3% ಬಡ್ಡಿ ರಿಯಾಯಿತಿ ನೇರವಾಗಿ ಅನ್ವಯವಾಗುತ್ತದೆ.', hi: 'बैंक ऋण जारी करता है और 3% ब्याज छूट सीधे लागू होती है।' } }
     ],
     timeline: '30 - 45 Days for complete bank sanction',
-    img: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&q=80',
+    img: '/schemes/pm-aif.jpg',
     badge: { en: '3% Interest Rebate', kn: '೩% ಬಡ್ಡಿ ರಿಯಾಯಿತಿ', hi: '3% ब्याज छूट' },
     badgeClass: 'badge-success',
     ministry: { en: 'Ministry of Agriculture & Farmers Welfare, GoI', kn: 'ಕೃಷಿ ಸಚಿವಾಲಯ, ಭಾರತ ಸರ್ಕಾರ', hi: 'कृषि एवं किसान कल्याण मंत्रालय' },
@@ -478,7 +478,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Card Generation & Delivery', kn: 'ಕಾರ್ಡ್ ವಿತರಣೆ', hi: 'कार्ड वितरण' }, desc: { en: 'Laminated card and crop fertilizer advisory handed over at Gram Panchayat / RSK.', kn: 'ಗ್ರಾಮ ಪಂಚಾಯತ್ ಅಥವಾ ಆರ್‌ಎಸ್‌ಕೆ ಮೂಲಕ ರಸಗೊಬ್ಬರ ಶಿಫಾರಸು ಕಾರ್ಡ್ ವಿತರಣೆ.', hi: 'ग्राम पंचायत या RSK द्वारा लैमिनेटेड कार्ड व उर्वरक सलाह पत्र वितरण।' } }
     ],
     timeline: '14 - 21 Days from sample submission',
-    img: 'https://images.unsplash.com/photo-1627920769852-5c21f5fb3d0f?w=600&q=80',
+    img: '/schemes/soil-health-card.jpg',
     badge: { en: '100% Free', kn: 'ಉಚಿತ ಪರೀಕ್ಷೆ', hi: '100% मुफ्त' },
     badgeClass: 'badge-primary',
     ministry: { en: 'Dept. of Agriculture, Karnataka & GoI', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ', hi: 'कृषि विभाग, भारत सरकार' },
@@ -526,7 +526,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Fund Disbursement', kn: 'ಸಹಾಯಧನ ಜಮೆ', hi: 'अनुदान भुगतान' }, desc: { en: 'Subsidy credited directly post installation.', kn: 'ಯಂತ್ರ ಅಳವಡಿಕೆ ಪೂರ್ಣಗೊಂಡ ನಂತರ ಖಾತೆಗೆ ಸಬ್ಸಿಡಿ ಜಮೆ.', hi: 'कार्य पूरा होने के बाद सीधे खाते में सब्सिडी।' } }
     ],
     timeline: '30 Days post field inspection',
-    img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80',
+    img: '/schemes/coffee-dev.png',
     badge: { en: 'Malnad Region', kn: 'ಮಲೆನಾಡು', hi: 'मलनाड क्षेत्र' },
     badgeClass: 'badge-success',
     ministry: { en: 'Coffee Board of India, Ministry of Commerce', kn: 'ಕಾಫಿ ಮಂಡಳಿ, ವಾಣಿಜ್ಯ ಸಚಿವಾಲಯ', hi: 'कॉफी बोर्ड, वाणिज्य मंत्रालय' },
@@ -578,7 +578,7 @@ export const kaSchemes = [
       { step: 3, title: { en: 'Monthly DBT Credit', kn: 'ಮಾಸಿಕ ಹಣ ಜಮೆ', hi: 'मासिक डीबीटी' }, desc: { en: '₹2,000 credited automatically every month to NPCI-mapped account.', kn: 'ಪ್ರತಿ ತಿಂಗಳು ₹2,000 ನೇರವಾಗಿ ಆಧಾರ್ ಜೋಡಿತ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ಜಮೆ.', hi: 'हर माह सीधे बैंक खाते में ₹2,000 का ट्रांसफर।' } }
     ],
     timeline: 'Immediate token generation; Approval in 15 days',
-    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80',
+    img: '/schemes/gruha-lakshmi.jpg',
     badge: { en: '₹2,000/Month', kn: '₹೨,೦೦೦/ತಿಂಗಳಿಗೆ', hi: '₹2,000/माह' },
     badgeClass: 'badge-success',
     ministry: { en: 'Dept. of Women & Child Development, Karnataka', kn: 'ಮಹಿಳಾ ಮತ್ತು ಮಕ್ಕಳ ಅಭಿವೃದ್ಧಿ ಇಲಾಖೆ', hi: 'महिला एवं बाल विकास विभाग' },
@@ -599,7 +599,7 @@ export const kaSchemes = [
       kn: 'ಗ್ರಾಮೀಣ ಮಹಿಳೆಯರನ್ನು ಸ್ವಸಹಾಯ ಸಂಘಗಳಾಗಿ (SHG) ಸಂಘಟಿಸಿ ₹25,000 ಸುತ್ತು ನಿಧಿ ಹಾಗೂ ಶೂನ್ಯ ಬಡ್ಡಿದರದ ಆರ್ಥಿಕ ನೆರವು ನೀಡಿ ಸಬಲೀಕರಣಗೊಳಿಸುವ ಯೋಜನೆ.', 
       hi: 'ग्रामीण महिलाओं के स्वयं सहायता समूहों (SHG) को ₹25,000 रिवाल्विंग फंड और कम ब्याज वाले सूक्ष्म ऋण प्रदान करना।' 
     },
-    img: 'https://images.unsplash.com/photo-1603597395015-8167f1dc219d?w=600&q=80',
+    img: '/schemes/stree-shakti.jpg',
     badge: { en: 'SHG Loan @ 0%', kn: 'ಶೂನ್ಯ ಬಡ್ಡಿ ಸಾಲ', hi: '0% ब्याज ऋण' },
     badgeClass: 'badge-info',
     ministry: { en: 'Women & Child Development Dept., Karnataka', kn: 'ಮಹಿಳಾ ಮತ್ತು ಮಕ್ಕಳ ಕಲ್ಯಾಣ ಇಲಾಖೆ', hi: 'महिला एवं बाल विकास विभाग' },
@@ -614,7 +614,7 @@ export const kaSchemes = [
 export const agriFinancialAssistance = [
   {
     id: 'kcc-crop-loan',
-    img: 'https://images.unsplash.com/photo-1589828135898-d14fb4081c70?w=600&q=80',
+    img: '/schemes/kisan-credit-card.jpg',
     title: { en: 'Kisan Credit Card (KCC) Short-Term Crop Loan', kn: 'ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ (KCC) ಅಲ್ಪಾವಧಿ ಬೆಳೆ ಸಾಲ', hi: 'किसान क्रेडिट कार्ड अल्पकालिक फसल ऋण' },
     category: 'Crop Loan',
     interestRate: '4% p.a. (with prompt repayment incentive)',
@@ -630,7 +630,7 @@ export const agriFinancialAssistance = [
   },
   {
     id: 'pmfby-insurance-detail',
-    img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&q=80',
+    img: '/schemes/pmfby.jpg',
     title: { en: 'PMFBY Crop Insurance Slabs & Settlement Guide', kn: 'ಪಿಎಂ ಫಸಲ್ ಬಿಮಾ ಯೋಜನೆ ಪ್ರೀಮಿಯಂ ದರಗಳು & ಪರಿಹಾರ', hi: 'पीएम फसल बीमा प्रीमियम दरें और दावा प्रक्रिया' },
     category: 'Insurance',
     interestRate: 'Subsidized premium by GoI & Govt of Karnataka',
@@ -647,7 +647,7 @@ export const agriFinancialAssistance = [
   },
   {
     id: 'nabard-startup-grant',
-    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80',
+    img: '/schemes/fpo-formation.jpg',
     title: { en: 'NABARD Agri-Startup & FPO Capital Grants', kn: 'ನಬಾರ್ಡ್ ಕೃಷಿ ಸ್ಟಾರ್ಟ್‌ಅಪ್ & ಎಫ್‌ಪಿಒ ಅನುದಾನಗಳು', hi: 'नाबार्ड कृषि स्टार्टअप और FPO अनुदान' },
     category: 'Grants & Startups',
     interestRate: 'Grants (0% repayment) & Subsidized Term Loans',
@@ -669,7 +669,7 @@ export const agriFinancialAssistance = [
 export const agriAdvisoryAndCenters = [
   {
     type: 'RSK',
-    img: 'https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?w=600&q=80',
+    img: '/schemes/rsk-network.jpg',
     title: { en: 'Raitha Samparka Kendra (RSK) Network', kn: 'ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರ (RSK) ಜಾಲ', hi: 'रायथा संपर्क केंद्र (RSK) नेटवर्क' },
     desc: { en: 'Over 745+ RSKs across all taluks providing subsidized seeds, soil sample collection, fertilizers, and pest management advisory.', kn: 'ರಾಜ್ಯದ ಎಲ್ಲಾ ತಾಲೂಕುಗಳಲ್ಲಿ 745+ ಆರ್‌ಎಸ್‌ಕೆಗಳು ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿದ್ದು ರಿಯಾಯಿತಿ ಬೀಜ, ಮಣ್ಣು ಪರೀಕ್ಷೆ ಹಾಗೂ ರೋಗ ನಿಯಂತ್ರಣ ಮಾಹಿತಿ ನೀಡುತ್ತವೆ.', hi: 'कर्नाटक की सभी तहसीलों में 745+ केंद्र जहां सब्सिडी वाले बीज, उर्वरक और कृषि सलाह मिलती है।' },
     contact: 'Kisan Call Centre Toll-Free: 1800-180-1551 / 080-22212804',
@@ -678,7 +678,7 @@ export const agriAdvisoryAndCenters = [
   },
   {
     type: 'KVK',
-    img: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&q=80',
+    img: '/schemes/kvk-centers.jpg',
     title: { en: 'Krishi Vigyan Kendras (ICAR - KVKs)', kn: 'ಕೃಷಿ ವಿಜ್ಞಾನ ಕೇಂದ್ರಗಳು (KVK)', hi: 'कृषि विज्ञान केंद्र (KVK)' },
     desc: { en: '33+ ICAR-KVKs in Karnataka conducting Krishi Melas, live field demonstrations, drone training, and certified seed production workshops.', kn: 'ಕರ್ನಾಟಕದಲ್ಲಿ 33+ ಕೆವಿಕೆಗಳು ಕೃಷಿ ಮೇಳ, ಡ್ರೋನ್ ತರಬೇತಿ, ಸುಧಾರಿತ ತಳಿಗಳ ಪ್ರದರ್ಶನ ಹಾಗೂ ಕಾರ್ಯಾಗಾರಗಳನ್ನು ಆಯೋಜಿಸುತ್ತವೆ.', hi: 'कर्नाटक में 33+ केंद्र जो कृषि मेला, ड्रोन प्रशिक्षण और उन्नत तकनीकों का लाइव प्रदर्शन करते हैं।' },
     contact: 'UAS Bengaluru: 080-23330153 | UAS Dharwad: 0836-2448321',
@@ -687,7 +687,7 @@ export const agriAdvisoryAndCenters = [
   },
   {
     type: 'SoilCard',
-    img: 'https://images.unsplash.com/photo-1627920769852-5c21f5fb3d0f?w=600&q=80',
+    img: '/schemes/soil-health-card.jpg',
     title: { en: 'Digital Soil Health Portal & Testing Labs', kn: 'ಡಿಜಿಟಲ್ ಮಣ್ಣು ಪರೀಕ್ಷೆ & ಪ್ರಯೋಗಾಲಯ', hi: 'डिजिटल मृदा स्वास्थ्य और प्रयोगशाला' },
     desc: { en: 'Access your parcel-wise Soil Health Card, get micro-nutrient recommendations, and find the nearest government testing lab.', kn: 'ನಿಮ್ಮ ಸರ್ವೆ ನಂಬರ್‌ನ ಮಣ್ಣಿನ ಪರೀಕ್ಷಾ ವರದಿ ಪರಿಶೀಲಿಸಿ ಹಾಗೂ ಹತ್ತಿರದ ಜಿಲ್ಲಾ ಮಣ್ಣು ಪರೀಕ್ಷಾ ಕೇಂದ್ರದ ಮಾಹಿತಿ ಪಡೆಯಿರಿ.', hi: 'अपने खेत का मृदा स्वास्थ्य कार्ड डाउनलोड करें और अनुशंसित उर्वरक मात्रा जानें।' },
     contact: 'Helpline: 011-23381012',
@@ -696,7 +696,7 @@ export const agriAdvisoryAndCenters = [
   },
   {
     type: 'WeatherAlert',
-    img: 'https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=600&q=80',
+    img: '/schemes/varuna-mitra.jpg',
     title: { en: 'KSNDMC Varuna Mitra Weather & Agromet Advisory', kn: 'ವರುಣ ಮಿತ್ರ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ (KSNDMC)', hi: 'वरुण मित्र मौसम एवं कृषि सलाह' },
     desc: { en: 'Gram Panchayat level rain forecasts, drought alerts, and crop-specific advisory updated every 15 minutes by KSNDMC.', kn: 'ಗ್ರಾಮ ಪಂಚಾಯತ್ ಮಟ್ಟದ ಮಳೆ ಮುನ್ಸೂಚನೆ, ಬರ ಎಚ್ಚರಿಕೆ ಹಾಗೂ ಬೆಳೆವಾರು ಹವಾಮಾನ ಸಲಹೆಗಳನ್ನು 24x7 ಪಡೆಯಿರಿ.', hi: 'ग्राम पंचायत स्तर पर वर्षा पूर्वानुमान और सूखा अलर्ट 24x7 उपलब्ध।' },
     contact: 'Varuna Mitra 24x7 Helpline: 9243345433',
@@ -720,7 +720,8 @@ export const schemesSuccessStories = [
       kn: 'ಮೊದಲು ಪ್ರತಿ ಋತುವಿನಲ್ಲಿ ಬೋರ್‌ವೆಲ್ ಡೀಸೆಲ್‌ಗಾಗಿ ₹35,000 ಖರ್ಚಾಗುತ್ತಿತ್ತು. ಸೋಲಾರ್ ಪಂಪ್ ಅಳವಡಿಸಿದ ನಂತರ ವಿದ್ಯುತ್ ಬಿಲ್ ಶೂನ್ಯವಾಗಿದ್ದು, ಮೆಣಸಿನಕಾಯಿ ಇಳುವರಿ ಶೇ 28% ಹೆಚ್ಚಾಗಿದೆ.',
       hi: 'पहले बोरवेल के डीजल पर हर सीजन ₹35,000 खर्च होते थे। कुसुम सोलर पंप के बाद बिजली खर्च शून्य और मिर्च की पैदावार में 28% की वृद्धि हुई।'
     },
-    image: 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=400&q=80',
+    image: '/testimonials/basavaraj-kusum.png',
+    bannerImage: '/testimonials/basavaraj-kusum.png',
     stat: '+28% Crop Yield'
   },
   {
@@ -734,8 +735,8 @@ export const schemesSuccessStories = [
       kn: 'ಕೃಷಿ ಹೊಂಡ ನಿರ್ಮಿಸಿದ್ದರಿಂದ ಮಳೆ ಕೈಕೊಟ್ಟಾಗಲೂ ನವಣೆ ಬೆಳೆಯನ್ನು ಉಳಿಸಿಕೊಳ್ಳಲು ಸಾಧ್ಯವಾಯಿತು. ಎಪಿಎಂಸಿಯಲ್ಲಿ ಉತ್ತಮ ಧಾರಣೆ ಜತೆಗೆ ಸರ್ಕಾರದ ಪ್ರೋತ್ಸಾಹಧನವೂ ಖಾತೆಗೆ ಜಮೆಯಾಯಿತು.',
       hi: 'कृषि होंडा (खेत तालाब) ने सूखे के समय फसल को बचाया। नवणे बाजरे की खेती से अच्छा मुनाफा और ₹10,000/हेक्टेयर की सब्सिडी मिली।'
     },
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
-    bannerImage: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&q=80',
+    image: '/testimonials/gangamma-krishi-honda.png',
+    bannerImage: '/testimonials/gangamma-krishi-honda.png',
     stat: '₹1.4L Net Income'
   },
   {

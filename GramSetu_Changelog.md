@@ -160,6 +160,15 @@
 
 ---
 
+## 📅 02 September 2026 — Official Government Scheme Visuals Upgrade 🏛️
+
+- **Official Government Scheme Assets**: Replaced generic stock photos across all Karnataka & Central schemes with authentic visuals sourced from official government websites (pmkisan.gov.in, samrakshane.karnataka.gov.in, raitamitra.karnataka.gov.in, agrimachinery.nic.in, agriinfra.dac.gov.in, soilhealth.dac.gov.in, atimysore.karnataka.gov.in).
+- **Custom Scheme Images**: Integrated the user-provided **Bharatiya Stree Shakti** banner, **Coffee Development Programme** banner, **Soil Health Card Scheme 2026** infographic, **RuPay Kisan Credit Card (KCC)** image, **PMFBY** banner, **Raitha Siri** banner, **Krishi Bhagya** banner, and **Agriculture Infrastructure Fund (AIF)** banner.
+- **Local Asset Hosting**: Stored all scheme banners and imagery locally in `/public/schemes/` for high reliability, offline support, zero CORS/hotlinking issues, and fast load speeds.
+- **Updated Catalog & Advisory**: Linked official images to all 13 flagship schemes, financial assistance cards, and RSK/KVK agricultural advisory centers.
+
+---
+
 ## 📊 Summary Stats
 
 | Metric | Count |
