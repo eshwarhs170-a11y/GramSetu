@@ -1,8 +1,0 @@
-c5a0df8098267ee5edb443b5648cb08cec776f4f commit	refs/heads/main
-b89d5178b1ecb5d3556a2f766c2f0883115a1a29 commit	refs/notes/commits
-c169dc0cf93d5c4497e406081380e7191fae6d67 commit	refs/original/refs/heads/main
-c169dc0cf93d5c4497e406081380e7191fae6d67 commit	refs/original/refs/remotes/origin/main
-0710db96ac2dea1d2a122e719677614cde305101 commit	refs/original/refs/stash
-c5a0df8098267ee5edb443b5648cb08cec776f4f commit	refs/remotes/origin/HEAD
-c5a0df8098267ee5edb443b5648cb08cec776f4f commit	refs/remotes/origin/main
-0d4d49e8b0edeb3b07dfe4bb0f4629a1bb020f47 commit	refs/stash
