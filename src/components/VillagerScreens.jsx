@@ -769,7 +769,7 @@ export function SchemesScreen() {
     window.speechSynthesis.speak(utterance)
   }
 
-  const categories = ['All', 'Agriculture', 'Finance', 'Health', 'Women', 'Scholarship']
+  const categories = ['All', 'Agriculture', 'Finance', 'Health', 'Women', 'Scholarship', 'Food Security', 'Utilities', 'Women Empowerment', 'Youth']
   const beneficiaryOptions = [
     { value: 'All', label: t('filterBeneficiaryAll') },
     { value: 'Small/Marginal Farmers', label: t('filterBeneficiarySmall') },

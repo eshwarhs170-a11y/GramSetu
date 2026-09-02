@@ -1018,4 +1018,57 @@ export const kaScholarships = [
     applyLink: 'https://www.buddy4study.com/',
     trackerUrl: 'https://www.buddy4study.com/'
   }
+  ,
+  {
+    id: 'ssp-post-matric',
+    category: 'Scholarship',
+    level: 'State',
+    beneficiary: ['SC/ST', 'OBC', 'Minority Students', 'General'],
+    objective: 'Higher Education',
+    stage: 'College (Post-Matric)',
+    districtSpecific: ['All'],
+    title: { en: 'SSP Post-Matric Scholarship', kn: 'ಎಸ್‌ಎಸ್‌ಪಿ ಮೆಟ್ರಿಕ್-ನಂತರದ ವಿದ್ಯಾರ್ಥಿವೇತನ', hi: 'एसएसपी पोस्ट-मैट्रिक छात्रवृत्ति' },
+    desc: { en: 'Unified State Scholarship Portal (SSP) for post-matric students across all departments (SC/ST/OBC/Minority) for college fee reimbursement and maintenance allowance.', kn: 'ಕಾಲೇಜು ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಶುಲ್ಕ ಮರುಪಾವತಿ ಮತ್ತು ನಿರ್ವಹಣಾ ಭತ್ಯೆಗಾಗಿ ಏಕೀಕೃತ ರಾಜ್ಯ ವಿದ್ಯಾರ್ಥಿವೇತನ ಪೋರ್ಟಲ್ (ಎಸ್‌ಎಸ್‌ಪಿ).', hi: 'सभी विभागों के कॉलेज के छात्रों के लिए एकीकृत राज्य छात्रवृत्ति पोर्टल (SSP)।' },
+    eligibility: { en: 'Students studying in Class 11 (PUC) and above with family income within departmental limits (usually ₹2.5 Lakhs).', kn: 'ಪಿಯುಸಿ ಮತ್ತು ಮೇಲ್ಪಟ್ಟ ತರಗತಿಗಳಲ್ಲಿ ವ್ಯಾಸಂಗ ಮಾಡುತ್ತಿರುವ ವಿದ್ಯಾರ್ಥಿಗಳು.', hi: 'कक्षा 11 (पीयूसी) और उससे ऊपर के छात्र।' },
+    exclusions: { en: 'Students with family income above the prescribed limits.', kn: 'ನಿಗದಿತ ಮಿತಿಗಿಂತ ಹೆಚ್ಚಿನ ಆದಾಯ ಹೊಂದಿರುವವರು.', hi: 'निर्धारित सीमा से अधिक पारिवारिक आय वाले छात्र।' },
+    benefits: { subsidyPercent: 'Full Fee Reimbursement', maxLimit: 'Varies by course', mode: 'DBT to Aadhaar-linked Bank Account', interestSubvention: 'N/A' },
+    documents: { en: 'Aadhaar, Caste/Income Certificate, Fee Receipt, E-Attestation.', kn: 'ಆಧಾರ್, ಜಾತಿ/ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ, ಇ-ದೃಢೀಕರಣ.', hi: 'आधार, जाति/आय प्रमाण पत्र, ई-प्रमाणीकरण।' },
+    processSteps: [
+      { step: 1, title: { en: 'E-Attestation', kn: 'ಇ-ದೃಢೀಕರಣ', hi: 'ई-प्रमाणीकरण' }, desc: { en: 'Get documents verified by college E-Attestation officer.', kn: 'ಕಾಲೇಜಿನ ಅಧಿಕಾರಿಗಳಿಂದ ದಾಖಲೆಗಳನ್ನು ದೃಢೀಕರಿಸಿ.', hi: 'कॉलेज अधिकारी द्वारा दस्तावेजों का सत्यापन।' } },
+      { step: 2, title: { en: 'Apply on SSP', kn: 'ಎಸ್‌ಎಸ್‌ಪಿ ಅರ್ಜಿ', hi: 'SSP आवेदन' }, desc: { en: 'Submit the application using SATS ID.', kn: 'SATS ಐಡಿ ಬಳಸಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ.', hi: 'SATS ID का उपयोग करके आवेदन जमा करें।' } }
+    ],
+    timeline: 'Annual application cycle (Usually closes in March)',
+    img: 'https://images.unsplash.com/photo-1546410531-ea4cea477149?w=800&q=80',
+    badge: { en: 'Fee Reimbursement', kn: 'ಶುಲ್ಕ ಮರುಪಾವತಿ', hi: 'फीस वापसी' },
+    badgeClass: 'badge-primary',
+    ministry: { en: 'Multiple Departments, Karnataka', kn: 'ವಿವಿಧ ಇಲಾಖೆಗಳು, ಕರ್ನಾಟಕ', hi: 'विभिन्न विभाग, कर्नाटक' },
+    applyLink: 'https://ssp.postmatric.karnataka.gov.in/',
+    trackerUrl: 'https://ssp.postmatric.karnataka.gov.in/studentstatus.aspx'
+  },
+  {
+    id: 'raitha-vidya-nidhi',
+    category: 'Scholarship',
+    level: 'State',
+    beneficiary: ['Farmers Children', 'Students'],
+    objective: 'Higher Education',
+    stage: 'Class 8 to Post-Graduation',
+    districtSpecific: ['All'],
+    title: { en: 'Mukhyamantri Raitha Vidya Nidhi', kn: 'ಮುಖ್ಯಮಂತ್ರಿ ರೈತ ವಿದ್ಯಾನಿಧಿ', hi: 'मुख्यमंत्री रैथा विद्या निधि' },
+    desc: { en: 'Scholarship program exclusively for the children of farmers, weavers, and fishermen to encourage higher education.', kn: 'ರೈತರು, ನೇಕಾರರು ಮತ್ತು ಮೀನುಗಾರರ ಮಕ್ಕಳ ಉನ್ನತ ಶಿಕ್ಷಣವನ್ನು ಪ್ರೋತ್ಸಾಹಿಸಲು ವಿಶೇಷ ವಿದ್ಯಾರ್ಥಿವೇತನ.', hi: 'किसानों, बुनकरों और मछुआरों के बच्चों की उच्च शिक्षा को प्रोत्साहित करने के लिए छात्रवृत्ति।' },
+    eligibility: { en: 'Children of farmers with a valid FID (Farmer ID) studying from Class 8 to Post-Graduation.', kn: 'FID ಹೊಂದಿರುವ ರೈತರ ಮಕ್ಕಳು 8ನೇ ತರಗತಿಯಿಂದ ಸ್ನಾತಕೋತ್ತರ ಪದವಿಯವರೆಗೆ.', hi: 'कक्षा 8 से पोस्ट-ग्रेजुएशन तक पढ़ने वाले FID धारक किसानों के बच्चे।' },
+    exclusions: { en: 'Students failing their previous academic year.', kn: 'ಹಿಂದಿನ ತರಗತಿಯಲ್ಲಿ ಅನುತ್ತೀರ್ಣರಾದವರು.', hi: 'पिछले शैक्षणिक वर्ष में अनुत्तीर्ण छात्र।' },
+    benefits: { subsidyPercent: 'Direct Grant', maxLimit: '₹2,000 to ₹11,000 per year based on gender and course', mode: 'DBT', interestSubvention: 'N/A' },
+    documents: { en: 'Student Aadhaar, Farmer FID, Bank Account.', kn: 'ವಿದ್ಯಾರ್ಥಿ ಆಧಾರ್, ರೈತ FID, ಬ್ಯಾಂಕ್ ಖಾತೆ.', hi: 'छात्र का आधार, किसान FID, बैंक खाता।' },
+    processSteps: [
+      { step: 1, title: { en: 'Auto-processing via SSP', kn: 'ಎಸ್‌ಎಸ್‌ಪಿ ಮೂಲಕ ಪ್ರಕ್ರಿಯೆ', hi: 'SSP द्वारा स्वतः प्रक्रिया' }, desc: { en: 'Apply via SSP portal; system automatically fetches FID status.', kn: 'ಎಸ್‌ಎಸ್‌ಪಿ ಪೋರ್ಟಲ್ ಮೂಲಕ ಅರ್ಜಿ; ಸಿಸ್ಟಮ್ FID ಅನ್ನು ಪರಿಶೀಲಿಸುತ್ತದೆ.', hi: 'SSP पोर्टल के माध्यम से आवेदन।' } }
+    ],
+    timeline: 'Disbursed during the academic year',
+    img: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80',
+    badge: { en: 'For Farmers Children', kn: 'ರೈತರ ಮಕ್ಕಳಿಗೆ', hi: 'किसानों के बच्चों के लिए' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Dept. of Agriculture, Karnataka', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ', hi: 'कृषि विभाग, कर्नाटक' },
+    applyLink: 'https://ssp.postmatric.karnataka.gov.in/',
+    trackerUrl: 'https://ssp.postmatric.karnataka.gov.in/studentstatus.aspx'
+  }
+
 ];
