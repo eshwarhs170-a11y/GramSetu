@@ -1,10 +1,11 @@
 import fs from 'fs';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
+import 'dotenv/config';
 
-// 1. Firebase Config from src/firebase.js
+// 1. Firebase Config — API key loaded from .env (never hardcode secrets)
 const firebaseConfig = {
-  apiKey: "REDACTED_USE_ENV_VAR",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "gramsetu-ed75a.firebaseapp.com",
   projectId: "gramsetu-ed75a",
   storageBucket: "gramsetu-ed75a.firebasestorage.app",
