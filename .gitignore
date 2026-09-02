@@ -29,3 +29,28 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Development / one-off scripts — not part of the app
+*.cjs
+fetch*.js
+fix_*.js
+download_*.js
+update_*.js
+inject_*.js
+upgrade_*.js
+refactor.cjs
+scratch/
+
+# Temporary data / output files
+*.txt
+old_*.json
+bbmp*.json
+bbmp*.html
+lgd_response*.txt
+ocr_data.txt
+test_download.*
+test.jsx
+wiki_wards.html
+
+# Dist build (local only)
+dist/
