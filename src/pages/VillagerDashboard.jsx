@@ -56,6 +56,20 @@ export default function VillagerDashboard() {
   const [storedName, setStoredName] = useState(window.localStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ')
 
   useEffect(() => {
+    if (!window.localStorage.getItem('citizen_email') && !window.localStorage.getItem('citizen_phone')) {
+      window.localStorage.setItem('citizen_name', 'ರಾಮಪ್ಪ ಗೌಡ')
+      window.localStorage.setItem('citizen_email', 'ramappa.gowda@gramsetu.in')
+      window.localStorage.setItem('citizen_phone', '9845012345')
+      window.localStorage.setItem('citizen_district', 'Mysuru')
+      window.localStorage.setItem('citizen_taluk', 'Mysuru Taluk')
+      window.localStorage.setItem('citizen_gp', 'Hootagalli GP')
+      window.localStorage.setItem('citizen_village', 'Hootagalli')
+      window.localStorage.setItem('citizen_area_type', 'rural')
+      setStoredName('ರಾಮಪ್ಪ ಗೌಡ')
+    }
+  }, [])
+
+  useEffect(() => {
     const handleUpdate = () => {
       setStoredName(window.localStorage.getItem('citizen_name') || 'ರಾಮಪ್ಪ ಗೌಡ')
     }

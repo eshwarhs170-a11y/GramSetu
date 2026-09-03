@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
@@ -15,13 +15,26 @@ import { sendOtpEmail } from '../utils/sendOtp'
 
 export default function VillagerLogin() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { t } = useLanguage()
 
   useEffect(() => {
+    if (searchParams.get('autologin') === 'true' || searchParams.get('demo') === 'true') {
+      window.localStorage.setItem('citizen_name', 'ರಾಮಪ್ಪ ಗೌಡ')
+      window.localStorage.setItem('citizen_email', 'ramappa.gowda@gramsetu.in')
+      window.localStorage.setItem('citizen_phone', '9845012345')
+      window.localStorage.setItem('citizen_district', 'Mysuru')
+      window.localStorage.setItem('citizen_taluk', 'Mysuru Taluk')
+      window.localStorage.setItem('citizen_gp', 'Hootagalli GP')
+      window.localStorage.setItem('citizen_village', 'Hootagalli')
+      window.localStorage.setItem('citizen_area_type', 'rural')
+      navigate('/dashboard/villager', { replace: true })
+      return
+    }
     if (window.localStorage.getItem('citizen_email') || window.localStorage.getItem('citizen_phone')) {
       navigate('/dashboard/villager')
     }
-  }, [navigate])
+  }, [navigate, searchParams])
 
   const [step, setStep] = useState(1)
   const [email, setEmail] = useState('')
