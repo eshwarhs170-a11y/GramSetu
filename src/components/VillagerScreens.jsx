@@ -318,16 +318,16 @@ export function HomeScreen({ setActive }) {
               </p>
             </div>
           </div>
-          <div style={{ display: 'flex', overflowX: 'auto', padding: '14px 20px', gap: 14, scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+          <div style={{ display: 'flex', overflowX: 'auto', padding: '16px 20px', gap: 16, scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
             {districtCropsMap[normalizeDistrict(userDistrict)].map((crop, idx) => (
               <div
                 key={idx}
-                style={{ minWidth: 80, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, cursor: 'pointer', transition: 'transform 0.2s', flexShrink: 0 }}
+                style={{ minWidth: 90, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, cursor: 'pointer', transition: 'transform 0.2s', flexShrink: 0 }}
                 onClick={() => setSelectedCropInfo(cropInfoMap[crop])}
                 onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.07)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
               >
-                <div style={{ width: 68, height: 68, borderRadius: '50%', overflow: 'hidden', border: '3px solid var(--border-light)', boxShadow: '0 3px 8px rgba(0,0,0,0.09)', flexShrink: 0 }}>
+                <div style={{ width: 84, height: 84, borderRadius: '50%', overflow: 'hidden', border: '3px solid var(--border-light)', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', flexShrink: 0 }}>
                   <img
                     src={cropImageMap[crop] || cropInfoMap[crop]?.image || `/crops/${crop.replace(/\s+/g, '_')}.jpg`}
                     alt={crop}
@@ -335,7 +335,7 @@ export function HomeScreen({ setActive }) {
                     onError={e => { e.currentTarget.src = '/crops/Paddy.jpg'; }}
                   />
                 </div>
-                <span style={{ fontSize: 11, fontWeight: 600, textAlign: 'center', color: 'var(--text-main)', maxWidth: 78, lineHeight: 1.3 }}>{crop}</span>
+                <span style={{ fontSize: 11, fontWeight: 600, textAlign: 'center', color: 'var(--text-main)', maxWidth: 88, lineHeight: 1.3 }}>{crop}</span>
               </div>
             ))}
           </div>
@@ -731,7 +731,7 @@ export function HomeScreen({ setActive }) {
               onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 3px 10px rgba(22, 163, 74, 0.25)'; }}
             >
               <MapPinOff size={15} strokeWidth={2.2} />
-              <span>{lang === 'kn' ? 'ಗ್ರಾಮ ಸೇರಿಸಿ' : 'Report Village'}</span>
+              <span style={{ whiteSpace: 'nowrap' }}>{lang === 'kn' ? 'ಗ್ರಾಮ ಸೇರಿಸಿ' : 'Report Village'}</span>
             </button>
             <button
               type="button"
@@ -758,7 +758,7 @@ export function HomeScreen({ setActive }) {
               onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'var(--border, #cbd5e1)'; e.currentTarget.style.color = 'var(--text-main, #0f172a)'; }}
             >
               <HelpCircle size={15} strokeWidth={2.2} />
-              <span>{lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಕೇಳಿ' : 'Ask Question'}</span>
+              <span style={{ whiteSpace: 'nowrap' }}>{lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಕೇಳಿ' : 'Ask Question'}</span>
             </button>
           </div>
         </div>
