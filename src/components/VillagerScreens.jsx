@@ -304,6 +304,44 @@ export function HomeScreen({ setActive }) {
         </div>
       </div>
 
+      {/* ── Suitable Crops – RIGHT after banner, visible on mobile without scrolling ── */}
+      {roleMode === 'farmer' && districtCropsMap[normalizeDistrict(userDistrict)] && (
+        <div className="animate-fadeInUp card" style={{ marginBottom: 20, padding: 0 }}>
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Sprout size={17} style={{ color: 'var(--primary)', flexShrink: 0 }} />
+            <div>
+              <h4 style={{ fontSize: 14, fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
+                {lang === 'kn' ? `${userDistrict} ಜಿಲ್ಲೆಗೆ ಸೂಕ್ತವಾದ ಬೆಳೆಗಳು` : `Suitable Crops — ${userDistrict}`}
+              </h4>
+              <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
+                {lang === 'kn' ? 'ತೊಟ್ಟಿಕೆ ಮಾಡಿ ವಿವರ ನೋಡಿ' : 'Tap a crop for details'}
+              </p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', overflowX: 'auto', padding: '14px 20px', gap: 14, scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+            {districtCropsMap[normalizeDistrict(userDistrict)].map((crop, idx) => (
+              <div
+                key={idx}
+                style={{ minWidth: 80, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, cursor: 'pointer', transition: 'transform 0.2s', flexShrink: 0 }}
+                onClick={() => setSelectedCropInfo(cropInfoMap[crop])}
+                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.07)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                <div style={{ width: 68, height: 68, borderRadius: '50%', overflow: 'hidden', border: '3px solid var(--border-light)', boxShadow: '0 3px 8px rgba(0,0,0,0.09)', flexShrink: 0 }}>
+                  <img
+                    src={cropImageMap[crop] || cropInfoMap[crop]?.image || `/crops/${crop.replace(/\s+/g, '_')}.jpg`}
+                    alt={crop}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    onError={e => { e.currentTarget.src = '/crops/Paddy.jpg'; }}
+                  />
+                </div>
+                <span style={{ fontSize: 11, fontWeight: 600, textAlign: 'center', color: 'var(--text-main)', maxWidth: 78, lineHeight: 1.3 }}>{crop}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Dynamic Profile Selector in Home Screen */}
       <div className="card" style={{ marginBottom: 20, padding: '16px 20px' }}>
         <div>
@@ -404,41 +442,6 @@ export function HomeScreen({ setActive }) {
           </div>
         ))}
       </div>
-
-      
-      {roleMode === 'farmer' && districtCropsMap[userDistrict] && (
-        <div className="animate-fadeInUp card" style={{ marginBottom: 20, padding: 0 }}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              <h4 style={{ fontSize: 15, fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Sprout size={18} style={{ color: 'var(--primary)' }} />
-                {lang === 'kn' ? `${userDistrict} ಜಿಲ್ಲೆಗೆ ಸೂಕ್ತವಾದ ಬೆಳೆಗಳು` : `Suitable Crops for ${userDistrict}`}
-              </h4>
-              <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-                {lang === 'kn' ? 'ನಿಮ್ಮ ಜಿಲ್ಲೆಯಲ್ಲಿ ಬೆಳೆಯಬಹುದಾದ ಪ್ರಮುಖ 10 ಬೆಳೆಗಳು' : 'Top 10 major crops suitable for your district'}
-              </p>
-            </div>
-          </div>
-          <div style={{ display: 'flex', overflowX: 'auto', padding: '16px 20px', gap: 16, scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
-            {districtCropsMap[userDistrict].map((crop, idx) => (
-              
-              <div 
-                key={idx} 
-                style={{ minWidth: 100, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, cursor: 'pointer', transition: 'transform 0.2s' }}
-                onClick={() => setSelectedCropInfo(cropInfoMap[crop])}
-                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-              >
-
-                <div style={{ width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', border: '3px solid #f1f5f9', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-                  <img src={cropImageMap[crop] || cropInfoMap[crop]?.image || `/crops/${crop.replace(/\s+/g, '_')}.jpg`} alt={crop} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <span style={{ fontSize: 12, fontWeight: 600, textAlign: 'center', color: 'var(--text-main)' }}>{crop}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {roleMode === 'student' && (
         <div className="animate-fadeInUp card" style={{ marginBottom: 20, border: '1.5px solid var(--primary-light)', background: 'var(--bg-card)' }}>
