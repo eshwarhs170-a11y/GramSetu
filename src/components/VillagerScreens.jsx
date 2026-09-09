@@ -266,7 +266,7 @@ export function HomeScreen({ setActive }) {
   }, [])
 
   return (
-    <div className="animate-fadeInUp" style={{ maxWidth: 900 }}>
+    <div className="animate-fadeInUp">
       <div className="welcome-banner">
         <div className="welcome-banner-bg" />
         <div className="welcome-banner-bg2" />
