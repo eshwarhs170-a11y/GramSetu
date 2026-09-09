@@ -333,65 +333,213 @@ export function HomeScreen({ setActive }) {
         </div>
       </div>
 
-      {/* ── Farmer Inquiry & Missing Village Banner Card ── */}
-      <div className="animate-fadeInUp card" style={{
-        marginBottom: 20,
-        padding: '16px 20px',
-        background: 'linear-gradient(135deg, rgba(22, 163, 74, 0.09) 0%, rgba(37, 99, 235, 0.06) 100%)',
-        border: '1.5px solid rgba(22, 163, 74, 0.28)',
-        borderRadius: '16px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: 14
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{
-            width: 44, height: 44, borderRadius: 12,
-            background: 'linear-gradient(135deg, #16a34a, #15803d)',
-            color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)', flexShrink: 0
-          }}>
-            <HelpCircle size={22} strokeWidth={2.2} />
+      {/* ── Stats Grid (Active Schemes, My Complaints, New Alerts) ── */}
+      <div className="stats-grid">
+        {[
+          { Icon: Landmark,         labelKey: 'activeSchemes',    value: '6',                             color: '#dbeafe', iconColor: '#1d4ed8', trend: '+1 Raitha Siri', pageId: 'schemes' },
+          { Icon: ClipboardList,    labelKey: 'myComplaints',     value: String(globalComplaints.length), color: '#fee2e2', iconColor: '#dc2626', trend: `${globalComplaints.filter(c => c.status === 'resolved').length} resolved`, pageId: 'complaint' },
+          { Icon: Bell,             labelKey: 'newAlerts',        value: '4',                             color: '#fef3c7', iconColor: '#d97706', trend: '2 urgent', pageId: 'announcements' }
+        ].map((s, i) => (
+          <div 
+            className="stat-card animate-fadeInUp" 
+            key={i} 
+            style={{ animationDelay: `${i * 0.08}s`, cursor: 'pointer' }}
+            onClick={() => setActive(s.pageId)}
+          >
+            <div className="stat-icon" style={{ background: s.color, color: s.iconColor }}>
+              <s.Icon size={22} strokeWidth={2} />
+            </div>
+            <div className="stat-info">
+              <p>{t(s.labelKey)}</p>
+              <p>{s.value}</p>
+              <span>{s.trend}</span>
+            </div>
           </div>
-          <div>
-            <h4 style={{ margin: 0, fontSize: 15, fontWeight: 800, color: 'var(--text-main)' }}>
-              {lang === 'kn' ? 'ಗ್ರಾಮ ಕಾಣಿಸುತ್ತಿಲ್ಲವೇ ಅಥವಾ ಕೃಷಿ ಪ್ರಶ್ನೆ ಇದೆಯೇ?' : "Can't find your village or have a farming query?"}
-            </h4>
-            <p style={{ margin: '3px 0 0', fontSize: 12, color: 'var(--text-secondary)' }}>
-              {lang === 'kn'
-                ? 'ವಿವರಗಳನ್ನು ನೇರವಾಗಿ ಸರ್ಕಾರಿ ಡೇಟಾಬೇಸ್‌ಗೆ ಕಳುಹಿಸಿ — ನೋಡೆಲ್ ಅಧಿಕಾರಿಗಳು ಶೀಘ್ರ ಪರಿಹರಿಸುತ್ತಾರೆ'
-                : 'Send missing village names or questions directly to our database for nodal officer resolution.'}
-            </p>
+        ))}
+      </div>
+
+      {/* ── Crop Doctor Quick Action ── */}
+      <div
+        className="animate-fadeInUp"
+        onClick={() => setActive ? setActive('crop-doctor') : navigate('/crop-doctor')}
+        style={{
+          cursor: 'pointer',
+          background: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)',
+          borderRadius: 18,
+          padding: '16px 20px',
+          marginBottom: 20,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 16,
+          boxShadow: '0 8px 24px rgba(6,78,59,0.22), 0 2px 6px rgba(0,0,0,0.06)',
+          border: '1px solid rgba(34,197,94,0.3)',
+          transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(6,78,59,0.32)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(6,78,59,0.22)'; }}
+      >
+        <div style={{
+          background: 'rgba(34,197,94,0.22)',
+          borderRadius: 12,
+          padding: '10px',
+          border: '1.5px solid rgba(34,197,94,0.35)',
+          flexShrink: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#4ade80'
+        }}>
+          <Bot size={24} strokeWidth={2.2} />
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', marginBottom: 2 }}>
+            {lang === 'kn' ? 'ಬೆಳೆ ವೈದ್ಯ — AI ರೋಗ ಪರೀಕ್ಷೆ' : 'Crop Doctor — AI Disease Scanner'}
+          </div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>
+            {lang === 'kn' ? 'ಕ್ಯಾಮರಾ ಮೂಲಕ ಬೆಳೆ ರೋಗ ಗುರುತಿಸಿ ಮತ್ತು ತಕ್ಷಣ ಪರಿಹಾರ ಪಡೆಯಿರಿ' : 'Point camera at crop to detect disease instantly'}
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new CustomEvent('gramSetuOpenInquiry', { detail: { category: 'missing_village' } }))}
-            style={{
-              background: '#16a34a', color: '#fff', border: 'none', borderRadius: 10,
-              padding: '9px 15px', fontSize: 12, fontWeight: 700, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 6,
-              boxShadow: '0 2px 8px rgba(22, 163, 74, 0.25)'
-            }}
-          >
-            <MapPinOff size={14} strokeWidth={2.2} />
-            <span>{lang === 'kn' ? 'ಗ್ರಾಮ ಸೇರಿಸಿ' : 'Report Village'}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new CustomEvent('gramSetuOpenInquiry', { detail: { category: 'question' } }))}
-            style={{
-              background: 'var(--bg-card)', color: 'var(--text-main)', border: '1px solid var(--border)',
-              borderRadius: 10, padding: '9px 15px', fontSize: 12, fontWeight: 700,
-              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6
-            }}
-          >
-            <HelpCircle size={14} strokeWidth={2.2} />
-            <span>{lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಕೇಳಿ' : 'Ask Question'}</span>
-          </button>
+        <div style={{
+          width: 32,
+          height: 32,
+          borderRadius: 8,
+          background: 'rgba(255, 255, 255, 0.12)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#4ade80',
+          flexShrink: 0
+        }}>
+          <ArrowRight size={16} />
+        </div>
+      </div>
+
+      {/* ── Farmer Inquiry & Missing Village Banner Card (Placed Below Active Schemes & Crop Doctor) ── */}
+      <div 
+        className="animate-fadeInUp card inquiry-feature-card" 
+        style={{
+          marginBottom: 20,
+          padding: '18px 20px',
+          background: 'linear-gradient(135deg, rgba(22, 163, 74, 0.08) 0%, rgba(37, 99, 235, 0.05) 50%, rgba(16, 185, 129, 0.07) 100%)',
+          border: '1.5px solid rgba(22, 163, 74, 0.24)',
+          borderRadius: '18px',
+          boxShadow: '0 6px 20px -4px rgba(22, 163, 74, 0.1), 0 2px 6px -1px rgba(0, 0, 0, 0.03)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Subtle decorative glow */}
+        <div style={{
+          position: 'absolute',
+          top: -24,
+          right: -24,
+          width: 100,
+          height: 100,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(34, 197, 94, 0.14) 0%, transparent 70%)',
+          pointerEvents: 'none'
+        }} />
+
+        {/* 1st line starts with the Question Mark Icon */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+            <div style={{
+              width: 30,
+              height: 30,
+              borderRadius: 9,
+              background: 'linear-gradient(135deg, #16a34a, #15803d)',
+              color: '#fff',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 3px 8px rgba(22, 163, 74, 0.28)',
+              flexShrink: 0
+            }}>
+              <HelpCircle size={17} strokeWidth={2.4} />
+            </div>
+            <h4 style={{ margin: 0, fontSize: 15, fontWeight: 800, color: 'var(--text-main)', lineHeight: 1.3 }}>
+              {lang === 'kn' ? 'ಗ್ರಾಮ ಕಾಣಿಸುತ್ತಿಲ್ಲವೇ ಅಥವಾ ಕೃಷಿ ಪ್ರಶ್ನೆ ಇದೆಯೇ?' : "Can't find your village or have a farming query?"}
+            </h4>
+          </div>
+
+          {/* Small text below occupies full width so it fits within 2 lines */}
+          <p style={{
+            margin: '0 0 16px 0',
+            fontSize: 12.5,
+            lineHeight: 1.5,
+            color: 'var(--text-secondary)'
+          }}>
+            {lang === 'kn'
+              ? 'ವಿವರಗಳನ್ನು ನೇರವಾಗಿ ಸರ್ಕಾರಿ ಡೇಟಾಬೇಸ್‌ಗೆ ಕಳುಹಿಸಿ — ನೋಡೆಲ್ ಅಧಿಕಾರಿಗಳು ಪರಿಶೀಲಿಸಿ ಪರಿಹರಿಸುತ್ತಾರೆ.'
+              : 'Send missing village names or questions directly to our database for nodal officer resolution.'}
+          </p>
+
+          {/* Report village and ask question buttons in the middle */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 12,
+            flexWrap: 'wrap',
+            width: '100%'
+          }}>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('gramSetuOpenInquiry', { detail: { category: 'missing_village' } }))}
+              style={{
+                background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 11,
+                padding: '10px 18px',
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 7,
+                boxShadow: '0 3px 10px rgba(22, 163, 74, 0.25)',
+                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                flex: '1 1 140px',
+                maxWidth: '220px'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(22, 163, 74, 0.35)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 3px 10px rgba(22, 163, 74, 0.25)'; }}
+            >
+              <MapPinOff size={15} strokeWidth={2.2} />
+              <span>{lang === 'kn' ? 'ಗ್ರಾಮ ಸೇರಿಸಿ' : 'Report Village'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('gramSetuOpenInquiry', { detail: { category: 'question' } }))}
+              style={{
+                background: 'var(--bg-card, #ffffff)',
+                color: 'var(--text-main, #0f172a)',
+                border: '1.5px solid var(--border, #cbd5e1)',
+                borderRadius: 11,
+                padding: '10px 18px',
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 7,
+                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.04)',
+                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                flex: '1 1 140px',
+                maxWidth: '220px'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = '#16a34a'; e.currentTarget.style.color = '#16a34a'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'var(--border, #cbd5e1)'; e.currentTarget.style.color = 'var(--text-main, #0f172a)'; }}
+            >
+              <HelpCircle size={15} strokeWidth={2.2} />
+              <span>{lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಕೇಳಿ' : 'Ask Question'}</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -565,60 +713,6 @@ export function HomeScreen({ setActive }) {
           </div>
         </div>
       )}
-
-      <div className="stats-grid">
-        {[
-          { Icon: Landmark,         labelKey: 'activeSchemes',    value: '6',      color: '#dbeafe', iconColor: '#1d4ed8', trend: '+1 Raitha Siri', pageId: 'schemes' },
-          { Icon: ClipboardList,    labelKey: 'myComplaints',     value: String(globalComplaints.length), color: '#fee2e2', iconColor: '#dc2626', trend: `${globalComplaints.filter(c => c.status === 'resolved').length} resolved`, pageId: 'complaint' },
-          { Icon: Bell,             labelKey: 'newAlerts',        value: '4',      color: '#fef3c7', iconColor: '#d97706', trend: '2 urgent', pageId: 'announcements' }
-        ].map((s, i) => (
-          <div 
-            className="stat-card animate-fadeInUp" 
-            key={i} 
-            style={{ animationDelay: `${i * 0.1}s`, cursor: 'pointer' }}
-            onClick={() => setActive(s.pageId)}
-          >
-            <div className="stat-icon" style={{ background: s.color, color: s.iconColor }}>
-              <s.Icon size={22} strokeWidth={1.8} />
-            </div>
-            <div className="stat-info">
-              <p>{t(s.labelKey)}</p>
-              <p>{s.value}</p>
-              <span>{s.trend}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Crop Doctor Quick Action ── */}
-      <div
-        className="animate-fadeInUp"
-        onClick={() => setActive ? setActive('crop-doctor') : navigate('/crop-doctor')}
-        style={{
-          cursor: 'pointer',
-          background: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)',
-          borderRadius: 16, padding: '18px 20px', marginBottom: 20,
-          display: 'flex', alignItems: 'center', gap: 16,
-          boxShadow: '0 8px 24px rgba(6,78,59,0.25)',
-          border: '1px solid rgba(34,197,94,0.3)',
-          transition: 'transform 0.2s, box-shadow 0.2s',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(6,78,59,0.35)'; }}
-        onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 8px 24px rgba(6,78,59,0.25)'; }}
-      >
-        <div style={{ background: 'rgba(34,197,94,0.2)', borderRadius: 12, padding: '10px 12px', border: '1px solid rgba(34,197,94,0.3)', flexShrink: 0 }}>
-          <span style={{ fontSize: 28 }}>🔬</span>
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 16, fontWeight: 900, color: '#fff', marginBottom: 2 }}>
-            {lang === 'kn' ? 'ಬೆಳೆ ವೈದ್ಯ — AI ರೋಗ ಪರೀಕ್ಷೆ' : 'Crop Doctor — AI Disease Scanner'}
-          </div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)', fontWeight: 500 }}>
-            {lang === 'kn' ? 'ಕ್ಯಾಮರಾ ಮೂಲಕ ಬೆಳೆ ರೋಗ ಗುರುತಿಸಿ' : 'Point camera at crop to detect disease instantly'}
-          </div>
-        </div>
-        <div style={{ color: '#22c55e', fontWeight: 800, fontSize: 20 }}>→</div>
-      </div>
 
       <div className="content-grid">
         <div>
