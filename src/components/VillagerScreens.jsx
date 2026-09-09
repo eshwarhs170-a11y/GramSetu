@@ -266,7 +266,7 @@ export function HomeScreen({ setActive }) {
   }, [])
 
   return (
-    <div className="animate-fadeInUp">
+    <div className="animate-fadeInUp" style={{ maxWidth: 900 }}>
       <div className="welcome-banner">
         <div className="welcome-banner-bg" />
         <div className="welcome-banner-bg2" />
@@ -407,7 +407,7 @@ export function HomeScreen({ setActive }) {
 
       
       {roleMode === 'farmer' && districtCropsMap[userDistrict] && (
-        <div className="animate-fadeInUp card" style={{ marginBottom: 20, padding: 0, overflow: 'hidden' }}>
+        <div className="animate-fadeInUp card" style={{ marginBottom: 20, padding: 0 }}>
           <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
               <h4 style={{ fontSize: 15, fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>

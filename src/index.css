@@ -753,9 +753,9 @@ input, textarea, select { font-family: inherit; outline: none; }
 /* ===== STATS GRID ===== */
 .stats-grid { 
   display: grid; 
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  grid-template-columns: repeat(3, 1fr); 
   gap: 16px; 
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 .stat-card {
   background: var(--bg-card);
@@ -977,7 +977,7 @@ input, textarea, select { font-family: inherit; outline: none; }
   background: rgba(255,255,255,0.03);
   border-radius: 50%;
 }
-.welcome-banner-text h2 { font-size: 22px; font-weight: 800; color: #fff; font-family: 'Poppins', sans-serif; }
+.welcome-banner-text h2 { font-size: 22px; font-weight: 800; color: #fff; font-family: 'Poppins', sans-serif; display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; white-space: nowrap; }
 .welcome-banner-text p { font-size: 14px; color: rgba(255,255,255,0.75); margin-top: 4px; }
 .welcome-banner-img { width: 120px; position: relative; z-index: 1; }
 .welcome-banner-img img { width: 100%; border-radius: var(--radius-md); }
