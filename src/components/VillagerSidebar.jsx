@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext'
 import {
   LayoutDashboard, Landmark, TrendingUp, Megaphone,
   ClipboardList, SearchCheck, UserCircle, Wheat,
-  X, LogOut, ChevronRight, Cloud, ShieldAlert, PlayCircle, Camera
+  X, LogOut, ChevronRight, Cloud, ShieldAlert, PlayCircle, Camera, HelpCircle
 } from 'lucide-react'
 
 export default function VillagerSidebar({ active, setActive, sidebarOpen, setSidebarOpen }) {
@@ -57,6 +57,7 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
     { id: 'complaint',     icon: ClipboardList,   labelKey: 'sNavComplaint' },
     { id: 'status',        icon: SearchCheck,     labelKey: 'sNavStatus' },
     { id: 'profile',       icon: UserCircle,      labelKey: 'sNavProfile' },
+    { id: 'inquiry',       icon: HelpCircle,      labelKey: 'askQuestionOrReport' },
   ]
 
   return (
@@ -100,7 +101,14 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
             <div
               key={item.id}
               className={`nav-item ${active === item.id ? 'active' : ''}`}
-              onClick={() => setActive(item.id)}
+              onClick={() => {
+                if (item.id === 'inquiry') {
+                  window.dispatchEvent(new CustomEvent('gramSetuOpenInquiry', { detail: { category: 'question' } }))
+                  setSidebarOpen(false)
+                  return
+                }
+                setActive(item.id)
+              }}
             >
               <Icon size={18} strokeWidth={1.8} style={{ flexShrink: 0 }} />
               <span>{t(item.labelKey) || (item.id === 'crop-doctor' ? 'Crop Doctor (AR)' : item.labelKey)}</span>

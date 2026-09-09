@@ -11,7 +11,8 @@ import {
   WeatherScreen, EmergencySOSScreen, TutorialsScreen
 } from '../components/VillagerScreens'
 import CropScanner from '../components/CropScanner'
-import { Menu, Search, Bell, X, AlertTriangle, IndianRupee, LayoutDashboard, Landmark, Microscope, ClipboardList, User, Wheat } from 'lucide-react'
+import { Menu, Search, Bell, X, AlertTriangle, IndianRupee, LayoutDashboard, Landmark, Microscope, ClipboardList, User, Wheat, HelpCircle } from 'lucide-react'
+import FarmerInquiryModal from '../components/FarmerInquiryModal'
 
 import { db } from '../firebase'
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
@@ -32,9 +33,20 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
   const [notifExpanded, setNotifExpanded] = useState(null)
   const [announcements, setAnnouncements] = useState([])
   const [marketAlert, setMarketAlert] = useState(null)
+  const [inquiryModalOpen, setInquiryModalOpen] = useState(false)
+  const [inquiryCategory, setInquiryCategory] = useState('question')
   const { t, lang } = useLanguage()
   const { speak } = useVoice()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const handleOpenInquiry = (e) => {
+      if (e.detail?.category) setInquiryCategory(e.detail.category)
+      setInquiryModalOpen(true)
+    }
+    window.addEventListener('gramSetuOpenInquiry', handleOpenInquiry)
+    return () => window.removeEventListener('gramSetuOpenInquiry', handleOpenInquiry)
+  }, [])
 
   useEffect(() => {
     const mountTime = new Date()
@@ -218,6 +230,14 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
               <Search size={18} strokeWidth={2} />
             </button>
 
+            <button
+              className="topbar-icon-btn"
+              title={lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಕೇಳಿ / ಗ್ರಾಮ ವರದಿ' : 'Ask Question / Report Missing Info'}
+              onClick={() => { setInquiryCategory('question'); setInquiryModalOpen(true); }}
+            >
+              <HelpCircle size={18} strokeWidth={2} />
+            </button>
+
             <div style={{ position: 'relative' }}>
               <button type="button" className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
                 <Bell size={18} strokeWidth={2} />
@@ -395,6 +415,13 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
           </div>
         </div>
       )}
+
+      {/* Inquiry Modal */}
+      <FarmerInquiryModal
+        isOpen={inquiryModalOpen}
+        onClose={() => setInquiryModalOpen(false)}
+        defaultCategory={inquiryCategory}
+      />
     </div>
   )
 }

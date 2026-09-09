@@ -41,6 +41,7 @@ import {
   Lock,
   Map,
   MapPin,
+  MapPinOff,
   Megaphone,
   MessageCircle,
   Minus,
@@ -328,6 +329,68 @@ export function HomeScreen({ setActive }) {
             }}
           >
             <GraduationCap className={roleMode === 'student' ? 'text-white' : 'text-purple-500'} size={16} /> {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿ' : 'Student'}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Farmer Inquiry & Missing Village Banner Card ── */}
+      <div className="animate-fadeInUp card" style={{
+        marginBottom: 20,
+        padding: '16px 20px',
+        background: 'linear-gradient(135deg, rgba(22, 163, 74, 0.09) 0%, rgba(37, 99, 235, 0.06) 100%)',
+        border: '1.5px solid rgba(22, 163, 74, 0.28)',
+        borderRadius: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: 14
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{
+            width: 44, height: 44, borderRadius: 12,
+            background: 'linear-gradient(135deg, #16a34a, #15803d)',
+            color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)', flexShrink: 0
+          }}>
+            <HelpCircle size={22} strokeWidth={2.2} />
+          </div>
+          <div>
+            <h4 style={{ margin: 0, fontSize: 15, fontWeight: 800, color: 'var(--text-main)' }}>
+              {lang === 'kn' ? 'ಗ್ರಾಮ ಕಾಣಿಸುತ್ತಿಲ್ಲವೇ ಅಥವಾ ಕೃಷಿ ಪ್ರಶ್ನೆ ಇದೆಯೇ?' : "Can't find your village or have a farming query?"}
+            </h4>
+            <p style={{ margin: '3px 0 0', fontSize: 12, color: 'var(--text-secondary)' }}>
+              {lang === 'kn'
+                ? 'ವಿವರಗಳನ್ನು ನೇರವಾಗಿ ಸರ್ಕಾರಿ ಡೇಟಾಬೇಸ್‌ಗೆ ಕಳುಹಿಸಿ — ನೋಡೆಲ್ ಅಧಿಕಾರಿಗಳು ಶೀಘ್ರ ಪರಿಹರಿಸುತ್ತಾರೆ'
+                : 'Send missing village names or questions directly to our database for nodal officer resolution.'}
+            </p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('gramSetuOpenInquiry', { detail: { category: 'missing_village' } }))}
+            style={{
+              background: '#16a34a', color: '#fff', border: 'none', borderRadius: 10,
+              padding: '9px 15px', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 6,
+              boxShadow: '0 2px 8px rgba(22, 163, 74, 0.25)'
+            }}
+          >
+            <MapPinOff size={14} strokeWidth={2.2} />
+            <span>{lang === 'kn' ? 'ಗ್ರಾಮ ಸೇರಿಸಿ' : 'Report Village'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('gramSetuOpenInquiry', { detail: { category: 'question' } }))}
+            style={{
+              background: 'var(--bg-card)', color: 'var(--text-main)', border: '1px solid var(--border)',
+              borderRadius: 10, padding: '9px 15px', fontSize: 12, fontWeight: 700,
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6
+            }}
+          >
+            <HelpCircle size={14} strokeWidth={2.2} />
+            <span>{lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಕೇಳಿ' : 'Ask Question'}</span>
           </button>
         </div>
       </div>
@@ -2479,11 +2542,13 @@ export function ComplaintScreen() {
     setCameraMode('idle')
   }
 
+  const [editingComplaintId, setEditingComplaintId] = useState(null)
+
   const handleComplaintSubmit = async (e) => {
     e.preventDefault()
     if (!selected || !subject || !description) return
 
-    const randomId = 'GS-KA-0' + Math.floor(500 + Math.random() * 500)
+    const randomId = editingComplaintId || ('GS-KA-0' + Math.floor(500 + Math.random() * 500))
     const newComplaintObj = {
       id: randomId,
       title: `${subject} — ${location}`,
@@ -2491,7 +2556,7 @@ export function ComplaintScreen() {
       date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
       category: selected,
       assignedTo: `Taluk Office, ${taluk}`,
-      lastUpdate: 'Assigned to nodal officer',
+      lastUpdate: editingComplaintId ? (lang === 'kn' ? 'ನಾಗರಿಕರಿಂದ ದೂರು ವಿವರಗಳು ತಿದ್ದುಪಡಿಗೊಂಡಿವೆ' : 'Complaint updated by citizen') : 'Assigned to nodal officer',
       submittedBy: userName || window.localStorage.getItem('citizen_name') || 'Anonymous',
       submittedPhone: window.localStorage.getItem('citizen_phone') || '',
       submittedEmail: window.localStorage.getItem('citizen_email') || '',
@@ -2510,7 +2575,11 @@ export function ComplaintScreen() {
     }
 
     // Also update local state
-    globalComplaints = [{ ...newComplaintObj, photo: photoUri }, ...globalComplaints]
+    if (editingComplaintId) {
+      globalComplaints = globalComplaints.map(c => c.id === editingComplaintId ? { ...c, ...newComplaintObj, photo: photoUri } : c)
+    } else {
+      globalComplaints = [{ ...newComplaintObj, photo: photoUri }, ...globalComplaints]
+    }
     notifyComplaintListeners()
     stopCamera()
     setNewComplaintId(randomId)
@@ -2520,6 +2589,12 @@ export function ComplaintScreen() {
   const handleReset = () => {
     setSelected(''); setSubject(''); setDescription('')
     setPhotoUri(null); stopCamera(); setCameraMode('idle'); setSubmitted(false)
+    setEditingComplaintId(null)
+  }
+
+  const handleEditComplaint = () => {
+    setEditingComplaintId(newComplaintId)
+    setSubmitted(false)
   }
 
   if (submitted) {
@@ -2533,7 +2608,18 @@ export function ComplaintScreen() {
         <p style={{ color: 'var(--text-secondary)', fontSize: 14, maxWidth: 420, marginBottom: 24 }}>
           {t('complaintMsg')}
         </p>
-        <button className="btn btn-primary" onClick={handleReset}>{t('fileAnother')}</button>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <button
+            type="button"
+            className="btn btn-outline"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+            onClick={handleEditComplaint}
+          >
+            <Edit3 size={16} />
+            <span>{lang === 'kn' ? 'ದೂರನ್ನು ತಿದ್ದುಪಡಿ ಮಾಡಿ' : 'Edit Complaint'}</span>
+          </button>
+          <button className="btn btn-primary" onClick={handleReset}>{t('fileAnother')}</button>
+        </div>
       </div>
     )
   }
@@ -2565,6 +2651,38 @@ export function ComplaintScreen() {
       </div>
 
       <div className="complaint-form">
+        {editingComplaintId && (
+          <div style={{
+            background: 'rgba(37, 99, 235, 0.08)',
+            border: '1.5px solid #2563eb',
+            borderRadius: 14,
+            padding: '12px 18px',
+            marginBottom: 20,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            color: '#1d4ed8',
+            fontSize: 14,
+            fontWeight: 600
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Edit3 size={18} />
+              <span>
+                {lang === 'kn'
+                  ? `ದೂರನ್ನು ತಿದ್ದುಪಡಿ ಮಾಡಲಾಗುತ್ತಿದೆ (${editingComplaintId})`
+                  : `Editing Complaint (${editingComplaintId})`}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleReset}
+              style={{ background: 'transparent', border: 'none', color: '#1d4ed8', cursor: 'pointer', fontSize: 13, textDecoration: 'underline' }}
+            >
+              {lang === 'kn' ? 'ರದ್ದುಗೊಳಿಸಿ' : 'Cancel Edit'}
+            </button>
+          </div>
+        )}
+
         {/* Step 1: Category */}
         <div className="card" style={{ marginBottom: 20 }}>
           <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>{t('step1')}</h3>
@@ -2774,7 +2892,9 @@ export function ComplaintScreen() {
 
               <div className="otp-hint">{t('escalationNote')}</div>
               <button type="submit" className="btn btn-primary" style={{ padding: '14px 24px', justifyContent: 'center' }}>
-                {t('submitComplaint')}
+                {editingComplaintId
+                  ? (lang === 'kn' ? 'ದೂರನ್ನು ನವೀಕರಿಸಿ' : 'Update Complaint')
+                  : t('submitComplaint')}
               </button>
             </div>
           </form>

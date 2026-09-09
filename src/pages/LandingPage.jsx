@@ -8,8 +8,9 @@ import ThemeToggle from '../components/ThemeToggle'
 import { db } from '../firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import {
-  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink, Building2, GraduationCap, X, Check, Copyright
+  ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink, Building2, GraduationCap, X, Check, Copyright, HelpCircle, MapPinOff
 } from 'lucide-react'
+import FarmerInquiryModal from '../components/FarmerInquiryModal'
 
 // ── District Knowledge Base ──────────────────────────────────
 
@@ -32,6 +33,8 @@ export default function LandingPage() {
   const [newsletterPhone, setNewsletterPhone] = useState('')
   const [newsletterStatus, setNewsletterStatus] = useState('Join') // 'Join' | 'Loading' | 'Joined'
   const [infoModal, setInfoModal] = useState({ isOpen: false, title: '', content: '' })
+  const [inquiryModalOpen, setInquiryModalOpen] = useState(false)
+  const [inquiryCategory, setInquiryCategory] = useState('missing_village')
 
   const handleNewsletterJoin = async () => {
     if (!newsletterPhone || newsletterPhone.trim().length < 10) {
@@ -182,6 +185,27 @@ export default function LandingPage() {
         <div className="landing-nav-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <LanguageSwitcher variant="topbar-style" />
           <ThemeToggle />
+          <button
+            onClick={() => { setInquiryCategory('question'); setInquiryModalOpen(true); }}
+            className="hover-lift"
+            style={{
+              background: 'rgba(22, 163, 74, 0.1)',
+              color: '#15803d',
+              border: '1px solid rgba(22, 163, 74, 0.25)',
+              borderRadius: 10,
+              padding: '9px 13px',
+              fontWeight: 700,
+              fontSize: 13,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <HelpCircle size={15} strokeWidth={2.2} />
+            <span>{lang === 'kn' ? 'ಸಹಾಯವಾಣಿ' : 'Helpdesk'}</span>
+          </button>
           <button
             onClick={() => navigate('/login/villager')}
             className="hover-lift"
@@ -608,6 +632,12 @@ export default function LandingPage() {
               <span onClick={() => navigate('/login/villager')} style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#4ade80'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.55)'}>
                 APMC Daily Rates
               </span>
+              <span onClick={() => { setInquiryCategory('missing_village'); setInquiryModalOpen(true); }} style={{ color: '#4ade80', fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600 }}>
+                <MapPinOff size={14} /> {lang === 'kn' ? 'ಕಾಣೆಯಾದ ಗ್ರಾಮ ಸೇರ್ಪಡೆ' : 'Report Missing Village'}
+              </span>
+              <span onClick={() => { setInquiryCategory('question'); setInquiryModalOpen(true); }} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <HelpCircle size={14} /> {lang === 'kn' ? 'ರೈತ ಸಹಾಯವಾಣಿ & ಪ್ರಶ್ನೆ' : 'Farmer Helpdesk & Inquiry'}
+              </span>
             </div>
           </div>
 
@@ -744,6 +774,39 @@ export default function LandingPage() {
           </div>
         </div>
       )}
+
+      {/* ── Floating Farmer Inquiry & Missing Village Action ── */}
+      <div style={{ position: 'fixed', bottom: 24, left: 24, zIndex: 9990 }}>
+        <button
+          onClick={() => { setInquiryCategory('missing_village'); setInquiryModalOpen(true); }}
+          className="hover-lift"
+          style={{
+            background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+            color: '#ffffff',
+            border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: 30,
+            padding: '10px 18px',
+            boxShadow: '0 10px 25px -4px rgba(0,0,0,0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            cursor: 'pointer',
+            fontSize: 13,
+            fontWeight: 700
+          }}
+        >
+          <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <HelpCircle size={15} color="#fff" strokeWidth={2.4} />
+          </div>
+          <span>{lang === 'kn' ? 'ಗ್ರಾಮ ಕಾಣಿಸುತ್ತಿಲ್ಲವೇ? / ಪ್ರಶ್ನೆ ಕೇಳಿ' : 'Missing Village? / Ask Help'}</span>
+        </button>
+      </div>
+
+      <FarmerInquiryModal
+        isOpen={inquiryModalOpen}
+        onClose={() => setInquiryModalOpen(false)}
+        defaultCategory={inquiryCategory}
+      />
     </div>
   )
 }

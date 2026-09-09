@@ -13,7 +13,8 @@ import {
   TrendingUp, Clock, RefreshCw, CheckCircle, Bell, Search,
   Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2,
   MapPin, Phone, Home, ShieldCheck, Mail, Map, Building2, User,
-  Star, Tag, Calendar, Menu, X, Hourglass, Folder, FileText, AlertTriangle, Send, ArrowUp, Check, Edit3
+  Star, Tag, Calendar, Menu, X, Hourglass, Folder, FileText, AlertTriangle, Send, ArrowUp, Check, Edit3,
+  HelpCircle, MapPinOff, MessageSquarePlus
 } from 'lucide-react'
 import * as Icons from 'lucide-react'
 
@@ -79,7 +80,7 @@ const allDistricts = [
 ]
 
 // ===== Sidebar =====
-function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessionData }) {
+function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessionData, pendingInquiryCount = 0 }) {
   const navigate = useNavigate()
   const { t } = useLanguage()
 
@@ -105,6 +106,7 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
     { id: 'overview',   icon: LayoutDashboard, labelKey: 'sNavOverview',      badge: null },
     { id: 'complaints', icon: ClipboardList,   labelKey: 'sNavNewComplaints',  badge: '28' },
     { id: 'resolved',   icon: CheckCircle2,    labelKey: 'sNavResolved',       badge: null },
+    { id: 'inquiries',  icon: HelpCircle,      labelKey: 'sNavInquiries',      badge: pendingInquiryCount > 0 ? String(pendingInquiryCount) : null },
     { id: 'state',      icon: Map,             labelKey: 'State Overview',     badge: null },
     { id: 'announcements', icon: ClipboardList, labelKey: 'Announcements', badge: null },
     { id: 'announce', icon: Megaphone, labelKey: 'sNavPublish', badge: null },
@@ -1324,11 +1326,649 @@ function SettingsScreen() {
 }
 
 
+// ===== Farmer Inquiries & Missing Data =====
+export const initialSampleInquiries = [
+  {
+    ticketId: 'GS-INQ-948102',
+    category: 'missing_village',
+    name: 'ರಾಮೇಗೌಡ (Ramegowda)',
+    phone: '9845123980',
+    email: 'ramegowda.mys@gmail.com',
+    district: 'Mysuru',
+    taluk: 'Hunsur',
+    gp: 'Biligere GP',
+    villageName: 'ಕಲ್ಲಹಳ್ಳಿ ಕೊಪ್ಪಲು (Kallahalli Koppalu)',
+    subject: 'Add Kallahalli Koppalu hamlet under Biligere GP',
+    description: 'Our hamlet has 85 farmer families but is missing from the GramSetu village selection list. Kindly add it to the revenue records list.',
+    status: 'pending',
+    dateStr: '2 Aug 2026',
+    resolutionNotes: '',
+    resolvedBy: '',
+  },
+  {
+    ticketId: 'GS-INQ-831745',
+    category: 'question',
+    name: 'ಮಂಜುಳಾ ದೇವಿ (Manjula Devi)',
+    phone: '9448109823',
+    email: '',
+    district: 'Mandya',
+    taluk: 'Pandavapura',
+    gp: 'Chinya GP',
+    villageName: 'Chinya',
+    subject: 'Query on Krishi Bhagya farm pond subsidy timeline',
+    description: 'We applied for farm pond (Krishi Honda) under Krishi Bhagya 2 weeks ago. When will the RSK inspection team visit our land?',
+    status: 'in_progress',
+    dateStr: '1 Aug 2026',
+    resolutionNotes: 'Assigned to Assistant Agricultural Officer (AAO) Pandavapura for field inspection on 12 Aug.',
+    resolvedBy: 'Panchayat Development Officer',
+  },
+  {
+    ticketId: 'GS-INQ-719324',
+    category: 'data_correction',
+    name: 'ಚನ್ನಬಸಪ್ಪ (Channabasappa)',
+    phone: '9731245890',
+    email: '',
+    district: 'Shivamogga',
+    taluk: 'Shikaripura',
+    gp: 'Hosur GP',
+    villageName: 'Hosur',
+    subject: 'Update APMC Arecanut Rashi procurement rate',
+    description: 'The displayed price is for Chali arecanut. Please add separate daily quotation for Red Rashi Supari.',
+    status: 'resolved',
+    dateStr: '28 Jul 2026',
+    resolutionNotes: 'Updated APMC Shimoga commodity ticker to include Red Rashi Arecanut grade prices.',
+    resolvedBy: 'Agriculture Marketing Officer',
+  }
+]
+
+function InquiryResolveModal({ inquiry, onClose, onSaved, sessionData }) {
+  const { lang } = useLanguage()
+  const [status, setStatus] = useState(inquiry?.status || 'resolved')
+  const [notes, setNotes] = useState(inquiry?.resolutionNotes || '')
+  const [saving, setSaving] = useState(false)
+
+  const handleSave = async (e) => {
+    e.preventDefault()
+    setSaving(true)
+    const officerName = sessionData?.name || 'Panchayat Development Officer'
+    const resolvedAt = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+
+    // Update in Firestore if _docId is present
+    if (inquiry._docId) {
+      try {
+        await updateDoc(doc(db, 'farmer_inquiries', inquiry._docId), {
+          status,
+          resolutionNotes: notes,
+          resolvedBy: officerName,
+          resolvedAt: serverTimestamp()
+        })
+      } catch (err) {
+        console.warn('Firestore update failed:', err)
+      }
+    }
+
+    // Update in localStorage
+    try {
+      const local = JSON.parse(window.localStorage.getItem('gramsetu_farmer_inquiries') || '[]')
+      const updated = local.map(item => {
+        if ((item.ticketId || item.id) === (inquiry.ticketId || inquiry.id)) {
+          return { ...item, status, resolutionNotes: notes, resolvedBy: officerName, resolvedAt }
+        }
+        return item
+      })
+      window.localStorage.setItem('gramsetu_farmer_inquiries', JSON.stringify(updated))
+    } catch (_) {}
+
+    onSaved({
+      ...inquiry,
+      status,
+      resolutionNotes: notes,
+      resolvedBy: officerName,
+      resolvedAt
+    })
+    setSaving(false)
+    onClose()
+  }
+
+  return (
+    <div
+      className="modal-overlay animate-fadeInUp"
+      style={{
+        position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.75)',
+        backdropFilter: 'blur(6px)', zIndex: 9999,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16
+      }}
+      onClick={onClose}
+    >
+      <div
+        className="modal-content"
+        style={{
+          background: 'var(--bg-card, #ffffff)', color: 'var(--text-main, #0f172a)',
+          borderRadius: 20, maxWidth: 540, width: '100%', padding: 0,
+          border: '1px solid var(--border-light, #e2e8f0)', overflow: 'hidden',
+          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.35)'
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div style={{
+          padding: '18px 24px', background: 'linear-gradient(135deg, #1e3a8a, #3b82f6)',
+          color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between'
+        }}>
+          <div>
+            <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800 }}>
+              {lang === 'kn' ? 'ವಿಚಾರಣೆ / ಕೋರಿಕೆ ಪರಿಹಾರ' : 'Resolve Farmer Inquiry'}
+            </h3>
+            <p style={{ margin: '2px 0 0', fontSize: 12, opacity: 0.85 }}>
+              Ticket: {inquiry.ticketId || inquiry.id}
+            </p>
+          </div>
+          <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
+            <X size={20} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSave} style={{ padding: 24 }}>
+          {/* Inquiry summary box */}
+          <div style={{ background: 'var(--bg-main, #f8fafc)', borderRadius: 12, padding: 14, marginBottom: 18, fontSize: 13, lineHeight: 1.6 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+              <strong>Farmer:</strong> <span>{inquiry.name} ({inquiry.phone})</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+              <strong>Location:</strong> <span>{inquiry.villageName ? `${inquiry.villageName}, ` : ''}{inquiry.taluk || ''} ({inquiry.district})</span>
+            </div>
+            <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px dashed var(--border, #e2e8f0)' }}>
+              <strong>Description:</strong> {inquiry.description}
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 700, marginBottom: 6 }}>
+              {lang === 'kn' ? 'ಸ್ಥಿತಿ ಆಯ್ಕೆಮಾಡಿ *' : 'Update Status *'}
+            </label>
+            <select
+              value={status}
+              onChange={e => setStatus(e.target.value)}
+              style={{
+                width: '100%', padding: '10px 12px', borderRadius: 10,
+                border: '1.5px solid var(--border, #cbd5e1)', background: 'var(--bg-main, #f8fafc)',
+                color: 'var(--text-main, #0f172a)', fontSize: 14, outline: 'none'
+              }}
+            >
+              <option value="pending">Pending Review / ಬಾಕಿ ಇದೆ</option>
+              <option value="in_progress">In Progress / ಪ್ರಕ್ರಿಯೆಯಲ್ಲಿದೆ</option>
+              <option value="resolved">Resolved / ಪರಿಹರಿಸಲಾಗಿದೆ</option>
+            </select>
+          </div>
+
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 700, marginBottom: 6 }}>
+              {lang === 'kn' ? 'ಅಧಿಕೃತ ಪರಿಹಾರ ಟಿಪ್ಪಣಿ / Remarks *' : 'Official Resolution Notes / Remarks *'}
+            </label>
+            <textarea
+              required
+              rows={3}
+              placeholder={lang === 'kn' ? 'ಉದಾ: ಗ್ರಾಮವನ್ನು ಬಿಳಿಕೆರೆ ಪಂಚಾಯತಿ ವ್ಯಾಪ್ತಿಗೆ ಸೇರಿಸಲಾಗಿದೆ...' : 'e.g. Verified with revenue records. Village added to master list under Taluk office...'}
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              style={{
+                width: '100%', padding: '10px 12px', borderRadius: 10,
+                border: '1.5px solid var(--border, #cbd5e1)', background: 'var(--bg-main, #f8fafc)',
+                color: 'var(--text-main, #0f172a)', fontSize: 13, outline: 'none',
+                fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+            <button
+              type="button"
+              onClick={onClose}
+              style={{
+                background: 'transparent', border: 'none', padding: '10px 16px',
+                borderRadius: 10, color: 'var(--text-muted, #64748b)', fontWeight: 600,
+                fontSize: 13, cursor: 'pointer'
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              style={{
+                background: '#3b82f6', color: '#fff', border: 'none', padding: '10px 20px',
+                borderRadius: 10, fontWeight: 700, fontSize: 13, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: 6, boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+              }}
+            >
+              {saving ? 'Saving...' : (status === 'resolved' ? 'Confirm Resolution' : 'Update Status')}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+function FarmerInquiriesScreen({ sessionData }) {
+  const { lang } = useLanguage()
+  const [inquiries, setInquiries] = useState([])
+  const [searchText, setSearchText] = useState('')
+  const [catFilter, setCatFilter] = useState('all') // 'all' | 'missing_village' | 'question' | 'data_correction'
+  const [statusFilter, setStatusFilter] = useState('all') // 'all' | 'pending' | 'in_progress' | 'resolved'
+  const [selectedForResolve, setSelectedForResolve] = useState(null)
+
+  useEffect(() => {
+    const q = query(collection(db, 'farmer_inquiries'), orderBy('createdAt', 'desc'))
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetched = snapshot.docs.map(d => ({
+        ...d.data(),
+        id: d.data().ticketId || d.id,
+        _docId: d.id
+      }))
+      const local = JSON.parse(window.localStorage.getItem('gramsetu_farmer_inquiries') || '[]')
+      const merged = [...fetched, ...local, ...initialSampleInquiries].filter(
+        (v, i, a) => a.findIndex(x => (x.ticketId || x.id) === (v.ticketId || v.id)) === i
+      )
+      setInquiries(merged)
+    }, (err) => {
+      console.warn('Firestore snapshot error, loading local and sample:', err)
+      const local = JSON.parse(window.localStorage.getItem('gramsetu_farmer_inquiries') || '[]')
+      const merged = [...local, ...initialSampleInquiries].filter(
+        (v, i, a) => a.findIndex(x => (x.ticketId || x.id) === (v.ticketId || v.id)) === i
+      )
+      setInquiries(merged)
+    })
+    return () => unsubscribe()
+  }, [])
+
+  // Handle local state update after modal resolution
+  const handleInquiryUpdated = (updated) => {
+    setInquiries(prev => prev.map(item => (
+      (item.ticketId || item.id) === (updated.ticketId || updated.id) ? updated : item
+    )))
+  }
+
+  // Filter inquiries
+  const filtered = inquiries.filter(item => {
+    // Category filter
+    const catMatch = catFilter === 'all' || item.category === catFilter
+
+    // Status filter
+    const statusMatch = statusFilter === 'all' || item.status === statusFilter
+
+    // Search text
+    const searchMatch = !searchText.trim() || [
+      item.ticketId, item.name, item.phone, item.villageName,
+      item.district, item.taluk, item.subject, item.description
+    ].some(field => (field || '').toLowerCase().includes(searchText.toLowerCase()))
+
+    return catMatch && statusMatch && searchMatch
+  })
+
+  // Counters
+  const totalCount = inquiries.length
+  const pendingCount = inquiries.filter(i => i.status === 'pending' || i.status === 'in_progress').length
+  const missingVillageCount = inquiries.filter(i => i.category === 'missing_village').length
+  const resolvedCount = inquiries.filter(i => i.status === 'resolved').length
+
+  const getCatLabel = (cat) => {
+    switch (cat) {
+      case 'missing_village': return lang === 'kn' ? 'ಕಾಣೆಯಾದ ಗ್ರಾಮ' : 'Missing Village'
+      case 'question': return lang === 'kn' ? 'ರೈತ ಪ್ರಶ್ನೆ' : 'Farmer Query'
+      case 'data_correction': return lang === 'kn' ? 'ಮಾಹಿತಿ ತಿದ್ದುಪಡಿ' : 'Data Correction'
+      default: return lang === 'kn' ? 'ಇತರ ನೆರವು' : 'General Help'
+    }
+  }
+
+  const getCatIcon = (cat) => {
+    switch (cat) {
+      case 'missing_village': return MapPinOff
+      case 'question': return HelpCircle
+      case 'data_correction': return FileText
+      default: return MessageSquarePlus
+    }
+  }
+
+  return (
+    <div className="animate-fadeInUp" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {/* Top Header Card */}
+      <div style={{
+        background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1d4ed8 100%)',
+        borderRadius: 20, padding: '24px 28px', color: '#fff',
+        boxShadow: '0 10px 25px -5px rgba(30, 58, 138, 0.3)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16
+      }}>
+        <div>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.15)', padding: '4px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700, marginBottom: 8 }}>
+            <HelpCircle size={14} />
+            <span>{lang === 'kn' ? 'ರೈತ ಸಹಾಯವಾಣಿ & ಡೇಟಾಬೇಸ್ ನಿರ್ವಹಣೆ' : 'Citizen Assistance & Database Updates'}</span>
+          </div>
+          <h2 style={{ fontSize: 24, fontWeight: 800, margin: 0 }}>
+            {lang === 'kn' ? 'ರೈತರ ವಿಚಾರಣೆಗಳು ಮತ್ತು ಕಾಣೆಯಾದ ಮಾಹಿತಿ' : 'Farmer Inquiries & Missing Data Portal'}
+          </h2>
+          <p style={{ fontSize: 13, opacity: 0.85, margin: '6px 0 0 0' }}>
+            {lang === 'kn'
+              ? 'ರೈತರು ಕಳುಹಿಸಿದ ಕಾಣೆಯಾದ ಗ್ರಾಮಗಳ ಹೆಸರುಗಳು, ಪ್ರಶ್ನೆಗಳು ಹಾಗೂ ತಿದ್ದುಪಡಿಗಳನ್ನು ಪರಿಶೀಲಿಸಿ ಪರಿಹರಿಸಿ.'
+              : 'Review submitted missing village names, agricultural questions, and portal correction requests.'}
+          </p>
+        </div>
+
+        {/* Action badge */}
+        <div style={{
+          background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+          borderRadius: 14, padding: '12px 18px', textAlign: 'center'
+        }}>
+          <div style={{ fontSize: 24, fontWeight: 900, color: '#fef08a' }}>{pendingCount}</div>
+          <div style={{ fontSize: 11, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
+            {lang === 'kn' ? 'ಬಾಕಿ ಇರುವ ಕೋರಿಕೆಗಳು' : 'Pending Resolution'}
+          </div>
+        </div>
+      </div>
+
+      {/* Metrics Row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 16 }}>
+        <div className="card" style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <FileText size={20} strokeWidth={2.2} />
+          </div>
+          <div>
+            <div style={{ fontSize: 22, fontWeight: 800 }}>{totalCount}</div>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{lang === 'kn' ? 'ಒಟ್ಟು ಸಲ್ಲಿಕೆಗಳು' : 'Total Inquiries'}</div>
+          </div>
+        </div>
+
+        <div className="card" style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(245, 158, 11, 0.1)', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Clock size={20} strokeWidth={2.2} />
+          </div>
+          <div>
+            <div style={{ fontSize: 22, fontWeight: 800 }}>{pendingCount}</div>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{lang === 'kn' ? 'ಪರಿಶೀಲನೆಯಲ್ಲಿವೆ' : 'Pending Action'}</div>
+          </div>
+        </div>
+
+        <div className="card" style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(22, 163, 74, 0.1)', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <MapPinOff size={20} strokeWidth={2.2} />
+          </div>
+          <div>
+            <div style={{ fontSize: 22, fontWeight: 800 }}>{missingVillageCount}</div>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{lang === 'kn' ? 'ಕಾಣೆಯಾದ ಗ್ರಾಮಗಳು' : 'Missing Villages'}</div>
+          </div>
+        </div>
+
+        <div className="card" style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CheckCircle2 size={20} strokeWidth={2.2} />
+          </div>
+          <div>
+            <div style={{ fontSize: 22, fontWeight: 800 }}>{resolvedCount}</div>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{lang === 'kn' ? 'ಪರಿಹರಿಸಲಾಗಿದೆ' : 'Resolved'}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Filter and Search Bar */}
+      <div className="card" style={{ padding: 16 }}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          {/* Search Box */}
+          <div style={{ position: 'relative', flex: '1 1 260px', maxWidth: 400 }}>
+            <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <input
+              type="text"
+              placeholder={lang === 'kn' ? 'ರೈತ, ಗ್ರಾಮ, ಫೋನ್ ಅಥವಾ ಟಿಕೆಟ್ ಐಡಿ ಹುಡುಕಿ...' : 'Search by farmer, village, phone, or ticket ID...'}
+              value={searchText}
+              onChange={e => setSearchText(e.target.value)}
+              style={{
+                width: '100%', padding: '9px 12px 9px 36px', borderRadius: 10,
+                border: '1.5px solid var(--border, #cbd5e1)', background: 'var(--bg-main, #f8fafc)',
+                color: 'var(--text-main, #0f172a)', fontSize: 13, outline: 'none', boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          {/* Status Tabs */}
+          <div style={{ display: 'flex', background: 'var(--bg-main, #f1f5f9)', padding: 3, borderRadius: 10, gap: 4 }}>
+            {[
+              { id: 'all', label: lang === 'kn' ? 'ಎಲ್ಲಾ' : 'All Statuses' },
+              { id: 'pending', label: lang === 'kn' ? 'ಬಾಕಿ' : 'Pending' },
+              { id: 'in_progress', label: lang === 'kn' ? 'ಪ್ರಕ್ರಿಯೆ' : 'In Progress' },
+              { id: 'resolved', label: lang === 'kn' ? 'ಪರಿಹರಿಸಲಾಗಿದೆ' : 'Resolved' },
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setStatusFilter(tab.id)}
+                style={{
+                  background: statusFilter === tab.id ? '#ffffff' : 'transparent',
+                  color: statusFilter === tab.id ? '#0f172a' : '#64748b',
+                  border: 'none', borderRadius: 8, padding: '6px 12px',
+                  fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                  boxShadow: statusFilter === tab.id ? '0 2px 4px rgba(0,0,0,0.06)' : 'none'
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Category Chips */}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', borderTop: '1px solid var(--border-light, #f1f5f9)', paddingTop: 12 }}>
+          {[
+            { id: 'all', label: lang === 'kn' ? 'ಎಲ್ಲಾ ವಿಭಾಗ' : 'All Categories', icon: FileText },
+            { id: 'missing_village', label: lang === 'kn' ? 'ಕಾಣೆಯಾದ ಗ್ರಾಮಗಳು' : 'Missing Villages', icon: MapPinOff },
+            { id: 'question', label: lang === 'kn' ? 'ರೈತರ ಪ್ರಶ್ನೆಗಳು' : 'Farmer Questions', icon: HelpCircle },
+            { id: 'data_correction', label: lang === 'kn' ? 'ಮಾಹಿತಿ ತಿದ್ದುಪಡಿ' : 'Data Corrections', icon: Edit3 },
+          ].map(c => {
+            const Icon = c.icon
+            const isSel = catFilter === c.id
+            return (
+              <button
+                key={c.id}
+                onClick={() => setCatFilter(c.id)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  padding: '6px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600,
+                  border: isSel ? '1.5px solid #3b82f6' : '1px solid var(--border, #cbd5e1)',
+                  background: isSel ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
+                  color: isSel ? '#2563eb' : 'var(--text-secondary, #64748b)',
+                  cursor: 'pointer'
+                }}
+              >
+                <Icon size={13} />
+                <span>{c.label}</span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Inquiry List */}
+      {filtered.length === 0 ? (
+        <div className="card" style={{ padding: 48, textAlign: 'center' }}>
+          <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--bg-main, #f1f5f9)', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+            <HelpCircle size={28} />
+          </div>
+          <h4 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 6px' }}>
+            {lang === 'kn' ? 'ಯಾವುದೇ ಸಲ್ಲಿಕೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ' : 'No Inquiries Found'}
+          </h4>
+          <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}>
+            {lang === 'kn' ? 'ಫಿಲ್ಟರ್ ಅಥವಾ ಹುಡುಕಾಟ ಬದಲಾಯಿಸಿ ನೋಡಿ' : 'Try adjusting your search terms or filters'}
+          </p>
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
+          {filtered.map(item => {
+            const CatIcon = getCatIcon(item.category)
+            const isResolved = item.status === 'resolved'
+            const isInProgress = item.status === 'in_progress'
+
+            return (
+              <div
+                key={item.ticketId || item.id}
+                className="card"
+                style={{
+                  padding: 20,
+                  borderLeft: item.category === 'missing_village'
+                    ? '4px solid #16a34a'
+                    : isResolved
+                    ? '4px solid #10b981'
+                    : '4px solid #3b82f6',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12
+                }}
+              >
+                {/* Header row */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 8 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-muted, #64748b)', letterSpacing: '0.04em' }}>
+                      {item.ticketId || item.id}
+                    </span>
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 4,
+                      padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700,
+                      background: item.category === 'missing_village' ? 'rgba(22, 163, 74, 0.12)' : 'rgba(59, 130, 246, 0.12)',
+                      color: item.category === 'missing_village' ? '#15803d' : '#1d4ed8'
+                    }}>
+                      <CatIcon size={12} />
+                      <span>{getCatLabel(item.category)}</span>
+                    </span>
+                    <span style={{
+                      padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700,
+                      background: isResolved ? 'rgba(16, 185, 129, 0.12)' : isInProgress ? 'rgba(59, 130, 246, 0.12)' : 'rgba(245, 158, 11, 0.12)',
+                      color: isResolved ? '#059669' : isInProgress ? '#2563eb' : '#d97706'
+                    }}>
+                      {isResolved ? 'Resolved' : isInProgress ? 'In Progress' : 'Pending Review'}
+                    </span>
+                  </div>
+
+                  <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+                    {item.dateStr || 'Recent'}
+                  </span>
+                </div>
+
+                {/* Farmer & Location Info */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 13, background: 'var(--bg-main, #f8fafc)', padding: '10px 14px', borderRadius: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <User size={14} style={{ color: '#64748b' }} />
+                    <strong>{item.name}</strong>
+                  </div>
+                  {item.phone && (
+                    <a
+                      href={`tel:${item.phone}`}
+                      style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#16a34a', textDecoration: 'none', fontWeight: 600 }}
+                    >
+                      <Phone size={14} />
+                      <span>{item.phone}</span>
+                    </a>
+                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)' }}>
+                    <MapPin size={14} style={{ color: '#64748b' }} />
+                    <span>
+                      {item.taluk ? `${item.taluk}, ` : ''}{item.district}
+                      {item.gp ? ` (GP: ${item.gp})` : ''}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Special Village Highlight if Missing Village */}
+                {item.villageName && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>
+                      {lang === 'kn' ? 'ಸೇರಿಸಬೇಕಾದ ಗ್ರಾಮ:' : 'Reported Village / Area:'}
+                    </span>
+                    <span style={{
+                      background: 'rgba(22, 163, 74, 0.12)',
+                      color: '#15803d',
+                      padding: '4px 12px',
+                      borderRadius: 8,
+                      fontWeight: 800,
+                      fontSize: 13
+                    }}>
+                      {item.villageName}
+                    </span>
+                  </div>
+                )}
+
+                {/* Subject & Description */}
+                <div>
+                  <h4 style={{ margin: '0 0 4px', fontSize: 15, fontWeight: 700, color: 'var(--text-main)' }}>
+                    {item.subject}
+                  </h4>
+                  <p style={{ margin: 0, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                    {item.description}
+                  </p>
+                </div>
+
+                {/* Resolution Notes Box if already resolved */}
+                {item.resolutionNotes && (
+                  <div style={{
+                    background: 'rgba(16, 185, 129, 0.08)',
+                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                    borderRadius: 10,
+                    padding: '10px 14px',
+                    fontSize: 12,
+                    color: '#065f46',
+                    lineHeight: 1.5
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, marginBottom: 2 }}>
+                      <CheckCircle2 size={13} />
+                      <span>{lang === 'kn' ? 'ಅಧಿಕೃತ ಪರಿಹಾರ ವಿವರ' : 'Official Resolution'}</span>
+                      {item.resolvedBy && <span style={{ opacity: 0.7 }}>· By {item.resolvedBy}</span>}
+                    </div>
+                    <div>{item.resolutionNotes}</div>
+                  </div>
+                )}
+
+                {/* Resolve Action Button */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: 6 }}>
+                  <button
+                    onClick={() => setSelectedForResolve(item)}
+                    style={{
+                      background: isResolved ? 'transparent' : '#3b82f6',
+                      color: isResolved ? '#2563eb' : '#fff',
+                      border: isResolved ? '1.5px solid #3b82f6' : 'none',
+                      borderRadius: 8,
+                      padding: '7px 16px',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      boxShadow: isResolved ? 'none' : '0 2px 6px rgba(59, 130, 246, 0.3)'
+                    }}
+                  >
+                    <CheckCircle2 size={14} />
+                    <span>{isResolved ? (lang === 'kn' ? 'ಟಿಪ್ಪಣಿ ತಿದ್ದುಪಡಿ' : 'Edit Resolution') : (lang === 'kn' ? 'ಪರಿಹರಿಸಿ / Update' : 'Resolve / Update')}</span>
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {/* Resolution Modal */}
+      {selectedForResolve && (
+        <InquiryResolveModal
+          inquiry={selectedForResolve}
+          sessionData={sessionData}
+          onClose={() => setSelectedForResolve(null)}
+          onSaved={handleInquiryUpdated}
+        />
+      )}
+    </div>
+  )
+}
+
 // ===== Page meta =====
 const pageMeta = {
   overview:   { titleKey: 'sNavOverview',      subKey: 'officerLocation' },
   complaints: { titleKey: 'sNavNewComplaints', subKey: 'complaintSub' },
   resolved:   { titleKey: 'sNavResolved',      subKey: 'statusSub' },
+  inquiries:  { titleKey: 'inquiriesTitle',    subKey: 'inquiriesSub' },
   state:      { titleKey: 'State Overview',    subKey: 'All Karnataka Districts' },
   announce:   { titleKey: 'sNavPublish',       subKey: 'announceSub' },
   announcements: { titleKey: 'Announcements', subKey: 'View Notices' },
@@ -1388,6 +2028,24 @@ export default function OfficialDashboard() {
     return () => unsubscribe()
   }, [sessionData.district])
 
+  const [pendingInquiriesCount, setPendingInquiriesCount] = useState(0)
+  useEffect(() => {
+    const q = query(collection(db, 'farmer_inquiries'), orderBy('createdAt', 'desc'))
+    const unsub = onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs.map(d => ({ ...d.data(), id: d.data().ticketId || d.id }))
+      const local = JSON.parse(window.localStorage.getItem('gramsetu_farmer_inquiries') || '[]')
+      const all = [...docs, ...local, ...initialSampleInquiries].filter((v, i, a) => a.findIndex(t => (t.ticketId || t.id) === (v.ticketId || v.id)) === i)
+      const pending = all.filter(item => item.status === 'pending' || item.status === 'in_progress').length
+      setPendingInquiriesCount(pending)
+    }, () => {
+      const local = JSON.parse(window.localStorage.getItem('gramsetu_farmer_inquiries') || '[]')
+      const all = [...local, ...initialSampleInquiries].filter((v, i, a) => a.findIndex(t => (t.ticketId || t.id) === (v.ticketId || v.id)) === i)
+      const pending = all.filter(item => item.status === 'pending' || item.status === 'in_progress').length
+      setPendingInquiriesCount(pending)
+    })
+    return () => unsub()
+  }, [])
+
   const [complaintFilter, setComplaintFilter] = useState(null) // 'pending' | null
   const handlePendingClick = () => {
     setComplaintFilter('pending')
@@ -1404,6 +2062,7 @@ export default function OfficialDashboard() {
       case 'overview':   return <OverviewScreen onPendingClick={handlePendingClick} onResolvedClick={handleResolvedClick} sessionData={sessionData} pendingCount={pendingCount} resolvedCount={resolvedCount} />
       case 'complaints': return <ComplaintsScreen resolved={false} filter={complaintFilter} />
       case 'resolved':   return <ComplaintsScreen resolved={true} />
+      case 'inquiries':  return <FarmerInquiriesScreen sessionData={sessionData} />
       case 'state':      return <ComplaintsScreen resolved={false} stateOverview={true} />
       case 'announcements': return <OfficialAnnouncements onEdit={handleEditAnnouncement} />
       case 'announce':   return <AnnounceScreen editMode={editMode} editingAnnouncement={editingAnnouncement} />
@@ -1471,6 +2130,7 @@ export default function OfficialDashboard() {
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         sessionData={sessionData}
+        pendingInquiryCount={pendingInquiriesCount}
       />
       {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={() => setSidebarOpen(false)} />}
       <div className="main-content">

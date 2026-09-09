@@ -53,17 +53,17 @@ export default function VoiceAssistantWidget() {
   const chatEndRef = useRef(null);
   const ui = UI_TEXT[lang] || UI_TEXT.en;
 
-  // Hide on demo / map pages
-  if (location.pathname.startsWith('/demo') || location.pathname === '/live-map' || location.pathname === '/magic-login') return null;
+  const isHidden = location.pathname.startsWith('/demo') || location.pathname === '/live-map' || location.pathname === '/magic-login';
 
   // Auto-scroll chat
   useEffect(() => {
+    if (isHidden) return;
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatHistory, isProcessing]);
+  }, [chatHistory, isProcessing, isHidden]);
 
   // Process transcript when speech ends
   useEffect(() => {
-    if (!transcript || isListening) return;
+    if (isHidden || !transcript || isListening) return;
 
     const processCommand = async () => {
       const userMsg = transcript.trim();
@@ -122,6 +122,8 @@ export default function VoiceAssistantWidget() {
     : isSpeaking
     ? { boxShadow: '0 0 0 8px rgba(245,158,11,0.2)', animation: 'voicePulse 1.5s ease-out infinite' }
     : { boxShadow: '0 4px 16px rgba(22,163,74,0.3)' };
+
+  if (isHidden) return null;
 
   return (
     <div className="voice-fab-wrapper" style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10, fontFamily: "'Inter', sans-serif" }}>

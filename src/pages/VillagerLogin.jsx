@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
-import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail, Send, ShieldCheck, Building2, TreePine, MapPin } from 'lucide-react'
+import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail, Send, ShieldCheck, Building2, TreePine, MapPin, MapPinOff, HelpCircle } from 'lucide-react'
 import { sendOtpEmail } from '../utils/sendOtp'
 import { db, auth } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
@@ -12,10 +12,11 @@ import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import talukToGps from '../data/talukToGps'
 import villageData from '../data/karnatakVillages'
 import karnatakaUrbanData from '../data/karnatakaUrbanData'
+import FarmerInquiryModal from '../components/FarmerInquiryModal'
 
 export default function VillagerLogin() {
   const navigate = useNavigate()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
 
   useEffect(() => {
     if (window.localStorage.getItem('citizen_email') || window.localStorage.getItem('citizen_phone')) {
@@ -41,6 +42,8 @@ export default function VillagerLogin() {
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [generatedOtp, setGeneratedOtp] = useState('')
+  const [inquiryModalOpen, setInquiryModalOpen] = useState(false)
+  const [inquiryCategory, setInquiryCategory] = useState('missing_village')
 
   // ── Cascading helpers ──────────────────────────────────────────
   const activeDistrictObj = useMemo(
@@ -356,6 +359,27 @@ export default function VillagerLogin() {
                         <button type="button" className="btn-ghost w-full" onClick={() => { setIsOtherVillage(false); setVillage('') }} style={{ marginTop: 12, justifyContent: 'center', color: '#64748b' }}>Cancel</button>
                       </div>
                     )}
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 6 }}>
+                      <button
+                        type="button"
+                        onClick={() => { setInquiryCategory('missing_village'); setInquiryModalOpen(true) }}
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: '#16a34a',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          padding: '2px 0'
+                        }}
+                      >
+                        <MapPinOff size={13} strokeWidth={2.2} />
+                        <span>{lang === 'kn' ? 'ಗ್ರಾಮ ಕಾಣಿಸುತ್ತಿಲ್ಲವೇ? ಡೇಟಾಬೇಸ್‌ಗೆ ಸೇರಿಸಲು ವರದಿ ಮಾಡಿ' : "Can't find your village? Report to database"}</span>
+                      </button>
+                    </div>
                   </div>
                 </>
               )}
@@ -413,7 +437,41 @@ export default function VillagerLogin() {
             </form>
           )}
 
-          <div style={{ marginTop: 24, padding: 16, background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+          <div style={{ marginTop: 20, padding: 14, background: 'rgba(22, 163, 74, 0.08)', border: '1.5px dashed rgba(22, 163, 74, 0.3)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#16a34a', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <HelpCircle size={16} strokeWidth={2.2} />
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-main)' }}>
+                  {lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಅಥವಾ ಕಾಣೆಯಾದ ವಿವರಗಳಿವೆಯೇ?' : 'Have questions or missing details?'}
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                  {lang === 'kn' ? 'ನೇರವಾಗಿ ನಮ್ಮ ಡೇಟಾಬೇಸ್‌ಗೆ ಕಳುಹಿಸಿ' : 'Send directly to database for resolution'}
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => { setInquiryCategory('question'); setInquiryModalOpen(true) }}
+              style={{
+                background: '#16a34a',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 8,
+                padding: '7px 12px',
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 6px rgba(22, 163, 74, 0.25)'
+              }}
+            >
+              {lang === 'kn' ? 'ಸಹಾಯವಾಣಿ' : 'Helpdesk'}
+            </button>
+          </div>
+
+          <div style={{ marginTop: 16, padding: 16, background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
             <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>{t('officialQ')}</p>
             <button
               style={{ color: 'var(--primary)', fontWeight: 600, fontSize: 13, marginTop: 4, background: 'transparent', border: 'none', cursor: 'pointer' }}
@@ -424,6 +482,15 @@ export default function VillagerLogin() {
           </div>
         </div>
       </div>
+
+      <FarmerInquiryModal
+        isOpen={inquiryModalOpen}
+        onClose={() => setInquiryModalOpen(false)}
+        defaultCategory={inquiryCategory}
+        prefillDistrict={district}
+        prefillTaluk={taluk}
+        prefillVillage={village}
+      />
     </div>
   )
 }

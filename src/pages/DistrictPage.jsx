@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
-import { ArrowLeft, MapPin, Sprout, X } from 'lucide-react'
+import { ArrowLeft, MapPin, Sprout, X, MapPinOff, HelpCircle } from 'lucide-react'
 import * as Icons from 'lucide-react'
 import { districtData } from '../data/districtsData'
 import districtImages from '../data/districtImages.json'
 import { districtCropsMap, cropImageMap } from '../data/districtCrops'
 import cropInfoMap from '../data/cropInfo.json'
+import FarmerInquiryModal from '../components/FarmerInquiryModal'
 
 // Helper function to map icons to rich Unsplash images
 const getTopicImage = (iconName) => {
@@ -85,6 +86,7 @@ export default function DistrictPage() {
   const navigate = useNavigate()
   const { lang } = useLanguage()
   const [selectedCropInfo, setSelectedCropInfo] = useState(null)
+  const [inquiryModalOpen, setInquiryModalOpen] = useState(false)
   
   const district = districtData[id]
 
@@ -328,6 +330,66 @@ export default function DistrictPage() {
           ))}
         </div>
       </div>
+
+      {/* ── Missing Village in District Banner ── */}
+      {district && (
+        <div style={{ maxWidth: 1200, margin: '40px auto 0 auto', padding: '0 24px' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%)',
+            border: '1.5px dashed rgba(74, 222, 128, 0.4)',
+            borderRadius: 20,
+            padding: '28px 32px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 20,
+            boxShadow: '0 15px 30px rgba(0,0,0,0.3)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <div style={{
+                width: 50, height: 50, borderRadius: 14,
+                background: 'linear-gradient(135deg, #16a34a, #15803d)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#fff', boxShadow: '0 6px 16px rgba(22, 163, 74, 0.3)', flexShrink: 0
+              }}>
+                <MapPinOff size={24} strokeWidth={2.2} />
+              </div>
+              <div>
+                <h3 style={{ color: '#fff', fontSize: 18, fontWeight: 800, margin: '0 0 6px 0' }}>
+                  {lang === 'kn' ? `${district.name} ಜಿಲ್ಲೆಯಲ್ಲಿ ನಿಮ್ಮ ಗ್ರಾಮ ಕಾಣಿಸುತ್ತಿಲ್ಲವೇ?` : `Don't see your village or panchayat in ${district.name}?`}
+                </h3>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: 0, lineHeight: 1.5 }}>
+                  {lang === 'kn'
+                    ? 'ನಿಮ್ಮ ಗ್ರಾಮದ ಹೆಸರನ್ನು ಸರ್ಕಾರಿ ಡೇಟಾಬೇಸ್‌ಗೆ ಕಳುಹಿಸಿ — ಸಂಬಂಧಪಟ್ಟ ತಾಲೂಕು ಅಧಿಕಾರಿಗಳು ಪರಿಶೀಲಿಸಿ ಸೇರಿಸುತ್ತಾರೆ.'
+                    : 'Submit your village, hamlet, or GP name directly to our database so taluk officials can review and add it.'}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setInquiryModalOpen(true)}
+              style={{
+                background: 'linear-gradient(135deg, #16a34a, #15803d)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 12,
+                padding: '12px 24px',
+                fontSize: 14,
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                boxShadow: '0 4px 14px rgba(22, 163, 74, 0.35)',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <MapPinOff size={16} strokeWidth={2.2} />
+              <span>{lang === 'kn' ? 'ಗ್ರಾಮ ಸೇರ್ಪಡೆಗೆ ವರದಿ ಮಾಡಿ' : 'Report Missing Village'}</span>
+            </button>
+          </div>
+        </div>
+      )}
       
       {/* Spacer */}
       <div style={{ height: 64 }}></div>
@@ -361,6 +423,15 @@ export default function DistrictPage() {
             </p>
           </div>
         </div>
+      )}
+
+      {district && (
+        <FarmerInquiryModal
+          isOpen={inquiryModalOpen}
+          onClose={() => setInquiryModalOpen(false)}
+          defaultCategory="missing_village"
+          prefillDistrict={district.name}
+        />
       )}
     </div>
   )

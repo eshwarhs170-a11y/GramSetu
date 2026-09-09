@@ -28,5 +28,13 @@ service cloud.firestore {
       allow create: if true;
       allow read, write: if false;
     }
+
+    // 5. Farmer Inquiries / Missing Village & Data Collection
+    // Anyone (farmers, visitors) can submit questions or missing data.
+    // Officials can read, update, or resolve inquiries.
+    match /farmer_inquiries/{inquiryId} {
+      allow create: if true;
+      allow read, update, delete: if true;
+    }
   }
 }

@@ -103,7 +103,15 @@ const translations = {
  sNavPublish: 'Publish Announcement',
  sNavAnalytics: 'Analytics',
  sNavCitizens: 'Farmers / Citizens',
+ sNavInquiries: 'Farmer Queries & Missing Data',
  sNavSettings: 'Settings',
+
+ // ---- Farmer Inquiries & Missing Data ----
+ helpDesk: 'Farmer Helpdesk',
+ reportMissingVillage: 'Report Missing Village',
+ askQuestionOrReport: 'Ask Question / Report Missing Info',
+ inquiriesTitle: 'Farmer Queries & Missing Data',
+ inquiriesSub: 'Review citizen questions, missing village submissions, and data requests',
 
  // ---- Dashboard subtitles ----
  dashTitle: 'Dashboard',
@@ -372,7 +380,15 @@ const translations = {
  sNavPublish: 'ಪ್ರಕಟಣೆ ಹೊರಡಿಸಿ',
  sNavAnalytics: 'ವಿಶ್ಲೇಷಣೆ',
  sNavCitizens: 'ರೈತರು / ನಾಗರಿಕರು',
+ sNavInquiries: 'ರೈತರ ವಿಚಾರಣೆ ಮತ್ತು ಕಾಣೆಯಾದ ಮಾಹಿತಿ',
  sNavSettings: 'ಸೆಟ್ಟಿಂಗ್ಸ್',
+
+ // ---- Farmer Inquiries & Missing Data ----
+ helpDesk: 'ರೈತ ಸಹಾಯವಾಣಿ',
+ reportMissingVillage: 'ಗ್ರಾಮ ಕಾಣಿಸುತ್ತಿಲ್ಲವೇ? ವರದಿ ಮಾಡಿ',
+ askQuestionOrReport: 'ಪ್ರಶ್ನೆ ಕೇಳಿ / ಮಾಹಿತಿ ವರದಿ ಮಾಡಿ',
+ inquiriesTitle: 'ರೈತರ ವಿಚಾರಣೆ ಮತ್ತು ಕಾಣೆಯಾದ ಮಾಹಿತಿ',
+ inquiriesSub: 'ನಾಗರಿಕರ ಪ್ರಶ್ನೆಗಳು, ಕಾಣೆಯಾದ ಗ್ರಾಮ ಸಲ್ಲಿಕೆಗಳು ಮತ್ತು ಪರಿಹಾರಗಳು',
 
  dashTitle: 'ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
  dashSub: 'ಮರಳಿ ಸ್ವಾಗತ,',
@@ -633,7 +649,15 @@ const translations = {
  sNavPublish: 'घोषणा प्रकाशित करें',
  sNavAnalytics: 'विश्लेषण',
  sNavCitizens: 'किसान / नागरिक',
+ sNavInquiries: 'किसान पूछताछ और छूटी जानकारी',
  sNavSettings: 'सेटिंग्स',
+
+ // ---- Farmer Inquiries & Missing Data ----
+ helpDesk: 'किसान सहायता केंद्र',
+ reportMissingVillage: 'गाँव नहीं मिला? रिपोर्ट करें',
+ askQuestionOrReport: 'सवाल पूछें / छूटी जानकारी भेजें',
+ inquiriesTitle: 'किसान पूछताछ और छूटी जानकारी',
+ inquiriesSub: 'नागरिकों के सवाल, छूटे गाँव और समाधान की स्थिति',
 
  dashTitle: 'डैशबोर्ड',
  dashSub: 'वापसी पर स्वागत है,',
