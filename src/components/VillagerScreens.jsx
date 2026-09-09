@@ -434,10 +434,10 @@ export function HomeScreen({ setActive }) {
         <div className="animate-fadeInUp card" style={{ marginBottom: 20, border: '1.5px solid var(--primary-light)', background: 'var(--bg-card)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 22 }}><GraduationCap className="inline mr-1 text-purple-500" size={16} /></span>
               <div>
-                <h4 style={{ fontSize: 16, fontWeight: 700, color: 'var(--primary-dark)', margin: 0 }}>
-                  <GraduationCap className="inline mr-1 text-purple-500" size={16} /> Scholarships & Eligibility
+                <h4 style={{ fontSize: 16, fontWeight: 700, color: 'var(--primary-dark)', margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <GraduationCap className="text-purple-500" size={18} />
+                  <span>{lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿವೇತನಗಳು & ಅರ್ಹತೆ' : 'Scholarships & Eligibility'}</span>
                 </h4>
                 <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '2px 0 0 0' }}>
                   {lang === 'kn'
