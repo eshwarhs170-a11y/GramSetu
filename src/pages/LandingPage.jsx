@@ -63,10 +63,16 @@ export default function LandingPage() {
     }
   }, [navigate])
 
-  // Welcome message — fires on every page load and again on language switch
   // Welcome message — greets only once per session, but responds to manual language switches
   const prevLang = useRef(lang)
   useEffect(() => {
+    const isLoggedIn = Boolean(
+      window.localStorage.getItem('official_id') ||
+      window.localStorage.getItem('citizen_email') ||
+      window.localStorage.getItem('citizen_phone')
+    )
+    if (isLoggedIn) return
+
     const sessionWelcomed = sessionStorage.getItem('gramsetu_welcomed')
     const isLangChange = prevLang.current !== lang
     prevLang.current = lang

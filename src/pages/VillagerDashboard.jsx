@@ -69,11 +69,12 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
 
   useEffect(() => {
     if (!window.sessionStorage.getItem('villager_welcomed')) {
+      window.sessionStorage.setItem('villager_welcomed', 'true')
       const name = window.localStorage.getItem('citizen_name') || 'User'
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         speak(`Namaskara ${name}`)
-        window.sessionStorage.setItem('villager_welcomed', 'true')
       }, 1000)
+      return () => clearTimeout(timer)
     }
   }, [speak])
 

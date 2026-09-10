@@ -1987,11 +1987,12 @@ export default function OfficialDashboard() {
 
   useEffect(() => {
     if (!window.sessionStorage.getItem('official_welcomed')) {
+      window.sessionStorage.setItem('official_welcomed', 'true')
       const name = window.localStorage.getItem('official_name') || 'Official'
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         speak(`Namaskara ${name}`)
-        window.sessionStorage.setItem('official_welcomed', 'true')
       }, 1000)
+      return () => clearTimeout(timer)
     }
   }, [speak])
 

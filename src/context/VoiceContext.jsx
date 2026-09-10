@@ -184,11 +184,16 @@ export function VoiceProvider({ children }) {
       if (voices.length > 0) {
         doSpeak();
       } else {
-        window.speechSynthesis.onvoiceschanged = () => {
-          window.speechSynthesis.onvoiceschanged = null;
-          doSpeak();
+        let hasSpoken = false;
+        const triggerOnce = () => {
+          if (!hasSpoken) {
+            hasSpoken = true;
+            window.speechSynthesis.onvoiceschanged = null;
+            doSpeak();
+          }
         };
-        doSpeak();
+        window.speechSynthesis.onvoiceschanged = triggerOnce;
+        setTimeout(triggerOnce, 250);
       }
     }, 60);
   }, [lang]);
