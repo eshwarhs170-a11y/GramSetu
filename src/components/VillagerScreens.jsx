@@ -737,9 +737,9 @@ export function HomeScreen({ setActive }) {
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('gramSetuOpenInquiry', { detail: { category: 'question' } }))}
               style={{
-                background: 'var(--bg-card, #ffffff)',
-                color: 'var(--text-main, #0f172a)',
-                border: '1.5px solid var(--border, #cbd5e1)',
+                background: 'var(--bg-main)',
+                color: 'var(--text-primary)',
+                border: '1.5px solid var(--border)',
                 borderRadius: 11,
                 padding: '10px 18px',
                 fontSize: 13,
@@ -749,13 +749,13 @@ export function HomeScreen({ setActive }) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 7,
-                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.04)',
+                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
                 transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                 flex: '1 1 140px',
                 maxWidth: '220px'
               }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = '#16a34a'; e.currentTarget.style.color = '#16a34a'; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'var(--border, #cbd5e1)'; e.currentTarget.style.color = 'var(--text-main, #0f172a)'; }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = 'var(--primary)'; e.currentTarget.style.color = 'var(--primary)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(22,163,74,0.18)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.08)'; }}
             >
               <HelpCircle size={15} strokeWidth={2.2} />
               <span style={{ whiteSpace: 'nowrap' }}>{lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಕೇಳಿ' : 'Ask Question'}</span>

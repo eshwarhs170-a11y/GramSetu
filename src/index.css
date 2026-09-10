@@ -1634,3 +1634,139 @@ input, textarea, select { font-family: inherit; outline: none; }
     padding-bottom: 76px !important;
   }
 }
+
+/* ===== FARMER INQUIRY MODAL – DARK MODE FIXES ===== */
+
+/* Modal container & header */
+[data-theme="dark"] .modal-overlay .modal-content {
+  background: #161b22 !important;
+  color: #e6edf3 !important;
+  border-color: #30363d !important;
+}
+
+/* Modal header gradient */
+[data-theme="dark"] .modal-overlay .modal-content > div:first-child {
+  background: linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(59,130,246,0.05) 100%) !important;
+  border-bottom-color: #30363d !important;
+}
+
+/* All headings / text inside modal */
+[data-theme="dark"] .modal-overlay .modal-content h3,
+[data-theme="dark"] .modal-overlay .modal-content h4,
+[data-theme="dark"] .modal-overlay .modal-content label {
+  color: #e6edf3 !important;
+}
+
+[data-theme="dark"] .modal-overlay .modal-content p,
+[data-theme="dark"] .modal-overlay .modal-content span:not([class]) {
+  color: #8b949e !important;
+}
+
+/* Inputs, textareas, selects inside modal */
+[data-theme="dark"] .modal-overlay .modal-content input,
+[data-theme="dark"] .modal-overlay .modal-content textarea,
+[data-theme="dark"] .modal-overlay .modal-content select {
+  background: #0d1117 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+[data-theme="dark"] .modal-overlay .modal-content input::placeholder,
+[data-theme="dark"] .modal-overlay .modal-content textarea::placeholder {
+  color: #6e7681 !important;
+}
+
+[data-theme="dark"] .modal-overlay .modal-content select option {
+  background: #161b22;
+  color: #e6edf3;
+}
+
+/* Category selector buttons (unselected) */
+[data-theme="dark"] .modal-overlay .modal-content button[type="button"]:not(:first-child) {
+  background: #0d1117 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+/* Category button label text (inner divs) */
+[data-theme="dark"] .modal-overlay .modal-content button[type="button"] > div > div:first-child {
+  color: #e6edf3 !important;
+}
+
+[data-theme="dark"] .modal-overlay .modal-content button[type="button"] > div > div:last-child {
+  color: #8b949e !important;
+}
+
+/* Category button icon bg (unselected) */
+[data-theme="dark"] .modal-overlay .modal-content button[type="button"] > div:first-child {
+  background: rgba(255,255,255,0.06) !important;
+  color: #8b949e !important;
+}
+
+/* Cancel button */
+[data-theme="dark"] .modal-overlay .modal-content button[type="button"][aria-label="Close"] {
+  color: #8b949e !important;
+}
+[data-theme="dark"] .modal-overlay .modal-content button[type="button"][aria-label="Close"]:hover {
+  background: #21262d !important;
+}
+
+/* Cancel text button at bottom of form */
+[data-theme="dark"] .modal-overlay .modal-content form > div:last-child > button[type="button"] {
+  background: transparent !important;
+  color: #8b949e !important;
+  border: 1.5px solid #30363d !important;
+  border-radius: 12px !important;
+  padding: 12px 18px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+/* Info/guarantee banner inside modal */
+[data-theme="dark"] .modal-overlay .modal-content div[style*="rgba(22, 163, 74"] {
+  background: rgba(34,197,94,0.08) !important;
+  border-color: rgba(34,197,94,0.25) !important;
+  color: #e6edf3 !important;
+}
+
+/* Ticket summary card */
+[data-theme="dark"] .modal-overlay .modal-content div[style*="f8fafc"] {
+  background: #0d1117 !important;
+  color: #8b949e !important;
+}
+
+/* Editing banner */
+[data-theme="dark"] .modal-overlay .modal-content div[style*="rgba(37, 99, 235, 0.08)"] {
+  background: rgba(59,130,246,0.08) !important;
+  border-color: rgba(59,130,246,0.3) !important;
+}
+
+/* ===== TOPBAR MOBILE: prevent Globe/GramSetu title overlap ===== */
+@media (max-width: 768px) {
+  .topbar-left {
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    max-width: calc(100% - 190px) !important;
+  }
+
+  .topbar-brand {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .topbar-brand-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 110px;
+  }
+
+  /* Give middle (lang+theme) and actions fixed widths so they don't crowd brand */
+  .topbar-row2-mobile {
+    flex: 0 0 auto !important;
+  }
+
+  .topbar-actions {
+    flex: 0 0 auto !important;
+  }
+}

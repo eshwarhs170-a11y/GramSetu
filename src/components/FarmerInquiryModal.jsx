@@ -5,6 +5,7 @@ import {
   AlertCircle, ChevronRight, User, Phone, Mail, Building2, MapPinOff, ShieldCheck
 } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
+import { useTheme } from '../context/ThemeContext'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import { db } from '../firebase'
 import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore'
@@ -18,6 +19,32 @@ export default function FarmerInquiryModal({
   prefillVillage = ''
 }) {
   const { lang } = useLanguage()
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
+
+  // Theme-aware colour tokens
+  const T = {
+    bg:        isDark ? '#161b22' : '#ffffff',
+    bgMain:    isDark ? '#0d1117' : '#f8fafc',
+    bgDisabled:isDark ? '#161b22' : '#f1f5f9',
+    text:      isDark ? '#e6edf3' : '#0f172a',
+    textSub:   isDark ? '#8b949e' : '#475569',
+    textMuted: isDark ? '#6e7681' : '#94a3b8',
+    border:    isDark ? '#30363d' : '#cbd5e1',
+    borderLight: isDark ? '#21262d' : '#e2e8f0',
+    headerGrad: isDark
+      ? 'linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(59,130,246,0.05) 100%)'
+      : 'linear-gradient(135deg, rgba(22,163,74,0.08) 0%, rgba(37,99,235,0.05) 100%)',
+    cardBg:    isDark ? '#0d1117' : '#f8fafc',
+    bannerBg:  isDark ? 'rgba(34,197,94,0.08)' : 'rgba(22,163,74,0.08)',
+    bannerBorder: isDark ? 'rgba(34,197,94,0.25)' : 'rgba(22,163,74,0.25)',
+    catBg:     isDark ? '#0d1117' : '#f8fafc',
+    catBorder: isDark ? '#30363d' : '#e2e8f0',
+    catIconBg: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+    catIconColor: isDark ? '#8b949e' : '#64748b',
+    catText:   isDark ? '#e6edf3' : '#1e293b',
+    catDesc:   isDark ? '#6e7681' : '#64748b',
+  }
 
   const [category, setCategory] = useState(defaultCategory)
   const [name, setName] = useState('')
@@ -249,8 +276,8 @@ export default function FarmerInquiryModal({
       <div
         className="modal-content"
         style={{
-          background: 'var(--bg-card, #ffffff)',
-          color: 'var(--text-main, #0f172a)',
+          background: T.bg,
+          color: T.text,
           borderRadius: '24px',
           maxWidth: '620px',
           width: '100%',
@@ -258,7 +285,7 @@ export default function FarmerInquiryModal({
           display: 'flex',
           flexDirection: 'column',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
-          border: '1px solid var(--border-light, rgba(226, 232, 240, 0.8))',
+          border: `1px solid ${T.borderLight}`,
           overflow: 'hidden',
           position: 'relative'
         }}
@@ -268,11 +295,11 @@ export default function FarmerInquiryModal({
         <div
           style={{
             padding: '20px 24px',
-            borderBottom: '1px solid var(--border-light, #e2e8f0)',
+            borderBottom: `1px solid ${T.borderLight}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            background: 'linear-gradient(135deg, rgba(22, 163, 74, 0.08) 0%, rgba(37, 99, 235, 0.05) 100%)'
+            background: T.headerGrad
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -293,10 +320,10 @@ export default function FarmerInquiryModal({
               <HelpCircle size={22} strokeWidth={2.2} />
             </div>
             <div>
-              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: 'var(--text-main, #0f172a)' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: T.text }}>
                 {lang === 'kn' ? 'ರೈತ ಸಹಾಯವಾಣಿ & ಮಾಹಿತಿ ಸಲ್ಲಿಕೆ' : 'Farmer Helpdesk & Missing Data Submission'}
               </h3>
-              <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--text-secondary, #64748b)' }}>
+              <p style={{ margin: '2px 0 0', fontSize: '12px', color: T.textSub }}>
                 {lang === 'kn'
                   ? 'ಕಾಣೆಯಾದ ಗ್ರಾಮ ಅಥವಾ ಪ್ರಶ್ನೆಗಳನ್ನು ಡೇಟಾಬೇಸ್‌ಗೆ ಕಳುಹಿಸಿ — ಅಧಿಕಾರಿಗಳು ಪರಿಹರಿಸುತ್ತಾರೆ'
                   : 'Submit missing villages or questions to our database for nodal officer resolution'}
@@ -316,10 +343,10 @@ export default function FarmerInquiryModal({
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              color: 'var(--text-muted, #94a3b8)',
+              color: T.textMuted,
               transition: 'background 0.2s'
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-main, #f1f5f9)')}
+            onMouseEnter={(e) => (e.currentTarget.style.background = T.bgMain)}
             onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
           >
             <X size={20} strokeWidth={2.5} />
@@ -348,11 +375,11 @@ export default function FarmerInquiryModal({
                 <CheckCircle2 size={44} strokeWidth={2.4} />
               </div>
 
-              <h4 style={{ fontSize: '22px', fontWeight: 800, margin: '0 0 8px', color: 'var(--text-main, #0f172a)' }}>
+              <h4 style={{ fontSize: '22px', fontWeight: 800, margin: '0 0 8px', color: T.text }}>
                 {lang === 'kn' ? 'ವಿವರಗಳನ್ನು ಡೇಟಾಬೇಸ್‌ಗೆ ದಾಖಲಿಸಲಾಗಿದೆ!' : 'Successfully Submitted to Database!'}
               </h4>
 
-              <p style={{ fontSize: '14px', color: 'var(--text-secondary, #64748b)', maxWidth: '440px', margin: '0 auto 20px', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '14px', color: T.textSub, maxWidth: '440px', margin: '0 auto 20px', lineHeight: 1.6 }}>
                 {lang === 'kn'
                   ? 'ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್ ಅಧಿಕಾರಿಗಳಿಗೆ ರವಾನಿಸಲಾಗಿದೆ. ನಮ್ಮ ತಾಲ್ಲೂಕು ನೋಡೆಲ್ ಅಧಿಕಾರಿಗಳು ಪರಿಶೀಲಿಸಿ ಪರಿಹರಿಸಲಿದ್ದಾರೆ.'
                   : 'Your submission has been safely saved in the GramSetu master database. Taluk and District nodal officers will review and update this shortly.'}
@@ -361,8 +388,8 @@ export default function FarmerInquiryModal({
               {/* Ticket Card */}
               <div
                 style={{
-                  background: 'var(--bg-main, #f8fafc)',
-                  border: '1.5px dashed var(--primary, #16a34a)',
+                  background: T.cardBg,
+                  border: '1.5px dashed #16a34a',
                   borderRadius: '16px',
                   padding: '16px 20px',
                   maxWidth: '380px',
@@ -374,7 +401,7 @@ export default function FarmerInquiryModal({
                 }}
               >
                 <div style={{ textAlign: 'left' }}>
-                  <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted, #64748b)', fontWeight: 700 }}>
+                  <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', color: T.textMuted, fontWeight: 700 }}>
                     {lang === 'kn' ? 'ಟ್ರ್ಯಾಕಿಂಗ್ ಟಿಕೆಟ್ ಐಡಿ' : 'Reference Ticket ID'}
                   </span>
                   <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--primary, #16a34a)', letterSpacing: '0.04em' }}>
@@ -389,9 +416,9 @@ export default function FarmerInquiryModal({
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
-                    background: copied ? '#16a34a' : '#ffffff',
-                    color: copied ? '#ffffff' : 'var(--text-main, #0f172a)',
-                    border: '1px solid var(--border, #cbd5e1)',
+                    background: copied ? '#16a34a' : T.bgMain,
+                    color: copied ? '#ffffff' : T.text,
+                    border: `1px solid ${T.border}`,
                     borderRadius: '10px',
                     padding: '8px 14px',
                     fontSize: '12px',
@@ -409,12 +436,12 @@ export default function FarmerInquiryModal({
               {/* Summary Details */}
               <div
                 style={{
-                  background: 'var(--bg-main, #f8fafc)',
+                  background: T.cardBg,
                   borderRadius: '14px',
                   padding: '16px',
                   textAlign: 'left',
                   fontSize: '13px',
-                  color: 'var(--text-secondary, #475569)',
+                  color: T.textSub,
                   maxWidth: '440px',
                   margin: '0 auto 24px',
                   lineHeight: 1.6
@@ -447,7 +474,7 @@ export default function FarmerInquiryModal({
                   type="button"
                   onClick={handleEditSubmission}
                   style={{
-                    background: '#ffffff',
+                    background: T.bgMain,
                     border: '1.5px solid #2563eb',
                     borderRadius: '12px',
                     padding: '10px 18px',
@@ -469,12 +496,12 @@ export default function FarmerInquiryModal({
                   onClick={() => { setEditingTicketId(null); setEditingDocId(null); setSubmittedTicket(null); }}
                   style={{
                     background: 'transparent',
-                    border: '1.5px solid var(--border, #cbd5e1)',
+                    border: `1.5px solid ${T.border}`,
                     borderRadius: '12px',
                     padding: '10px 18px',
                     fontSize: '13px',
                     fontWeight: 700,
-                    color: 'var(--text-main, #334155)',
+                    color: T.text,
                     cursor: 'pointer'
                   }}
                 >
@@ -533,7 +560,7 @@ export default function FarmerInquiryModal({
 
               {/* Category Selector Chips */}
               <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, marginBottom: '10px', color: 'var(--text-main, #0f172a)' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, marginBottom: '10px', color: T.text }}>
                   {lang === 'kn' ? 'ಸಲ್ಲಿಕೆಯ ಪ್ರಕಾರ ಆಯ್ಕೆ ಮಾಡಿ *' : 'Select What You Need to Submit *'}
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -549,8 +576,8 @@ export default function FarmerInquiryModal({
                           textAlign: 'left',
                           padding: '12px 14px',
                           borderRadius: '14px',
-                          border: isSelected ? '2px solid #16a34a' : '1.5px solid var(--border, #e2e8f0)',
-                          background: isSelected ? 'rgba(22, 163, 74, 0.07)' : 'var(--bg-main, #f8fafc)',
+                          border: isSelected ? '2px solid #16a34a' : `1.5px solid ${T.catBorder}`,
+                          background: isSelected ? (isDark ? 'rgba(34,197,94,0.1)' : 'rgba(22,163,74,0.07)') : T.catBg,
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'flex-start',
@@ -564,8 +591,8 @@ export default function FarmerInquiryModal({
                             width: '32px',
                             height: '32px',
                             borderRadius: '8px',
-                            background: isSelected ? '#16a34a' : 'rgba(0,0,0,0.05)',
-                            color: isSelected ? '#ffffff' : '#64748b',
+                            background: isSelected ? '#16a34a' : T.catIconBg,
+                            color: isSelected ? '#ffffff' : T.catIconColor,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -576,10 +603,10 @@ export default function FarmerInquiryModal({
                           <Icon size={16} strokeWidth={2.2} />
                         </div>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontWeight: 700, fontSize: '13px', color: isSelected ? '#16a34a' : 'var(--text-main, #1e293b)' }}>
+                          <div style={{ fontWeight: 700, fontSize: '13px', color: isSelected ? (isDark ? '#4ade80' : '#16a34a') : T.catText }}>
                             {lang === 'kn' ? c.labelKn : c.labelEn}
                           </div>
-                          <div style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)', marginTop: '2px', lineHeight: 1.3 }}>
+                          <div style={{ fontSize: '11px', color: T.catDesc, marginTop: '2px', lineHeight: 1.3 }}>
                             {lang === 'kn' ? c.descKn : c.descEn}
                           </div>
                         </div>
@@ -593,8 +620,8 @@ export default function FarmerInquiryModal({
               {category === 'missing_village' && (
                 <div
                   style={{
-                    background: 'rgba(22, 163, 74, 0.08)',
-                    border: '1px solid rgba(22, 163, 74, 0.25)',
+                    background: T.bannerBg,
+                    border: `1px solid ${T.bannerBorder}`,
                     borderRadius: '14px',
                     padding: '14px 16px',
                     marginBottom: '20px',
@@ -603,8 +630,8 @@ export default function FarmerInquiryModal({
                     gap: '12px'
                   }}
                 >
-                  <MapPinOff size={22} style={{ color: '#16a34a', flexShrink: 0 }} />
-                  <div style={{ fontSize: '12px', color: 'var(--text-main, #1e293b)', lineHeight: 1.5 }}>
+                  <MapPinOff size={22} style={{ color: isDark ? '#4ade80' : '#16a34a', flexShrink: 0 }} />
+                  <div style={{ fontSize: '12px', color: T.text, lineHeight: 1.5 }}>
                     <strong>{lang === 'kn' ? 'ಗ್ರಾಮ ಸೇರ್ಪಡೆ ಖಾತರಿ:' : 'Missing Village Guarantee:'}</strong>{' '}
                     {lang === 'kn'
                       ? 'ನಿಮ್ಮ ಗ್ರಾಮ, ಹಟ್ಟಿ ಅಥವಾ ಮಜರೆ ಹೆಸರು ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಮಾಸ್ಟರ್ ಪಟ್ಟಿಯಲ್ಲಿ ಸೇರ್ಪಡೆ ಮಾಡಲು ನೇರವಾಗಿ ಪಿಡಿಒ ಮತ್ತು ತಾಲೂಕು ಕಚೇರಿಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ.'
@@ -638,7 +665,7 @@ export default function FarmerInquiryModal({
               {/* Farmer Contact Details */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px', marginBottom: '16px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-secondary, #475569)' }}>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
                     {lang === 'kn' ? 'ನಿಮ್ಮ ಹೆಸರು / Farmer Name *' : 'Farmer / Citizen Name *'}
                   </label>
                   <div style={{ position: 'relative' }}>
@@ -653,9 +680,9 @@ export default function FarmerInquiryModal({
                         width: '100%',
                         padding: '10px 14px 10px 38px',
                         borderRadius: '12px',
-                        border: '1.5px solid var(--border, #cbd5e1)',
-                        background: 'var(--bg-main, #f8fafc)',
-                        color: 'var(--text-main, #0f172a)',
+                        border: `1.5px solid ${T.border}`,
+                        background: T.bgMain,
+                        color: T.text,
                         fontSize: '14px',
                         outline: 'none',
                         boxSizing: 'border-box'
@@ -665,7 +692,7 @@ export default function FarmerInquiryModal({
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-secondary, #475569)' }}>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
                     {lang === 'kn' ? 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ / Phone Number *' : 'Mobile Number (For resolution SMS) *'}
                   </label>
                   <div style={{ position: 'relative' }}>
@@ -681,9 +708,9 @@ export default function FarmerInquiryModal({
                         width: '100%',
                         padding: '10px 14px 10px 38px',
                         borderRadius: '12px',
-                        border: '1.5px solid var(--border, #cbd5e1)',
-                        background: 'var(--bg-main, #f8fafc)',
-                        color: 'var(--text-main, #0f172a)',
+                        border: `1.5px solid ${T.border}`,
+                        background: T.bgMain,
+                        color: T.text,
                         fontSize: '14px',
                         outline: 'none',
                         boxSizing: 'border-box'
@@ -696,7 +723,7 @@ export default function FarmerInquiryModal({
               {/* Location Cascade */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '16px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-secondary, #475569)' }}>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
                     {lang === 'kn' ? 'ಜಿಲ್ಲೆ / District *' : 'District *'}
                   </label>
                   <select
@@ -707,9 +734,9 @@ export default function FarmerInquiryModal({
                       width: '100%',
                       padding: '10px 12px',
                       borderRadius: '12px',
-                      border: '1.5px solid var(--border, #cbd5e1)',
-                      background: 'var(--bg-main, #f8fafc)',
-                      color: 'var(--text-main, #0f172a)',
+                      border: `1.5px solid ${T.border}`,
+                      background: T.bgMain,
+                      color: T.text,
                       fontSize: '13px',
                       outline: 'none',
                       boxSizing: 'border-box'
@@ -723,7 +750,7 @@ export default function FarmerInquiryModal({
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-secondary, #475569)' }}>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
                     {lang === 'kn' ? 'ತಾಲೂಕು / Taluk' : 'Taluk'}
                   </label>
                   <select
@@ -734,9 +761,9 @@ export default function FarmerInquiryModal({
                       width: '100%',
                       padding: '10px 12px',
                       borderRadius: '12px',
-                      border: '1.5px solid var(--border, #cbd5e1)',
-                      background: district ? 'var(--bg-main, #f8fafc)' : 'var(--bg-disabled, #f1f5f9)',
-                      color: 'var(--text-main, #0f172a)',
+                      border: `1.5px solid ${T.border}`,
+                      background: district ? T.bgMain : T.bgDisabled,
+                      color: T.text,
                       fontSize: '13px',
                       outline: 'none',
                       cursor: district ? 'pointer' : 'not-allowed',
@@ -751,7 +778,7 @@ export default function FarmerInquiryModal({
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-secondary, #475569)' }}>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
                     {lang === 'kn' ? 'ಗ್ರಾಮ ಪಂಚಾಯತಿ / GP (ಐಚ್ಛಿಕ)' : 'Gram Panchayat (Optional)'}
                   </label>
                   <input
@@ -763,9 +790,9 @@ export default function FarmerInquiryModal({
                       width: '100%',
                       padding: '10px 12px',
                       borderRadius: '12px',
-                      border: '1.5px solid var(--border, #cbd5e1)',
-                      background: 'var(--bg-main, #f8fafc)',
-                      color: 'var(--text-main, #0f172a)',
+                      border: `1.5px solid ${T.border}`,
+                      background: T.bgMain,
+                      color: T.text,
                       fontSize: '13px',
                       outline: 'none',
                       boxSizing: 'border-box'
@@ -776,13 +803,13 @@ export default function FarmerInquiryModal({
 
               {/* Village Name Specific Field */}
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: category === 'missing_village' ? '#16a34a' : 'var(--text-secondary, #475569)' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: category === 'missing_village' ? (isDark ? '#4ade80' : '#16a34a') : T.textSub }}>
                   {category === 'missing_village'
                     ? (lang === 'kn' ? 'ಸೇರಿಸಬೇಕಾದ ಗ್ರಾಮ / ಮಜರೆ ಹೆಸರು *' : 'Missing Village / Hamlet / Area Name *')
                     : (lang === 'kn' ? 'ನಿಮ್ಮ ಗ್ರಾಮ / ಪ್ರದೇಶ ಹೆಸರು' : 'Village / Area Name')}
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <MapPin size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: category === 'missing_village' ? '#16a34a' : '#94a3b8' }} />
+                  <MapPin size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: category === 'missing_village' ? (isDark ? '#4ade80' : '#16a34a') : T.textMuted }} />
                   <input
                     type="text"
                     required={category === 'missing_village'}
@@ -806,7 +833,7 @@ export default function FarmerInquiryModal({
 
               {/* Subject */}
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-secondary, #475569)' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
                   {lang === 'kn' ? 'ವಿಷಯ / Subject *' : 'Subject / Summary *'}
                 </label>
                 <input
@@ -819,9 +846,9 @@ export default function FarmerInquiryModal({
                     width: '100%',
                     padding: '10px 14px',
                     borderRadius: '12px',
-                    border: '1.5px solid var(--border, #cbd5e1)',
-                    background: 'var(--bg-main, #f8fafc)',
-                    color: 'var(--text-main, #0f172a)',
+                    border: `1.5px solid ${T.border}`,
+                    background: T.bgMain,
+                    color: T.text,
                     fontSize: '14px',
                     outline: 'none',
                     boxSizing: 'border-box'
@@ -831,7 +858,7 @@ export default function FarmerInquiryModal({
 
               {/* Description */}
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-secondary, #475569)' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
                   {lang === 'kn' ? 'ಪೂರ್ಣ ವಿವರಗಳು ಅಥವಾ ಪ್ರಶ್ನೆ *' : 'Full Details / Description / Question *'}
                 </label>
                 <textarea
@@ -852,9 +879,9 @@ export default function FarmerInquiryModal({
                     width: '100%',
                     padding: '12px 14px',
                     borderRadius: '12px',
-                    border: '1.5px solid var(--border, #cbd5e1)',
-                    background: 'var(--bg-main, #f8fafc)',
-                    color: 'var(--text-main, #0f172a)',
+                    border: `1.5px solid ${T.border}`,
+                    background: T.bgMain,
+                    color: T.text,
                     fontSize: '14px',
                     outline: 'none',
                     resize: 'vertical',
@@ -872,13 +899,24 @@ export default function FarmerInquiryModal({
                   onClick={onClose}
                   style={{
                     background: 'transparent',
-                    border: 'none',
-                    color: 'var(--text-muted, #64748b)',
+                    border: '1.5px solid #ef4444',
+                    color: '#ef4444',
                     padding: '12px 18px',
                     borderRadius: '12px',
                     fontWeight: 600,
                     fontSize: '14px',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = '#ef4444'
+                    e.currentTarget.style.color = '#ffffff'
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(239,68,68,0.35)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = 'transparent'
+                    e.currentTarget.style.color = '#ef4444'
+                    e.currentTarget.style.boxShadow = 'none'
                   }}
                 >
                   {lang === 'kn' ? 'ರದ್ದುಮಾಡಿ' : 'Cancel'}
