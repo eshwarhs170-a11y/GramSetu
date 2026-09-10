@@ -61,6 +61,13 @@ Built with accessibility, voice-first interaction, AI crop disease scanning, and
 - **Scholarship Finder:** Income and eligibility based discovery for student scholarships (SSP, Buddy4Study, HDFC Parivartan, Reliance, MANF, AICTE Saksham).
 - **Text-to-Speech:** Listen to scheme guidelines and eligibility criteria spoken aloud in the selected language.
 
+### Farmer Helpdesk & Question Submission (ರೈತ ಸಹಾಯವಾಣಿ & ಪ್ರಶ್ನೆ ಸಲ್ಲಿಕೆ)
+- **Direct Citizen Inquiries & Questioning:** Villagers and farmers can ask questions on state/central schemes, crop advisories, subsidy disbursement, or submit missing village and panchayat information.
+- **Intelligent Inquiry Categorization:** Multi-category filing (`question`, `missing_village`, `missing_scheme`, `app_issue`, `other`) with real-time district and taluk geo-tagging.
+- **Automated Tracking Tickets:** Generates unique tracking tickets (e.g., `GS-INQ-849201`) saved in Firestore for live status monitoring (`pending` ➔ `in_review` ➔ `resolved`).
+- **Official Resolution Hub:** Line officers and PDOs receive incoming citizen questions in their dedicated official dashboard inbox to respond, resolve, and update village data.
+- **Accessible Dark/Light Modal:** Designed with dynamic theme tokens, instant bilingual (Kannada & English) toggles, and intuitive mobile ergonomics.
+
 ### Emergency SOS & Rural Weather Insights
 - **One-Tap Emergency SOS:** Instant emergency alert broadcast for urgent rural, agricultural, or health crises.
 - **Karnataka Agro-Weather:** Location-specific weather forecasts and agricultural advisories.
@@ -106,6 +113,7 @@ Built with accessibility, voice-first interaction, AI crop disease scanning, and
 | `/demo/qr-cards` | Printable Magic QR Passes (A4 / A5 layout) | Open Day / Evaluators |
 | `/demo/dashboard` | Big Screen Real-Time Complaint Monitor + Audio Chimes | Presentation Displays |
 | `/demo/voice` | Standalone GramSetu AI Voice Assistant Demonstration | All |
+| `/presentation.html` | Interactive 8-Slide EEC-2026 Presentation Deck & PDF Exporter | Evaluators / Reviewers |
 | `/magic-login` | Tokenless instant role-playing entry point | QR Code Scanners |
 
 ---
