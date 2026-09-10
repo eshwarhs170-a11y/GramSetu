@@ -461,8 +461,7 @@ input, textarea, select { font-family: inherit; outline: none; }
 
 /* Desktop: original topbar layout styling */
 .topbar-left { display: flex; align-items: center; gap: 12px; }
-.topbar-row2-mobile { display: flex; align-items: center; gap: 16px; margin-left: auto; margin-right: 16px; }
-.topbar-actions { display: flex; align-items: center; gap: 16px; }
+.topbar-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
 
 .topbar-icon-btn {
   width: 38px; height: 38px;
@@ -1510,23 +1509,20 @@ input, textarea, select { font-family: inherit; outline: none; }
 
   /* ── Row 1 Left: hamburger + brand ── */
   .topbar-left {
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
   }
 
-  /* ── Middle: language + theme ── */
-  .topbar-row2-mobile {
-    flex: 0 0 auto;
-    width: auto;
+  /* ── Right: all 4 icons grouped together with equal uniform spacing ── */
+  .topbar-actions {
+    margin-left: auto !important;
+    flex: 0 0 auto !important;
     display: flex !important;
-    align-items: center;
-    gap: 2px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
+    align-items: center !important;
+    gap: 6px !important; /* Uniform equal gap between Globe, Theme, Search, Bell */
   }
 
   /* Hide language text and chevron on mobile */
@@ -1535,12 +1531,15 @@ input, textarea, select { font-family: inherit; outline: none; }
     display: none !important;
   }
   
-  /* Increase mobile icon sizes (Globe, Theme, Search, Bell) */
+  /* Equal sized icon buttons (Globe, Theme, Search, Bell) */
   .lang-dropdown-container.topbar-style .lang-dropdown-trigger,
   .topbar-icon-btn {
     padding: 0 !important;
-    width: 42px !important;
-    height: 42px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    display: flex !important;
+    align-items: center !important;
     justify-content: center !important;
     border: none !important;
     background: transparent !important;
@@ -1549,16 +1548,8 @@ input, textarea, select { font-family: inherit; outline: none; }
   
   .lang-dropdown-container.topbar-style .lang-dropdown-trigger svg:first-child,
   .topbar-icon-btn svg {
-    width: 22px !important;
-    height: 22px !important;
-  }
-
-  /* ── Right: search + bell (hide profile) ── */
-  .topbar-actions {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    width: 20px !important;
+    height: 20px !important;
   }
 
   /* Hide profile icon on mobile */
@@ -1572,12 +1563,6 @@ input, textarea, select { font-family: inherit; outline: none; }
 
   .topbar-badge {
     display: none;
-  }
-
-  .topbar-icon-btn {
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 8px !important;
   }
 
   /* Sleek Bottom Navigation Bar */
@@ -1761,12 +1746,8 @@ input, textarea, select { font-family: inherit; outline: none; }
     max-width: 110px;
   }
 
-  /* Give middle (lang+theme) and actions fixed widths so they don't crowd brand */
-  .topbar-row2-mobile {
-    flex: 0 0 auto !important;
-  }
-
   .topbar-actions {
+    margin-left: auto !important;
     flex: 0 0 auto !important;
   }
 }

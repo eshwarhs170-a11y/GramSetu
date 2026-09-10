@@ -218,14 +218,11 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
             </div>
           </div>
 
-          {/* ── Language & Theme (Middle on desktop, Bottom row on mobile) ── */}
-          <div className="topbar-row2-mobile">
+          {/* ── Actions (All 4 icons grouped on right side with equal spacing) ── */}
+          <div className="topbar-actions">
             <LanguageSwitcher variant="topbar-style" />
             <ThemeToggle />
-          </div>
 
-          {/* ── Actions (Right on desktop, Top-Right on mobile) ── */}
-          <div className="topbar-actions">
             <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
               <Search size={18} strokeWidth={2} />
             </button>
