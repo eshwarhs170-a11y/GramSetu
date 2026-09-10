@@ -294,63 +294,86 @@ export default function FarmerInquiryModal({
         {/* Header */}
         <div
           style={{
-            padding: '20px 24px',
+            padding: '18px 22px 14px',
             borderBottom: `1px solid ${T.borderLight}`,
+            background: T.headerGrad,
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            background: T.headerGrad
+            flexDirection: 'column',
+            gap: '8px'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div
+          {/* 1st Line: [Icon + Title] on left, [Highlighted Cancel Button] at right end */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '10px',
+                  background: 'linear-gradient(135deg, #16a34a, #15803d)',
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 2px 8px rgba(22, 163, 74, 0.3)',
+                  flexShrink: 0
+                }}
+              >
+                <HelpCircle size={18} strokeWidth={2.4} />
+              </div>
+              <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: T.text, lineHeight: 1.3 }}>
+                {lang === 'kn' ? 'ರೈತ ಸಹಾಯವಾಣಿ & ಮಾಹಿತಿ ಸಲ್ಲಿಕೆ' : 'Farmer Helpdesk & Missing Data Submission'}
+              </h3>
+            </div>
+
+            {/* Highlighted Cancel Button at right end */}
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              title={lang === 'kn' ? 'ರದ್ದುಮಾಡಿ / ಮುಚ್ಚಿ' : 'Cancel / Close'}
               style={{
-                width: '42px',
-                height: '42px',
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #16a34a, #15803d)',
-                color: '#ffffff',
+                background: isDark ? 'rgba(239, 68, 68, 0.15)' : '#fee2e2',
+                border: '1.5px solid #ef4444',
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)',
-                flexShrink: 0
+                cursor: 'pointer',
+                color: '#ef4444',
+                flexShrink: 0,
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 6px rgba(239, 68, 68, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#ef4444'
+                e.currentTarget.style.color = '#ffffff'
+                e.currentTarget.style.transform = 'scale(1.05)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = isDark ? 'rgba(239, 68, 68, 0.15)' : '#fee2e2'
+                e.currentTarget.style.color = '#ef4444'
+                e.currentTarget.style.transform = 'scale(1)'
               }}
             >
-              <HelpCircle size={22} strokeWidth={2.2} />
-            </div>
-            <div>
-              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: T.text }}>
-                {lang === 'kn' ? 'ರೈತ ಸಹಾಯವಾಣಿ & ಮಾಹಿತಿ ಸಲ್ಲಿಕೆ' : 'Farmer Helpdesk & Missing Data Submission'}
-              </h3>
-              <p style={{ margin: '2px 0 0', fontSize: '12px', color: T.textSub }}>
-                {lang === 'kn'
-                  ? 'ಕಾಣೆಯಾದ ಗ್ರಾಮ ಅಥವಾ ಪ್ರಶ್ನೆಗಳನ್ನು ಡೇಟಾಬೇಸ್‌ಗೆ ಕಳುಹಿಸಿ — ಅಧಿಕಾರಿಗಳು ಪರಿಹರಿಸುತ್ತಾರೆ'
-                  : 'Submit missing villages or questions to our database for nodal officer resolution'}
-              </p>
-            </div>
+              <X size={18} strokeWidth={2.5} />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            aria-label="Close"
-            style={{
-              background: 'transparent',
-              border: 'none',
-              width: '34px',
-              height: '34px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              color: T.textMuted,
-              transition: 'background 0.2s'
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = T.bgMain)}
-            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-          >
-            <X size={20} strokeWidth={2.5} />
-          </button>
+
+          {/* 2nd Line: Downside small sentences covered cleanly in 2 lines */}
+          <p style={{ margin: 0, fontSize: '12.5px', color: T.textSub, lineHeight: 1.45 }}>
+            {lang === 'kn'
+              ? 'ಕಾಣೆಯಾದ ಗ್ರಾಮ ಅಥವಾ ಪ್ರಶ್ನೆಗಳನ್ನು ಡೇಟಾಬೇಸ್‌ಗೆ ಕಳುಹಿಸಿ — ಅಧಿಕಾರಿಗಳು ಪರಿಹರಿಸುತ್ತಾರೆ'
+              : 'Submit missing villages or questions to our database for nodal officer resolution'}
+          </p>
         </div>
 
         {/* Modal Body */}

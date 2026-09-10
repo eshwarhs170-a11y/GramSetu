@@ -11,7 +11,7 @@ import {
   WeatherScreen, EmergencySOSScreen, TutorialsScreen
 } from '../components/VillagerScreens'
 import CropScanner from '../components/CropScanner'
-import { Menu, Search, Bell, X, AlertTriangle, IndianRupee, LayoutDashboard, Landmark, Microscope, ClipboardList, User, Wheat, HelpCircle } from 'lucide-react'
+import { Menu, Search, Bell, X, AlertTriangle, IndianRupee, LayoutDashboard, Landmark, Microscope, ClipboardList, User, Wheat } from 'lucide-react'
 import FarmerInquiryModal from '../components/FarmerInquiryModal'
 
 import { db } from '../firebase'
@@ -228,14 +228,6 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
           <div className="topbar-actions">
             <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
               <Search size={18} strokeWidth={2} />
-            </button>
-
-            <button
-              className="topbar-icon-btn"
-              title={lang === 'kn' ? 'ಪ್ರಶ್ನೆ ಕೇಳಿ / ಗ್ರಾಮ ವರದಿ' : 'Ask Question / Report Missing Info'}
-              onClick={() => { setInquiryCategory('question'); setInquiryModalOpen(true); }}
-            >
-              <HelpCircle size={18} strokeWidth={2} />
             </button>
 
             <div style={{ position: 'relative' }}>
