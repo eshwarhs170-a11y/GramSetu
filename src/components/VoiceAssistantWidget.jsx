@@ -132,7 +132,7 @@ export default function VoiceAssistantWidget() {
       {isOpen && (
         <div style={{
           background: 'var(--bg-card, #fff)',
-          borderRadius: 20, width: 300, maxHeight: 440,
+          borderRadius: 20, width: 'min(320px, calc(100vw - 28px))', maxHeight: 440,
           boxShadow: '0 20px 60px rgba(0,0,0,0.18), 0 0 0 1px rgba(22,163,74,0.1)',
           border: '1px solid var(--border-light, #e2e8f0)',
           display: 'flex', flexDirection: 'column',

@@ -2136,7 +2136,7 @@ export default function OfficialDashboard() {
       {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={() => setSidebarOpen(false)} />}
       <div className="main-content">
         <header className="topbar">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="topbar-left">
             <button
               type="button"
               className="hamburger-btn"
@@ -2145,12 +2145,12 @@ export default function OfficialDashboard() {
             >
               <Menu size={22} strokeWidth={2} />
             </button>
-            <div>
+            <div style={{ minWidth: 0 }}>
               <div className="topbar-title">{t(page.titleKey) || page.titleKey}</div>
               <div className="topbar-subtitle">{sessionData.district} District, Karnataka — {sessionData.department}</div>
             </div>
           </div>
-          <div className="topbar-right">
+          <div className="topbar-actions">
             <LanguageSwitcher variant="topbar-style" />
             <ThemeToggle />
             <button className="topbar-icon-btn" onClick={() => setSearchOpen(true)}>

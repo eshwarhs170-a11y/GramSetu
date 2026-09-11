@@ -831,6 +831,71 @@ input, textarea, select { font-family: inherit; outline: none; }
   box-shadow: 0 12px 30px -8px rgba(22, 163, 74, 0.18), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
 }
 
+/* ── Feature Details Page ── */
+.feature-details-container {
+  min-height: 100vh;
+  background: var(--bg-page, #f8fafc);
+  font-family: 'Inter', 'Noto Sans Kannada', sans-serif;
+  overflow-x: hidden;
+  padding-bottom: 60px;
+}
+.feature-details-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  width: 100%;
+}
+.feature-details-hero {
+  position: relative;
+  min-height: 380px;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  padding: 48px 32px;
+  box-sizing: border-box;
+}
+.feature-details-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #0f172a 0%, rgba(15, 23, 42, 0.75) 60%, rgba(15, 23, 42, 0.3) 100%);
+}
+.feature-details-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+.feature-details-content-wrapper {
+  max-width: 1040px;
+  margin: -36px auto 60px;
+  position: relative;
+  z-index: 10;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+.feature-details-card-grid {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 36px;
+  box-sizing: border-box;
+}
+
 /* ===== SECTION TITLES ===== */
 .section-title {
   display: flex; align-items: center; justify-content: space-between;
@@ -1394,23 +1459,47 @@ input, textarea, select { font-family: inherit; outline: none; }
 
   /* ── Landing Page Nav (mobile) ── */
   .landing-top-nav {
-    padding: 12px 10px !important;
+    padding: 10px 12px !important;
+    gap: 6px !important;
+    box-sizing: border-box !important;
   }
   .landing-nav-subtitle {
     display: none !important;
   }
-  .lang-label {
-    display: inline-block !important;
+  .landing-nav-title {
+    font-size: 16px !important;
+    font-weight: 800 !important;
   }
   .landing-nav-left {
     gap: 6px !important;
+    flex-shrink: 0 !important;
+  }
+  .landing-nav-left > div:first-child {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px !important;
+  }
+  .landing-nav-left svg {
+    width: 17px !important;
+    height: 17px !important;
   }
   .landing-nav-right {
-    gap: 6px !important;
+    gap: 5px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
   }
-  .landing-nav-right button {
-    padding: 8px 12px !important;
-    font-size: 13px !important;
+  .landing-btn-helpdesk {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+    gap: 4px !important;
+  }
+  .landing-btn-login {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(22,163,74,0.25) !important;
   }
 
   /* ── Landing Page Hero (mobile) ── */
@@ -1439,6 +1528,26 @@ input, textarea, select { font-family: inherit; outline: none; }
   }
   footer {
     padding: 32px 16px 20px !important;
+  }
+
+  /* ── Feature Details Page (mobile) ── */
+  .feature-details-nav {
+    padding: 10px 12px !important;
+    gap: 6px !important;
+  }
+  .feature-details-hero {
+    min-height: 280px !important;
+    padding: 24px 16px 36px !important;
+  }
+  .feature-details-content-wrapper {
+    margin: -20px auto 40px !important;
+    padding: 0 12px !important;
+  }
+  .feature-details-card-grid {
+    grid-template-columns: 1fr !important;
+    padding: 22px 16px !important;
+    gap: 24px !important;
+    border-radius: 16px !important;
   }
 }
 

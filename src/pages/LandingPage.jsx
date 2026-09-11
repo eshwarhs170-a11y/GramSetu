@@ -193,7 +193,7 @@ export default function LandingPage() {
           <ThemeToggle />
           <button
             onClick={() => { setInquiryCategory('question'); setInquiryModalOpen(true); }}
-            className="hover-lift"
+            className="landing-btn-helpdesk hover-lift"
             style={{
               background: 'rgba(22, 163, 74, 0.1)',
               color: '#15803d',
@@ -214,7 +214,7 @@ export default function LandingPage() {
           </button>
           <button
             onClick={() => navigate('/login/villager')}
-            className="hover-lift"
+            className="landing-btn-login hover-lift"
             style={{
               background: 'linear-gradient(135deg, #16a34a, #15803d)',
               color: '#fff', border: 'none', borderRadius: 10,
@@ -491,7 +491,7 @@ export default function LandingPage() {
             },
             {
               id: 'complaints',
-              img: 'https://images.unsplash.com/photo-1590402494587-44b71d7772f6?w=700&q=80',
+              img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=700&q=80',
               badge: 'Auto-Escalation',
               badgeColor: '#dc2626',
               title: 'Complaint Filing & Tracking',
@@ -500,7 +500,7 @@ export default function LandingPage() {
             },
             {
               id: 'districts',
-              img: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=700&q=80',
+              img: 'https://images.unsplash.com/photo-1600100397608-f010f443b747?w=700&q=80',
               badge: 'All 31 Districts',
               badgeColor: '#d97706',
               title: 'District Heritage Explorer',
@@ -781,32 +781,6 @@ export default function LandingPage() {
         </div>
       )}
 
-      {/* ── Floating Farmer Inquiry & Missing Village Action ── */}
-      <div style={{ position: 'fixed', bottom: 24, left: 24, zIndex: 9990 }}>
-        <button
-          onClick={() => { setInquiryCategory('missing_village'); setInquiryModalOpen(true); }}
-          className="hover-lift"
-          style={{
-            background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-            color: '#ffffff',
-            border: '1px solid rgba(255,255,255,0.2)',
-            borderRadius: 30,
-            padding: '10px 18px',
-            boxShadow: '0 10px 25px -4px rgba(0,0,0,0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            cursor: 'pointer',
-            fontSize: 13,
-            fontWeight: 700
-          }}
-        >
-          <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <HelpCircle size={15} color="#fff" strokeWidth={2.4} />
-          </div>
-          <span>{lang === 'kn' ? 'ಗ್ರಾಮ ಕಾಣಿಸುತ್ತಿಲ್ಲವೇ? / ಪ್ರಶ್ನೆ ಕೇಳಿ' : 'Missing Village? / Ask Help'}</span>
-        </button>
-      </div>
 
       <FarmerInquiryModal
         isOpen={inquiryModalOpen}

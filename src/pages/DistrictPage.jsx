@@ -142,12 +142,27 @@ export default function DistrictPage() {
             padding: 0 16px !important;
           }
           .district-page-hero {
-            padding: 40px 16px !important;
+            padding: 36px 16px !important;
           }
           .district-hero-inner {
             flex-direction: column !important;
             text-align: center !important;
             gap: 16px !important;
+          }
+          .district-hero-inner h1 {
+            font-size: 28px !important;
+          }
+          .district-hero-inner p {
+            font-size: 15px !important;
+          }
+          .district-hero-emoji {
+            width: 80px !important;
+            height: 80px !important;
+            margin: 0 auto !important;
+          }
+          .district-hero-emoji svg {
+            width: 42px !important;
+            height: 42px !important;
           }
           .district-info-tape {
             padding: 16px !important;
@@ -155,12 +170,12 @@ export default function DistrictPage() {
             gap: 16px !important;
           }
           .crops-grid {
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
-            gap: 12px !important;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important;
+            gap: 10px !important;
           }
           .crop-card-img {
-            width: 60px !important;
-            height: 60px !important;
+            width: 54px !important;
+            height: 54px !important;
           }
           .highlights-grid {
             grid-template-columns: 1fr !important;
