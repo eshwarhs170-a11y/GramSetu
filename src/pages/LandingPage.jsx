@@ -464,7 +464,7 @@ export default function LandingPage() {
           {[
             {
               id: 'schemes',
-              img: 'https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=700&q=80',
+              img: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=700&q=80',
               badge: '30+ Schemes',
               badgeColor: '#16a34a',
               title: 'Government Schemes & Scholarships',

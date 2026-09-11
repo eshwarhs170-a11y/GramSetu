@@ -103,16 +103,16 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
   }
 
   const navItems = [
-    { id: 'overview',   icon: LayoutDashboard, labelKey: 'sNavOverview',      badge: null },
-    { id: 'complaints', icon: ClipboardList,   labelKey: 'sNavNewComplaints',  badge: '28' },
-    { id: 'resolved',   icon: CheckCircle2,    labelKey: 'sNavResolved',       badge: null },
-    { id: 'inquiries',  icon: HelpCircle,      labelKey: 'sNavInquiries',      badge: pendingInquiryCount > 0 ? String(pendingInquiryCount) : null },
-    { id: 'state',      icon: Map,             labelKey: 'State Overview',     badge: null },
-    { id: 'announcements', icon: ClipboardList, labelKey: 'Announcements', badge: null },
-    { id: 'announce', icon: Megaphone, labelKey: 'sNavPublish', badge: null },
-    { id: 'analytics',  icon: BarChart3,       labelKey: 'sNavAnalytics',      badge: null },
-    { id: 'citizens',   icon: Users,           labelKey: 'sNavCitizens',       badge: null },
-    { id: 'settings',   icon: Settings,        labelKey: 'sNavSettings',       badge: null },
+    { id: 'overview',        icon: LayoutDashboard,    labelKey: 'sNavOverview',       badge: null },
+    { id: 'complaints',      icon: ClipboardList,      labelKey: 'sNavNewComplaints',  badge: '28' },
+    { id: 'resolved',        icon: CheckCircle2,       labelKey: 'sNavResolved',       badge: null },
+    { id: 'inquiries',       icon: HelpCircle,         labelKey: 'sNavInquiries',      badge: pendingInquiryCount > 0 ? String(pendingInquiryCount) : null },
+    { id: 'state',           icon: Map,                labelKey: 'State Overview',     badge: null },
+    { id: 'announcements',   icon: ClipboardList,      labelKey: 'Announcements',      badge: null },
+    { id: 'announce',        icon: Megaphone,          labelKey: 'sNavPublish',        badge: null },
+    { id: 'analytics',       icon: BarChart3,          labelKey: 'sNavAnalytics',      badge: null },
+    { id: 'citizens',        icon: Users,              labelKey: 'sNavCitizens',       badge: null },
+    { id: 'settings',        icon: Settings,           labelKey: 'sNavSettings',       badge: null },
   ]
 
   return (
@@ -1553,8 +1553,10 @@ function FarmerInquiriesScreen({ sessionData }) {
   const { lang } = useLanguage()
   const [inquiries, setInquiries] = useState([])
   const [searchText, setSearchText] = useState('')
-  const [catFilter, setCatFilter] = useState('all') // 'all' | 'missing_village' | 'question' | 'data_correction'
+  // 'missing_village' tab shows only missing village reports; 'questions' shows farmer questions
+  const [activeTab, setActiveTab] = useState('missing_village') // 'missing_village' | 'questions'
   const [statusFilter, setStatusFilter] = useState('all') // 'all' | 'pending' | 'in_progress' | 'resolved'
+  const [districtFilter, setDistrictFilter] = useState(sessionData?.district || 'all')
   const [selectedForResolve, setSelectedForResolve] = useState(null)
 
   useEffect(() => {
@@ -1588,10 +1590,20 @@ function FarmerInquiriesScreen({ sessionData }) {
     )))
   }
 
-  // Filter inquiries
+  // Tab-based category: missing_village tab shows missing_village only; questions tab shows question + data_correction + other
+  const tabCategoryMatch = (item) => {
+    if (activeTab === 'missing_village') return item.category === 'missing_village'
+    return item.category !== 'missing_village'
+  }
+
+  // Filter inquiries — with district filter + tab filter + status filter + search
   const filtered = inquiries.filter(item => {
-    // Category filter
-    const catMatch = catFilter === 'all' || item.category === catFilter
+    // District filter (officer's district or 'all')
+    const districtMatch = districtFilter === 'all' ||
+      (item.district || '').toLowerCase() === districtFilter.toLowerCase()
+
+    // Tab-based category filter
+    const tabMatch = tabCategoryMatch(item)
 
     // Status filter
     const statusMatch = statusFilter === 'all' || item.status === statusFilter
@@ -1602,14 +1614,17 @@ function FarmerInquiriesScreen({ sessionData }) {
       item.district, item.taluk, item.subject, item.description
     ].some(field => (field || '').toLowerCase().includes(searchText.toLowerCase()))
 
-    return catMatch && statusMatch && searchMatch
+    return districtMatch && tabMatch && statusMatch && searchMatch
   })
 
-  // Counters
-  const totalCount = inquiries.length
-  const pendingCount = inquiries.filter(i => i.status === 'pending' || i.status === 'in_progress').length
-  const missingVillageCount = inquiries.filter(i => i.category === 'missing_village').length
-  const resolvedCount = inquiries.filter(i => i.status === 'resolved').length
+  // Counters (district-filtered)
+  const districtInquiries = districtFilter === 'all' ? inquiries :
+    inquiries.filter(i => (i.district || '').toLowerCase() === districtFilter.toLowerCase())
+  const totalCount = districtInquiries.length
+  const pendingCount = districtInquiries.filter(i => i.status === 'pending' || i.status === 'in_progress').length
+  const missingVillageCount = districtInquiries.filter(i => i.category === 'missing_village').length
+  const resolvedCount = districtInquiries.filter(i => i.status === 'resolved').length
+  const questionsCount = districtInquiries.filter(i => i.category !== 'missing_village').length
 
   const getCatLabel = (cat) => {
     switch (cat) {
@@ -1652,17 +1667,71 @@ function FarmerInquiriesScreen({ sessionData }) {
               : 'Review submitted missing village names, agricultural questions, and portal correction requests.'}
           </p>
         </div>
-
-        {/* Action badge */}
-        <div style={{
-          background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
-          borderRadius: 14, padding: '12px 18px', textAlign: 'center'
-        }}>
-          <div style={{ fontSize: 24, fontWeight: 900, color: '#fef08a' }}>{pendingCount}</div>
-          <div style={{ fontSize: 11, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
-            {lang === 'kn' ? 'ಬಾಕಿ ಇರುವ ಕೋರಿಕೆಗಳು' : 'Pending Resolution'}
+        {/* District + Pending badge */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-end' }}>
+          <div style={{
+            background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: 14, padding: '12px 18px', textAlign: 'center'
+          }}>
+            <div style={{ fontSize: 24, fontWeight: 900, color: '#fef08a' }}>{pendingCount}</div>
+            <div style={{ fontSize: 11, opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
+              {lang === 'kn' ? 'ಬಾಕಿ ಇರುವ ಕೋರಿಕೆಗಳು' : 'Pending Resolution'}
+            </div>
           </div>
+          {/* District Filter */}
+          <select
+            value={districtFilter}
+            onChange={e => setDistrictFilter(e.target.value)}
+            style={{
+              padding: '7px 12px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.3)',
+              background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 12, fontWeight: 700,
+              outline: 'none', cursor: 'pointer'
+            }}
+          >
+            <option value="all" style={{ color: '#0f172a' }}>{lang === 'kn' ? 'ಎಲ್ಲಾ ಜಿಲ್ಲೆಗಳು' : 'All Districts'}</option>
+            {allDistricts.map(d => (
+              <option key={d} value={d} style={{ color: '#0f172a' }}>{d}</option>
+            ))}
+          </select>
         </div>
+      </div>
+
+      {/* TAB SWITCHER — Missing Villages vs Farmer Questions */}
+      <div style={{ display: 'flex', gap: 0, background: 'var(--bg-main, #f1f5f9)', borderRadius: 14, padding: 4, border: '1px solid var(--border-light, #e2e8f0)', alignSelf: 'flex-start' }}>
+        <button
+          onClick={() => setActiveTab('missing_village')}
+          style={{
+            padding: '10px 20px', borderRadius: 10, border: 'none', cursor: 'pointer',
+            fontWeight: 700, fontSize: 13, display: 'flex', alignItems: 'center', gap: 8,
+            background: activeTab === 'missing_village' ? '#16a34a' : 'transparent',
+            color: activeTab === 'missing_village' ? '#fff' : 'var(--text-secondary, #64748b)',
+            boxShadow: activeTab === 'missing_village' ? '0 4px 12px rgba(22,163,74,0.25)' : 'none',
+            transition: 'all 0.2s'
+          }}
+        >
+          <MapPinOff size={15} />
+          {lang === 'kn' ? 'ಕಾಣೆಯಾದ ಗ್ರಾಮಗಳು' : 'Missing Villages'}
+          <span style={{ background: activeTab === 'missing_village' ? 'rgba(255,255,255,0.25)' : '#e2e8f0', color: activeTab === 'missing_village' ? '#fff' : '#64748b', borderRadius: 20, padding: '1px 7px', fontSize: 11, fontWeight: 800 }}>
+            {missingVillageCount}
+          </span>
+        </button>
+        <button
+          onClick={() => setActiveTab('questions')}
+          style={{
+            padding: '10px 20px', borderRadius: 10, border: 'none', cursor: 'pointer',
+            fontWeight: 700, fontSize: 13, display: 'flex', alignItems: 'center', gap: 8,
+            background: activeTab === 'questions' ? '#3b82f6' : 'transparent',
+            color: activeTab === 'questions' ? '#fff' : 'var(--text-secondary, #64748b)',
+            boxShadow: activeTab === 'questions' ? '0 4px 12px rgba(59,130,246,0.25)' : 'none',
+            transition: 'all 0.2s'
+          }}
+        >
+          <HelpCircle size={15} />
+          {lang === 'kn' ? 'ರೈತರ ಪ್ರಶ್ನೆಗಳು' : 'Farmer Questions'}
+          <span style={{ background: activeTab === 'questions' ? 'rgba(255,255,255,0.25)' : '#e2e8f0', color: activeTab === 'questions' ? '#fff' : '#64748b', borderRadius: 20, padding: '1px 7px', fontSize: 11, fontWeight: 800 }}>
+            {questionsCount}
+          </span>
+        </button>
       </div>
 
       {/* Metrics Row */}
@@ -1710,7 +1779,7 @@ function FarmerInquiriesScreen({ sessionData }) {
 
       {/* Filter and Search Bar */}
       <div className="card" style={{ padding: 16 }}>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Search Box */}
           <div style={{ position: 'relative', flex: '1 1 260px', maxWidth: 400 }}>
             <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
@@ -1730,7 +1799,7 @@ function FarmerInquiriesScreen({ sessionData }) {
           {/* Status Tabs */}
           <div style={{ display: 'flex', background: 'var(--bg-main, #f1f5f9)', padding: 3, borderRadius: 10, gap: 4 }}>
             {[
-              { id: 'all', label: lang === 'kn' ? 'ಎಲ್ಲಾ' : 'All Statuses' },
+              { id: 'all', label: lang === 'kn' ? 'ಎಲ್ಲಾ' : 'All' },
               { id: 'pending', label: lang === 'kn' ? 'ಬಾಕಿ' : 'Pending' },
               { id: 'in_progress', label: lang === 'kn' ? 'ಪ್ರಕ್ರಿಯೆ' : 'In Progress' },
               { id: 'resolved', label: lang === 'kn' ? 'ಪರಿಹರಿಸಲಾಗಿದೆ' : 'Resolved' },
@@ -1751,49 +1820,21 @@ function FarmerInquiriesScreen({ sessionData }) {
             ))}
           </div>
         </div>
-
-        {/* Category Chips */}
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', borderTop: '1px solid var(--border-light, #f1f5f9)', paddingTop: 12 }}>
-          {[
-            { id: 'all', label: lang === 'kn' ? 'ಎಲ್ಲಾ ವಿಭಾಗ' : 'All Categories', icon: FileText },
-            { id: 'missing_village', label: lang === 'kn' ? 'ಕಾಣೆಯಾದ ಗ್ರಾಮಗಳು' : 'Missing Villages', icon: MapPinOff },
-            { id: 'question', label: lang === 'kn' ? 'ರೈತರ ಪ್ರಶ್ನೆಗಳು' : 'Farmer Questions', icon: HelpCircle },
-            { id: 'data_correction', label: lang === 'kn' ? 'ಮಾಹಿತಿ ತಿದ್ದುಪಡಿ' : 'Data Corrections', icon: Edit3 },
-          ].map(c => {
-            const Icon = c.icon
-            const isSel = catFilter === c.id
-            return (
-              <button
-                key={c.id}
-                onClick={() => setCatFilter(c.id)}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 6,
-                  padding: '6px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600,
-                  border: isSel ? '1.5px solid #3b82f6' : '1px solid var(--border, #cbd5e1)',
-                  background: isSel ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
-                  color: isSel ? '#2563eb' : 'var(--text-secondary, #64748b)',
-                  cursor: 'pointer'
-                }}
-              >
-                <Icon size={13} />
-                <span>{c.label}</span>
-              </button>
-            )
-          })}
-        </div>
       </div>
 
       {/* Inquiry List */}
       {filtered.length === 0 ? (
         <div className="card" style={{ padding: 48, textAlign: 'center' }}>
           <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--bg-main, #f1f5f9)', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-            <HelpCircle size={28} />
+            {activeTab === 'missing_village' ? <MapPinOff size={28} /> : <HelpCircle size={28} />}
           </div>
           <h4 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 6px' }}>
-            {lang === 'kn' ? 'ಯಾವುದೇ ಸಲ್ಲಿಕೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ' : 'No Inquiries Found'}
+            {activeTab === 'missing_village'
+              ? (lang === 'kn' ? 'ಯಾವುದೇ ಕಾಣೆಯಾದ ಗ್ರಾಮ ವರದಿಗಳಿಲ್ಲ' : 'No Missing Village Reports Found')
+              : (lang === 'kn' ? 'ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ' : 'No Farmer Questions Found')}
           </h4>
           <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}>
-            {lang === 'kn' ? 'ಫಿಲ್ಟರ್ ಅಥವಾ ಹುಡುಕಾಟ ಬದಲಾಯಿಸಿ ನೋಡಿ' : 'Try adjusting your search terms or filters'}
+            {lang === 'kn' ? 'ಫಿಲ್ಟರ್ ಅಥವಾ ಹುಡುಕಾಟ ಬದಲಾಯಿಸಿ ನೋಡಿ' : 'Try adjusting your search terms or district filter'}
           </p>
         </div>
       ) : (
