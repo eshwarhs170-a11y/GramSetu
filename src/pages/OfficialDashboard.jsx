@@ -605,6 +605,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
   const [respondingTo, setRespondingTo] = useState(null)
   const [searchText, setSearchText] = useState('')
   const [catFilter, setCatFilter] = useState('All')
+  const [submitterFilter, setSubmitterFilter] = useState('all') // 'all' | 'farmer'
   const session = getSessionData()
 
   useEffect(() => {
@@ -681,11 +682,20 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
 
       return distMatch && talukMatch && gpMatch && statusMatch && levelMatch && deptCatMatch
     })
+
+    // Search: covers title, id, district, taluk, description, submittedBy
     if (searchText) list = list.filter(c =>
-      c.title?.toLowerCase().includes(searchText.toLowerCase()) ||
-      c.id?.toLowerCase().includes(searchText.toLowerCase())
+      (c.title || '').toLowerCase().includes(searchText.toLowerCase()) ||
+      (c.id || '').toLowerCase().includes(searchText.toLowerCase()) ||
+      (c.district || '').toLowerCase().includes(searchText.toLowerCase()) ||
+      (c.taluk || '').toLowerCase().includes(searchText.toLowerCase()) ||
+      (c.description || '').toLowerCase().includes(searchText.toLowerCase()) ||
+      (c.submittedBy || '').toLowerCase().includes(searchText.toLowerCase())
     )
+
     if (catFilter !== 'All') list = list.filter(c => c.category === catFilter)
+    // Submitter type filter: 'farmer' = only citizen-submitted; 'all' = everything
+    if (submitterFilter === 'farmer') list = list.filter(c => c.submitterType === 'farmer' || !c.submitterType)
     return list
   })()
 
@@ -733,7 +743,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
         <div className="form-input" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', flex: 1, minWidth: 180 }}>
           <Search size={15} style={{ color: 'var(--text-muted)' }} />
           <input style={{ border: 'none', outline: 'none', width: '100%', fontSize: 13 }}
-            placeholder="Search complaints..."
+            placeholder="Search by title, ID, district, taluk, description, name..."
             value={searchText} onChange={e => setSearchText(e.target.value)} />
         </div>
         <select className="form-input" style={{ width: 160, fontSize: 13 }}
@@ -745,6 +755,21 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
           <option value="Agriculture / RSK">Agriculture</option>
           <option value="PHC / Health">Health</option>
         </select>
+        {/* Farmer vs All submitter filter */}
+        <div style={{ display: 'flex', background: 'var(--bg-main)', borderRadius: 10, padding: 3, border: '1px solid var(--border-light)', gap: 2 }}>
+          {[['all', 'All Complaints'], ['farmer', '🌾 Farmer Only']].map(([val, label]) => (
+            <button
+              key={val}
+              onClick={() => setSubmitterFilter(val)}
+              style={{
+                padding: '6px 14px', fontSize: 12, fontWeight: 600, border: 'none',
+                borderRadius: 8, cursor: 'pointer', transition: 'all 0.2s',
+                background: submitterFilter === val ? 'var(--primary)' : 'transparent',
+                color: submitterFilter === val ? '#fff' : 'var(--text-secondary)'
+              }}
+            >{label}</button>
+          ))}
+        </div>
       </div>
 
       {!resolved ? (

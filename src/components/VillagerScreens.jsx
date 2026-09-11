@@ -226,14 +226,34 @@ export function HomeScreen({ setActive }) {
     })
   }
 
-  // Fetch real AGMARKNET prices on mount, then apply micro-tick every 60s
+  // Fetch real AGMARKNET prices; fall back to district static map if API returns nothing
   const refreshPrices = async (forceApi = false) => {
     setLoadingPrices(true)
-    const distData = districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || BASELINE_PRICES
-    setLivePrices(distData)
-    setPriceSource('district')
+    try {
+      if (forceApi) clearPriceCache()
+      const liveData = await fetchLivePrices()
+      if (liveData && liveData.length > 0) {
+        // Filter to crops relevant to the user's district
+        const districtCrops = districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || []
+        const districtCropNames = new Set(districtCrops.map(c => c.crop.split('(')[0].trim().toLowerCase()))
+        // Prefer live prices for crops in this district; show all live data if no district match
+        const filtered = liveData.filter(c => districtCropNames.size === 0 || districtCropNames.has(c.crop.split('(')[0].trim().toLowerCase()))
+        const finalPrices = filtered.length > 0 ? filtered : liveData.slice(0, 10)
+        setLivePrices(finalPrices)
+        setPriceSource('live')
+      } else {
+        // API returned nothing (market closed / no data today) — use static district map
+        const distData = districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || BASELINE_PRICES
+        setLivePrices(distData)
+        setPriceSource('district')
+      }
+    } catch (err) {
+      const distData = districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || BASELINE_PRICES
+      setLivePrices(distData)
+      setPriceSource('district')
+    }
     setLastUpdated(new Date())
-    setTimeout(() => setLoadingPrices(false), 400)
+    setLoadingPrices(false)
   }
 
   useEffect(() => {
@@ -2004,8 +2024,38 @@ export function MarketScreen() {
   const { t, lang } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
   const [viewMode, setViewMode] = useState('district') // 'district' or 'all'
+  const [livePriceOverlay, setLivePriceOverlay] = useState(null) // map: cropName -> live price object
+  const [priceDataSource, setPriceDataSource] = useState('static') // 'live' | 'static'
+  const [priceLastUpdated, setPriceLastUpdated] = useState(null)
+  const [loadingLive, setLoadingLive] = useState(true)
 
   const userDistrict = window.localStorage.getItem('citizen_district') || 'Mysuru'
+
+  // Fetch live prices from AGMARKNET API on mount
+  useEffect(() => {
+    let cancelled = false
+    setLoadingLive(true)
+    fetchLivePrices().then(data => {
+      if (cancelled) return
+      if (data && data.length > 0) {
+        // Build a lookup map: English crop name (lowercase) -> live price object
+        const overlay = {}
+        data.forEach(item => {
+          const key = item.crop.split('(')[0].trim().toLowerCase()
+          overlay[key] = item
+        })
+        setLivePriceOverlay(overlay)
+        setPriceDataSource('live')
+        setPriceLastUpdated(new Date())
+      } else {
+        setPriceDataSource('static')
+      }
+      setLoadingLive(false)
+    }).catch(() => {
+      if (!cancelled) { setPriceDataSource('static'); setLoadingLive(false) }
+    })
+    return () => { cancelled = true }
+  }, [])
 
   const getCropLocalImage = (cropName) => {
     const english = cropName.split('(')[0].trim()
@@ -2058,11 +2108,33 @@ export function MarketScreen() {
   // District name aliases (handles spelling variants from login data)
   // normalizeDistrict is now at the top of the file
 
+  // Merge live API data on top of static prices
+  const applyLiveOverlay = (crops) => {
+    if (!livePriceOverlay) return crops
+    return crops.map(crop => {
+      const key = crop.crop.split('(')[0].trim().toLowerCase()
+      const live = livePriceOverlay[key]
+      if (!live) return crop
+      const oldRaw = parseFloat(String(crop.price).replace(/[^0-9.]/g, '')) || 0
+      const newRaw = parseFloat(String(live.price).replace(/[^0-9.]/g, '')) || 0
+      const delta = newRaw - oldRaw
+      return {
+        ...crop,
+        price: live.price,
+        change: delta > 0 ? '+₹' + Math.round(delta).toLocaleString('en-IN') : delta < 0 ? '-₹' + Math.round(Math.abs(delta)).toLocaleString('en-IN') : crop.change,
+        trend: delta > 0 ? 'up' : delta < 0 ? 'down' : crop.trend,
+        market: live.market || crop.market,
+        status: 'ACTUAL',
+      }
+    })
+  }
+
   // My District: 10 crops from PDF dataset | All Karnataka: famous state-wide crops
-  const sourcePrices = viewMode === 'district'
+  const rawSourcePrices = viewMode === 'district'
     ? (districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || [])
     : karnatakaPopularCrops
 
+  const sourcePrices = applyLiveOverlay(rawSourcePrices)
 
   const filteredPrices = sourcePrices
     .map(normalizePriceRow)
@@ -2071,7 +2143,7 @@ export function MarketScreen() {
       p.market.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
-  const highlightPrices = viewMode === 'all' ? karnatakaPopularCrops : sourcePrices
+  const highlightPrices = viewMode === 'all' ? applyLiveOverlay(karnatakaPopularCrops) : sourcePrices
 
   const [landArea, setLandArea] = useState('')
   const [selectedCrop, setSelectedCrop] = useState('')
@@ -2111,9 +2183,26 @@ export function MarketScreen() {
         overflow: 'hidden'
       }}>
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', marginBottom: 8, padding: '4px 10px', fontSize: 12 }}>
-            <TrendingUp size={14} className="inline mr-1 text-emerald-300" /> {lang === 'kn' ? 'ಕರ್ನಾಟಕ APMC ಲೈವ್ ಧಾರಣೆ' : 'Karnataka APMC Live Market Feed'}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 8 }}>
+            <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', padding: '4px 10px', fontSize: 12 }}>
+              <TrendingUp size={14} className="inline mr-1 text-emerald-300" /> {lang === 'kn' ? 'ಕರ್ನಾಟಕ APMC ಲೈವ್ ಧಾರಣೆ' : 'Karnataka APMC Live Market Feed'}
+            </span>
+            {loadingLive ? (
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                <Hourglass size={12} /> Fetching live prices…
+              </span>
+            ) : priceDataSource === 'live' ? (
+              <span style={{ fontSize: 11, color: '#6ee7b7', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#6ee7b7', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
+                LIVE · AGMARKNET{priceLastUpdated ? ' · ' + priceLastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : ''}
+              </span>
+            ) : (
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#9ca3af', display: 'inline-block' }} />
+                MSP Baseline · Market closed or offline
+              </span>
+            )}
+          </div>
           <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
             {lang === 'kn' ? 'ಎಪಿಎಂಸಿ ಮಾರುಕಟ್ಟೆ ಧಾರಣೆಗಳು' : 'APMC Mandi Market Prices'}
           </h2>
@@ -2152,11 +2241,14 @@ export function MarketScreen() {
               </div>
               <div className="card" style={{ background: 'linear-gradient(135deg, #ede9fe, #ddd6fe)', border: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <div style={{ fontSize: 12, color: '#5b21b6', fontWeight: 600, marginBottom: 4 }}>Data Source</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: '#4c1d95' }}>
-                  <ClipboardList className="inline mr-1 text-indigo-500" size={16} /> Karnataka APMC Price Sheet
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#4c1d95', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <ClipboardList className="inline text-indigo-500" size={16} />
+                  {priceDataSource === 'live' ? 'AGMARKNET · Live API' : 'Karnataka APMC Price Sheet'}
                 </div>
                 <div style={{ fontSize: 11, color: '#6d28d9', marginTop: 4 }}>
-                  31 districts × 10 crops · Modal prices · Aug 2026
+                  {priceDataSource === 'live'
+                    ? `Live prices · Updated: ${priceLastUpdated ? priceLastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : 'just now'}`
+                    : '31 districts × 10 crops · Modal prices · Baseline'}
                 </div>
                 <div style={{ fontSize: 11, color: '#6d28d9', marginTop: 2 }}>
                   {viewMode === 'district' ? `Showing: ${userDistrict} district crops` : 'Showing: Famous Karnataka crops'}
@@ -2696,7 +2788,11 @@ export function ComplaintScreen() {
     const newComplaintObj = {
       id: randomId,
       title: `${subject} — ${location}`,
+      subject: subject,
+      description: description,
+      location: location,
       status: 'pending',
+      submitterType: 'farmer',      // distinguishes farmer complaints from official ones
       date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
       category: selected,
       assignedTo: `Taluk Office, ${taluk}`,

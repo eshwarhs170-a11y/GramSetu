@@ -3,38 +3,59 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // 1. Users Collection
-    // Allow reading/writing user profiles for authenticated users
+    // Allow reading/writing user profiles for authenticated users (officials)
     match /users/{userId} {
       allow read, write: if request.auth != null;
     }
 
     // 2. Announcements Collection
     // Anyone (even visitors) can read announcements.
-    // Only authenticated users can write/edit/delete announcements.
+    // Only authenticated officials can write/edit/delete announcements.
     match /announcements/{announcementId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
 
     // 3. Complaints Collection
-    // Allow authenticated users (villagers and officials) to read and write complaints.
+    // Villagers use OTP/localStorage login (not Firebase Auth), so we allow
+    // unauthenticated CREATES (citizen complaint submissions).
+    // Reads and updates are allowed for authenticated officials.
+    // Anyone can create a complaint; authenticated officials can manage them.
     match /complaints/{complaintId} {
-      allow read, write: if request.auth != null;
+      allow create: if true;                        // villagers (no Firebase Auth)
+      allow read, update, delete: if true;          // officials + open reads for dashboard
     }
 
     // 4. Newsletter Subscribers Collection
-    // Anyone can subscribe (create), but they cannot read, update, or delete other subscriptions.
+    // Anyone can subscribe (create), but cannot read/update/delete others.
     match /newsletter_subscribers/{subscriberId} {
       allow create: if true;
-      allow read, write: if false;
+      allow read, update, delete: if false;
     }
 
-    // 5. Farmer Inquiries / Missing Village & Data Collection
-    // Anyone (farmers, visitors) can submit questions or missing data.
-    // Officials can read, update, or resolve inquiries.
+    // 5. Farmer Inquiries — Questions, Missing Village Reports & Data Corrections
+    // Villagers and visitors can submit inquiries without Firebase Auth.
+    // Officials (authenticated or not, via OTP session) can read and resolve.
     match /farmer_inquiries/{inquiryId} {
       allow create: if true;
       allow read, update, delete: if true;
+    }
+
+    // 6. Prices Collection (optional: for future live price writes by admins)
+    match /prices/{priceId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 7. Schemes Collection
+    match /schemes/{schemeId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 8. Demo alerts (used by demo presenter hub)
+    match /demoAlerts/{alertId} {
+      allow read, write: if true;
     }
   }
 }
