@@ -500,7 +500,7 @@ export default function LandingPage() {
             },
             {
               id: 'districts',
-              img: 'https://images.unsplash.com/photo-1600100397608-f010f443b747?w=700&q=80',
+              img: '/district-images/mysuru_mysore_palace.jpg',
               badge: 'All 31 Districts',
               badgeColor: '#d97706',
               title: 'District Heritage Explorer',
@@ -523,7 +523,14 @@ export default function LandingPage() {
             >
               {/* Real image */}
               <div style={{ height: 160, overflow: 'hidden', position: 'relative' }}>
-                <img src={f.img} alt={f.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
+                <img
+                  src={f.img}
+                  alt={f.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
+                  onError={e => {
+                    e.target.onerror = null;
+                    e.target.src = '/district-images/mysuru_mysore_palace.jpg';
+                  }}
                   onMouseEnter={e => e.target.style.transform = 'scale(1.05)'}
                   onMouseLeave={e => e.target.style.transform = 'scale(1)'}
                 />

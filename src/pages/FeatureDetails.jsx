@@ -172,7 +172,7 @@ const featureData = {
     descEn: 'Discover the unique cultural heritage, GI-tagged agricultural produce, famous landmarks, taluks, and administrative details for all 31 districts of Karnataka.',
     descKn: 'ಕರ್ನಾಟಕದ 31 ಜಿಲ್ಲೆಗಳ ಪ್ರಸಿದ್ಧ ಸ್ಮಾರಕಗಳು, ಭೌಗೋಳಿಕ ಮಾನ್ಯತೆ (GI) ಪಡೆದ ಬೆಳೆಗಳು, ತಾಲೂಕುಗಳು ಮತ್ತು ಸಾಂಸ್ಕೃತಿಕ ಪರಂಪರೆಯನ್ನು ಅನ್ವೇಷಿಸಿ.',
     descHi: 'कर्नाटक के सभी 31 जिलों की सांस्कृतिक धरोहर, जीआई-टैग प्राप्त कृषि उत्पाद, दर्शनीय स्थल और तालुकों की विस्तृत जानकारी।',
-    image: 'https://images.unsplash.com/photo-1600100397608-f010f443b747?w=1200&q=80',
+    image: '/district-images/mysuru_mysore_palace.jpg',
     details: [
       {
         en: 'Rich Cultural Landmarks: Explore Hampi, Mysore Palace, Gol Gumbaz, Belur & Halebidu.',
