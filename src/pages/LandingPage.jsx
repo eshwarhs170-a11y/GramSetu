@@ -500,7 +500,8 @@ export default function LandingPage() {
             },
             {
               id: 'districts',
-              img: '/district-images/mysuru_mysore_palace.jpg',
+              img: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?w=700&q=80',
+              fallback: '/district-images/mysuru_mysore_palace.jpg',
               badge: 'All 31 Districts',
               badgeColor: '#d97706',
               title: 'District Heritage Explorer',
@@ -529,7 +530,7 @@ export default function LandingPage() {
                   style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
                   onError={e => {
                     e.target.onerror = null;
-                    e.target.src = '/district-images/mysuru_mysore_palace.jpg';
+                    e.target.src = f.fallback || 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=700&q=80';
                   }}
                   onMouseEnter={e => e.target.style.transform = 'scale(1.05)'}
                   onMouseLeave={e => e.target.style.transform = 'scale(1)'}
