@@ -2713,6 +2713,7 @@ export function ComplaintScreen() {
   const [submissionType, setSubmissionType] = useState('complaints') // complaints | feedback | district_complaints
   const [submitted, setSubmitted] = useState(false)
   const [newComplaintId, setNewComplaintId] = useState('')
+  const [submitError, setSubmitError] = useState('')
 
   const [subject, setSubject] = useState('')
   const [description, setDescription] = useState('')
@@ -2821,7 +2822,19 @@ export function ComplaintScreen() {
 
   const handleComplaintSubmit = async (e) => {
     e.preventDefault()
-    if (!selected || !subject || !description) return
+    setSubmitError('')
+    if (!selected) {
+      setSubmitError(lang === 'kn' ? '⚠️ ದಯವಿಟ್ಟು ಒಂದು ವಿಭಾಗವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ (ಹಂತ 1)' : '⚠️ Please select a category in Step 1 above')
+      return
+    }
+    if (!subject) {
+      setSubmitError(lang === 'kn' ? '⚠️ ವಿಷಯ ನಮೂದಿಸಿ' : '⚠️ Please fill in the Subject field')
+      return
+    }
+    if (!description) {
+      setSubmitError(lang === 'kn' ? '⚠️ ವಿವರಣೆ ನಮೂದಿಸಿ' : '⚠️ Please fill in the Description field')
+      return
+    }
 
     const randomId = editingComplaintId || ('GS-KA-0' + Math.floor(500 + Math.random() * 500))
     const newComplaintObj = {
@@ -3192,6 +3205,11 @@ export function ComplaintScreen() {
               </div>
 
               <div className="otp-hint">{t('escalationNote')}</div>
+              {submitError && (
+                <div style={{ background: '#fef2f2', border: '1.5px solid #fca5a5', borderRadius: 10, padding: '10px 14px', color: '#dc2626', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>
+                  {submitError}
+                </div>
+              )}
               <button type="submit" className="btn btn-primary" style={{ padding: '14px 24px', justifyContent: 'center' }}>
                 {editingComplaintId
                   ? (lang === 'kn' ? 'ದೂರನ್ನು ನವೀಕರಿಸಿ' : 'Update Complaint')
