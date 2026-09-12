@@ -51,6 +51,7 @@ import {
   PhoneOff,
   Pin,
   PlayCircle,
+  PlusCircle,
   Radio,
   RefreshCw,
   Route,
@@ -880,15 +881,21 @@ export function HomeScreen({ setActive }) {
           <div className="animate-fadeInUp" style={{
             background: 'var(--bg-card)', borderRadius: 16, padding: 24, maxWidth: 400, width: '100%',
             position: 'relative', border: '1px solid var(--border-light)',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            maxHeight: '85vh', overflowY: 'auto'
           }} onClick={e => e.stopPropagation()}>
             <button
               onClick={() => setSelectedCropInfo(null)}
               style={{ position: 'absolute', top: 12, right: 12, background: 'var(--bg-main)', border: 'none', width: 32, height: 32, borderRadius: 16, fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)' }}
             ><X className="inline" size={16} /></button>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
-              <div style={{ width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', border: '2px solid var(--primary)' }}>
-                <img src={selectedCropInfo.image} alt={selectedCropInfo.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', border: '2px solid var(--primary)', flexShrink: 0 }}>
+                <img
+                  src={selectedCropInfo.image}
+                  alt={selectedCropInfo.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  onError={e => { e.currentTarget.src = '/crops/Paddy.jpg'; }}
+                />
               </div>
               <div>
                 <h3 style={{ fontSize: 22, fontWeight: 800, margin: '0 0 4px 0', color: 'var(--text-primary)' }}>{selectedCropInfo.name}</h3>
@@ -2210,23 +2217,23 @@ export function MarketScreen() {
       }}>
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 8, justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', padding: '4px 10px', fontSize: 12 }}>
-                <TrendingUp size={14} className="inline mr-1 text-emerald-300" /> {lang === 'kn' ? 'ಕರ್ನಾಟಕ APMC ಲೈವ್ ಧಾರಣೆ' : 'Karnataka APMC Live Market Feed'}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', minWidth: 0 }}>
+              <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', padding: '4px 10px', fontSize: 12, whiteSpace: 'nowrap' }}>
+                <TrendingUp size={14} className="inline mr-1 text-emerald-300" /> {lang === 'kn' ? 'APMC ಲೈವ್' : 'Karnataka APMC Live'}
               </span>
               {loadingLive ? (
-                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <Hourglass size={12} /> Fetching live prices…
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}>
+                  <Hourglass size={12} /> Fetching…
                 </span>
               ) : priceDataSource === 'live' ? (
-                <span style={{ fontSize: 11, color: '#6ee7b7', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: 11, color: '#6ee7b7', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}>
                   <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#6ee7b7', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
-                  LIVE · AGMARKNET{priceLastUpdated ? ' · ' + priceLastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : ''}
+                  LIVE{priceLastUpdated ? ' · ' + priceLastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : ''}
                 </span>
               ) : (
-                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}>
                   <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#9ca3af', display: 'inline-block' }} />
-                  MSP Baseline · Market closed or offline
+                  MSP Baseline
                 </span>
               )}
             </div>
@@ -2234,7 +2241,7 @@ export function MarketScreen() {
             <button
               onClick={handleRefreshPrices}
               disabled={loadingLive}
-              style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', borderRadius: 8, padding: '6px 12px', fontSize: 12, cursor: loadingLive ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600, transition: 'all 0.2s', opacity: loadingLive ? 0.7 : 1 }}
+              style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', borderRadius: 8, padding: '6px 12px', fontSize: 12, cursor: loadingLive ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600, transition: 'all 0.2s', opacity: loadingLive ? 0.7 : 1, flexShrink: 0, whiteSpace: 'nowrap' }}
               onMouseOver={e => !loadingLive && (e.currentTarget.style.background = 'rgba(255,255,255,0.3)')}
               onMouseOut={e => !loadingLive && (e.currentTarget.style.background = 'rgba(255,255,255,0.2)')}
             >
@@ -2707,13 +2714,14 @@ export function AnnouncementsScreen() {
   )
 }
 
-export function ComplaintScreen() {
+export function ComplaintScreen({ setActive }) {
   const { t, lang } = useLanguage()
   const [selected, setSelected] = useState('')
   const [submissionType, setSubmissionType] = useState('complaints') // complaints | feedback | district_complaints
   const [submitted, setSubmitted] = useState(false)
   const [newComplaintId, setNewComplaintId] = useState('')
   const [submitError, setSubmitError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [subject, setSubject] = useState('')
   const [description, setDescription] = useState('')
@@ -2822,27 +2830,30 @@ export function ComplaintScreen() {
 
   const handleComplaintSubmit = async (e) => {
     e.preventDefault()
+    if (isSubmitting) return
     setSubmitError('')
     if (!selected) {
       setSubmitError(lang === 'kn' ? '⚠️ ದಯವಿಟ್ಟು ಒಂದು ವಿಭಾಗವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ (ಹಂತ 1)' : '⚠️ Please select a category in Step 1 above')
       return
     }
-    if (!subject) {
+    if (!subject || !subject.trim()) {
       setSubmitError(lang === 'kn' ? '⚠️ ವಿಷಯ ನಮೂದಿಸಿ' : '⚠️ Please fill in the Subject field')
       return
     }
-    if (!description) {
+    if (!description || !description.trim()) {
       setSubmitError(lang === 'kn' ? '⚠️ ವಿವರಣೆ ನಮೂದಿಸಿ' : '⚠️ Please fill in the Description field')
       return
     }
 
+    setIsSubmitting(true)
+
     const randomId = editingComplaintId || ('GS-KA-0' + Math.floor(500 + Math.random() * 500))
     const newComplaintObj = {
       id: randomId,
-      title: `${subject} — ${location}`,
-      subject: subject,
-      description: description,
-      location: location,
+      title: `${subject.trim()} — ${location.trim() || 'General Area'}`,
+      subject: subject.trim(),
+      description: description.trim(),
+      location: location.trim() || 'General Area',
       status: 'pending',
       submitterType: 'farmer',      // distinguishes farmer complaints from official ones
       date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
@@ -2856,17 +2867,24 @@ export function ComplaintScreen() {
       taluk: taluk || window.localStorage.getItem('citizen_taluk') || 'Mysuru',
       gp: window.localStorage.getItem('citizen_gp') || '',
       village: window.localStorage.getItem('citizen_village') || '',
-      createdAt: serverTimestamp()
+      createdAt: serverTimestamp(),
+      _collection: submissionType,
     }
 
-    // Save to Firestore (include compressed base64 photo so officials can see it)
+    // Save to Firestore with timeout race so it never blocks the UI or hangs
     try {
-      await addDoc(collection(db, submissionType), { ...newComplaintObj, photo: photoUri })
+      const docPayload = { ...newComplaintObj }
+      if (photoUri) docPayload.photo = photoUri
+      const writePromise = addDoc(collection(db, submissionType), docPayload)
+      await Promise.race([
+        writePromise,
+        new Promise(resolve => setTimeout(resolve, 1200))
+      ])
     } catch (err) {
-      console.warn('Firestore write failed, saving locally:', err)
+      console.warn('Firestore write queued or handled locally:', err)
     }
 
-    // Also update local state
+    // Update local state
     if (editingComplaintId) {
       globalComplaints = globalComplaints.map(c => c.id === editingComplaintId ? { ...c, ...newComplaintObj, photo: photoUri } : c)
     } else {
@@ -2875,42 +2893,120 @@ export function ComplaintScreen() {
     notifyComplaintListeners()
     stopCamera()
     setNewComplaintId(randomId)
+    setIsSubmitting(false)
     setSubmitted(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleReset = () => {
     setSelected(''); setSubject(''); setDescription('')
     setPhotoUri(null); stopCamera(); setCameraMode('idle'); setSubmitted(false)
-    setEditingComplaintId(null); setSubmissionType('complaints')
+    setEditingComplaintId(null); setSubmissionType('complaints'); setIsSubmitting(false)
   }
 
   const handleEditComplaint = () => {
     setEditingComplaintId(newComplaintId)
     setSubmitted(false)
+    setIsSubmitting(false)
   }
 
   if (submitted) {
+    const handleTrackStatus = () => {
+      window.dispatchEvent(new CustomEvent('gramSetuNavTab', { detail: { tab: 'status' } }))
+      if (typeof setActive === 'function') setActive('status')
+    }
+
+    const typeBadgeText = submissionType === 'feedback'
+      ? (lang === 'kn' ? '💬 ಪ್ರತಿಕ್ರಿಯೆ / ಸಲಹೆ' : '💬 Feedback / Suggestion')
+      : submissionType === 'district_complaints'
+      ? (lang === 'kn' ? '🏛️ ಜಿಲ್ಲಾ ದೂರು' : '🏛️ District Complaint')
+      : (lang === 'kn' ? '📋 ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ದೂರು' : '📋 Panchayat Complaint')
+
     return (
-      <div className="animate-fadeInUp" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', textAlign: 'center' }}>
-        <div style={{ fontSize: 72, marginBottom: 20 }}><CheckCircle2 className="inline mr-1 text-emerald-500" size={16} /></div>
-        <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 8 }}>{t('complaintSubmitted')}</h2>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: 8 }}>
-          {t('complaintId')}: <strong>{newComplaintId}</strong>
-        </p>
-        <p style={{ color: 'var(--text-secondary)', fontSize: 14, maxWidth: 420, marginBottom: 24 }}>
-          {t('complaintMsg')}
-        </p>
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <button
-            type="button"
-            className="btn btn-outline"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
-            onClick={handleEditComplaint}
-          >
-            <Edit3 size={16} />
-            <span>{lang === 'kn' ? 'ದೂರನ್ನು ತಿದ್ದುಪಡಿ ಮಾಡಿ' : 'Edit Complaint'}</span>
-          </button>
-          <button className="btn btn-primary" onClick={handleReset}>{t('fileAnother')}</button>
+      <div className="animate-fadeInUp" style={{ maxWidth: 520, margin: '20px auto', padding: '0 16px', textAlign: 'center' }}>
+        <div className="card" style={{ padding: '32px 20px', borderRadius: 24, boxShadow: '0 15px 35px rgba(22,101,52,0.1)', border: '1.5px solid #bbf7d0', background: 'linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%)' }}>
+          <div style={{
+            width: 72, height: 72, borderRadius: '50%', background: '#dcfce7', color: '#15803d',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px',
+            border: '4px solid #86efac', boxShadow: '0 8px 20px rgba(34,197,94,0.2)'
+          }}>
+            <CheckCircle2 size={42} strokeWidth={2.5} />
+          </div>
+
+          <span className="badge" style={{ background: '#dcfce7', color: '#166534', padding: '6px 14px', fontSize: 13, fontWeight: 700, borderRadius: 20, marginBottom: 12, display: 'inline-block' }}>
+            {typeBadgeText}
+          </span>
+
+          <h2 style={{ fontSize: 22, fontWeight: 800, color: '#14532d', margin: '8px 0' }}>
+            {t('complaintSubmitted')}
+          </h2>
+
+          <div style={{
+            background: '#ffffff', borderRadius: 14, padding: '14px 18px', margin: '18px 0',
+            border: '1.5px dashed #86efac', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10
+          }}>
+            <div style={{ textAlign: 'left' }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                {t('complaintId')} / ಟ್ರ್ಯಾಕಿಂಗ್ ಐಡಿ
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 900, color: '#15803d', letterSpacing: '0.02em', marginTop: 2 }}>
+                {newComplaintId}
+              </div>
+            </div>
+            <button
+              type="button"
+              className="btn btn-sm btn-outline"
+              onClick={() => {
+                navigator.clipboard?.writeText(newComplaintId)
+                alert(lang === 'kn' ? 'ಐಡಿ ಕಾಪಿ ಮಾಡಲಾಗಿದೆ: ' + newComplaintId : 'Tracking ID copied: ' + newComplaintId)
+              }}
+              style={{ borderRadius: 8, fontSize: 12, padding: '6px 12px' }}
+            >
+              📋 {lang === 'kn' ? 'ಕಾಪಿ ಮಾಡಿ' : 'Copy ID'}
+            </button>
+          </div>
+
+          <p style={{ color: '#4b5563', fontSize: 14, lineHeight: 1.55, marginBottom: 22 }}>
+            {t('complaintMsg')}
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%' }}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              style={{
+                width: '100%', padding: '14px', justifyContent: 'center', fontSize: 15, fontWeight: 800,
+                borderRadius: 14, background: 'linear-gradient(135deg, #15803d 0%, #16a34a 100%)',
+                boxShadow: '0 8px 20px rgba(21,128,61,0.25)'
+              }}
+              onClick={handleTrackStatus}
+            >
+              <SearchCheck size={18} className="inline mr-1" />
+              <span>{lang === 'kn' ? 'ದೂರು ಸ್ಥಿತಿ ಪರಿಶೀಲಿಸಿ / Track Status' : 'Track Status / View My Complaints'}</span>
+            </button>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <button
+                type="button"
+                className="btn btn-outline"
+                style={{ justifyContent: 'center', padding: '10px 12px', fontSize: 13, borderRadius: 12 }}
+                onClick={handleEditComplaint}
+              >
+                <Edit3 size={15} className="inline mr-1" />
+                <span>{lang === 'kn' ? 'ತಿದ್ದುಪಡಿ ಮಾಡಿ' : 'Edit'}</span>
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-outline"
+                style={{ justifyContent: 'center', padding: '10px 12px', fontSize: 13, borderRadius: 12 }}
+                onClick={handleReset}
+              >
+                <PlusCircle size={15} className="inline mr-1" />
+                <span>{t('fileAnother')}</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -2978,19 +3074,22 @@ export function ComplaintScreen() {
         {/* Step 0: Submission Type */}
         <div className="card" style={{ marginBottom: 20 }}>
           <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>{lang === 'kn' ? 'ಸಲ್ಲಿಕೆ ಪ್ರಕಾರ / Submission Type' : 'Submission Type'}</h3>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            {[{id: 'complaints', en: 'Panchayat Complaint', kn: 'ಪಂಚಾಯಿತಿ ದೂರು'}, {id: 'feedback', en: 'Feedback/Suggestion', kn: 'ಪ್ರತಿಕ್ರಿಯೆ/ಸಲಹೆ'}, {id: 'district_complaints', en: 'District Complaint', kn: 'ಜಿಲ್ಲಾ ದೂರು'}].map(type => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
+            {[{id: 'complaints', en: 'Panchayat Complaint', kn: 'ಪಂಚಾಯಿತಿ ದೂರು', emoji: '📋'}, {id: 'feedback', en: 'Feedback/Suggestion', kn: 'ಪ್ರತಿಕ್ರಿಯೆ/ಸಲಹೆ', emoji: '💬'}, {id: 'district_complaints', en: 'District Complaint', kn: 'ಜಿಲ್ಲಾ ದೂರು', emoji: '🏛️'}].map(type => (
               <button
                 key={type.id}
                 type="button"
                 onClick={() => setSubmissionType(type.id)}
                 style={{
-                  flex: 1, minWidth: 140, padding: '12px', borderRadius: 12, border: `2px solid ${submissionType === type.id ? '#ea580c' : '#e2e8f0'}`,
+                  padding: '12px 8px', borderRadius: 12,
+                  border: `2px solid ${submissionType === type.id ? '#ea580c' : '#e2e8f0'}`,
                   background: submissionType === type.id ? '#fff7ed' : '#f8fafc',
                   color: submissionType === type.id ? '#c2410c' : '#475569',
-                  fontWeight: 700, fontSize: 14, cursor: 'pointer', transition: 'all 0.2s'
+                  fontWeight: 700, fontSize: 13, cursor: 'pointer', transition: 'all 0.2s',
+                  textAlign: 'center', lineHeight: 1.4
                 }}
               >
+                <div style={{ fontSize: 20, marginBottom: 4 }}>{type.emoji}</div>
                 {lang === 'kn' ? type.kn : type.en}
               </button>
             ))}
@@ -3210,10 +3309,40 @@ export function ComplaintScreen() {
                   {submitError}
                 </div>
               )}
-              <button type="submit" className="btn btn-primary" style={{ padding: '14px 24px', justifyContent: 'center' }}>
-                {editingComplaintId
-                  ? (lang === 'kn' ? 'ದೂರನ್ನು ನವೀಕರಿಸಿ' : 'Update Complaint')
-                  : t('submitComplaint')}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn btn-primary"
+                style={{
+                  padding: '14px 24px',
+                  justifyContent: 'center',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  opacity: isSubmitting ? 0.8 : 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  fontSize: 15,
+                  fontWeight: 700,
+                  boxShadow: '0 4px 14px rgba(234, 88, 12, 0.35)',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {isSubmitting ? (
+                  <>
+                    <RefreshCw className="animate-spin" size={18} />
+                    <span>{lang === 'kn' ? 'ದೂರು ಸಲ್ಲಿಸಲಾಗುತ್ತಿದೆ...' : 'Submitting Complaint...'}</span>
+                  </>
+                ) : editingComplaintId ? (
+                  <>
+                    <Edit3 size={18} />
+                    <span>{lang === 'kn' ? 'ದೂರನ್ನು ನವೀಕರಿಸಿ' : 'Update Complaint'}</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={18} />
+                    <span>{t('submitComplaint')}</span>
+                  </>
+                )}
               </button>
             </div>
           </form>
@@ -3223,37 +3352,45 @@ export function ComplaintScreen() {
   )
 }
 
-export function ComplaintStatusScreen() {
+export function ComplaintStatusScreen({ setActive }) {
   const { t, lang } = useLanguage()
   const [complaints, setComplaints] = useState([...globalComplaints])
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    let unsubscribe = () => {}
-    try {
-      // Listen to Firestore complaints in real-time (no orderBy to avoid index errors)
-      const q = collection(db, 'complaints')
-      unsubscribe = onSnapshot(q, (snap) => {
-        try {
-          if (!snap.empty) {
-            const firestoreComplaints = snap.docs
-              .map(d => ({ id: d.id, ...d.data() }))
-              .sort((a, b) => {
-                const ta = a.createdAt?.seconds || 0
-                const tb = b.createdAt?.seconds || 0
-                return tb - ta
-              })
-            const localIds = new Set(firestoreComplaints.map(c => c.id))
-            const localOnly = globalComplaints.filter(c => !localIds.has(c.id))
-            setComplaints([...localOnly, ...firestoreComplaints])
-          }
-        } catch (e) {
-          setComplaints([...globalComplaints])
-        }
-      }, () => {
-        // On error, just show local complaints
-        setComplaints([...globalComplaints])
+    let unsubs = []
+    let docsMap = { complaints: [], feedback: [], district_complaints: [] }
+
+    const updateAllComplaints = () => {
+      const allFirestore = [...docsMap.complaints, ...docsMap.feedback, ...docsMap.district_complaints]
+      const fsIds = new Set(allFirestore.map(c => c.id))
+      const localOnly = globalComplaints.filter(c => !fsIds.has(c.id))
+      const merged = [...localOnly, ...allFirestore]
+      merged.sort((a, b) => {
+        const timeA = a.createdAt?.seconds ? a.createdAt.seconds * 1000 : (a.createdAt?.toMillis ? a.createdAt.toMillis() : Date.parse(a.date) || 0)
+        const timeB = b.createdAt?.seconds ? b.createdAt.seconds * 1000 : (b.createdAt?.toMillis ? b.createdAt.toMillis() : Date.parse(b.date) || 0)
+        return timeB - timeA
       })
+      setComplaints(merged)
+    }
+
+    try {
+      const unsubC = onSnapshot(collection(db, 'complaints'), (snap) => {
+        docsMap.complaints = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id, _docId: d.id, _collection: 'complaints' }))
+        updateAllComplaints()
+      }, () => updateAllComplaints())
+
+      const unsubF = onSnapshot(collection(db, 'feedback'), (snap) => {
+        docsMap.feedback = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id, _docId: d.id, _collection: 'feedback' }))
+        updateAllComplaints()
+      }, () => updateAllComplaints())
+
+      const unsubD = onSnapshot(collection(db, 'district_complaints'), (snap) => {
+        docsMap.district_complaints = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id, _docId: d.id, _collection: 'district_complaints' }))
+        updateAllComplaints()
+      }, () => updateAllComplaints())
+
+      unsubs = [unsubC, unsubF, unsubD]
     } catch (e) {
       setComplaints([...globalComplaints])
     }
@@ -3268,7 +3405,7 @@ export function ComplaintStatusScreen() {
     }
 
     return () => {
-      try { unsubscribe() } catch (e) {}
+      unsubs.forEach(u => { try { u() } catch (e) {} })
       window.onComplaintsUpdated = null
     }
   }, [])
@@ -3482,6 +3619,12 @@ export function ComplaintStatusScreen() {
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap', marginBottom: 4 }}>
                     <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--text-muted)' }}><Ticket className="inline mr-1 text-pink-500" size={16} /> {c.id}</span>
+                    {c._collection === 'feedback' && (
+                      <span className="badge" style={{ background: '#f1f5f9', color: '#475569', fontSize: 10, padding: '2px 8px' }}>💬 {lang === 'kn' ? 'ಸಲಹೆ' : 'Feedback'}</span>
+                    )}
+                    {c._collection === 'district_complaints' && (
+                      <span className="badge" style={{ background: '#fef3c7', color: '#b45309', fontSize: 10, padding: '2px 8px' }}>🏛️ {lang === 'kn' ? 'ಜಿಲ್ಲಾ ದೂರು' : 'District'}</span>
+                    )}
                     <span className={`badge ${
                       c.status === 'resolved' ? 'badge-success'
                       : isEscalated ? 'badge-warning'

@@ -111,8 +111,8 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
       case 'schemes':       return <SchemesScreen />
       case 'market':        return <MarketScreen />
       case 'announcements': return <AnnouncementsScreen />
-      case 'complaint':     return <ComplaintScreen />
-      case 'status':        return <ComplaintStatusScreen />
+      case 'complaint':     return <ComplaintScreen setActive={setActive} />
+      case 'status':        return <ComplaintStatusScreen setActive={setActive} />
       case 'profile':       return <ProfileScreen />
       case 'weather':       return <WeatherScreen />
       case 'sos':           return <EmergencySOSScreen />

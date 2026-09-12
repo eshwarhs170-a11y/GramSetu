@@ -351,7 +351,7 @@ function RespondModal({ complaint, onClose, onSaved }) {
     }
     try {
       if (complaint._docId) {
-        await updateDoc(doc(db, 'complaints', complaint._docId), {
+        await updateDoc(doc(db, complaint._collection || 'complaints', complaint._docId), {
           status: newStatus,
           lastUpdate: responseText,
           lastRespondedAt: serverTimestamp(),
@@ -610,9 +610,9 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
 
   useEffect(() => {
     if (resolved) return
-    const qComplaints = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
-    const qFeedback = query(collection(db, 'feedback'), orderBy('createdAt', 'desc'))
-    const qDistrict = query(collection(db, 'district_complaints'), orderBy('createdAt', 'desc'))
+    const qComplaints = collection(db, 'complaints')
+    const qFeedback = collection(db, 'feedback')
+    const qDistrict = collection(db, 'district_complaints')
     
     let docsMap = { complaints: [], feedback: [], district_complaints: [] }
 
@@ -658,7 +658,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
       status: 'escalated',
     }
     try {
-      await updateDoc(doc(db, 'complaints', complaint._docId), {
+      await updateDoc(doc(db, complaint._collection || 'complaints', complaint._docId), {
         escalationLevel: (complaint.escalationLevel ?? 0) + 1,
         status: 'escalated',
         lastUpdate: `Escalated to ${next.role} due to no response.`,
@@ -2108,9 +2108,9 @@ export default function OfficialDashboard() {
   }, [])
 
   useEffect(() => {
-    const qComplaints = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
-    const qFeedback = query(collection(db, 'feedback'), orderBy('createdAt', 'desc'))
-    const qDistrict = query(collection(db, 'district_complaints'), orderBy('createdAt', 'desc'))
+    const qComplaints = collection(db, 'complaints')
+    const qFeedback = collection(db, 'feedback')
+    const qDistrict = collection(db, 'district_complaints')
     
     let docsMap = { complaints: [], feedback: [], district_complaints: [] }
 
