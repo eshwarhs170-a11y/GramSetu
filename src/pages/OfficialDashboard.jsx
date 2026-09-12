@@ -610,13 +610,39 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
 
   useEffect(() => {
     if (resolved) return
-    const q = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetched = snapshot.docs.map(d => ({ ...d.data(), id: d.data().id || d.id, _docId: d.id }))
-      const merged = [...fetched, ...kaNewComplaints].filter((v, i, a) => a.findIndex(x => x.id === v.id) === i)
+    const qComplaints = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
+    const qFeedback = query(collection(db, 'feedback'), orderBy('createdAt', 'desc'))
+    const qDistrict = query(collection(db, 'district_complaints'), orderBy('createdAt', 'desc'))
+    
+    let docsMap = { complaints: [], feedback: [], district_complaints: [] }
+
+    const updateLiveComplaints = () => {
+      const allFetched = [...docsMap.complaints, ...docsMap.feedback, ...docsMap.district_complaints]
+      const merged = [...allFetched, ...kaNewComplaints].filter((v, i, a) => a.findIndex(x => x.id === v.id) === i)
+      merged.sort((a, b) => {
+        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : Date.parse(a.date) || 0
+        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : Date.parse(b.date) || 0
+        return timeB - timeA
+      })
       setLiveComplaints(merged)
+    }
+
+    const unsubC = onSnapshot(qComplaints, (snap) => {
+      docsMap.complaints = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id, _docId: d.id, _collection: 'complaints' }))
+      updateLiveComplaints()
     }, () => {})
-    return () => unsubscribe && unsubscribe()
+    
+    const unsubF = onSnapshot(qFeedback, (snap) => {
+      docsMap.feedback = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id, _docId: d.id, _collection: 'feedback' }))
+      updateLiveComplaints()
+    }, () => {})
+
+    const unsubD = onSnapshot(qDistrict, (snap) => {
+      docsMap.district_complaints = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id, _docId: d.id, _collection: 'district_complaints' }))
+      updateLiveComplaints()
+    }, () => {})
+
+    return () => { unsubC(); unsubF(); unsubD(); }
   }, [resolved])
 
   // Auto-escalation: if overdue and has a Firestore doc ID, escalate
@@ -790,6 +816,8 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                   <div style={{ flex: 1, minWidth: 180 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
                       <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--text-muted)' }}>{c.id}</span>
+                      {c._collection === 'feedback' && <span className="badge" style={{ background: '#f59e0b', color: '#fff', fontSize: 10 }}>FEEDBACK</span>}
+                      {c._collection === 'district_complaints' && <span className="badge" style={{ background: '#8b5cf6', color: '#fff', fontSize: 10 }}>DISTRICT</span>}
                       <span className={`badge ${
                         c.status === 'resolved' ? 'badge-success'
                         : c.status === 'escalated' ? 'badge-warning'
@@ -2080,10 +2108,15 @@ export default function OfficialDashboard() {
   }, [])
 
   useEffect(() => {
-    const q = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetched = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.data().id || doc.id }))
-      const merged = [...fetched, ...kaNewComplaints, ...kaResolvedComplaints.map(c => ({...c, status: 'resolved'}))].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+    const qComplaints = query(collection(db, 'complaints'), orderBy('createdAt', 'desc'))
+    const qFeedback = query(collection(db, 'feedback'), orderBy('createdAt', 'desc'))
+    const qDistrict = query(collection(db, 'district_complaints'), orderBy('createdAt', 'desc'))
+    
+    let docsMap = { complaints: [], feedback: [], district_complaints: [] }
+
+    const updateCounts = () => {
+      const allFetched = [...docsMap.complaints, ...docsMap.feedback, ...docsMap.district_complaints]
+      const merged = [...allFetched, ...kaNewComplaints, ...kaResolvedComplaints.map(c => ({...c, status: 'resolved'}))].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
       
       const districtDocs = merged.filter(c => {
         const loc = (c.district || c.taluk || c.village || '').toLowerCase()
@@ -2091,8 +2124,24 @@ export default function OfficialDashboard() {
       })
       setPendingCount(districtDocs.filter(c => c.status === 'pending').length)
       setResolvedCount(districtDocs.filter(c => c.status === 'resolved').length)
-    })
-    return () => unsubscribe()
+    }
+
+    const unsubC = onSnapshot(qComplaints, (snap) => {
+      docsMap.complaints = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id }))
+      updateCounts()
+    }, () => {})
+    
+    const unsubF = onSnapshot(qFeedback, (snap) => {
+      docsMap.feedback = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id }))
+      updateCounts()
+    }, () => {})
+
+    const unsubD = onSnapshot(qDistrict, (snap) => {
+      docsMap.district_complaints = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id }))
+      updateCounts()
+    }, () => {})
+
+    return () => { unsubC(); unsubF(); unsubD(); }
   }, [sessionData.district])
 
   const [pendingInquiriesCount, setPendingInquiriesCount] = useState(0)

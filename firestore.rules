@@ -26,6 +26,16 @@ service cloud.firestore {
       allow read, update, delete: if true;          // officials + open reads for dashboard
     }
 
+    match /feedback/{feedbackId} {
+      allow create: if true;
+      allow read, update, delete: if true;
+    }
+
+    match /district_complaints/{complaintId} {
+      allow create: if true;
+      allow read, update, delete: if true;
+    }
+
     // 4. Newsletter Subscribers Collection
     // Anyone can subscribe (create), but cannot read/update/delete others.
     match /newsletter_subscribers/{subscriberId} {

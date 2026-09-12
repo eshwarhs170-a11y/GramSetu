@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import {
   Activity,
@@ -870,15 +871,16 @@ export function HomeScreen({ setActive }) {
       </div>
 
       {/* Crop Info Modal */}
-      {selectedCropInfo && (
+      {selectedCropInfo && ReactDOM.createPortal(
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000,
+          backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 99999,
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20
         }} onClick={() => setSelectedCropInfo(null)}>
           <div className="animate-fadeInUp" style={{
             background: 'var(--bg-card)', borderRadius: 16, padding: 24, maxWidth: 400, width: '100%',
-            position: 'relative', border: '1px solid var(--border-light)'
+            position: 'relative', border: '1px solid var(--border-light)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
           }} onClick={e => e.stopPropagation()}>
             <button
               onClick={() => setSelectedCropInfo(null)}
@@ -897,7 +899,8 @@ export function HomeScreen({ setActive }) {
               {typeof selectedCropInfo.description === 'string' ? selectedCropInfo.description : (selectedCropInfo.description[lang] || selectedCropInfo.description.en)}
             </p>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )
@@ -2032,6 +2035,29 @@ export function MarketScreen() {
   const userDistrict = window.localStorage.getItem('citizen_district') || 'Mysuru'
 
   // Fetch live prices from AGMARKNET API on mount
+  const handleRefreshPrices = () => {
+    clearPriceCache()
+    setLoadingLive(true)
+    fetchLivePrices().then(data => {
+      if (data && data.length > 0) {
+        // Build a lookup map: English crop name (lowercase) -> live price object
+        const overlay = {}
+        data.forEach(item => {
+          const key = item.crop.split('(')[0].trim().toLowerCase()
+          overlay[key] = item
+        })
+        setLivePriceOverlay(overlay)
+        setPriceDataSource('live')
+        setPriceLastUpdated(new Date())
+      } else {
+        setPriceDataSource('static')
+      }
+      setLoadingLive(false)
+    }).catch(() => {
+      setPriceDataSource('static'); setLoadingLive(false)
+    })
+  }
+
   useEffect(() => {
     let cancelled = false
     setLoadingLive(true)
@@ -2183,25 +2209,37 @@ export function MarketScreen() {
         overflow: 'hidden'
       }}>
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 8 }}>
-            <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', padding: '4px 10px', fontSize: 12 }}>
-              <TrendingUp size={14} className="inline mr-1 text-emerald-300" /> {lang === 'kn' ? 'ಕರ್ನಾಟಕ APMC ಲೈವ್ ಧಾರಣೆ' : 'Karnataka APMC Live Market Feed'}
-            </span>
-            {loadingLive ? (
-              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <Hourglass size={12} /> Fetching live prices…
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 8, justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', padding: '4px 10px', fontSize: 12 }}>
+                <TrendingUp size={14} className="inline mr-1 text-emerald-300" /> {lang === 'kn' ? 'ಕರ್ನಾಟಕ APMC ಲೈವ್ ಧಾರಣೆ' : 'Karnataka APMC Live Market Feed'}
               </span>
-            ) : priceDataSource === 'live' ? (
-              <span style={{ fontSize: 11, color: '#6ee7b7', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#6ee7b7', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
-                LIVE · AGMARKNET{priceLastUpdated ? ' · ' + priceLastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : ''}
-              </span>
-            ) : (
-              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#9ca3af', display: 'inline-block' }} />
-                MSP Baseline · Market closed or offline
-              </span>
-            )}
+              {loadingLive ? (
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <Hourglass size={12} /> Fetching live prices…
+                </span>
+              ) : priceDataSource === 'live' ? (
+                <span style={{ fontSize: 11, color: '#6ee7b7', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#6ee7b7', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
+                  LIVE · AGMARKNET{priceLastUpdated ? ' · ' + priceLastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : ''}
+                </span>
+              ) : (
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#9ca3af', display: 'inline-block' }} />
+                  MSP Baseline · Market closed or offline
+                </span>
+              )}
+            </div>
+            
+            <button
+              onClick={handleRefreshPrices}
+              disabled={loadingLive}
+              style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', borderRadius: 8, padding: '6px 12px', fontSize: 12, cursor: loadingLive ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600, transition: 'all 0.2s', opacity: loadingLive ? 0.7 : 1 }}
+              onMouseOver={e => !loadingLive && (e.currentTarget.style.background = 'rgba(255,255,255,0.3)')}
+              onMouseOut={e => !loadingLive && (e.currentTarget.style.background = 'rgba(255,255,255,0.2)')}
+            >
+              <RefreshCw size={14} className={loadingLive ? 'animate-spin' : ''} /> {lang === 'kn' ? 'ರಿಫ್ರೆಶ್ ಮಾಡಿ' : 'Refresh Now'}
+            </button>
           </div>
           <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
             {lang === 'kn' ? 'ಎಪಿಎಂಸಿ ಮಾರುಕಟ್ಟೆ ಧಾರಣೆಗಳು' : 'APMC Mandi Market Prices'}
@@ -2672,6 +2710,7 @@ export function AnnouncementsScreen() {
 export function ComplaintScreen() {
   const { t, lang } = useLanguage()
   const [selected, setSelected] = useState('')
+  const [submissionType, setSubmissionType] = useState('complaints') // complaints | feedback | district_complaints
   const [submitted, setSubmitted] = useState(false)
   const [newComplaintId, setNewComplaintId] = useState('')
 
@@ -2809,7 +2848,7 @@ export function ComplaintScreen() {
 
     // Save to Firestore (include compressed base64 photo so officials can see it)
     try {
-      await addDoc(collection(db, 'complaints'), { ...newComplaintObj, photo: photoUri })
+      await addDoc(collection(db, submissionType), { ...newComplaintObj, photo: photoUri })
     } catch (err) {
       console.warn('Firestore write failed, saving locally:', err)
     }
@@ -2829,7 +2868,7 @@ export function ComplaintScreen() {
   const handleReset = () => {
     setSelected(''); setSubject(''); setDescription('')
     setPhotoUri(null); stopCamera(); setCameraMode('idle'); setSubmitted(false)
-    setEditingComplaintId(null)
+    setEditingComplaintId(null); setSubmissionType('complaints')
   }
 
   const handleEditComplaint = () => {
@@ -2922,6 +2961,28 @@ export function ComplaintScreen() {
             </button>
           </div>
         )}
+
+        {/* Step 0: Submission Type */}
+        <div className="card" style={{ marginBottom: 20 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>{lang === 'kn' ? 'ಸಲ್ಲಿಕೆ ಪ್ರಕಾರ / Submission Type' : 'Submission Type'}</h3>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            {[{id: 'complaints', en: 'Panchayat Complaint', kn: 'ಪಂಚಾಯಿತಿ ದೂರು'}, {id: 'feedback', en: 'Feedback/Suggestion', kn: 'ಪ್ರತಿಕ್ರಿಯೆ/ಸಲಹೆ'}, {id: 'district_complaints', en: 'District Complaint', kn: 'ಜಿಲ್ಲಾ ದೂರು'}].map(type => (
+              <button
+                key={type.id}
+                type="button"
+                onClick={() => setSubmissionType(type.id)}
+                style={{
+                  flex: 1, minWidth: 140, padding: '12px', borderRadius: 12, border: `2px solid ${submissionType === type.id ? '#ea580c' : '#e2e8f0'}`,
+                  background: submissionType === type.id ? '#fff7ed' : '#f8fafc',
+                  color: submissionType === type.id ? '#c2410c' : '#475569',
+                  fontWeight: 700, fontSize: 14, cursor: 'pointer', transition: 'all 0.2s'
+                }}
+              >
+                {lang === 'kn' ? type.kn : type.en}
+              </button>
+            ))}
+          </div>
+        </div>
 
         {/* Step 1: Category */}
         <div className="card" style={{ marginBottom: 20 }}>

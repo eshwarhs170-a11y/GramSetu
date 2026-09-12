@@ -1385,7 +1385,7 @@ export default function CropScanner() {
 
         {/* Not-a-crop error banner */}
         {notCropMsg && (
-          <div style={{ position: 'absolute', bottom: 160, left: 16, right: 16, background: 'rgba(239,68,68,0.95)', borderRadius: 14, padding: '12px 16px', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'flex-start', gap: 10, zIndex: 70, boxShadow: '0 4px 20px rgba(239,68,68,0.4)' }}>
+          <div style={{ position: 'fixed', bottom: 160, left: '50%', transform: 'translateX(-50%)', width: 'calc(100% - 32px)', maxWidth: 500, background: 'rgba(239,68,68,0.95)', borderRadius: 14, padding: '12px 16px', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'flex-start', gap: 10, zIndex: 99999, boxShadow: '0 4px 20px rgba(239,68,68,0.4)' }}>
             <span style={{ fontSize: 22, flexShrink: 0 }}>⚠️</span>
             <div style={{ flex: 1 }}>
               <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 800, color: '#fff' }}>
