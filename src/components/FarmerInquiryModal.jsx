@@ -13,6 +13,7 @@ import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/fi
 export default function FarmerInquiryModal({
   isOpen,
   onClose,
+  isPage = false,
   defaultCategory = 'missing_village',
   prefillDistrict = '',
   prefillTaluk = '',
@@ -219,7 +220,7 @@ export default function FarmerInquiryModal({
     setTimeout(() => setCopied(false), 2000)
   }
 
-  if (!isOpen) return null
+  if (!isOpen && !isPage) return null
 
   const categories = [
     {
@@ -256,41 +257,26 @@ export default function FarmerInquiryModal({
     }
   ]
 
-  return (
+  const modalBody = (
     <div
-      className="modal-overlay animate-fadeInUp"
+      className="modal-content animate-fadeInUp"
       style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.75)',
-        backdropFilter: 'blur(8px)',
-        zIndex: 9999,
+        background: T.bg,
+        color: T.text,
+        borderRadius: '24px',
+        maxWidth: isPage ? '760px' : '620px',
+        width: '100%',
+        maxHeight: isPage ? 'none' : '92vh',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '16px',
-        overflowY: 'auto'
+        flexDirection: 'column',
+        boxShadow: isPage ? '0 10px 30px rgba(0, 0, 0, 0.1)' : '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
+        border: `1px solid ${T.borderLight}`,
+        overflow: 'hidden',
+        position: 'relative',
+        margin: isPage ? '0 auto 40px' : undefined
       }}
-      onClick={onClose}
+      onClick={(e) => e.stopPropagation()}
     >
-      <div
-        className="modal-content"
-        style={{
-          background: T.bg,
-          color: T.text,
-          borderRadius: '24px',
-          maxWidth: '620px',
-          width: '100%',
-          maxHeight: '92vh',
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
-          border: `1px solid ${T.borderLight}`,
-          overflow: 'hidden',
-          position: 'relative'
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
         {/* Header */}
         <div
           style={{
@@ -984,7 +970,35 @@ export default function FarmerInquiryModal({
             </form>
           )}
         </div>
+    </div>
+  )
+
+  if (isPage) {
+    return (
+      <div style={{ width: '100%', padding: '8px 0 24px' }}>
+        {modalBody}
       </div>
+    )
+  }
+
+  return (
+    <div
+      className="modal-overlay animate-fadeInUp"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(15, 23, 42, 0.75)',
+        backdropFilter: 'blur(8px)',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px',
+        overflowY: 'auto'
+      }}
+      onClick={onClose}
+    >
+      {modalBody}
     </div>
   )
 }

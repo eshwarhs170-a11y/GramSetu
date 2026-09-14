@@ -102,12 +102,8 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
               key={item.id}
               className={`nav-item ${active === item.id ? 'active' : ''}`}
               onClick={() => {
-                if (item.id === 'inquiry') {
-                  window.dispatchEvent(new CustomEvent('gramSetuOpenInquiry', { detail: { category: 'question' } }))
-                  setSidebarOpen(false)
-                  return
-                }
                 setActive(item.id)
+                setSidebarOpen(false)
               }}
             >
               <Icon size={18} strokeWidth={1.8} style={{ flexShrink: 0 }} />
@@ -125,10 +121,10 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
 
       <div className="sidebar-footer">
         <button className="logout-btn" onClick={() => {
-          window.localStorage.removeItem('citizen_name')
+          // Keep identity data for form pre-fill on next login
+          // Only mark as logged out — don't clear name/district/taluk
+          window.localStorage.setItem('citizen_logged_out', 'true')
           window.localStorage.removeItem('citizen_email')
-          window.localStorage.removeItem('citizen_district')
-          window.localStorage.removeItem('citizen_taluk')
           window.localStorage.removeItem('citizen_phone')
           navigate('/')
         }}>

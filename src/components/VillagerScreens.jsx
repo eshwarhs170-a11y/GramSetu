@@ -82,6 +82,7 @@ import { useLanguage, Trans } from '../context/LanguageContext'
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
 import { transliterateWord } from '../utils/transliterate'
+import Confetti from './Confetti'
 import { fetchLivePrices, BASELINE_PRICES, clearPriceCache } from '../utils/fetchPrices'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import { fetchWeatherForLocation, formatForecastData } from '../utils/fetchWeather'
@@ -3004,6 +3005,7 @@ export function ComplaintScreen({ setActive }) {
 
     return (
       <div className="animate-fadeInUp" style={{ maxWidth: 520, margin: '20px auto', padding: '0 16px', textAlign: 'center' }}>
+        <Confetti active={true} />
         <div className="card" style={{ padding: '32px 20px', borderRadius: 24, boxShadow: '0 15px 35px rgba(22,101,52,0.1)', border: '1.5px solid #bbf7d0', background: 'linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%)' }}>
           <div style={{
             width: 72, height: 72, borderRadius: '50%', background: '#dcfce7', color: '#15803d',
@@ -3527,54 +3529,148 @@ export function ComplaintStatusScreen({ setActive }) {
     }
   }, [])
 
-  const [scope, setScope] = useState('taluk') // 'taluk' | 'district' | 'all'
+  const [scope, setScope] = useState('taluk') // 'taluk' | 'district' | 'all' | 'my'
 
   const rawTaluk = window.localStorage.getItem('citizen_taluk') || 'Mysuru'
   const rawDistrict = window.localStorage.getItem('citizen_district') || 'Mysuru'
   const myName = window.localStorage.getItem('citizen_name') || ''
+  const myPhone = window.localStorage.getItem('citizen_phone') || ''
+  const myEmail = window.localStorage.getItem('citizen_email') || ''
 
   const userTaluk = rawTaluk.replace(/taluk/gi, '').trim()
   const userDistrict = rawDistrict.replace(/district/gi, '').trim()
 
-  // Calculate scope counts
-  const talukCount = complaints.filter(c => {
-    if (!c.taluk) return true
-    const cTaluk = c.taluk.toLowerCase()
-    const uTaluk = userTaluk.toLowerCase()
-    return cTaluk.includes(uTaluk) || uTaluk.includes(cTaluk)
-  }).length
+  const cleanStr = (s) => (s || '')
+    .toString()
+    .replace(/\b(district|taluk|village|ward|office|gp|gram\s*panchayat)\b/gi, '')
+    .trim()
+    .toLowerCase()
 
-  const districtCount = complaints.filter(c => {
-    if (!c.district) return true
-    const cDist = c.district.toLowerCase()
-    const uDist = userDistrict.toLowerCase()
-    return cDist.includes(uDist) || uDist.includes(cDist)
-  }).length
+  const canonicalDistrict = (d) => {
+    if (!d) return ''
+    const s = cleanStr(d)
+    const aliases = {
+      'tumkur': 'tumakuru',
+      'tumakuru': 'tumakuru',
+      'mysore': 'mysuru',
+      'mysuru': 'mysuru',
+      'shimoga': 'shivamogga',
+      'shivamogga': 'shivamogga',
+      'bellary': 'ballari',
+      'ballari': 'ballari',
+      'belgaum': 'belagavi',
+      'belagavi': 'belagavi',
+      'bijapur': 'vijayapura',
+      'vijayapura': 'vijayapura',
+      'gulbarga': 'kalaburagi',
+      'kalaburagi': 'kalaburagi',
+      'davangere': 'davanagere',
+      'davanagere': 'davanagere',
+      'dharwar': 'dharwad',
+      'dharwad': 'dharwad',
+      'bangalore': 'bengaluru urban',
+      'bengaluru': 'bengaluru urban',
+      'chikkaballapura': 'chikkaballapur',
+      'chamarajanagara': 'chamarajanagar',
+      'dakshin kannada': 'dakshina kannada',
+      'uttar kannada': 'uttara kannada',
+      'chikmagalur': 'chikkamagaluru',
+      'bagalkot': 'bagalkote',
+      'ramanagar': 'ramanagara',
+      'yadgiri': 'yadgir',
+      'haveri': 'haveri',
+    }
+    return aliases[s] || s
+  }
+
+  const canonicalTaluk = (t) => {
+    if (!t) return ''
+    return cleanStr(t)
+  }
+
+  // Strict district match: must match the user's logged-in district
+  const matchesDistrict = (c) => {
+    const userCanonical = canonicalDistrict(rawDistrict)
+    if (!userCanonical) return false
+
+    const cDistrict = canonicalDistrict(c.district)
+    if (cDistrict) {
+      return cDistrict === userCanonical
+    }
+
+    // If complaint has no explicit district, check location/assignedTo only if it mentions userCanonical
+    const fullLoc = `${c.location || ''} ${c.assignedTo || ''} ${c.village || ''}`.toLowerCase()
+    if (fullLoc.includes(userCanonical)) {
+      return true
+    }
+
+    return false
+  }
+
+  // Strict taluk match: must belong to the user's logged-in taluk (and same district if district specified)
+  const matchesTaluk = (c) => {
+    const userCanonicalTaluk = canonicalTaluk(rawTaluk)
+    if (!userCanonicalTaluk) return false
+
+    // If complaint explicitly specifies a district and it is NOT the user's district, reject
+    if (c.district && !matchesDistrict(c)) {
+      return false
+    }
+
+    const cTaluk = canonicalTaluk(c.taluk)
+    if (cTaluk) {
+      return cTaluk === userCanonicalTaluk || cTaluk.includes(userCanonicalTaluk) || userCanonicalTaluk.includes(cTaluk)
+    }
+
+    // If complaint has no explicit taluk, check location / assignedTo / title
+    const fullLoc = `${c.location || ''} ${c.assignedTo || ''} ${c.village || ''} ${c.title || ''}`.toLowerCase()
+    if (fullLoc.includes(userCanonicalTaluk)) {
+      return true
+    }
+
+    return false
+  }
+
+  // Submissions made by the currently logged-in citizen
+  const isOwnerComplaint = (c) => {
+    if (myPhone && c.submittedPhone && c.submittedPhone === myPhone) return true
+    if (myEmail && c.submittedEmail && c.submittedEmail.toLowerCase() === myEmail.toLowerCase()) return true
+    if (myName && c.submittedBy && typeof c.submittedBy === 'string') {
+      const cSub = c.submittedBy.trim().toLowerCase()
+      const mSub = myName.trim().toLowerCase()
+      if (cSub && mSub && (cSub === mSub || cSub.includes(mSub) || mSub.includes(cSub))) return true
+    }
+    return false
+  }
+
+  // Calculate scope counts
+  const talukCount = complaints.filter(c => matchesTaluk(c)).length
+  const districtCount = complaints.filter(c => matchesDistrict(c)).length
+  const mySubmissionsCount = complaints.filter(c => isOwnerComplaint(c)).length
 
   const filteredComplaints = complaints.filter(c => {
     const s = search.toLowerCase()
     const searchMatch = !search || 
                         (c.title && c.title.toLowerCase().includes(s)) ||
                         (c.id && c.id.toLowerCase().includes(s)) ||
-                        (c.category && c.category.toLowerCase().includes(s))
+                        (c.category && c.category.toLowerCase().includes(s)) ||
+                        (c.district && c.district.toLowerCase().includes(s)) ||
+                        (c.taluk && c.taluk.toLowerCase().includes(s))
 
-    // Owner check: farmer always sees their own complaints regardless of scope filter
-    const isOwner = myName && c.submittedBy && typeof c.submittedBy === 'string' && (
-      c.submittedBy.toLowerCase().includes(myName.toLowerCase()) ||
-      myName.toLowerCase().includes(c.submittedBy.toLowerCase())
-    )
-
-    // Scope filter check
+    // Scope filter — STRICT location separation
+    // My Taluk: ONLY complaints located in user's taluk
+    // My District: ONLY complaints located in user's district
+    // All Karnataka: Shows state-wide complaints
+    // My Submissions: Shows complaints submitted by this user
     let scopeMatch = true
     if (scope === 'taluk') {
-      const cTaluk = (c.taluk || '').toLowerCase()
-      const uTaluk = userTaluk.toLowerCase()
-      scopeMatch = isOwner || !c.taluk || cTaluk.includes(uTaluk) || uTaluk.includes(cTaluk)
+      scopeMatch = matchesTaluk(c)
     } else if (scope === 'district') {
-      const cDist = (c.district || '').toLowerCase()
-      const uDist = userDistrict.toLowerCase()
-      scopeMatch = isOwner || !c.district || cDist.includes(uDist) || uDist.includes(cDist)
+      scopeMatch = matchesDistrict(c)
+    } else if (scope === 'my') {
+      scopeMatch = isOwnerComplaint(c)
     }
+    // scope === 'all' → show everything across Karnataka (scopeMatch stays true)
 
     return searchMatch && scopeMatch
   })
@@ -3699,6 +3795,39 @@ export function ComplaintStatusScreen({ setActive }) {
             fontWeight: 800
           }}>{complaints.length}</span>
         </button>
+
+        {mySubmissionsCount > 0 && (
+          <button
+            type="button"
+            onClick={() => setScope('my')}
+            style={{
+              padding: '8px 16px',
+              borderRadius: 20,
+              border: scope === 'my' ? '2px solid #2563eb' : '1px solid #e2e8f0',
+              background: scope === 'my' ? '#eff6ff' : '#ffffff',
+              color: scope === 'my' ? '#1d4ed8' : '#64748b',
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              boxShadow: scope === 'my' ? '0 2px 8px rgba(37,99,235,0.15)' : 'none',
+              transition: 'all 0.2s'
+            }}
+          >
+            <span>👤</span>
+            <span>{lang === 'kn' ? 'ನನ್ನ ಅರ್ಜಿಗಳು' : 'My Submissions'}</span>
+            <span style={{
+              background: scope === 'my' ? '#2563eb' : '#cbd5e1',
+              color: '#fff',
+              fontSize: 11,
+              borderRadius: 10,
+              padding: '1px 7px',
+              fontWeight: 800
+            }}>{mySubmissionsCount}</span>
+          </button>
+        )}
       </div>
 
       <div style={{ marginBottom: 20 }}>
@@ -3754,10 +3883,16 @@ export function ComplaintStatusScreen({ setActive }) {
                     </span>
                   </div>
                   <h4 style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 700 }}>{c.title}</h4>
-                  <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
                     <span><Folder className="inline mr-1 text-blue-500" size={16} /> {c.category}</span>
                     <span><Calendar className="inline mr-1 text-blue-500" size={16} /> {c.date}</span>
                     <span><Landmark className="inline mr-1 text-blue-500" size={16} /> {c.assignedTo}</span>
+                    {(c.taluk || c.district) && (
+                      <span style={{ color: '#0369a1', background: '#f0f9ff', border: '1px solid #bae6fd', padding: '1px 8px', borderRadius: 12, fontWeight: 600, fontSize: 11, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                        <MapPin size={12} className="text-sky-600" />
+                        {[c.taluk, c.district].filter(Boolean).join(', ')}
+                      </span>
+                    )}
                   </div>
                   <PhotoToggle photo={c.photo} />
                 </div>
@@ -3818,8 +3953,34 @@ export function ComplaintStatusScreen({ setActive }) {
           )
         })}
         {filteredComplaints.length === 0 && (
-          <div className="card" style={{ textAlign: 'center', padding: 32, color: 'var(--text-muted)' }}>
-            No complaints found.
+          <div className="card" style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)', background: '#f8fafc', borderRadius: 16, border: '1px dashed #cbd5e1' }}>
+            <div style={{ fontSize: 32, marginBottom: 10 }}>
+              {scope === 'my' ? '👤' : '📍'}
+            </div>
+            <h4 style={{ margin: '0 0 6px', color: '#334155', fontWeight: 700, fontSize: 15 }}>
+              {scope === 'taluk' 
+                ? (lang === 'kn' ? `${userTaluk} ತಾಲೂಕಿನಲ್ಲಿ ಯಾವುದೇ ದೂರುಗಳಿಲ್ಲ` : `No complaints found in ${userTaluk} Taluk`)
+                : scope === 'district'
+                ? (lang === 'kn' ? `${userDistrict} ಜಿಲ್ಲೆಯಲ್ಲಿ ಯಾವುದೇ ದೂರುಗಳಿಲ್ಲ` : `No complaints found in ${userDistrict} District`)
+                : scope === 'my'
+                ? (lang === 'kn' ? 'ನೀವು ಇನ್ನೂ ಯಾವುದೇ ದೂರು ಸಲ್ಲಿಸಿಲ್ಲ' : 'You have not submitted any complaints yet')
+                : (lang === 'kn' ? 'ಯಾವುದೇ ದೂರುಗಳು ಕಂಡುಬಂದಿಲ್ಲ' : 'No complaints found')}
+            </h4>
+            <p style={{ margin: '0 0 16px', fontSize: 13, color: '#64748b' }}>
+              {scope !== 'all' 
+                ? (lang === 'kn' ? 'ಕರ್ನಾಟಕ ರಾಜ್ಯದ ಎಲ್ಲಾ ದೂರುಗಳನ್ನು ವೀಕ್ಷಿಸಲು "ಎಲ್ಲಾ ದೂರುಗಳು" ಟ್ಯಾಬ್ ಆಯ್ಕೆಮಾಡಿ' : 'State-wide complaints from other districts can be viewed in the "All Karnataka" tab.')
+                : (lang === 'kn' ? 'ಹೊಸ ದೂರನ್ನು ಸಲ್ಲಿಸಲು ದೂರು ನೋಂದಣಿ ಪುಟಕ್ಕೆ ಹೋಗಿ' : 'Register a new complaint from the sidebar')}
+            </p>
+            {scope !== 'all' && (
+              <button 
+                type="button" 
+                onClick={() => setScope('all')}
+                className="btn btn-outline" 
+                style={{ fontSize: 13, padding: '7px 18px', borderRadius: 20, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+              >
+                <span>🌐</span> {lang === 'kn' ? `ಎಲ್ಲಾ ಕರ್ನಾಟಕ ದೂರುಗಳನ್ನು ನೋಡಿ (${complaints.length})` : `View All Karnataka Complaints (${complaints.length})`}
+              </button>
+            )}
           </div>
         )}
       </div>

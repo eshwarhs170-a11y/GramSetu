@@ -42,7 +42,7 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
   useEffect(() => {
     const handleOpenInquiry = (e) => {
       if (e.detail?.category) setInquiryCategory(e.detail.category)
-      setInquiryModalOpen(true)
+      setActive('inquiry')
     }
     window.addEventListener('gramSetuOpenInquiry', handleOpenInquiry)
     return () => window.removeEventListener('gramSetuOpenInquiry', handleOpenInquiry)
@@ -102,6 +102,7 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
     sos:           { titleKey: 'sosTitle',       subKey: 'sosSub' },
     tutorials:     { titleKey: 'tutorialTitle',  subKey: 'tutorialSub' },
     'crop-doctor': { titleKey: 'sNavCropDoctor', subKey: 'dashSub' },
+    inquiry:       { titleKey: 'askQuestionOrReport', subKey: 'dashSub' },
   }
   const page = pageMeta[active] || pageMeta.home
 
@@ -118,6 +119,7 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
       case 'sos':           return <EmergencySOSScreen />
       case 'tutorials':     return <TutorialsScreen />
       case 'crop-doctor':   return <CropScanner />
+      case 'inquiry':       return <FarmerInquiryModal isPage={true} defaultCategory={inquiryCategory} onClose={() => setActive('home')} />
       default:              return <HomeScreen />
     }
   }

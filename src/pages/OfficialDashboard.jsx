@@ -76,8 +76,52 @@ const allDistricts = [
   'Vijayanagara', 'Yadgir'
 ]
 
+const getEligibleCategories = (dept) => {
+  if (!dept) return null
+  const d = dept.toLowerCase()
+  if (d.includes('agriculture') || d.includes('rsk')) return ['Agriculture / RSK', 'ಕೃಷಿ / RSK', 'Agriculture']
+  if (d.includes('electricity') || d.includes('bescom')) return ['Electricity / BESCOM', 'ವಿದ್ಯುತ್ / BESCOM', 'Electricity']
+  if (d.includes('water')) return ['Water Supply', 'ನೀರು ಸರಬರಾಜು', 'Water']
+  if (d.includes('revenue')) return ['Bhoomi / Land Records', 'ಭೂಮಿ / ಭೂ ದಾಖಲೆ', 'Ration/PDS']
+  if (d.includes('health') || d.includes('phc')) return ['PHC / Health', 'PHC / ಆರೋಗ್ಯ', 'PHC / स्वास्थ्य']
+  if (d.includes('education') || d.includes('ddpi')) return ['Schools / DDPI', 'ಶಾಲೆ / DDPI']
+  if (d.includes('panchayat') || d.includes('pdo')) return ['Roads & Paths', 'Sanitation / BBMP', 'ರಸ್ತೆ ಮತ್ತು ದಾರಿ', 'ಸ್ವಚ್ಛತೆ', 'Sanitation', 'Roads']
+  return null // General administrative depts see all categories
+}
+
+const isComplaintEligibleForOfficer = (c, session) => {
+  if (!session) return true
+  const sessionDist = (session.district || '').toLowerCase().trim()
+  const cDist = (c.district || c.village || '').toLowerCase().trim()
+  const distMatch = sessionDist ? (
+    cDist.includes(sessionDist) ||
+    sessionDist.includes(cDist) ||
+    (sessionDist.includes('tum') && cDist.includes('tum'))
+  ) : true
+
+  const sTalukClean = (session.taluk || '').replace(/ taluk/i, '').trim().toLowerCase()
+  const cTalukClean = (c.taluk || '').replace(/ taluk/i, '').trim().toLowerCase()
+  const talukMatch = sTalukClean ? (
+    !cTalukClean || cTalukClean.includes(sTalukClean) || sTalukClean.includes(cTalukClean)
+  ) : true
+
+  const gpMatch = session.gp ? (c.gp || '').toLowerCase() === session.gp.toLowerCase() : true
+
+  const escLevel = c.escalationLevel ?? 0
+  const myLevel = session.department?.includes('Taluk Panchayat') ? 1
+    : session.department?.includes('Zilla') || session.department?.includes('CEO') ? 2
+    : session.department?.includes('RDPR') || session.department?.includes('Commissioner') ? 3
+    : 0
+  const levelMatch = escLevel >= myLevel
+
+  const eligibleCats = getEligibleCategories(session.department)
+  const deptCatMatch = eligibleCats ? eligibleCats.includes(c.category) : true
+
+  return distMatch && talukMatch && gpMatch && levelMatch && deptCatMatch
+}
+
 // ===== Sidebar =====
-function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessionData, pendingInquiryCount = 0 }) {
+function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessionData, pendingInquiryCount = 0, newComplaintsCount = 0 }) {
   const navigate = useNavigate()
   const { t } = useLanguage()
 
@@ -101,7 +145,7 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
 
   const navItems = [
     { id: 'overview',        icon: LayoutDashboard,    labelKey: 'sNavOverview',       badge: null },
-    { id: 'complaints',      icon: ClipboardList,      labelKey: 'sNavNewComplaints',  badge: '28' },
+    { id: 'complaints',      icon: ClipboardList,      labelKey: 'sNavNewComplaints',  badge: newComplaintsCount > 0 ? String(newComplaintsCount) : null },
     { id: 'resolved',        icon: CheckCircle2,       labelKey: 'sNavResolved',       badge: null },
     { id: 'inquiries',       icon: HelpCircle,         labelKey: 'sNavInquiries',      badge: pendingInquiryCount > 0 ? String(pendingInquiryCount) : null },
     { id: 'state',           icon: Map,                labelKey: 'State Overview',     badge: null },
@@ -209,12 +253,12 @@ function OverviewScreen({ onPendingClick, onResolvedClick, sessionData, pendingC
 
       <div className="analytics-grid">
         {[
-          { Icon: ClipboardList, labelKey: 'totalComplaints', value: '186', color: '#fee2e2', iconColor: '#ef4444', sub: '+18 today' },
-          { Icon: Clock,         labelKey: 'pendingComplaints', value: '28', color: '#fef3c7', iconColor: '#f59e0b', sub: '7 high priority' },
-          { Icon: RefreshCw,     labelKey: 'inProgressComplaints', value: '22', color: '#dbeafe', iconColor: '#3b82f6', sub: '4 escalated' },
-          { Icon: CheckCircle,   labelKey: 'resolvedComplaints', value: '136', color: '#d1fae5', iconColor: '#10b981', sub: '97% rate' },
-          { Icon: Users,         labelKey: 'registeredCitizens', value: '5,210', color: '#ede9fe', iconColor: '#8b5cf6', sub: '+82 this month' },
-          { Icon: Megaphone,     labelKey: 'announcements', value: '6', color: '#fce7f3', iconColor: '#ec4899', sub: 'This month' },
+          { Icon: ClipboardList, labelKey: 'totalComplaints', value: String(pendingCount + resolvedCount), color: '#fee2e2', iconColor: '#ef4444', sub: `${pendingCount} active` },
+          { Icon: Clock,         labelKey: 'pendingComplaints', value: String(pendingCount), color: '#fef3c7', iconColor: '#f59e0b', sub: `${pendingCount} pending` },
+          { Icon: RefreshCw,     labelKey: 'inProgressComplaints', value: '0', color: '#dbeafe', iconColor: '#3b82f6', sub: 'In progress' },
+          { Icon: CheckCircle,   labelKey: 'resolvedComplaints', value: String(resolvedCount), color: '#d1fae5', iconColor: '#10b981', sub: 'Resolved' },
+          { Icon: Users,         labelKey: 'registeredCitizens', value: '1,240', color: '#ede9fe', iconColor: '#8b5cf6', sub: 'Active' },
+          { Icon: Megaphone,     labelKey: 'announcements', value: '4', color: '#fce7f3', iconColor: '#ec4899', sub: 'This month' },
         ].map((s, i) => (
           <div className="stat-card animate-fadeInUp" key={i} style={{ animationDelay: `${i * 0.07}s` }}>
             <div className="stat-icon" style={{ background: s.color, color: s.iconColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -346,32 +390,43 @@ function RespondModal({ complaint, onClose, onSaved }) {
       escalationLevel: complaint.escalationLevel ?? 0,
       timestamp: new Date().toISOString(),
     }
+
+    // Immediately trigger UI update and close modal so official is never stuck waiting
     try {
+      onSaved(responseObj)
+    } catch (err) {
+      console.warn('onSaved callback error:', err)
+    }
+    onClose()
+
+    // Firestore async update in background with timeout safety
+    try {
+      const syncTasks = []
       if (complaint._docId) {
-        await updateDoc(doc(db, complaint._collection || 'complaints', complaint._docId), {
-          status: newStatus,
-          lastUpdate: responseText,
-          lastRespondedAt: serverTimestamp(),
-          responses: arrayUnion(responseObj),
-        })
+        syncTasks.push(
+          updateDoc(doc(db, complaint._collection || 'complaints', complaint._docId), {
+            status: newStatus,
+            lastUpdate: responseText,
+            lastRespondedAt: serverTimestamp(),
+            responses: arrayUnion(responseObj),
+          })
+        )
       }
-      // Also add to the new official_responses collection for visibility
-      try {
-        await addDoc(collection(db, 'official_responses'), {
+      syncTasks.push(
+        addDoc(collection(db, 'official_responses'), {
           ...responseObj,
           complaintRefId: complaint._docId || complaint.id,
           complaintTitle: complaint.title || '',
-        })
-      } catch (addError) {
-        console.warn('Failed to add to official_responses collection (check rules):', addError)
-      }
-      onSaved(responseObj)
+        }).catch(err => console.warn('addDoc official_responses notice:', err))
+      )
+
+      await Promise.race([
+        Promise.all(syncTasks),
+        new Promise(resolve => setTimeout(resolve, 3000))
+      ])
     } catch (e) {
-      console.warn('Firestore update failed', e)
-      onSaved(responseObj)
+      console.warn('Firestore update notice:', e)
     }
-    setSaving(false)
-    onClose()
   }
 
   const statusColor = newStatus === 'resolved' ? '#10b981' : newStatus === 'inprogress' ? '#3b82f6' : '#f59e0b'
@@ -644,7 +699,6 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
   const session = getSessionData()
 
   useEffect(() => {
-    if (resolved) return
     const qComplaints = collection(db, 'complaints')
     const qFeedback = collection(db, 'feedback')
     const qDistrict = collection(db, 'district_complaints')
@@ -653,7 +707,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
 
     const updateLiveComplaints = () => {
       const allFetched = [...docsMap.complaints, ...docsMap.feedback, ...docsMap.district_complaints]
-      const merged = [...allFetched, ...kaNewComplaints].filter((v, i, a) => a.findIndex(x => x.id === v.id) === i)
+      const merged = [...allFetched, ...kaNewComplaints, ...kaResolvedComplaints.map(c => ({...c, status: 'resolved'}))].filter((v, i, a) => a.findIndex(x => x.id === v.id) === i)
       merged.sort((a, b) => {
         const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : Date.parse(a.date) || 0
         const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : Date.parse(b.date) || 0
@@ -678,7 +732,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
     }, () => {})
 
     return () => { unsubC(); unsubF(); unsubD(); }
-  }, [resolved])
+  }, [])
 
   // Auto-escalation: if overdue and has a Firestore doc ID, escalate
   const handleAutoEscalate = async (complaint) => {
@@ -705,17 +759,23 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
 
   const displayedComplaints = (() => {
     let list = stateOverview ? liveComplaints : liveComplaints.filter(c => {
-      const distMatch = session.district ? (
-        (c.district || c.village || '').toLowerCase().includes(session.district.toLowerCase()) ||
-        session.district.toLowerCase().includes((c.district || '').toLowerCase())
+      const sessionDist = (session.district || '').toLowerCase().trim()
+      const cDist = (c.district || c.village || '').toLowerCase().trim()
+      const distMatch = sessionDist ? (
+        cDist.includes(sessionDist) ||
+        sessionDist.includes(cDist) ||
+        (sessionDist.includes('tum') && cDist.includes('tum'))
       ) : true
+
       const sTalukClean = (session.taluk || '').replace(/ taluk/i, '').trim().toLowerCase()
       const cTalukClean = (c.taluk || '').replace(/ taluk/i, '').trim().toLowerCase()
       const talukMatch = sTalukClean ? (
         !cTalukClean || cTalukClean.includes(sTalukClean) || sTalukClean.includes(cTalukClean)
       ) : true
       const gpMatch = session.gp ? (c.gp || '').toLowerCase() === session.gp.toLowerCase() : true
-      const statusMatch = filter ? (c.status === filter) : true
+      const statusMatch = filter 
+        ? (c.status === filter) 
+        : (resolved ? c.status === 'resolved' : c.status !== 'resolved')
       // Also show escalated complaints that reached this level
       const escLevel = c.escalationLevel ?? 0
       const myLevel = session.department?.includes('Taluk Panchayat') ? 1
@@ -723,20 +783,6 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
         : session.department?.includes('RDPR') || session.department?.includes('Commissioner') ? 3
         : 0
       const levelMatch = stateOverview ? true : escLevel >= myLevel
-
-      // Specific department category filter
-      const getEligibleCategories = (dept) => {
-        if (!dept) return null
-        const d = dept.toLowerCase()
-        if (d.includes('agriculture')) return ['Agriculture / RSK', 'ಕೃಷಿ / RSK', 'Agriculture']
-        if (d.includes('electricity') || d.includes('bescom')) return ['Electricity / BESCOM', 'ವಿದ್ಯುತ್ / BESCOM', 'Electricity']
-        if (d.includes('water')) return ['Water Supply', 'ನೀರು ಸರಬರಾಜು', 'Water']
-        if (d.includes('revenue')) return ['Bhoomi / Land Records', 'ಭೂಮಿ / ಭೂ ದಾಖಲೆ', 'Ration/PDS']
-        if (d.includes('health') || d.includes('phc')) return ['PHC / Health', 'PHC / ಆರೋಗ್ಯ', 'PHC / स्वास्थ्य']
-        if (d.includes('education') || d.includes('ddpi')) return ['Schools / DDPI', 'ಶಾಲೆ / DDPI']
-        if (d.includes('panchayat') || d.includes('pdo')) return ['Roads & Paths', 'Sanitation / BBMP', 'ರಸ್ತೆ ಮತ್ತು ದಾರಿ', 'ಸ್ವಚ್ಛತೆ', 'Sanitation', 'Roads']
-        return null // General administrative depts see all categories
-      }
 
       const eligibleCats = getEligibleCategories(session.department)
       const deptCatMatch = eligibleCats ? eligibleCats.includes(c.category) : true
@@ -986,25 +1032,46 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {kaResolvedComplaints.map((c, i) => (
-            <div className="complaint-status-card" key={i}>
-              <div className="complaint-status-indicator resolved" />
-              <div className="complaint-status-content">
-                <h4>{c.title}</h4>
-                <p>{c.village} — Resolved by: {c.resolvedBy}</p>
-                <div className="complaint-status-meta">
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Tag size={12} /> {c.id}</span>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Calendar size={12} /> {c.resolvedDate}</span>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}>
-                    {[...Array(5)].map((_, si) => (
-                      <Star key={si} size={13} fill={si < c.rating ? '#fbbf24' : 'none'} color={si < c.rating ? '#fbbf24' : '#d1d5db'} />
-                    ))}
-                  </span>
-                  <span className="badge badge-success">{t('resolved')}</span>
+          {displayedComplaints.length > 0 ? (
+            displayedComplaints.map((c, i) => (
+              <div className="complaint-status-card animate-fadeInUp" key={c.id || i}
+                style={{
+                  borderLeft: '4px solid #10b981',
+                  padding: '16px 18px',
+                  flexDirection: 'column',
+                }}>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                  <div style={{ flex: 1, minWidth: 180 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
+                      <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--text-muted)' }}>{c.id}</span>
+                      <span className="badge badge-success" style={{ fontSize: 10, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                        <CheckCircle2 size={12} /> {t('resolved')}
+                      </span>
+                    </div>
+                    <h4 style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 700 }}>{c.title}</h4>
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Folder size={12} /> {c.category}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><MapPin size={12} /> {c.village || c.taluk || c.district}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Calendar size={12} /> {c.date || (c.createdAt?.toDate?.()?.toLocaleDateString()) || 'Unknown'}</span>
+                      {c.submittedBy && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><User size={12} /> {c.submittedBy}</span>}
+                    </div>
+                  </div>
                 </div>
+
+                {/* Resolution response */}
+                {(c.lastUpdate || (c.responses && c.responses.length > 0)) && (
+                  <div style={{ marginTop: 10, background: 'rgba(16, 185, 129, 0.08)', borderRadius: 8, padding: '10px 14px', borderLeft: '3px solid #10b981', fontSize: 12 }}>
+                    <div style={{ color: '#10b981', fontWeight: 700, fontSize: 11, marginBottom: 2 }}>Official Resolution / ಅಧಿಕೃತ ಪರಿಹಾರ:</div>
+                    <p style={{ margin: 0, color: 'var(--text-primary)' }}>{c.lastUpdate || c.responses[c.responses.length - 1]?.message}</p>
+                  </div>
+                )}
               </div>
+            ))
+          ) : (
+            <div className="card" style={{ textAlign: 'center', padding: 32, color: 'var(--text-muted)' }}>
+              No resolved complaints found for your jurisdiction.
             </div>
-          ))}
+          )}
         </div>
       )}
 
@@ -2176,12 +2243,11 @@ export default function OfficialDashboard() {
       const allFetched = [...docsMap.complaints, ...docsMap.feedback, ...docsMap.district_complaints]
       const merged = [...allFetched, ...kaNewComplaints, ...kaResolvedComplaints.map(c => ({...c, status: 'resolved'}))].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
       
-      const districtDocs = merged.filter(c => {
-        const loc = (c.district || c.taluk || c.village || '').toLowerCase()
-        return loc.includes(sessionData.district.toLowerCase())
-      })
-      setPendingCount(districtDocs.filter(c => c.status === 'pending').length)
-      setResolvedCount(districtDocs.filter(c => c.status === 'resolved').length)
+      const eligibleDocs = merged.filter(c => isComplaintEligibleForOfficer(c, sessionData))
+      const pendingTotal = eligibleDocs.filter(c => c.status !== 'resolved').length
+      const resolvedTotal = eligibleDocs.filter(c => c.status === 'resolved').length
+      setPendingCount(pendingTotal)
+      setResolvedCount(resolvedTotal)
     }
 
     const unsubC = onSnapshot(qComplaints, (snap) => {
@@ -2200,7 +2266,7 @@ export default function OfficialDashboard() {
     }, () => {})
 
     return () => { unsubC(); unsubF(); unsubD(); }
-  }, [sessionData.district])
+  }, [sessionData.district, sessionData.department, sessionData.taluk, sessionData.gp])
 
   const [pendingInquiriesCount, setPendingInquiriesCount] = useState(0)
   useEffect(() => {
@@ -2305,6 +2371,7 @@ export default function OfficialDashboard() {
         setSidebarOpen={setSidebarOpen}
         sessionData={sessionData}
         pendingInquiryCount={pendingInquiriesCount}
+        newComplaintsCount={pendingCount}
       />
       {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={() => setSidebarOpen(false)} />}
       <div className="main-content">

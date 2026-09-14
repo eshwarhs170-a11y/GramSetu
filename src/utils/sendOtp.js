@@ -10,18 +10,28 @@ const EMAILJS_PUBLIC_KEY  = 'WxFna4OMAj2w50yJk'
 let emailjsInitialized = false
 
 async function sendViaApi(email, otp) {
-  const res = await fetch('/api/send-otp', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, otp }),
-  })
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 2000)
 
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}))
-    throw new Error(data.error || `API error: ${res.status}`)
+  try {
+    const res = await fetch('/api/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp }),
+      signal: controller.signal
+    })
+    clearTimeout(timeoutId)
+
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      throw new Error(data.error || `API error: ${res.status}`)
+    }
+
+    return true
+  } catch (err) {
+    clearTimeout(timeoutId)
+    throw err
   }
-
-  return true
 }
 
 async function sendViaEmailJS(email, otp) {
@@ -35,7 +45,9 @@ async function sendViaEmailJS(email, otp) {
 
   await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
     email,
+    to_email: email,
     passcode: otp,
+    otp,
     time: '10 minutes',
   })
 
@@ -48,14 +60,27 @@ async function sendViaEmailJS(email, otp) {
  * @returns {Promise<{success: boolean, method: 'api'|'emailjs'}>}
  */
 export async function sendOtpEmail(email, otp) {
-  // Use the server-side Gmail SMTP route (inbox-friendly)
+  console.log(`[GramSetu OTP] Sending code to ${email}... (For quick testing/demo, code is: ${otp})`)
+  
+  // 1. First try server-side Gmail SMTP route
   try {
     await sendViaApi(email, otp)
+    console.log('[GramSetu OTP] Delivered via Server API (Gmail SMTP)')
     return { success: true, method: 'api' }
   } catch (apiErr) {
-    console.error('API route error:', apiErr)
+    console.warn('[GramSetu OTP] Server API route failed, attempting EmailJS fallback...', apiErr.message)
+  }
+
+  // 2. Fallback to EmailJS (client-side browser direct)
+  try {
+    await sendViaEmailJS(email, otp)
+    console.log('[GramSetu OTP] Delivered via EmailJS fallback')
+    return { success: true, method: 'emailjs' }
+  } catch (emailjsErr) {
+    console.error('[GramSetu OTP] EmailJS fallback also failed:', emailjsErr)
     throw new Error(
-      `Failed to send OTP via SMTP: ${apiErr.message}. Make sure GMAIL_USER and GMAIL_APP_PASSWORD are set in your .env file!`
+      `Failed to deliver OTP email. Please verify email address or check console for OTP.`
     )
   }
 }
+

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
-import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail, Send, ShieldCheck, Building2, TreePine, MapPin, MapPinOff, HelpCircle } from 'lucide-react'
+import { Wheat, Landmark, TrendingUp, ClipboardList, ArrowLeft, AlertTriangle, CheckCircle2, Mail, Send, ShieldCheck, Building2, TreePine, MapPin, MapPinOff, HelpCircle, Edit3 } from 'lucide-react'
 import { sendOtpEmail } from '../utils/sendOtp'
 import { db, auth } from '../firebase'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
@@ -19,24 +19,36 @@ export default function VillagerLogin() {
   const { t, lang } = useLanguage()
 
   useEffect(() => {
-    if (window.localStorage.getItem('citizen_email') || window.localStorage.getItem('citizen_phone')) {
+    // Only auto-redirect if logged in AND didn't explicitly log out
+    const isLoggedOut = window.localStorage.getItem('citizen_logged_out') === 'true'
+    if (!isLoggedOut && (window.localStorage.getItem('citizen_email') || window.localStorage.getItem('citizen_phone'))) {
       navigate('/dashboard/villager')
     }
   }, [navigate])
 
-  const [step, setStep] = useState(1)
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [name, setName] = useState('')
-  const [district, setDistrict] = useState('')
-  const [taluk, setTaluk] = useState('')
-  const [areaType, setAreaType] = useState('')  // 'rural' | 'urban'
-  const [gp, setGp] = useState('')
-  const [village, setVillage] = useState('')
+  // Pre-fill from previous session if user came back after logout
+  const prevEmail    = window.localStorage.getItem('citizen_email')    || ''
+  const prevPhone    = window.localStorage.getItem('citizen_phone')    || ''
+  const prevName     = window.localStorage.getItem('citizen_name')     || ''
+  const prevDistrict = window.localStorage.getItem('citizen_district') || ''
+  const prevTaluk    = window.localStorage.getItem('citizen_taluk')    || ''
+
+  // Check if this is a returning user (previously logged out)
+  const isReturningUser = window.localStorage.getItem('citizen_logged_out') === 'true' && prevName && prevEmail
+
+  const [step, setStep] = useState(isReturningUser ? 0 : 1) // 0 = welcome-back, 1 = form, 2 = otp
+  const [email, setEmail] = useState(prevEmail)
+  const [phone, setPhone] = useState(prevPhone)
+  const [name, setName] = useState(prevName)
+  const [district, setDistrict] = useState(prevDistrict)
+  const [taluk, setTaluk] = useState(prevTaluk)
+  const [areaType, setAreaType] = useState(window.localStorage.getItem('citizen_area_type') || '')  // 'rural' | 'urban'
+  const [gp, setGp] = useState(window.localStorage.getItem('citizen_gp') || '')
+  const [village, setVillage] = useState(window.localStorage.getItem('citizen_village') || '')
   const [isOtherVillage, setIsOtherVillage] = useState(false)
   // Urban fields
-  const [urbanBody, setUrbanBody] = useState('')
-  const [ward, setWard] = useState('')
+  const [urbanBody, setUrbanBody] = useState(window.localStorage.getItem('citizen_area_type') === 'urban' ? (window.localStorage.getItem('citizen_gp') || '') : '')
+  const [ward, setWard] = useState(window.localStorage.getItem('citizen_area_type') === 'urban' ? (window.localStorage.getItem('citizen_village') || '') : '')
   const [otp, setOtp] = useState('')
   const [otpSentAlert, setOtpSentAlert] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -143,6 +155,23 @@ export default function VillagerLogin() {
   // Determine the final address for OTP validation
   const finalAddress = areaType === 'urban' ? ward : village
 
+  // ── Welcome-back quick OTP (step 0) ────────────────────────────
+  const handleQuickLogin = async () => {
+    setLoading(true)
+    setErrorMsg('')
+    const newOtp = Math.floor(100000 + Math.random() * 900000).toString()
+    setGeneratedOtp(newOtp)
+    try {
+      await sendOtpEmail(email, newOtp)
+      setOtpSentAlert(true)
+      setStep(2)
+    } catch (error) {
+      setErrorMsg('Failed to send OTP. Please check your email address.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // ── OTP send ───────────────────────────────────────────────────
   const handleSendOtp = async (e) => {
     e.preventDefault()
@@ -158,14 +187,16 @@ export default function VillagerLogin() {
     const newOtp = Math.floor(100000 + Math.random() * 900000).toString()
     setGeneratedOtp(newOtp)
     
-    // Fire and forget to avoid blocking UI for SMTP latency
-    sendOtpEmail(email, newOtp).catch(error => {
-      console.error('OTP send error in background:', error);
-    });
-
-    setOtpSentAlert(true)
-    setStep(2)
-    setLoading(false)
+    try {
+      await sendOtpEmail(email, newOtp)
+      setOtpSentAlert(true)
+      setStep(2)
+    } catch (error) {
+      console.error('OTP send error in background:', error)
+      setErrorMsg('Failed to send OTP: ' + (error.message || 'Please check your connection and email address.'))
+    } finally {
+      setLoading(false)
+    }
   }
 
   // ── OTP verify ─────────────────────────────────────────────────
@@ -178,35 +209,10 @@ export default function VillagerLogin() {
     setLoading(true)
     setErrorMsg('')
     try {
-      const dummyPassword = email + "GramSetu!2026";
-      try {
-        await signInWithEmailAndPassword(auth, email, dummyPassword);
-      } catch (authErr) {
-        if (authErr.code === 'auth/user-not-found' || authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/invalid-login-credentials') {
-          try {
-            await createUserWithEmailAndPassword(auth, email, dummyPassword);
-          } catch (createErr) {
-            console.error("Firebase Auth creation error:", createErr);
-          }
-        }
-      }
-
-      const uid = 'user-' + email.replace(/[^a-z0-9]/gi, '-')
       const resolvedGp = areaType === 'urban' ? urbanBody : gp
       const resolvedVillage = areaType === 'urban' ? ward : village
-      try {
-        await setDoc(doc(db, 'users', uid), {
-          uid, name, email, phone,
-          district, taluk,
-          areaType,
-          gp: resolvedGp,
-          village: resolvedVillage,
-          role: 'villager',
-          createdAt: serverTimestamp(),
-          lastLoginAt: serverTimestamp()
-        }, { merge: true })
-      } catch (_) {}
 
+      // Save to localStorage immediately — this is instant
       window.localStorage.setItem('citizen_name', name)
       window.localStorage.setItem('citizen_email', email)
       window.localStorage.setItem('citizen_district', district)
@@ -215,12 +221,32 @@ export default function VillagerLogin() {
       window.localStorage.setItem('citizen_village', resolvedVillage)
       window.localStorage.setItem('citizen_area_type', areaType)
       window.localStorage.setItem('citizen_phone', phone)
+      window.localStorage.removeItem('citizen_logged_out') // clear logout flag
 
+      // Navigate immediately — don't wait for Firebase
       navigate('/dashboard/villager')
+
+      // Run Firebase operations in background (non-blocking)
+      const dummyPassword = email + "GramSetu!2026";
+      signInWithEmailAndPassword(auth, email, dummyPassword).catch(async (authErr) => {
+        if (authErr.code === 'auth/user-not-found' || authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/invalid-login-credentials') {
+          createUserWithEmailAndPassword(auth, email, dummyPassword).catch(e => console.warn('Auth create:', e))
+        }
+      })
+      const uid = 'user-' + email.replace(/[^a-z0-9]/gi, '-')
+      setDoc(doc(db, 'users', uid), {
+        uid, name, email, phone,
+        district, taluk,
+        areaType,
+        gp: resolvedGp,
+        village: resolvedVillage,
+        role: 'villager',
+        lastLoginAt: serverTimestamp()
+      }, { merge: true }).catch(e => console.warn('Firestore sync:', e))
+
     } catch (error) {
       console.error('Login error:', error)
       setErrorMsg('Something went wrong. Please try again.')
-    } finally {
       setLoading(false)
     }
   }
@@ -274,8 +300,8 @@ export default function VillagerLogin() {
           </div>
 
           <div className="login-form-header">
-            <h3>{step === 1 ? 'Raita / Villager Login' : 'Verify Your Email OTP'}</h3>
-            <p>{step === 1 ? 'Enter your details to receive a one-time password' : `We sent a 6-digit OTP to ${email}`}</p>
+            <h3>{step === 0 ? 'Welcome Back! 👋' : step === 1 ? 'Raita / Villager Login' : 'Verify Your Email OTP'}</h3>
+            <p>{step === 0 ? `Good to see you again, ${prevName.split(' ')[0]}` : step === 1 ? 'Enter your details to receive a one-time password' : `We sent a 6-digit OTP to ${email}`}</p>
           </div>
 
           {errorMsg && (
@@ -292,7 +318,95 @@ export default function VillagerLogin() {
             </div>
           )}
 
-          {step === 1 ? (
+          {/* ── STEP 0: Welcome Back Screen ── */}
+          {step === 0 && (
+            <div className="animate-fadeInUp">
+              {/* Avatar + Name Card */}
+              <div style={{
+                background: 'linear-gradient(135deg, #f0fdf4, #dcfce7)',
+                border: '2px solid #86efac',
+                borderRadius: 20,
+                padding: '24px 20px',
+                textAlign: 'center',
+                marginBottom: 20,
+              }}>
+                <div style={{
+                  width: 72, height: 72,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #16a34a, #15803d)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#fff', fontWeight: 800, fontSize: 28,
+                  margin: '0 auto 12px',
+                  boxShadow: '0 8px 20px rgba(22,163,74,0.35)',
+                  border: '3px solid #fff',
+                }}>
+                  {prevName.charAt(0).toUpperCase()}
+                </div>
+                <div style={{ fontSize: 22, fontWeight: 800, color: '#14532d', marginBottom: 4 }}>{prevName}</div>
+                <div style={{ fontSize: 13, color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                  <MapPin size={13} />
+                  {prevTaluk && prevDistrict ? `${prevTaluk}, ${prevDistrict}` : prevDistrict || 'Karnataka'}
+                </div>
+                <div style={{ fontSize: 12, color: '#6b7280', marginTop: 6 }}>{prevEmail}</div>
+              </div>
+
+              {errorMsg && (
+                <div style={{ padding: 12, background: 'var(--danger-light)', color: 'var(--danger)', borderRadius: 'var(--radius-sm)', fontSize: 13, fontWeight: 500, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <AlertTriangle size={15} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                  {errorMsg}
+                </div>
+              )}
+
+              {/* Quick Login Button */}
+              <button
+                type="button"
+                className="btn btn-primary"
+                style={{ width: '100%', padding: '14px', fontSize: 16, fontWeight: 700, borderRadius: 14, marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}
+                onClick={handleQuickLogin}
+                disabled={loading}
+              >
+                {loading ? (
+                  <><span style={{ width: 18, height: 18, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} /> Sending OTP…</>
+                ) : (
+                  <><Send size={18} /> Send OTP to {prevEmail.split('@')[0]}@… &amp; Login</>
+                )}
+              </button>
+
+              {/* Divider */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '16px 0' }}>
+                <div style={{ flex: 1, height: 1, background: 'var(--border-light)' }} />
+                <span style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 600 }}>OR</span>
+                <div style={{ flex: 1, height: 1, background: 'var(--border-light)' }} />
+              </div>
+
+              {/* Edit / Switch user */}
+              <button
+                type="button"
+                className="btn btn-outline"
+                style={{ width: '100%', padding: '12px', fontSize: 14, fontWeight: 600, borderRadius: 12, marginBottom: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+                onClick={() => setStep(1)}
+              >
+                <Edit3 size={15} /> Edit My Details
+              </button>
+
+              <button
+                type="button"
+                style={{ width: '100%', padding: '10px', fontSize: 13, color: 'var(--text-muted)', background: 'transparent', border: 'none', cursor: 'pointer', fontWeight: 500 }}
+                onClick={() => {
+                  // Clear all saved data and start fresh
+                  window.localStorage.clear()
+                  setName(''); setEmail(''); setPhone(''); setDistrict(''); setTaluk('')
+                  setAreaType(''); setGp(''); setVillage(''); setUrbanBody(''); setWard('')
+                  setStep(1)
+                }}
+              >
+                Not {prevName.split(' ')[0]}? Login as someone else →
+              </button>
+            </div>
+          )}
+
+          {/* ── STEP 1: Full Form ── */}
+          {step === 1 && (
             <form className="login-form" onSubmit={handleSendOtp}>
               <div className="form-group">
                 <label className="form-label">Full Name / ಪೂರ್ಣ ಹೆಸರು *</label>
@@ -407,7 +521,10 @@ export default function VillagerLogin() {
                 {loading ? 'Sending OTP...' : 'Send OTP to Email'}
               </button>
             </form>
-          ) : (
+          )}
+
+          {/* ── STEP 2: OTP Verification ── */}
+          {step === 2 && (
             <form className="login-form" onSubmit={handleVerifyOtp}>
               <div className="form-group">
                 <label className="form-label">6-digit OTP / 6 ಅಂಕಿ OTP</label>
