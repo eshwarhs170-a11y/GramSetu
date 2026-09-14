@@ -3443,6 +3443,32 @@ export function ComplaintScreen({ setActive }) {
   )
 }
 
+function PhotoToggle({ photo }) {
+  const [show, setShow] = React.useState(false)
+  if (!photo) return null
+  return (
+    <div style={{ marginTop: 10 }}>
+      <button
+        type="button"
+        onClick={() => setShow(p => !p)}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 12, fontWeight: 600, cursor: 'pointer',
+          background: 'none', border: '1px solid var(--border-light)',
+          borderRadius: 8, padding: '4px 12px', color: 'var(--primary)'
+        }}
+      >
+        📷 {show ? 'Hide Photo' : 'View Photo'}
+      </button>
+      {show && (
+        <div style={{ marginTop: 8 }}>
+          <img src={photo} alt="Complaint Attachment" style={{ width: '100%', maxHeight: 220, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border-light)' }} />
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function ComplaintStatusScreen({ setActive }) {
   const { t, lang } = useLanguage()
   const [complaints, setComplaints] = useState([...globalComplaints])
@@ -3733,30 +3759,7 @@ export function ComplaintStatusScreen({ setActive }) {
                     <span><Calendar className="inline mr-1 text-blue-500" size={16} /> {c.date}</span>
                     <span><Landmark className="inline mr-1 text-blue-500" size={16} /> {c.assignedTo}</span>
                   </div>
-                  {c.photo && (() => {
-                    const [showPhoto, setShowPhoto] = React.useState(false)
-                    return (
-                      <div style={{ marginTop: 10 }}>
-                        <button
-                          type="button"
-                          onClick={() => setShowPhoto(p => !p)}
-                          style={{
-                            display: 'inline-flex', alignItems: 'center', gap: 6,
-                            fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                            background: 'none', border: '1px solid var(--border-light)',
-                            borderRadius: 8, padding: '4px 12px', color: 'var(--primary)'
-                          }}
-                        >
-                          📷 {showPhoto ? 'Hide Photo' : 'View Photo'}
-                        </button>
-                        {showPhoto && (
-                          <div style={{ marginTop: 8 }}>
-                            <img src={c.photo} alt="Complaint Attachment" style={{ width: '100%', maxHeight: 220, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border-light)' }} />
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })()}
+                  <PhotoToggle photo={c.photo} />
                 </div>
               </div>
 
