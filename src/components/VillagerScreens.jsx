@@ -45,6 +45,7 @@ import {
   MapPinOff,
   Megaphone,
   MessageCircle,
+  Mic,
   Minus,
   Phone,
   PhoneCall,
@@ -80,6 +81,7 @@ import { useLanguage, Trans } from '../context/LanguageContext'
 
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
+import { transliterateWord } from '../utils/transliterate'
 import { fetchLivePrices, BASELINE_PRICES, clearPriceCache } from '../utils/fetchPrices'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import { fetchWeatherForLocation, formatForecastData } from '../utils/fetchWeather'
@@ -103,8 +105,8 @@ import { karnatakaPopularCrops } from '../data/karnatakaPopularCrops'
 export const kaPrices = [
   // MSP 2025-26: Ragi ₹4,290/quintal; APMC Bengaluru spot ~₹3,900-4,100
   { crop: 'Ragi (ರಾಗಿ)', unit: 'per quintal', price: '₹4,050', change: '+₹64', trend: 'up', market: 'APMC Bengaluru', img: '/crops/Ragi.jpg' },
-  // Arecanut Shimoga spot ~₹48,000-52,000 (2025-26 high demand)
-  { crop: 'Areca Nut (ಅಡಿಕೆ)', unit: 'per quintal', price: '₹49,500', change: '+₹800', trend: 'up', market: 'APMC Shimoga', img: '/crops/Arecanut.jpg' },
+  // Arecanut Shimoga spot ~₹54,000-56,000 (Rashi variety 2026)
+  { crop: 'Areca Nut (ಅಡಿಕೆ)', unit: 'per quintal', price: '₹55,400', change: '+₹650', trend: 'up', market: 'APMC Shimoga (Rashi)', img: '/crops/Arecanut.jpg' },
   // Coffee Robusta Chikkamagaluru ~₹18,000-22,000/quintal
   { crop: 'Coffee (ಕಾಫಿ)', unit: 'per quintal', price: '₹20,500', change: '-₹300', trend: 'down', market: 'APMC Chikkamagaluru', img: '/crops/Coffee.jpg' },
   // Silk Cocoon Ramanagara ~₹500-650/kg
@@ -2748,6 +2750,60 @@ export function ComplaintScreen({ setActive }) {
     return () => stopCamera()
   }, [])
 
+  // Voice Typing State
+  const [isListeningSubj, setIsListeningSubj] = useState(false)
+  const [isListeningDesc, setIsListeningDesc] = useState(false)
+  const recognitionRef = React.useRef(null)
+
+  useEffect(() => {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (SpeechRec) {
+      recognitionRef.current = new SpeechRec()
+      recognitionRef.current.continuous = false
+      recognitionRef.current.interimResults = false
+    }
+  }, [])
+
+  const startVoiceTyping = (field) => {
+    if (!recognitionRef.current) return alert("Voice typing is not supported in this browser.")
+    recognitionRef.current.lang = lang === 'kn' ? 'kn-IN' : 'en-IN'
+    recognitionRef.current.onstart = () => {
+      if (field === 'subject') setIsListeningSubj(true)
+      else setIsListeningDesc(true)
+    }
+    recognitionRef.current.onend = () => {
+      setIsListeningSubj(false)
+      setIsListeningDesc(false)
+    }
+    recognitionRef.current.onresult = (e) => {
+      const transcript = e.results[0][0].transcript
+      if (field === 'subject') setSubject(prev => prev ? prev + ' ' + transcript : transcript)
+      else setDescription(prev => prev ? prev + ' ' + transcript : transcript)
+    }
+    try { recognitionRef.current.start() } catch (e) { console.warn(e) }
+  }
+
+  // Transliteration logic
+  const handleTextChange = async (e, setter) => {
+    const val = e.target.value
+    if (lang !== 'kn') {
+      setter(val)
+      return
+    }
+    
+    setter(val) // Optimistic update
+    
+    if (val.endsWith(' ')) {
+      const words = val.trimEnd().split(' ')
+      const lastWord = words[words.length - 1]
+      if (lastWord && /[a-zA-Z]/.test(lastWord)) {
+        const transliterated = await transliterateWord(lastWord, 'kn')
+        words[words.length - 1] = transliterated
+        setter(words.join(' ') + ' ')
+      }
+    }
+  }
+
   const stopCamera = () => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(t => t.stop())
@@ -2876,6 +2932,11 @@ export function ComplaintScreen({ setActive }) {
       const docPayload = { ...newComplaintObj }
       if (photoUri) docPayload.photo = photoUri
       const writePromise = addDoc(collection(db, submissionType), docPayload)
+      
+      // Also write to district-specific collection so admin can verify district-wise directly in Firebase Console
+      const cleanDist = (userDistrict || 'Mysuru').replace(/district/gi, '').trim().toLowerCase().replace(/\s+/g, '_')
+      addDoc(collection(db, `district_${cleanDist}_complaints`), docPayload).catch(() => {})
+
       await Promise.race([
         writePromise,
         new Promise(resolve => setTimeout(resolve, 1200))
@@ -3137,20 +3198,31 @@ export function ComplaintScreen({ setActive }) {
 
               <div className="form-group">
                 <label className="form-label">{t('complaintSubject')} / ವಿಷಯ *</label>
-                <input
-                  className="form-input"
-                  placeholder={`Describe your ${selected} issue briefly`}
-                  value={subject} onChange={e => setSubject(e.target.value)} required
-                />
+                <div style={{ position: 'relative' }}>
+                  <input
+                    className="form-input"
+                    placeholder={`Describe your ${selected} issue briefly`}
+                    value={subject} onChange={e => handleTextChange(e, setSubject)} required
+                    style={{ paddingRight: 40 }}
+                  />
+                  <button type="button" onClick={() => startVoiceTyping('subject')} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}>
+                    <Mic size={18} className={isListeningSubj ? 'text-red-500 animate-pulse' : 'text-gray-400'} />
+                  </button>
+                </div>
               </div>
               <div className="form-group">
                 <label className="form-label">{t('complaintDesc')} / ವಿವರಣೆ *</label>
-                <textarea
-                  className="form-input" rows={4}
-                  placeholder="ವಿಸ್ತೃತ ವಿವರಣೆ / Detailed description..."
-                  style={{ resize: 'vertical' }}
-                  value={description} onChange={e => setDescription(e.target.value)} required
-                />
+                <div style={{ position: 'relative' }}>
+                  <textarea
+                    className="form-input" rows={4}
+                    placeholder="ವಿಸ್ತೃತ ವಿವರಣೆ / Detailed description..."
+                    style={{ resize: 'vertical', paddingRight: 40 }}
+                    value={description} onChange={e => handleTextChange(e, setDescription)} required
+                  />
+                  <button type="button" onClick={() => startVoiceTyping('description')} style={{ position: 'absolute', right: 10, top: 12, background: 'none', border: 'none', cursor: 'pointer' }}>
+                    <Mic size={18} className={isListeningDesc ? 'text-red-500 animate-pulse' : 'text-gray-400'} />
+                  </button>
+                </div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                 <div className="form-group">

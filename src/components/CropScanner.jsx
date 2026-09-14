@@ -1385,19 +1385,50 @@ export default function CropScanner() {
 
         {/* Not-a-crop error banner */}
         {notCropMsg && (
-          <div style={{ position: 'fixed', bottom: 160, left: '50%', transform: 'translateX(-50%)', width: 'calc(100% - 32px)', maxWidth: 500, background: 'rgba(239,68,68,0.95)', borderRadius: 14, padding: '12px 16px', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'flex-start', gap: 10, zIndex: 99999, boxShadow: '0 4px 20px rgba(239,68,68,0.4)' }}>
-            <span style={{ fontSize: 22, flexShrink: 0 }}>⚠️</span>
+          <div style={{
+            position: 'fixed',
+            top: 75,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 'calc(100% - 32px)',
+            maxWidth: 500,
+            background: '#dc2626',
+            color: '#fff',
+            borderRadius: 14,
+            padding: '14px 16px',
+            boxShadow: '0 10px 25px rgba(220, 38, 38, 0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            zIndex: 99999,
+            border: '1.5px solid #f87171',
+            animation: 'fadeIn 0.2s ease-out'
+          }}>
+            <span style={{ fontSize: 24, flexShrink: 0 }}>⚠️</span>
             <div style={{ flex: 1 }}>
-              <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 800, color: '#fff' }}>
-                {lang === 'kn' ? 'ಬೆಳೆ ಚಿತ್ರ ಅಲ್ಲ' : 'Not a Crop Image'}
+              <p style={{ margin: '0 0 2px', fontSize: 13, fontWeight: 800, color: '#fff' }}>
+                {lang === 'kn' ? 'ಬೆಳೆ ಚಿತ್ರ ಅಲ್ಲ / Not a Crop Image' : 'Not a Crop Image'}
               </p>
-              <p style={{ margin: 0, fontSize: 12, color: 'rgba(255,255,255,0.9)', lineHeight: 1.5 }}>
+              <p style={{ margin: 0, fontSize: 12, color: '#fef2f2', lineHeight: 1.4 }}>
                 {lang === 'kn'
                   ? 'ದಯವಿಟ್ಟು ಬೆಳೆ ಎಲೆ, ಕಾಂಡ ಅಥವಾ ಹಣ್ಣಿನ ಚಿತ್ರ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ. ಮುದ್ರಿತ ಚಿತ್ರಗಳನ್ನು ಸಹ ಸ್ಕ್ಯಾನ್ ಮಾಡಬಹುದು.'
                   : notCropMsg}
               </p>
             </div>
-            <button onClick={() => setNotCropMsg(null)} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 8, padding: '4px 8px', color: '#fff', cursor: 'pointer', fontSize: 16, fontWeight: 700, flexShrink: 0 }}>✕</button>
+            <button
+              onClick={() => setNotCropMsg(null)}
+              style={{
+                background: 'rgba(255,255,255,0.25)',
+                border: 'none',
+                borderRadius: 8,
+                padding: '6px 10px',
+                color: '#fff',
+                cursor: 'pointer',
+                fontSize: 14,
+                fontWeight: 800,
+                flexShrink: 0
+              }}
+            >✕</button>
           </div>
         )}
 

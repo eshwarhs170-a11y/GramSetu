@@ -43,9 +43,6 @@ const kaNewComplaints = [
   { id: 'GS-KA-0501', title: 'No Water for 3 Days — Ward 5', village: 'Ramanagara', status: 'pending', category: 'Water', date: '5 Aug', priority: 'high' },
   { id: 'GS-KA-0498', title: 'Pothole on NH 275 near GKVK', village: 'Mysuru', status: 'inprogress', category: 'Roads', date: '4 Aug', priority: 'medium' },
   { id: 'GS-KA-0489', title: 'FPS Giving Less Ration — Mandya', village: 'Mandya', status: 'pending', category: 'Ration/PDS', date: '3 Aug', priority: 'high' },
-  { id: 'GS-KA-0476', title: 'BESCOM Street Lights Not Working', village: 'Channapatna', status: 'inprogress', category: 'Electricity', date: '2 Aug', priority: 'low' },
-  { id: 'GS-KA-0456', title: 'Borewell Hand Pump Broken — RSK Ramanagar', village: 'Ramanagara', status: 'pending', category: 'Water', date: '1 Aug', priority: 'high' },
-  { id: 'GS-KA-0445', title: 'APMC Weighing Scale Faulty', village: 'Tumkuru', status: 'pending', category: 'Agriculture', date: '30 Jul', priority: 'medium' },
 ]
 
 const kaResolvedComplaints = [
@@ -358,6 +355,16 @@ function RespondModal({ complaint, onClose, onSaved }) {
           responses: arrayUnion(responseObj),
         })
       }
+      // Also add to the new official_responses collection for visibility
+      try {
+        await addDoc(collection(db, 'official_responses'), {
+          ...responseObj,
+          complaintRefId: complaint._docId || complaint.id,
+          complaintTitle: complaint.title || '',
+        })
+      } catch (addError) {
+        console.warn('Failed to add to official_responses collection (check rules):', addError)
+      }
       onSaved(responseObj)
     } catch (e) {
       console.warn('Firestore update failed', e)
@@ -606,6 +613,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
   const [searchText, setSearchText] = useState('')
   const [catFilter, setCatFilter] = useState('All')
   const [submitterFilter, setSubmitterFilter] = useState('all') // 'all' | 'farmer'
+  const [collectionFilter, setCollectionFilter] = useState('all') // 'all' | 'complaints' | 'feedback' | 'district_complaints'
   const session = getSessionData()
 
   useEffect(() => {
@@ -722,6 +730,8 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
     if (catFilter !== 'All') list = list.filter(c => c.category === catFilter)
     // Submitter type filter: 'farmer' = only citizen-submitted; 'all' = everything
     if (submitterFilter === 'farmer') list = list.filter(c => c.submitterType === 'farmer' || !c.submitterType)
+    // Collection / Submission type filter: 'complaints' | 'feedback' | 'district_complaints'
+    if (collectionFilter !== 'all') list = list.filter(c => (c._collection || 'complaints') === collectionFilter)
     return list
   })()
 
@@ -765,14 +775,14 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
         ))}
       </div>
 
-      <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
         <div className="form-input" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', flex: 1, minWidth: 180 }}>
           <Search size={15} style={{ color: 'var(--text-muted)' }} />
           <input style={{ border: 'none', outline: 'none', width: '100%', fontSize: 13 }}
             placeholder="Search by title, ID, district, taluk, description, name..."
             value={searchText} onChange={e => setSearchText(e.target.value)} />
         </div>
-        <select className="form-input" style={{ width: 160, fontSize: 13 }}
+        <select className="form-input" style={{ width: 150, fontSize: 13 }}
           value={catFilter} onChange={e => setCatFilter(e.target.value)}>
           <option value="All">{t('allCategories')}</option>
           <option value="Water Supply">Water</option>
@@ -781,14 +791,34 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
           <option value="Agriculture / RSK">Agriculture</option>
           <option value="PHC / Health">Health</option>
         </select>
+        {/* Collection / Type Filter (All / Panchayat / Feedback / District) */}
+        <div style={{ display: 'flex', background: 'var(--bg-main)', borderRadius: 10, padding: 3, border: '1px solid var(--border-light)', gap: 2, flexWrap: 'wrap' }}>
+          {[
+            ['all', 'All'],
+            ['complaints', '📋 Panchayat'],
+            ['feedback', '💬 Feedback'],
+            ['district_complaints', '🏛️ District']
+          ].map(([val, label]) => (
+            <button
+              key={val}
+              onClick={() => setCollectionFilter(val)}
+              style={{
+                padding: '6px 11px', fontSize: 12, fontWeight: 600, border: 'none',
+                borderRadius: 8, cursor: 'pointer', transition: 'all 0.2s',
+                background: collectionFilter === val ? 'var(--primary)' : 'transparent',
+                color: collectionFilter === val ? '#fff' : 'var(--text-secondary)'
+              }}
+            >{label}</button>
+          ))}
+        </div>
         {/* Farmer vs All submitter filter */}
         <div style={{ display: 'flex', background: 'var(--bg-main)', borderRadius: 10, padding: 3, border: '1px solid var(--border-light)', gap: 2 }}>
-          {[['all', 'All Complaints'], ['farmer', '🌾 Farmer Only']].map(([val, label]) => (
+          {[['all', 'All Submissions'], ['farmer', '🌾 Farmer']].map(([val, label]) => (
             <button
               key={val}
               onClick={() => setSubmitterFilter(val)}
               style={{
-                padding: '6px 14px', fontSize: 12, fontWeight: 600, border: 'none',
+                padding: '6px 12px', fontSize: 12, fontWeight: 600, border: 'none',
                 borderRadius: 8, cursor: 'pointer', transition: 'all 0.2s',
                 background: submitterFilter === val ? 'var(--primary)' : 'transparent',
                 color: submitterFilter === val ? '#fff' : 'var(--text-secondary)'
@@ -850,6 +880,11 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Calendar size={12} /> {c.date || (c.createdAt?.toDate?.()?.toLocaleDateString()) || 'Unknown'}</span>
                       {c.submittedBy && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><User size={12} /> {c.submittedBy}</span>}
                     </div>
+                    {c.photo && (
+                      <div style={{ marginTop: 12 }}>
+                        <img src={c.photo} alt="Complaint Attachment" style={{ width: '100%', maxHeight: 200, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border-light)' }} />
+                      </div>
+                    )}
                   </div>
                   <EscalationBadge complaint={c} />
                 </div>

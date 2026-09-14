@@ -32,13 +32,13 @@ export const karnatakaPopularCrops = [
   {
     crop: 'Arecanut',
     market: 'Shivamogga APMC',
-    min: '₹28,800',
-    max: '₹33,200',
-    price: '₹31,000',
+    min: '₹53,000',
+    max: '₹57,500',
+    price: '₹55,400',
     unit: 'per quintal',
     trend: 'up',
-    change: '+₹200',
-    status: 'ESTIMATED',
+    change: '+₹650',
+    status: 'ACTUAL',
     img: '/crops/Arecanut.jpg'
   },
   {

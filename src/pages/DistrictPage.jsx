@@ -417,16 +417,22 @@ export default function DistrictPage() {
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, backdropFilter: 'blur(4px)'
         }} onClick={() => setSelectedCropInfo(null)}>
           <div style={{
-            background: '#1e293b', borderRadius: 20, padding: 32, maxWidth: 450, width: '100%',
-            position: 'relative', border: '1px solid rgba(255,255,255,0.1)', color: '#fff'
+            background: '#1e293b', borderRadius: 20, padding: 24, maxWidth: 450, width: '100%',
+            position: 'relative', border: '1px solid rgba(255,255,255,0.1)', color: '#fff',
+            maxHeight: '85vh', overflowY: 'auto'
           }} onClick={e => e.stopPropagation()}>
             <button
               onClick={() => setSelectedCropInfo(null)}
               style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(255,255,255,0.1)', border: 'none', width: 32, height: 32, borderRadius: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}
             ><X size={16} /></button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 20 }}>
-              <div style={{ width: 100, height: 100, borderRadius: '50%', overflow: 'hidden', border: '3px solid #4ade80' }}>
-                <img src={selectedCropInfo.image} alt={selectedCropInfo.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
+              <div style={{ width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', border: '3px solid #4ade80', flexShrink: 0 }}>
+                <img
+                  src={selectedCropInfo.image}
+                  alt={selectedCropInfo.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  onError={e => { e.currentTarget.src = '/crops/Paddy.jpg'; }}
+                />
               </div>
               <div>
                 <h3 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 6px 0' }}>{selectedCropInfo.name}</h3>
