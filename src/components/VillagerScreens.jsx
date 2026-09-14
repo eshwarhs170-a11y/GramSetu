@@ -2490,7 +2490,7 @@ export function MarketScreen() {
                           border: `1px solid ${p.status === 'ACTUAL' ? '#bbf7d0' : '#e5e7eb'}`,
                           borderRadius: 6, padding: '2px 6px'
                         }}>
-                          {p.status === 'ACTUAL' ? '<Check className="inline mr-1 text-emerald-500" size={16} /> Verified' : '~ Estimated'}
+                          {p.status === 'ACTUAL' ? <><Check className="inline mr-1 text-emerald-500" size={16} /> Verified</> : '~ Estimated'}
                         </div>
                       )}
                     </div>
@@ -2847,7 +2847,24 @@ export function ComplaintScreen({ setActive }) {
     }
   }
 
-  const capturePhoto = () => {
+  // Compress image to max 600px wide, JPEG quality 0.5 — keeps it well under Firestore 1MB limit
+  const compressImage = (dataUrl) => new Promise((resolve) => {
+    const img = new Image()
+    img.onload = () => {
+      const MAX_W = 600
+      const ratio = Math.min(1, MAX_W / img.width)
+      const w = Math.round(img.width * ratio)
+      const h = Math.round(img.height * ratio)
+      const canvas = document.createElement('canvas')
+      canvas.width = w
+      canvas.height = h
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+      resolve(canvas.toDataURL('image/jpeg', 0.5))
+    }
+    img.src = dataUrl
+  })
+
+  const capturePhoto = async () => {
     if (!videoRef.current || !canvasRef.current) return
     const video = videoRef.current
     const canvas = canvasRef.current
@@ -2855,8 +2872,9 @@ export function ComplaintScreen({ setActive }) {
     canvas.height = video.videoHeight || 480
     const ctx = canvas.getContext('2d')
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
-    setPhotoUri(dataUrl)
+    const raw = canvas.toDataURL('image/jpeg', 0.9)
+    const compressed = await compressImage(raw)
+    setPhotoUri(compressed)
     stopCamera()
     setCameraMode('captured')
   }
@@ -2864,13 +2882,14 @@ export function ComplaintScreen({ setActive }) {
   const handleFileUpload = (e) => {
     const file = e.target.files[0]
     if (!file) return
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File too large. Max 5MB allowed.')
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File too large. Max 10MB allowed.')
       return
     }
     const reader = new FileReader()
-    reader.onload = (ev) => {
-      setPhotoUri(ev.target.result)
+    reader.onload = async (ev) => {
+      const compressed = await compressImage(ev.target.result)
+      setPhotoUri(compressed)
       setCameraMode('captured')
     }
     reader.readAsDataURL(file)
@@ -2939,7 +2958,7 @@ export function ComplaintScreen({ setActive }) {
 
       await Promise.race([
         writePromise,
-        new Promise(resolve => setTimeout(resolve, 1200))
+        new Promise(resolve => setTimeout(resolve, 4000))
       ])
     } catch (err) {
       console.warn('Firestore write queued or handled locally:', err)
@@ -3714,6 +3733,11 @@ export function ComplaintStatusScreen({ setActive }) {
                     <span><Calendar className="inline mr-1 text-blue-500" size={16} /> {c.date}</span>
                     <span><Landmark className="inline mr-1 text-blue-500" size={16} /> {c.assignedTo}</span>
                   </div>
+                  {c.photo && (
+                    <div style={{ marginTop: 12 }}>
+                      <img src={c.photo} alt="Complaint Attachment" style={{ width: '100%', maxHeight: 200, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border-light)' }} />
+                    </div>
+                  )}
                 </div>
               </div>
 
