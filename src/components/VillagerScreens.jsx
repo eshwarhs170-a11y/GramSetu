@@ -3733,11 +3733,30 @@ export function ComplaintStatusScreen({ setActive }) {
                     <span><Calendar className="inline mr-1 text-blue-500" size={16} /> {c.date}</span>
                     <span><Landmark className="inline mr-1 text-blue-500" size={16} /> {c.assignedTo}</span>
                   </div>
-                  {c.photo && (
-                    <div style={{ marginTop: 12 }}>
-                      <img src={c.photo} alt="Complaint Attachment" style={{ width: '100%', maxHeight: 200, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border-light)' }} />
-                    </div>
-                  )}
+                  {c.photo && (() => {
+                    const [showPhoto, setShowPhoto] = React.useState(false)
+                    return (
+                      <div style={{ marginTop: 10 }}>
+                        <button
+                          type="button"
+                          onClick={() => setShowPhoto(p => !p)}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                            fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                            background: 'none', border: '1px solid var(--border-light)',
+                            borderRadius: 8, padding: '4px 12px', color: 'var(--primary)'
+                          }}
+                        >
+                          📷 {showPhoto ? 'Hide Photo' : 'View Photo'}
+                        </button>
+                        {showPhoto && (
+                          <div style={{ marginTop: 8 }}>
+                            <img src={c.photo} alt="Complaint Attachment" style={{ width: '100%', maxHeight: 220, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border-light)' }} />
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })()}
                 </div>
               </div>
 
