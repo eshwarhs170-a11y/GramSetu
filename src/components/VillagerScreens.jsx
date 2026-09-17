@@ -4653,8 +4653,68 @@ export function TutorialsScreen() {
     }
   ]
 
-  const filteredTutorials = activeCategory === 'all' ? tutorials : tutorials.filter(t => t.cat === activeCategory)
-  const progressPercent = tutorials.length > 0 ? Math.round((watchedVideos.filter(id => tutorials.find(t => t.id === id)).length / tutorials.length) * 100) : 0
+  // Extra tutorials added below the 3 core ones
+  const extraTutorials = [
+    {
+      id: 'digilocker',
+      cat: 'digital',
+      icon: ShieldCheck,
+      color: '#0284c7',
+      title: lang === 'kn' ? 'ಡಿಜಿಲಾಕರ್ ಬಳಸುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'DigiLocker का उपयोग कैसे करें?' : 'How to use DigiLocker?',
+      desc: lang === 'kn' ? 'ಡಿಜಿಟಲ್ ದಾಖಲೆಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿಡಿ' : lang === 'hi' ? 'डिजिटल दस्तावेज़ सुरक्षित रखें' : 'Store & access documents digitally',
+      videoId: lang === 'kn' ? 'M8G_H1l6y_I' : lang === 'hi' ? 'Yc_y6V_2EwI' : 'n5T7GqOQ9nU'
+    },
+    {
+      id: 'bhoomi',
+      cat: 'digital',
+      icon: Map,
+      color: '#b45309',
+      title: lang === 'kn' ? 'ಭೂಮಿ - ಆರ್‌ಟಿಸಿ ಆನ್‌ಲೈನ್ ನೋಡುವುದು' : lang === 'hi' ? 'भूमि पोर्टल - RTC ऑनलाइन देखें' : 'Bhoomi – Check Land Records (RTC)',
+      desc: lang === 'kn' ? 'ನಿಮ್ಮ ಜಮೀನಿನ ದಾಖಲೆ ಆನ್‌ಲೈನ್ ನೋಡಿ' : lang === 'hi' ? 'अपनी जमीन के कागज़ ऑनलाइन देखें' : 'Check your land ownership records online',
+      videoId: lang === 'kn' ? 'yMhJDzwNFQA' : lang === 'hi' ? 'mFuzqbk7bMM' : 'sKmMn3XDLMU'
+    },
+    {
+      id: 'fasal_bima',
+      cat: 'schemes',
+      icon: Sprout,
+      color: '#15803d',
+      title: lang === 'kn' ? 'ಪಿಎಂ ಫಸಲ್ ಬಿಮಾ ಯೋಜನೆ' : lang === 'hi' ? 'PM फसल बीमा योजना' : 'PM Fasal Bima Yojana',
+      desc: lang === 'kn' ? 'ಬೆಳೆ ನಷ್ಟಕ್ಕೆ ವಿಮಾ ಸಂರಕ್ಷಣೆ ಪಡೆಯಿರಿ' : lang === 'hi' ? 'फसल नुकसान पर बीमा सुरक्षा पाएं' : 'Get crop insurance for losses',
+      videoId: lang === 'kn' ? 'FiLkHhJMhG4' : lang === 'hi' ? 'pFgeCVFQTlk' : 'MtJb7fhK2vw'
+    },
+    {
+      id: 'aadhaar',
+      cat: 'digital',
+      icon: KeyRound,
+      color: '#7c3aed',
+      title: lang === 'kn' ? 'ಆಧಾರ್ ಅನ್ನು ಬ್ಯಾಂಕ್‌ಗೆ ಜೋಡಿಸುವುದು' : lang === 'hi' ? 'आधार को बैंक से लिंक करें' : 'Link Aadhaar to Bank Account',
+      desc: lang === 'kn' ? 'DBT ಸಬ್ಸಿಡಿ ನೇರ ಖಾತೆಗೆ ಬರಲಿ' : lang === 'hi' ? 'DBT सब्सिडी सीधे खाते में पाएं' : 'Get DBT subsidies directly in your account',
+      videoId: lang === 'kn' ? 'ZrC2A9_CqYI' : lang === 'hi' ? 'bSWFvZlxYyA' : 'LmcE9RZo_oA'
+    },
+    {
+      id: 'mgnrega',
+      cat: 'schemes',
+      icon: Landmark,
+      color: '#dc2626',
+      title: lang === 'kn' ? 'ಮನರೇಗಾ - ಜಾಬ್ ಕಾರ್ಡ್ & ಪಾವತಿ' : lang === 'hi' ? 'मनरेगा - जॉब कार्ड और भुगतान' : 'MGNREGA – Job Card & Payments',
+      desc: lang === 'kn' ? 'ಮನರೇಗಾ ಕೆಲಸ ಮತ್ತು ಪಾವತಿ ಮಾಹಿತಿ' : lang === 'hi' ? 'मनरेगा काम और भुगतान जानकारी' : 'Check MGNREGA work status & wages',
+      videoId: lang === 'kn' ? 'lHpKP2HNQKY' : lang === 'hi' ? 'xvFZjo5PgG0' : 'N9EwTLhFwBE'
+    },
+    {
+      id: 'kcc',
+      cat: 'banking',
+      icon: CreditCard,
+      color: '#0369a1',
+      title: lang === 'kn' ? 'ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಅರ್ಜಿ' : lang === 'hi' ? 'किसान क्रेडिट कार्ड आवेदन' : 'Apply for Kisan Credit Card',
+      desc: lang === 'kn' ? 'ಕಡಿಮೆ ಬಡ್ಡಿ ದರದಲ್ಲಿ ರೈತ ಸಾಲ' : lang === 'hi' ? 'कम ब्याज दर पर किसान ऋण' : 'Get low-interest agricultural loans',
+      videoId: lang === 'kn' ? 'C8lHkEi_gAA' : lang === 'hi' ? 'q9Bs2xON3IM' : 'QJ_5dFqCvN8'
+    }
+  ]
+
+  const allTutorials = [...tutorials, ...extraTutorials]
+
+  const filteredTutorials = activeCategory === 'all' ? allTutorials : allTutorials.filter(t => t.cat === activeCategory)
+  const progressPercent = allTutorials.length > 0 ? Math.round((watchedVideos.filter(id => allTutorials.find(t => t.id === id)).length / allTutorials.length) * 100) : 0
 
   const getAiResponse = (q) => {
     if (lang === 'kn') return "\u0C87\u0CA6\u0CC1 \u0CB8\u0CC1\u0CB2\u0CAD! \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAC\u0CCD\u0CAF\u0CBE\u0C82\u0C95\u0CCD \u0C96\u0CBE\u0CA4\u0CC6\u0CAF\u0CA8\u0CCD\u0CA8\u0CC1 \u0C9C\u0CCB\u0CA1\u0CBF\u0CB8\u0CBF \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 QR \u0C95\u0CCB\u0CA1\u0CCD \u0CB8\u0CCD\u0C95\u0CCD\u0CAF\u0CBE\u0CA8\u0CCD \u0CAE\u0CBE\u0CA1\u0CBF \u0CAA\u0CBE\u0CB5\u0CA4\u0CBF\u0CB8\u0CBF. \u0CB5\u0CC0\u0CA1\u0CBF\u0CAF\u0CCB\u0CA6\u0CB2\u0CCD\u0CB2\u0CBF 2:15 \u0CA8\u0CBF\u0CAE\u0CBF\u0CB7\u0CA6\u0CB2\u0CCD\u0CB2\u0CBF \u0CB9\u0C82\u0CA4\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CCB\u0CA1\u0CBF."
@@ -4711,7 +4771,7 @@ export function TutorialsScreen() {
         <div style={{ marginTop: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 6, opacity: 0.9 }}>
             <span>{lang === 'kn' ? 'ನಿಮ್ಮ ಪ್ರಗತಿ' : 'Your Progress'}</span>
-            <span>{watchedVideos.length} / {tutorials.length}</span>
+            <span>{watchedVideos.filter(id => allTutorials.find(t => t.id === id)).length} / {allTutorials.length}</span>
           </div>
           <div style={{ height: 8, background: 'rgba(255,255,255,0.2)', borderRadius: 4, overflow: 'hidden' }}>
             <div style={{ height: '100%', background: '#4ade80', width: `${progressPercent}%`, transition: 'width 0.5s ease-out' }} />
