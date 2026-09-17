@@ -3166,19 +3166,19 @@ export function ComplaintScreen({ setActive }) {
         {/* Step 0: Submission Type */}
         <div className="card" style={{ marginBottom: 20 }}>
           <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>{lang === 'kn' ? 'ಸಲ್ಲಿಕೆ ಪ್ರಕಾರ / Submission Type' : 'Submission Type'}</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 10 }}>
             {[{id: 'complaints', en: 'Panchayat Complaint', kn: 'ಪಂಚಾಯಿತಿ ದೂರು', emoji: '📋'}, {id: 'feedback', en: 'Feedback/Suggestion', kn: 'ಪ್ರತಿಕ್ರಿಯೆ/ಸಲಹೆ', emoji: '💬'}, {id: 'district_complaints', en: 'District Complaint', kn: 'ಜಿಲ್ಲಾ ದೂರು', emoji: '🏛️'}].map(type => (
               <button
                 key={type.id}
                 type="button"
                 onClick={() => setSubmissionType(type.id)}
                 style={{
-                  padding: '12px 8px', borderRadius: 12,
+                  padding: '12px 6px', borderRadius: 12,
                   border: `2px solid ${submissionType === type.id ? '#ea580c' : '#e2e8f0'}`,
                   background: submissionType === type.id ? '#fff7ed' : '#f8fafc',
                   color: submissionType === type.id ? '#c2410c' : '#475569',
-                  fontWeight: 700, fontSize: 13, cursor: 'pointer', transition: 'all 0.2s',
-                  textAlign: 'center', lineHeight: 1.4
+                  fontWeight: 700, fontSize: 12, cursor: 'pointer', transition: 'all 0.2s',
+                  textAlign: 'center', lineHeight: 1.3, wordBreak: 'break-word', hyphens: 'auto'
                 }}
               >
                 <div style={{ fontSize: 20, marginBottom: 4 }}>{type.emoji}</div>
@@ -3216,13 +3216,13 @@ export function ComplaintScreen({ setActive }) {
             <div className="login-form" style={{ gap: 16 }}>
 
               {/* Auto-filled from login */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-                <div className="form-group">
-                  <label className="form-label">Applicant Name / ಅರ್ಜಿದಾರರ ಹೆಸರು</label>
+              <div style={{ display: 'flex', gap: 14 }}>
+                <div className="form-group" style={{ flex: 1, minWidth: 0 }}>
+                  <label className="form-label" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Applicant Name / ಅರ್ಜಿದಾರರ ಹೆಸರು</label>
                   <input className="form-input" value={userName || 'Enter your name'} readOnly style={{ background: 'var(--bg-main)' }} />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">District / ಜಿಲ್ಲೆ</label>
+                <div className="form-group" style={{ flex: 1, minWidth: 0 }}>
+                  <label className="form-label" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>District / ಜಿಲ್ಲೆ</label>
                   <input className="form-input" value={userDistrict} readOnly style={{ background: 'var(--bg-main)' }} />
                 </div>
               </div>
@@ -3255,14 +3255,14 @@ export function ComplaintScreen({ setActive }) {
                   </button>
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-                <div className="form-group">
-                  <label className="form-label">{t('complaintLocation')} / ಸ್ಥಳ</label>
+              <div style={{ display: 'flex', gap: 14 }}>
+                <div className="form-group" style={{ flex: 1, minWidth: 0 }}>
+                  <label className="form-label" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('complaintLocation')} / ಸ್ಥಳ</label>
                   <input className="form-input" placeholder="ಉದಾ: ವಾರ್ಡ್ 3"
                     value={location} onChange={e => setLocation(e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">ತಾಲೂಕು / Taluk</label>
+                <div className="form-group" style={{ flex: 1, minWidth: 0 }}>
+                  <label className="form-label" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>ತಾಲೂಕು / Taluk</label>
                   <input className="form-input" value={taluk} readOnly style={{ background: 'var(--bg-main)' }} />
                 </div>
               </div>
@@ -4626,6 +4626,7 @@ export function TutorialsScreen() {
   const tutorials = [
     {
       id: 'upi',
+      cat: 'banking',
       icon: IndianRupee,
       color: '#7c3aed',
       title: lang === 'kn' ? '\u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 / GPay \u0CAC\u0CB3\u0CB8\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6?' : lang === 'hi' ? '\u092B\u094B\u0928\u092A\u0947 / GPay \u0915\u093E \u0909\u092A\u092F\u094B\u0917 \u0915\u0948\u0938\u0947 \u0915\u0930\u0947\u0902?' : 'How to use PhonePe / Google Pay?',
@@ -4634,6 +4635,7 @@ export function TutorialsScreen() {
     },
     {
       id: 'sir',
+      cat: 'schemes',
       icon: FileText,
       color: '#0369a1',
       title: lang === 'kn' ? '\u0C9A\u0CC1\u0CA8\u0CBE\u0CB5\u0CA3\u0CBE \u0C86\u0CAF\u0CCB\u0C97\u0CA6 SIR \u0CAB\u0CBE\u0CB0\u0CCD\u0CAE\u0CCD' : lang === 'hi' ? '\u091A\u0941\u0928\u093E\u0935 \u0906\u092F\u094B\u0917 SIR \u092B\u0949\u0930\u094D\u092E' : 'Election Commission SIR Form',
@@ -4642,6 +4644,7 @@ export function TutorialsScreen() {
     },
     {
       id: 'market',
+      cat: 'agri',
       icon: TrendingUp,
       color: '#16a34a',
       title: lang === 'kn' ? '\u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6 \u0CA8\u0CCB\u0CA1\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1' : lang === 'hi' ? '\u092C\u093E\u091C\u093E\u0930 \u092D\u093E\u0935 \u0915\u0948\u0938\u0947 \u0926\u0947\u0916\u0947\u0902' : 'Check Market Prices (APMC)',
@@ -4649,6 +4652,9 @@ export function TutorialsScreen() {
       videoId: lang === 'kn' ? '-nxLVO4ZQRw' : lang === 'hi' ? 'uBYy1SoeP9o' : '6-dpn_sUQ1U'
     }
   ]
+
+  const filteredTutorials = activeCategory === 'all' ? tutorials : tutorials.filter(t => t.cat === activeCategory)
+  const progressPercent = tutorials.length > 0 ? Math.round((watchedVideos.filter(id => tutorials.find(t => t.id === id)).length / tutorials.length) * 100) : 0
 
   const getAiResponse = (q) => {
     if (lang === 'kn') return "\u0C87\u0CA6\u0CC1 \u0CB8\u0CC1\u0CB2\u0CAD! \u0CA8\u0CBF\u0CAE\u0CCD\u0CAE \u0CAC\u0CCD\u0CAF\u0CBE\u0C82\u0C95\u0CCD \u0C96\u0CBE\u0CA4\u0CC6\u0CAF\u0CA8\u0CCD\u0CA8\u0CC1 \u0C9C\u0CCB\u0CA1\u0CBF\u0CB8\u0CBF \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 QR \u0C95\u0CCB\u0CA1\u0CCD \u0CB8\u0CCD\u0C95\u0CCD\u0CAF\u0CBE\u0CA8\u0CCD \u0CAE\u0CBE\u0CA1\u0CBF \u0CAA\u0CBE\u0CB5\u0CA4\u0CBF\u0CB8\u0CBF. \u0CB5\u0CC0\u0CA1\u0CBF\u0CAF\u0CCB\u0CA6\u0CB2\u0CCD\u0CB2\u0CBF 2:15 \u0CA8\u0CBF\u0CAE\u0CBF\u0CB7\u0CA6\u0CB2\u0CCD\u0CB2\u0CBF \u0CB9\u0C82\u0CA4\u0C97\u0CB3\u0CA8\u0CCD\u0CA8\u0CC1 \u0CA8\u0CCB\u0CA1\u0CBF."
@@ -4736,6 +4742,8 @@ export function TutorialsScreen() {
           const Icon = tut.icon
           const isActive = activeQuestion === tut.id
           const history = chatHistory[tut.id] || []
+          const isWatched = watchedVideos.includes(tut.id)
+          const isDownloading = downloadingIds.includes(tut.id)
           
           return (
           <div key={tut.id + lang} className="card" style={{ padding: 0, overflow: 'hidden' }}>

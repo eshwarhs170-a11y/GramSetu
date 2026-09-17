@@ -12,11 +12,19 @@ L.Icon.Default.mergeOptions({
 });
 
 function LocationMarker({ position, setPosition }) {
-  useMapEvents({
+  const map = useMapEvents({
     click(e) {
       setPosition(e.latlng);
     },
+    locationfound(e) {
+      setPosition(e.latlng);
+      map.flyTo(e.latlng, 15);
+    },
   });
+
+  React.useEffect(() => {
+    map.locate();
+  }, [map]);
 
   return position === null ? null : (
     <Marker position={position}></Marker>
