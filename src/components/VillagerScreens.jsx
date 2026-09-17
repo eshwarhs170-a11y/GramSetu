@@ -4592,6 +4592,35 @@ export function TutorialsScreen() {
   const [isTyping, setIsTyping] = useState(false)
   const [chatHistory, setChatHistory] = useState({}) // { tutorialId: [ {role: 'user'|'ai', text: ''} ] }
   const [inputVal, setInputVal] = useState('')
+  const [activeCategory, setActiveCategory] = useState('all')
+  const [watchedVideos, setWatchedVideos] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('watched_videos')) || [] } 
+    catch { return [] }
+  })
+  const [downloadingIds, setDownloadingIds] = useState([])
+
+  const markWatched = (id) => {
+    if (watchedVideos.includes(id)) return
+    const newWatched = [...watchedVideos, id]
+    setWatchedVideos(newWatched)
+    localStorage.setItem('watched_videos', JSON.stringify(newWatched))
+  }
+
+  const handleDownload = (id) => {
+    setDownloadingIds(prev => [...prev, id])
+    setTimeout(() => {
+      setDownloadingIds(prev => prev.filter(vid => vid !== id))
+      alert(lang === 'kn' ? 'ಆಫ್‌ಲೈನ್‌ಗಾಗಿ ವೀಡಿಯೊ ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ!' : 'Video saved for offline viewing!')
+    }, 2000)
+  }
+
+  const categories = [
+    { id: 'all', label: lang === 'kn' ? 'ಎಲ್ಲಾ' : 'All' },
+    { id: 'banking', label: lang === 'kn' ? 'ಬ್ಯಾಂಕಿಂಗ್' : 'Banking' },
+    { id: 'schemes', label: lang === 'kn' ? 'ಯೋಜನೆಗಳು' : 'Govt Schemes' },
+    { id: 'digital', label: lang === 'kn' ? 'ಡಿಜಿಟಲ್ ಸೇವೆಗಳು' : 'Digital Services' },
+    { id: 'agri', label: lang === 'kn' ? 'ಕೃಷಿ' : 'Agriculture' }
+  ]
 
   // Real YouTube video IDs per language per topic
   const tutorials = [
@@ -4649,35 +4678,61 @@ export function TutorialsScreen() {
 
   return (
     <div className="animate-fadeInUp">
-      {/* Hero Banner */}
+      {/* Hero Banner with Gamification */}
       <div style={{
         background: 'linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #7c3aed 100%)',
-        borderRadius: 20,
-        padding: '24px 28px',
-        color: '#fff',
-        marginBottom: 24,
-        boxShadow: '0 10px 25px rgba(124, 58, 237, 0.2)',
-        position: 'relative',
-        overflow: 'hidden'
+        borderRadius: 20, padding: '24px', color: '#fff', marginBottom: 20,
+        boxShadow: '0 10px 25px rgba(124, 58, 237, 0.2)'
       }}>
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', marginBottom: 8, padding: '4px 10px', fontSize: 12 }}>
-            <PlayCircle size={14} className="inline mr-1 text-purple-300" /> {lang === 'kn' ? 'ಡಿಜಿಟಲ್ ಕಲಿಕೆ ಕೇಂದ್ರ' : 'Digital Learning Hub'}
-          </span>
-          <h2 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
-            {lang === 'kn' ? 'ಡಿಜಿಟಲ್ ವೀಡಿಯೊ ಪಾಠಗಳು' : 'Digital Video Tutorials'}
-          </h2>
-          <p style={{ margin: 0, fontSize: 14, color: 'rgba(255,255,255,0.9)', maxWidth: 620 }}>
-            {lang === 'kn' ? 'ಡಿಜಿಟಲ್ ಉಪಕರಣಗಳು, ಯುಪಿಐ ಪಾವತಿಗಳು ಮತ್ತು ಸಾರ್ವಜನಿಕ ಸೇವೆಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಬಳಸುವುದು ಹೇಗೆ ಎಂದು ಕಲಿಯಿರಿ' : 'Learn how to use UPI payments, voter SIR forms, APMC price checking & digital tools safely'}
-          </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <span className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', marginBottom: 8 }}>
+              <GraduationCap size={14} className="inline mr-1 text-purple-200" /> 
+              {lang === 'kn' ? 'ಡಿಜಿಟಲ್ ಸಾಕ್ಷರತೆ ಬ್ಯಾಡ್ಜ್' : 'Digital Literacy'}
+            </span>
+            <h2 style={{ fontSize: 22, fontWeight: 800, margin: '4px 0 8px 0', color: '#fff' }}>
+              {lang === 'kn' ? 'ಡಿಜಿಟಲ್ ವೀಡಿಯೊ ಪಾಠಗಳು' : 'Digital Tutorials'}
+            </h2>
+          </div>
+          {progressPercent === 100 && (
+            <div style={{ background: '#f59e0b', padding: '6px 10px', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 800, fontSize: 12, boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)' }}>
+              <Star size={16} fill="#fff" color="#fff" /> Master!
+            </div>
+          )}
+        </div>
+        
+        {/* Progress Bar */}
+        <div style={{ marginTop: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 6, opacity: 0.9 }}>
+            <span>{lang === 'kn' ? 'ನಿಮ್ಮ ಪ್ರಗತಿ' : 'Your Progress'}</span>
+            <span>{watchedVideos.length} / {tutorials.length}</span>
+          </div>
+          <div style={{ height: 8, background: 'rgba(255,255,255,0.2)', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ height: '100%', background: '#4ade80', width: `${progressPercent}%`, transition: 'width 0.5s ease-out' }} />
+          </div>
         </div>
       </div>
 
-      <div style={{ marginBottom: 20 }}>
+      {/* Category Filters */}
+      <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 12, marginBottom: 8, WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }}>
+        {categories.map(c => (
+          <button
+            key={c.id}
+            onClick={() => setActiveCategory(c.id)}
+            style={{
+              padding: '8px 16px', borderRadius: 20, whiteSpace: 'nowrap', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
+              background: activeCategory === c.id ? '#7c3aed' : 'var(--bg-main)',
+              color: activeCategory === c.id ? '#fff' : 'var(--text-secondary)',
+              border: `1px solid ${activeCategory === c.id ? '#7c3aed' : 'var(--border-light)'}`
+            }}
+          >
+            {c.label}
+          </button>
+        ))}
       </div>
 
       <div style={{ display: 'grid', gap: 20 }}>
-        {tutorials.map(tut => {
+        {filteredTutorials.map(tut => {
           const Icon = tut.icon
           const isActive = activeQuestion === tut.id
           const history = chatHistory[tut.id] || []
@@ -4690,7 +4745,10 @@ export function TutorialsScreen() {
                 <Icon size={20} />
               </div>
               <div style={{ flex: 1 }}>
-                <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>{tut.title}</h3>
+                <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  {tut.title}
+                  {isWatched && <CheckCircle size={16} color="#16a34a" fill="#dcfce7" />}
+                </h3>
                 <p style={{ margin: '2px 0 0 0', fontSize: 12, color: 'var(--text-muted)' }}>{tut.desc}</p>
               </div>
             </div>
@@ -4706,6 +4764,33 @@ export function TutorialsScreen() {
                 allowFullScreen
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
               />
+            </div>
+            
+            {/* Actions: Save Offline & Mark Watched */}
+            <div style={{ padding: '12px 20px', display: 'flex', gap: 12, borderBottom: '1px solid var(--border-light)' }}>
+              <button
+                onClick={() => markWatched(tut.id)}
+                disabled={isWatched}
+                style={{
+                  flex: 1, padding: '8px', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: isWatched ? 'default' : 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, transition: 'all 0.2s',
+                  background: isWatched ? '#f0fdf4' : '#fff', color: isWatched ? '#16a34a' : '#475569',
+                  border: `1px solid ${isWatched ? '#bbf7d0' : '#cbd5e1'}`
+                }}
+              >
+                {isWatched ? <><Check size={14} /> Completed</> : <><PlayCircle size={14} /> Mark as Watched</>}
+              </button>
+              <button
+                onClick={() => handleDownload(tut.id)}
+                disabled={isDownloading}
+                style={{
+                  flex: 1, padding: '8px', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: isDownloading ? 'not-allowed' : 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, transition: 'all 0.2s',
+                  background: '#fff', color: '#0ea5e9', border: '1px solid #bae6fd'
+                }}
+              >
+                {isDownloading ? <><RefreshCw size={14} className="animate-spin" /> Saving...</> : <><Cloud size={14} /> Save Offline</>}
+              </button>
             </div>
             
             {/* AI Doubt Solver Section */}
