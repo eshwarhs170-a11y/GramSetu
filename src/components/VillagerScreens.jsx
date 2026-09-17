@@ -4421,13 +4421,41 @@ export function EmergencySOSScreen() {
   const { t, lang } = useLanguage()
   const district = window.localStorage.getItem('citizen_district') || 'Mysuru'
 
-  const helplines = [
-    { title: 'Ambulance / Medical', num: '108', icon: PhoneCall, color: '#dc2626' },
-    { title: 'Police / Law & Order', num: '100', icon: ShieldAlert, color: '#1d4ed8' },
-    { title: 'Fire & Rescue', num: '101', icon: AlertTriangle, color: '#ea580c' },
-    { title: 'Women Helpline', num: '1091', icon: PhoneCall, color: '#db2777' },
-    { title: 'Kisan Call Center', num: '1551', icon: PhoneCall, color: '#16a34a' },
-    { title: 'Poison Information', num: '1066', icon: PhoneCall, color: '#9333ea' }
+  const categories = [
+    {
+      title: 'Medical & Health',
+      color: '#dc2626',
+      items: [
+        { title: 'Medical Emergency', num: '108', icon: PhoneCall, color: '#dc2626' },
+        { title: 'Pregnant Women', num: '102', icon: PhoneCall, color: '#f43f5e' },
+        { title: 'Health Advice', num: '104', icon: PhoneCall, color: '#ec4899' },
+        { title: 'Poison Info', num: '1066', icon: PhoneCall, color: '#9333ea' }
+      ]
+    },
+    {
+      title: 'Police & Rescue',
+      color: '#1d4ed8',
+      items: [
+        { title: 'Police', num: '100', icon: ShieldAlert, color: '#1d4ed8' },
+        { title: 'Fire & Rescue', num: '101', icon: AlertTriangle, color: '#ea580c' }
+      ]
+    },
+    {
+      title: 'Road & Accidents',
+      color: '#0369a1',
+      items: [
+        { title: 'Local Accidents', num: '1073', icon: AlertTriangle, color: '#0369a1' },
+        { title: 'National Highway', num: '1033', icon: PhoneCall, color: '#0284c7' }
+      ]
+    },
+    {
+      title: 'Support & Assistance',
+      color: '#db2777',
+      items: [
+        { title: 'Women Helpline', num: '1091', icon: PhoneCall, color: '#db2777' },
+        { title: 'Kisan Call Center', num: '1551', icon: PhoneCall, color: '#16a34a' }
+      ]
+    }
   ]
 
   return (
@@ -4440,19 +4468,24 @@ export function EmergencySOSScreen() {
         </a>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 16 }}>
-        {helplines.map((h, i) => (
-          <a key={i} href={`tel:${h.num}`} className="card" style={{ display: 'flex', alignItems: 'center', gap: 16, textDecoration: 'none', color: 'inherit', padding: '16px', transition: 'transform 0.2s' }}>
-            <div style={{ background: h.color + '20', color: h.color, padding: '12px', borderRadius: '50%' }}>
-              <h.icon size={24} />
-            </div>
-            <div>
-              <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{h.title}</div>
-              <div style={{ fontSize: 20, fontWeight: 800 }}>{h.num}</div>
-            </div>
-          </a>
-        ))}
-      </div>
+      {categories.map((cat, idx) => (
+        <div key={idx} style={{ marginBottom: 24 }}>
+          <h3 style={{ color: cat.color, fontSize: 16, fontWeight: 700, marginBottom: 12, borderBottom: `2px solid ${cat.color}30`, paddingBottom: 8 }}>{cat.title}</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 16 }}>
+            {cat.items.map((h, i) => (
+              <a key={i} href={`tel:${h.num}`} className="card" style={{ display: 'flex', alignItems: 'center', gap: 16, textDecoration: 'none', color: 'inherit', padding: '16px', transition: 'transform 0.2s' }}>
+                <div style={{ background: h.color + '20', color: h.color, padding: '12px', borderRadius: '50%' }}>
+                  <h.icon size={24} />
+                </div>
+                <div>
+                  <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{h.title}</div>
+                  <div style={{ fontSize: 20, fontWeight: 800 }}>{h.num}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
 
       <div className="card" style={{ marginTop: 20, display: 'flex', gap: 12, alignItems: 'flex-start', background: '#f0f9ff', borderColor: '#bae6fd' }}>
         <Info size={24} color="#0369a1" style={{ flexShrink: 0 }} />
