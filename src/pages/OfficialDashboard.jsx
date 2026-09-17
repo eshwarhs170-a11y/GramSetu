@@ -628,6 +628,42 @@ function RespondModal({ complaint, onClose, onSaved }) {
 }
 
 
+// ===== Location Toggle =====
+function LocationToggle({ lat, lng }) {
+  const [show, setShow] = React.useState(false)
+  if (!lat || !lng) return null
+  return (
+    <div style={{ marginTop: 10 }}>
+      <button
+        type="button"
+        onClick={() => setShow(p => !p)}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 12, fontWeight: 600, cursor: 'pointer',
+          background: 'none', border: '1px solid var(--border-light)',
+          borderRadius: 8, padding: '4px 12px', color: '#10b981'
+        }}
+      >
+        📍 {show ? 'Hide Map' : 'View Live Location'}
+      </button>
+      {show && (
+        <div style={{ marginTop: 8, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+          <iframe 
+            width="100%" 
+            height="250" 
+            frameBorder="0" 
+            scrolling="no" 
+            marginHeight="0" 
+            marginWidth="0" 
+            src={`https://maps.google.com/maps?q=${lat},${lng}&hl=en&z=15&output=embed`}
+            title="Live Location Map"
+          ></iframe>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ===== Photo Toggle =====
 function PhotoToggle({ photo }) {
   const [show, setShow] = React.useState(false)
@@ -954,6 +990,7 @@ function ComplaintsScreen({ resolved, stateOverview, filter }) {
                       {c.submittedBy && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><User size={12} /> {c.submittedBy}</span>}
                     </div>
                     <PhotoToggle photo={c.photo} />
+                    <LocationToggle lat={c.lat} lng={c.lng} />
                   </div>
                   <EscalationBadge complaint={c} />
                 </div>

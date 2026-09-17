@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { useNavigate } from 'react-router-dom'
+import MapPicker from './MapPicker'
 import {
   Activity,
   AlertCircle,
@@ -2734,6 +2735,11 @@ export function ComplaintScreen({ setActive }) {
   const [userName, setUserName] = useState('')
   const [userDistrict, setUserDistrict] = useState('Mysuru')
 
+  // Live Location States
+  const [liveLocation, setLiveLocation] = useState(null)
+  const [locationLoading, setLocationLoading] = useState(false)
+  const [showMapModal, setShowMapModal] = useState(false)
+
   // Camera states
   const [cameraMode, setCameraMode] = useState('idle') // idle | requesting | live | captured | denied | unsupported | file
   const [cameraError, setCameraError] = useState('')
@@ -2951,6 +2957,10 @@ export function ComplaintScreen({ setActive }) {
     try {
       const docPayload = { ...newComplaintObj }
       if (photoUri) docPayload.photo = photoUri
+      if (liveLocation) {
+        docPayload.lat = liveLocation.lat
+        docPayload.lng = liveLocation.lng
+      }
       const writePromise = addDoc(collection(db, submissionType), docPayload)
       
       // Also write to district-specific collection so admin can verify district-wise directly in Firebase Console
@@ -3396,6 +3406,65 @@ export function ComplaintScreen({ setActive }) {
                 )}
               </div>
 
+              {/* Live Location Controls */}
+              <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLocationLoading(true);
+                    if (navigator.geolocation) {
+                      navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                          setLiveLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+                          setLocationLoading(false);
+                        },
+                        (err) => {
+                          alert('Could not fetch location. Please allow permissions or pick on map.');
+                          setLocationLoading(false);
+                        },
+                        { enableHighAccuracy: true, timeout: 10000 }
+                      );
+                    } else {
+                      alert('Geolocation is not supported by your browser.');
+                      setLocationLoading(false);
+                    }
+                  }}
+                  disabled={locationLoading}
+                  style={{
+                    flex: 1, padding: '10px 14px', borderRadius: '10px',
+                    background: liveLocation ? '#d1fae5' : '#f0fdf4',
+                    color: liveLocation ? '#065f46' : '#16a34a',
+                    border: `1px solid ${liveLocation ? '#34d399' : '#bbf7d0'}`,
+                    fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {locationLoading ? (
+                    <RefreshCw size={16} className="animate-spin" />
+                  ) : liveLocation ? (
+                    <><Check size={16} /> Location Attached!</>
+                  ) : (
+                    <><MapPin size={16} /> Use My Live Location</>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowMapModal(true)}
+                  style={{
+                    flex: 1, padding: '10px 14px', borderRadius: '10px',
+                    background: 'var(--bg-main)',
+                    color: 'var(--text-secondary)',
+                    border: '1px solid var(--border)',
+                    fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
+                  }}
+                >
+                  <Map size={16} /> Pick on Map
+                </button>
+              </div>
+
               <div className="otp-hint">{t('escalationNote')}</div>
               {submitError && (
                 <div style={{ background: '#fef2f2', border: '1.5px solid #fca5a5', borderRadius: 10, padding: '10px 14px', color: '#dc2626', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>
@@ -3441,6 +3510,25 @@ export function ComplaintScreen({ setActive }) {
           </form>
         )}
       </div>
+
+      {/* Map Picker Modal */}
+      {showMapModal && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 99999, background: 'rgba(0,0,0,0.5)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
+        }}>
+          <div style={{ background: '#fff', borderRadius: '16px', padding: '20px', width: '100%', maxWidth: '500px', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>Pick Complaint Location</h3>
+              <button onClick={() => setShowMapModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>
+            </div>
+            <MapPicker onLocationSelected={(coords) => {
+              setLiveLocation(coords);
+              setShowMapModal(false);
+            }} />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
