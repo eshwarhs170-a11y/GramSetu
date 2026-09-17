@@ -4631,7 +4631,7 @@ export function TutorialsScreen() {
       color: '#7c3aed',
       title: lang === 'kn' ? '\u0CAB\u0CCB\u0CA8\u0CCD\u200C\u0CAA\u0CC7 / GPay \u0CAC\u0CB3\u0CB8\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1 \u0CB9\u0CC7\u0C97\u0CC6?' : lang === 'hi' ? '\u092B\u094B\u0928\u092A\u0947 / GPay \u0915\u093E \u0909\u092A\u092F\u094B\u0917 \u0915\u0948\u0938\u0947 \u0915\u0930\u0947\u0902?' : 'How to use PhonePe / Google Pay?',
       desc: lang === 'kn' ? 'UPI \u0CAE\u0CC2\u0CB2\u0C95 \u0CB8\u0CC1\u0CB0\u0C95\u0CCD\u0CB7\u0CBF\u0CA4\u0CB5\u0CBE\u0C97\u0CBF \u0CB9\u0CA3 \u0C95\u0CB3\u0CC1\u0CB9\u0CBF\u0CB8\u0CBF' : lang === 'hi' ? 'UPI \u0938\u0947 \u0938\u0941\u0930\u0915\u094D\u0937\u093F\u0924 \u092A\u0948\u0938\u0947 \u092D\u0947\u091C\u0947\u0902' : 'Send money securely via UPI',
-      videoId: lang === 'kn' ? 'VIMM_NwaSag' : lang === 'hi' ? 'T8BJag0KzOM' : 'EsmAFKKfwDQ'
+      videoId: lang === 'kn' ? 'C17ztmHEQGw' : lang === 'hi' ? 'TrSI511zR-U' : 'EsmAFKKfwDQ'
     },
     {
       id: 'sir',
@@ -4649,7 +4649,7 @@ export function TutorialsScreen() {
       color: '#16a34a',
       title: lang === 'kn' ? '\u0CAE\u0CBE\u0CB0\u0CC1\u0C95\u0C9F\u0CCD\u0C9F\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6 \u0CA8\u0CCB\u0CA1\u0CC1\u0CB5\u0CC1\u0CA6\u0CC1' : lang === 'hi' ? '\u092C\u093E\u091C\u093E\u0930 \u092D\u093E\u0935 \u0915\u0948\u0938\u0947 \u0926\u0947\u0916\u0947\u0902' : 'Check Market Prices (APMC)',
       desc: lang === 'kn' ? 'APMC \u0CAC\u0CC6\u0CB3\u0CC6 \u0CAC\u0CC6\u0CB2\u0CC6 \u0CA8\u0CCB\u0CA1\u0CBF' : lang === 'hi' ? 'APMC \u092B\u0938\u0932 \u0915\u0940\u092E\u0924 \u0926\u0947\u0916\u0947\u0902' : 'Check daily APMC crop prices',
-      videoId: lang === 'kn' ? '-nxLVO4ZQRw' : lang === 'hi' ? 'uBYy1SoeP9o' : '6-dpn_sUQ1U'
+      videoId: lang === 'kn' ? 'NUmn690WdPU' : lang === 'hi' ? 'Z3c9nqnpo3s' : '6-dpn_sUQ1U'
     }
   ]
 
@@ -4662,7 +4662,7 @@ export function TutorialsScreen() {
       color: '#0284c7',
       title: lang === 'kn' ? 'ಡಿಜಿಲಾಕರ್ ಬಳಸುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'DigiLocker का उपयोग कैसे करें?' : 'How to use DigiLocker?',
       desc: lang === 'kn' ? 'ಡಿಜಿಟಲ್ ದಾಖಲೆಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿಡಿ' : lang === 'hi' ? 'डिजिटल दस्तावेज़ सुरक्षित रखें' : 'Store & access documents digitally',
-      videoId: lang === 'kn' ? 'M8G_H1l6y_I' : lang === 'hi' ? 'Yc_y6V_2EwI' : 'n5T7GqOQ9nU'
+      videoId: lang === 'kn' ? 'v6QTnODGJZc' : lang === 'hi' ? 'x01ab9Zb5LM' : 'LRMOwN4LYvc'
     },
     {
       id: 'bhoomi',
@@ -4671,7 +4671,7 @@ export function TutorialsScreen() {
       color: '#b45309',
       title: lang === 'kn' ? 'ಭೂಮಿ - ಆರ್‌ಟಿಸಿ ಆನ್‌ಲೈನ್ ನೋಡುವುದು' : lang === 'hi' ? 'भूमि पोर्टल - RTC ऑनलाइन देखें' : 'Bhoomi – Check Land Records (RTC)',
       desc: lang === 'kn' ? 'ನಿಮ್ಮ ಜಮೀನಿನ ದಾಖಲೆ ಆನ್‌ಲೈನ್ ನೋಡಿ' : lang === 'hi' ? 'अपनी जमीन के कागज़ ऑनलाइन देखें' : 'Check your land ownership records online',
-      videoId: lang === 'kn' ? 'yMhJDzwNFQA' : lang === 'hi' ? 'mFuzqbk7bMM' : 'sKmMn3XDLMU'
+      videoId: lang === 'kn' ? 'LnU7vFyud9g' : lang === 'hi' ? 'oKjRX-BU240' : 'oKjRX-BU240'
     },
     {
       id: 'fasal_bima',
@@ -4680,7 +4680,7 @@ export function TutorialsScreen() {
       color: '#15803d',
       title: lang === 'kn' ? 'ಪಿಎಂ ಫಸಲ್ ಬಿಮಾ ಯೋಜನೆ' : lang === 'hi' ? 'PM फसल बीमा योजना' : 'PM Fasal Bima Yojana',
       desc: lang === 'kn' ? 'ಬೆಳೆ ನಷ್ಟಕ್ಕೆ ವಿಮಾ ಸಂರಕ್ಷಣೆ ಪಡೆಯಿರಿ' : lang === 'hi' ? 'फसल नुकसान पर बीमा सुरक्षा पाएं' : 'Get crop insurance for losses',
-      videoId: lang === 'kn' ? 'FiLkHhJMhG4' : lang === 'hi' ? 'pFgeCVFQTlk' : 'MtJb7fhK2vw'
+      videoId: lang === 'kn' ? 'qTvb-K80Tkw' : lang === 'hi' ? 'yOqTKYqMXa8' : 'Y0gSsi4AOcI'
     },
     {
       id: 'aadhaar',
@@ -4689,7 +4689,7 @@ export function TutorialsScreen() {
       color: '#7c3aed',
       title: lang === 'kn' ? 'ಆಧಾರ್ ಅನ್ನು ಬ್ಯಾಂಕ್‌ಗೆ ಜೋಡಿಸುವುದು' : lang === 'hi' ? 'आधार को बैंक से लिंक करें' : 'Link Aadhaar to Bank Account',
       desc: lang === 'kn' ? 'DBT ಸಬ್ಸಿಡಿ ನೇರ ಖಾತೆಗೆ ಬರಲಿ' : lang === 'hi' ? 'DBT सब्सिडी सीधे खाते में पाएं' : 'Get DBT subsidies directly in your account',
-      videoId: lang === 'kn' ? 'ZrC2A9_CqYI' : lang === 'hi' ? 'bSWFvZlxYyA' : 'LmcE9RZo_oA'
+      videoId: lang === 'kn' ? '6mMhaUJdel4' : lang === 'hi' ? 'HaTYq8B6sac' : 'RH3YIUP1Ykc'
     },
     {
       id: 'mgnrega',
@@ -4698,7 +4698,7 @@ export function TutorialsScreen() {
       color: '#dc2626',
       title: lang === 'kn' ? 'ಮನರೇಗಾ - ಜಾಬ್ ಕಾರ್ಡ್ & ಪಾವತಿ' : lang === 'hi' ? 'मनरेगा - जॉब कार्ड और भुगतान' : 'MGNREGA – Job Card & Payments',
       desc: lang === 'kn' ? 'ಮನರೇಗಾ ಕೆಲಸ ಮತ್ತು ಪಾವತಿ ಮಾಹಿತಿ' : lang === 'hi' ? 'मनरेगा काम और भुगतान जानकारी' : 'Check MGNREGA work status & wages',
-      videoId: lang === 'kn' ? 'lHpKP2HNQKY' : lang === 'hi' ? 'xvFZjo5PgG0' : 'N9EwTLhFwBE'
+      videoId: lang === 'kn' ? '1tKcGPFjX0U' : lang === 'hi' ? '-435xZcTUhs' : 'H6NPHJCVFoo'
     },
     {
       id: 'kcc',
@@ -4707,7 +4707,7 @@ export function TutorialsScreen() {
       color: '#0369a1',
       title: lang === 'kn' ? 'ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಅರ್ಜಿ' : lang === 'hi' ? 'किसान क्रेडिट कार्ड आवेदन' : 'Apply for Kisan Credit Card',
       desc: lang === 'kn' ? 'ಕಡಿಮೆ ಬಡ್ಡಿ ದರದಲ್ಲಿ ರೈತ ಸಾಲ' : lang === 'hi' ? 'कम ब्याज दर पर किसान ऋण' : 'Get low-interest agricultural loans',
-      videoId: lang === 'kn' ? 'C8lHkEi_gAA' : lang === 'hi' ? 'q9Bs2xON3IM' : 'QJ_5dFqCvN8'
+      videoId: lang === 'kn' ? '2tAtVJveZ4c' : lang === 'hi' ? '4Yb7jT2KpE4' : 'mhfoNdk-fOo'
     }
   ]
 
