@@ -5,6 +5,7 @@ import { useLanguage } from '../context/LanguageContext'
 import { useVoice } from '../context/VoiceContext'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import ThemeToggle from '../components/ThemeToggle'
+import { useTheme } from '../context/ThemeContext'
 import { db } from '../firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import {
@@ -29,6 +30,8 @@ export default function LandingPage() {
   const navigate = useNavigate()
   const { t, lang } = useLanguage()
   const { speak } = useVoice()
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
   const [selectedRole, setSelectedRole] = useState('farmer')
   const [newsletterPhone, setNewsletterPhone] = useState('')
   const [newsletterStatus, setNewsletterStatus] = useState('Join') // 'Join' | 'Loading' | 'Joined'
@@ -113,7 +116,14 @@ export default function LandingPage() {
   }
 
   return (
-    <div style={{ fontFamily: "'Inter', 'Noto Sans Kannada', sans-serif", overflowX: 'hidden' }}>
+    <div style={{
+      fontFamily: "'Inter', 'Noto Sans Kannada', sans-serif",
+      overflowX: 'hidden',
+      background: isDark ? '#0b1120' : '#ffffff',
+      color: isDark ? '#f8fafc' : '#0f172a',
+      minHeight: '100vh',
+      transition: 'background-color 0.3s ease, color 0.3s ease'
+    }}>
       <style>{`
         @keyframes float {
           0% { transform: translateY(0px); }
@@ -164,10 +174,10 @@ export default function LandingPage() {
       {/* ── NAV ── */}
       <nav className="landing-top-nav" style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '14px 16px', background: '#fff',
-        borderBottom: '1px solid #e5e7eb',
+        padding: '14px 16px', background: isDark ? '#0f172a' : '#fff',
+        borderBottom: `1px solid ${isDark ? '#1e293b' : '#e5e7eb'}`,
         position: 'sticky', top: 0, zIndex: 100,
-        boxShadow: '0 1px 12px rgba(0,0,0,0.06)'
+        boxShadow: isDark ? '0 1px 12px rgba(0,0,0,0.4)' : '0 1px 12px rgba(0,0,0,0.06)'
       }}>
         <div
           className="landing-nav-left"
@@ -184,8 +194,8 @@ export default function LandingPage() {
             <Wheat size={20} color="#fff" strokeWidth={2} />
           </div>
           <div>
-            <div className="landing-nav-title" style={{ fontWeight: 800, fontSize: 18, color: '#111827', lineHeight: 1.1 }}>{t('appName')}</div>
-            <div className="landing-nav-subtitle" style={{ fontSize: 11, color: '#6b7280' }}>{t('appSubtitle')}</div>
+            <div className="landing-nav-title" style={{ fontWeight: 800, fontSize: 18, color: isDark ? '#f8fafc' : '#111827', lineHeight: 1.1 }}>{t('appName')}</div>
+            <div className="landing-nav-subtitle" style={{ fontSize: 11, color: isDark ? '#94a3b8' : '#6b7280' }}>{t('appSubtitle')}</div>
           </div>
         </div>
         <div className="landing-nav-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -195,9 +205,9 @@ export default function LandingPage() {
             onClick={() => { setInquiryCategory('question'); setInquiryModalOpen(true); }}
             className="landing-btn-helpdesk hover-lift"
             style={{
-              background: 'rgba(22, 163, 74, 0.1)',
-              color: '#15803d',
-              border: '1px solid rgba(22, 163, 74, 0.25)',
+              background: isDark ? 'rgba(34, 197, 94, 0.15)' : 'rgba(22, 163, 74, 0.1)',
+              color: isDark ? '#4ade80' : '#15803d',
+              border: `1px solid ${isDark ? 'rgba(74, 222, 128, 0.3)' : 'rgba(22, 163, 74, 0.25)'}`,
               borderRadius: 10,
               padding: '9px 13px',
               fontWeight: 700,
@@ -450,14 +460,30 @@ export default function LandingPage() {
       </section>
 
       {/* ── FEATURES ── */}
-      <section className="features-section" style={{ background: '#fff', padding: '52px 24px' }}>
+      <section className="features-section" style={{
+        background: isDark ? '#0b1120' : '#fff',
+        padding: '52px 24px',
+        borderTop: isDark ? '1px solid #1e293b' : 'none'
+      }}>
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
           <div style={{
-            display: 'inline-block', background: '#f0fdf4', color: '#16a34a',
+            display: 'inline-block',
+            background: isDark ? 'rgba(34, 197, 94, 0.15)' : '#f0fdf4',
+            color: isDark ? '#4ade80' : '#16a34a',
+            border: isDark ? '1px solid rgba(74, 222, 128, 0.25)' : 'none',
             borderRadius: 50, padding: '6px 18px', fontSize: 13, fontWeight: 700, marginBottom: 14
           }}>Core Features</div>
-          <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 900, color: '#0f172a', marginBottom: 12, letterSpacing: -0.5 }}>{t('featTitle')}</h2>
-          <p style={{ fontSize: 17, color: '#6b7280', maxWidth: 560, margin: '0 auto', lineHeight: 1.6 }}>{t('featSub')}</p>
+          <h2 style={{
+            fontSize: 'clamp(24px, 4vw, 36px)',
+            fontWeight: 900,
+            color: isDark ? '#f8fafc' : '#0f172a',
+            marginBottom: 12, letterSpacing: -0.5
+          }}>{t('featTitle')}</h2>
+          <p style={{
+            fontSize: 17,
+            color: isDark ? '#94a3b8' : '#6b7280',
+            maxWidth: 560, margin: '0 auto', lineHeight: 1.6
+          }}>{t('featSub')}</p>
         </div>
 
         <div className="features-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: 20, maxWidth: 1200, margin: '0 auto' }}>
@@ -514,13 +540,21 @@ export default function LandingPage() {
               onClick={() => navigate(`/feature/${f.id}`)}
               style={{
                 borderRadius: 20, overflow: 'hidden', cursor: 'pointer',
-                border: '1px solid #e5e7eb',
-                background: '#fff',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+                border: isDark ? '1px solid #1e293b' : '1px solid #e5e7eb',
+                background: isDark ? '#131d31' : '#fff',
+                boxShadow: isDark ? '0 8px 30px rgba(0,0,0,0.4)' : '0 4px 24px rgba(0,0,0,0.06)',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-8px)'; e.currentTarget.style.boxShadow = '0 24px 48px rgba(0,0,0,0.14)' }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)' }}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = 'translateY(-8px)';
+                e.currentTarget.style.boxShadow = isDark ? '0 20px 40px rgba(0,0,0,0.6)' : '0 24px 48px rgba(0,0,0,0.14)';
+                if (isDark) e.currentTarget.style.borderColor = 'rgba(74, 222, 128, 0.4)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = 'none';
+                e.currentTarget.style.boxShadow = isDark ? '0 8px 30px rgba(0,0,0,0.4)' : '0 4px 24px rgba(0,0,0,0.06)';
+                if (isDark) e.currentTarget.style.borderColor = '#1e293b';
+              }}
             >
               {/* Real image */}
               <div style={{ height: 160, overflow: 'hidden', position: 'relative' }}>
@@ -543,7 +577,9 @@ export default function LandingPage() {
                 }}>{f.badge}</div>
                 <div style={{
                   position: 'absolute', top: 14, right: 14,
-                  background: 'rgba(255,255,255,0.9)', color: '#0f172a',
+                  background: isDark ? 'rgba(15, 23, 42, 0.85)' : 'rgba(255,255,255,0.9)',
+                  color: isDark ? '#f8fafc' : '#0f172a',
+                  border: isDark ? '1px solid rgba(255,255,255,0.1)' : 'none',
                   width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
                 }}>
@@ -552,9 +588,9 @@ export default function LandingPage() {
               </div>
               {/* Content */}
               <div style={{ padding: 24 }}>
-                <h3 style={{ fontSize: 17, fontWeight: 800, color: '#0f172a', marginBottom: 10 }}>{f.title}</h3>
-                <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7, margin: '0 0 14px 0' }}>{f.desc}</p>
-                <div style={{ fontSize: 12, fontWeight: 700, color: f.badgeColor, background: `${f.badgeColor}15`, borderRadius: 8, padding: '6px 10px', display: 'inline-block' }}>{f.tag}</div>
+                <h3 style={{ fontSize: 17, fontWeight: 800, color: isDark ? '#f8fafc' : '#0f172a', marginBottom: 10 }}>{f.title}</h3>
+                <p style={{ fontSize: 13, color: isDark ? '#94a3b8' : '#6b7280', lineHeight: 1.7, margin: '0 0 14px 0' }}>{f.desc}</p>
+                <div style={{ fontSize: 12, fontWeight: 700, color: f.badgeColor, background: isDark ? `${f.badgeColor}25` : `${f.badgeColor}15`, borderRadius: 8, padding: '6px 10px', display: 'inline-block' }}>{f.tag}</div>
               </div>
             </div>
           ))}
@@ -562,21 +598,27 @@ export default function LandingPage() {
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section className="testimonials-section" style={{ background: 'linear-gradient(135deg, #f0fdf4, #ecfdf5)', padding: '48px 24px', borderTop: '1px solid #d1fae5' }}>
+      <section className="testimonials-section" style={{
+        background: isDark ? 'linear-gradient(135deg, #091a13 0%, #0d281e 100%)' : 'linear-gradient(135deg, #f0fdf4, #ecfdf5)',
+        padding: '48px 24px',
+        borderTop: `1px solid ${isDark ? 'rgba(34, 197, 94, 0.2)' : '#d1fae5'}`
+      }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <h2 style={{ fontSize: 'clamp(22px, 4vw, 32px)', fontWeight: 900, color: '#0f172a', marginBottom: 8 }}>ರೈತರ ಮಾತು — What Farmers Say</h2>
-          <p style={{ fontSize: 15, color: '#6b7280' }}>Real stories from Karnataka's rural communities</p>
+          <h2 style={{ fontSize: 'clamp(22px, 4vw, 32px)', fontWeight: 900, color: isDark ? '#f8fafc' : '#0f172a', marginBottom: 8 }}>ರೈತರ ಮಾತು — What Farmers Say</h2>
+          <p style={{ fontSize: 15, color: isDark ? '#86efac' : '#6b7280' }}>Real stories from Karnataka's rural communities</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, maxWidth: 1000, margin: '0 auto' }}>
           {testimonials.map((t2, i) => (
             <div key={i} style={{
-              background: '#fff', borderRadius: 20, padding: 24,
-              boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: '1px solid #d1fae5'
+              background: isDark ? '#11221c' : '#fff',
+              borderRadius: 20, padding: 24,
+              boxShadow: isDark ? '0 8px 30px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.06)',
+              border: `1px solid ${isDark ? 'rgba(34, 197, 94, 0.15)' : '#d1fae5'}`
             }}>
               <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
                 {[...Array(5)].map((_, si) => <Star key={si} size={14} fill="#fbbf24" color="#fbbf24" />)}
               </div>
-              <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.7, marginBottom: 18, fontStyle: 'italic' }}>"{t2.text}"</p>
+              <p style={{ fontSize: 14, color: isDark ? '#e2e8f0' : '#374151', lineHeight: 1.7, marginBottom: 18, fontStyle: 'italic' }}>"{t2.text}"</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <div style={{
                   width: 40, height: 40, borderRadius: '50%', fontSize: 16, fontWeight: 700,
@@ -584,8 +626,8 @@ export default function LandingPage() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff'
                 }}>{t2.avatar}</div>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: '#111827' }}>{t2.name}</div>
-                  <div style={{ fontSize: 12, color: '#9ca3af' }}>{t2.loc}, Karnataka</div>
+                  <div style={{ fontWeight: 700, fontSize: 14, color: isDark ? '#f8fafc' : '#111827' }}>{t2.name}</div>
+                  <div style={{ fontSize: 12, color: isDark ? '#86efac' : '#9ca3af' }}>{t2.loc}, Karnataka</div>
                 </div>
               </div>
             </div>
@@ -748,14 +790,14 @@ export default function LandingPage() {
           padding: '20px'
         }} onClick={() => setInfoModal({ isOpen: false, title: '', content: '' })}>
           <div style={{
-            background: '#fff',
-            color: '#1e293b',
+            background: isDark ? '#161b22' : '#fff',
+            color: isDark ? '#f8fafc' : '#1e293b',
             padding: '28px',
             borderRadius: '20px',
             maxWidth: '450px',
             width: '100%',
-            border: '1px solid rgba(0,0,0,0.05)',
-            boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)',
+            border: isDark ? '1px solid #30363d' : '1px solid rgba(0,0,0,0.05)',
+            boxShadow: isDark ? '0 20px 25px -5px rgba(0,0,0,0.5), 0 10px 10px -5px rgba(0,0,0,0.3)' : '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)',
             position: 'relative'
           }} onClick={e => e.stopPropagation()}>
             <button
@@ -763,7 +805,7 @@ export default function LandingPage() {
               style={{
                 position: 'absolute',
                 top: 20, right: 20,
-                background: '#f1f5f9',
+                background: isDark ? '#21262d' : '#f1f5f9',
                 border: 'none',
                 width: 32, height: 32,
                 borderRadius: '50%',
@@ -771,18 +813,18 @@ export default function LandingPage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                color: '#64748b',
+                color: isDark ? '#c9d1d9' : '#64748b',
                 transition: 'background 0.2s'
               }}
-              onMouseEnter={e => e.currentTarget.style.background = '#e2e8f0'}
-              onMouseLeave={e => e.currentTarget.style.background = '#f1f5f9'}
+              onMouseEnter={e => e.currentTarget.style.background = isDark ? '#30363d' : '#e2e8f0'}
+              onMouseLeave={e => e.currentTarget.style.background = isDark ? '#21262d' : '#f1f5f9'}
             >
               <X size={16} />
             </button>
-            <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#0f172a', marginBottom: '16px', marginTop: 0 }}>
+            <h3 style={{ fontSize: '20px', fontWeight: 800, color: isDark ? '#f8fafc' : '#0f172a', marginBottom: '16px', marginTop: 0 }}>
               {infoModal.title}
             </h3>
-            <p style={{ fontSize: '15px', color: '#475569', lineHeight: 1.7, margin: 0 }}>
+            <p style={{ fontSize: '15px', color: isDark ? '#8b949e' : '#475569', lineHeight: 1.7, margin: 0 }}>
               {infoModal.content}
             </p>
           </div>

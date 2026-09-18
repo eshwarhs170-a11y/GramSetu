@@ -2738,7 +2738,7 @@ export function ComplaintScreen({ setActive }) {
   // Live Location States
   const [liveLocation, setLiveLocation] = useState(null)
   const [locationLoading, setLocationLoading] = useState(false)
-  const [showMapModal, setShowMapModal] = useState(false)
+  const [showMapInline, setShowMapInline] = useState(false)
 
   // Camera states
   const [cameraMode, setCameraMode] = useState('idle') // idle | requesting | live | captured | denied | unsupported | file
@@ -3407,10 +3407,16 @@ export function ComplaintScreen({ setActive }) {
               </div>
 
               {/* Live Location Controls */}
-              <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
+              {/* Live Location Controls */}
+              <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
                 <button
                   type="button"
                   onClick={() => {
+                    if (liveLocation) {
+                      // Toggle off if already attached!
+                      setLiveLocation(null);
+                      return;
+                    }
                     setLocationLoading(true);
                     if (navigator.geolocation) {
                       navigator.geolocation.getCurrentPosition(
@@ -3430,20 +3436,22 @@ export function ComplaintScreen({ setActive }) {
                     }
                   }}
                   disabled={locationLoading}
+                  title={liveLocation ? 'Click to remove attached location' : 'Attach your current GPS location'}
                   style={{
                     flex: 1, padding: '10px 14px', borderRadius: '10px',
                     background: liveLocation ? '#d1fae5' : '#f0fdf4',
                     color: liveLocation ? '#065f46' : '#16a34a',
-                    border: `1px solid ${liveLocation ? '#34d399' : '#bbf7d0'}`,
+                    border: `1.5px solid ${liveLocation ? '#10b981' : '#bbf7d0'}`,
                     fontWeight: 600, fontSize: 13, cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                    transition: 'all 0.2s'
+                    transition: 'all 0.2s',
+                    boxShadow: liveLocation ? '0 2px 8px rgba(16,185,129,0.2)' : 'none'
                   }}
                 >
                   {locationLoading ? (
                     <RefreshCw size={16} className="animate-spin" />
                   ) : liveLocation ? (
-                    <><Check size={16} /> Location Attached!</>
+                    <><Check size={16} /> Location Attached! (Tap to remove)</>
                   ) : (
                     <><MapPin size={16} /> Use My Live Location</>
                   )}
@@ -3451,19 +3459,71 @@ export function ComplaintScreen({ setActive }) {
 
                 <button
                   type="button"
-                  onClick={() => setShowMapModal(true)}
+                  onClick={() => setShowMapInline(prev => !prev)}
                   style={{
                     flex: 1, padding: '10px 14px', borderRadius: '10px',
-                    background: 'var(--bg-main)',
-                    color: 'var(--text-secondary)',
-                    border: '1px solid var(--border)',
+                    background: showMapInline ? '#eff6ff' : 'var(--bg-main)',
+                    color: showMapInline ? '#1d4ed8' : 'var(--text-secondary)',
+                    border: `1.5px solid ${showMapInline ? '#3b82f6' : 'var(--border)'}`,
                     fontWeight: 600, fontSize: 13, cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    transition: 'all 0.2s'
                   }}
                 >
-                  <Map size={16} /> Pick on Map
+                  <Map size={16} /> {showMapInline ? 'Close Map' : 'Pick on Map'}
                 </button>
               </div>
+
+              {/* Location Attached Info Pill */}
+              {liveLocation && (
+                <div style={{
+                  marginBottom: 14, padding: '10px 14px', background: '#f0fdf4',
+                  borderRadius: 10, border: '1px solid #86efac',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontSize: 12
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#166534', fontWeight: 600 }}>
+                    <MapPin size={14} className="text-emerald-600" />
+                    <span>Attached: {liveLocation.address || `${liveLocation.lat.toFixed(5)}, ${liveLocation.lng.toFixed(5)}`}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${liveLocation.lat},${liveLocation.lng}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#2563eb', fontWeight: 700, textDecoration: 'underline', fontSize: 11 }}
+                    >
+                      View in Google Maps ↗
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => setLiveLocation(null)}
+                      style={{ background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', fontWeight: 700, fontSize: 11 }}
+                    >
+                      ✕ Remove
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Inline Map Picker right here in the form ("then and there itself") */}
+              {showMapInline && (
+                <div style={{ marginBottom: 16 }}>
+                  <MapPicker
+                    district={userDistrict}
+                    taluk={taluk}
+                    village={window.localStorage.getItem('citizen_village') || ''}
+                    initialCoords={liveLocation}
+                    onLocationSelected={(coords) => {
+                      setLiveLocation(coords);
+                      if (coords.address) {
+                        setLocation(coords.address);
+                      }
+                      setShowMapInline(false);
+                    }}
+                    onCancel={() => setShowMapInline(false)}
+                  />
+                </div>
+              )}
 
               <div className="otp-hint">{t('escalationNote')}</div>
               {submitError && (
@@ -3510,25 +3570,6 @@ export function ComplaintScreen({ setActive }) {
           </form>
         )}
       </div>
-
-      {/* Map Picker Modal */}
-      {showMapModal && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 99999, background: 'rgba(0,0,0,0.5)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
-        }}>
-          <div style={{ background: '#fff', borderRadius: '16px', padding: '20px', width: '100%', maxWidth: '500px', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>Pick Complaint Location</h3>
-              <button onClick={() => setShowMapModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>
-            </div>
-            <MapPicker onLocationSelected={(coords) => {
-              setLiveLocation(coords);
-              setShowMapModal(false);
-            }} />
-          </div>
-        </div>
-      )}
     </div>
   )
 }
@@ -3980,6 +4021,22 @@ export function ComplaintStatusScreen({ setActive }) {
                         <MapPin size={12} className="text-sky-600" />
                         {[c.taluk, c.district].filter(Boolean).join(', ')}
                       </span>
+                    )}
+                    {c.lat && c.lng && (
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${c.lat},${c.lng}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          color: '#2563eb', background: '#eff6ff', border: '1px solid #bfdbfe',
+                          padding: '2px 8px', borderRadius: 12, fontWeight: 700, fontSize: 11,
+                          display: 'inline-flex', alignItems: 'center', gap: 4, textDecoration: 'none'
+                        }}
+                        onClick={e => e.stopPropagation()}
+                      >
+                        <MapPin size={11} className="text-blue-600" />
+                        <span>Google Maps ↗</span>
+                      </a>
                     )}
                   </div>
                   <PhotoToggle photo={c.photo} />
