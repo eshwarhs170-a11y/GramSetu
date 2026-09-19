@@ -120,34 +120,34 @@ export default function CropScanner() {
 
     // Map AI crop names → our DB crop keys
     const cropKeywords = [
-      { keys: ['paddy', 'rice', 'ಭತ್ತ', 'धान', 'चावल'],               db: 'Paddy / Rice (ಭತ್ತ / धान)' },
-      { keys: ['ragi', 'finger millet', 'ರಾಗಿ', 'रागी', 'मडुआ'],       db: 'Ragi / Finger Millet (ರಾಗಿ / मडुआ)' },
-      { keys: ['maize', 'corn', 'ಮೆಕ್ಕೆಜೋಳ', 'मक्का', 'भुट्टा'],       db: 'Maize / Corn (ಮೆಕ್ಕೆಜೋಳ / मक्का)' },
-      { keys: ['wheat', 'ಗೋಧಿ', 'गेहूं'],                              db: 'Wheat (ಗೋಧಿ / गेहूं)' },
-      { keys: ['jowar', 'sorghum', 'ಜೋಳ', 'ज्वार'],                    db: 'Jowar / Sorghum (ಜೋಳ / ज्वार)' },
-      { keys: ['cotton', 'ಹತ್ತಿ', 'कपास'],                            db: 'Cotton (ಹತ್ತಿ / कपास)' },
-      { keys: ['sugarcane', 'ಕಬ್ಬು', 'गन्ना'],                         db: 'Sugarcane (ಕಬ್ಬು / गन्ना)' },
-      { keys: ['coconut', 'ತೆಂಗು', 'ತೆಂಗಿನಕಾಯಿ', 'नारियल'],             db: 'Coconut (ತೆಂಗು / नारियल)' },
-      { keys: ['arecanut', 'areca', 'ಅಡಿಕೆ', 'सुपारी'],                 db: 'Arecanut (ಅಡಿಕೆ / सुपारी)' },
-      { keys: ['coffee', 'ಕಾಫಿ', 'कॉफी'],                             db: 'Coffee (ಕಾಫಿ / कॉफी)' },
-      { keys: ['pepper', 'black pepper', 'ಮೆಣಸು', 'ಕರಿಮೆಣಸು', 'काली मिर्च'], db: 'Black Pepper (ಕರಿಮೆಣಸು / काली मिर्च)' },
-      { keys: ['tomato', 'ಟೊಮೇಟೊ', 'ಟೊಮೆಟೊ', 'टमाटर'],                  db: 'Tomato (ಟೊಮೇಟೊ / टमाटर)' },
-      { keys: ['potato', 'ಆಲೂ', 'ಆಲೂಗಡ್ಡೆ', 'आलू'],                   db: 'Potato (ಆಲೂಗಡ್ಡೆ / आलू)' },
-      { keys: ['onion', 'ಈರುಳ್ಳಿ', 'प्याज'],                            db: 'Onion (ಈರುಳ್ಳಿ / प्याज)' },
-      { keys: ['chilli', 'chili', 'ಮೆಣಸಿನಕಾಯಿ', 'मिर्च'],             db: 'Chilli (ಮೆಣಸಿನಕಾಯಿ / मिर्च)' },
-      { keys: ['brinjal', 'eggplant', 'aubergine', 'ಬದನೆ', 'ಬದನೆಕಾಯಿ', 'बैंगन'], db: 'Brinjal / Eggplant (ಬದನೆಕಾಯಿ / बैंगन)' },
-      { keys: ['banana', 'ಬಾಳೆ', 'ಬಾಳೆಹಣ್ಣು', 'केला'],                 db: 'Banana (ಬಾಳೆ / केला)' },
-      { keys: ['mango', 'ಮಾವು', 'ಮಾವಿನಕಾಯಿ', 'आम'],                    db: 'Mango (ಮಾವು / आम)' },
-      { keys: ['pomegranate', 'ದಾಳಿಂಬೆ', 'अनार'],                      db: 'Pomegranate (ದಾಳಿಂಬೆ / अनार)' },
-      { keys: ['groundnut', 'peanut', 'ಕಡಲೆಕಾಯಿ', 'मूंगफली'],          db: 'Groundnut (ಕಡಲೆಕಾಯಿ / मूंगफली)' },
-      { keys: ['sunflower', 'ಸೂರ್ಯಕಾಂತಿ', 'सूरजमुखी'],                 db: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ / सूरजमुखी)' },
-      { keys: ['soybean', 'soya', 'ಸೋಯಾ', 'ಸೋಯಾಬೀನ್', 'सोयाबीन'],      db: 'Soybean (ಸೋಯಾಬೀನ್ / सोयाबीन)' },
-      { keys: ['chickpea', 'bengal gram', 'ಕಡಲೆ', 'चना'],            db: 'Chickpea / Bengal Gram (ಕಡಲೆ / चना)' },
-      { keys: ['mung', 'green gram', 'ಹೆಸರು', 'ಹೆಸರುಕಾಳು', 'मूंग'],   db: 'Mung Bean / Green Gram (ಹೆಸರುಕಾಳು / मूंग)' },
-      { keys: ['ginger', 'shunti', 'ಶುಂಠಿ', 'अदरक'],                  db: 'Ginger (ಶುಂಠಿ / अदरक)' },
-      { keys: ['turmeric', 'arishina', 'ಅರಿಶಿನ', 'हल्दी'],             db: 'Turmeric (ಅರಿಶಿನ / हल्दी)' },
-      { keys: ['cardamom', 'elakki', 'ಏಲಕ್ಕಿ', 'इलायची'],             db: 'Cardamom (ಏಲಕ್ಕಿ / इलायची)' },
-      { keys: ['papaya', 'pappayi', 'ಪಪ್ಪಾಯಿ', 'पपीता'],               db: 'Papaya (ಪಪ್ಪಾಯಿ / पपीता)' },
+      { keys: ['paddy', 'rice', 'ಭತ್ತ', 'धान', 'चावल'],               db: 'Paddy / Rice (ಭತ್ತ)' },
+      { keys: ['ragi', 'finger millet', 'ರಾಗಿ', 'रागी', 'मडुआ'],       db: 'Ragi / Finger Millet (ರಾಗಿ)' },
+      { keys: ['maize', 'corn', 'ಮೆಕ್ಕೆಜೋಳ', 'मक्का', 'भुट्टा'],       db: 'Maize / Corn (ಮೆಕ್ಕೆಜೋಳ)' },
+      { keys: ['wheat', 'ಗೋಧಿ', 'गेहूं'],                              db: 'Wheat (ಗೋಧಿ)' },
+      { keys: ['jowar', 'sorghum', 'ಜೋಳ', 'ज्वार'],                    db: 'Jowar / Sorghum (ಜೋಳ)' },
+      { keys: ['cotton', 'ಹತ್ತಿ', 'कपास'],                            db: 'Cotton (ಹತ್ತಿ)' },
+      { keys: ['sugarcane', 'ಕಬ್ಬು', 'गन्ना'],                         db: 'Sugarcane (ಕಬ್ಬು)' },
+      { keys: ['coconut', 'ತೆಂಗು', 'ತೆಂಗಿನಕಾಯಿ', 'नारियल'],             db: 'Coconut (ತೆಂಗು)' },
+      { keys: ['arecanut', 'areca', 'ಅಡಿಕೆ', 'सुपारी'],                 db: 'Arecanut (ಅಡಿಕೆ)' },
+      { keys: ['coffee', 'ಕಾಫಿ', 'कॉफी'],                             db: 'Coffee (ಕಾಫಿ)' },
+      { keys: ['pepper', 'black pepper', 'ಮೆಣಸು', 'ಕರಿಮೆಣಸು', 'काली मिर्च'], db: 'Black Pepper (ಕರಿಮೆಣಸು)' },
+      { keys: ['tomato', 'ಟೊಮೇಟೊ', 'ಟೊಮೆಟೊ', 'टमाटर'],                  db: 'Tomato (ಟೊಮೇಟೊ)' },
+      { keys: ['potato', 'ಆಲೂ', 'ಆಲೂಗಡ್ಡೆ', 'आलू'],                   db: 'Potato (ಆಲೂಗಡ್ಡೆ)' },
+      { keys: ['onion', 'ಈರುಳ್ಳಿ', 'प्याज'],                            db: 'Onion (ಈರುಳ್ಳಿ)' },
+      { keys: ['chilli', 'chili', 'ಮೆಣಸಿನಕಾಯಿ', 'मिर्च'],             db: 'Chilli (ಮೆಣಸಿನಕಾಯಿ)' },
+      { keys: ['brinjal', 'eggplant', 'aubergine', 'ಬದನೆ', 'ಬದನೆಕಾಯಿ', 'बैंगन'], db: 'Brinjal / Eggplant (ಬದನೆಕಾಯಿ)' },
+      { keys: ['banana', 'ಬಾಳೆ', 'ಬಾಳೆಹಣ್ಣು', 'केला'],                 db: 'Banana (ಬಾಳೆ)' },
+      { keys: ['mango', 'ಮಾವು', 'ಮಾವಿನಕಾಯಿ', 'आम'],                    db: 'Mango (ಮಾವು)' },
+      { keys: ['pomegranate', 'ದಾಳಿಂಬೆ', 'अनार'],                      db: 'Pomegranate (ದಾಳಿಂಬೆ)' },
+      { keys: ['groundnut', 'peanut', 'ಕಡಲೆಕಾಯಿ', 'मूंगफली'],          db: 'Groundnut (ಕಡಲೆಕಾಯಿ)' },
+      { keys: ['sunflower', 'ಸೂರ್ಯಕಾಂತಿ', 'सूरजमुखी'],                 db: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ)' },
+      { keys: ['soybean', 'soya', 'ಸೋಯಾ', 'ಸೋಯಾಬೀನ್', 'सोयाबीन'],      db: 'Soybean (ಸೋಯಾಬೀನ್)' },
+      { keys: ['chickpea', 'bengal gram', 'ಕಡಲೆ', 'चना'],            db: 'Chickpea / Bengal Gram (ಕಡಲೆ)' },
+      { keys: ['mung', 'green gram', 'ಹೆಸರು', 'ಹೆಸರುಕಾಳು', 'मूंग'],   db: 'Mung Bean / Green Gram (ಹೆಸರುಕಾಳು)' },
+      { keys: ['ginger', 'shunti', 'ಶುಂಠಿ', 'अदरक'],                  db: 'Ginger (ಶುಂಠಿ)' },
+      { keys: ['turmeric', 'arishina', 'ಅರಿಶಿನ', 'हल्दी'],             db: 'Turmeric (ಅರಿಶಿನ)' },
+      { keys: ['cardamom', 'elakki', 'ಏಲಕ್ಕಿ', 'इलायची'],             db: 'Cardamom (ಏಲಕ್ಕಿ)' },
+      { keys: ['papaya', 'pappayi', 'ಪಪ್ಪಾಯಿ', 'पपीता'],               db: 'Papaya (ಪಪ್ಪಾಯಿ)' },
     ];
 
     let matchedCropName = null;
@@ -553,7 +553,7 @@ export default function CropScanner() {
     Scheme: ${result.scheme || 'N/A'}
 
     INSTRUCTIONS:
-    - You must act as a conversational, helpful AI assistant (like ChatGPT/Gemini).
+    - You must act as a conversational, helpful AI assistant (like ChatGPT).
     - Answer the user's question naturally based on the context above.
     - If the user asks a follow-up question (e.g. "what are those brown spots", "how much time to recover"), use the context to answer it accurately.
     - You MUST reply entirely in ${langName}.
@@ -952,18 +952,7 @@ export default function CropScanner() {
               <div style={{ position: 'absolute', top: 80, left: '50%', transform: 'translateX(-50%)', background: 'rgba(239,68,68,0.85)', color: '#fff', padding: '5px 14px', borderRadius: 10, fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>📷 DEMO MODE</div>
             </div>
           ) : (
-            /* Clipping wrapper — zoom scales only the video feed, not the container */
-            <div style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative' }}>
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  filter: scanning ? 'brightness(0.6) saturate(1.2)' : 'brightness(1)',
+           ) saturate(1.2)' : 'brightness(1)',
                   transition: 'filter 0.3s',
                   transform: zoomLevel !== 1 ? `scale(${zoomLevel})` : 'none',
                   transformOrigin: 'center center',

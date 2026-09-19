@@ -12,7 +12,7 @@ export function getAgriProductLink(query) {
 
 export const CROP_DISEASES = [
   {
-    "crop": "Paddy / Rice (ಭತ್ತ / धान)",
+    "crop": "Paddy / Rice (ಭತ್ತ)",
     "cropKn": "ಭತ್ತ",
     "cropHi": "धान (चावल)",
     "emoji": "🌾",
@@ -82,7 +82,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Paddy / Rice (ಭತ್ತ / धान)",
+    "crop": "Paddy / Rice (ಭತ್ತ)",
     "cropKn": "ಭತ್ತ",
     "cropHi": "धान (चावल)",
     "emoji": "🌾",
@@ -145,7 +145,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Paddy / Rice (ಭತ್ತ / धान)",
+    "crop": "Paddy / Rice (ಭತ್ತ)",
     "cropKn": "ಭತ್ತ",
     "cropHi": "धान (चावल)",
     "emoji": "🌾",
@@ -208,7 +208,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Paddy / Rice (ಭತ್ತ / धान)",
+    "crop": "Paddy / Rice (ಭತ್ತ)",
     "cropKn": "ಭತ್ತ",
     "cropHi": "धान (चावल)",
     "emoji": "🌾",
@@ -271,7 +271,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Paddy / Rice (ಭತ್ತ / धान)",
+    "crop": "Paddy / Rice (ಭತ್ತ)",
     "cropKn": "ಭತ್ತ",
     "cropHi": "धान (चावल)",
     "emoji": "🌾",
@@ -334,7 +334,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Ragi / Finger Millet (ರಾಗಿ / मडुआ)",
+    "crop": "Ragi / Finger Millet (ರಾಗಿ)",
     "cropKn": "ರಾಗಿ",
     "cropHi": "रागी (मडुआ)",
     "emoji": "🌾",
@@ -397,7 +397,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Ragi / Finger Millet (ರಾಗಿ / मडुआ)",
+    "crop": "Ragi / Finger Millet (ರಾಗಿ)",
     "cropKn": "ರಾಗಿ",
     "cropHi": "रागी (मडुआ)",
     "emoji": "🌾",
@@ -460,7 +460,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Ragi / Finger Millet (ರಾಗಿ / मडुआ)",
+    "crop": "Ragi / Finger Millet (ರಾಗಿ)",
     "cropKn": "ರಾಗಿ",
     "cropHi": "रागी (मडुआ)",
     "emoji": "🌾",
@@ -516,7 +516,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Ragi / Finger Millet (ರಾಗಿ / मडुआ)",
+    "crop": "Ragi / Finger Millet (ರಾಗಿ)",
     "cropKn": "ರಾಗಿ",
     "cropHi": "रागी (मडुआ)",
     "emoji": "🌾",
@@ -572,7 +572,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Ragi / Finger Millet (ರಾಗಿ / मडुआ)",
+    "crop": "Ragi / Finger Millet (ರಾಗಿ)",
     "cropKn": "ರಾಗಿ",
     "cropHi": "रागी (मडुआ)",
     "emoji": "🌾",
@@ -628,7 +628,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Maize / Corn (ಮೆಕ್ಕೆಜೋಳ / मक्का)",
+    "crop": "Maize / Corn (ಮೆಕ್ಕೆಜೋಳ)",
     "cropKn": "ಮೆಕ್ಕೆಜೋಳ",
     "cropHi": "मक्का (भुट्टा)",
     "emoji": "🌽",
@@ -698,7 +698,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Maize / Corn (ಮೆಕ್ಕೆಜೋಳ / मक्का)",
+    "crop": "Maize / Corn (ಮೆಕ್ಕೆಜೋಳ)",
     "cropKn": "ಮೆಕ್ಕೆಜೋಳ",
     "cropHi": "मक्का (भुट्टा)",
     "emoji": "🌽",
@@ -754,7 +754,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Maize / Corn (ಮೆಕ್ಕೆಜೋಳ / मक्का)",
+    "crop": "Maize / Corn (ಮೆಕ್ಕೆಜೋಳ)",
     "cropKn": "ಮೆಕ್ಕೆಜೋಳ",
     "cropHi": "मक्का (भुट्टा)",
     "emoji": "🌽",
@@ -810,7 +810,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Maize / Corn (ಮೆಕ್ಕೆಜೋಳ / मक्का)",
+    "crop": "Maize / Corn (ಮೆಕ್ಕೆಜೋಳ)",
     "cropKn": "ಮೆಕ್ಕೆಜೋಳ",
     "cropHi": "मक्का (भुट्टा)",
     "emoji": "🌽",
@@ -866,11 +866,11 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Maize / Corn (ಮೆಕ್ಕೆಜೋಳ / मक्का)",
+    "crop": "Maize / Corn (ಮೆಕ್ಕೆಜೋಳ)",
     "cropKn": "ಮೆಕ್ಕೆಜೋಳ",
     "cropHi": "मक्का (भुट्टा)",
     "emoji": "🌽",
-    "disease": "Post-flowering Stalk Rot (Macrophomina phaseolina / Fusarium)",
+    "disease": "Post-flowering Stalk Rot (Macrophomina phaseolina)",
     "diseaseKn": "ಮೆಕ್ಕೆಜೋಳದ ಕಾಂಡ ಕೊಳೆ ರೋಗ",
     "diseaseHi": "मक्का तना सड़न रोग (पोस्ट-फ्लावरिंग स्टालक रॉट)",
     "severity": "High",
@@ -929,7 +929,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Wheat (ಗೋಧಿ / गेहूं)",
+    "crop": "Wheat (ಗೋಧಿ)",
     "cropKn": "ಗೋಧಿ",
     "cropHi": "गेहूं",
     "emoji": "🌾",
@@ -985,7 +985,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Wheat (ಗೋಧಿ / गेहूं)",
+    "crop": "Wheat (ಗೋಧಿ)",
     "cropKn": "ಗೋಧಿ",
     "cropHi": "गेहूं",
     "emoji": "🌾",
@@ -1041,7 +1041,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Wheat (ಗೋಧಿ / गेहूं)",
+    "crop": "Wheat (ಗೋಧಿ)",
     "cropKn": "ಗೋಧಿ",
     "cropHi": "गेहूं",
     "emoji": "🌾",
@@ -1097,7 +1097,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Wheat (ಗೋಧಿ / गेहूं)",
+    "crop": "Wheat (ಗೋಧಿ)",
     "cropKn": "ಗೋಧಿ",
     "cropHi": "गेहूं",
     "emoji": "🌾",
@@ -1153,7 +1153,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Wheat (ಗೋಧಿ / गेहूं)",
+    "crop": "Wheat (ಗೋಧಿ)",
     "cropKn": "ಗೋಧಿ",
     "cropHi": "गेहूं",
     "emoji": "🌾",
@@ -1209,11 +1209,11 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Jowar / Sorghum (ಜೋಳ / ज्वार)",
+    "crop": "Jowar / Sorghum (ಜೋಳ)",
     "cropKn": "ಜೋಳ",
     "cropHi": "ज्वार (सोरघम)",
     "emoji": "🌾",
-    "disease": "Grain Mold (Curvularia lunata / Fusarium moniliforme)",
+    "disease": "Grain Mold (Curvularia lunata)",
     "diseaseKn": "ಜೋಳದ ಕಾಳು ಬೂಷ್ಟು ರೋಗ",
     "diseaseHi": "ज्वार दाना फफूंद रोग (ग्रेन मोल्ड)",
     "severity": "High",
@@ -1265,7 +1265,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Jowar / Sorghum (ಜೋಳ / ज्वार)",
+    "crop": "Jowar / Sorghum (ಜೋಳ)",
     "cropKn": "ಜೋಳ",
     "cropHi": "ज्वार (सोरघम)",
     "emoji": "🌾",
@@ -1321,7 +1321,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Jowar / Sorghum (ಜೋಳ / ज्वार)",
+    "crop": "Jowar / Sorghum (ಜೋಳ)",
     "cropKn": "ಜೋಳ",
     "cropHi": "ज्वार (सोरघम)",
     "emoji": "🌾",
@@ -1377,7 +1377,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Jowar / Sorghum (ಜೋಳ / ज्वार)",
+    "crop": "Jowar / Sorghum (ಜೋಳ)",
     "cropKn": "ಜೋಳ",
     "cropHi": "ज्वार (सोरघम)",
     "emoji": "🌾",
@@ -1433,7 +1433,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Jowar / Sorghum (ಜೋಳ / ज्वार)",
+    "crop": "Jowar / Sorghum (ಜೋಳ)",
     "cropKn": "ಜೋಳ",
     "cropHi": "ज्वार (सोरघम)",
     "emoji": "🌾",
@@ -1489,7 +1489,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Cotton (ಹತ್ತಿ / कपास)",
+    "crop": "Cotton (ಹತ್ತಿ)",
     "cropKn": "ಹತ್ತಿ",
     "cropHi": "कपास (कॉटन)",
     "emoji": "🌱",
@@ -1552,7 +1552,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Cotton (ಹತ್ತಿ / कपास)",
+    "crop": "Cotton (ಹತ್ತಿ)",
     "cropKn": "ಹತ್ತಿ",
     "cropHi": "कपास (कॉटन)",
     "emoji": "🌱",
@@ -1608,7 +1608,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Cotton (ಹತ್ತಿ / कपास)",
+    "crop": "Cotton (ಹತ್ತಿ)",
     "cropKn": "ಹತ್ತಿ",
     "cropHi": "कपास (कॉटन)",
     "emoji": "🌱",
@@ -1664,7 +1664,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Cotton (ಹತ್ತಿ / कपास)",
+    "crop": "Cotton (ಹತ್ತಿ)",
     "cropKn": "ಹತ್ತಿ",
     "cropHi": "कपास (कॉटन)",
     "emoji": "🌱",
@@ -1727,7 +1727,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Cotton (ಹತ್ತಿ / कपास)",
+    "crop": "Cotton (ಹತ್ತಿ)",
     "cropKn": "ಹತ್ತಿ",
     "cropHi": "कपास (कॉटन)",
     "emoji": "🌱",
@@ -1790,7 +1790,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Sugarcane (ಕಬ್ಬು / गन्ना)",
+    "crop": "Sugarcane (ಕಬ್ಬು)",
     "cropKn": "ಕಬ್ಬು",
     "cropHi": "गन्ना (ईख)",
     "emoji": "🎋",
@@ -1853,7 +1853,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Sugarcane (ಕಬ್ಬು / गन्ना)",
+    "crop": "Sugarcane (ಕಬ್ಬು)",
     "cropKn": "ಕಬ್ಬು",
     "cropHi": "गन्ना (ईख)",
     "emoji": "🎋",
@@ -1909,7 +1909,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Sugarcane (ಕಬ್ಬು / गन्ना)",
+    "crop": "Sugarcane (ಕಬ್ಬು)",
     "cropKn": "ಕಬ್ಬು",
     "cropHi": "गन्ना (ईख)",
     "emoji": "🎋",
@@ -1965,7 +1965,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Sugarcane (ಕಬ್ಬು / गन्ना)",
+    "crop": "Sugarcane (ಕಬ್ಬು)",
     "cropKn": "ಕಬ್ಬು",
     "cropHi": "गन्ना (ईख)",
     "emoji": "🎋",
@@ -2021,7 +2021,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Sugarcane (ಕಬ್ಬು / गन्ना)",
+    "crop": "Sugarcane (ಕಬ್ಬು)",
     "cropKn": "ಕಬ್ಬು",
     "cropHi": "गन्ना (ईख)",
     "emoji": "🎋",
@@ -2077,7 +2077,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Coconut (ತೆಂಗು / नारियल)",
+    "crop": "Coconut (ತೆಂಗು)",
     "cropKn": "ತೆಂಗು",
     "cropHi": "नारियल",
     "emoji": "🥥",
@@ -2140,7 +2140,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Coconut (ತೆಂಗು / नारियल)",
+    "crop": "Coconut (ತೆಂಗು)",
     "cropKn": "ತೆಂಗು",
     "cropHi": "नारियल",
     "emoji": "🥥",
@@ -2196,12 +2196,12 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Coconut (ತೆಂಗು / नारियल)",
+    "crop": "Coconut (ತೆಂಗು)",
     "cropKn": "ತೆಂಗು",
     "cropHi": "नारियल",
     "emoji": "🥥",
     "disease": "Basal Stem Rot / Ganoderma Wilt (Ganoderma lucidum)",
-    "diseaseKn": "ಅಣಬೆ ರೋಗ (ಕಾಂಡ ಕೊಳೆ / ಗ್ಯಾನೋಡರ್ಮಾ)",
+    "diseaseKn": "ಅಣಬೆ ರೋಗ (ಕಾಂಡ ಕೊಳೆ)",
     "diseaseHi": "नारियल तना विगलन (गैनोडर्मा उकठा)",
     "severity": "High",
     "remedy": "Root feeding with Hexaconazole 5 SC @ 2% (20 mL in 100 mL water) per palm at quarterly intervals. Apply 5 kg neem cake + 50g Trichoderma harzianum to soil basin.",
@@ -2252,7 +2252,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Coconut (ತೆಂಗು / नारियल)",
+    "crop": "Coconut (ತೆಂಗು)",
     "cropKn": "ತೆಂಗು",
     "cropHi": "नारियल",
     "emoji": "🥥",
@@ -2308,7 +2308,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Coconut (ತೆಂಗು / नारियल)",
+    "crop": "Coconut (ತೆಂಗು)",
     "cropKn": "ತೆಂಗು",
     "cropHi": "नारियल",
     "emoji": "🥥",
@@ -2364,7 +2364,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Arecanut (ಅಡಿಕೆ / सुपारी)",
+    "crop": "Arecanut (ಅಡಿಕೆ)",
     "cropKn": "ಅಡಿಕೆ",
     "cropHi": "सुपारी (अरेकानट)",
     "emoji": "🌴",
@@ -2427,7 +2427,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Arecanut (ಅಡಿಕೆ / सुपारी)",
+    "crop": "Arecanut (ಅಡಿಕೆ)",
     "cropKn": "ಅಡಿಕೆ",
     "cropHi": "सुपारी (अरेकानट)",
     "emoji": "🌴",
@@ -2483,7 +2483,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Arecanut (ಅಡಿಕೆ / सुपारी)",
+    "crop": "Arecanut (ಅಡಿಕೆ)",
     "cropKn": "ಅಡಿಕೆ",
     "cropHi": "सुपारी (अरेकानट)",
     "emoji": "🌴",
@@ -2539,7 +2539,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Arecanut (ಅಡಿಕೆ / सुपारी)",
+    "crop": "Arecanut (ಅಡಿಕೆ)",
     "cropKn": "ಅಡಿಕೆ",
     "cropHi": "सुपारी (अरेकानट)",
     "emoji": "🌴",
@@ -2595,7 +2595,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Arecanut (ಅಡಿಕೆ / सुपारी)",
+    "crop": "Arecanut (ಅಡಿಕೆ)",
     "cropKn": "ಅಡಿಕೆ",
     "cropHi": "सुपारी (अरेकानट)",
     "emoji": "🌴",
@@ -2651,7 +2651,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Coffee (ಕಾಫಿ / कॉफी)",
+    "crop": "Coffee (ಕಾಫಿ)",
     "cropKn": "ಕಾಫಿ",
     "cropHi": "कॉफी",
     "emoji": "☕",
@@ -2707,7 +2707,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Coffee (ಕಾಫಿ / कॉफी)",
+    "crop": "Coffee (ಕಾಫಿ)",
     "cropKn": "ಕಾಫಿ",
     "cropHi": "कॉफी",
     "emoji": "☕",
@@ -2763,7 +2763,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Coffee (ಕಾಫಿ / कॉफी)",
+    "crop": "Coffee (ಕಾಫಿ)",
     "cropKn": "ಕಾಫಿ",
     "cropHi": "कॉफी",
     "emoji": "☕",
@@ -2819,7 +2819,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Coffee (ಕಾಫಿ / कॉफी)",
+    "crop": "Coffee (ಕಾಫಿ)",
     "cropKn": "ಕಾಫಿ",
     "cropHi": "कॉफी",
     "emoji": "☕",
@@ -2875,7 +2875,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Coffee (ಕಾಫಿ / कॉफी)",
+    "crop": "Coffee (ಕಾಫಿ)",
     "cropKn": "ಕಾಫಿ",
     "cropHi": "कॉफी",
     "emoji": "☕",
@@ -2931,7 +2931,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Black Pepper (ಕರಿಮೆಣಸು / काली मिर्च)",
+    "crop": "Black Pepper (ಕರಿಮೆಣಸು)",
     "cropKn": "ಕರಿಮೆಣಸು",
     "cropHi": "काली मिर्च (ब्लैक पेपर)",
     "emoji": "🌿",
@@ -2994,7 +2994,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Black Pepper (ಕರಿಮೆಣಸು / काली मिर्च)",
+    "crop": "Black Pepper (ಕರಿಮೆಣಸು)",
     "cropKn": "ಕರಿಮೆಣಸು",
     "cropHi": "काली मिर्च (ब्लैक पेपर)",
     "emoji": "🌿",
@@ -3050,7 +3050,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Black Pepper (ಕರಿಮೆಣಸು / काली मिर्च)",
+    "crop": "Black Pepper (ಕರಿಮೆಣಸು)",
     "cropKn": "ಕರಿಮೆಣಸು",
     "cropHi": "काली मिर्च (ब्लैक पेपर)",
     "emoji": "🌿",
@@ -3061,7 +3061,7 @@ export const CROP_DISEASES = [
     "remedy": "Spray 1% Bordeaux mixture or Carbendazim 50 WP @ 1 g/L or Mancozeb 75 WP @ 2 g/L twice during July-August berry formation.",
     "remedyKn": "ಜುಲೈ-ಆಗಸ್ಟ್ ತಿಂಗಳಲ್ಲಿ ಕಾಳು ಕಟ್ಟುವಾಗ 1% ಬೋರ್ಡೋ ಮಿಶ್ರಣ ಅಥವಾ Carbendazim 50 WP @ 1 g/L ಎರಡು ಬಾರಿ ಸಿಂಪಡಿಸಿ.",
     "remedyHi": "जुलाई-अगस्त में दाना बनते समय 1% बोर्डो मिश्रण या Carbendazim 50 WP @ 1 g/L का दो बार छिड़काव करें।",
-    "prevention": "Provide adequate sunlight to vines by regulating shade of standard trees (Silver Oak / Erythrina).",
+    "prevention": "Provide adequate sunlight to vines by regulating shade of standard trees (Silver Oak).",
     "preventionKn": "ನೆರಳು ಮರಗಳ (ಸಿಲ್ವರ್ ಓಕ್) ಕೊಂಬೆಗಳನ್ನು ಕತ್ತರಿಸಿ ಬಳ್ಳಿಗಳಿಗೆ ಸೂಕ್ತ ಸೂರ್ಯನ ಬೆಳಕು ಸಿಗುವಂತೆ ಮಾಡಿ.",
     "preventionHi": "सिल्वर ओक जैसे छायादार पेड़ों की छंटाई करके बेलों तक पर्याप्त धूप पहुंचाएं।",
     "organicTip": "Spray Pseudomonas fluorescens @ 5 g/L early in morning at fruit set.",
@@ -3106,7 +3106,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Black Pepper (ಕರಿಮೆಣಸು / काली मिर्च)",
+    "crop": "Black Pepper (ಕರಿಮೆಣಸು)",
     "cropKn": "ಕರಿಮೆಣಸು",
     "cropHi": "काली मिर्च (ब्लैक पेपर)",
     "emoji": "🌿",
@@ -3162,7 +3162,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Black Pepper (ಕರಿಮೆಣಸು / काली मिर्च)",
+    "crop": "Black Pepper (ಕರಿಮೆಣಸು)",
     "cropKn": "ಕರಿಮೆಣಸು",
     "cropHi": "काली मिर्च (ब्लैक पेपर)",
     "emoji": "🌿",
@@ -3218,7 +3218,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Tomato (ಟೊಮೇಟೊ / टमाटर)",
+    "crop": "Tomato (ಟೊಮೇಟೊ)",
     "cropKn": "ಟೊಮೇಟೊ",
     "cropHi": "टमाटर",
     "emoji": "🍅",
@@ -3281,7 +3281,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Tomato (ಟೊಮೇಟೊ / टमाटर)",
+    "crop": "Tomato (ಟೊಮೇಟೊ)",
     "cropKn": "ಟೊಮೇಟೊ",
     "cropHi": "टमाटर",
     "emoji": "🍅",
@@ -3337,7 +3337,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Tomato (ಟೊಮೇಟೊ / टमाटर)",
+    "crop": "Tomato (ಟೊಮೇಟೊ)",
     "cropKn": "ಟೊಮೇಟೊ",
     "cropHi": "टमाटर",
     "emoji": "🍅",
@@ -3351,7 +3351,7 @@ export const CROP_DISEASES = [
     "prevention": "Raise seedlings under 40-mesh insect-proof nylon nets. Install yellow sticky traps @ 25/acre.",
     "preventionKn": "40-ಮೆಶ್ ನೈಲಾನ್ ಬಲೆಯಡಿ ಸಸಿಗಳನ್ನು ಬೆಳೆಸಿ. ಎಕರೆಗೆ 25 ಹಳದಿ ಅಂಟು ಬಲೆಗಳನ್ನು ಅಳವಡಿಸಿ.",
     "preventionHi": "नर्सरी को 40-जालीदार नेट हाउस में तैयार करें। 25 पीले चिपचिपे ट्रैप प्रति एकड़ लगाएं।",
-    "organicTip": "Spray 5% neem oil emulsion weekly; use barrier crops (maize/sorghum) around tomato plot.",
+    "organicTip": "Spray 5% neem oil emulsion weekly; use barrier crops (maize) around tomato plot.",
     "organicTipKn": "ವಾರಕ್ಕೊಮ್ಮೆ ಬೇವಿನ ಎಣ್ಣೆ ಸಿಂಪಡಿಸಿ ಮತ್ತು ಹೊಲದ ಸುತ್ತಲೂ ಮೆಕ್ಕೆಜೋಳದ ಗಡಿ ಬೆಳೆ ಹಾಕಿ.",
     "organicTipHi": "साप्ताहिक रूप से नीम के तेल का छिड़काव करें और खेत के चारों ओर मक्के की बॉर्डर फसल लगाएं।",
     "fertilizer": "Foliar spray of 19:19:19 @ 4 g/L + Micronutrients to support growth of infected plants.",
@@ -3400,7 +3400,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Tomato (ಟೊಮೇಟೊ / टमाटर)",
+    "crop": "Tomato (ಟೊಮೇಟೊ)",
     "cropKn": "ಟೊಮೇಟೊ",
     "cropHi": "टमाटर",
     "emoji": "🍅",
@@ -3463,7 +3463,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Tomato (ಟೊಮೇಟೊ / टमाटर)",
+    "crop": "Tomato (ಟೊಮೇಟೊ)",
     "cropKn": "ಟೊಮೇಟೊ",
     "cropHi": "टमाटर",
     "emoji": "🍅",
@@ -3526,7 +3526,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Potato (ಆಲೂಗಡ್ಡೆ / आलू)",
+    "crop": "Potato (ಆಲೂಗಡ್ಡೆ)",
     "cropKn": "ಆಲೂಗಡ್ಡೆ",
     "cropHi": "आलू",
     "emoji": "🥔",
@@ -3568,7 +3568,7 @@ export const CROP_DISEASES = [
       {
         "name": "Cymoxanil 8% + Mancozeb 64% WP",
         "type": "chemical",
-        "brand": "Curzate (DuPont/Corteva)",
+        "brand": "Curzate (DuPont)",
         "price": "₹550 – ₹780 / 500g",
         "query": "Cymoxanil Mancozeb Curzate"
       },
@@ -3582,7 +3582,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Potato (ಆಲೂಗಡ್ಡೆ / आलू)",
+    "crop": "Potato (ಆಲೂಗಡ್ಡೆ)",
     "cropKn": "ಆಲೂಗಡ್ಡೆ",
     "cropHi": "आलू",
     "emoji": "🥔",
@@ -3638,7 +3638,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Potato (ಆಲೂಗಡ್ಡೆ / आलू)",
+    "crop": "Potato (ಆಲೂಗಡ್ಡೆ)",
     "cropKn": "ಆಲೂಗಡ್ಡೆ",
     "cropHi": "आलू",
     "emoji": "🥔",
@@ -3694,7 +3694,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Potato (ಆಲೂಗಡ್ಡೆ / आलू)",
+    "crop": "Potato (ಆಲೂಗಡ್ಡೆ)",
     "cropKn": "ಆಲೂಗಡ್ಡೆ",
     "cropHi": "आलू",
     "emoji": "🥔",
@@ -3750,7 +3750,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Potato (ಆಲೂಗಡ್ಡೆ / आलू)",
+    "crop": "Potato (ಆಲೂಗಡ್ಡೆ)",
     "cropKn": "ಆಲೂಗಡ್ಡೆ",
     "cropHi": "आलू",
     "emoji": "🥔",
@@ -3806,7 +3806,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Onion (ಈರುಳ್ಳಿ / प्याज)",
+    "crop": "Onion (ಈರುಳ್ಳಿ)",
     "cropKn": "ಈರುಳ್ಳಿ",
     "cropHi": "प्याज",
     "emoji": "🧅",
@@ -3869,7 +3869,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Onion (ಈರುಳ್ಳಿ / प्याज)",
+    "crop": "Onion (ಈರುಳ್ಳಿ)",
     "cropKn": "ಈರುಳ್ಳಿ",
     "cropHi": "प्याज",
     "emoji": "🧅",
@@ -3932,7 +3932,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Onion (ಈರುಳ್ಳಿ / प्याज)",
+    "crop": "Onion (ಈರುಳ್ಳಿ)",
     "cropKn": "ಈರುಳ್ಳಿ",
     "cropHi": "प्याज",
     "emoji": "🧅",
@@ -3988,7 +3988,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Onion (ಈರುಳ್ಳಿ / प्याज)",
+    "crop": "Onion (ಈರುಳ್ಳಿ)",
     "cropKn": "ಈರುಳ್ಳಿ",
     "cropHi": "प्याज",
     "emoji": "🧅",
@@ -4044,7 +4044,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Onion (ಈರುಳ್ಳಿ / प्याज)",
+    "crop": "Onion (ಈರುಳ್ಳಿ)",
     "cropKn": "ಈರುಳ್ಳಿ",
     "cropHi": "प्याज",
     "emoji": "🧅",
@@ -4100,7 +4100,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Chilli (ಮೆಣಸಿನಕಾಯಿ / मिर्च)",
+    "crop": "Chilli (ಮೆಣಸಿನಕಾಯಿ)",
     "cropKn": "ಮೆಣಸಿನಕಾಯಿ",
     "cropHi": "मिर्च (चिल्ली)",
     "emoji": "🌶️",
@@ -4163,7 +4163,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Chilli (ಮೆಣಸಿನಕಾಯಿ / मिर्च)",
+    "crop": "Chilli (ಮೆಣಸಿನಕಾಯಿ)",
     "cropKn": "ಮೆಣಸಿನಕಾಯಿ",
     "cropHi": "मिर्च (चिल्ली)",
     "emoji": "🌶️",
@@ -4219,7 +4219,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Chilli (ಮೆಣಸಿನಕಾಯಿ / मिर्च)",
+    "crop": "Chilli (ಮೆಣಸಿನಕಾಯಿ)",
     "cropKn": "ಮೆಣಸಿನಕಾಯಿ",
     "cropHi": "मिर्च (चिल्ली)",
     "emoji": "🌶️",
@@ -4268,14 +4268,14 @@ export const CROP_DISEASES = [
       {
         "name": "Myclobutanil 10 WP",
         "type": "chemical",
-        "brand": "Systhane (Dow/Rallis)",
+        "brand": "Systhane (Dow)",
         "price": "₹380 – ₹520 / 100g",
         "query": "Myclobutanil 10 WP Systhane"
       }
     ]
   },
   {
-    "crop": "Chilli (ಮೆಣಸಿನಕಾಯಿ / मिर्च)",
+    "crop": "Chilli (ಮೆಣಸಿನಕಾಯಿ)",
     "cropKn": "ಮೆಣಸಿನಕಾಯಿ",
     "cropHi": "मिर्च (चिल्ली)",
     "emoji": "🌶️",
@@ -4331,7 +4331,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Chilli (ಮೆಣಸಿನಕಾಯಿ / मिर्च)",
+    "crop": "Chilli (ಮೆಣಸಿನಕಾಯಿ)",
     "cropKn": "ಮೆಣಸಿನಕಾಯಿ",
     "cropHi": "मिर्च (चिल्ली)",
     "emoji": "🌶️",
@@ -4387,7 +4387,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Brinjal / Eggplant (ಬದನೆಕಾಯಿ / बैंगन)",
+    "crop": "Brinjal / Eggplant (ಬದನೆಕಾಯಿ)",
     "cropKn": "ಬದನೆಕಾಯಿ",
     "cropHi": "बैंगन (ब्रिंजल)",
     "emoji": "🍆",
@@ -4436,7 +4436,7 @@ export const CROP_DISEASES = [
       {
         "name": "Spinosad 45 SC",
         "type": "chemical",
-        "brand": "Tracer (Dow/Corteva)",
+        "brand": "Tracer (Dow)",
         "price": "₹950 – ₹1,350 / 75mL",
         "query": "Spinosad 45 SC Tracer"
       },
@@ -4450,7 +4450,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Brinjal / Eggplant (ಬದನೆಕಾಯಿ / बैंगन)",
+    "crop": "Brinjal / Eggplant (ಬದನೆಕಾಯಿ)",
     "cropKn": "ಬದನೆಕಾಯಿ",
     "cropHi": "बैंगन (ब्रिंजल)",
     "emoji": "🍆",
@@ -4506,7 +4506,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Brinjal / Eggplant (ಬದನೆಕಾಯಿ / बैंगन)",
+    "crop": "Brinjal / Eggplant (ಬದನೆಕಾಯಿ)",
     "cropKn": "ಬದನೆಕಾಯಿ",
     "cropHi": "बैंगन (ब्रिंजल)",
     "emoji": "🍆",
@@ -4562,7 +4562,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Brinjal / Eggplant (ಬದನೆಕಾಯಿ / बैंगन)",
+    "crop": "Brinjal / Eggplant (ಬದನೆಕಾಯಿ)",
     "cropKn": "ಬದನೆಕಾಯಿ",
     "cropHi": "बैंगन (ब्रिंजल)",
     "emoji": "🍆",
@@ -4618,11 +4618,11 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Brinjal / Eggplant (ಬದನೆಕಾಯಿ / बैंगन)",
+    "crop": "Brinjal / Eggplant (ಬದನೆಕಾಯಿ)",
     "cropKn": "ಬದನೆಕಾಯಿ",
     "cropHi": "बैंगन (ब्रिंजल)",
     "emoji": "🍆",
-    "disease": "Brinjal Damping Off (Pythium debaryanum / Rhizoctonia solani)",
+    "disease": "Brinjal Damping Off (Pythium debaryanum)",
     "diseaseKn": "ಬದನೆ ಸಸಿ ಮಡಿ ಕೊಳೆ ರೋಗ",
     "diseaseHi": "बैंगन आर्द्र-पतन (डैम्पिंग ऑफ / नर्सरी सड़न)",
     "severity": "High",
@@ -4674,7 +4674,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Banana (ಬಾಳೆ / केला)",
+    "crop": "Banana (ಬಾಳೆ)",
     "cropKn": "ಬಾಳೆ",
     "cropHi": "केला (बनाना)",
     "emoji": "🍌",
@@ -4737,11 +4737,11 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Banana (ಬಾಳೆ / केला)",
+    "crop": "Banana (ಬಾಳೆ)",
     "cropKn": "ಬಾಳೆ",
     "cropHi": "केला (बनाना)",
     "emoji": "🍌",
-    "disease": "Sigatoka Leaf Spot (Pseudocercospora fijiensis / musae)",
+    "disease": "Sigatoka Leaf Spot (Pseudocercospora fijiensis)",
     "diseaseKn": "ಬಾಳೆ ಸಿಗಟೋಕ ಎಲೆ ಚುಕ್ಕೆ ರೋಗ",
     "diseaseHi": "केला सिगाटोका पर्ण चित्ती रोग (सिगाटोका लीफ स्पॉट)",
     "severity": "High",
@@ -4793,7 +4793,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Banana (ಬಾಳೆ / केला)",
+    "crop": "Banana (ಬಾಳೆ)",
     "cropKn": "ಬಾಳೆ",
     "cropHi": "केला (बनाना)",
     "emoji": "🍌",
@@ -4849,7 +4849,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Banana (ಬಾಳೆ / केला)",
+    "crop": "Banana (ಬಾಳೆ)",
     "cropKn": "ಬಾಳೆ",
     "cropHi": "केला (बनाना)",
     "emoji": "🍌",
@@ -4857,7 +4857,7 @@ export const CROP_DISEASES = [
     "diseaseKn": "ಬಾಳೆ ಗೆಡ್ಡೆ ಕೊರೆಯುವ ಹುಳು (ರೈಜೋಮ್ ವೀವಿಲ್)",
     "diseaseHi": "केला प्रकंद घुन (कंद छेदक / राइजोम वीविल)",
     "severity": "High",
-    "remedy": "Pare suckers (trim outer roots/corm) and dip in Chlorpyrifos 20 EC @ 2.5 mL/L for 20 minutes before planting. Apply Fipronil 0.3% GR @ 20 g/plant or Chlorpyrifos 20 EC @ 3 mL/L around base.",
+    "remedy": "Pare suckers (trim outer roots) and dip in Chlorpyrifos 20 EC @ 2.5 mL/L for 20 minutes before planting. Apply Fipronil 0.3% GR @ 20 g/plant or Chlorpyrifos 20 EC @ 3 mL/L around base.",
     "remedyKn": "ನಾಟಿಗೆ ಮುನ್ನ ಗೆಡ್ಡೆಯ ಬೇರು ಮತ್ತು ಮೇಲ್ಪದರ ಕತ್ತರಿಸಿ Chlorpyrifos @ 2.5 mL/L ನಲ್ಲಿ 20 ನಿಮಿಷ ನೆನೆಸಿ. ಗಿಡದ ಬುಡಕ್ಕೆ Fipronil 0.3% GR @ 20g ಹಾಕಿ.",
     "remedyHi": "कंदों की छिलाई करके Chlorpyrifos @ 2.5 mL/L में 20 मिनट डुबोएं। पौधों के आधार पर Fipronil 0.3% GR @ 20g डालें।",
     "prevention": "Use disc-on-stump pseudostem traps (split pseudostem pieces laid on ground) to attract and destroy adult weevils manually.",
@@ -4905,7 +4905,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Banana (ಬಾಳೆ / केला)",
+    "crop": "Banana (ಬಾಳೆ)",
     "cropKn": "ಬಾಳೆ",
     "cropHi": "केला (बनाना)",
     "emoji": "🍌",
@@ -4961,7 +4961,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Mango (ಮಾವು / आम)",
+    "crop": "Mango (ಮಾವು)",
     "cropKn": "ಮಾವು",
     "cropHi": "आम (मैंगो)",
     "emoji": "🥭",
@@ -5017,7 +5017,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Mango (ಮಾವು / आम)",
+    "crop": "Mango (ಮಾವು)",
     "cropKn": "ಮಾವು",
     "cropHi": "आम (मैंगो)",
     "emoji": "🥭",
@@ -5073,11 +5073,11 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Mango (ಮಾವು / आम)",
+    "crop": "Mango (ಮಾವು)",
     "cropKn": "ಮಾವು",
     "cropHi": "आम (मैंगो)",
     "emoji": "🥭",
-    "disease": "Mango Hopper (Amritodus atkinsoni / Idioscopus niveosparsus)",
+    "disease": "Mango Hopper (Amritodus atkinsoni)",
     "diseaseKn": "ಮಾವಿನ ಜಿಗಿಹುಳು",
     "diseaseHi": "आम का फुदका (मैंगो हॉपर)",
     "severity": "High",
@@ -5129,7 +5129,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Mango (ಮಾವು / आम)",
+    "crop": "Mango (ಮಾವು)",
     "cropKn": "ಮಾವು",
     "cropHi": "आम (मैंगो)",
     "emoji": "🥭",
@@ -5185,7 +5185,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Mango (ಮಾವು / आम)",
+    "crop": "Mango (ಮಾವು)",
     "cropKn": "ಮಾವು",
     "cropHi": "आम (मैंगो)",
     "emoji": "🥭",
@@ -5241,7 +5241,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Pomegranate (ದಾಳಿಂಬೆ / अनार)",
+    "crop": "Pomegranate (ದಾಳಿಂಬೆ)",
     "cropKn": "ದಾಳಿಂಬೆ",
     "cropHi": "अनार (पोमोग्रेनेट)",
     "emoji": "🍎",
@@ -5304,7 +5304,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Pomegranate (ದಾಳಿಂಬೆ / अनार)",
+    "crop": "Pomegranate (ದಾಳಿಂಬೆ)",
     "cropKn": "ದಾಳಿಂಬೆ",
     "cropHi": "अनार (पोमोग्रेनेट)",
     "emoji": "🍎",
@@ -5367,7 +5367,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Pomegranate (ದಾಳಿಂಬೆ / अनार)",
+    "crop": "Pomegranate (ದಾಳಿಂಬೆ)",
     "cropKn": "ದಾಳಿಂಬೆ",
     "cropHi": "अनार (पोमोग्रेनेट)",
     "emoji": "🍎",
@@ -5423,7 +5423,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Pomegranate (ದಾಳಿಂಬೆ / अनार)",
+    "crop": "Pomegranate (ದಾಳಿಂಬೆ)",
     "cropKn": "ದಾಳಿಂಬೆ",
     "cropHi": "अनार (पोमोग्रेनेट)",
     "emoji": "🍎",
@@ -5479,7 +5479,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Pomegranate (ದಾಳಿಂಬೆ / अनार)",
+    "crop": "Pomegranate (ದಾಳಿಂಬೆ)",
     "cropKn": "ದಾಳಿಂಬೆ",
     "cropHi": "अनार (पोमोग्रेनेट)",
     "emoji": "🍎",
@@ -5535,7 +5535,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Groundnut (ಕಡಲೆಕಾಯಿ / मूंगफली)",
+    "crop": "Groundnut (ಕಡಲೆಕಾಯಿ)",
     "cropKn": "ಕಡಲೆಕಾಯಿ",
     "cropHi": "मूंगफली (ग्राउंडनट)",
     "emoji": "🥜",
@@ -5552,7 +5552,7 @@ export const CROP_DISEASES = [
     "organicTip": "Foliar spray of 5% neem seed kernel extract (NSKE) or Pseudomonas fluorescens @ 5 g/L.",
     "organicTipKn": "5% ಬೇವಿನ ಕಷಾಯ (NSKE) ಅಥವಾ Pseudomonas fluorescens @ 5 g/L ಸಿಂಪಡಿಸಿ.",
     "organicTipHi": "5% नीम के बीज का अर्क या Pseudomonas fluorescens @ 5 g/L का छिड़काव करें।",
-    "fertilizer": "Apply Gypsum @ 200 kg/acre at 40–45 days (flowering/pegging) to strengthen pod shells.",
+    "fertilizer": "Apply Gypsum @ 200 kg/acre at 40–45 days (flowering) to strengthen pod shells.",
     "fertilizerKn": "ಕಾಯಿ ಕಟ್ಟುವ ಹಂತದಲ್ಲಿ (40-45 ದಿನಗಳಲ್ಲಿ) ಎಕರೆಗೆ 200 kg ಜಿಪ್ಸಮ್ (Gypsum) ಗೊಬ್ಬರ ನೀಡಿ.",
     "fertilizerHi": "सुईयां बनते समय (40-45 दिन पर) 200 kg जिप्सम प्रति एकड़ डालें ताकि फलियां मजबूत बनें।",
     "scheme": "National Food Security Mission - Oilseeds (NFSM-OS)",
@@ -5598,7 +5598,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Groundnut (ಕಡಲೆಕಾಯಿ / मूंगफली)",
+    "crop": "Groundnut (ಕಡಲೆಕಾಯಿ)",
     "cropKn": "ಕಡಲೆಕಾಯಿ",
     "cropHi": "मूंगफली (ग्राउंडनट)",
     "emoji": "🥜",
@@ -5654,7 +5654,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Groundnut (ಕಡಲೆಕಾಯಿ / मूंगफली)",
+    "crop": "Groundnut (ಕಡಲೆಕಾಯಿ)",
     "cropKn": "ಕಡಲೆಕಾಯಿ",
     "cropHi": "मूंगफली (ग्राउंडनट)",
     "emoji": "🥜",
@@ -5710,7 +5710,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Groundnut (ಕಡಲೆಕಾಯಿ / मूंगफली)",
+    "crop": "Groundnut (ಕಡಲೆಕಾಯಿ)",
     "cropKn": "ಕಡಲೆಕಾಯಿ",
     "cropHi": "मूंगफली (ग्राउंडनट)",
     "emoji": "🥜",
@@ -5766,7 +5766,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Groundnut (ಕಡಲೆಕಾಯಿ / मूंगफली)",
+    "crop": "Groundnut (ಕಡಲೆಕಾಯಿ)",
     "cropKn": "ಕಡಲೆಕಾಯಿ",
     "cropHi": "मूंगफली (ग्राउंडनट)",
     "emoji": "🥜",
@@ -5822,7 +5822,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Sunflower (ಸೂರ್ಯಕಾಂತಿ / सूरजमुखी)",
+    "crop": "Sunflower (ಸೂರ್ಯಕಾಂತಿ)",
     "cropKn": "ಸೂರ್ಯಕಾಂತಿ",
     "cropHi": "सूरजमुखी",
     "emoji": "🌻",
@@ -5878,7 +5878,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Sunflower (ಸೂರ್ಯಕಾಂತಿ / सूरजमुखी)",
+    "crop": "Sunflower (ಸೂರ್ಯಕಾಂತಿ)",
     "cropKn": "ಸೂರ್ಯಕಾಂತಿ",
     "cropHi": "सूरजमुखी",
     "emoji": "🌻",
@@ -5934,7 +5934,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Sunflower (ಸೂರ್ಯಕಾಂತಿ / सूरजमुखी)",
+    "crop": "Sunflower (ಸೂರ್ಯಕಾಂತಿ)",
     "cropKn": "ಸೂರ್ಯಕಾಂತಿ",
     "cropHi": "सूरजमुखी",
     "emoji": "🌻",
@@ -5990,7 +5990,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Sunflower (ಸೂರ್ಯಕಾಂತಿ / सूरजमुखी)",
+    "crop": "Sunflower (ಸೂರ್ಯಕಾಂತಿ)",
     "cropKn": "ಸೂರ್ಯಕಾಂತಿ",
     "cropHi": "सूरजमुखी",
     "emoji": "🌻",
@@ -6046,7 +6046,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Sunflower (ಸೂರ್ಯಕಾಂತಿ / सूरजमुखी)",
+    "crop": "Sunflower (ಸೂರ್ಯಕಾಂತಿ)",
     "cropKn": "ಸೂರ್ಯಕಾಂತಿ",
     "cropHi": "सूरजमुखी",
     "emoji": "🌻",
@@ -6054,10 +6054,10 @@ export const CROP_DISEASES = [
     "diseaseKn": "ಸೂರ್ಯಕಾಂತಿ ನೆಕ್ರೋಸಿಸ್ ರೋಗ (ಟಿಎಸ್‌ವಿ)",
     "diseaseHi": "सूरजमुखी परिगलन रोग (नेक्रोसिस वायरस - टीएसवी)",
     "severity": "High",
-    "remedy": "Control thrips vector (Scirtothrips dorsalis / Frankliniella) by spraying Imidacloprid 17.8 SL @ 0.5 mL/L or Fipronil 5 SC @ 1.5 mL/L at 15 and 30 days after emergence.",
+    "remedy": "Control thrips vector (Scirtothrips dorsalis) by spraying Imidacloprid 17.8 SL @ 0.5 mL/L or Fipronil 5 SC @ 1.5 mL/L at 15 and 30 days after emergence.",
     "remedyKn": "ಥ್ರಿಪ್ಸ್ ನಿಯಂತ್ರಣಕ್ಕೆ Imidacloprid 17.8 SL @ 0.5 mL/L ಅಥವಾ Fipronil 5 SC @ 1.5 mL/L ಸಿಂಪಡಿಸಿ. ರೋಗಪೀಡಿತ ಗಿಡಗಳನ್ನು ಕಿತ್ತುಹಾಕಿ.",
     "remedyHi": "थ्रिप्स की रोकथाम के लिए Imidacloprid 17.8 SL @ 0.5 mL/L या Fipronil 5 SC @ 1.5 mL/L का छिड़काव करें।",
-    "prevention": "Destroy weed hosts like Parthenium hysterophorus around fields. Grow border crops (sorghum/pearl millet).",
+    "prevention": "Destroy weed hosts like Parthenium hysterophorus around fields. Grow border crops (sorghum).",
     "preventionKn": "ಹೊಲದ ಸುತ್ತಮುತ್ತಲಿರುವ ಕಾಂಗ್ರೆಸ್ ಕಳೆ (ಪಾರ್ಥೇನಿಯಂ) ಗಿಡಗಳನ್ನು ಸಂಪೂರ್ಣ ನಾಶಮಾಡಿ. ಗಡಿಯಲ್ಲಿ ಜೋಳ ಅಥವಾ ಸಜ್ಜೆ ಬೆಳೆಯಿರಿ.",
     "preventionHi": "खेत के चारों ओर से गाजरघास (पार्थेनियम) नष्ट करें। बॉर्डर पर ज्वार या बाजरा लगाएं।",
     "organicTip": "Foliar spray of 5% neem seed kernel extract (NSKE) + blue sticky traps @ 20/acre.",
@@ -6102,7 +6102,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Soybean (ಸೋಯಾಬೀನ್ / सोयाबीन)",
+    "crop": "Soybean (ಸೋಯಾಬೀನ್)",
     "cropKn": "ಸೋಯಾಬೀನ್",
     "cropHi": "सोयाबीन",
     "emoji": "🌱",
@@ -6158,7 +6158,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Soybean (ಸೋಯಾಬೀನ್ / सोयाबीन)",
+    "crop": "Soybean (ಸೋಯಾಬೀನ್)",
     "cropKn": "ಸೋಯಾಬೀನ್",
     "cropHi": "सोयाबीन",
     "emoji": "🌱",
@@ -6214,7 +6214,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Soybean (ಸೋಯಾಬೀನ್ / सोयाबीन)",
+    "crop": "Soybean (ಸೋಯಾಬೀನ್)",
     "cropKn": "ಸೋಯಾಬೀನ್",
     "cropHi": "सोयाबीन",
     "emoji": "🌱",
@@ -6270,7 +6270,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Soybean (ಸೋಯಾಬೀನ್ / सोयाबीन)",
+    "crop": "Soybean (ಸೋಯಾಬೀನ್)",
     "cropKn": "ಸೋಯಾಬೀನ್",
     "cropHi": "सोयाबीन",
     "emoji": "🌱",
@@ -6326,7 +6326,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Soybean (ಸೋಯಾಬೀನ್ / सोयाबीन)",
+    "crop": "Soybean (ಸೋಯಾಬೀನ್)",
     "cropKn": "ಸೋಯಾಬೀನ್",
     "cropHi": "सोयाबीन",
     "emoji": "🌱",
@@ -6382,7 +6382,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Chickpea / Bengal Gram (ಕಡಲೆ / चना)",
+    "crop": "Chickpea / Bengal Gram (ಕಡಲೆ)",
     "cropKn": "ಕಡಲೆ",
     "cropHi": "चना (बंगाल ग्राम)",
     "emoji": "🌱",
@@ -6438,7 +6438,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Chickpea / Bengal Gram (ಕಡಲೆ / चना)",
+    "crop": "Chickpea / Bengal Gram (ಕಡಲೆ)",
     "cropKn": "ಕಡಲೆ",
     "cropHi": "चना (बंगाल ग्राम)",
     "emoji": "🌱",
@@ -6494,11 +6494,11 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Chickpea / Bengal Gram (ಕಡಲೆ / चना)",
+    "crop": "Chickpea / Bengal Gram (ಕಡಲೆ)",
     "cropKn": "ಕಡಲೆ",
     "cropHi": "चना (बंगाल ग्राम)",
     "emoji": "🌱",
-    "disease": "Dry Root Rot (Rhizoctonia bataticola / Macrophomina)",
+    "disease": "Dry Root Rot (Rhizoctonia bataticola)",
     "diseaseKn": "ಕಡಲೆ ಒಣ ಬೇರು ಕೊಳೆ ರೋಗ",
     "diseaseHi": "चना शुष्क जड़ सड़न (ड्राई रूट रॉट)",
     "severity": "High",
@@ -6550,7 +6550,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Chickpea / Bengal Gram (ಕಡಲೆ / चना)",
+    "crop": "Chickpea / Bengal Gram (ಕಡಲೆ)",
     "cropKn": "ಕಡಲೆ",
     "cropHi": "चना (बंगाल ग्राम)",
     "emoji": "🌱",
@@ -6613,7 +6613,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Chickpea / Bengal Gram (ಕಡಲೆ / चना)",
+    "crop": "Chickpea / Bengal Gram (ಕಡಲೆ)",
     "cropKn": "ಕಡಲೆ",
     "cropHi": "चना (बंगाल ग्राम)",
     "emoji": "🌱",
@@ -6669,7 +6669,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Mung Bean / Green Gram (ಹೆಸರುಕಾಳು / मूंग)",
+    "crop": "Mung Bean / Green Gram (ಹೆಸರುಕಾಳು)",
     "cropKn": "ಹೆಸರುಕಾಳು",
     "cropHi": "मूंग (हरा चना)",
     "emoji": "🌱",
@@ -6732,7 +6732,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Mung Bean / Green Gram (ಹೆಸರುಕಾಳು / मूंग)",
+    "crop": "Mung Bean / Green Gram (ಹೆಸರುಕಾಳು)",
     "cropKn": "ಹೆಸರುಕಾಳು",
     "cropHi": "मूंग (हरा चना)",
     "emoji": "🌱",
@@ -6788,7 +6788,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Mung Bean / Green Gram (ಹೆಸರುಕಾಳು / मूंग)",
+    "crop": "Mung Bean / Green Gram (ಹೆಸರುಕಾಳು)",
     "cropKn": "ಹೆಸರುಕಾಳು",
     "cropHi": "मूंग (हरा चना)",
     "emoji": "🌱",
@@ -6844,7 +6844,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Mung Bean / Green Gram (ಹೆಸರುಕಾಳು / मूंग)",
+    "crop": "Mung Bean / Green Gram (ಹೆಸರುಕಾಳು)",
     "cropKn": "ಹೆಸರುಕಾಳು",
     "cropHi": "मूंग (हरा चना)",
     "emoji": "🌱",
@@ -6900,7 +6900,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-    "crop": "Mung Bean / Green Gram (ಹೆಸರುಕಾಳು / मूंग)",
+    "crop": "Mung Bean / Green Gram (ಹೆಸರುಕಾಳು)",
     "cropKn": "ಹೆಸರುಕಾಳು",
     "cropHi": "मूंग (हरा चना)",
     "emoji": "🌱",
@@ -6956,7 +6956,7 @@ export const CROP_DISEASES = [
     ]
   },
   {
-  "crop": "Ginger (ಶುಂಠಿ / अदरक)",
+  "crop": "Ginger (ಶುಂಠಿ)",
   "cropKn": "ಶುಂಠಿ",
   "cropHi": "अदरक",
   "emoji": "🫚",
@@ -7019,7 +7019,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Ginger (ಶುಂಠಿ / अदरक)",
+  "crop": "Ginger (ಶುಂಠಿ)",
   "cropKn": "ಶುಂಠಿ",
   "cropHi": "अदरक",
   "emoji": "🫚",
@@ -7075,7 +7075,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Ginger (ಶುಂಠಿ / अदरक)",
+  "crop": "Ginger (ಶುಂಠಿ)",
   "cropKn": "ಶುಂಠಿ",
   "cropHi": "अदरक",
   "emoji": "🫚",
@@ -7131,7 +7131,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Ginger (ಶುಂಠಿ / अदरक)",
+  "crop": "Ginger (ಶುಂಠಿ)",
   "cropKn": "ಶುಂಠಿ",
   "cropHi": "अदरक",
   "emoji": "🫚",
@@ -7187,7 +7187,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Ginger (ಶುಂಠಿ / अदरक)",
+  "crop": "Ginger (ಶುಂಠಿ)",
   "cropKn": "ಶುಂಠಿ",
   "cropHi": "अदरक",
   "emoji": "🫚",
@@ -7243,7 +7243,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Turmeric (ಅರಿಶಿನ / हल्दी)",
+  "crop": "Turmeric (ಅರಿಶಿನ)",
   "cropKn": "ಅರಿಶಿನ",
   "cropHi": "हल्दी",
   "emoji": "🌿",
@@ -7306,7 +7306,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Turmeric (ಅರಿಶಿನ / हल्दी)",
+  "crop": "Turmeric (ಅರಿಶಿನ)",
   "cropKn": "ಅರಿಶಿನ",
   "cropHi": "हल्दी",
   "emoji": "🌿",
@@ -7362,7 +7362,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Turmeric (ಅರಿಶಿನ / हल्दी)",
+  "crop": "Turmeric (ಅರಿಶಿನ)",
   "cropKn": "ಅರಿಶಿನ",
   "cropHi": "हल्दी",
   "emoji": "🌿",
@@ -7418,7 +7418,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Turmeric (ಅರಿಶಿನ / हल्दी)",
+  "crop": "Turmeric (ಅರಿಶಿನ)",
   "cropKn": "ಅರಿಶಿನ",
   "cropHi": "हल्दी",
   "emoji": "🌿",
@@ -7474,7 +7474,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Turmeric (ಅರಿಶಿನ / हल्दी)",
+  "crop": "Turmeric (ಅರಿಶಿನ)",
   "cropKn": "ಅರಿಶಿನ",
   "cropHi": "हल्दी",
   "emoji": "🌿",
@@ -7530,7 +7530,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Cardamom (ಏಲಕ್ಕಿ / इलायची)",
+  "crop": "Cardamom (ಏಲಕ್ಕಿ)",
   "cropKn": "ಏಲಕ್ಕಿ",
   "cropHi": "इलायची",
   "emoji": "🌱",
@@ -7586,7 +7586,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Cardamom (ಏಲಕ್ಕಿ / इलायची)",
+  "crop": "Cardamom (ಏಲಕ್ಕಿ)",
   "cropKn": "ಏಲಕ್ಕಿ",
   "cropHi": "इलायची",
   "emoji": "🌱",
@@ -7642,7 +7642,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Cardamom (ಏಲಕ್ಕಿ / इलायची)",
+  "crop": "Cardamom (ಏಲಕ್ಕಿ)",
   "cropKn": "ಏಲಕ್ಕಿ",
   "cropHi": "इलायची",
   "emoji": "🌱",
@@ -7698,7 +7698,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Cardamom (ಏಲಕ್ಕಿ / इलायची)",
+  "crop": "Cardamom (ಏಲಕ್ಕಿ)",
   "cropKn": "ಏಲಕ್ಕಿ",
   "cropHi": "इलायची",
   "emoji": "🌱",
@@ -7754,11 +7754,11 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Cardamom (ಏಲಕ್ಕಿ / इलायची)",
+  "crop": "Cardamom (ಏಲಕ್ಕಿ)",
   "cropKn": "ಏಲಕ್ಕಿ",
   "cropHi": "इलायची",
   "emoji": "🌱",
-  "disease": "Rhizome Rot / Clump Rot (Pythium vexans / Rhizoctonia solani)",
+  "disease": "Rhizome Rot / Clump Rot (Pythium vexans)",
   "diseaseKn": "ಗೆಡ್ಡೆ ಕೊಳೆ ರೋಗ / ಕ್ಲಂಪ್ ರಫ್",
   "diseaseHi": "प्रकंद विगलन / क्लंप रॉट",
   "severity": "High",
@@ -7810,7 +7810,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Papaya (ಪರಂಗಿ / पपीता)",
+  "crop": "Papaya (ಪರಂಗಿ)",
   "cropKn": "ಪರಂಗಿ",
   "cropHi": "पपीता",
   "emoji": "🍈",
@@ -7866,7 +7866,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Papaya (ಪರಂಗಿ / पपीता)",
+  "crop": "Papaya (ಪರಂಗಿ)",
   "cropKn": "ಪರಂಗಿ",
   "cropHi": "पपीता",
   "emoji": "🍈",
@@ -7922,7 +7922,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Papaya (ಪರಂಗಿ / पपीता)",
+  "crop": "Papaya (ಪರಂಗಿ)",
   "cropKn": "ಪರಂಗಿ",
   "cropHi": "पपीता",
   "emoji": "🍈",
@@ -7978,7 +7978,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Papaya (ಪರಂಗಿ / पपीತಾ)",
+  "crop": "Papaya (ಪರಂಗಿ)",
   "cropKn": "ಪರಂಗಿ",
   "cropHi": "पपीता",
   "emoji": "🍈",
@@ -8034,7 +8034,7 @@ export const CROP_DISEASES = [
   ]
 },
   {
-  "crop": "Papaya (ಪರಂಗಿ / पपीता)",
+  "crop": "Papaya (ಪರಂಗಿ)",
   "cropKn": "ಪರಂಗಿ",
   "cropHi": "पपीता",
   "emoji": "🍈",
@@ -8093,7 +8093,7 @@ export const CROP_DISEASES = [
 
 export const demoCards = [
   {
-    "crop": "Paddy / Rice (ಭತ್ತ / धान)",
+    "crop": "Paddy / Rice (ಭತ್ತ)",
     "cropKn": "ಭತ್ತ",
     "cropHi": "धान (चावल)",
     "disease": "Blast Disease (Pyricularia oryzae)",
@@ -8164,7 +8164,7 @@ export const demoCards = [
     ]
   },
   {
-    "crop": "Tomato (ಟೊಮೇಟೊ / टमाटर)",
+    "crop": "Tomato (ಟೊಮೇಟೊ)",
     "cropKn": "ಟೊಮೇಟೊ",
     "cropHi": "टमाटर",
     "disease": "Late Blight (Phytophthora infestans)",
@@ -8235,7 +8235,7 @@ export const demoCards = [
     ]
   },
   {
-  "crop": "Ginger (ಶುಂಠಿ / अदरक)",
+  "crop": "Ginger (ಶುಂಠಿ)",
   "cropKn": "ಶುಂಠಿ",
   "cropHi": "अदरक",
   "emoji": "🫚",
@@ -8298,7 +8298,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Ginger (ಶುಂಠಿ / अदरक)",
+  "crop": "Ginger (ಶುಂಠಿ)",
   "cropKn": "ಶುಂಠಿ",
   "cropHi": "अदरक",
   "emoji": "🫚",
@@ -8354,7 +8354,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Ginger (ಶುಂಠಿ / अदरक)",
+  "crop": "Ginger (ಶುಂಠಿ)",
   "cropKn": "ಶುಂಠಿ",
   "cropHi": "अदरक",
   "emoji": "🫚",
@@ -8410,7 +8410,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Ginger (ಶುಂಠಿ / अदरक)",
+  "crop": "Ginger (ಶುಂಠಿ)",
   "cropKn": "ಶುಂಠಿ",
   "cropHi": "अदरक",
   "emoji": "🫚",
@@ -8466,7 +8466,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Ginger (ಶುಂಠಿ / अदरक)",
+  "crop": "Ginger (ಶುಂಠಿ)",
   "cropKn": "ಶುಂಠಿ",
   "cropHi": "अदरक",
   "emoji": "🫚",
@@ -8522,7 +8522,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Turmeric (ಅರಿಶಿನ / हल्दी)",
+  "crop": "Turmeric (ಅರಿಶಿನ)",
   "cropKn": "ಅರಿಶಿನ",
   "cropHi": "हल्दी",
   "emoji": "🌿",
@@ -8585,7 +8585,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Turmeric (ಅರಿಶಿನ / हल्दी)",
+  "crop": "Turmeric (ಅರಿಶಿನ)",
   "cropKn": "ಅರಿಶಿನ",
   "cropHi": "हल्दी",
   "emoji": "🌿",
@@ -8641,7 +8641,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Turmeric (ಅರಿಶಿನ / हल्दी)",
+  "crop": "Turmeric (ಅರಿಶಿನ)",
   "cropKn": "ಅರಿಶಿನ",
   "cropHi": "हल्दी",
   "emoji": "🌿",
@@ -8697,7 +8697,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Turmeric (ಅರಿಶಿನ / हल्दी)",
+  "crop": "Turmeric (ಅರಿಶಿನ)",
   "cropKn": "ಅರಿಶಿನ",
   "cropHi": "हल्दी",
   "emoji": "🌿",
@@ -8753,7 +8753,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Turmeric (ಅರಿಶಿನ / हल्दी)",
+  "crop": "Turmeric (ಅರಿಶಿನ)",
   "cropKn": "ಅರಿಶಿನ",
   "cropHi": "हल्दी",
   "emoji": "🌿",
@@ -8809,7 +8809,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Cardamom (ಏಲಕ್ಕಿ / इलायची)",
+  "crop": "Cardamom (ಏಲಕ್ಕಿ)",
   "cropKn": "ಏಲಕ್ಕಿ",
   "cropHi": "इलायची",
   "emoji": "🌱",
@@ -8865,7 +8865,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Cardamom (ಏಲಕ್ಕಿ / इलायची)",
+  "crop": "Cardamom (ಏಲಕ್ಕಿ)",
   "cropKn": "ಏಲಕ್ಕಿ",
   "cropHi": "इलायची",
   "emoji": "🌱",
@@ -8921,7 +8921,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Cardamom (ಏಲಕ್ಕಿ / इलायची)",
+  "crop": "Cardamom (ಏಲಕ್ಕಿ)",
   "cropKn": "ಏಲಕ್ಕಿ",
   "cropHi": "इलायची",
   "emoji": "🌱",
@@ -8977,7 +8977,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Cardamom (ಏಲಕ್ಕಿ / इलायची)",
+  "crop": "Cardamom (ಏಲಕ್ಕಿ)",
   "cropKn": "ಏಲಕ್ಕಿ",
   "cropHi": "इलायची",
   "emoji": "🌱",
@@ -9033,11 +9033,11 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Cardamom (ಏಲಕ್ಕಿ / इलायची)",
+  "crop": "Cardamom (ಏಲಕ್ಕಿ)",
   "cropKn": "ಏಲಕ್ಕಿ",
   "cropHi": "इलायची",
   "emoji": "🌱",
-  "disease": "Rhizome Rot / Clump Rot (Pythium vexans / Rhizoctonia solani)",
+  "disease": "Rhizome Rot / Clump Rot (Pythium vexans)",
   "diseaseKn": "ಗೆಡ್ಡೆ ಕೊಳೆ ರೋಗ / ಕ್ಲಂಪ್ ರಫ್",
   "diseaseHi": "प्रकंद विगलन / क्लंप रॉट",
   "severity": "High",
@@ -9089,7 +9089,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Papaya (ಪರಂಗಿ / पपीता)",
+  "crop": "Papaya (ಪರಂಗಿ)",
   "cropKn": "ಪರಂಗಿ",
   "cropHi": "पपीता",
   "emoji": "🍈",
@@ -9145,7 +9145,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Papaya (ಪರಂಗಿ / पपीता)",
+  "crop": "Papaya (ಪರಂಗಿ)",
   "cropKn": "ಪರಂಗಿ",
   "cropHi": "पपीता",
   "emoji": "🍈",
@@ -9201,7 +9201,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Papaya (ಪರಂಗಿ / पपीता)",
+  "crop": "Papaya (ಪರಂಗಿ)",
   "cropKn": "ಪರಂಗಿ",
   "cropHi": "पपीता",
   "emoji": "🍈",
@@ -9257,7 +9257,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Papaya (ಪರಂಗಿ / पपीತಾ)",
+  "crop": "Papaya (ಪರಂಗಿ)",
   "cropKn": "ಪರಂಗಿ",
   "cropHi": "पपीता",
   "emoji": "🍈",
@@ -9313,7 +9313,7 @@ export const demoCards = [
   ]
 },
   {
-  "crop": "Papaya (ಪರಂಗಿ / पपीता)",
+  "crop": "Papaya (ಪರಂಗಿ)",
   "cropKn": "ಪರಂಗಿ",
   "cropHi": "पपीता",
   "emoji": "🍈",
