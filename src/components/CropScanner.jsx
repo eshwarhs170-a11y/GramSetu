@@ -862,9 +862,6 @@ export default function CropScanner() {
               <option value="NO_CROP" style={{ color: '#dc2626', background: '#fff' }}>
                 {lang === 'kn' ? '— ಬೆಳೆ ಆಯ್ಕೆ ಮಾಡಿ —' : '— Select crop to scan —'}
               </option>
-              <option value="AUTO_DETECT" style={{ color: '#15803d', fontWeight: 800, background: '#f0fdf4' }}>
-                {lang === 'kn' ? '✨ ಸ್ವಯಂ ಪತ್ತೆ (ಎಲ್ಲಾ 30+ ಬೆಳೆಗಳು & ಚಾರ್ಟ್‌ಗಳು)' : '✨ Auto-Detect (All 30+ Crops & Charts)'}
-              </option>
               {UNIQUE_CROPS.map((crop, i) => (
                 <option key={i} value={crop} style={{ color: '#1a2e1f', background: '#fff' }}>
                   {crop}
@@ -1072,9 +1069,7 @@ export default function CropScanner() {
             <div style={{ background: 'rgba(34,197,94,0.2)', borderRadius: 10, padding: '5px 10px', border: '1px solid rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', gap: 6 }}>
               <Microscope size={13} color="#22c55e" />
               <span style={{ fontSize: 12, fontWeight: 700, color: '#22c55e' }}>
-                {selectedCrop === 'AUTO_DETECT'
-                  ? '✨ Auto-Detect'
-                  : `${CROP_DISEASES.find(d => d.crop === selectedCrop)?.emoji || '🌿'} ${selectedCrop.split('/')[0].trim()}`}
+                {selectedCrop === 'NO_CROP' ? (lang === 'kn' ? 'ಬೆಳೆ' : 'Crop') : `${CROP_DISEASES.find(d => d.crop === selectedCrop)?.emoji || '🌿'} ${selectedCrop.split('/')[0].trim()}`}
               </span>
             </div>
           </div>
@@ -1218,14 +1213,12 @@ export default function CropScanner() {
           <div style={{ width: 36, height: 4, background: '#cbd5e1', borderRadius: 4, margin: '0 auto 12px' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
             <div style={{ fontSize: 22 }}>
-              {selectedCrop === 'AUTO_DETECT' ? '✨' : (CROP_DISEASES.find(d => d.crop === selectedCrop)?.emoji || '🌿')}
+              {CROP_DISEASES.find(d => d.crop === selectedCrop)?.emoji || '🌿'}
             </div>
             <div>
               <p style={{ margin: 0, fontSize: 11, color: '#64748b', fontWeight: 600 }}>{lang === 'kn' ? 'ಆಯ್ಕೆಯಾದ ಬೆಳೆ' : 'Scanning crop'}</p>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 800, color: '#0f172a' }}>
-                {selectedCrop === 'AUTO_DETECT'
-                  ? (lang === 'kn' ? '✨ ಸ್ವಯಂ ಪತ್ತೆ (ಎಲ್ಲಾ ಬೆಳೆಗಳು)' : '✨ Auto-Detect (All Crops)')
-                  : selectedCrop}
+                {selectedCrop}
               </p>
             </div>
             <button onClick={() => setPage('home')} style={{ marginLeft: 'auto', background: '#f1f5f9', border: 'none', borderRadius: 8, padding: '6px 10px', fontSize: 12, fontWeight: 700, color: '#475569', cursor: 'pointer' }}>Change</button>
