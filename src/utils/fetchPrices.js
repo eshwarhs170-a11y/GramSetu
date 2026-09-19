@@ -126,6 +126,16 @@ export const BASELINE_PRICES = [
   { crop: 'Papaya (ಪಪ್ಪಾಯಿ / पपीता)', unit: 'per kg', price: '₹50', change: '+₹0', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Papaya.jpg', districts: [], type: 'fruit' },
   { crop: 'Guava (ಸೀಬೆಕಾಯಿ / अमरूद)', unit: 'per kg', price: '₹60', change: '+₹4', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Guava.jpg', districts: [], type: 'fruit' },
   { crop: 'Sapota (ಸಪೋಟ / चीकू)', unit: 'per kg', price: '₹70', change: '+₹2', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Sapota.jpg', districts: [], type: 'fruit' },
+  { crop: 'Beetroot (ಬೀಟ್ರೂಟ್ / चुकंदर)', unit: 'per kg', price: '₹40', change: '+₹2', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Beetroot.jpg', districts: [], type: 'vegetable' },
+  { crop: 'Drumstick (ನುಗ್ಗೆಕಾಯಿ / सहजन)', unit: 'per kg', price: '₹60', change: '+₹5', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Drumstick.jpg', districts: [], type: 'vegetable' },
+  { crop: 'Spinach (ಪಾಲಕ್ / पालक)', unit: 'per kg', price: '₹30', change: '-₹1', trend: 'down', market: 'Bengaluru APMC', img: '/crops/Spinach.jpg', districts: [], type: 'vegetable' },
+  { crop: 'Sweet Potato (ಗೆಣಸು / शकरकंद)', unit: 'per kg', price: '₹35', change: '+₹2', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Sweet_Potato.jpg', districts: [], type: 'vegetable' },
+  { crop: 'Pumpkin (ಕುಂಬಳಕಾಯಿ / कद्दू)', unit: 'per kg', price: '₹25', change: '-₹3', trend: 'down', market: 'Bengaluru APMC', img: '/crops/Pumpkin.jpg', districts: [], type: 'vegetable' },
+  { crop: 'Jackfruit (ಹಲಸಿನ ಹಣ್ಣು / कटहल)', unit: 'per kg', price: '₹80', change: '+₹5', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Jackfruit.jpg', districts: [], type: 'fruit' },
+  { crop: 'Custard Apple (ಸೀತಾಫಲ / शरीफा)', unit: 'per kg', price: '₹120', change: '+₹10', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Custard_Apple.jpg', districts: [], type: 'fruit' },
+  { crop: 'Fig (ಅಂಜೂರ / अंजीर)', unit: 'per kg', price: '₹150', change: '+₹5', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Fig.jpg', districts: [], type: 'fruit' },
+  { crop: 'Strawberry (ಸ್ಟ್ರಾಬೆರಿ / स्ट्रॉबेरी)', unit: 'per kg', price: '₹200', change: '-₹10', trend: 'down', market: 'Bengaluru APMC', img: '/crops/Strawberry.jpg', districts: [], type: 'fruit' },
+  { crop: 'Muskmelon (ಖರಬೂಜ / खरबूजा)', unit: 'per kg', price: '₹40', change: '+₹2', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Muskmelon.jpg', districts: [], type: 'fruit' },
 ];
 
 
