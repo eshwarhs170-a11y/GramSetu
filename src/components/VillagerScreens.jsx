@@ -2038,6 +2038,7 @@ export function MarketScreen() {
   const { t, lang } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
   const [viewMode, setViewMode] = useState('district') // 'district' or 'all'
+  const [categoryTab, setCategoryTab] = useState('crop') // 'crop' | 'vegetable' | 'fruit'
   const [livePriceOverlay, setLivePriceOverlay] = useState(null) // map: cropName -> live price object
   const [priceDataSource, setPriceDataSource] = useState('static') // 'live' | 'static'
   const [priceLastUpdated, setPriceLastUpdated] = useState(null)
@@ -2173,11 +2174,16 @@ export function MarketScreen() {
 
   const sourcePrices = applyLiveOverlay(rawSourcePrices)
 
-  const filteredPrices = sourcePrices
+  // Also include BASELINE_PRICES for vegetables and fruits (always all-Karnataka)
+  const allPricesWithTypes = categoryTab !== 'crop'
+    ? applyLiveOverlay(BASELINE_PRICES.filter(p => p.type === categoryTab))
+    : sourcePrices
+
+  const filteredPrices = allPricesWithTypes
     .map(normalizePriceRow)
     .filter(p =>
       p.crop.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.market.toLowerCase().includes(searchTerm.toLowerCase())
+      (p.market || '').toLowerCase().includes(searchTerm.toLowerCase())
     )
 
   const highlightPrices = viewMode === 'all' ? applyLiveOverlay(karnatakaPopularCrops) : sourcePrices
@@ -2357,7 +2363,11 @@ export function MarketScreen() {
       <div className="card" style={{ padding: '20px', marginBottom: 20 }}>
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>
-            {viewMode === 'district' ? `${normalizeDistrict(userDistrict)} District Crops` : 'Famous Karnataka Crops'}
+            {categoryTab === 'vegetable'
+              ? (lang === 'kn' ? '🥕 ತರಕಾರಿ ದರಗಳು' : lang === 'hi' ? '🥕 सब्जी मंडी भाव' : '🥕 Vegetable Market Prices')
+              : categoryTab === 'fruit'
+              ? (lang === 'kn' ? '🍎 ಹಣ್ಣಿನ ದರಗಳು' : lang === 'hi' ? '🍎 फल मंडी भाव' : '🍎 Fruit Market Prices')
+              : viewMode === 'district' ? `🌾 ${normalizeDistrict(userDistrict)} District Crops` : '🌾 Famous Karnataka Crops'}
           </div>
           
           {/* View Mode Toggle */}
@@ -2386,6 +2396,30 @@ export function MarketScreen() {
             </button>
           </div>
 
+
+          {/* Category Tabs: Crops / Vegetables / Fruits */}
+          <div style={{ display: 'flex', background: 'var(--bg-card-alt)', borderRadius: 'var(--radius-md)', padding: 4, border: '1px solid var(--border-light)', gap: 2 }}>
+            {[
+              { id: 'crop',      emoji: '🌾', labelEn: 'Crops',      labelKn: 'ಬೆಳೆಗಳು',    labelHi: 'फसलें' },
+              { id: 'vegetable', emoji: '🥕', labelEn: 'Vegetables',  labelKn: 'ತರಕಾರಿಗಳು', labelHi: 'सब्ज़ियां' },
+              { id: 'fruit',     emoji: '🍎', labelEn: 'Fruits',      labelKn: 'ಹಣ್ಣುಗಳು',   labelHi: 'फल' },
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setCategoryTab(tab.id)}
+                style={{
+                  padding: '8px 16px', fontSize: 13, fontWeight: 600, border: 'none',
+                  borderRadius: 'var(--radius-sm)', cursor: 'pointer', transition: 'all 0.2s',
+                  background: categoryTab === tab.id ? 'var(--primary)' : 'transparent',
+                  color: categoryTab === tab.id ? '#fff' : 'var(--text-secondary)',
+                  boxShadow: categoryTab === tab.id ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',
+                  display: 'flex', alignItems: 'center', gap: 5,
+                }}
+              >
+                {tab.emoji} {lang === 'kn' ? tab.labelKn : lang === 'hi' ? tab.labelHi : tab.labelEn}
+              </button>
+            ))}
+          </div>
           <input 
             type="text" 
             className="form-input" 
