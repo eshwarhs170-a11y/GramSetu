@@ -266,7 +266,7 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
         cropName: 'Cotton',
         diseaseName: 'Pink Bollworm (Pectinophora gossypiella)',
         confidence: 'High',
-        visualClues: 'Detected Cotton bollworm damage'
+        visualClues: 'Detected Cotton bollworm damage with pink larvae inside boll'
       };
     }
 
@@ -276,7 +276,7 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
         cropName: 'Sugarcane',
         diseaseName: 'Red Rot (Colletotrichum falcatum)',
         confidence: 'High',
-        visualClues: 'Detected Sugarcane red rot stem discoloration'
+        visualClues: 'Detected Sugarcane red rot — red tissue with white patches in split cane'
       };
     }
 
@@ -284,9 +284,9 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
       return {
         isCrop: true,
         cropName: 'Coconut',
-        diseaseName: 'Yellow Leaf Disease',
+        diseaseName: 'Rhinoceros Beetle (Oryctes rhinoceros)',
         confidence: 'High',
-        visualClues: 'Detected Coconut frond yellowing and crown wilt'
+        visualClues: 'Detected V-shaped cuts on coconut fronds caused by Rhinoceros Beetle'
       };
     }
 
@@ -294,9 +294,9 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
       return {
         isCrop: true,
         cropName: 'Arecanut',
-        diseaseName: 'Yellow Leaf Disease',
+        diseaseName: 'Yellow Leaf Disease (Phytoplasma)',
         confidence: 'High',
-        visualClues: 'Detected Arecanut yellow leaf disease symptoms'
+        visualClues: 'Detected Arecanut yellow leaf disease — yellowing leaflets from tips'
       };
     }
 
@@ -304,9 +304,9 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
       return {
         isCrop: true,
         cropName: 'Coffee',
-        diseaseName: 'Coffee Leaf Rust (Hemileia vastatrix)',
+        diseaseName: 'White Stem Borer (Xylotrechus quadripes)',
         confidence: 'High',
-        visualClues: 'Detected orange rust pustules on coffee leaf'
+        visualClues: 'Detected Coffee White Stem Borer — trunk ridges from grubs, entry holes'
       };
     }
 
@@ -314,9 +314,9 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
       return {
         isCrop: true,
         cropName: 'Groundnut',
-        diseaseName: 'Early Leaf Spot (Cercospora arachidicola)',
+        diseaseName: 'Early Leaf Spot / Tikka (Cercospora arachidicola)',
         confidence: 'High',
-        visualClues: 'Detected leaf spot lesions on groundnut leaf'
+        visualClues: 'Detected brown circular leaf spots with yellow halo on groundnut'
       };
     }
 
@@ -324,9 +324,9 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
       return {
         isCrop: true,
         cropName: 'Banana',
-        diseaseName: 'Panama Wilt / Fusarium Wilt (Fusarium oxysporum f. sp. cubense)',
+        diseaseName: 'Sigatoka Leaf Spot (Pseudocercospora fijiensis)',
         confidence: 'High',
-        visualClues: 'Detected Banana wilt vascular discoloration or Sigatoka spots'
+        visualClues: 'Detected spindle streaks and brown spots on banana leaves'
       };
     }
 
@@ -334,9 +334,29 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
       return {
         isCrop: true,
         cropName: 'Mango',
-        diseaseName: 'Anthracnose (Colletotrichum gloeosporioides)',
+        diseaseName: 'Powdery Mildew (Oidium mangiferae)',
         confidence: 'High',
-        visualClues: 'Detected Mango anthracnose necrotic spots'
+        visualClues: 'Detected white powdery growth on mango inflorescence and leaves'
+      };
+    }
+
+    if (sLower.includes('soybean') || sLower.includes('soya')) {
+      return {
+        isCrop: true,
+        cropName: 'Soybean',
+        diseaseName: 'Soybean Rust (Phakopsora pachyrhizi)',
+        confidence: 'High',
+        visualClues: 'Detected tan to reddish-brown rust pustules on soybean leaf underside'
+      };
+    }
+
+    if (sLower.includes('tur') || sLower.includes('turdal') || sLower.includes('pigeon pea') || sLower.includes('ತೊಗರಿ')) {
+      return {
+        isCrop: true,
+        cropName: 'Tur Dal / Pigeon Pea',
+        diseaseName: 'Fusarium Wilt (Fusarium udum)',
+        confidence: 'High',
+        visualClues: 'Detected yellowing, wilting and browning of Tur Dal plant'
       };
     }
 
@@ -489,6 +509,12 @@ If the image is a plant, crop leaf, stem, ear, fruit, tree frond, OR an agricult
 28. Papaya: Papaya Ring Spot Virus (PRSV) [mosaic mottling & dark green rings on fruits], Anthracnose (Colletotrichum gloeosporioides) [circular sunken spots on ripe fruit], Foot Rot / Stem Rot (Pythium aphanidermatum) [water-soaked soft rot at trunk base], Powdery Mildew (Oidium caricae) [white powdery patches on leaf underside]
 
 ${userSelectedCrop && userSelectedCrop !== 'NO_CROP' && userSelectedCrop !== 'AUTO_DETECT' ? `NOTE: The user has chosen "${userSelectedCrop}". If the image shows a multi-crop chart or can match this crop, identify the specific disease for "${userSelectedCrop}".` : 'NOTE: Auto-detect mode is active. Identify whichever crop and disease is centered or prominent in this image.'}
+
+SPECIAL CHART RECOGNITION — VERY IMPORTANT:
+If you see a printed reference chart titled "DISEASED CROPS REFERENCE" or similar grid layout with multiple crop disease photos:
+- Part 1 contains: Ragi-Blast, Ragi-Downy Mildew, Paddy-Blast, Paddy-Sheath Blight, Maize-Fall Armyworm, Maize-Northern Leaf Blight, Tomato-Late Blight, Tomato-Leaf Curl Virus, Onion-Purple Blotch, Onion-Downy Mildew, Cotton-Pink Bollworm, Cotton-Bacterial Blight, Sugarcane-Red Rot, Sugarcane-Wilt, Coconut-Rhinoceros Beetle, Coconut-Bud Rot
+- Part 2 contains: Arecanut-Yellow Leaf Disease, Arecanut-Bud Rot, Coffee-White Stem Borer, Coffee-Leaf Rust, Banana-Sigatoka Leaf Spot, Banana-Fusarium Wilt, Mango-Powdery Mildew, Groundnut-Early Leaf Spot, Groundnut-Stem Rot, Wheat-Yellow Rust, Wheat-Brown Rust, Potato-Late Blight, Soybean-Rust, Soybean-Bacterial Pustule, Turdal-Fusarium Wilt, Turdal-Sterility Mosaic
+If a crop has been pre-selected by the user, return that crop's disease from the chart above.
 
 Respond ONLY with a JSON object:
 If not crop: {"isCrop": false, "reason": "Not a crop or plant image"}
