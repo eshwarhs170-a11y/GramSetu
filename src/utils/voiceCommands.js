@@ -666,13 +666,22 @@ export async function processVoiceCommand(transcript, lang = 'en') {
         return { type: 'chat', response: pMsg[lang] || pMsg.en };
       }
 
-      if (/scheme|yojana|kisan|subsidy|ಯೋಜನೆ|योजना/i.test(lower)) {
+      if (/scheme|yojana|kisan|subsidy|ಯೋಜನೆ|ಸ್ಕೀಮ್|ಸರ್ಕಾರ|ಗೌರ್ಮೆಂಟ್|ಯೋಜನೆಗಳ|योजना|सब्सिडी/i.test(lower)) {
         const sMsg = {
           en: 'Karnataka government provides schemes like PM-KISAN (₹6000/yr), Raitha Siri (₹10,000/ha), PMFBY crop insurance, and Raita Vidyanidhi. Visit the Schemes section on your dashboard for eligibility details.',
           kn: 'ಕರ್ನಾಟಕ ಸರ್ಕಾರವು PM-KISAN (₹6000/ವರ್ಷ), ರೈತ ಸಿರಿ (₹10,000/ಹೆಕ್ಟೇರ್), PMFBY ಬೆಳೆ ವಿಮೆ ಮತ್ತು ರೈತ ವಿದ್ಯಾನಿಧಿ ಯೋಜನೆಗಳನ್ನು ನೀಡುತ್ತದೆ. ವಿವರಗಳಿಗೆ ಯೋಜನೆಗಳ ವಿಭಾಗ ನೋಡಿ.',
           hi: 'कर्नाटक सरकार PM-KISAN, रायथा सिरी, PMFBY फसल बीमा जैसी योजनाएं प्रदान करती है। विवरण के लिए योजनाएं अनुभाग देखें।',
         };
         return { type: 'chat', response: sMsg[lang] || sMsg.en };
+      }
+
+      if (/app|ಆಪ್|ಅಪ್ಲಿಕೇಶನ್|ಉಪಯೋಗ|ಬಳಸು|ಹೇಗೆ|ಗ್ರಾಮಸೇತು|ಗೊತ್ತಾಗಬೇಕು|features|about|use|how/i.test(lower)) {
+        const appMsg = {
+          en: 'GramSetu is an all-in-one digital platform for Karnataka farmers. Features: 1) Live APMC market prices 2) Crop Doctor disease scanner 3) Govt Schemes finder 4) Village grievance filing.',
+          kn: 'ಗ್ರಾಮಸೇತು ಅಪ್ಲಿಕೇಶನ್‌ನಲ್ಲಿ ೪ ಪ್ರಮುಖ ಸೇವೆಗಳಿವೆ: ೧) APMC ನೇರ ಮಾರುಕಟ್ಟೆ ದರ ೨) ಬೆಳೆ ರೋಗ ಪರೀಕ್ಷೆ (Crop Doctor) ೩) ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು ೪) ಗ್ರಾಮ ಪಂಚಾಯತಿ ದೂರು ಸಲ್ಲಿಕೆ.',
+          hi: 'ग्रामसेतु ऐप में 4 मुख्य सुविधाएं हैं: 1) लाइव मंडी भाव 2) फसल रोग डॉक्टर 3) सरकारी योजनाएं 4) पंचायत शिकायतें।',
+        };
+        return { type: 'chat', response: appMsg[lang] || appMsg.en };
       }
 
       const defaultMsg = {
@@ -685,13 +694,37 @@ export async function processVoiceCommand(transcript, lang = 'en') {
     responseText = responseText.replace(/[*#_`]/g, '').trim();
     return { type: 'chat', response: responseText };
   } catch (error) {
-    if (error.message?.includes('429')) {
+    console.warn('processVoiceCommand error:', error.message?.slice(0, 100));
+    // Topic-aware fallback so error responses match what the user actually asked
+    const isScheme = /scheme|yojana|kisan|subsidy|ಯೋಜನೆ|ಸ್ಕೀಮ್|ಸರ್ಕಾರ|ಯೋಜನೆಗಳ|योजना|सब्सिडी/i.test(lower);
+    const isAppQuery = /app|ಆಪ್|ಅಪ್ಲಿಕೇಶನ್|ಉಪಯೋಗ|ಬಳಸು|ಹೇಗೆ|ಗ್ರಾಮಸೇತು|features|about|use|how/i.test(lower);
+    const isPrice = /price|rate|apmc|market|ಬೆಲೆ|ಮಾರುಕಟ್ಟೆ|भाव|मंडी/i.test(lower);
+
+    if (isScheme) {
       return {
         type: 'chat',
         response: lang === 'kn'
-          ? 'ಕರ್ನಾಟಕದ APMC ಮಾರುಕಟ್ಟೆಯಲ್ಲಿ ಇಂದಿನ ಅಂದಾಜು ಬೆಳೆ ದರಗಳು: ಕಲ್ಲಂಗಡಿ ₹1,200-₹1,800/ಕ್ವಿಂಟಾಲ್, ರಾಗಿ MSP ₹3,846, ತೆಂಗಿನಕಾಯಿ ₹11,500, ಅಡಿಕೆ ₹48,000, ಭತ್ತ ₹2,300. ವಿವರವಾದ ನೇರ ದರಗಳಿಗೆ Market ವಿಭಾಗ ನೋಡಿ.'
-          : lang === 'hi' ? 'कर्नाटक APMC मंडी भाव: तरबूज ₹1,200 - ₹1,800/क्विंटल, रागी MSP ₹3,846, नारियल ₹11,500/क्विंटल। लाइव भाव के लिए मार्केट सेक्शन देखें।'
-          : 'Current APMC rates in Karnataka: Watermelon ₹1,200 - ₹1,800/qtl, Ragi MSP ₹3,846/qtl, Coconut ₹11,500/qtl. Check live rates on dashboard.',
+          ? 'ಕರ್ನಾಟಕ ಸರ್ಕಾರವು PM-KISAN (₹6000/ವರ್ಷ), ರೈತ ಸಿರಿ (₹10,000/ಹೆಕ್ಟೇರ್), PMFBY ಬೆಳೆ ವಿಮೆ ಮತ್ತು ರೈತ ವಿದ್ಯಾನಿಧಿ ಯೋಜನೆಗಳನ್ನು ನೀಡುತ್ತದೆ. ವಿವರಗಳಿಗೆ ಯೋಜನೆಗಳ ವಿಭಾಗ ನೋಡಿ.'
+          : lang === 'hi' ? 'कर्नाटक सरकार PM-KISAN, रायथा सिरी, PMFBY फसल बीमा जैसी योजनाएं प्रदान करती है। विवरण के लिए योजनाएं अनुभाग देखें।'
+          : 'Karnataka provides PM-KISAN (₹6000/yr), Raitha Siri (₹10,000/ha), PMFBY crop insurance, and Raita Vidyanidhi. Visit the Schemes section for eligibility.',
+      };
+    }
+    if (isAppQuery) {
+      return {
+        type: 'chat',
+        response: lang === 'kn'
+          ? 'ಗ್ರಾಮಸೇತು ಅಪ್ಲಿಕೇಶನ್‌ನಲ್ಲಿ ೪ ಸೇವೆಗಳಿವೆ: ೧) APMC ನೇರ ಮಾರುಕಟ್ಟೆ ದರ ೨) ಬೆಳೆ ರೋಗ ಪರೀಕ್ಷೆ ೩) ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು ೪) ಗ್ರಾಮ ದೂರು ಸಲ್ಲಿಕೆ.'
+          : lang === 'hi' ? 'ग्रामसेतु में 4 सुविधाएं हैं: 1) लाइव मंडी भाव 2) फसल रोग डॉक्टर 3) सरकारी योजनाएं 4) पंचायत शिकायतें।'
+          : 'GramSetu features: 1) Live APMC market prices 2) Crop Doctor disease scanner 3) Govt Schemes 4) Village grievance filing.',
+      };
+    }
+    if (isPrice) {
+      return {
+        type: 'chat',
+        response: lang === 'kn'
+          ? 'ಇಂದಿನ ಅಂದಾಜು ಬೆಳೆ ದರಗಳು: ರಾಗಿ MSP ₹3,846, ತೆಂಗಿನಕಾಯಿ ₹11,500, ಅಡಿಕೆ ₹48,000, ಭತ್ತ ₹2,300/ಕ್ವಿಂಟಾಲ್. ನೇರ ದರಗಳಿಗೆ Market ವಿಭಾಗ ನೋಡಿ.'
+          : lang === 'hi' ? 'अनुमानित APMC भाव: रागी MSP ₹3,846, नारियल ₹11,500, सुपारी ₹48,000, धान ₹2,300/क्विंटल। लाइव भाव मार्केट सेक्शन में देखें।'
+          : 'Approx APMC rates: Ragi MSP ₹3,846/qtl, Coconut ₹11,500/qtl, Arecanut ₹48,000/qtl, Paddy ₹2,300/qtl. Check live rates in the Market section.',
       };
     }
     return {
