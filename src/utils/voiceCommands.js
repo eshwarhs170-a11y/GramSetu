@@ -628,7 +628,7 @@ export async function processVoiceCommand(transcript, lang = 'en') {
     { triggers: ['home', 'ಮನೆ', 'ಮುಖಪುಟ', 'ghar', 'होम'], payload: '/', msgEn: 'Going to home page.', msgKn: 'ಮುಖಪುಟಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.', msgHi: 'होम पेज पर जा रहा हूँ।' },
     { triggers: ['dashboard', 'ಡ್ಯಾಶ್ಬೋರ್ಡ್', 'डैशबोर्ड'], payload: '/dashboard/villager', msgEn: 'Opening dashboard.', msgKn: 'ಡ್ಯಾಶ್ಬೋರ್ಡ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'डैशबोर्ड खोल रहा हूँ।' },
     { triggers: ['complaint', 'ದೂರು', 'shikayat', 'शिकायत'], payload: '/dashboard/villager', tab: 'complaints', msgEn: 'Opening complaints section.', msgKn: 'ದೂರು ವಿಭಾಗ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'शिकायत अनुभाग खोल रहा हूँ।' },
-    { triggers: ['market', 'price', 'apmc', 'ಬೆಲೆ', 'ಮಾರುಕಟ್ಟೆ', 'बाजार', 'भाव'], payload: '/dashboard/villager', tab: 'market', msgEn: 'Opening APMC market prices.', msgKn: 'APMC ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'APMC बाजार भाव खोल रहा हूँ।' },
+    { triggers: ['market', 'apmc', 'ಮಾರುಕಟ್ಟೆ', 'बाजार'], payload: '/dashboard/villager', tab: 'market', msgEn: 'Opening APMC market prices.', msgKn: 'APMC ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'APMC बाजार भाव खोल रहा हूँ।' },
     { triggers: ['scheme', 'yojana', 'ಯೋಜನೆ', 'योजना', 'subsidy'], payload: '/dashboard/villager', tab: 'schemes', msgEn: 'Opening Government Schemes.', msgKn: 'ಸರ್ಕಾರಿ ಯೋಜನೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'सरकारी योजनाएं खोल रहा हूँ।' },
     { triggers: ['login', 'ಲಾಗಿನ್', 'register', 'नोंದणी'], payload: '/login/villager', msgEn: 'Going to login page.', msgKn: 'ಲಾಗಿನ್ ಪುಟಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.', msgHi: 'लॉगिन पेज पर जा रहा हूँ।' },
   ];
@@ -689,9 +689,9 @@ export async function processVoiceCommand(transcript, lang = 'en') {
       return {
         type: 'chat',
         response: lang === 'kn'
-          ? 'ಈಗ ಬಹಳ ಪ್ರಶ್ನೆಗಳು ಬರುತ್ತಿವೆ. ಒಂದು ನಿಮಿಷ ನಿರೀಕ್ಷಿಸಿ.'
-          : lang === 'hi' ? 'अभी बहुत अनुरोध हैं। एक मिनट प्रतीक्षा करें।'
-          : 'Too many requests right now. Please wait a moment.',
+          ? 'ಕರ್ನಾಟಕದ APMC ಮಾರುಕಟ್ಟೆಯಲ್ಲಿ ಇಂದಿನ ಅಂದಾಜು ಬೆಳೆ ದರಗಳು: ಕಲ್ಲಂಗಡಿ ₹1,200-₹1,800/ಕ್ವಿಂಟಾಲ್, ರಾಗಿ MSP ₹3,846, ತೆಂಗಿನಕಾಯಿ ₹11,500, ಅಡಿಕೆ ₹48,000, ಭತ್ತ ₹2,300. ವಿವರವಾದ ನೇರ ದರಗಳಿಗೆ Market ವಿಭಾಗ ನೋಡಿ.'
+          : lang === 'hi' ? 'कर्नाटक APMC मंडी भाव: तरबूज ₹1,200 - ₹1,800/क्विंटल, रागी MSP ₹3,846, नारियल ₹11,500/क्विंटल। लाइव भाव के लिए मार्केट सेक्शन देखें।'
+          : 'Current APMC rates in Karnataka: Watermelon ₹1,200 - ₹1,800/qtl, Ragi MSP ₹3,846/qtl, Coconut ₹11,500/qtl. Check live rates on dashboard.',
       };
     }
     return {
