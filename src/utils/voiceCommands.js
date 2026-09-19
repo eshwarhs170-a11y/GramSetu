@@ -481,6 +481,10 @@ If the image is a plant, crop leaf, stem, ear, fruit, tree frond, OR an agricult
 20. Chilli: Phytophthora Foot Rot (Phytophthora capsici) [dark collar rot at soil level, wilting with green chillies]
 21. Black Pepper: Phytophthora Foot Rot (Phytophthora capsici)
 22. Ragi / Finger Millet: Blast Disease (Pyricularia grisea), Head Smut (Ustilago crameri)
+23. Ginger: Rhizome Rot, Leaf Spot
+24. Turmeric: Leaf Spot, Rhizome Rot
+25. Cardamom: Capsule Rot, Mosaic
+26. Papaya: Ring Spot Virus, Powdery Mildew
 
 ${userSelectedCrop && userSelectedCrop !== 'NO_CROP' && userSelectedCrop !== 'AUTO_DETECT' ? `NOTE: The user has chosen "${userSelectedCrop}". If the image shows a multi-crop chart or can match this crop, identify the specific disease for "${userSelectedCrop}".` : 'NOTE: Auto-detect mode is active. Identify whichever crop and disease is centered or prominent in this image.'}
 

@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useVoice } from '../context/VoiceContext';
 import { callGemini, callGeminiVision, callGeminiTranslate } from '../utils/voiceCommands';
 import { useNavigate } from 'react-router-dom';
-import { CROP_DISEASES, UNIQUE_CROPS, demoCards as DEMO_CARDS_DATA, getAgriProductLink } from '../data/cropDiseasesData';
+import { CROP_DISEASES, UNIQUE_CROPS, demoCards as DEMO_CARDS_DATA, getAgriProductLink, getLocalizedCropName } from '../data/cropDiseasesData';
 
 const SEVERITY_CONFIG = {
   High:   { bg: '#fee2e2', text: '#b91c1c', label: '⚠️ High Severity' },
@@ -31,7 +31,6 @@ export default function CropScanner() {
   const [notCropMsg, setNotCropMsg] = useState(null);
   const [scanProgress, setScanProgress] = useState(0);
   const [activeTab, setActiveTab] = useState('remedy');
-  const [viewLang, setViewLang] = useState('auto'); // 'auto' | 'all' | 'kn' | 'hi' | 'en'
   const [zoomLevel, setZoomLevel] = useState(1);
   const [translatedRemedy, setTranslatedRemedy] = useState(null);
   const [translatedPrevention, setTranslatedPrevention] = useState(null);
@@ -119,24 +118,32 @@ export default function CropScanner() {
     const cLower = effectiveCrop.toLowerCase();
     const dLower = (diseaseName || '').toLowerCase();
 
-    // Map AI crop names → our DB crop keys (partial match)
-    const cropKeywords = [
+    // Map AI crop names → our DB c    const cropKeywords = [
       { keys: ['paddy', 'rice', 'ಭತ್ತ', 'धान', 'चावल'],               db: 'Paddy / Rice (ಭತ್ತ / धान)' },
-      { keys: ['ragi', 'finger millet', 'ರಾಗಿ', 'रागी'],                db: 'Ragi / Finger Millet (ರಾಗಿ / रागी)' },
-      { keys: ['maize', 'corn', 'ಜೋಳ', 'मक्का', 'भुट्टा'],              db: 'Maize / Corn (ಜೋಳ / मक्का)' },
+      { keys: ['ragi', 'finger millet', 'ರಾಗಿ', 'रागी', 'मडुआ'],       db: 'Ragi / Finger Millet (ರಾಗಿ / मडुआ)' },
+      { keys: ['maize', 'corn', 'ಮೆಕ್ಕೆಜೋಳ', 'मक्का', 'भुट्टा'],       db: 'Maize / Corn (ಮೆಕ್ಕೆಜೋಳ / मक्का)' },
+      { keys: ['wheat', 'ಗೋಧಿ', 'गेहूं'],                              db: 'Wheat (ಗೋಧಿ / गेहूं)' },
+      { keys: ['jowar', 'sorghum', 'ಜೋಳ', 'ज्वार'],                     db: 'Jowar / Sorghum (ಜೋಳ / ज्वार)' },
       { keys: ['cotton', 'ಹತ್ತಿ', 'कपास'],                             db: 'Cotton (ಹತ್ತಿ / कपास)' },
-      { keys: ['tomato', 'ಟೊಮೇಟೊ', 'ಟೊಮೆಟೊ', 'टमाटर'],                   db: 'Tomato (ಟೊಮೇಟೊ / टमाटर)' },
-      { keys: ['potato', 'ಆಲೂ', 'ಆಲೂಗಡ್ಡೆ', 'आलू'],                    db: 'Potato (ಆಲೂಗಡ್ಡೆ / आलू)' },
-      { keys: ['onion', 'ಈರುಳ್ಳಿ', 'प्याज'],                             db: 'Onion (ಈರುಳ್ಳಿ / प्याज)' },
-      { keys: ['sugarcane', 'ಕಬ್ಬು', 'गन्ना'],                          db: 'Sugarcane (ಕಬ್ಬು / गन्ना)' },
+      { keys: ['sugarcane', 'ಕಬ್ಬು', 'गन्ना', 'ईख'],                    db: 'Sugarcane (ಕಬ್ಬು / गन्ना)' },
       { keys: ['coconut', 'ತೆಂಗು', 'ತೆಂಗಿನಕಾಯಿ', 'नारियल'],              db: 'Coconut (ತೆಂಗು / नारियल)' },
       { keys: ['arecanut', 'areca', 'ಅಡಿಕೆ', 'सुपारी'],                  db: 'Arecanut (ಅಡಿಕೆ / सुपारी)' },
       { keys: ['coffee', 'ಕಾಫಿ', 'कॉफी'],                              db: 'Coffee (ಕಾಫಿ / कॉफी)' },
+      { keys: ['pepper', 'black pepper', 'ಮೆಣಸು', 'ಕರಿಮೆಣಸು', 'काली मिर्च'], db: 'Black Pepper (ಕರಿಮೆಣಸು / काली मिर्च)' },
+      { keys: ['tomato', 'ಟೊಮೇಟೊ', 'ಟೊಮೆಟೊ', 'टमाटर'],                   db: 'Tomato (ಟೊಮೇಟೊ / टमाटर)' },
+      { keys: ['potato', 'ಆಲೂ', 'ಆಲೂಗಡ್ಡೆ', 'आलू'],                    db: 'Potato (ಆಲೂಗಡ್ಡೆ / आलू)' },
+      { keys: ['onion', 'ಈರುಳ್ಳಿ', 'प्याज'],                             db: 'Onion (ಈರುಳ್ಳಿ / प्याज)' },
+      { keys: ['chilli', 'chili', 'ಮೆಣಸಿನಕಾಯಿ', 'मिर्च'],              db: 'Chilli (ಮೆಣಸಿನಕಾಯಿ / मिर्च)' },
+      { keys: ['brinjal', 'eggplant', 'aubergine', 'ಬದನೆ', 'ಬದನೆಕಾಯಿ', 'बैंगन'], db: 'Brinjal / Eggplant (ಬದನೆಕಾಯಿ / बैंगन)' },
       { keys: ['banana', 'ಬಾಳೆ', 'ಬಾಳೆಹಣ್ಣು', 'केला'],                  db: 'Banana (ಬಾಳೆ / केला)' },
       { keys: ['mango', 'ಮಾವು', 'ಮಾವಿನಕಾಯಿ', 'आम'],                     db: 'Mango (ಮಾವು / आम)' },
+      { keys: ['pomegranate', 'ದಾಳಿಂಬೆ', 'ದಾಳಿಂಬೆಕಾಯಿ', 'अनार'],        db: 'Pomegranate (ದಾಳಿಂಬೆ / अनार)' },
       { keys: ['groundnut', 'peanut', 'ಕಡಲೆಕಾಯಿ', 'मूंगफली'],           db: 'Groundnut (ಕಡಲೆಕಾಯಿ / मूंगफली)' },
       { keys: ['sunflower', 'ಸೂರ್ಯಕಾಂತಿ', 'सूरजमुखी'],                  db: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ / सूरजमुखी)' },
       { keys: ['soybean', 'soya', 'ಸೋಯಾ', 'ಸೋಯಾಬೀನ್', 'सोयाबीन'],       db: 'Soybean (ಸೋಯಾಬೀನ್ / सोयाबीन)' },
+      { keys: ['chickpea', 'bengal gram', 'ಕಡಲೆ', 'चना'],             db: 'Chickpea / Bengal Gram (ಕಡಲೆ / चना)' },
+      { keys: ['mung', 'green gram', 'ಹೆಸರು', 'ಹೆಸರುಕಾಳು', 'मूंग'],    db: 'Mung Bean / Green Gram (ಹೆಸರುಕಾಳು / मूंग)' },
+    ];�್', 'सोयाबीन'],       db: 'Soybean (ಸೋಯಾಬೀನ್ / सोयाबीन)' },
       { keys: ['wheat', 'ಗೋಧಿ', 'गेहूं'],                              db: 'Wheat (ಗೋಧಿ / गेहूं)' },
       { keys: ['jowar', 'sorghum', 'ಜೋಳ', 'ज्वार'],                     db: 'Jowar / Sorghum (ಜೋಳ / ज्वार)' },
       { keys: ['chickpea', 'bengal gram', 'ಕಡಲೆ', 'चना'],             db: 'Chickpea / Bengal Gram (ಕಡಲೆ / चना)' },
@@ -431,7 +438,7 @@ export default function CropScanner() {
     if (!result || result === 'NO_CROP') return;
     if (isSpeaking) { stopSpeaking(); return; }
 
-    const effectiveLang = viewLang === 'auto' ? lang : (viewLang === 'all' ? lang : viewLang);
+    const effectiveLang = lang;
     let text = '';
 
     if (effectiveLang === 'kn') {
@@ -824,7 +831,7 @@ export default function CropScanner() {
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                     <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(0,0,0,0.7)', borderRadius: 20, padding: '4px 10px', color: '#fff', fontSize: 11, fontWeight: 700, backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', gap: 5, zIndex: 2 }}>
-                      {d.icon} {d.crop.split('/')[0].trim()}
+                      {d.icon} {getLocalizedCropName(d.crop, lang)}
                     </div>
                     <div style={{ position: 'absolute', bottom: 8, right: 8, background: 'linear-gradient(135deg, #1a7c4a, #145f38)', color: '#fff', fontSize: 10, fontWeight: 800, padding: '4px 8px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 3, zIndex: 2 }}>
                       View Details <ChevronRight size={12} />
@@ -837,10 +844,10 @@ export default function CropScanner() {
                       <AlertTriangle size={11} color="#b91c1c" /> {d.severity} Severity
                     </div>
                     <div style={{ fontSize: 14, fontWeight: 900, color: '#1a2e1f', marginBottom: 2, lineHeight: 1.3 }}>
-                      {lang === 'hi' ? (d.diseaseHi || d.disease) : d.disease}
+                      {lang === 'kn' ? (d.diseaseKn || d.disease) : lang === 'hi' ? (d.diseaseHi || d.disease) : d.disease}
                     </div>
                     <div style={{ fontSize: 11, color: '#4b7a5c', fontWeight: 600, marginBottom: 8 }}>
-                      {lang === 'hi' ? (d.diseaseHi || d.diseaseKn) : d.diseaseKn}
+                      {lang === 'kn' || lang === 'hi' ? d.disease : (d.diseaseKn || d.diseaseHi || '')}
                     </div>
 
                     <div style={{ fontSize: 11, color: '#334155', background: '#f0f7f3', borderRadius: 8, padding: '8px 10px', border: '1px solid #d1e8db', lineHeight: 1.4, display: 'flex', alignItems: 'flex-start', gap: 5 }}>
@@ -1092,7 +1099,7 @@ export default function CropScanner() {
             </div>
             <div>
               <p style={{ margin: 0, fontSize: 13, fontWeight: 800, color: '#1a2e1f' }}>{lang === 'kn' ? 'AI ಸಹಾಯಕ' : 'AI Assistant'}</p>
-              <p style={{ margin: 0, fontSize: 11, color: '#64748b' }}>{result && result !== 'NO_CROP' ? result.disease : ''}</p>
+              <p style={{ margin: 0, fontSize: 11, color: '#64748b' }}>{result && result !== 'NO_CROP' ? (lang === 'kn' ? (result.diseaseKn || result.disease) : lang === 'hi' ? (result.diseaseHi || result.disease) : result.disease) : ''}</p>
             </div>
           </div>
         </div>
@@ -1285,19 +1292,16 @@ export default function CropScanner() {
                   <span style={{ background: SEVERITY_CONFIG[result.severity]?.bg || '#fee2e2', color: SEVERITY_CONFIG[result.severity]?.text || '#b91c1c', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20, display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 6 }}>
                     <AlertTriangle size={11} color="#b91c1c" /> {SEVERITY_CONFIG[result.severity]?.label || 'High Severity'}
                   </span>
-                  <h2 style={{ margin: '0 0 3px', fontSize: 18, fontWeight: 900, color: '#1a2e1f', lineHeight: 1.25 }}>{result.disease}</h2>
-                  {result.diseaseKn && (
-                    <p style={{ margin: '0 0 2px', fontSize: 13, color: '#4b7a5c', fontWeight: 700 }}>
-                      {viewLang === 'hi' ? (result.diseaseHi || result.diseaseKn) : result.diseaseKn}
-                    </p>
-                  )}
-                  {result.diseaseHi && (viewLang === 'all' || viewLang === 'hi') && (
-                    <p style={{ margin: '0 0 4px', fontSize: 12.5, color: '#15803d', fontWeight: 600 }}>
-                      🇮🇳 {result.diseaseHi}
+                  <h2 style={{ margin: '0 0 3px', fontSize: 18, fontWeight: 900, color: '#1a2e1f', lineHeight: 1.25 }}>
+                    {lang === 'kn' ? (result.diseaseKn || result.disease) : lang === 'hi' ? (result.diseaseHi || result.disease) : result.disease}
+                  </h2>
+                  {(lang === 'kn' || lang === 'hi') && (
+                    <p style={{ margin: '0 0 3px', fontSize: 13, color: '#4b7a5c', fontWeight: 700 }}>
+                      {result.disease}
                     </p>
                   )}
                   <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <Leaf size={12} />{lang === 'kn' ? 'ಬೆಳೆ' : 'Crop'}: {result.crop}
+                    <Leaf size={12} />{lang === 'kn' ? 'ಬೆಳೆ' : lang === 'hi' ? 'फसल' : 'Crop'}: {getLocalizedCropName(result.crop, lang)}
                   </div>
                 </div>
               </div>
@@ -1322,53 +1326,6 @@ export default function CropScanner() {
               <button onClick={handleReset} style={{ padding: '13px 16px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#1a7c4a,#145f38)', color: '#fff', fontWeight: 800, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, boxShadow: '0 3px 10px rgba(26,124,74,0.2)' }}>
                 <RefreshCw size={15} />{lang === 'kn' ? 'ಮತ್ತೆ' : lang === 'hi' ? 'फिर से' : 'Rescan'}
               </button>
-            </div>
-
-            {/* Trilingual Language Selector Bar */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              background: '#ffffff',
-              border: '1px solid #d1e8db',
-              borderRadius: 14,
-              padding: '6px 10px',
-              marginBottom: 14,
-              boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 800, color: '#1a7c4a' }}>
-                <Languages size={15} color="#1a7c4a" />
-                <span>{lang === 'kn' ? 'ಭಾಷೆ / Language:' : lang === 'hi' ? 'भाषा / Language:' : 'Language:'}</span>
-              </div>
-              <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-                {[
-                  { id: 'all', label: '🌐 All 3 (ಎಲ್ಲವೂ / सभी)' },
-                  { id: 'kn', label: 'ಕನ್ನಡ' },
-                  { id: 'hi', label: 'हिन्दी' },
-                  { id: 'en', label: 'English' }
-                ].map(opt => {
-                  const isActive = (viewLang === opt.id) || (viewLang === 'auto' && (opt.id === lang || (opt.id === 'en' && lang !== 'kn' && lang !== 'hi')));
-                  return (
-                    <button
-                      key={opt.id}
-                      onClick={() => setViewLang(opt.id)}
-                      style={{
-                        padding: '5px 11px',
-                        borderRadius: 9,
-                        border: isActive ? '1.5px solid #1a7c4a' : '1px solid #e2e8f0',
-                        background: isActive ? '#1a7c4a' : '#f8fafc',
-                        color: isActive ? '#ffffff' : '#334155',
-                        fontSize: 12,
-                        fontWeight: isActive ? 800 : 600,
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease'
-                      }}
-                    >
-                      {opt.label}
-                    </button>
-                  );
-                })}
-              </div>
             </div>
 
             {/* Tabs */}
@@ -1398,35 +1355,14 @@ export default function CropScanner() {
                       <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>
                     )}
 
-                    {/* Trilingual Render */}
-                    {(() => {
-                      const eff = viewLang === 'auto' ? lang : viewLang;
-                      if (eff === 'kn') {
-                        return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.remedyKn || translatedRemedy || result.remedy}</p>;
-                      }
-                      if (eff === 'hi') {
-                        return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.remedyHi || result.remedy}</p>;
-                      }
-                      if (eff === 'en') {
-                        return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.remedy}</p>;
-                      }
-                      return (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                          <div style={{ padding: '8px 12px', background: '#fffbeb', borderRadius: 10, border: '1px solid #fef3c7' }}>
-                            <div style={{ fontSize: 10, fontWeight: 800, color: '#b45309', marginBottom: 3 }}>🟡 ಕನ್ನಡ (Kannada)</div>
-                            <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.remedyKn || translatedRemedy || result.remedy}</p>
-                          </div>
-                          <div style={{ padding: '8px 12px', background: '#f0fdf4', borderRadius: 10, border: '1px solid #dcfce7' }}>
-                            <div style={{ fontSize: 10, fontWeight: 800, color: '#15803d', marginBottom: 3 }}>🔵 हिन्दी (Hindi)</div>
-                            <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.remedyHi || result.remedy}</p>
-                          </div>
-                          <div style={{ padding: '8px 12px', background: '#f8fafc', borderRadius: 10, border: '1px solid #e2e8f0' }}>
-                            <div style={{ fontSize: 10, fontWeight: 800, color: '#475569', marginBottom: 3 }}>🟢 English</div>
-                            <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.remedy}</p>
-                          </div>
-                        </div>
-                      );
-                    })()}
+                    {/* Direct Language Render */}
+                    <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>
+                      {lang === 'kn'
+                        ? (result.remedyKn || translatedRemedy || result.remedy)
+                        : lang === 'hi'
+                        ? (result.remedyHi || result.remedy)
+                        : result.remedy}
+                    </p>
                   </div>
 
                   {/* Prevention & Cultural Control */}
@@ -1436,25 +1372,13 @@ export default function CropScanner() {
                         <ShieldCheck size={14} color="#0369a1" />
                         {lang === 'kn' ? 'ತಡೆಗಟ್ಟುವಿಕೆ & ಕೃಷಿ ಪದ್ಧತಿ' : lang === 'hi' ? 'रोकथाम एवं कृषि प्रबंधन' : 'Prevention & Cultural Control'}
                       </p>
-                      {(() => {
-                        const eff = viewLang === 'auto' ? lang : viewLang;
-                        if (eff === 'kn') {
-                          return <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>{result.preventionKn || translatedPrevention || result.prevention}</p>;
-                        }
-                        if (eff === 'hi') {
-                          return <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>{result.preventionHi || result.prevention}</p>;
-                        }
-                        if (eff === 'en') {
-                          return <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>{result.prevention}</p>;
-                        }
-                        return (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                            <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5 }}><strong style={{ color: '#0284c7' }}>ಕನ್ನಡ:</strong> {result.preventionKn || result.prevention}</p>
-                            <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5 }}><strong style={{ color: '#16a34a' }}>हिन्दी:</strong> {result.preventionHi || result.prevention}</p>
-                            <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5 }}><strong style={{ color: '#475569' }}>English:</strong> {result.prevention}</p>
-                          </div>
-                        );
-                      })()}
+                      <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>
+                        {lang === 'kn'
+                          ? (result.preventionKn || translatedPrevention || result.prevention)
+                          : lang === 'hi'
+                          ? (result.preventionHi || result.prevention)
+                          : result.prevention}
+                      </p>
                     </div>
                   )}
 
@@ -1465,25 +1389,13 @@ export default function CropScanner() {
                         <Leaf size={14} color="#15803d" />
                         {lang === 'kn' ? 'ಸಾವಯವ ಪರ್ಯಾಯ' : lang === 'hi' ? 'जैविक विकल्प' : 'Organic Alternative'}
                       </p>
-                      {(() => {
-                        const eff = viewLang === 'auto' ? lang : viewLang;
-                        if (eff === 'kn') {
-                          return <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>{result.organicTipKn || translatedOrganicTip || result.organicTip}</p>;
-                        }
-                        if (eff === 'hi') {
-                          return <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>{result.organicTipHi || result.organicTip}</p>;
-                        }
-                        if (eff === 'en') {
-                          return <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>{result.organicTip}</p>;
-                        }
-                        return (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                            <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}><strong style={{ color: '#15803d' }}>ಕನ್ನಡ:</strong> {result.organicTipKn || result.organicTip}</p>
-                            <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}><strong style={{ color: '#15803d' }}>हिन्दी:</strong> {result.organicTipHi || result.organicTip}</p>
-                            <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}><strong style={{ color: '#15803d' }}>English:</strong> {result.organicTip}</p>
-                          </div>
-                        );
-                      })()}
+                      <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>
+                        {lang === 'kn'
+                          ? (result.organicTipKn || translatedOrganicTip || result.organicTip)
+                          : lang === 'hi'
+                          ? (result.organicTipHi || result.organicTip)
+                          : result.organicTip}
+                      </p>
                     </div>
                   )}
 
@@ -1581,35 +1493,14 @@ export default function CropScanner() {
                     <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>
                   )}
 
-                  {/* Trilingual Fertilizer Guidance */}
-                  {(() => {
-                    const eff = viewLang === 'auto' ? lang : viewLang;
-                    if (eff === 'kn') {
-                      return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.fertilizerKn || translatedFertilizer || result.fertilizer}</p>;
-                    }
-                    if (eff === 'hi') {
-                      return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.fertilizerHi || result.fertilizer}</p>;
-                    }
-                    if (eff === 'en') {
-                      return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.fertilizer}</p>;
-                    }
-                    return (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        <div style={{ padding: '8px 12px', background: '#fffbeb', borderRadius: 10, border: '1px solid #fef3c7' }}>
-                          <div style={{ fontSize: 10, fontWeight: 800, color: '#b45309', marginBottom: 3 }}>🟡 ಕನ್ನಡ (Kannada)</div>
-                          <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.fertilizerKn || translatedFertilizer || result.fertilizer}</p>
-                        </div>
-                        <div style={{ padding: '8px 12px', background: '#f0fdf4', borderRadius: 10, border: '1px solid #dcfce7' }}>
-                          <div style={{ fontSize: 10, fontWeight: 800, color: '#15803d', marginBottom: 3 }}>🔵 हिन्दी (Hindi)</div>
-                          <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.fertilizerHi || result.fertilizer}</p>
-                        </div>
-                        <div style={{ padding: '8px 12px', background: '#f8fafc', borderRadius: 10, border: '1px solid #e2e8f0' }}>
-                          <div style={{ fontSize: 10, fontWeight: 800, color: '#475569', marginBottom: 3 }}>🟢 English</div>
-                          <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.fertilizer}</p>
-                        </div>
-                      </div>
-                    );
-                  })()}
+                  {/* Direct Language Fertilizer Guidance */}
+                  <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>
+                    {lang === 'kn'
+                      ? (result.fertilizerKn || translatedFertilizer || result.fertilizer)
+                      : lang === 'hi'
+                      ? (result.fertilizerHi || result.fertilizer)
+                      : result.fertilizer}
+                  </p>
 
                   {/* Verified Fertilizer Product Links with Pricing */}
                   {result.products && result.products.filter(p => p.type === 'fertilizer').length > 0 && (
@@ -1706,49 +1597,20 @@ export default function CropScanner() {
                   )}
 
                   {(() => {
-                    const eff = viewLang === 'auto' ? lang : viewLang;
-                    const takeawaysList = eff === 'kn'
+                    const takeawaysList = lang === 'kn'
                       ? (result.keyTakeawaysKn || translatedKeyTakeaways || result.keyTakeaways)
-                      : eff === 'hi'
+                      : lang === 'hi'
                       ? (result.keyTakeawaysHi || result.keyTakeaways)
-                      : eff === 'en'
-                      ? result.keyTakeaways
-                      : null;
+                      : result.keyTakeaways;
 
-                    if (takeawaysList) {
-                      return takeawaysList.map((tip, i) => (
-                        <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 9 }}>
-                          <div style={{ width: 20, height: 20, borderRadius: '50%', background: (result.color || '#1a7c4a') + '20', color: result.color || '#1a7c4a', fontSize: 10, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
-                            {i + 1}
-                          </div>
-                          <p style={{ margin: 0, fontSize: 13.5, color: '#334155', lineHeight: 1.55, fontWeight: 500 }}>
-                            {tip}
-                          </p>
-                        </div>
-                      ));
-                    }
-
-                    // 'all' view: show points with Kannada, Hindi, and English sub-lines
-                    return result.keyTakeaways.map((enTip, i) => (
-                      <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 12, paddingBottom: 10, borderBottom: i < result.keyTakeaways.length - 1 ? '1px dashed #e2e8f0' : 'none' }}>
-                        <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#1a7c4a20', color: '#1a7c4a', fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                    return (takeawaysList || []).map((tip, i) => (
+                      <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 9 }}>
+                        <div style={{ width: 20, height: 20, borderRadius: '50%', background: (result.color || '#1a7c4a') + '20', color: result.color || '#1a7c4a', fontSize: 10, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
                           {i + 1}
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                          {result.keyTakeawaysKn?.[i] && (
-                            <p style={{ margin: 0, fontSize: 13, color: '#1e293b', lineHeight: 1.45 }}>
-                              <strong style={{ color: '#b45309' }}>🟡 ಕನ್ನಡ:</strong> {result.keyTakeawaysKn[i]}
-                            </p>
-                          )}
-                          {result.keyTakeawaysHi?.[i] && (
-                            <p style={{ margin: 0, fontSize: 13, color: '#1e293b', lineHeight: 1.45 }}>
-                              <strong style={{ color: '#15803d' }}>🔵 हिन्दी:</strong> {result.keyTakeawaysHi[i]}
-                            </p>
-                          )}
-                          <p style={{ margin: 0, fontSize: 13, color: '#475569', lineHeight: 1.45 }}>
-                            <strong style={{ color: '#64748b' }}>🟢 English:</strong> {enTip}
-                          </p>
-                        </div>
+                        <p style={{ margin: 0, fontSize: 13.5, color: '#334155', lineHeight: 1.55, fontWeight: 500 }}>
+                          {tip}
+                        </p>
                       </div>
                     ));
                   })()}
