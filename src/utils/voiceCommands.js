@@ -480,7 +480,7 @@ If the image is a plant, crop leaf, stem, ear, fruit, tree frond, OR an agricult
 19. Chickpea / Bengal Gram: Fusarium Wilt (Fusarium oxysporum f. sp. ciceris) [drooping, sudden drying and wilting of plant]
 20. Chilli: Phytophthora Foot Rot (Phytophthora capsici) [dark collar rot at soil level, wilting with green chillies]
 21. Black Pepper: Phytophthora Foot Rot (Phytophthora capsici)
-22. Ragi / Finger Millet: Blast Disease (Pyricularia grisea), Head Smut (Ustilago crameri)
+22. Ragi / Finger Millet: Ragi Blast (Pyricularia grisea) [spindle lesions on leaves/neck], Foot Rot / Seedling Blight (Cochliobolus miyabeanus) [stem browning & collar rot at base], Ragi Smut (Melanopsichium eleusinis) [black powdery spore galls in fingers], Downy Mildew / Green Ear (Sclerophthora macrospora) [green bushy leafy head / tuppala roga / hasiru tene]
 23. Ginger: Rhizome Rot, Leaf Spot
 24. Turmeric: Leaf Spot, Rhizome Rot
 25. Cardamom: Capsule Rot, Mosaic
