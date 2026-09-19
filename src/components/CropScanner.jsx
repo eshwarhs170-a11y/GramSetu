@@ -1,596 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, X, CheckCircle2, AlertTriangle, ShieldCheck, Volume2, Info, Scan, Leaf, AlertCircle, Microscope, Droplets, FlaskConical, Sprout, ChevronRight, Upload, MessageCircle, Send, ImagePlus, ChevronsDown, Loader2, TriangleAlert, CircleCheck, ScanLine, Image, Crop, Layers, Bot, Pill, Building2, ListChecks, RefreshCw, ArrowRight, Wheat, Zap, Lightbulb } from 'lucide-react';
+import { Camera, X, CheckCircle2, AlertTriangle, ShieldCheck, Volume2, Info, Scan, Leaf, AlertCircle, Microscope, Droplets, FlaskConical, Sprout, ChevronRight, Upload, MessageCircle, Send, ImagePlus, ChevronsDown, Loader2, TriangleAlert, CircleCheck, ScanLine, Image, Crop, Layers, Bot, Pill, Building2, ListChecks, RefreshCw, ArrowRight, Wheat, Zap, Lightbulb, ExternalLink, ShoppingBag, Languages, Tag, IndianRupee } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useVoice } from '../context/VoiceContext';
 import { callGemini, callGeminiVision, callGeminiTranslate } from '../utils/voiceCommands';
 import { useNavigate } from 'react-router-dom';
-
-// ─────────────────────────────────────────────────────────────────
-// COMPREHENSIVE KARNATAKA CROP DISEASE DATABASE
-// Based on major crops grown in Karnataka (all districts)
-// Diseases from PlantVillage / Kaggle crop disease datasets
-// scheme: null means no relevant scheme → section is hidden
-// ─────────────────────────────────────────────────────────────────
-const CROP_DISEASES = [
-  // ── PADDY / RICE ──
-  {
-    crop: 'Paddy / Rice (ಭತ್ತ)',
-    emoji: '🌾',
-    disease: 'Blast Disease (Pyricularia oryzae)',
-    diseaseKn: 'ಬೆಂಕಿ ರೋಗ',
-    severity: 'High',
-    remedy: 'Spray Tricyclazole 75 WP @ 0.6 g/L or Carbendazim 50 WP @ 1 g/L at tillering stage. Avoid excess nitrogen.',
-    fertilizer: 'Apply 120:60:60 kg NPK/ha in split doses. Avoid excess N.',
-    organicTip: 'Use Pseudomonas fluorescens @ 2.5 kg/ha as foliar spray.',
-    scheme: 'PMFBY Pradhan Mantri Fasal Bima Yojana',
-    schemeLink: 'https://pmfby.gov.in/',
-    color: '#f59e0b',
-    keyTakeaways: ['Affects leaves, neck, and panicles', 'High humidity & cool nights favor outbreak', 'Use resistant varieties like BPT 5204'],
-  },
-  {
-    crop: 'Paddy / Rice (ಭತ್ತ)',
-    emoji: '🌾',
-    disease: 'Brown Plant Hopper (Nilaparvata lugens)',
-    diseaseKn: 'ಕಂದು ಎಲೆ ಹೇನು',
-    severity: 'High',
-    remedy: 'Apply Imidacloprid 17.8 SL @ 0.5 mL/L or Buprofezin 25 SC @ 1.25 mL/L. Drain water for 3–4 days.',
-    fertilizer: 'Reduce N application; avoid excessive tillering.',
-    organicTip: 'Spray NSKE 5% (Neem Seed Kernel Extract) early stage.',
-    scheme: 'Raitha Samparka Kendra Pest Alert',
-    schemeLink: 'https://raitamitra.karnataka.gov.in/',
-    color: '#d97706',
-    keyTakeaways: ['Causes "hopperburn" — circular burned patches', 'Vector for Grassy Stunt & Ragged Stunt viruses', 'Avoid dense transplanting'],
-  },
-  {
-    crop: 'Paddy / Rice (ಭತ್ತ)',
-    emoji: '🌾',
-    disease: 'Sheath Blight (Rhizoctonia solani)',
-    diseaseKn: 'ತೊಗಟೆ ಅಂಗಮಾರಿ',
-    severity: 'Medium',
-    remedy: 'Spray Validamycin 3 SL @ 2 mL/L or Hexaconazole 5 EC @ 1 mL/L. Improve air circulation.',
-    fertilizer: 'Balanced K application (MOP 60 kg/ha) strengthens cell walls.',
-    organicTip: 'Apply Trichoderma viride 1% WP @ 4 kg/ha at tillering.',
-    scheme: null,
-    color: '#92400e',
-    keyTakeaways: ['Water-borne fungus; spreads via irrigation water', 'High N + high humidity trigger outbreaks', 'Field sanitation — burn crop debris'],
-  },
-
-  // ── RAGI (FINGER MILLET) ──
-  {
-    crop: 'Ragi / Finger Millet (ರಾಗಿ)',
-    emoji: '🌿',
-    disease: 'Blast Disease (Pyricularia grisea)',
-    diseaseKn: 'ಬೆಂಕಿ ರೋಗ',
-    severity: 'High',
-    remedy: 'Spray Tricyclazole 75 WP @ 0.6 g/L. Seed treatment with Carbendazim @ 2 g/kg.',
-    fertilizer: 'Apply 50:40:25 kg NPK/ha for rainfed Ragi.',
-    organicTip: 'Spray cow urine 10% solution at 15-day intervals as preventive.',
-    scheme: 'Raitha Siri Scheme (ರೈತ ಸಿರಿ) — ₹10,000/hectare',
-    schemeLink: 'https://raitamitra.karnataka.gov.in/',
-    color: '#ef4444',
-    keyTakeaways: ['Karnataka accounts for 40% of India\'s Ragi production', 'Affects neck, finger, and leaf', 'Sow resistant variety GPU-28'],
-  },
-  {
-    crop: 'Ragi / Finger Millet (ರಾಗಿ)',
-    emoji: '🌿',
-    disease: 'Head Smut (Ustilago crameri)',
-    diseaseKn: 'ತಲೆ ಕರಿ ರೋಗ',
-    severity: 'Medium',
-    remedy: 'Seed treatment with Carboxin 37.5% + Thiram 37.5% DS @ 3 g/kg seed.',
-    fertilizer: 'No specific change; maintain balanced nutrition.',
-    organicTip: 'Hot water treatment of seeds at 52°C for 10 minutes before sowing.',
-    scheme: null,
-    color: '#dc2626',
-    keyTakeaways: ['Soil-borne seed-borne fungus', 'Entire ear head converted to smut mass', 'Use certified disease-free seed'],
-  },
-
-  // ── MAIZE ──
-  {
-    crop: 'Maize / Corn (ಜೋಳ)',
-    emoji: '🌽',
-    disease: 'Fall Armyworm (Spodoptera frugiperda)',
-    diseaseKn: 'ಫಾಲ್ ಆರ್ಮಿವರ್ಮ್',
-    severity: 'High',
-    remedy: 'Apply Emamectin Benzoate 5 SG @ 0.4 g/L or Chlorantraniliprole 18.5 SC @ 0.4 mL/L. Apply into whorl early morning.',
-    fertilizer: 'Well-timed top dressing of urea @ 50 kg/ha at V6 stage strengthens plant.',
-    organicTip: 'Apply sand + lime mixture (9:1) in the whorl. Release Trichogramma @ 1 lakh/ha.',
-    scheme: 'PMFBY Crop Insurance (Maize)',
-    schemeLink: 'https://pmfby.gov.in/',
-    color: '#eab308',
-    keyTakeaways: ['Invasive pest; first detected in India 2018', 'Causes ₹12,000 Cr loss annually in India', 'Early morning scouting is essential'],
-  },
-  {
-    crop: 'Maize / Corn (ಜೋಳ)',
-    emoji: '🌽',
-    disease: 'Northern Leaf Blight (Exserohilum turcicum)',
-    diseaseKn: 'ಉತ್ತರ ಎಲೆ ಅಂಗಮಾರಿ',
-    severity: 'Medium',
-    remedy: 'Spray Mancozeb 75 WP @ 2.5 g/L or Propiconazole 25 EC @ 1 mL/L.',
-    fertilizer: 'Ensure adequate K and balanced N to reduce susceptibility.',
-    organicTip: 'Bordeaux mixture 1% spray at early symptom stage.',
-    scheme: null,
-    color: '#ca8a04',
-    keyTakeaways: ['Long, cigar-shaped gray-green lesions on leaves', 'Cool, moist weather triggers spread', 'Grows from lower leaves upward'],
-  },
-  {
-    crop: 'Maize / Corn (ಜೋಳ)',
-    emoji: '🌽',
-    disease: 'Head Smut (Ustilago crameri)',
-    diseaseKn: 'ಜೋಳದ ತಲೆ ಕರಿ ರೋಗ',
-    severity: 'High',
-    remedy: 'Seed treatment with Carboxin 37.5% + Thiram 37.5% DS @ 3 g/kg seed. Cut and bag infected tassels before spore dispersal; burn or bury deeply.',
-    fertilizer: 'Balanced NPK nutrition (120:60:40 kg/ha) with Zinc Sulphate 25 kg/ha.',
-    organicTip: 'Solarize soil and apply Trichoderma viride @ 5 kg/ha enriched in farmyard manure.',
-    scheme: 'PMFBY Crop Insurance (Maize)',
-    schemeLink: 'https://pmfby.gov.in/',
-    color: '#b91c1c',
-    keyTakeaways: ['Converts tassel and ear into mass of black powdery smut spores', 'Soil and seed-borne fungal infection', 'Use certified resistant hybrid seeds'],
-  },
-
-  // ── COTTON ──
-  {
-    crop: 'Cotton (ಹತ್ತಿ)',
-    emoji: '🪴',
-    disease: 'Pink Bollworm (Pectinophora gossypiella)',
-    diseaseKn: 'ಗುಲಾಬಿ ಕಾಯಿಕೊರಕ',
-    severity: 'High',
-    remedy: 'Install 5 pheromone traps per acre for monitoring. Spray Spinosad 45 SC @ 0.3 mL/L or Profenofos 50 EC @ 2 mL/L. Hand-pick damaged bolls.',
-    fertilizer: 'Apply Zinc Sulphate @ 25 kg/ha if deficient. Avoid excess N.',
-    organicTip: 'Release Trichogramma chilonis @ 1.5 lakh eggs/ha at 15-day intervals.',
-    scheme: 'Cotton Corporation of India — MSP Support',
-    schemeLink: 'https://cotcorp.org.in/',
-    color: '#ec4899',
-    keyTakeaways: ['Major pest of Bt cotton too', 'Damage inside bolls → fiber quality loss', 'Sex pheromone traps essential for IPM'],
-  },
-  {
-    crop: 'Cotton (ಹತ್ತಿ)',
-    emoji: '🪴',
-    disease: 'Leaf Curl Virus (Cotton Leaf Curl Disease)',
-    diseaseKn: 'ಎಲೆ ಮುದುಡು ರೋಗ',
-    severity: 'High',
-    remedy: 'No chemical cure. Uproot and destroy infected plants. Control whitefly vector with Imidacloprid 17.8 SL @ 0.5 mL/L.',
-    fertilizer: 'No specific change; strengthen plants with K and micronutrients.',
-    organicTip: 'Yellow sticky traps for whitefly monitoring (5/acre).',
-    scheme: null,
-    color: '#db2777',
-    keyTakeaways: ['Whitefly (Bemisia tabaci) transmits the virus', 'Cannot be cured — only prevented', 'Uproot infected plants immediately'],
-  },
-
-  // ── TOMATO ──
-  {
-    crop: 'Tomato (ಟೊಮೇಟೊ)',
-    emoji: '🍅',
-    disease: 'Late Blight (Phytophthora infestans)',
-    diseaseKn: 'ಅಂಗಮಾರಿ ರೋಗ',
-    severity: 'High',
-    remedy: 'Spray Mancozeb 75 WP @ 2 g/L or Metalaxyl + Mancozeb 72 WP @ 2.5 g/L. Repeat every 7 days in wet weather.',
-    fertilizer: 'Ensure adequate Calcium (foliar CaCl₂ 0.5%) to strengthen cell walls.',
-    organicTip: 'Spray Bordeaux mixture 0.5% as preventive measure every 10 days.',
-    scheme: 'PMFBY Crop Insurance (Vegetables)',
-    schemeLink: 'https://pmfby.gov.in/',
-    color: '#f97316',
-    keyTakeaways: ['Same pathogen that caused Irish Potato Famine 1845', 'Spreads rapidly in cool + humid conditions', 'Infected fruits turn dark brown & inedible'],
-  },
-  {
-    crop: 'Tomato (ಟೊಮೇಟೊ)',
-    emoji: '🍅',
-    disease: 'Tomato Leaf Miner (Tuta absoluta)',
-    diseaseKn: 'ಎಲೆ ಗಣಿ ಕೀಟ',
-    severity: 'High',
-    remedy: 'Apply Coragen (Chlorantraniliprole) 18.5 SC @ 0.3 mL/L. Install delta traps with pheromone lures.',
-    fertilizer: 'No direct fertilizer link; healthy plants resist better.',
-    organicTip: 'Release Nesidiocoris tenuis (predator bug) for biological control.',
-    scheme: null,
-    color: '#ea580c',
-    keyTakeaways: ['Invasive pest — high economic damage', 'Mines inside leaves; also attacks fruits', 'Complete tunnels visible on leaves'],
-  },
-  {
-    crop: 'Tomato (ಟೊಮೇಟೊ)',
-    emoji: '🍅',
-    disease: 'Early Blight (Alternaria solani)',
-    diseaseKn: 'ಆರಂಭಿಕ ಅಂಗಮಾರಿ',
-    severity: 'Medium',
-    remedy: 'Spray Iprodione 50 WP @ 1.5 g/L or Azoxystrobin 23 SC @ 1 mL/L.',
-    fertilizer: 'Adequate Potassium reduces severity. K₂O @ 100 kg/ha.',
-    organicTip: 'Garlic extract spray (5%) has antifungal properties.',
-    scheme: null,
-    color: '#c2410c',
-    keyTakeaways: ['Concentric ring pattern on leaves', 'Starts from lower leaves, moves up', 'Use certified disease-free transplants'],
-  },
-
-  // ── POTATO ──
-  {
-    crop: 'Potato (ಆಲೂಗಡ್ಡೆ)',
-    emoji: '🥔',
-    disease: 'Late Blight (Phytophthora infestans)',
-    diseaseKn: 'ಅಂಗಮಾರಿ ರೋಗ',
-    severity: 'High',
-    remedy: 'Spray Cymoxanil + Mancozeb 72 WP @ 2.5 g/L. Apply before onset of rainy season.',
-    fertilizer: 'Earthing up with soil + adequate K reduces tuber infection.',
-    organicTip: 'Spray decoction of garlic + chili (5%) as preventive measure.',
-    scheme: 'Horticulture Crop Insurance (Karnataka)',
-    schemeLink: 'https://horticulturedir.karnataka.gov.in/',
-    color: '#a16207',
-    keyTakeaways: ['Water-mold type pathogen', 'Dark brown spots with white fungal growth underneath', 'Cool 12–18°C + rain = epidemic conditions'],
-  },
-
-  // ── ONION ──
-  {
-    crop: 'Onion (ಈರುಳ್ಳಿ)',
-    emoji: '🧅',
-    disease: 'Purple Blotch (Alternaria porri)',
-    diseaseKn: 'ನೇರಳೆ ಚುಕ್ಕೆ ರೋಗ',
-    severity: 'Medium',
-    remedy: 'Spray Mancozeb 75 WP @ 2 g/L or Iprodione 50 WP @ 1.5 g/L. Repeat at 10-day intervals.',
-    fertilizer: 'Avoid excess N. Apply S (Sulphur @ 20 kg/ha).',
-    organicTip: 'Spray NSKE 5% + Pseudomonas fluorescens @ 2.5 kg/ha.',
-    scheme: 'PMFBY (Rabi Onion)',
-    schemeLink: 'https://pmfby.gov.in/',
-    color: '#7c3aed',
-    keyTakeaways: ['Purple-centered lesions with yellow halo', 'Thrips injury predisposes plants', 'Avoid overhead irrigation'],
-  },
-
-  // ── SUGARCANE ──
-  {
-    crop: 'Sugarcane (ಕಬ್ಬು)',
-    emoji: '🎍',
-    disease: 'Red Rot (Colletotrichum falcatum)',
-    diseaseKn: 'ಕೆಂಪು ಕೊಳೆ ರೋಗ',
-    severity: 'High',
-    remedy: 'Plant disease-free setts from certified nurseries. Treat setts with Carbendazim 0.1% for 15 min. Crop rotation with paddy.',
-    fertilizer: 'Apply 250:100:125 kg NPK/ha. Adequate K builds resistance.',
-    organicTip: 'Apply Trichoderma viride with FYM @ 25 kg/ha in furrows.',
-    scheme: 'FRP (Fair & Remunerative Price) Support',
-    schemeLink: 'https://sugarcane.kar.nic.in/',
-    color: '#84cc16',
-    keyTakeaways: ['Most destructive disease of sugarcane', 'Splits cane shows red + white patches', 'Destroy infected ratoons; do not retain'],
-  },
-  {
-    crop: 'Sugarcane (ಕಬ್ಬು)',
-    emoji: '🎍',
-    disease: 'Smut (Ustilago scitaminea)',
-    diseaseKn: 'ಕರಿ ಕೊಳಾಯಿ ರೋಗ',
-    severity: 'Medium',
-    remedy: 'Hot water treatment of setts at 50°C for 2 hours. Use resistant varieties (Co 86032, CoV 92102).',
-    fertilizer: 'Standard NPK; no specific change.',
-    organicTip: 'Biocontrol: Coniothyrium minitans for soil treatment.',
-    scheme: null,
-    color: '#65a30d',
-    keyTakeaways: ['Whip-like black structure from growing point', 'Seed-borne disease', 'Remove and burn black whip immediately'],
-  },
-
-  // ── COCONUT ──
-  {
-    crop: 'Coconut (ತೆಂಗು)',
-    emoji: '🥥',
-    disease: 'Rhinoceros Beetle (Oryctes rhinoceros)',
-    diseaseKn: 'ಖಡ್ಗಮೃಗ ದುಂಬಿ',
-    severity: 'High',
-    remedy: 'Extract beetles using wire hooks. Apply Sevidol 8G @ 25 g/palm inside young leaf axils. Pheromone traps @ 1/acre.',
-    fertilizer: 'Apply 50 kg FYM + 1.3 kg NPK mixture per palm annually.',
-    organicTip: 'Apply Baculovirus oryctes (BV) for biological control in compost.',
-    scheme: 'Coconut Development Board Schemes',
-    schemeLink: 'https://coconutboard.gov.in/',
-    color: '#14b8a6',
-    keyTakeaways: ['Bores into growing point → V-shaped cuts on leaves', 'Breeds in decaying organic matter', 'Clean compost pits + pheromone traps key'],
-  },
-  {
-    crop: 'Coconut (ತೆಂಗು)',
-    emoji: '🥥',
-    disease: 'Root Wilt (Phytoplasma)',
-    diseaseKn: 'ಬೇರು ಸೊರಗು ರೋಗ',
-    severity: 'High',
-    remedy: 'No chemical cure. Inject oxytetracycline into trunk (Kerala treatment protocol). Destroy severely infected palms.',
-    fertilizer: 'Spray micronutrients — Mn, Zn, B foliar sprays monthly.',
-    organicTip: 'Apply neem cake 5 kg + Trichoderma 1 kg in basins.',
-    scheme: null,
-    color: '#0d9488',
-    keyTakeaways: ['Phytoplasma — transmitted by plant hoppers', 'Yellowing from lower fronds upward', 'No curative treatment — early removal recommended'],
-  },
-  {
-    crop: 'Coconut (ತೆಂಗು)',
-    emoji: '🥥',
-    disease: 'Yellow Leaf Disease (Phytoplasma)',
-    diseaseKn: 'ತೆಂಗಿನ ಹಳದಿ ಎಲೆ ರೋಗ',
-    severity: 'High',
-    remedy: 'No chemical cure. Spray Bordeaux mixture (1%) to prevent secondary foliar infection. Manage lace bug vectors with Neem oil 0.03% @ 5 mL/L.',
-    fertilizer: 'Apply 1.3 kg Urea + 2 kg Rock Phosphate + 3.5 kg MOP + 1 kg Magnesium Sulphate per palm yearly to boost vigor.',
-    organicTip: 'Grow green manure (Sunn hemp) in palm basins. Apply 50 kg compost + 5 kg neem cake.',
-    scheme: 'Coconut Development Board Schemes',
-    schemeLink: 'https://coconutboard.gov.in/',
-    color: '#eab308',
-    keyTakeaways: ['Intense yellowing starts from leaflet tips in middle whorl', 'Nut size drastically shrinks and kernels remain thin/soft', 'Transmitted by lace bug and planthopper vectors'],
-  },
-  {
-    crop: 'Coconut (ತೆಂಗು)',
-    emoji: '🥥',
-    disease: 'Bud Rot (Phytophthora meadii)',
-    diseaseKn: 'ತೆಂಗಿನ ಸುಳಿ ಕೊಳೆ ರೋಗ',
-    severity: 'High',
-    remedy: 'Remove completely rotten central spindle tissues. Clean crown and dress with Bordeaux paste. Drench crown with Metalaxyl + Mancozeb @ 2.5 g/L.',
-    fertilizer: 'Ensure good monsoon drainage in plantation. Apply MOP @ 2 kg/palm.',
-    organicTip: 'Place perforated sachet of copper sulphate + lime (50g each) in leaf axils before monsoon.',
-    scheme: 'Coconut Development Board Schemes',
-    schemeLink: 'https://coconutboard.gov.in/',
-    color: '#dc2626',
-    keyTakeaways: ['Central spear leaf rots with foul smell and easily pulls out', 'Deadly water-mold rot spreading rapidly during continuous monsoon rains', 'Immediate intervention needed to save palm'],
-  },
-
-  // ── ARECANUT ──
-  {
-    crop: 'Arecanut (ಅಡಿಕೆ)',
-    emoji: '🌴',
-    disease: 'Yellow Leaf Disease (Phytoplasma)',
-    diseaseKn: 'ಹಳದಿ ಎಲೆ ರೋಗ',
-    severity: 'High',
-    remedy: 'No direct cure. Apply Bordeaux mixture (1%) spray monthly. Ensure drainage. Oxytetracycline injection (200 mg/palm).',
-    fertilizer: 'Apply 150g N + 60g P₂O₅ + 200g K₂O per palm yearly. Mg and Zn spray.',
-    organicTip: 'Apply green leaf manure + compost in the basin. Intercrop with banana.',
-    scheme: 'Horticulture Crop Insurance (Karnataka)',
-    schemeLink: 'https://horticulturedir.karnataka.gov.in/',
-    color: '#eab308',
-    keyTakeaways: ['Major disease of arecanut in Karnataka', 'Transmitted by Myndus crudus leafhopper', 'Yellowing + drying from oldest leaves'],
-  },
-  {
-    crop: 'Arecanut (ಅಡಿಕೆ)',
-    emoji: '🌴',
-    disease: 'Bud Rot (Phytophthora meadii)',
-    diseaseKn: 'ಮೊಗ್ಗು ಕೊಳೆ ರೋಗ',
-    severity: 'High',
-    remedy: 'Remove and destroy infected bud and lower leaves. Apply Bordeaux paste on cut surfaces. Spray Metalaxyl + Mancozeb 72 WP @ 2 g/L.',
-    fertilizer: 'Avoid waterlogging. Apply MOP 200 g/palm.',
-    organicTip: 'Pour 100 mL Bordeaux mixture 1% into the crown monthly during monsoon.',
-    scheme: null,
-    color: '#d97706',
-    keyTakeaways: ['Most serious monsoon disease of Arecanut', 'Water-mold — spreads through rain splash', 'Crown of palm rots and whole palm dies'],
-  },
-
-  // ── COFFEE ──
-  {
-    crop: 'Coffee (ಕಾಫಿ)',
-    emoji: '☕',
-    disease: 'White Stem Borer (Xylotrechus quadripes)',
-    diseaseKn: 'ಬಿಳಿ ಕಾಂಡ ಕೊರಕ',
-    severity: 'High',
-    remedy: 'Uproot and burn affected plants. Pheromone traps (4/ha). Stem paint with Chlorpyriphos 20 EC (1:10 with water).',
-    fertilizer: 'Apply NPK 120:90:120 kg/ha in 3 split doses. Mg 30 kg/ha.',
-    organicTip: 'Shade management: proper pruning reduces humidity that aids beetles.',
-    scheme: 'Coffee Board Subsidies (Integrated Crop Management)',
-    schemeLink: 'https://indiacoffee.org/schemes/',
-    color: '#8b5cf6',
-    keyTakeaways: ['Most devastating pest of coffee in India', 'Adult beetles lay eggs on stem bark', 'Attack during summer; adult emergence post-monsoon'],
-  },
-  {
-    crop: 'Coffee (ಕಾಫಿ)',
-    emoji: '☕',
-    disease: 'Coffee Leaf Rust (Hemileia vastatrix)',
-    diseaseKn: 'ಎಲೆ ತುಕ್ಕು ರೋಗ',
-    severity: 'High',
-    remedy: 'Spray Copper oxychloride 50 WP @ 3 g/L. Apply Propiconazole 25 EC @ 1 mL/L for heavy infection.',
-    fertilizer: 'Apply K₂O 100 kg/ha to improve resistance. Avoid excess shade.',
-    organicTip: 'Copper-based Bordeaux mixture 0.5% spray at berry development.',
-    scheme: null,
-    color: '#7c3aed',
-    keyTakeaways: ['Orange powdery spore masses on leaf underside', 'Wind-spread; rapid in humid conditions', 'Shade management crucial for control'],
-  },
-
-  // ── BANANA ──
-  {
-    crop: 'Banana (ಬಾಳೆ)',
-    emoji: '🍌',
-    disease: 'Panama Wilt / Fusarium Wilt (Fusarium oxysporum)',
-    diseaseKn: 'ಫ್ಯೂಸೇರಿಯಂ ಸೊರಗು ರೋಗ',
-    severity: 'High',
-    remedy: 'No chemical cure. Remove and destroy affected plants. Use Trichoderma viride @ 4 kg/ha soil application.',
-    fertilizer: 'Apply FYM 10 kg/plant + KNO₃ spray 1%.',
-    organicTip: 'Grow resistant cultivars (Grand Naine, Dwarf Cavendish). Biopriming with Trichoderma.',
-    scheme: 'Horticulture Crop Insurance (Karnataka)',
-    schemeLink: 'https://horticulturedir.karnataka.gov.in/',
-    color: '#facc15',
-    keyTakeaways: ['Soil-borne disease — no pesticide cure', 'Vascular tissue turns brown when cut', 'Once in soil, persists for 30+ years'],
-  },
-  {
-    crop: 'Banana (ಬಾಳೆ)',
-    emoji: '🍌',
-    disease: 'Sigatoka Leaf Spot (Mycosphaerella fijiensis)',
-    diseaseKn: 'ಕಪ್ಪು ಸಿಗಟೋಕ',
-    severity: 'Medium',
-    remedy: 'Spray Propiconazole 25 EC @ 0.5 mL/L or Mancozeb 75 WP @ 2 g/L. Alternate fungicides to avoid resistance.',
-    fertilizer: 'Adequate K (150 g MOP/plant) reduces susceptibility.',
-    organicTip: 'Remove old leaves. Apply mineral oil spray (1%) to reduce spore germination.',
-    scheme: null,
-    color: '#eab308',
-    keyTakeaways: ['Most serious foliar disease globally', 'Streaks → necrotic patches on leaves', 'Reduces photosynthesis, yield by 50%'],
-  },
-
-  // ── MANGO ──
-  {
-    crop: 'Mango (ಮಾವು)',
-    emoji: '🥭',
-    disease: 'Anthracnose (Colletotrichum gloeosporioides)',
-    diseaseKn: 'ಆಂಥ್ರಾಕ್ನೋಸ್ ರೋಗ',
-    severity: 'Medium',
-    remedy: 'Spray Copper oxychloride 50 WP @ 3 g/L at flowering. Carbendazim 50 WP @ 1 g/L on young fruits.',
-    fertilizer: 'Balanced nutrition; avoid excess N during fruit development.',
-    organicTip: 'Bordeaux mixture 1% spray at panicle emergence.',
-    scheme: 'Horticulture Crop Insurance (Karnataka)',
-    schemeLink: 'https://horticulturedir.karnataka.gov.in/',
-    color: '#f59e0b',
-    keyTakeaways: ['Black spots on flowers, leaves, and fruits', 'Post-harvest disease too', 'High rainfall during flowering = risk'],
-  },
-  {
-    crop: 'Mango (ಮಾವು)',
-    emoji: '🥭',
-    disease: 'Mango Hoppers (Idioscopus clypealis)',
-    diseaseKn: 'ತಿಗಣೆ ಕೀಟ',
-    severity: 'High',
-    remedy: 'Spray Imidacloprid 17.8 SL @ 0.25 mL/L or Carbaryl 50 WP @ 2 g/L at 50% flowering.',
-    fertilizer: 'Balanced N-P-K. Avoid excess N that attracts pests.',
-    organicTip: 'NSKE 5% spray as repellent at pre-flowering stage.',
-    scheme: null,
-    color: '#d97706',
-    keyTakeaways: ['Sucks sap from flowers → no fruit set', 'Honeydew excretion causes sooty mold', 'Critical to spray at early bloom stage'],
-  },
-
-  // ── GROUNDNUT ──
-  {
-    crop: 'Groundnut (ಕಡಲೆಕಾಯಿ)',
-    emoji: '🥜',
-    disease: 'Early Leaf Spot (Cercospora arachidicola)',
-    diseaseKn: 'ಆರಂಭಿಕ ಎಲೆ ಚುಕ್ಕೆ',
-    severity: 'Medium',
-    remedy: 'Spray Chlorothalonil 75 WP @ 2 g/L or Mancozeb 75 WP @ 2.5 g/L every 14 days.',
-    fertilizer: 'Apply gypsum 400 kg/ha at pegging to supply Ca + S for pod filling.',
-    organicTip: 'Spray NSKE 5% as preventive spray at 30 DAS.',
-    scheme: 'PMFBY Kharif Oilseeds',
-    schemeLink: 'https://pmfby.gov.in/',
-    color: '#d97706',
-    keyTakeaways: ['Brown spots with yellow halo', 'Can reduce yield by 50% in severe cases', 'Karnataka\'s main Kharif oilseed crop'],
-  },
-
-  // ── SUNFLOWER ──
-  {
-    crop: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ)',
-    emoji: '🌻',
-    disease: 'Downy Mildew (Plasmopara halstedii)',
-    diseaseKn: 'ತೇವ ತುಪ್ಪಟ ರೋಗ',
-    severity: 'High',
-    remedy: 'Seed treatment with Metalaxyl 35 WS @ 6 g/kg. Spray Mancozeb 75 WP @ 2.5 g/L.',
-    fertilizer: 'Ensure Mn and Zn micronutrients at seedling stage.',
-    organicTip: 'Use bio-priming with Pseudomonas fluorescens @ 10 g/kg seed.',
-    scheme: 'PMFBY Oilseed Crop Insurance',
-    schemeLink: 'https://pmfby.gov.in/',
-    color: '#fbbf24',
-    keyTakeaways: ['Stunted plant, white coating on leaf underside', 'Karnataka is top sunflower producer in India', 'Seed treatment is most effective prevention'],
-  },
-
-  // ── SOYBEAN ──
-  {
-    crop: 'Soybean (ಸೋಯಾಬೀನ್)',
-    emoji: '🫘',
-    disease: 'Yellow Mosaic Virus (MYMV)',
-    diseaseKn: 'ಹಳದಿ ಮೊಸ್ಯಾಕ್ ರೋಗ',
-    severity: 'High',
-    remedy: 'No cure. Control whitefly vector: Imidacloprid 17.8 SL @ 0.5 mL/L. Uproot infected plants.',
-    fertilizer: 'Balanced nutrition. Avoid excess N that promotes whitefly.',
-    organicTip: 'Yellow sticky traps (10/acre) to monitor whitefly.',
-    scheme: null,
-    color: '#65a30d',
-    keyTakeaways: ['Whitefly-transmitted begomovirus', 'Yellow-green mosaic on leaves', 'Up to 95% yield loss in severe cases'],
-  },
-
-  // ── WHEAT ──
-  {
-    crop: 'Wheat (ಗೋಧಿ)',
-    emoji: '🌾',
-    disease: 'Blast Disease (Pyricularia grisea)',
-    diseaseKn: 'ಗೋಧಿ ಬೆಂಕಿ ರೋಗ',
-    severity: 'High',
-    remedy: 'Spray Tebuconazole 25.9% EC @ 1 mL/L or Tricyclazole 75% WP @ 0.6 g/L at heading/flowering stage. Burn infected crop residues.',
-    fertilizer: 'Balanced NPK (100:60:40 kg/ha). Avoid excess late nitrogen application.',
-    organicTip: 'Foliar spray of Pseudomonas fluorescens @ 5 g/L at boot stage.',
-    scheme: 'PMFBY Rabi Crop Insurance',
-    schemeLink: 'https://pmfby.gov.in/',
-    color: '#d97706',
-    keyTakeaways: ['Causes premature bleaching of spikes/ears', 'Elliptical gray lesions on rachis stop grain filling', 'Warm, rainy weather during heading triggers severe epidemics'],
-  },
-  {
-    crop: 'Wheat (ಗೋಧಿ)',
-    emoji: '🌾',
-    disease: 'Yellow Rust / Stripe Rust (Puccinia striiformis)',
-    diseaseKn: 'ಹಳದಿ ತುಕ್ಕು',
-    severity: 'High',
-    remedy: 'Spray Propiconazole 25 EC @ 1 mL/L or Tebuconazole 25.9 EC @ 1 mL/L.',
-    fertilizer: 'Adequate K (MOP 40 kg/ha) strengthens resistance.',
-    organicTip: 'Use resistant varieties like HD 2967, GW 496.',
-    scheme: 'PMFBY Rabi Crop Insurance',
-    schemeLink: 'https://pmfby.gov.in/',
-    color: '#f59e0b',
-    keyTakeaways: ['Yellow-orange stripes parallel to leaf veins', 'Cool temperatures (10–15°C) favor spread', 'Can cause 70% yield loss if untreated'],
-  },
-
-  // ── JOWAR / SORGHUM ──
-  {
-    crop: 'Jowar / Sorghum (ಜೋಳ)',
-    emoji: '🌾',
-    disease: 'Grain Mold (Fusarium + Curvularia + Alternaria complex)',
-    diseaseKn: 'ಧಾನ್ಯ ಚಿಗರಿ ರೋಗ',
-    severity: 'Medium',
-    remedy: 'Spray Mancozeb 75 WP @ 2 g/L or Thiram 75 WP @ 2 g/L at grain filling stage.',
-    fertilizer: 'Adequate K improves grain quality. Avoid excess N.',
-    organicTip: 'Harvest early when grains reach physiological maturity.',
-    scheme: null,
-    color: '#92400e',
-    keyTakeaways: ['Pink/red/black discoloration of grain', 'Reduces grain quality and germination', 'Timely harvest is key prevention'],
-  },
-
-  // ── BENGAL GRAM / CHICKPEA ──
-  {
-    crop: 'Chickpea / Bengal Gram (ಕಡಲೆ)',
-    emoji: '🫛',
-    disease: 'Fusarium Wilt (Fusarium oxysporum f. sp. ciceris)',
-    diseaseKn: 'ಫ್ಯೂಸೇರಿಯಂ ಸೊರಗು',
-    severity: 'High',
-    remedy: 'Seed treatment with Carbendazim 50 WP @ 2 g/kg + Trichoderma viride @ 4 g/kg. Use resistant varieties (JG 62, Annigeri).',
-    fertilizer: 'Apply DAP @ 75 kg/ha + Rhizobium culture seed treatment.',
-    organicTip: 'Soil application of Trichoderma viride @ 5 kg/ha at sowing.',
-    scheme: 'PM Fasal Bima Yojana (Rabi Pulses)',
-    schemeLink: 'https://pmfby.gov.in/',
-    color: '#d97706',
-    keyTakeaways: ['Soil-borne disease; persists many years', 'Yellowing + wilting, especially single branches', 'Crop rotation with non-legume for 3 years'],
-  },
-
-  // ── PEPPER ──
-  {
-    crop: 'Black Pepper (ಕರಿಮೆಣಸು)',
-    emoji: '🌶️',
-    disease: 'Phytophthora Foot Rot (Phytophthora capsici)',
-    diseaseKn: 'ಫೈಟೊಫ್ತೊರಾ ಕಾಂಡ ಕೊಳೆ',
-    severity: 'High',
-    remedy: 'Drench soil with Metalaxyl + Mancozeb 72 WP @ 2.5 g/L. Apply Copper oxychloride 50 WP @ 3 g/L as foliar spray.',
-    fertilizer: 'Improve drainage. Apply MOP 250 g/vine + lime 500 g/vine.',
-    organicTip: 'Biocontrol: Trichoderma + Pseudomonas mix in soil drench.',
-    scheme: 'Spices Board India Subsidies',
-    schemeLink: 'https://www.indianspices.com/',
-    color: '#1d4ed8',
-    keyTakeaways: ['Quick wilting and collar rot', 'Spreads rapidly in monsoon waterlogging', 'Improve drainage before onset of rains'],
-  },
-
-  // ── MUNG BEAN / GREEN GRAM ──
-  {
-    crop: 'Mung Bean / Green Gram (ಹೆಸರುಕಾಳು)',
-    emoji: '🌱',
-    disease: 'Yellow Mosaic Virus (MYMV)',
-    diseaseKn: 'ಹಳದಿ ಮೊಸಾಯಿಕ್ ರೋಗ',
-    severity: 'High',
-    remedy: 'No chemical cure. Rogue out infected plants. Spray Dimethoate 30 EC @ 1.7 mL/L or Imidacloprid 17.8 SL @ 0.5 mL/L for whitefly control.',
-    fertilizer: 'Apply DAP @ 50 kg/ha at sowing with Rhizobium seed inoculation.',
-    organicTip: 'Install yellow sticky traps (15-20 per acre). Spray NSKE 5% at 15-day intervals.',
-    scheme: 'National Food Security Mission (NFSM Pulses)',
-    schemeLink: 'https://nfsm.gov.in/',
-    color: '#ca8a04',
-    keyTakeaways: ['Alternating bright yellow and dark green mosaic patches on leaves', 'Transmitted rapidly by whiteflies (Bemisia tabaci)', 'Plant resistant varieties such as LGG 460 or IPM 02-3'],
-  },
-
-  // ── CHILLI ──
-  {
-    crop: 'Chilli (ಮೆಣಸಿನಕಾಯಿ)',
-    emoji: '🌶️',
-    disease: 'Phytophthora Foot Rot (Phytophthora capsici)',
-    diseaseKn: 'ಮೆಣಸಿನಕಾಯಿ ಕಾಂಡ ಕೊಳೆ ರೋಗ',
-    severity: 'High',
-    remedy: 'Drench soil at stem base with Metalaxyl + Mancozeb 72 WP @ 2.5 g/L or Copper Oxychloride 50 WP @ 3 g/L. Avoid water stagnation.',
-    fertilizer: 'Grow on raised beds with proper drainage. Apply Potassium (MOP 50 kg/ha).',
-    organicTip: 'Soil application of Trichoderma harzianum @ 5 kg/ha mixed with 250 kg FYM at transplanting.',
-    scheme: 'Mission for Integrated Development of Horticulture (MIDH)',
-    schemeLink: 'https://midh.gov.in/',
-    color: '#dc2626',
-    keyTakeaways: ['Dark water-soaked rot at stem collar at soil line', 'Entire plant wilts suddenly with green fruits still attached', 'Favored by excess soil moisture and warm temperatures'],
-  },
-];
-
-// Build unique crop list for the selector
-const UNIQUE_CROPS = [...new Set(CROP_DISEASES.map(d => d.crop))];
+import { CROP_DISEASES, UNIQUE_CROPS, demoCards as DEMO_CARDS_DATA, getAgriProductLink } from '../data/cropDiseasesData';
 
 const SEVERITY_CONFIG = {
   High:   { bg: '#fee2e2', text: '#b91c1c', label: '⚠️ High Severity' },
@@ -617,6 +31,7 @@ export default function CropScanner() {
   const [notCropMsg, setNotCropMsg] = useState(null);
   const [scanProgress, setScanProgress] = useState(0);
   const [activeTab, setActiveTab] = useState('remedy');
+  const [viewLang, setViewLang] = useState('auto'); // 'auto' | 'all' | 'kn' | 'hi' | 'en'
   const [zoomLevel, setZoomLevel] = useState(1);
   const [translatedRemedy, setTranslatedRemedy] = useState(null);
   const [translatedPrevention, setTranslatedPrevention] = useState(null);
@@ -706,28 +121,28 @@ export default function CropScanner() {
 
     // Map AI crop names → our DB crop keys (partial match)
     const cropKeywords = [
-      { keys: ['paddy', 'rice', 'ಭತ್ತ'],            db: 'Paddy / Rice (ಭತ್ತ)' },
-      { keys: ['ragi', 'finger millet', 'ರಾಗಿ'],      db: 'Ragi / Finger Millet (ರಾಗಿ)' },
-      { keys: ['maize', 'corn', 'ಜೋಳ'],              db: 'Maize / Corn (ಜೋಳ)' },
-      { keys: ['cotton', 'ಹತ್ತಿ'],                   db: 'Cotton (ಹತ್ತಿ)' },
-      { keys: ['tomato', 'ಟೊಮೇಟೊ'],                  db: 'Tomato (ಟೊಮೇಟೊ)' },
-      { keys: ['potato', 'ಆಲೂ', 'ಆಲೂಗಡ್ಡೆ'],         db: 'Potato (ಆಲೂಗಡ್ಡೆ)' },
-      { keys: ['onion', 'ಈರುಳ್ಳಿ'],                  db: 'Onion (ಈರುಳ್ಳಿ)' },
-      { keys: ['sugarcane', 'ಕಬ್ಬು'],                db: 'Sugarcane (ಕಬ್ಬು)' },
-      { keys: ['coconut', 'ತೆಂಗು'],                  db: 'Coconut (ತೆಂಗು)' },
-      { keys: ['arecanut', 'areca', 'ಅಡಿಕೆ'],        db: 'Arecanut (ಅಡಿಕೆ)' },
-      { keys: ['coffee', 'ಕಾಫಿ'],                    db: 'Coffee (ಕಾಫಿ)' },
-      { keys: ['banana', 'ಬಾಳೆ'],                    db: 'Banana (ಬಾಳೆ)' },
-      { keys: ['mango', 'ಮಾವು'],                     db: 'Mango (ಮಾವು)' },
-      { keys: ['groundnut', 'peanut', 'ಕಡಲೆಕಾಯಿ'],  db: 'Groundnut (ಕಡಲೆಕಾಯಿ)' },
-      { keys: ['sunflower', 'ಸೂರ್ಯಕಾಂತಿ'],           db: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ)' },
-      { keys: ['soybean', 'soya', 'ಸೋಯಾ'],           db: 'Soybean (ಸೋಯಾಬೀನ್)' },
-      { keys: ['wheat', 'ಗೋಧಿ'],                     db: 'Wheat (ಗೋಧಿ)' },
-      { keys: ['jowar', 'sorghum', 'ಜೋಳ'],           db: 'Jowar / Sorghum (ಜೋಳ)' },
-      { keys: ['chickpea', 'bengal gram', 'ಕಡಲೆ'],  db: 'Chickpea / Bengal Gram (ಕಡಲೆ)' },
-      { keys: ['chilli', 'chili', 'ಮೆಣಸಿನಕಾಯಿ'],     db: 'Chilli (ಮೆಣಸಿನಕಾಯಿ)' },
-      { keys: ['mung', 'green gram', 'ಹೆಸರು'],      db: 'Mung Bean / Green Gram (ಹೆಸರುಕಾಳು)' },
-      { keys: ['pepper', 'black pepper', 'ಮೆಣಸು'],  db: 'Black Pepper (ಕರಿಮೆಣಸು)' },
+      { keys: ['paddy', 'rice', 'ಭತ್ತ', 'धान', 'चावल'],               db: 'Paddy / Rice (ಭತ್ತ / धान)' },
+      { keys: ['ragi', 'finger millet', 'ರಾಗಿ', 'रागी'],                db: 'Ragi / Finger Millet (ರಾಗಿ / रागी)' },
+      { keys: ['maize', 'corn', 'ಜೋಳ', 'मक्का', 'भुट्टा'],              db: 'Maize / Corn (ಜೋಳ / मक्का)' },
+      { keys: ['cotton', 'ಹತ್ತಿ', 'कपास'],                             db: 'Cotton (ಹತ್ತಿ / कपास)' },
+      { keys: ['tomato', 'ಟೊಮೇಟೊ', 'ಟೊಮೆಟೊ', 'टमाटर'],                   db: 'Tomato (ಟೊಮೇಟೊ / टमाटर)' },
+      { keys: ['potato', 'ಆಲೂ', 'ಆಲೂಗಡ್ಡೆ', 'आलू'],                    db: 'Potato (ಆಲೂಗಡ್ಡೆ / आलू)' },
+      { keys: ['onion', 'ಈರುಳ್ಳಿ', 'प्याज'],                             db: 'Onion (ಈರುಳ್ಳಿ / प्याज)' },
+      { keys: ['sugarcane', 'ಕಬ್ಬು', 'गन्ना'],                          db: 'Sugarcane (ಕಬ್ಬು / गन्ना)' },
+      { keys: ['coconut', 'ತೆಂಗು', 'ತೆಂಗಿನಕಾಯಿ', 'नारियल'],              db: 'Coconut (ತೆಂಗು / नारियल)' },
+      { keys: ['arecanut', 'areca', 'ಅಡಿಕೆ', 'सुपारी'],                  db: 'Arecanut (ಅಡಿಕೆ / सुपारी)' },
+      { keys: ['coffee', 'ಕಾಫಿ', 'कॉफी'],                              db: 'Coffee (ಕಾಫಿ / कॉफी)' },
+      { keys: ['banana', 'ಬಾಳೆ', 'ಬಾಳೆಹಣ್ಣು', 'केला'],                  db: 'Banana (ಬಾಳೆ / केला)' },
+      { keys: ['mango', 'ಮಾವು', 'ಮಾವಿನಕಾಯಿ', 'आम'],                     db: 'Mango (ಮಾವು / आम)' },
+      { keys: ['groundnut', 'peanut', 'ಕಡಲೆಕಾಯಿ', 'मूंगफली'],           db: 'Groundnut (ಕಡಲೆಕಾಯಿ / मूंगफली)' },
+      { keys: ['sunflower', 'ಸೂರ್ಯಕಾಂತಿ', 'सूरजमुखी'],                  db: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ / सूरजमुखी)' },
+      { keys: ['soybean', 'soya', 'ಸೋಯಾ', 'ಸೋಯಾಬೀನ್', 'सोयाबीन'],       db: 'Soybean (ಸೋಯಾಬೀನ್ / सोयाबीन)' },
+      { keys: ['wheat', 'ಗೋಧಿ', 'गेहूं'],                              db: 'Wheat (ಗೋಧಿ / गेहूं)' },
+      { keys: ['jowar', 'sorghum', 'ಜೋಳ', 'ज्वार'],                     db: 'Jowar / Sorghum (ಜೋಳ / ज्वार)' },
+      { keys: ['chickpea', 'bengal gram', 'ಕಡಲೆ', 'चना'],             db: 'Chickpea / Bengal Gram (ಕಡಲೆ / चना)' },
+      { keys: ['chilli', 'chili', 'ಮೆಣಸಿನಕಾಯಿ', 'मिर्च'],              db: 'Chilli (ಮೆಣಸಿನಕಾಯಿ / मिर्च)' },
+      { keys: ['mung', 'green gram', 'ಹೆಸರು', 'ಹೆಸರುಕಾಳು', 'मूंग'],    db: 'Mung Bean / Green Gram (ಹೆಸರುಕಾಳು / मूंग)' },
+      { keys: ['pepper', 'black pepper', 'ಮೆಣಸು', 'ಕರಿಮೆಣಸು', 'काली मिर्च'], db: 'Black Pepper (ಕರಿಮೆಣಸು / काली मिर्च)' },
     ];
 
     let matchedCropName = null;
@@ -1013,17 +428,20 @@ export default function CropScanner() {
   };
 
   const toggleVoice = () => {
-    if (isSpeaking) { stopSpeaking(); return; }
     if (!result || result === 'NO_CROP') return;
-    // Build natural-sounding text in selected language
-    let text;
-    if (lang === 'kn') {
-      // Use Kannada disease name + translated remedy if available, else speak meaningfully
+    if (isSpeaking) { stopSpeaking(); return; }
+
+    const effectiveLang = viewLang === 'auto' ? lang : (viewLang === 'all' ? lang : viewLang);
+    let text = '';
+
+    if (effectiveLang === 'kn') {
       const diseasePart = result.diseaseKn || result.disease;
-      const remedyPart = translatedRemedy || result.remedy;
-      text = `ರೋಗ: ${diseasePart}. ಬೆಳೆ: ${result.crop}. ಪರಿಹಾರ: ${remedyPart}. ${result.scheme ? `ಅರ್ಹ ಯೋಜನೆ: ${result.scheme}` : 'ಯಾವುದೇ ನಿರ್ದಿಷ್ಟ ಯೋಜನೆ ಇಲ್ಲ. ಸ್ಥಳೀಯ KVK ಸಂಪರ್ಕಿಸಿ.'}`;
-    } else if (lang === 'hi') {
-      text = `रोग: ${result.disease}. फसल: ${result.crop}. उपचार: ${result.remedy}. ${result.scheme ? `योजना: ${result.scheme}` : 'कोई विशिष्ट योजना नहीं। स्थानीय KVK से संपर्क करें।'}`;
+      const remedyPart = result.remedyKn || translatedRemedy || result.remedy;
+      text = `ರೋಗ: ${diseasePart}. ಬೆಳೆ: ${result.cropKn || result.crop}. ಪರಿಹಾರ: ${remedyPart}. ${result.scheme ? `ಅರ್ಹ ಯೋಜನೆ: ${result.scheme}` : 'ಯಾವುದೇ ನಿರ್ದಿಷ್ಟ ಯೋಜನೆ ಇಲ್ಲ. ಸ್ಥಳೀಯ ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರ ಅಥವಾ KVK ಸಂಪರ್ಕಿಸಿ.'}`;
+    } else if (effectiveLang === 'hi') {
+      const diseasePart = result.diseaseHi || result.disease;
+      const remedyPart = result.remedyHi || result.remedy;
+      text = `रोग: ${diseasePart}. फसल: ${result.cropHi || result.crop}. उपचार: ${remedyPart}. ${result.scheme ? `योजना: ${result.scheme}` : 'कोई विशिष्ट सरकारी योजना नहीं है। स्थानीय कृषि विज्ञान केंद्र से संपर्क करें।'}`;
     } else {
       text = `Disease detected: ${result.disease} on ${result.crop}. Severity: ${result.severity}. Treatment: ${result.remedy}. ${result.scheme ? `Eligible scheme: ${result.scheme}` : 'No specific government scheme. Contact your local Krishi Vigyan Kendra for support.'}`;
     }
@@ -1157,50 +575,12 @@ export default function CropScanner() {
 
   // ─────────────── PAGE 1: HOME ───────────────
   if (page === 'home') {
-    const demoCards = [
-      {
-        crop: 'Paddy / Rice (ಭತ್ತ)',
-        icon: <Wheat size={13} color="#fff" />,
-        disease: 'Blast Disease (Pyricularia oryzae)',
-        diseaseKn: 'ಬೆಂಕಿ ರೋಗ (ತೀವ್ರ ಹಂತ)',
-        severity: 'High',
-        image: '/crops/rice_blast.png',
-        fallbackImage: '/crops/Paddy.jpg',
-        remedy: 'Spray Tricyclazole 75 WP @ 0.6 g/L or Carbendazim 50 WP @ 1 g/L at tillering stage.',
-        prevention: 'Avoid excessive nitrogen fertilizer. Maintain standing water level (2-5 cm). Burn or bury infected crop debris after harvest to prevent spore survival.',
-        fertilizer: 'Apply 120:60:60 kg NPK/ha in split doses. Avoid heavy N top-dressing during cool cloudy weather.',
-        organicTip: 'Spray Pseudomonas fluorescens @ 2.5 kg/ha or Neem Seed Kernel Extract (NSKE 5%) as a preventive foliar spray.',
-        scheme: 'PMFBY Pradhan Mantri Fasal Bima Yojana',
-        schemeLink: 'https://pmfby.gov.in/',
-        color: '#ea580c',
-        keyTakeaways: [
-          'Affects leaves, leaf sheath, neck, and panicles causing spindle-shaped spots',
-          'High humidity (>90%) and cool night temperatures favor rapid disease outbreak',
-          'Plant disease-resistant varieties like BPT 5204 or KMP 101'
-        ],
-      },
-      {
-        crop: 'Tomato (ಟೊಮೇಟೊ)',
-        icon: <Sprout size={13} color="#fff" />,
-        disease: 'Late Blight (Phytophthora infestans)',
-        diseaseKn: 'ಲೇಟ್ ಬ್ಲೈಟ್ ಅಂಗಮಾರಿ ರೋಗ',
-        severity: 'High',
-        image: '/crops/tomato_late_blight.png',
-        fallbackImage: '/crops/Tomato.jpg',
-        remedy: 'Spray Mancozeb 75 WP @ 2 g/L or Metalaxyl 8% + Mancozeb 64% WP @ 2 g/L at 7-day intervals during wet weather.',
-        prevention: 'Ensure wider plant spacing for air ventilation. Use drip irrigation instead of overhead sprinklers. Remove and destroy lower infected leaves immediately.',
-        fertilizer: 'Apply Calcium Nitrate @ 5 kg/acre to strengthen cell wall structure against fungal hyphae penetration.',
-        organicTip: 'Spray Trichoderma viride @ 5g/L + Copper Oxychloride @ 2g/L. Apply bio-formulations early morning.',
-        scheme: 'Mission for Integrated Development of Horticulture (MIDH)',
-        schemeLink: 'https://midh.gov.in/',
-        color: '#dc2626',
-        keyTakeaways: [
-          'Causes dark, water-soaked lesions on leaves and white fungal bloom underneath in humid conditions',
-          'Can destroy an entire tomato crop within 7 to 10 days if left unmanaged',
-          'Practice strict crop rotation with non-solanaceous crops'
-        ],
-      }
-    ];
+    const demoCards = DEMO_CARDS_DATA.map(d => ({
+      ...d,
+      icon: d.crop.includes('Rice') || d.crop.includes('Paddy')
+        ? <Wheat size={13} color="#fff" />
+        : <Sprout size={13} color="#fff" />
+    }));
 
     return (
       <div style={{
@@ -1457,17 +837,23 @@ export default function CropScanner() {
                       <AlertTriangle size={11} color="#b91c1c" /> {d.severity} Severity
                     </div>
                     <div style={{ fontSize: 14, fontWeight: 900, color: '#1a2e1f', marginBottom: 2, lineHeight: 1.3 }}>
-                      {d.disease}
+                      {lang === 'hi' ? (d.diseaseHi || d.disease) : d.disease}
                     </div>
                     <div style={{ fontSize: 11, color: '#4b7a5c', fontWeight: 600, marginBottom: 8 }}>
-                      {d.diseaseKn}
+                      {lang === 'hi' ? (d.diseaseHi || d.diseaseKn) : d.diseaseKn}
                     </div>
 
                     <div style={{ fontSize: 11, color: '#334155', background: '#f0f7f3', borderRadius: 8, padding: '8px 10px', border: '1px solid #d1e8db', lineHeight: 1.4, display: 'flex', alignItems: 'flex-start', gap: 5 }}>
                       <Pill size={13} color="#1a7c4a" style={{ flexShrink: 0, marginTop: 1 }} />
                       <div>
-                        <span style={{ fontWeight: 800, color: '#1a7c4a' }}>Treatment: </span>
-                        {d.remedy.slice(0, 48)}…
+                        <span style={{ fontWeight: 800, color: '#1a7c4a' }}>
+                          {lang === 'kn' ? 'ಪರಿಹಾರ: ' : lang === 'hi' ? 'उपचार: ' : 'Treatment: '}
+                        </span>
+                        {lang === 'kn'
+                          ? (d.remedyKn || d.remedy).slice(0, 52)
+                          : lang === 'hi'
+                          ? (d.remedyHi || d.remedy).slice(0, 52)
+                          : d.remedy.slice(0, 52)}…
                       </div>
                     </div>
                   </div>
@@ -1900,7 +1286,16 @@ export default function CropScanner() {
                     <AlertTriangle size={11} color="#b91c1c" /> {SEVERITY_CONFIG[result.severity]?.label || 'High Severity'}
                   </span>
                   <h2 style={{ margin: '0 0 3px', fontSize: 18, fontWeight: 900, color: '#1a2e1f', lineHeight: 1.25 }}>{result.disease}</h2>
-                  {result.diseaseKn && <p style={{ margin: '0 0 4px', fontSize: 13, color: '#4b7a5c', fontWeight: 600 }}>{result.diseaseKn}</p>}
+                  {result.diseaseKn && (
+                    <p style={{ margin: '0 0 2px', fontSize: 13, color: '#4b7a5c', fontWeight: 700 }}>
+                      {viewLang === 'hi' ? (result.diseaseHi || result.diseaseKn) : result.diseaseKn}
+                    </p>
+                  )}
+                  {result.diseaseHi && (viewLang === 'all' || viewLang === 'hi') && (
+                    <p style={{ margin: '0 0 4px', fontSize: 12.5, color: '#15803d', fontWeight: 600 }}>
+                      🇮🇳 {result.diseaseHi}
+                    </p>
+                  )}
                   <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
                     <Leaf size={12} />{lang === 'kn' ? 'ಬೆಳೆ' : 'Crop'}: {result.crop}
                   </div>
@@ -1920,21 +1315,68 @@ export default function CropScanner() {
         {result && result !== 'NO_CROP' && (
           <div>
             {/* Action buttons */}
-            <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
-              <button onClick={toggleVoice} style={{ flex: 1, padding: '13px', borderRadius: 12, border: 'none', background: isSpeaking ? '#ef4444' : '#1a2e1f', color: '#fff', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <Volume2 size={18} />{isSpeaking ? (lang === 'kn' ? 'ನಿಲ್ಲಿಸು' : 'Stop') : (lang === 'kn' ? 'ಓದಿ ಹೇಳಿ' : 'Read Aloud')}
+            <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
+              <button onClick={toggleVoice} style={{ flex: 1, padding: '13px', borderRadius: 12, border: 'none', background: isSpeaking ? '#ef4444' : '#1a2e1f', color: '#fff', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: '0 3px 10px rgba(0,0,0,0.1)' }}>
+                <Volume2 size={18} />{isSpeaking ? (lang === 'kn' ? 'ನಿಲ್ಲಿಸು' : lang === 'hi' ? 'रोकें' : 'Stop') : (lang === 'kn' ? 'ಓದಿ ಹೇಳಿ' : lang === 'hi' ? 'सुनें (बोलकर बताएं)' : 'Read Aloud')}
               </button>
-              <button onClick={handleReset} style={{ padding: '13px 16px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#1a7c4a,#145f38)', color: '#fff', fontWeight: 800, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <RefreshCw size={15} />{lang === 'kn' ? 'ಮತ್ತೆ' : 'Rescan'}
+              <button onClick={handleReset} style={{ padding: '13px 16px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#1a7c4a,#145f38)', color: '#fff', fontWeight: 800, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, boxShadow: '0 3px 10px rgba(26,124,74,0.2)' }}>
+                <RefreshCw size={15} />{lang === 'kn' ? 'ಮತ್ತೆ' : lang === 'hi' ? 'फिर से' : 'Rescan'}
               </button>
+            </div>
+
+            {/* Trilingual Language Selector Bar */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: '#ffffff',
+              border: '1px solid #d1e8db',
+              borderRadius: 14,
+              padding: '6px 10px',
+              marginBottom: 14,
+              boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 800, color: '#1a7c4a' }}>
+                <Languages size={15} color="#1a7c4a" />
+                <span>{lang === 'kn' ? 'ಭಾಷೆ / Language:' : lang === 'hi' ? 'भाषा / Language:' : 'Language:'}</span>
+              </div>
+              <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+                {[
+                  { id: 'all', label: '🌐 All 3 (ಎಲ್ಲವೂ / सभी)' },
+                  { id: 'kn', label: 'ಕನ್ನಡ' },
+                  { id: 'hi', label: 'हिन्दी' },
+                  { id: 'en', label: 'English' }
+                ].map(opt => {
+                  const isActive = (viewLang === opt.id) || (viewLang === 'auto' && (opt.id === lang || (opt.id === 'en' && lang !== 'kn' && lang !== 'hi')));
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => setViewLang(opt.id)}
+                      style={{
+                        padding: '5px 11px',
+                        borderRadius: 9,
+                        border: isActive ? '1.5px solid #1a7c4a' : '1px solid #e2e8f0',
+                        background: isActive ? '#1a7c4a' : '#f8fafc',
+                        color: isActive ? '#ffffff' : '#334155',
+                        fontSize: 12,
+                        fontWeight: isActive ? 800 : 600,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Tabs */}
             <div style={{ display: 'flex', gap: 4, marginBottom: 14, background: '#ffffff', border: '1px solid #d1e8db', borderRadius: 12, padding: 4 }}>
               {[
-                { key: 'remedy', icon: <Pill size={13} />, label: lang === 'kn' ? 'ಪರಿಹಾರ & ತಡೆ' : 'Treatment & Control' },
-                { key: 'fertilizer', icon: <Sprout size={13} />, label: lang === 'kn' ? 'ಗೊಬ್ಬರ' : 'Nutrition' },
-                { key: 'tips', icon: <Lightbulb size={13} />, label: lang === 'kn' ? 'ಸಲಹೆ' : 'Key Takeaways' }
+                { key: 'remedy', icon: <Pill size={13} />, label: lang === 'kn' ? 'ಪರಿಹಾರ & ತಡೆ' : lang === 'hi' ? 'उपचार एवं रोकथाम' : 'Treatment & Control' },
+                { key: 'fertilizer', icon: <Sprout size={13} />, label: lang === 'kn' ? 'ಗೊಬ್ಬರ' : lang === 'hi' ? 'पोषण एवं उर्वरक' : 'Nutrition' },
+                { key: 'tips', icon: <Lightbulb size={13} />, label: lang === 'kn' ? 'ಸಲಹೆ' : lang === 'hi' ? 'मुख्य बिंदु' : 'Key Takeaways' }
               ].map(tab => (
                 <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{ flex: 1, padding: '9px 4px', borderRadius: 9, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700, background: activeTab === tab.key ? '#f0f7f3' : 'transparent', color: activeTab === tab.key ? '#1a7c4a' : '#64748b', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
                   {tab.icon} {tab.label}
@@ -1944,54 +1386,374 @@ export default function CropScanner() {
 
             {/* Tab content */}
             <div style={{ background: '#fff', border: '1px solid #d1e8db', borderRadius: 16, padding: 18, marginBottom: 14 }}>
-              {activeTab === 'remedy' && <div>
-                {/* Chemical Treatment */}
-                <div style={{ marginBottom: 14 }}>
-                  <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 6px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                    <Pill size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ರಾಸಾಯನಿಕ ನಿಯಂತ್ರಣ (Chemical Treatment)' : 'Chemical Treatment'}
-                  </p>
-                  {isTranslating && lang === 'kn' && <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>}
-                  <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{(lang === 'kn' && translatedRemedy) ? translatedRemedy : result.remedy}</p>
-                </div>
+              {activeTab === 'remedy' && (
+                <div>
+                  {/* Chemical Treatment Section */}
+                  <div style={{ marginBottom: 16 }}>
+                    <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <Pill size={14} color="#1a7c4a" />
+                      {lang === 'kn' ? 'ರಾಸಾಯನಿಕ ನಿಯಂತ್ರಣ (Chemical Treatment)' : lang === 'hi' ? 'रासायनिक उपचार (Chemical Treatment)' : 'Chemical Treatment'}
+                    </p>
+                    {isTranslating && lang === 'kn' && !result.remedyKn && (
+                      <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>
+                    )}
 
-                {/* Prevention */}
-                {result.prevention && (
-                  <div style={{ marginBottom: 14, background: '#f8fafc', borderRadius: 12, padding: '12px 14px', border: '1px solid #e2e8f0' }}>
-                    <p style={{ fontSize: 11, color: '#0369a1', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <ShieldCheck size={14} color="#0369a1" /> {lang === 'kn' ? 'ತಡೆಗಟ್ಟುವಿಕೆ & ನಿರ್ವಹಣೆ' : 'Prevention & Cultural Control'}
-                    </p>
-                    <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>
-                      {(lang === 'kn' && translatedPrevention) ? translatedPrevention : result.prevention}
-                    </p>
+                    {/* Trilingual Render */}
+                    {(() => {
+                      const eff = viewLang === 'auto' ? lang : viewLang;
+                      if (eff === 'kn') {
+                        return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.remedyKn || translatedRemedy || result.remedy}</p>;
+                      }
+                      if (eff === 'hi') {
+                        return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.remedyHi || result.remedy}</p>;
+                      }
+                      if (eff === 'en') {
+                        return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.remedy}</p>;
+                      }
+                      return (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                          <div style={{ padding: '8px 12px', background: '#fffbeb', borderRadius: 10, border: '1px solid #fef3c7' }}>
+                            <div style={{ fontSize: 10, fontWeight: 800, color: '#b45309', marginBottom: 3 }}>🟡 ಕನ್ನಡ (Kannada)</div>
+                            <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.remedyKn || translatedRemedy || result.remedy}</p>
+                          </div>
+                          <div style={{ padding: '8px 12px', background: '#f0fdf4', borderRadius: 10, border: '1px solid #dcfce7' }}>
+                            <div style={{ fontSize: 10, fontWeight: 800, color: '#15803d', marginBottom: 3 }}>🔵 हिन्दी (Hindi)</div>
+                            <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.remedyHi || result.remedy}</p>
+                          </div>
+                          <div style={{ padding: '8px 12px', background: '#f8fafc', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+                            <div style={{ fontSize: 10, fontWeight: 800, color: '#475569', marginBottom: 3 }}>🟢 English</div>
+                            <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.remedy}</p>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
-                )}
 
-                {/* Organic Tip */}
-                {result.organicTip && <div style={{ background: '#f0fdf4', borderRadius: 12, padding: '12px 14px', border: '1px solid #bbf7d0' }}>
-                  <p style={{ fontSize: 11, fontWeight: 800, color: '#15803d', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                    <Leaf size={14} color="#15803d" /> {lang === 'kn' ? 'ಸಾವಯವ ಪರ್ಯಾಯ' : 'Organic Alternative'}
+                  {/* Prevention & Cultural Control */}
+                  {result.prevention && (
+                    <div style={{ marginBottom: 16, background: '#f8fafc', borderRadius: 12, padding: '12px 14px', border: '1px solid #e2e8f0' }}>
+                      <p style={{ fontSize: 11, color: '#0369a1', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 6px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                        <ShieldCheck size={14} color="#0369a1" />
+                        {lang === 'kn' ? 'ತಡೆಗಟ್ಟುವಿಕೆ & ಕೃಷಿ ಪದ್ಧತಿ' : lang === 'hi' ? 'रोकथाम एवं कृषि प्रबंधन' : 'Prevention & Cultural Control'}
+                      </p>
+                      {(() => {
+                        const eff = viewLang === 'auto' ? lang : viewLang;
+                        if (eff === 'kn') {
+                          return <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>{result.preventionKn || translatedPrevention || result.prevention}</p>;
+                        }
+                        if (eff === 'hi') {
+                          return <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>{result.preventionHi || result.prevention}</p>;
+                        }
+                        if (eff === 'en') {
+                          return <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>{result.prevention}</p>;
+                        }
+                        return (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5 }}><strong style={{ color: '#0284c7' }}>ಕನ್ನಡ:</strong> {result.preventionKn || result.prevention}</p>
+                            <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5 }}><strong style={{ color: '#16a34a' }}>हिन्दी:</strong> {result.preventionHi || result.prevention}</p>
+                            <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5 }}><strong style={{ color: '#475569' }}>English:</strong> {result.prevention}</p>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  )}
+
+                  {/* Organic Alternative */}
+                  {result.organicTip && (
+                    <div style={{ background: '#f0fdf4', borderRadius: 12, padding: '12px 14px', border: '1px solid #bbf7d0', marginBottom: 16 }}>
+                      <p style={{ fontSize: 11, fontWeight: 800, color: '#15803d', margin: '0 0 6px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                        <Leaf size={14} color="#15803d" />
+                        {lang === 'kn' ? 'ಸಾವಯವ ಪರ್ಯಾಯ' : lang === 'hi' ? 'जैविक विकल्प' : 'Organic Alternative'}
+                      </p>
+                      {(() => {
+                        const eff = viewLang === 'auto' ? lang : viewLang;
+                        if (eff === 'kn') {
+                          return <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>{result.organicTipKn || translatedOrganicTip || result.organicTip}</p>;
+                        }
+                        if (eff === 'hi') {
+                          return <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>{result.organicTipHi || result.organicTip}</p>;
+                        }
+                        if (eff === 'en') {
+                          return <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>{result.organicTip}</p>;
+                        }
+                        return (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}><strong style={{ color: '#15803d' }}>ಕನ್ನಡ:</strong> {result.organicTipKn || result.organicTip}</p>
+                            <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}><strong style={{ color: '#15803d' }}>हिन्दी:</strong> {result.organicTipHi || result.organicTip}</p>
+                            <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}><strong style={{ color: '#15803d' }}>English:</strong> {result.organicTip}</p>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  )}
+
+                  {/* Verified Chemical & Organic Product Links with Pricing */}
+                  {result.products && result.products.filter(p => p.type === 'chemical' || p.type === 'organic').length > 0 && (
+                    <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid #e2e8f0' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                        <p style={{ fontSize: 12, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <ShoppingBag size={15} color="#1a7c4a" />
+                          {lang === 'kn' ? 'ಶಿಫಾರಸು ಮಾಡಿದ ಔಷಧಗಳು & ಬೆಲೆಗಳು' : lang === 'hi' ? 'अनुशंसित दवाएं एवं उत्पाद लिंक' : 'Recommended Medicines & Product Links'}
+                        </p>
+                        <span style={{ fontSize: 10, color: '#15803d', background: '#dcfce7', fontWeight: 800, padding: '3px 8px', borderRadius: 8, border: '1px solid #bbf7d0' }}>
+                          {lang === 'kn' ? 'ಖರೀದಿ & ದರ' : lang === 'hi' ? 'कीमत और विवरण' : 'Live Prices & Specs'}
+                        </span>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
+                        {result.products.filter(p => p.type === 'chemical' || p.type === 'organic').map((prod, idx) => (
+                          <div key={idx} style={{
+                            background: '#ffffff',
+                            border: '1.5px solid #d1e8db',
+                            borderRadius: 12,
+                            padding: '12px 14px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            gap: 10,
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+                          }}>
+                            <div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 6, marginBottom: 5 }}>
+                                <span style={{
+                                  fontSize: 10,
+                                  fontWeight: 800,
+                                  textTransform: 'uppercase',
+                                  padding: '2px 7px',
+                                  borderRadius: 6,
+                                  background: prod.type === 'organic' ? '#dcfce7' : '#fee2e2',
+                                  color: prod.type === 'organic' ? '#15803d' : '#b91c1c'
+                                }}>
+                                  {prod.type === 'organic' ? '🌿 Bio / Organic' : '🧪 Chemical Formulation'}
+                                </span>
+                                <span style={{ fontSize: 11, fontWeight: 800, color: '#166534', background: '#f0fdf4', padding: '2px 8px', borderRadius: 6, border: '1px solid #bbf7d0', whiteSpace: 'nowrap' }}>
+                                  {prod.price}
+                                </span>
+                              </div>
+                              <div style={{ fontSize: 13.5, fontWeight: 800, color: '#0f172a', marginBottom: 2 }}>
+                                {prod.name}
+                              </div>
+                              {prod.brand && (
+                                <div style={{ fontSize: 11, color: '#64748b', fontWeight: 500 }}>
+                                  {lang === 'kn' ? 'ಬ್ರ್ಯಾಂಡ್‌ಗಳು' : lang === 'hi' ? 'ब्रांड्स' : 'Brands'}: <strong style={{ color: '#334155' }}>{prod.brand}</strong>
+                                </div>
+                              )}
+                            </div>
+
+                            <a
+                              href={getAgriProductLink(prod.query || prod.name)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: 6,
+                                background: 'linear-gradient(135deg, #1a7c4a, #145f38)',
+                                color: '#ffffff',
+                                padding: '8px 12px',
+                                borderRadius: 9,
+                                fontSize: 12,
+                                fontWeight: 700,
+                                textDecoration: 'none',
+                                boxShadow: '0 2px 6px rgba(26, 124, 74, 0.25)',
+                                transition: 'all 0.15s ease'
+                              }}
+                            >
+                              <span>{lang === 'kn' ? 'ಉತ್ಪನ್ನ ವಿವರ & ಬೆಲೆ ಪರಿಶೀಲಿಸಿ' : lang === 'hi' ? 'उत्पाद विवरण एवं कीमत देखें' : 'View Product Details & Price'}</span>
+                              <ExternalLink size={13} />
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {activeTab === 'fertilizer' && (
+                <div>
+                  <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 10px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <Sprout size={14} color="#1a7c4a" />
+                    {lang === 'kn' ? 'ಗೊಬ್ಬರ ನಿರ್ವಹಣೆ (Nutrition Management)' : lang === 'hi' ? 'पोषण एवं उर्वरक प्रबंधन' : 'Nutrition Management'}
                   </p>
-                  <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>
-                    {(lang === 'kn' && translatedOrganicTip) ? translatedOrganicTip : result.organicTip}
+                  {isTranslating && lang === 'kn' && !result.fertilizerKn && (
+                    <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>
+                  )}
+
+                  {/* Trilingual Fertilizer Guidance */}
+                  {(() => {
+                    const eff = viewLang === 'auto' ? lang : viewLang;
+                    if (eff === 'kn') {
+                      return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.fertilizerKn || translatedFertilizer || result.fertilizer}</p>;
+                    }
+                    if (eff === 'hi') {
+                      return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.fertilizerHi || result.fertilizer}</p>;
+                    }
+                    if (eff === 'en') {
+                      return <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.65 }}>{result.fertilizer}</p>;
+                    }
+                    return (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        <div style={{ padding: '8px 12px', background: '#fffbeb', borderRadius: 10, border: '1px solid #fef3c7' }}>
+                          <div style={{ fontSize: 10, fontWeight: 800, color: '#b45309', marginBottom: 3 }}>🟡 ಕನ್ನಡ (Kannada)</div>
+                          <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.fertilizerKn || translatedFertilizer || result.fertilizer}</p>
+                        </div>
+                        <div style={{ padding: '8px 12px', background: '#f0fdf4', borderRadius: 10, border: '1px solid #dcfce7' }}>
+                          <div style={{ fontSize: 10, fontWeight: 800, color: '#15803d', marginBottom: 3 }}>🔵 हिन्दी (Hindi)</div>
+                          <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.fertilizerHi || result.fertilizer}</p>
+                        </div>
+                        <div style={{ padding: '8px 12px', background: '#f8fafc', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+                          <div style={{ fontSize: 10, fontWeight: 800, color: '#475569', marginBottom: 3 }}>🟢 English</div>
+                          <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.fertilizer}</p>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Verified Fertilizer Product Links with Pricing */}
+                  {result.products && result.products.filter(p => p.type === 'fertilizer').length > 0 && (
+                    <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid #e2e8f0' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                        <p style={{ fontSize: 12, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <Sprout size={15} color="#1a7c4a" />
+                          {lang === 'kn' ? 'ಶಿಫಾರಸು ಮಾಡಿದ ರಸಗೊಬ್ಬರಗಳು & ದರ' : lang === 'hi' ? 'अनुशंसित उर्वरक एवं उत्पाद लिंक' : 'Recommended Fertilizers & Product Links'}
+                        </p>
+                        <span style={{ fontSize: 10, color: '#15803d', background: '#dcfce7', fontWeight: 800, padding: '3px 8px', borderRadius: 8, border: '1px solid #bbf7d0' }}>
+                          {lang === 'kn' ? 'ಬೆಲೆ & ಪ್ಯಾಕಿಂಗ್' : lang === 'hi' ? 'सरकारी / बाजार दर' : 'Govt / Market Rates'}
+                        </span>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
+                        {result.products.filter(p => p.type === 'fertilizer').map((prod, idx) => (
+                          <div key={idx} style={{
+                            background: '#f0fdf4',
+                            border: '1.5px solid #bbf7d0',
+                            borderRadius: 12,
+                            padding: '12px 14px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            gap: 10,
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+                          }}>
+                            <div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 6, marginBottom: 5 }}>
+                                <span style={{
+                                  fontSize: 10,
+                                  fontWeight: 800,
+                                  textTransform: 'uppercase',
+                                  padding: '2px 7px',
+                                  borderRadius: 6,
+                                  background: '#dcfce7',
+                                  color: '#15803d'
+                                }}>
+                                  🌱 Fertilizer / Nutrient
+                                </span>
+                                <span style={{ fontSize: 11, fontWeight: 800, color: '#166534', background: '#ffffff', padding: '2px 8px', borderRadius: 6, border: '1px solid #86efac', whiteSpace: 'nowrap' }}>
+                                  {prod.price}
+                                </span>
+                              </div>
+                              <div style={{ fontSize: 13.5, fontWeight: 800, color: '#0f172a', marginBottom: 2 }}>
+                                {prod.name}
+                              </div>
+                              {prod.brand && (
+                                <div style={{ fontSize: 11, color: '#4b7a5c', fontWeight: 500 }}>
+                                  {lang === 'kn' ? 'ಬ್ರ್ಯಾಂಡ್‌ಗಳು' : lang === 'hi' ? 'निर्माता / ब्रांड' : 'Brands'}: <strong style={{ color: '#14532d' }}>{prod.brand}</strong>
+                                </div>
+                              )}
+                            </div>
+
+                            <a
+                              href={getAgriProductLink(prod.query || prod.name)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: 6,
+                                background: 'linear-gradient(135deg, #15803d, #14532d)',
+                                color: '#ffffff',
+                                padding: '8px 12px',
+                                borderRadius: 9,
+                                fontSize: 12,
+                                fontWeight: 700,
+                                textDecoration: 'none',
+                                boxShadow: '0 2px 6px rgba(21, 128, 61, 0.25)',
+                                transition: 'all 0.15s ease'
+                              }}
+                            >
+                              <span>{lang === 'kn' ? 'ಗೊಬ್ಬರ ವಿವರ & ಬೆಲೆ ಪರಿಶೀಲಿಸಿ' : lang === 'hi' ? 'उर्वरक विवरण एवं कीमत देखें' : 'View Fertilizer Details & Price'}</span>
+                              <ExternalLink size={13} />
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {activeTab === 'tips' && result.keyTakeaways && (
+                <div>
+                  <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 10px', display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <Lightbulb size={14} color="#1a7c4a" />
+                    {lang === 'kn' ? 'ಪ್ರಮುಖ ಅಂಶಗಳು (Key Takeaways)' : lang === 'hi' ? 'मुख्य बिंदु (Key Takeaways)' : 'Key Takeaways'}
                   </p>
-                </div>}
-              </div>}
-              {activeTab === 'fertilizer' && <div>
-                <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <Sprout size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ಗೊಬ್ಬರ ನಿರ್ವಹಣೆ' : 'Nutrition Management'}
-                </p>
-                {isTranslating && lang === 'kn' && !translatedFertilizer && <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>}
-                <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>
-                  {(lang === 'kn' && translatedFertilizer) ? translatedFertilizer : result.fertilizer}
-                </p>
-              </div>}
-              {activeTab === 'tips' && result.keyTakeaways && <div>
-                <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 10px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <Lightbulb size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ಪ್ರಮುಖ ಅಂಶಗಳು' : 'Key Takeaways'}
-                </p>
-                {isTranslating && lang === 'kn' && !translatedKeyTakeaways && <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>}
-                {(lang === 'kn' && translatedKeyTakeaways ? translatedKeyTakeaways : result.keyTakeaways).map((tip, i) => (<div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}><div style={{ width: 18, height: 18, borderRadius: '50%', background: (result.color || '#1a7c4a') + '20', color: result.color || '#1a7c4a', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{i+1}</div><p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5, fontWeight: 500 }}>{tip}</p></div>))}
-              </div>}
+                  {isTranslating && lang === 'kn' && !result.keyTakeawaysKn && (
+                    <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>
+                  )}
+
+                  {(() => {
+                    const eff = viewLang === 'auto' ? lang : viewLang;
+                    const takeawaysList = eff === 'kn'
+                      ? (result.keyTakeawaysKn || translatedKeyTakeaways || result.keyTakeaways)
+                      : eff === 'hi'
+                      ? (result.keyTakeawaysHi || result.keyTakeaways)
+                      : eff === 'en'
+                      ? result.keyTakeaways
+                      : null;
+
+                    if (takeawaysList) {
+                      return takeawaysList.map((tip, i) => (
+                        <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 9 }}>
+                          <div style={{ width: 20, height: 20, borderRadius: '50%', background: (result.color || '#1a7c4a') + '20', color: result.color || '#1a7c4a', fontSize: 10, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                            {i + 1}
+                          </div>
+                          <p style={{ margin: 0, fontSize: 13.5, color: '#334155', lineHeight: 1.55, fontWeight: 500 }}>
+                            {tip}
+                          </p>
+                        </div>
+                      ));
+                    }
+
+                    // 'all' view: show points with Kannada, Hindi, and English sub-lines
+                    return result.keyTakeaways.map((enTip, i) => (
+                      <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 12, paddingBottom: 10, borderBottom: i < result.keyTakeaways.length - 1 ? '1px dashed #e2e8f0' : 'none' }}>
+                        <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#1a7c4a20', color: '#1a7c4a', fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                          {i + 1}
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                          {result.keyTakeawaysKn?.[i] && (
+                            <p style={{ margin: 0, fontSize: 13, color: '#1e293b', lineHeight: 1.45 }}>
+                              <strong style={{ color: '#b45309' }}>🟡 ಕನ್ನಡ:</strong> {result.keyTakeawaysKn[i]}
+                            </p>
+                          )}
+                          {result.keyTakeawaysHi?.[i] && (
+                            <p style={{ margin: 0, fontSize: 13, color: '#1e293b', lineHeight: 1.45 }}>
+                              <strong style={{ color: '#15803d' }}>🔵 हिन्दी:</strong> {result.keyTakeawaysHi[i]}
+                            </p>
+                          )}
+                          <p style={{ margin: 0, fontSize: 13, color: '#475569', lineHeight: 1.45 }}>
+                            <strong style={{ color: '#64748b' }}>🟢 English:</strong> {enTip}
+                          </p>
+                        </div>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              )}
             </div>
 
             {/* Scheme */}
@@ -2000,7 +1762,7 @@ export default function CropScanner() {
                 <div style={{ background: '#16a34a', borderRadius: 10, padding: 10, color: '#fff', flexShrink: 0 }}><ShieldCheck size={20} /></div>
                 <div style={{ flex: 1 }}>
                   <p style={{ margin: '0 0 2px', fontSize: 10, color: '#15803d', fontWeight: 800, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <Building2 size={12} color="#15803d" /> {lang === 'kn' ? 'ಅರ್ಹ ಸರ್ಕಾರಿ ಯೋಜನೆ — ಅರ್ಜಿ ಸಲ್ಲಿಸಿ' : 'Eligible Govt Scheme — Tap to Apply'}
+                    <Building2 size={12} color="#15803d" /> {lang === 'kn' ? 'ಅರ್ಹ ಸರ್ಕಾರಿ ಯೋಜನೆ — ಅರ್ಜಿ ಸಲ್ಲಿಸಿ' : lang === 'hi' ? 'पात्र सरकारी योजना — आवेदन करें' : 'Eligible Govt Scheme — Tap to Apply'}
                   </p>
                   <p style={{ margin: 0, fontSize: 14, fontWeight: 800, color: '#14532d' }}>{result.scheme}</p>
                 </div>
@@ -2008,7 +1770,7 @@ export default function CropScanner() {
               </a>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 14, padding: '12px 16px', marginBottom: 16 }}>
-                <Info size={16} color="#94a3b8" /><p style={{ margin: 0, fontSize: 13, color: '#94a3b8', lineHeight: 1.5 }}>{lang === 'kn' ? 'ಈ ರೋಗಕ್ಕೆ ನಿರ್ದಿಷ್ಟ ಯೋಜನೆ ಇಲ್ಲ. ಸ್ಥಳೀಯ KVK ಸಂಪರ್ಕಿಸಿ.' : 'No specific govt scheme. Contact your local Krishi Vigyan Kendra (KVK).'}</p>
+                <Info size={16} color="#94a3b8" /><p style={{ margin: 0, fontSize: 13, color: '#94a3b8', lineHeight: 1.5 }}>{lang === 'kn' ? 'ಈ ರೋಗಕ್ಕೆ ನಿರ್ದಿಷ್ಟ ಯೋಜನೆ ಇಲ್ಲ. ಸ್ಥಳೀಯ KVK ಸಂಪರ್ಕಿಸಿ.' : lang === 'hi' ? 'इस रोग हेतु कोई विशेष सरकारी योजना नहीं है। स्थानीय केवीके (KVK) से संपर्क करें।' : 'No specific govt scheme. Contact your local Krishi Vigyan Kendra (KVK).'}</p>
               </div>
             )}
 
