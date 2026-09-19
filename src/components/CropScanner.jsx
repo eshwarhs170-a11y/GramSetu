@@ -619,6 +619,10 @@ export default function CropScanner() {
   const [activeTab, setActiveTab] = useState('remedy');
   const [zoomLevel, setZoomLevel] = useState(1);
   const [translatedRemedy, setTranslatedRemedy] = useState(null);
+  const [translatedPrevention, setTranslatedPrevention] = useState(null);
+  const [translatedOrganicTip, setTranslatedOrganicTip] = useState(null);
+  const [translatedFertilizer, setTranslatedFertilizer] = useState(null);
+  const [translatedKeyTakeaways, setTranslatedKeyTakeaways] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
 
   // Image upload & panning
@@ -878,10 +882,24 @@ export default function CropScanner() {
       setScanning(false); setScanPhase('done');
 
       if (finalResult) {
-        setResult(finalResult); setActiveTab('remedy'); setTranslatedRemedy(null);
-        if (lang === 'kn' && finalResult.remedy) {
+        setResult(finalResult); setActiveTab('remedy');
+        setTranslatedRemedy(null); setTranslatedPrevention(null); setTranslatedOrganicTip(null); setTranslatedFertilizer(null); setTranslatedKeyTakeaways(null);
+        if (lang === 'kn') {
           setIsTranslating(true);
-          callGeminiTranslate(finalResult.remedy, 'kn').then(t => { if (t) setTranslatedRemedy(t); setIsTranslating(false); });
+          Promise.all([
+            finalResult.remedy     ? callGeminiTranslate(finalResult.remedy, 'kn')     : Promise.resolve(null),
+            finalResult.prevention ? callGeminiTranslate(finalResult.prevention, 'kn') : Promise.resolve(null),
+            finalResult.organicTip ? callGeminiTranslate(finalResult.organicTip, 'kn') : Promise.resolve(null),
+            finalResult.fertilizer ? callGeminiTranslate(finalResult.fertilizer, 'kn') : Promise.resolve(null),
+            finalResult.keyTakeaways?.length ? callGeminiTranslate(finalResult.keyTakeaways.join(' | '), 'kn') : Promise.resolve(null),
+          ]).then(([r, p, o, f, k]) => {
+            if (r) setTranslatedRemedy(r);
+            if (p) setTranslatedPrevention(p);
+            if (o) setTranslatedOrganicTip(o);
+            if (f) setTranslatedFertilizer(f);
+            if (k) setTranslatedKeyTakeaways(k.split(' | '));
+            setIsTranslating(false);
+          });
         }
       } else {
         setResult('NO_CROP');
@@ -951,10 +969,24 @@ export default function CropScanner() {
       setScanning(false); setScanPhase('done');
 
       if (finalResult) {
-        setResult(finalResult); setActiveTab('remedy'); setTranslatedRemedy(null);
-        if (lang === 'kn' && finalResult.remedy) {
+        setResult(finalResult); setActiveTab('remedy');
+        setTranslatedRemedy(null); setTranslatedPrevention(null); setTranslatedOrganicTip(null); setTranslatedFertilizer(null); setTranslatedKeyTakeaways(null);
+        if (lang === 'kn') {
           setIsTranslating(true);
-          callGeminiTranslate(finalResult.remedy, 'kn').then(t => { if (t) setTranslatedRemedy(t); setIsTranslating(false); });
+          Promise.all([
+            finalResult.remedy     ? callGeminiTranslate(finalResult.remedy, 'kn')     : Promise.resolve(null),
+            finalResult.prevention ? callGeminiTranslate(finalResult.prevention, 'kn') : Promise.resolve(null),
+            finalResult.organicTip ? callGeminiTranslate(finalResult.organicTip, 'kn') : Promise.resolve(null),
+            finalResult.fertilizer ? callGeminiTranslate(finalResult.fertilizer, 'kn') : Promise.resolve(null),
+            finalResult.keyTakeaways?.length ? callGeminiTranslate(finalResult.keyTakeaways.join(' | '), 'kn') : Promise.resolve(null),
+          ]).then(([r, p, o, f, k]) => {
+            if (r) setTranslatedRemedy(r);
+            if (p) setTranslatedPrevention(p);
+            if (o) setTranslatedOrganicTip(o);
+            if (f) setTranslatedFertilizer(f);
+            if (k) setTranslatedKeyTakeaways(k.split(' | '));
+            setIsTranslating(false);
+          });
         }
       } else {
         setResult('NO_CROP');
@@ -975,7 +1007,7 @@ export default function CropScanner() {
     stopSpeaking(); setResult(null); setScanPhase('idle'); setScanProgress(0);
     setUploadedImage(null); setScanMode('camera'); setQaChat([]); setQaInput('');
     setPan({ x: 0, y: 0 }); currentPan.current = { x: 0, y: 0 };
-    setNotCropMsg(null); setTranslatedRemedy(null); setIsTranslating(false);
+    setNotCropMsg(null); setTranslatedRemedy(null); setTranslatedPrevention(null); setTranslatedOrganicTip(null); setTranslatedFertilizer(null); setTranslatedKeyTakeaways(null); setIsTranslating(false);
     setZoomLevel(1);
     setPage('home');
   };
@@ -1918,7 +1950,7 @@ export default function CropScanner() {
                   <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 6px', display: 'flex', alignItems: 'center', gap: 5 }}>
                     <Pill size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ರಾಸಾಯನಿಕ ನಿಯಂತ್ರಣ (Chemical Treatment)' : 'Chemical Treatment'}
                   </p>
-                  {isTranslating && lang !== 'en' && <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>}
+                  {isTranslating && lang === 'kn' && <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>}
                   <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{(lang === 'kn' && translatedRemedy) ? translatedRemedy : result.remedy}</p>
                 </div>
 
@@ -1926,31 +1958,39 @@ export default function CropScanner() {
                 {result.prevention && (
                   <div style={{ marginBottom: 14, background: '#f8fafc', borderRadius: 12, padding: '12px 14px', border: '1px solid #e2e8f0' }}>
                     <p style={{ fontSize: 11, color: '#0369a1', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <ShieldCheck size={14} color="#0369a1" /> {lang === 'kn' ? 'ತಡೆಗಟ್ಟುವಿಕೆ & ನಿರ್ವಹಣೆ (Prevention & Control)' : 'Prevention & Cultural Control'}
+                      <ShieldCheck size={14} color="#0369a1" /> {lang === 'kn' ? 'ತಡೆಗಟ್ಟುವಿಕೆ & ನಿರ್ವಹಣೆ' : 'Prevention & Cultural Control'}
                     </p>
-                    <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>{result.prevention}</p>
+                    <p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.55 }}>
+                      {(lang === 'kn' && translatedPrevention) ? translatedPrevention : result.prevention}
+                    </p>
                   </div>
                 )}
 
                 {/* Organic Tip */}
                 {result.organicTip && <div style={{ background: '#f0fdf4', borderRadius: 12, padding: '12px 14px', border: '1px solid #bbf7d0' }}>
                   <p style={{ fontSize: 11, fontWeight: 800, color: '#15803d', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                    <Leaf size={14} color="#15803d" /> {lang === 'kn' ? 'ಸಾವಯವ ಪರ್ಯಾಯ (Organic Alternative)' : 'Organic Alternative'}
+                    <Leaf size={14} color="#15803d" /> {lang === 'kn' ? 'ಸಾವಯವ ಪರ್ಯಾಯ' : 'Organic Alternative'}
                   </p>
-                  <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>{result.organicTip}</p>
+                  <p style={{ margin: 0, fontSize: 13, color: '#166534', lineHeight: 1.5 }}>
+                    {(lang === 'kn' && translatedOrganicTip) ? translatedOrganicTip : result.organicTip}
+                  </p>
                 </div>}
               </div>}
               {activeTab === 'fertilizer' && <div>
                 <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <Sprout size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ಪೋಷಕಾಂಶ ನಿರ್ವಹಣೆ' : 'Nutrition Management'}
+                  <Sprout size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ಗೊಬ್ಬರ ನಿರ್ವಹಣೆ' : 'Nutrition Management'}
                 </p>
-                <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>{result.fertilizer}</p>
+                {isTranslating && lang === 'kn' && !translatedFertilizer && <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>}
+                <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.6 }}>
+                  {(lang === 'kn' && translatedFertilizer) ? translatedFertilizer : result.fertilizer}
+                </p>
               </div>}
               {activeTab === 'tips' && result.keyTakeaways && <div>
                 <p style={{ fontSize: 11, color: '#1a7c4a', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 10px', display: 'flex', alignItems: 'center', gap: 5 }}>
                   <Lightbulb size={14} color="#1a7c4a" /> {lang === 'kn' ? 'ಪ್ರಮುಖ ಅಂಶಗಳು' : 'Key Takeaways'}
                 </p>
-                {result.keyTakeaways.map((tip, i) => (<div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}><div style={{ width: 18, height: 18, borderRadius: '50%', background: (result.color || '#1a7c4a') + '20', color: result.color || '#1a7c4a', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{i+1}</div><p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5, fontWeight: 500 }}>{tip}</p></div>))}
+                {isTranslating && lang === 'kn' && !translatedKeyTakeaways && <p style={{ margin: '0 0 6px', fontSize: 12, color: '#94a3b8', fontStyle: 'italic' }}>ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ...</p>}
+                {(lang === 'kn' && translatedKeyTakeaways ? translatedKeyTakeaways : result.keyTakeaways).map((tip, i) => (<div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}><div style={{ width: 18, height: 18, borderRadius: '50%', background: (result.color || '#1a7c4a') + '20', color: result.color || '#1a7c4a', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{i+1}</div><p style={{ margin: 0, fontSize: 13, color: '#334155', lineHeight: 1.5, fontWeight: 500 }}>{tip}</p></div>))}
               </div>}
             </div>
 
