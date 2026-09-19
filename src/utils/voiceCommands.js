@@ -441,16 +441,20 @@ export async function callGeminiVision(base64Image, mimeType = 'image/jpeg', use
   const prompt = `You are an expert plant pathologist AI specializing in Karnataka and Indian agriculture.
 Analyze this image with high precision.
 
-CRITICAL RULE 1: STRICT NON-CROP REJECTION (ANTI-SPOOFING)
-You MUST inspect if this image is genuinely agricultural.
-If the image shows:
-- A human face, selfie, person, body part, or hand close-up
-- Indoor room, office, walls, floor, furniture, desk, chair
-- Electronic device (laptop screen, computer monitor, keyboard, mobile phone)
-- Clothing, shoes, fabrics, vehicles, road, building architecture
-- Pets, domestic animals, or general everyday objects (that are not agricultural plants or crop pests on a plant)
--> YOU MUST RETURN IMMEDIATELY:
-{"isCrop": false, "reason": "Not a crop or plant image"}
+CRITICAL RULE 1: NON-CROP REJECTION
+Reject ONLY if the entire image is clearly non-agricultural with NO plant/leaf/crop/disease content:
+- A human selfie or portrait (no plants visible)
+- Entirely indoor scene with NO plants (room, furniture only)
+- Pure electronic device screen with NO crop content shown on it
+- Only vehicles, roads, or building facades with NO vegetation
+-> In those cases return: {"isCrop": false, "reason": "Not a crop or plant image"}
+
+IMPORTANT EXCEPTIONS — Always accept as isCrop:true:
+- Any image where a plant leaf, stem, fruit, or root is visible, even partially
+- Screenshots or photos from Wikipedia, Google, or any website showing plant diseases
+- Photos with watermarks, captions, or browser chrome IF the main subject contains crop/plant content
+- Reference charts, field guides, or disease identification posters
+- If the user has pre-selected a crop, be LENIENT — assume the image contains that crop unless it is obviously a human face or non-plant object
 
 CRITICAL RULE 2: CROP & DISEASE IDENTIFICATION
 If the image is a plant, crop leaf, stem, ear, fruit, tree frond, OR an agricultural crop disease guide/chart (including "Diseased Crops: Top 10 Identification Guide", "Diseased Crops: Identification Guide (11-20)", or "Crops & Pests Field Guide: Entries 21-32"), classify it into one of these 32 catalogued entries:
