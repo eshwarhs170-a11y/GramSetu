@@ -237,7 +237,7 @@ export function HomeScreen({ setActive }) {
     setLoadingPrices(true)
     try {
       if (forceApi) clearPriceCache()
-      const liveData = await fetchLivePrices()
+      const liveData = await fetchLivePrices(userDistrict)
       if (liveData && liveData.length > 0) {
         // Filter to crops relevant to the user's district
         const districtCrops = districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || []
@@ -2050,7 +2050,7 @@ export function MarketScreen() {
   const handleRefreshPrices = () => {
     clearPriceCache()
     setLoadingLive(true)
-    fetchLivePrices().then(data => {
+    fetchLivePrices(userDistrict).then(data => {
       if (data && data.length > 0) {
         // Build a lookup map: English crop name (lowercase) -> live price object
         const overlay = {}
@@ -2073,7 +2073,7 @@ export function MarketScreen() {
   useEffect(() => {
     let cancelled = false
     setLoadingLive(true)
-    fetchLivePrices().then(data => {
+    fetchLivePrices(userDistrict).then(data => {
       if (cancelled) return
       if (data && data.length > 0) {
         // Build a lookup map: English crop name (lowercase) -> live price object

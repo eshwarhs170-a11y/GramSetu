@@ -10,50 +10,50 @@ const CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
 
 // Maps AGMARKNET commodity names → our display format
 const CROP_META = {
-  'Maize': { name: 'Maize (ಮೆಕ್ಕೆಜೋಳ)', unit: 'per quintal', img: '/crops/Maize.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Bengaluru Rural","Bengaluru Urban","Bidar","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Chitradurga","Davanagere","Dharwad","Gadag","Hassan","Haveri","Kalaburagi","Kolar","Koppal","Mandya","Mysuru","Raichur","Ramanagara","Shivamogga","Tumakuru","Uttara Kannada","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
-  'Bengal gram': { name: 'Bengal gram (ಕಡಲೆ)', unit: 'per quintal', img: '/crops/Bengal_gram.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Bidar","Chitradurga","Davanagere","Dharwad","Gadag","Haveri","Kalaburagi","Koppal","Raichur","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
-  'Groundnut': { name: 'Groundnut (ಕಡಲೆಕಾಯಿ)', unit: 'per quintal', img: '/crops/Groundnut.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Bengaluru Rural","Bidar","Chamarajanagar","Chikkaballapur","Chitradurga","Davanagere","Dharwad","Gadag","Haveri","Kalaburagi","Kolar","Koppal","Mandya","Mysuru","Raichur","Ramanagara","Tumakuru","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
-  'Sunflower': { name: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ)', unit: 'per quintal', img: '/crops/Sunflower.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Bidar","Chitradurga","Davanagere","Dharwad","Gadag","Haveri","Kalaburagi","Koppal","Raichur","Tumakuru","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
-  'Jowar': { name: 'Jowar (ಜೋಳ)', unit: 'per quintal', img: '/crops/Jowar.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Bidar","Chitradurga","Davanagere","Dharwad","Gadag","Haveri","Kalaburagi","Koppal","Raichur","Tumakuru","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
-  'Bajra': { name: 'Bajra (ಸಜ್ಜೆ)', unit: 'per quintal', img: '/crops/Bajra.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari"], type: 'crop' },
-  'Wheat': { name: 'Wheat (ಗೋಧಿ)', unit: 'per quintal', img: '/crops/Wheat.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Belagavi","Bidar","Dharwad","Gadag","Kalaburagi","Koppal","Raichur","Vijayapura","Yadgir"], type: 'crop' },
-  'Tur': { name: 'Tur (ತೊಗರಿ)', unit: 'per quintal', img: '/crops/Tur.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Bengaluru Urban","Bidar","Chitradurga","Davanagere","Dharwad","Gadag","Haveri","Kalaburagi","Koppal","Mandya","Mysuru","Raichur","Tumakuru","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
-  'Chilli': { name: 'Chilli (ಮೆಣಸಿನಕಾಯಿ)', unit: 'per quintal', img: '/crops/Chilli.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Davanagere","Dharwad","Gadag","Haveri","Koppal","Raichur","Vijayapura","Vijayanagara"], type: 'crop' },
-  'Cotton': { name: 'Cotton (ಹತ್ತಿ)', unit: 'per quintal', img: '/crops/Cotton.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Davanagere","Dharwad","Gadag","Haveri","Koppal","Raichur","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
-  'Paddy': { name: 'Paddy (ಭತ್ತ)', unit: 'per quintal', img: '/crops/Paddy.jpg', market: 'Ballari APMC', districts: ["Ballari","Bengaluru Rural","Chamarajanagar","Chikkamagaluru","Dakshina Kannada","Davanagere","Hassan","Haveri","Kodagu","Kolar","Koppal","Mandya","Mysuru","Raichur","Ramanagara","Shivamogga","Tumakuru","Udupi","Uttara Kannada","Vijayanagara"], type: 'crop' },
-  'Sugarcane': { name: 'Sugarcane (ಕಬ್ಬು)', unit: 'per tonne', img: '/crops/Sugarcane.jpg', market: 'Belagavi APMC', districts: ["Belagavi","Chamarajanagar","Davanagere","Mandya","Mysuru","Shivamogga","Vijayanagara"], type: 'crop' },
-  'Soybean': { name: 'Soybean (ಸೋಯಾಬೀನ್)', unit: 'per quintal', img: '/crops/Soybean.jpg', market: 'Belagavi APMC', districts: ["Belagavi","Bidar","Dharwad","Gadag","Haveri","Kalaburagi","Vijayapura","Yadgir"], type: 'crop' },
-  'Ragi': { name: 'Ragi (ರಾಗಿ)', unit: 'per quintal', img: '/crops/Ragi.jpg', market: 'Bengaluru Rural APMC', districts: ["Bengaluru Rural","Bengaluru Urban","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Chitradurga","Hassan","Kolar","Mandya","Mysuru","Ramanagara","Shivamogga","Tumakuru"], type: 'crop' },
+  'Maize': { name: 'Maize (ಮೆಕ್ಕೆಜೋಳ)', unit: 'per kg', img: '/crops/Maize.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Bengaluru Rural","Bengaluru Urban","Bidar","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Chitradurga","Davanagere","Dharwad","Gadag","Hassan","Haveri","Kalaburagi","Kolar","Koppal","Mandya","Mysuru","Raichur","Ramanagara","Shivamogga","Tumakuru","Uttara Kannada","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
+  'Bengal gram': { name: 'Bengal gram (ಕಡಲೆ)', unit: 'per kg', img: '/crops/Bengal_gram.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Bidar","Chitradurga","Davanagere","Dharwad","Gadag","Haveri","Kalaburagi","Koppal","Raichur","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
+  'Groundnut': { name: 'Groundnut (ಕಡಲೆಕಾಯಿ)', unit: 'per kg', img: '/crops/Groundnut.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Bengaluru Rural","Bidar","Chamarajanagar","Chikkaballapur","Chitradurga","Davanagere","Dharwad","Gadag","Haveri","Kalaburagi","Kolar","Koppal","Mandya","Mysuru","Raichur","Ramanagara","Tumakuru","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
+  'Sunflower': { name: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ)', unit: 'per kg', img: '/crops/Sunflower.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Bidar","Chitradurga","Davanagere","Dharwad","Gadag","Haveri","Kalaburagi","Koppal","Raichur","Tumakuru","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
+  'Jowar': { name: 'Jowar (ಜೋಳ)', unit: 'per kg', img: '/crops/Jowar.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Bidar","Chitradurga","Davanagere","Dharwad","Gadag","Haveri","Kalaburagi","Koppal","Raichur","Tumakuru","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
+  'Bajra': { name: 'Bajra (ಸಜ್ಜೆ)', unit: 'per kg', img: '/crops/Bajra.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari"], type: 'crop' },
+  'Wheat': { name: 'Wheat (ಗೋಧಿ)', unit: 'per kg', img: '/crops/Wheat.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Belagavi","Bidar","Dharwad","Gadag","Kalaburagi","Koppal","Raichur","Vijayapura","Yadgir"], type: 'crop' },
+  'Tur': { name: 'Tur (ತೊಗರಿ)', unit: 'per kg', img: '/crops/Tur.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Bengaluru Urban","Bidar","Chitradurga","Davanagere","Dharwad","Gadag","Haveri","Kalaburagi","Koppal","Mandya","Mysuru","Raichur","Tumakuru","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
+  'Chilli': { name: 'Chilli (ಮೆಣಸಿನಕಾಯಿ)', unit: 'per kg', img: '/crops/Chilli.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Davanagere","Dharwad","Gadag","Haveri","Koppal","Raichur","Vijayapura","Vijayanagara"], type: 'crop' },
+  'Cotton': { name: 'Cotton (ಹತ್ತಿ)', unit: 'per kg', img: '/crops/Cotton.jpg', market: 'Bagalkot APMC', districts: ["Bagalkot","Ballari","Belagavi","Davanagere","Dharwad","Gadag","Haveri","Koppal","Raichur","Vijayapura","Yadgir","Vijayanagara"], type: 'crop' },
+  'Paddy': { name: 'Paddy (ಭತ್ತ)', unit: 'per kg', img: '/crops/Paddy.jpg', market: 'Ballari APMC', districts: ["Ballari","Bengaluru Rural","Chamarajanagar","Chikkamagaluru","Dakshina Kannada","Davanagere","Hassan","Haveri","Kodagu","Kolar","Koppal","Mandya","Mysuru","Raichur","Ramanagara","Shivamogga","Tumakuru","Udupi","Uttara Kannada","Vijayanagara"], type: 'crop' },
+  'Sugarcane': { name: 'Sugarcane (ಕಬ್ಬು)', unit: 'per kg', img: '/crops/Sugarcane.jpg', market: 'Belagavi APMC', districts: ["Belagavi","Chamarajanagar","Davanagere","Mandya","Mysuru","Shivamogga","Vijayanagara"], type: 'crop' },
+  'Soybean': { name: 'Soybean (ಸೋಯಾಬೀನ್)', unit: 'per kg', img: '/crops/Soybean.jpg', market: 'Belagavi APMC', districts: ["Belagavi","Bidar","Dharwad","Gadag","Haveri","Kalaburagi","Vijayapura","Yadgir"], type: 'crop' },
+  'Ragi': { name: 'Ragi (ರಾಗಿ)', unit: 'per kg', img: '/crops/Ragi.jpg', market: 'Bengaluru Rural APMC', districts: ["Bengaluru Rural","Bengaluru Urban","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Chitradurga","Hassan","Kolar","Mandya","Mysuru","Ramanagara","Shivamogga","Tumakuru"], type: 'crop' },
   'Tomato': { name: 'Tomato (ಟೊಮೇಟೊ)', unit: 'per kg', img: '/crops/Tomato.jpg', market: 'Bengaluru Rural APMC', districts: ["Bengaluru Rural","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Hassan","Kolar","Mandya","Ramanagara","Tumakuru"], type: 'crop' },
   'Potato': { name: 'Potato (ಆಲೂಗಡ್ಡೆ)', unit: 'per kg', img: '/crops/Potato.jpg', market: 'Bengaluru Rural APMC', districts: ["Bengaluru Rural","Chikkaballapur","Chikkamagaluru","Hassan","Kolar"], type: 'crop' },
   'Onion': { name: 'Onion (ಈರುಳ್ಳಿ)', unit: 'per kg', img: '/crops/Onion.jpg', market: 'Bengaluru Rural APMC', districts: ["Bengaluru Rural","Chikkaballapur","Chitradurga","Kolar","Tumakuru"], type: 'crop' },
   'Beans': { name: 'Beans (ಬೀನ್ಸ್)', unit: 'per kg', img: '/crops/Beans.jpg', market: 'Hoskote APMC', districts: ["Bengaluru Rural","Chikkaballapur","Chikkamagaluru","Kolar"], type: 'crop' },
-  'Mulberry': { name: 'Mulberry (ಹಿಪ್ಪುನೇರಳೆ)', unit: 'per quintal', img: '/crops/Mulberry.jpg', market: 'Bengaluru Rural APMC', districts: ["Bengaluru Rural","Chikkaballapur","Kolar","Mandya","Ramanagara"], type: 'crop' },
-  'Finger millet': { name: 'Finger millet (ರಾಗಿ)', unit: 'per quintal', img: '/crops/Finger_millet.jpg', market: 'Bengaluru Rural APMC', districts: ["Bengaluru Rural"], type: 'crop' },
-  'Rice': { name: 'Rice (ಅಕ್ಕಿ)', unit: 'per quintal', img: '/crops/Rice.jpg', market: 'Bengaluru APMC', districts: ["Bengaluru Urban"], type: 'crop' },
-  'Green gram': { name: 'Green gram (ಹೆಸರು ಕಾಳು)', unit: 'per quintal', img: '/crops/Green_gram.jpg', market: 'Bengaluru APMC', districts: ["Bengaluru Urban","Bidar","Kalaburagi"], type: 'crop' },
-  'Black gram': { name: 'Black gram (ಉದ್ದು)', unit: 'per quintal', img: '/crops/Black_gram.jpg', market: 'Bengaluru Urban APMC', districts: ["Bengaluru Urban","Bidar","Kalaburagi","Yadgir"], type: 'crop' },
-  'Dry chilli': { name: 'Dry chilli (ಒಣ ಮೆಣಸಿನಕಾಯಿ)', unit: 'per quintal', img: '/crops/Dry_chilli.jpg', market: 'Bengaluru APMC', districts: ["Bengaluru Urban"], type: 'crop' },
-  'Turmeric': { name: 'Turmeric (ಅರಿಶಿನ)', unit: 'per quintal', img: '/crops/Turmeric.jpg', market: 'Bengaluru Urban APMC', districts: ["Bengaluru Urban","Chamarajanagar","Dakshina Kannada","Kodagu","Mysuru","Shivamogga","Udupi","Uttara Kannada"], type: 'crop' },
-  'Tamarind': { name: 'Tamarind (ಹುಣಸೆಹಣ್ಣು)', unit: 'per quintal', img: '/crops/Tamarind.jpg', market: 'Bengaluru Urban APMC', districts: ["Bengaluru Urban","Chamarajanagar","Ramanagara"], type: 'crop' },
-  'Sesame': { name: 'Sesame (ಎಳ್ಳು)', unit: 'per quintal', img: '/crops/Sesame.jpg', market: 'Bengaluru Urban APMC', districts: ["Bengaluru Urban"], type: 'crop' },
+  'Mulberry': { name: 'Mulberry (ಹಿಪ್ಪುನೇರಳೆ)', unit: 'per kg', img: '/crops/Mulberry.jpg', market: 'Bengaluru Rural APMC', districts: ["Bengaluru Rural","Chikkaballapur","Kolar","Mandya","Ramanagara"], type: 'crop' },
+  'Finger millet': { name: 'Finger millet (ರಾಗಿ)', unit: 'per kg', img: '/crops/Finger_millet.jpg', market: 'Bengaluru Rural APMC', districts: ["Bengaluru Rural"], type: 'crop' },
+  'Rice': { name: 'Rice (ಅಕ್ಕಿ)', unit: 'per kg', img: '/crops/Rice.jpg', market: 'Bengaluru APMC', districts: ["Bengaluru Urban"], type: 'crop' },
+  'Green gram': { name: 'Green gram (ಹೆಸರು ಕಾಳು)', unit: 'per kg', img: '/crops/Green_gram.jpg', market: 'Bengaluru APMC', districts: ["Bengaluru Urban","Bidar","Kalaburagi"], type: 'crop' },
+  'Black gram': { name: 'Black gram (ಉದ್ದು)', unit: 'per kg', img: '/crops/Black_gram.jpg', market: 'Bengaluru Urban APMC', districts: ["Bengaluru Urban","Bidar","Kalaburagi","Yadgir"], type: 'crop' },
+  'Dry chilli': { name: 'Dry chilli (ಒಣ ಮೆಣಸಿನಕಾಯಿ)', unit: 'per kg', img: '/crops/Dry_chilli.jpg', market: 'Bengaluru APMC', districts: ["Bengaluru Urban"], type: 'crop' },
+  'Turmeric': { name: 'Turmeric (ಅರಿಶಿನ)', unit: 'per kg', img: '/crops/Turmeric.jpg', market: 'Bengaluru Urban APMC', districts: ["Bengaluru Urban","Chamarajanagar","Dakshina Kannada","Kodagu","Mysuru","Shivamogga","Udupi","Uttara Kannada"], type: 'crop' },
+  'Tamarind': { name: 'Tamarind (ಹುಣಸೆಹಣ್ಣು)', unit: 'per kg', img: '/crops/Tamarind.jpg', market: 'Bengaluru Urban APMC', districts: ["Bengaluru Urban","Chamarajanagar","Ramanagara"], type: 'crop' },
+  'Sesame': { name: 'Sesame (ಎಳ್ಳು)', unit: 'per kg', img: '/crops/Sesame.jpg', market: 'Bengaluru Urban APMC', districts: ["Bengaluru Urban"], type: 'crop' },
   'Coconut': { name: 'Coconut (ತೆಂಗಿನಕಾಯಿ)', unit: 'per 100 nuts', img: '/crops/Coconut.jpg', market: 'Chamarajanagar APMC', districts: ["Chamarajanagar","Chikkamagaluru","Dakshina Kannada","Hassan","Kodagu","Mandya","Mysuru","Ramanagara","Shivamogga","Tumakuru","Udupi","Uttara Kannada"], type: 'crop' },
-  'Arecanut': { name: 'Arecanut (ಅಡಿಕೆ)', unit: 'per quintal', img: '/crops/Arecanut.jpg', market: 'Chamarajanagar APMC', districts: ["Chamarajanagar","Chikkamagaluru","Dakshina Kannada","Hassan","Kodagu","Shivamogga","Udupi","Uttara Kannada"], type: 'crop' },
-  'Green chilli': { name: 'Green chilli (ಹಸಿ ಮೆಣಸಿನಕಾಯಿ)', unit: 'per quintal', img: '/crops/Green_chilli.jpg', market: 'Chikkaballapur APMC', districts: ["Chikkaballapur","Chikkamagaluru"], type: 'crop' },
-  'Lime': { name: 'Lime (ನಿಂಬೆಹಣ್ಣು)', unit: 'per quintal', img: '/crops/Lime.jpg', market: 'Chikkaballapur APMC', districts: ["Chikkaballapur"], type: 'crop' },
-  'Coffee': { name: 'Coffee (ಕಾಫಿ)', unit: 'per quintal', img: '/crops/Coffee.jpg', market: 'Chikkamagaluru APMC', districts: ["Chikkamagaluru","Hassan","Kodagu"], type: 'crop' },
-  'Castor seed': { name: 'Castor seed (ಹರಳು ಬೀಜ)', unit: 'per quintal', img: '/crops/Castor_seed.jpg', market: 'Chitradurga APMC', districts: ["Chitradurga"], type: 'crop' },
-  'Horse gram': { name: 'Horse gram (ಹುರುಳಿ)', unit: 'per quintal', img: '/crops/Horse_gram.jpg', market: 'Chitradurga APMC', districts: ["Chitradurga"], type: 'crop' },
-  'Cashew': { name: 'Cashew (ಗೇರುಬೀಜ)', unit: 'per quintal', img: '/crops/Cashew.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada","Udupi","Uttara Kannada"], type: 'crop' },
-  'Black pepper': { name: 'Black pepper (ಕಾಳುಮೆಣಸು)', unit: 'per quintal', img: '/crops/Black_pepper.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada","Hassan","Kodagu","Shivamogga","Udupi","Uttara Kannada"], type: 'crop' },
-  'Banana': { name: 'Banana (ಬಾಳೆಹಣ್ಣು)', unit: 'per bunch', img: '/crops/Banana.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada","Kodagu","Mandya","Mysuru","Ramanagara","Shivamogga","Udupi","Uttara Kannada"], type: 'crop' },
-  'Ginger': { name: 'Ginger (ಶುಂಠಿ)', unit: 'per quintal', img: '/crops/Ginger.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada","Hassan","Kodagu","Shivamogga","Udupi"], type: 'crop' },
-  'Cocoa': { name: 'Cocoa (ಕೋಕೋ)', unit: 'per quintal', img: '/crops/Cocoa.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada","Kodagu","Udupi"], type: 'crop' },
-  'Rubber': { name: 'Rubber (ರಬ್ಬರ್)', unit: 'per quintal', img: '/crops/Rubber.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada"], type: 'crop' },
+  'Arecanut': { name: 'Arecanut (ಅಡಿಕೆ)', unit: 'per kg', img: '/crops/Arecanut.jpg', market: 'Chamarajanagar APMC', districts: ["Chamarajanagar","Chikkamagaluru","Dakshina Kannada","Hassan","Kodagu","Shivamogga","Udupi","Uttara Kannada"], type: 'crop' },
+  'Green chilli': { name: 'Green chilli (ಹಸಿ ಮೆಣಸಿನಕಾಯಿ)', unit: 'per kg', img: '/crops/Green_chilli.jpg', market: 'Chikkaballapur APMC', districts: ["Chikkaballapur","Chikkamagaluru"], type: 'crop' },
+  'Lime': { name: 'Lime (ನಿಂಬೆಹಣ್ಣು)', unit: 'per kg', img: '/crops/Lime.jpg', market: 'Chikkaballapur APMC', districts: ["Chikkaballapur"], type: 'crop' },
+  'Coffee': { name: 'Coffee (ಕಾಫಿ)', unit: 'per kg', img: '/crops/Coffee.jpg', market: 'Chikkamagaluru APMC', districts: ["Chikkamagaluru","Hassan","Kodagu"], type: 'crop' },
+  'Castor seed': { name: 'Castor seed (ಹರಳು ಬೀಜ)', unit: 'per kg', img: '/crops/Castor_seed.jpg', market: 'Chitradurga APMC', districts: ["Chitradurga"], type: 'crop' },
+  'Horse gram': { name: 'Horse gram (ಹುರುಳಿ)', unit: 'per kg', img: '/crops/Horse_gram.jpg', market: 'Chitradurga APMC', districts: ["Chitradurga"], type: 'crop' },
+  'Cashew': { name: 'Cashew (ಗೇರುಬೀಜ)', unit: 'per kg', img: '/crops/Cashew.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada","Udupi","Uttara Kannada"], type: 'crop' },
+  'Black pepper': { name: 'Black pepper (ಕಾಳುಮೆಣಸು)', unit: 'per kg', img: '/crops/Black_pepper.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada","Hassan","Kodagu","Shivamogga","Udupi","Uttara Kannada"], type: 'crop' },
+  'Banana': { name: 'Banana (ಬಾಳೆಹಣ್ಣು)', unit: 'per kg', img: '/crops/Banana.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada","Kodagu","Mandya","Mysuru","Ramanagara","Shivamogga","Udupi","Uttara Kannada"], type: 'crop' },
+  'Ginger': { name: 'Ginger (ಶುಂಠಿ)', unit: 'per kg', img: '/crops/Ginger.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada","Hassan","Kodagu","Shivamogga","Udupi"], type: 'crop' },
+  'Cocoa': { name: 'Cocoa (ಕೋಕೋ)', unit: 'per kg', img: '/crops/Cocoa.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada","Kodagu","Udupi"], type: 'crop' },
+  'Rubber': { name: 'Rubber (ರಬ್ಬರ್)', unit: 'per kg', img: '/crops/Rubber.jpg', market: 'Dakshina Kannada APMC', districts: ["Dakshina Kannada"], type: 'crop' },
   'Cardamom': { name: 'Cardamom (ಏಲಕ್ಕಿ)', unit: 'per kg', img: '/crops/Cardamom.jpg', market: 'Kodagu APMC', districts: ["Kodagu","Uttara Kannada"], type: 'crop' },
   'Mango': { name: 'Mango (ಮಾವಿನಹಣ್ಣು)', unit: 'per dozen', img: '/crops/Mango.jpg', market: 'Kolar APMC', districts: ["Kolar","Ramanagara","Uttara Kannada"], type: 'crop' },
-  'Tobacco': { name: 'Tobacco (ತಂಬಾಕು)', unit: 'per quintal', img: '/crops/Tobacco.jpg', market: 'Mysuru APMC', districts: ["Mysuru"], type: 'crop' },
-  'Pineapple': { name: 'Pineapple (ಅನಾನಸ್)', unit: 'per piece', img: '/crops/Pineapple.jpg', market: 'Udupi APMC', districts: ["Udupi"], type: 'crop' },
+  'Tobacco': { name: 'Tobacco (ತಂಬಾಕು)', unit: 'per kg', img: '/crops/Tobacco.jpg', market: 'Mysuru APMC', districts: ["Mysuru"], type: 'crop' },
+  'Pineapple': { name: 'Pineapple (ಅನಾನಸ್)', unit: 'per kg', img: '/crops/Pineapple.jpg', market: 'Udupi APMC', districts: ["Udupi"], type: 'crop' },
 };
 
 // Master list of all unique crops for the baseline
@@ -122,8 +122,8 @@ export const BASELINE_PRICES = [
   { crop: 'Grapes (ದ್ರಾಕ್ಷಿ / अंगूर)', unit: 'per kg', price: '₹100', change: '-₹5', trend: 'down', market: 'Bengaluru APMC', img: '/crops/Grapes.jpg', districts: [], type: 'fruit' },
   { crop: 'Orange (ಕಿತ್ತಳೆ / संतरा)', unit: 'per kg', price: '₹80', change: '+₹2', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Orange.jpg', districts: [], type: 'fruit' },
   { crop: 'Sweet Lime (ಮೂಸಂಬಿ / मौसंबी)', unit: 'per kg', price: '₹70', change: '+₹1', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Sweet_Lime.jpg', districts: [], type: 'fruit' },
-  { crop: 'Watermelon (ಕಲ್ಲಂಗಡಿ / तरबूज)', unit: 'per piece', price: '₹60', change: '-₹2', trend: 'down', market: 'Bengaluru APMC', img: '/crops/Watermelon.jpg', districts: [], type: 'fruit' },
-  { crop: 'Papaya (ಪಪ್ಪಾಯಿ / पपीता)', unit: 'per piece', price: '₹50', change: '+₹0', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Papaya.jpg', districts: [], type: 'fruit' },
+  { crop: 'Watermelon (ಕಲ್ಲಂಗಡಿ / तरबूज)', unit: 'per kg', price: '₹60', change: '-₹2', trend: 'down', market: 'Bengaluru APMC', img: '/crops/Watermelon.jpg', districts: [], type: 'fruit' },
+  { crop: 'Papaya (ಪಪ್ಪಾಯಿ / पपीता)', unit: 'per kg', price: '₹50', change: '+₹0', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Papaya.jpg', districts: [], type: 'fruit' },
   { crop: 'Guava (ಸೀಬೆಕಾಯಿ / अमरूद)', unit: 'per kg', price: '₹60', change: '+₹4', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Guava.jpg', districts: [], type: 'fruit' },
   { crop: 'Sapota (ಸಪೋಟ / चीकू)', unit: 'per kg', price: '₹70', change: '+₹2', trend: 'up', market: 'Bengaluru APMC', img: '/crops/Sapota.jpg', districts: [], type: 'fruit' },
 ];
@@ -141,8 +141,12 @@ export function clearPriceCache() {
  * Try to fetch from AGMARKNET API or compute today's real Karnataka APMC daily price.
  * Ensures the app never shows stale, static, or inaccurate prices.
  */
-export async function fetchLivePrices() {
-  const cached = window.localStorage.getItem(CACHE_KEY)
+export async function fetchLivePrices(userDistrict = '') {
+  // Use district in cache key
+  const districtKey = userDistrict ? userDistrict.toLowerCase() : 'all';
+  const localCacheKey = CACHE_KEY + '_' + districtKey;
+
+  const cached = window.localStorage.getItem(localCacheKey)
   if (cached) {
     try {
       const parsed = JSON.parse(cached)
@@ -155,28 +159,44 @@ export async function fetchLivePrices() {
   try {
     const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
     let records = []
+    let marketUsed = 'Karnataka APMC'
     
-    // Try data.gov.in AGMARKNET feed
-    try {
-      const res = await fetch(`https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${API_KEY}&format=json&filters[state]=Karnataka&filters[arrival_date]=${today}&limit=60`)
-      if (res.ok) {
-        const json = await res.json()
-        records = json.records || []
-      }
-    } catch (e) {}
+    // 1. Try district specific data
+    if (userDistrict) {
+       try {
+         const res = await fetch(`https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${API_KEY}&format=json&filters[state]=Karnataka&filters[district]=${userDistrict}&filters[arrival_date]=${today}&limit=60`)
+         if (res.ok) {
+           const json = await res.json()
+           records = json.records || []
+           if(records.length > 0) marketUsed = userDistrict + ' APMC';
+         }
+       } catch(e) {}
+    }
 
+    // 2. Fallback to Bengaluru APMC if district failed
+    if (records.length === 0) {
+       try {
+         const res = await fetch(`https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${API_KEY}&format=json&filters[state]=Karnataka&filters[district]=Bengaluru&filters[arrival_date]=${today}&limit=60`)
+         if (res.ok) {
+           const json = await res.json()
+           records = json.records || []
+           if(records.length > 0) marketUsed = 'Bengaluru APMC';
+         }
+       } catch(e) {}
+    }
+
+    // 3. Fallback to State-wide if Bengaluru failed
     if (records.length === 0) {
       try {
         const resRecent = await fetch(`https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${API_KEY}&format=json&filters[state]=Karnataka&limit=60`)
         if (resRecent.ok) {
           const jsonRecent = await resRecent.json()
           records = jsonRecent.records || []
+          if(records.length > 0) marketUsed = 'Karnataka Average';
         }
       } catch (e) {}
     }
 
-    // Daily deterministic market variation based on current day of year
-    // Reflects actual Karnataka Agricultural Marketing Board mandi conditions
     const now = new Date()
     const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24))
 
@@ -186,39 +206,49 @@ export async function fetchLivePrices() {
       
       const liveData = records.find(r => r.commodity && r.commodity.toLowerCase().includes(englishName.toLowerCase()))
       if (liveData && liveData.modal_price) {
-        const newPrice = parseFloat(liveData.modal_price)
-        const oldPriceRaw = baseCrop.price.replace(/[^0-9]/g, '')
-        const oldPrice = oldPriceRaw ? parseFloat(oldPriceRaw) : newPrice
+        // API returns price per quintal. We want per kg.
+        const newPricePerKg = parseFloat(liveData.modal_price) / 100;
         
-        const changeVal = newPrice - oldPrice
+        let oldPriceRaw = baseCrop.price.replace(/[^0-9]/g, '')
+        let oldPrice = oldPriceRaw ? parseFloat(oldPriceRaw) : newPricePerKg;
+        // If the base crop price was accidentally left in quintals in the baseline (e.g. >1000), divide it.
+        if (oldPrice > 1000) oldPrice = oldPrice / 100;
+        
+        const changeVal = newPricePerKg - oldPrice
         return {
           ...baseCrop,
-          price: fmt(newPrice),
+          price: fmt(newPricePerKg),
+          unit: 'per kg',
           type: baseCrop.type,
           change: changeVal >= 0 ? '+' + fmt(changeVal) : '-' + fmt(Math.abs(changeVal)),
           trend: changeVal >= 0 ? 'up' : 'down',
-          market: liveData.market + ' APMC'
+          market: liveData.market ? liveData.market + ' APMC' : marketUsed
         }
       }
 
       // If API record not published for today yet, apply daily market variance on benchmark
-      const baseRaw = parseFloat(baseCrop.price.replace(/[^0-9]/g, '')) || 3000
+      let baseRaw = parseFloat(baseCrop.price.replace(/[^0-9]/g, '')) || 30;
+      if (baseRaw > 1000) baseRaw = baseRaw / 100; // Force to per kg
+      
       // Realistic daily fluctuation: between -1.5% and +2.0%
       const seed = (dayOfYear * 17 + baseCrop.crop.charCodeAt(0) * 31) % 100
       const fluctPercent = ((seed - 48) / 100) * 0.02
-      const dailyPrice = Math.round((baseRaw * (1 + fluctPercent)) / 10) * 10
+      // Round to nearest integer for per kg prices
+      const dailyPrice = Math.round(baseRaw * (1 + fluctPercent));
       const diff = dailyPrice - baseRaw
 
       return {
         ...baseCrop,
         price: fmt(dailyPrice),
+        unit: 'per kg',
         type: baseCrop.type,
         change: diff >= 0 ? '+' + fmt(diff) : '-' + fmt(Math.abs(diff)),
         trend: diff >= 0 ? 'up' : 'down',
+        market: marketUsed
       }
     })
 
-    window.localStorage.setItem(CACHE_KEY, JSON.stringify({
+    window.localStorage.setItem(localCacheKey, JSON.stringify({
       timestamp: Date.now(),
       data: updatedPrices
     }))
@@ -226,7 +256,12 @@ export async function fetchLivePrices() {
     return updatedPrices
 
   } catch (err) {
-    console.error('Failed to fetch live prices, using daily benchmarks:', err)
-    return BASELINE_PRICES
+    console.error('Failed to fetch live prices:', err)
+    // fallback map to ensure 1kg
+    return BASELINE_PRICES.map(c => {
+       let val = parseFloat(c.price.replace(/[^0-9]/g, ''));
+       if (val > 1000) val = val / 100;
+       return { ...c, price: fmt(val || 30), unit: 'per kg', market: 'Karnataka APMC' };
+    });
   }
 }
