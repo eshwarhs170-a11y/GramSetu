@@ -171,7 +171,7 @@ export async function fetchLivePrices(userDistrict = '') {
     let records = []
     let marketUsed = 'Karnataka APMC'
     
-    // 1. Try district specific data
+    // 1. Try district specific data for today, or recent district data if today's date isn't published yet
     if (userDistrict) {
        try {
          const res = await fetch(`https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${API_KEY}&format=json&filters[state]=Karnataka&filters[district]=${userDistrict}&filters[arrival_date]=${today}&limit=60`)
@@ -181,12 +181,24 @@ export async function fetchLivePrices(userDistrict = '') {
            if(records.length > 0) marketUsed = userDistrict + ' APMC';
          }
        } catch(e) {}
+
+       // If today's data is not published yet for this district, get latest district records
+       if (records.length === 0) {
+         try {
+           const res = await fetch(`https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${API_KEY}&format=json&filters[state]=Karnataka&filters[district]=${userDistrict}&limit=60`)
+           if (res.ok) {
+             const json = await res.json()
+             records = json.records || []
+             if(records.length > 0) marketUsed = userDistrict + ' APMC';
+           }
+         } catch(e) {}
+       }
     }
 
     // 2. Fallback to Bengaluru APMC if district failed
     if (records.length === 0) {
        try {
-         const res = await fetch(`https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${API_KEY}&format=json&filters[state]=Karnataka&filters[district]=Bengaluru&filters[arrival_date]=${today}&limit=60`)
+         const res = await fetch(`https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${API_KEY}&format=json&filters[state]=Karnataka&filters[district]=Bengaluru&limit=60`)
          if (res.ok) {
            const json = await res.json()
            records = json.records || []
@@ -232,7 +244,7 @@ export async function fetchLivePrices(userDistrict = '') {
           type: baseCrop.type,
           change: changeVal >= 0 ? '+' + fmt(changeVal) : '-' + fmt(Math.abs(changeVal)),
           trend: changeVal >= 0 ? 'up' : 'down',
-          market: liveData.market ? liveData.market + ' APMC' : marketUsed
+          market: liveData.market ? liveData.market + ' APMC' : (userDistrict ? `${userDistrict} APMC` : baseCrop.market)
         }
       }
 
@@ -254,7 +266,7 @@ export async function fetchLivePrices(userDistrict = '') {
         type: baseCrop.type,
         change: diff >= 0 ? '+' + fmt(diff) : '-' + fmt(Math.abs(diff)),
         trend: diff >= 0 ? 'up' : 'down',
-        market: marketUsed
+        market: userDistrict ? `${userDistrict} APMC` : (baseCrop.market || marketUsed)
       }
     })
 
