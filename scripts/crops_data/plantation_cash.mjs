@@ -1,7 +1,7 @@
 export const PLANTATION_CASH = [
   // ── 1. COTTON ──
   {
-    crop: 'Cotton (ಹತ್ತಿ / कपास)',
+    crop: 'Cotton (ಹತ್ತಿ)',
     cropKn: 'ಹತ್ತಿ',
     cropHi: 'कपास (कॉटन)',
     emoji: '🌱',
@@ -214,7 +214,7 @@ export const PLANTATION_CASH = [
 
   // ── 2. SUGARCANE ──
   {
-    crop: 'Sugarcane (ಕಬ್ಬು / गन्ना)',
+    crop: 'Sugarcane (ಕಬ್ಬು)',
     cropKn: 'ಕಬ್ಬು',
     cropHi: 'गन्ना (ईख)',
     emoji: '🎋',
@@ -425,7 +425,7 @@ export const PLANTATION_CASH = [
 
   // ── 3. COCONUT ──
   {
-    crop: 'Coconut (ತೆಂಗು / नारियल)',
+    crop: 'Coconut (ತೆಂಗು)',
     cropKn: 'ತೆಂಗು',
     cropHi: 'नारियल',
     emoji: '🥥',
@@ -513,7 +513,7 @@ export const PLANTATION_CASH = [
       },
       {
         disease: 'Basal Stem Rot / Ganoderma Wilt (Ganoderma lucidum)',
-        diseaseKn: 'ಅಣಬೆ ರೋಗ (ಕಾಂಡ ಕೊಳೆ / ಗ್ಯಾನೋಡರ್ಮಾ)',
+        diseaseKn: 'ಅಣಬೆ ರೋಗ (ಕಾಂಡ ಕೊಳೆ)',
         diseaseHi: 'नारियल तना विगलन (गैनोडर्मा उकठा)',
         severity: 'High',
         remedy: 'Root feeding with Hexaconazole 5 SC @ 2% (20 mL in 100 mL water) per palm at quarterly intervals. Apply 5 kg neem cake + 50g Trichoderma harzianum to soil basin.',
@@ -636,7 +636,7 @@ export const PLANTATION_CASH = [
 
   // ── 4. ARECANUT ──
   {
-    crop: 'Arecanut (ಅಡಿಕೆ / सुपारी)',
+    crop: 'Arecanut (ಅಡಿಕೆ)',
     cropKn: 'ಅಡಿಕೆ',
     cropHi: 'सुपारी (अरेकानट)',
     emoji: '🌴',
@@ -847,7 +847,7 @@ export const PLANTATION_CASH = [
 
   // ── 5. COFFEE ──
   {
-    crop: 'Coffee (ಕಾಫಿ / कॉफी)',
+    crop: 'Coffee (ಕಾಫಿ)',
     cropKn: 'ಕಾಫಿ',
     cropHi: 'कॉफी',
     emoji: '☕',
@@ -1057,7 +1057,7 @@ export const PLANTATION_CASH = [
 
   // ── 6. BLACK PEPPER ──
   {
-    crop: 'Black Pepper (ಕರಿಮೆಣಸು / काली मिर्च)',
+    crop: 'Black Pepper (ಕರಿಮೆಣಸು)',
     cropKn: 'ಕರಿಮೆಣಸು',
     cropHi: 'काली मिर्च (ब्लैक पेपर)',
     emoji: '🌿',
@@ -1151,7 +1151,7 @@ export const PLANTATION_CASH = [
         remedy: 'Spray 1% Bordeaux mixture or Carbendazim 50 WP @ 1 g/L or Mancozeb 75 WP @ 2 g/L twice during July-August berry formation.',
         remedyKn: 'ಜುಲೈ-ಆಗಸ್ಟ್ ತಿಂಗಳಲ್ಲಿ ಕಾಳು ಕಟ್ಟುವಾಗ 1% ಬೋರ್ಡೋ ಮಿಶ್ರಣ ಅಥವಾ Carbendazim 50 WP @ 1 g/L ಎರಡು ಬಾರಿ ಸಿಂಪಡಿಸಿ.',
         remedyHi: 'जुलाई-अगस्त में दाना बनते समय 1% बोर्डो मिश्रण या Carbendazim 50 WP @ 1 g/L का दो बार छिड़काव करें।',
-        prevention: 'Provide adequate sunlight to vines by regulating shade of standard trees (Silver Oak / Erythrina).',
+        prevention: 'Provide adequate sunlight to vines by regulating shade of standard trees (Silver Oak).',
         preventionKn: 'ನೆರಳು ಮರಗಳ (ಸಿಲ್ವರ್ ಓಕ್) ಕೊಂಬೆಗಳನ್ನು ಕತ್ತರಿಸಿ ಬಳ್ಳಿಗಳಿಗೆ ಸೂಕ್ತ ಸೂರ್ಯನ ಬೆಳಕು ಸಿಗುವಂತೆ ಮಾಡಿ.',
         preventionHi: 'सिल्वर ओक जैसे छायादार पेड़ों की छंटाई करके बेलों तक पर्याप्त धूप पहुंचाएं।',
         organicTip: 'Spray Pseudomonas fluorescens @ 5 g/L early in morning at fruit set.',

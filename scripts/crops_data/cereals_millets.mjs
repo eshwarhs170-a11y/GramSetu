@@ -1,7 +1,7 @@
 export const CEREALS_MILLETS = [
   // ── 1. PADDY / RICE ──
   {
-    crop: 'Paddy / Rice (ಭತ್ತ / धान)',
+    crop: 'Paddy / Rice (ಭತ್ತ)',
     cropKn: 'ಭತ್ತ',
     cropHi: 'धान (चावल)',
     emoji: '🌾',
@@ -217,7 +217,7 @@ export const CEREALS_MILLETS = [
 
   // ── 2. RAGI / FINGER MILLET ──
   {
-    crop: 'Ragi / Finger Millet (ರಾಗಿ / मडुआ)',
+    crop: 'Ragi / Finger Millet (ರಾಗಿ)',
     cropKn: 'ರಾಗಿ',
     cropHi: 'रागी (मडुआ)',
     emoji: '🌾',
@@ -429,7 +429,7 @@ export const CEREALS_MILLETS = [
 
   // ── 3. MAIZE / CORN ──
   {
-    crop: 'Maize / Corn (ಮೆಕ್ಕೆಜೋಳ / मक्का)',
+    crop: 'Maize / Corn (ಮೆಕ್ಕೆಜೋಳ)',
     cropKn: 'ಮೆಕ್ಕೆಜೋಳ',
     cropHi: 'मक्का (भुट्टा)',
     emoji: '🌽',
@@ -597,7 +597,7 @@ export const CEREALS_MILLETS = [
         ]
       },
       {
-        disease: 'Post-flowering Stalk Rot (Macrophomina phaseolina / Fusarium)',
+        disease: 'Post-flowering Stalk Rot (Macrophomina phaseolina)',
         diseaseKn: 'ಮೆಕ್ಕೆಜೋಳದ ಕಾಂಡ ಕೊಳೆ ರೋಗ',
         diseaseHi: 'मक्का तना सड़न रोग (पोस्ट-फ्लावरिंग स्टालक रॉट)',
         severity: 'High',
@@ -642,7 +642,7 @@ export const CEREALS_MILLETS = [
 
   // ── 4. WHEAT ──
   {
-    crop: 'Wheat (ಗೋಧಿ / गेहूं)',
+    crop: 'Wheat (ಗೋಧಿ)',
     cropKn: 'ಗೋಧಿ',
     cropHi: 'गेहूं',
     emoji: '🌾',
@@ -852,13 +852,13 @@ export const CEREALS_MILLETS = [
 
   // ── 5. JOWAR / SORGHUM ──
   {
-    crop: 'Jowar / Sorghum (ಜೋಳ / ज्वार)',
+    crop: 'Jowar / Sorghum (ಜೋಳ)',
     cropKn: 'ಜೋಳ',
     cropHi: 'ज्वार (सोरघम)',
     emoji: '🌾',
     diseases: [
       {
-        disease: 'Grain Mold (Curvularia lunata / Fusarium moniliforme)',
+        disease: 'Grain Mold (Curvularia lunata)',
         diseaseKn: 'ಜೋಳದ ಕಾಳು ಬೂಷ್ಟು ರೋಗ',
         diseaseHi: 'ज्वार दाना फफूंद रोग (ग्रेन मोल्ड)',
         severity: 'High',

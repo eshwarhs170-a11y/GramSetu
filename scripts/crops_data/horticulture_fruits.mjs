@@ -1,7 +1,7 @@
 export const HORTICULTURE_FRUITS = [
   // ── 1. TOMATO ──
   {
-    crop: 'Tomato (ಟೊಮೇಟೊ / टमाटर)',
+    crop: 'Tomato (ಟೊಮೇಟೊ)',
     cropKn: 'ಟೊಮೇಟೊ',
     cropHi: 'टमाटर',
     emoji: '🍅',
@@ -98,7 +98,7 @@ export const HORTICULTURE_FRUITS = [
         prevention: 'Raise seedlings under 40-mesh insect-proof nylon nets. Install yellow sticky traps @ 25/acre.',
         preventionKn: '40-ಮೆಶ್ ನೈಲಾನ್ ಬಲೆಯಡಿ ಸಸಿಗಳನ್ನು ಬೆಳೆಸಿ. ಎಕರೆಗೆ 25 ಹಳದಿ ಅಂಟು ಬಲೆಗಳನ್ನು ಅಳವಡಿಸಿ.',
         preventionHi: 'नर्सरी को 40-जालीदार नेट हाउस में तैयार करें। 25 पीले चिपचिपे ट्रैप प्रति एकड़ लगाएं।',
-        organicTip: 'Spray 5% neem oil emulsion weekly; use barrier crops (maize/sorghum) around tomato plot.',
+        organicTip: 'Spray 5% neem oil emulsion weekly; use barrier crops (maize) around tomato plot.',
         organicTipKn: 'ವಾರಕ್ಕೊಮ್ಮೆ ಬೇವಿನ ಎಣ್ಣೆ ಸಿಂಪಡಿಸಿ ಮತ್ತು ಹೊಲದ ಸುತ್ತಲೂ ಮೆಕ್ಕೆಜೋಳದ ಗಡಿ ಬೆಳೆ ಹಾಕಿ.',
         organicTipHi: 'साप्ताहिक रूप से नीम के तेल का छिड़काव करें और खेत के चारों ओर मक्के की बॉर्डर फसल लगाएं।',
         fertilizer: 'Foliar spray of 19:19:19 @ 4 g/L + Micronutrients to support growth of infected plants.',
@@ -215,7 +215,7 @@ export const HORTICULTURE_FRUITS = [
 
   // ── 2. POTATO ──
   {
-    crop: 'Potato (ಆಲೂಗಡ್ಡೆ / आलू)',
+    crop: 'Potato (ಆಲೂಗಡ್ಡೆ)',
     cropKn: 'ಆಲೂಗಡ್ಡೆ',
     cropHi: 'आलू',
     emoji: '🥔',
@@ -256,7 +256,7 @@ export const HORTICULTURE_FRUITS = [
           'भंडारण में आलू अंदर से कत्थई-बैंगनी रंग के होकर सड़ जाते हैं'
         ],
         products: [
-          { name: 'Cymoxanil 8% + Mancozeb 64% WP', type: 'chemical', brand: 'Curzate (DuPont/Corteva)', price: '₹550 – ₹780 / 500g', query: 'Cymoxanil Mancozeb Curzate' },
+          { name: 'Cymoxanil 8% + Mancozeb 64% WP', type: 'chemical', brand: 'Curzate (DuPont)', price: '₹550 – ₹780 / 500g', query: 'Cymoxanil Mancozeb Curzate' },
           { name: 'Metalaxyl 8% + Mancozeb 64% WP', type: 'chemical', brand: 'Ridomil Gold', price: '₹480 – ₹680 / 500g', query: 'Metalaxyl Mancozeb 72 WP' }
         ]
       },
@@ -425,7 +425,7 @@ export const HORTICULTURE_FRUITS = [
 
   // ── 3. ONION ──
   {
-    crop: 'Onion (ಈರುಳ್ಳಿ / प्याज)',
+    crop: 'Onion (ಈರುಳ್ಳಿ)',
     cropKn: 'ಈರುಳ್ಳಿ',
     cropHi: 'प्याज',
     emoji: '🧅',
@@ -637,7 +637,7 @@ export const HORTICULTURE_FRUITS = [
 
   // ── 4. CHILLI ──
   {
-    crop: 'Chilli (ಮೆಣಸಿನಕಾಯಿ / मिर्च)',
+    crop: 'Chilli (ಮೆಣಸಿನಕಾಯಿ)',
     cropKn: 'ಮೆಣಸಿನಕಾಯಿ',
     cropHi: 'मिर्च (चिल्ली)',
     emoji: '🌶️',
@@ -760,7 +760,7 @@ export const HORTICULTURE_FRUITS = [
         ],
         products: [
           { name: 'Wettable Sulphur 80 WP', type: 'chemical', brand: 'Sulfex', price: '₹180 – ₹260 / 1kg', query: 'Wettable Sulphur 80 WP' },
-          { name: 'Myclobutanil 10 WP', type: 'chemical', brand: 'Systhane (Dow/Rallis)', price: '₹380 – ₹520 / 100g', query: 'Myclobutanil 10 WP Systhane' }
+          { name: 'Myclobutanil 10 WP', type: 'chemical', brand: 'Systhane (Dow)', price: '₹380 – ₹520 / 100g', query: 'Myclobutanil 10 WP Systhane' }
         ]
       },
       {
@@ -848,7 +848,7 @@ export const HORTICULTURE_FRUITS = [
 
   // ── 5. BRINJAL / EGGPLANT ──
   {
-    crop: 'Brinjal / Eggplant (ಬದನೆಕಾಯಿ / बैंगन)',
+    crop: 'Brinjal / Eggplant (ಬದನೆಕಾಯಿ)',
     cropKn: 'ಬದನೆಕಾಯಿ',
     cropHi: 'बैंगन (ब्रिंजल)',
     emoji: '🍆',
@@ -890,7 +890,7 @@ export const HORTICULTURE_FRUITS = [
         ],
         products: [
           { name: 'Emamectin Benzoate 5 SG', type: 'chemical', brand: 'Proclaim (Syngenta)', price: '₹420 – ₹590 / 100g', query: 'Emamectin Benzoate 5 SG' },
-          { name: 'Spinosad 45 SC', type: 'chemical', brand: 'Tracer (Dow/Corteva)', price: '₹950 – ₹1,350 / 75mL', query: 'Spinosad 45 SC Tracer' },
+          { name: 'Spinosad 45 SC', type: 'chemical', brand: 'Tracer (Dow)', price: '₹950 – ₹1,350 / 75mL', query: 'Spinosad 45 SC Tracer' },
           { name: 'Brinjal Fruit Borer Trap (Lucin-Lure)', type: 'organic', brand: 'PCI Phero Trap', price: '₹130 – ₹190 / trap', query: 'Brinjal fruit borer pheromone trap' }
         ]
       },
@@ -1015,7 +1015,7 @@ export const HORTICULTURE_FRUITS = [
         ]
       },
       {
-        disease: 'Brinjal Damping Off (Pythium debaryanum / Rhizoctonia solani)',
+        disease: 'Brinjal Damping Off (Pythium debaryanum)',
         diseaseKn: 'ಬದನೆ ಸಸಿ ಮಡಿ ಕೊಳೆ ರೋಗ',
         diseaseHi: 'बैंगन आर्द्र-पतन (डैम्पिंग ऑफ / नर्सरी सड़न)',
         severity: 'High',
@@ -1059,7 +1059,7 @@ export const HORTICULTURE_FRUITS = [
 
   // ── 6. BANANA ──
   {
-    crop: 'Banana (ಬಾಳೆ / केला)',
+    crop: 'Banana (ಬಾಳೆ)',
     cropKn: 'ಬಾಳೆ',
     cropHi: 'केला (बनाना)',
     emoji: '🍌',
@@ -1106,7 +1106,7 @@ export const HORTICULTURE_FRUITS = [
         ]
       },
       {
-        disease: 'Sigatoka Leaf Spot (Pseudocercospora fijiensis / musae)',
+        disease: 'Sigatoka Leaf Spot (Pseudocercospora fijiensis)',
         diseaseKn: 'ಬಾಳೆ ಸಿಗಟೋಕ ಎಲೆ ಚುಕ್ಕೆ ರೋಗ',
         diseaseHi: 'केला सिगाटोका पर्ण चित्ती रोग (सिगाटोका लीफ स्पॉट)',
         severity: 'High',
@@ -1190,7 +1190,7 @@ export const HORTICULTURE_FRUITS = [
         diseaseKn: 'ಬಾಳೆ ಗೆಡ್ಡೆ ಕೊರೆಯುವ ಹುಳು (ರೈಜೋಮ್ ವೀವಿಲ್)',
         diseaseHi: 'केला प्रकंद घुन (कंद छेदक / राइजोम वीविल)',
         severity: 'High',
-        remedy: 'Pare suckers (trim outer roots/corm) and dip in Chlorpyrifos 20 EC @ 2.5 mL/L for 20 minutes before planting. Apply Fipronil 0.3% GR @ 20 g/plant or Chlorpyrifos 20 EC @ 3 mL/L around base.',
+        remedy: 'Pare suckers (trim outer roots) and dip in Chlorpyrifos 20 EC @ 2.5 mL/L for 20 minutes before planting. Apply Fipronil 0.3% GR @ 20 g/plant or Chlorpyrifos 20 EC @ 3 mL/L around base.',
         remedyKn: 'ನಾಟಿಗೆ ಮುನ್ನ ಗೆಡ್ಡೆಯ ಬೇರು ಮತ್ತು ಮೇಲ್ಪದರ ಕತ್ತರಿಸಿ Chlorpyrifos @ 2.5 mL/L ನಲ್ಲಿ 20 ನಿಮಿಷ ನೆನೆಸಿ. ಗಿಡದ ಬುಡಕ್ಕೆ Fipronil 0.3% GR @ 20g ಹಾಕಿ.',
         remedyHi: 'कंदों की छिलाई करके Chlorpyrifos @ 2.5 mL/L में 20 मिनट डुबोएं। पौधों के आधार पर Fipronil 0.3% GR @ 20g डालें।',
         prevention: 'Use disc-on-stump pseudostem traps (split pseudostem pieces laid on ground) to attract and destroy adult weevils manually.',
@@ -1270,7 +1270,7 @@ export const HORTICULTURE_FRUITS = [
 
   // ── 7. MANGO ──
   {
-    crop: 'Mango (ಮಾವು / आम)',
+    crop: 'Mango (ಮಾವು)',
     cropKn: 'ಮಾವು',
     cropHi: 'आम (मैंगो)',
     emoji: '🥭',
@@ -1356,7 +1356,7 @@ export const HORTICULTURE_FRUITS = [
         ]
       },
       {
-        disease: 'Mango Hopper (Amritodus atkinsoni / Idioscopus niveosparsus)',
+        disease: 'Mango Hopper (Amritodus atkinsoni)',
         diseaseKn: 'ಮಾವಿನ ಜಿಗಿಹುಳು',
         diseaseHi: 'आम का फुदका (मैंगो हॉपर)',
         severity: 'High',
@@ -1480,7 +1480,7 @@ export const HORTICULTURE_FRUITS = [
 
   // ── 8. POMEGRANATE ──
   {
-    crop: 'Pomegranate (ದಾಳಿಂಬೆ / अनार)',
+    crop: 'Pomegranate (ದಾಳಿಂಬೆ)',
     cropKn: 'ದಾಳಿಂಬೆ',
     cropHi: 'अनार (पोमोग्रेनेट)',
     emoji: '🍎',

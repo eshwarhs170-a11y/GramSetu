@@ -952,7 +952,18 @@ export default function CropScanner() {
               <div style={{ position: 'absolute', top: 80, left: '50%', transform: 'translateX(-50%)', background: 'rgba(239,68,68,0.85)', color: '#fff', padding: '5px 14px', borderRadius: 10, fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>📷 DEMO MODE</div>
             </div>
           ) : (
-           ) saturate(1.2)' : 'brightness(1)',
+            /* Clipping wrapper — zoom scales only the video feed, not the container */
+            <div style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative' }}>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  filter: scanning ? 'brightness(0.6) saturate(1.2)' : 'brightness(1)',
                   transition: 'filter 0.3s',
                   transform: zoomLevel !== 1 ? `scale(${zoomLevel})` : 'none',
                   transformOrigin: 'center center',

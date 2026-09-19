@@ -10,7 +10,7 @@ function getAgriProductLink(query) {
 const CROPS_DATA = [
   // ── 1. PADDY / RICE ──
   {
-    crop: 'Paddy / Rice (ಭತ್ತ / धान)',
+    crop: 'Paddy / Rice (ಭತ್ತ)',
     cropKn: 'ಭತ್ತ',
     cropHi: 'धान (चावल)',
     emoji: '🌾',
@@ -226,7 +226,7 @@ const CROPS_DATA = [
 
   // ── 2. RAGI / FINGER MILLET ──
   {
-    crop: 'Ragi / Finger Millet (ರಾಗಿ / मडुआ)',
+    crop: 'Ragi / Finger Millet (ರಾಗಿ)',
     cropKn: 'ರಾಗಿ',
     cropHi: 'रागी (मडुआ)',
     emoji: '🌾',

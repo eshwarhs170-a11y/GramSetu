@@ -1,7 +1,7 @@
 export const PULSES_OILSEEDS = [
   // ── 1. GROUNDNUT ──
   {
-    crop: 'Groundnut (ಕಡಲೆಕಾಯಿ / मूंगफली)',
+    crop: 'Groundnut (ಕಡಲೆಕಾಯಿ)',
     cropKn: 'ಕಡಲೆಕಾಯಿ',
     cropHi: 'मूंगफली (ग्राउंडनट)',
     emoji: '🥜',
@@ -20,7 +20,7 @@ export const PULSES_OILSEEDS = [
         organicTip: 'Foliar spray of 5% neem seed kernel extract (NSKE) or Pseudomonas fluorescens @ 5 g/L.',
         organicTipKn: '5% ಬೇವಿನ ಕಷಾಯ (NSKE) ಅಥವಾ Pseudomonas fluorescens @ 5 g/L ಸಿಂಪಡಿಸಿ.',
         organicTipHi: '5% नीम के बीज का अर्क या Pseudomonas fluorescens @ 5 g/L का छिड़काव करें।',
-        fertilizer: 'Apply Gypsum @ 200 kg/acre at 40–45 days (flowering/pegging) to strengthen pod shells.',
+        fertilizer: 'Apply Gypsum @ 200 kg/acre at 40–45 days (flowering) to strengthen pod shells.',
         fertilizerKn: 'ಕಾಯಿ ಕಟ್ಟುವ ಹಂತದಲ್ಲಿ (40-45 ದಿನಗಳಲ್ಲಿ) ಎಕರೆಗೆ 200 kg ಜಿಪ್ಸಮ್ (Gypsum) ಗೊಬ್ಬರ ನೀಡಿ.',
         fertilizerHi: 'सुईयां बनते समय (40-45 दिन पर) 200 kg जिप्सम प्रति एकड़ डालें ताकि फलियां मजबूत बनें।',
         scheme: 'National Food Security Mission - Oilseeds (NFSM-OS)',
@@ -212,7 +212,7 @@ export const PULSES_OILSEEDS = [
 
   // ── 2. SUNFLOWER ──
   {
-    crop: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ / सूरजमुखी)',
+    crop: 'Sunflower (ಸೂರ್ಯಕಾಂತಿ)',
     cropKn: 'ಸೂರ್ಯಕಾಂತಿ',
     cropHi: 'सूरजमुखी',
     emoji: '🌻',
@@ -382,10 +382,10 @@ export const PULSES_OILSEEDS = [
         diseaseKn: 'ಸೂರ್ಯಕಾಂತಿ ನೆಕ್ರೋಸಿಸ್ ರೋಗ (ಟಿಎಸ್‌ವಿ)',
         diseaseHi: 'सूरजमुखी परिगलन रोग (नेक्रोसिस वायरस - टीएसवी)',
         severity: 'High',
-        remedy: 'Control thrips vector (Scirtothrips dorsalis / Frankliniella) by spraying Imidacloprid 17.8 SL @ 0.5 mL/L or Fipronil 5 SC @ 1.5 mL/L at 15 and 30 days after emergence.',
+        remedy: 'Control thrips vector (Scirtothrips dorsalis) by spraying Imidacloprid 17.8 SL @ 0.5 mL/L or Fipronil 5 SC @ 1.5 mL/L at 15 and 30 days after emergence.',
         remedyKn: 'ಥ್ರಿಪ್ಸ್ ನಿಯಂತ್ರಣಕ್ಕೆ Imidacloprid 17.8 SL @ 0.5 mL/L ಅಥವಾ Fipronil 5 SC @ 1.5 mL/L ಸಿಂಪಡಿಸಿ. ರೋಗಪೀಡಿತ ಗಿಡಗಳನ್ನು ಕಿತ್ತುಹಾಕಿ.',
         remedyHi: 'थ्रिप्स की रोकथाम के लिए Imidacloprid 17.8 SL @ 0.5 mL/L या Fipronil 5 SC @ 1.5 mL/L का छिड़काव करें।',
-        prevention: 'Destroy weed hosts like Parthenium hysterophorus around fields. Grow border crops (sorghum/pearl millet).',
+        prevention: 'Destroy weed hosts like Parthenium hysterophorus around fields. Grow border crops (sorghum).',
         preventionKn: 'ಹೊಲದ ಸುತ್ತಮುತ್ತಲಿರುವ ಕಾಂಗ್ರೆಸ್ ಕಳೆ (ಪಾರ್ಥೇನಿಯಂ) ಗಿಡಗಳನ್ನು ಸಂಪೂರ್ಣ ನಾಶಮಾಡಿ. ಗಡಿಯಲ್ಲಿ ಜೋಳ ಅಥವಾ ಸಜ್ಜೆ ಬೆಳೆಯಿರಿ.',
         preventionHi: 'खेत के चारों ओर से गाजरघास (पार्थेनियम) नष्ट करें। बॉर्डर पर ज्वार या बाजरा लगाएं।',
         organicTip: 'Foliar spray of 5% neem seed kernel extract (NSKE) + blue sticky traps @ 20/acre.',
@@ -422,7 +422,7 @@ export const PULSES_OILSEEDS = [
 
   // ── 3. SOYBEAN ──
   {
-    crop: 'Soybean (ಸೋಯಾಬೀನ್ / सोयाबीन)',
+    crop: 'Soybean (ಸೋಯಾಬೀನ್)',
     cropKn: 'ಸೋಯಾಬೀನ್',
     cropHi: 'सोयाबीन',
     emoji: '🌱',
@@ -632,7 +632,7 @@ export const PULSES_OILSEEDS = [
 
   // ── 4. CHICKPEA / BENGAL GRAM ──
   {
-    crop: 'Chickpea / Bengal Gram (ಕಡಲೆ / चना)',
+    crop: 'Chickpea / Bengal Gram (ಕಡಲೆ)',
     cropKn: 'ಕಡಲೆ',
     cropHi: 'चना (बंगाल ग्राम)',
     emoji: '🌱',
@@ -718,7 +718,7 @@ export const PULSES_OILSEEDS = [
         ]
       },
       {
-        disease: 'Dry Root Rot (Rhizoctonia bataticola / Macrophomina)',
+        disease: 'Dry Root Rot (Rhizoctonia bataticola)',
         diseaseKn: 'ಕಡಲೆ ಒಣ ಬೇರು ಕೊಳೆ ರೋಗ',
         diseaseHi: 'चना शुष्क जड़ सड़न (ड्राई रूट रॉट)',
         severity: 'High',
@@ -843,7 +843,7 @@ export const PULSES_OILSEEDS = [
 
   // ── 5. MUNG BEAN / GREEN GRAM ──
   {
-    crop: 'Mung Bean / Green Gram (ಹೆಸರುಕಾಳು / मूंग)',
+    crop: 'Mung Bean / Green Gram (ಹೆಸರುಕಾಳು)',
     cropKn: 'ಹೆಸರುಕಾಳು',
     cropHi: 'मूंग (हरा चना)',
     emoji: '🌱',
