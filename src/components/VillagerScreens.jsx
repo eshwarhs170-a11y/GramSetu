@@ -2134,7 +2134,7 @@ export function MarketScreen() {
     return {
       ...p,
       cropKey: p.crop,
-      crop: formatCropLabel(p.crop),
+      crop: formatCropLabel(p.crop, lang),
       img: localImg,
       fallbackImg,
       unit: p.unit || cropMeta[p.crop]?.unit || 'per quintal',

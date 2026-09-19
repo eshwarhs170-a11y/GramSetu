@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDCDEKu_DG5-Jgi-jLbxRDdBmbd94KuMdM",
+  apiKey: "process.env.FIREBASE_API_KEY",
   authDomain: "gramsetu-ed75a.firebaseapp.com",
   projectId: "gramsetu-ed75a",
   storageBucket: "gramsetu-ed75a.firebasestorage.app",
