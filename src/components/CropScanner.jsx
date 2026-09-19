@@ -170,50 +170,214 @@ export default function CropScanner() {
 
     // Try to match disease name
     if (dLower && !dLower.includes('healthy') && !dLower.includes('no disease')) {
-      const diseaseKeywords = [
+            const diseaseKeywords = [
+        // 1. Paddy / Rice
         ['blast', 'blast'],
+        ['benki roga', 'blast'],
         ['brown plant hopper', 'brown plant hopper'],
         ['planthopper', 'brown plant hopper'],
         ['sheath blight', 'sheath blight'],
-        ['head smut', 'head smut'],
+        ['bacterial leaf blight', 'bacterial leaf blight'],
+        ['blb', 'bacterial leaf blight'],
+        ['yellow stem borer', 'stem borer'],
+
+        // 2. Ragi / Finger Millet
+        ['ragi blast', 'blast'],
+        ['foot rot', 'foot rot'],
+        ['seedling blight', 'seedling blight'],
+        ['buda kole', 'foot rot'],
+        ['sasi soragu', 'foot rot'],
+        ['ragi smut', 'smut'],
+        ['kadige roga', 'smut'],
+        ['green ear', 'green ear'],
+        ['downy mildew', 'downy mildew'],
+        ['hasiru tene', 'green ear'],
+        ['tuppala roga', 'green ear'],
+
+        // 3. Maize / Corn
         ['fall armyworm', 'fall armyworm'],
         ['armyworm', 'fall armyworm'],
-        ['northern leaf blight', 'northern leaf blight'],
-        ['pink bollworm', 'pink bollworm'],
-        ['bollworm', 'pink bollworm'],
-        ['leaf curl', 'leaf curl'],
-        ['late blight', 'late blight'],
-        ['leaf miner', 'leaf miner'],
-        ['early blight', 'early blight'],
-        ['purple blotch', 'purple blotch'],
-        ['red rot', 'red rot'],
-        ['smut', 'smut'],
-        ['rhinoceros', 'rhinoceros'],
-        ['root wilt', 'root wilt'],
-        ['yellow leaf', 'yellow leaf'],
-        ['bud rot', 'bud rot'],
-        ['white stem borer', 'stem borer'],
-        ['stem borer', 'stem borer'],
-        ['leaf rust', 'leaf rust'],
+        ['turcicum', 'turcicum'],
+        ['maydis', 'maydis'],
+        ['common rust', 'rust'],
+        ['stalk rot', 'stalk rot'],
+
+        // 4. Wheat
         ['yellow rust', 'yellow rust'],
         ['stripe rust', 'stripe rust'],
-        ['rust', 'rust'],
-        ['fusarium wilt', 'fusarium wilt'],
-        ['panama wilt', 'panama wilt'],
-        ['wilt', 'wilt'],
-        ['sigatoka', 'sigatoka'],
-        ['anthracnose', 'anthracnose'],
-        ['mango hoppers', 'mango hoppers'],
-        ['hoppers', 'hoppers'],
-        ['early leaf spot', 'early leaf spot'],
-        ['leaf spot', 'leaf spot'],
-        ['downy mildew', 'downy mildew'],
-        ['mildew', 'downy mildew'],
-        ['yellow mosaic', 'yellow mosaic'],
-        ['mosaic', 'mosaic'],
+        ['brown rust', 'brown rust'],
+        ['karnal bunt', 'karnal bunt'],
+        ['loose smut', 'loose smut'],
+
+        // 5. Jowar / Sorghum
         ['grain mold', 'grain mold'],
-        ['mold', 'grain mold'],
-        ['foot rot', 'foot rot'],
+        ['sorghum downy mildew', 'downy mildew'],
+        ['shoot fly', 'shoot fly'],
+        ['ergot', 'ergot'],
+
+        // 6. Cotton
+        ['pink bollworm', 'pink bollworm'],
+        ['black arm', 'bacterial blight'],
+        ['grey mildew', 'grey mildew'],
+        ['dahiya', 'grey mildew'],
+        ['cotton leaf curl', 'leaf curl'],
+
+        // 7. Sugarcane
+        ['red rot', 'red rot'],
+        ['sugarcane smut', 'smut'],
+        ['grassy shoot', 'grassy shoot'],
+        ['early shoot borer', 'shoot borer'],
+
+        // 8. Coconut
+        ['rhinoceros', 'rhinoceros'],
+        ['bud rot', 'bud rot'],
+        ['basal stem rot', 'basal stem rot'],
+        ['ganoderma', 'ganoderma'],
+        ['red palm weevil', 'weevil'],
+        ['eriophyid mite', 'mite'],
+
+        // 9. Arecanut
+        ['koleroga', 'koleroga'],
+        ['fruit rot', 'fruit rot'],
+        ['yellow leaf', 'yellow leaf'],
+        ['anabe roga', 'anabe roga'],
+        ['inflorescence dieback', 'inflorescence'],
+        ['spindle bug', 'spindle bug'],
+
+        // 10. Coffee
+        ['coffee leaf rust', 'rust'],
+        ['coffee berry borer', 'berry borer'],
+        ['black rot', 'black rot'],
+        ['white stem borer', 'stem borer'],
+
+        // 11. Black Pepper
+        ['quick wilt', 'quick wilt'],
+        ['slow wilt', 'slow wilt'],
+        ['pollu', 'pollu'],
+        ['phyllosticta', 'phyllosticta'],
+
+        // 12. Tomato
+        ['tomato late blight', 'late blight'],
+        ['early blight', 'early blight'],
+        ['tomato leaf curl', 'leaf curl'],
+        ['tolcv', 'leaf curl'],
+        ['bacterial wilt', 'bacterial wilt'],
+        ['fruit borer', 'fruit borer'],
+
+        // 13. Potato
+        ['potato late blight', 'late blight'],
+        ['potato early blight', 'early blight'],
+        ['black scurf', 'black scurf'],
+        ['stem canker', 'stem canker'],
+        ['soft rot', 'soft rot'],
+
+        // 14. Onion
+        ['purple blotch', 'purple blotch'],
+        ['basal rot', 'basal rot'],
+        ['stemphylium', 'stemphylium'],
+        ['onion downy mildew', 'downy mildew'],
+        ['thrips', 'thrips'],
+
+        // 15. Chilli
+        ['murda', 'leaf curl'],
+        ['chilli leaf curl', 'leaf curl'],
+        ['chilli anthracnose', 'anthracnose'],
+        ['dieback', 'dieback'],
+        ['chilli powdery mildew', 'powdery mildew'],
+        ['bacterial leaf spot', 'leaf spot'],
+
+        // 16. Brinjal / Eggplant
+        ['brinjal shoot and fruit borer', 'shoot and fruit borer'],
+        ['phomopsis', 'phomopsis'],
+        ['little leaf', 'little leaf'],
+
+        // 17. Banana
+        ['panama wilt', 'panama wilt'],
+        ['sigatoka', 'sigatoka'],
+        ['bunchy top', 'bunchy top'],
+        ['bbtv', 'bunchy top'],
+        ['rhizome weevil', 'weevil'],
+
+        // 18. Mango
+        ['mango powdery mildew', 'powdery mildew'],
+        ['mango anthracnose', 'anthracnose'],
+        ['mango hopper', 'hopper'],
+        ['mango fruit fly', 'fruit fly'],
+
+        // 19. Pomegranate
+        ['oily spot', 'oily spot'],
+        ['bacterial blight', 'bacterial blight'],
+        ['pomegranate wilt', 'wilt'],
+        ['anar butterfly', 'fruit borer'],
+        ['cercospora', 'cercospora'],
+
+        // 20. Groundnut
+        ['tikka', 'tikka'],
+        ['early leaf spot', 'leaf spot'],
+        ['groundnut rust', 'rust'],
+        ['collar rot', 'collar rot'],
+        ['crown rot', 'crown rot'],
+        ['sclerotium', 'stem rot'],
+
+        // 21. Sunflower
+        ['alternaria', 'alternaria'],
+        ['sunflower rust', 'rust'],
+        ['head rot', 'head rot'],
+        ['rhizopus', 'head rot'],
+
+        // 22. Soybean
+        ['soybean rust', 'rust'],
+        ['charcoal rot', 'charcoal rot'],
+        ['pod blight', 'pod blight'],
+        ['girdle beetle', 'girdle beetle'],
+
+        // 23. Chickpea / Bengal Gram
+        ['chickpea fusarium wilt', 'fusarium wilt'],
+        ['ascochyta', 'ascochyta'],
+        ['dry root rot', 'dry root rot'],
+        ['pod borer', 'pod borer'],
+
+        // 24. Mung Bean / Green Gram
+        ['mung yellow mosaic', 'yellow mosaic'],
+        ['ymv', 'yellow mosaic'],
+        ['powdery mildew', 'powdery mildew'],
+        ['web blight', 'web blight'],
+
+        // 25. Ginger
+        ['ginger soft rot', 'soft rot'],
+        ['rhizome rot', 'rhizome rot'],
+        ['ginger bacterial wilt', 'bacterial wilt'],
+        ['ginger leaf spot', 'leaf spot'],
+
+        // 26. Turmeric
+        ['turmeric rhizome rot', 'rhizome rot'],
+        ['leaf blotch', 'leaf blotch'],
+        ['taphrina', 'leaf blotch'],
+        ['nematode', 'nematode'],
+
+        // 27. Cardamom
+        ['azhukal', 'azhukal'],
+        ['capsule rot', 'capsule rot'],
+        ['katte', 'katte'],
+        ['chenthal', 'chenthal'],
+        ['cardamom thrips', 'thrips'],
+
+        // 28. Papaya
+        ['ring spot', 'ring spot'],
+        ['prsv', 'ring spot'],
+        ['papaya anthracnose', 'anthracnose'],
+        ['papaya foot rot', 'foot rot'],
+        ['mealybug', 'mealybug'],
+
+        // General fallback terms
+        ['wilt', 'wilt'],
+        ['rust', 'rust'],
+        ['smut', 'smut'],
+        ['rot', 'rot'],
+        ['blight', 'blight'],
+        ['spot', 'spot'],
+        ['mosaic', 'mosaic'],
+        ['curl', 'curl'],
       ];
       for (const [keyword] of diseaseKeywords) {
         if (dLower.includes(keyword)) {
