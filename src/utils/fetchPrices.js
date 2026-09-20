@@ -228,19 +228,17 @@ export async function fetchLivePrices(userDistrict = '') {
       
       const liveData = records.find(r => r.commodity && r.commodity.toLowerCase().includes(englishName.toLowerCase()))
       if (liveData && liveData.modal_price) {
-        // API returns price per quintal. We want per kg.
-        const newPricePerKg = parseFloat(liveData.modal_price) / 100;
+        // AGMARKNET API returns price per quintal. We will keep it per quintal.
+        const newPricePerQuintal = parseFloat(liveData.modal_price);
         
         let oldPriceRaw = baseCrop.price.replace(/[^0-9]/g, '')
-        let oldPrice = oldPriceRaw ? parseFloat(oldPriceRaw) : newPricePerKg;
-        // If the base crop price was accidentally left in quintals in the baseline (e.g. >1000), divide it.
-        if (oldPrice > 1000) oldPrice = oldPrice / 100;
+        let oldPrice = oldPriceRaw ? parseFloat(oldPriceRaw) : newPricePerQuintal;
         
-        const changeVal = newPricePerKg - oldPrice
+        const changeVal = newPricePerQuintal - oldPrice
         return {
           ...baseCrop,
-          price: fmt(newPricePerKg),
-          unit: 'per kg',
+          price: fmt(newPricePerQuintal),
+          unit: baseCrop.crop.includes('Coconut') ? 'per 100 nuts' : 'per quintal',
           type: baseCrop.type,
           change: changeVal >= 0 ? '+' + fmt(changeVal) : '-' + fmt(Math.abs(changeVal)),
           trend: changeVal >= 0 ? 'up' : 'down',
@@ -249,20 +247,19 @@ export async function fetchLivePrices(userDistrict = '') {
       }
 
       // If API record not published for today yet, apply daily market variance on benchmark
-      let baseRaw = parseFloat(baseCrop.price.replace(/[^0-9]/g, '')) || 30;
-      if (baseRaw > 1000) baseRaw = baseRaw / 100; // Force to per kg
+      let baseRaw = parseFloat(baseCrop.price.replace(/[^0-9]/g, '')) || 3000;
       
       // Realistic daily fluctuation: between -1.5% and +2.0%
       const seed = (dayOfYear * 17 + baseCrop.crop.charCodeAt(0) * 31) % 100
       const fluctPercent = ((seed - 48) / 100) * 0.02
-      // Round to nearest integer for per kg prices
+      // Round to nearest integer for per quintal prices
       const dailyPrice = Math.round(baseRaw * (1 + fluctPercent));
       const diff = dailyPrice - baseRaw
 
       return {
         ...baseCrop,
         price: fmt(dailyPrice),
-        unit: 'per kg',
+        unit: baseCrop.crop.includes('Coconut') ? 'per 100 nuts' : 'per quintal',
         type: baseCrop.type,
         change: diff >= 0 ? '+' + fmt(diff) : '-' + fmt(Math.abs(diff)),
         trend: diff >= 0 ? 'up' : 'down',
@@ -279,11 +276,10 @@ export async function fetchLivePrices(userDistrict = '') {
 
   } catch (err) {
     console.error('Failed to fetch live prices:', err)
-    // fallback map to ensure 1kg
+    // fallback map to ensure correct unit
     return BASELINE_PRICES.map(c => {
        let val = parseFloat(c.price.replace(/[^0-9]/g, ''));
-       if (val > 1000) val = val / 100;
-       return { ...c, price: fmt(val || 30), unit: 'per kg', market: 'Karnataka APMC' };
+       return { ...c, price: fmt(val || 3000), unit: c.crop.includes('Coconut') ? 'per 100 nuts' : 'per quintal', market: 'Karnataka APMC' };
     });
   }
 }

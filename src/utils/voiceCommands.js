@@ -138,19 +138,30 @@ function withTimeout(promise, ms, fallback) {
 // ─────────────────────────────────────────────────────────────────────────────
 export async function callGemini(prompt, systemInstruction) {
   if (!genAI) return null;
-  const modelsToTry = ['gemini-3.6-flash', 'gemini-2.5-flash-latest', 'gemini-1.5-flash-002'];
+  const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-pro'];
+  
   for (const modelName of modelsToTry) {
-    try {
-      const model = genAI.getGenerativeModel({
-        model: modelName,
-        systemInstruction,
-      });
-      const resultPromise = model.generateContent(prompt).then(r => r.response.text());
-      const text = await withTimeout(resultPromise, 12000, null);
-      if (text && text.trim().length > 0) return text;
-    } catch (error) {
-      if (error.message?.includes('429')) throw error;
-      console.warn(`Gemini API error with ${modelName}:`, error.message?.slice(0, 80));
+    let retries = 2;
+    while (retries >= 0) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction,
+        });
+        const resultPromise = model.generateContent(prompt).then(r => r.response.text());
+        const text = await withTimeout(resultPromise, 12000, null);
+        if (text && text.trim().length > 0) return text;
+        break; // If successful or null (timeout), break the retry loop
+      } catch (error) {
+        if (error.message?.includes('429') && retries > 0) {
+          retries--;
+          console.warn(`429 Rate limit on ${modelName}, retrying in 2s...`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          continue;
+        }
+        console.warn(`Gemini API error with ${modelName}:`, error.message?.slice(0, 80));
+        break; // On other errors or out of retries, try the next model
+      }
     }
   }
   return null;
