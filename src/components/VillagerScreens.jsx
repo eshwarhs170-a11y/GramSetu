@@ -1583,7 +1583,8 @@ export function SchemesScreen() {
                     {getLangText(s.desc)}
                   </p>
 
-                  {/* Highlights Pill Box - Only show if data actually exists */}\n                  {(s.benefits?.subsidyPercent || s.benefits?.maxLimit) && (
+                  {/* Highlights Pill Box - Only show if data actually exists */}
+                  {(s.benefits?.subsidyPercent || s.benefits?.maxLimit) && (
                     <div style={{
                       background: 'var(--bg-main)',
                       padding: '8px 12px',
