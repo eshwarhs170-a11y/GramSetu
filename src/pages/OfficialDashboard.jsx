@@ -1339,9 +1339,11 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
           </div>
 
           {/* Target Villages & Language — same row, aligned */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' }}>
-            <div className="form-group" style={{ margin: 0 }}>
-              <label className="form-label" style={{ marginBottom: 6 }}>{t('targetVillages')} / ಗುರಿ ಪ್ರದೇಶ</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div className="form-group" style={{ margin: 0, display: 'flex', flexDirection: 'column' }}>
+              <label className="form-label" style={{ marginBottom: 6, flexGrow: 1, display: 'flex', alignItems: 'flex-end' }}>
+                {t('targetVillages')} / ಗುರಿ ಪ್ರದೇಶ
+              </label>
               <select className="form-input" value={target} onChange={e => setTarget(e.target.value)}>
                 {session.gp && <option value={session.gp}>My GP: {session.gp}</option>}
                 {session.taluk && <option value={session.taluk}>My Taluk: {session.taluk}</option>}
@@ -1353,21 +1355,21 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
                   <option key={i}>{d}</option>
                 ))}
               </select>
-              {session.taluk && (
-                <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
-                  ℹ️ Recommended: Select "My Taluk" or "My GP"
-                </p>
-              )}
+              <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, height: 16 }}>
+                {session.taluk ? 'ℹ️ Recommended: Select "My Taluk" or "My GP"' : ''}
+              </p>
             </div>
-            <div className="form-group" style={{ margin: 0 }}>
-              <label className="form-label" style={{ marginBottom: 6 }}>Language / ಭಾಷೆ</label>
+            <div className="form-group" style={{ margin: 0, display: 'flex', flexDirection: 'column' }}>
+              <label className="form-label" style={{ marginBottom: 6, flexGrow: 1, display: 'flex', alignItems: 'flex-end' }}>
+                Language / ಭಾಷೆ
+              </label>
               <select className="form-input" value={langMode} onChange={e => setLangMode(e.target.value)}>
                 <option value="all">All (EN + ಕನ್ನಡ + हि)</option>
                 <option value="kn">ಕನ್ನಡ Only</option>
                 <option value="en">English Only</option>
                 <option value="hi">हिन्दी Only</option>
               </select>
-              <p style={{ fontSize: 11, color: '#10b981', marginTop: 4 }}>✅ AI auto-translates all 3</p>
+              <p style={{ fontSize: 11, color: '#10b981', marginTop: 4, height: 16 }}>✅ AI auto-translates all 3</p>
             </div>
           </div>
 
@@ -1739,7 +1741,7 @@ function InquiryResolveModal({ inquiry, onClose, onSaved, sessionData }) {
     onClose()
   }
 
-  return (
+  return createPortal(
     <div
       className="modal-overlay animate-fadeInUp"
       style={{
@@ -1854,7 +1856,8 @@ function InquiryResolveModal({ inquiry, onClose, onSaved, sessionData }) {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
 
@@ -2045,7 +2048,7 @@ function FarmerInquiriesScreen({ sessionData }) {
 
       {/* Metrics Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 16 }}>
-        <div className="card" style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div className="card" onClick={() => { setActiveTab('questions'); setStatusFilter('all'); }} style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <FileText size={20} strokeWidth={2.2} />
           </div>
@@ -2055,7 +2058,7 @@ function FarmerInquiriesScreen({ sessionData }) {
           </div>
         </div>
 
-        <div className="card" style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div className="card" onClick={() => { setActiveTab('questions'); setStatusFilter('pending'); }} style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(245, 158, 11, 0.1)', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Clock size={20} strokeWidth={2.2} />
           </div>
@@ -2065,7 +2068,7 @@ function FarmerInquiriesScreen({ sessionData }) {
           </div>
         </div>
 
-        <div className="card" style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div className="card" onClick={() => { setActiveTab('missing_village'); setStatusFilter('all'); }} style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(22, 163, 74, 0.1)', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <MapPinOff size={20} strokeWidth={2.2} />
           </div>
@@ -2075,7 +2078,7 @@ function FarmerInquiriesScreen({ sessionData }) {
           </div>
         </div>
 
-        <div className="card" style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div className="card" onClick={() => { setActiveTab('questions'); setStatusFilter('resolved'); }} style={{ padding: 18, display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <CheckCircle2 size={20} strokeWidth={2.2} />
           </div>

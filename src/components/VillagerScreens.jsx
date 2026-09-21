@@ -365,7 +365,8 @@ export function HomeScreen({ setActive }) {
               </div>
             ))}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Dynamic Profile Selector in Home Screen */}
@@ -602,7 +603,8 @@ export function HomeScreen({ setActive }) {
               </div>
             ))}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── Crop Doctor Quick Action ── */}
@@ -1834,7 +1836,8 @@ export function SchemesScreen() {
               </div>
             ))}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ============================================================ */}
@@ -1891,7 +1894,8 @@ export function SchemesScreen() {
               </div>
             ))}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ============================================================ */}
@@ -1945,7 +1949,8 @@ export function SchemesScreen() {
               </div>
             ))}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ============================================================ */}
@@ -2025,7 +2030,8 @@ export function SchemesScreen() {
               ))}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ============================================================ */}
@@ -2684,7 +2690,7 @@ export function AnnouncementsScreen() {
         ))}
       </div>
 
-      {selectedAnnounce && selectedAnnounce.id !== 'subscribe-widget' && (
+      {selectedAnnounce && selectedAnnounce.id !== 'subscribe-widget' && ReactDOM.createPortal(
         <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }}>
           <div className="card" style={{ maxWidth: 500, width: '100%', padding: 24, position: 'relative' }}>
             <button 
@@ -2703,10 +2709,11 @@ export function AnnouncementsScreen() {
             <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 20 }}>{selectedAnnounce.desc[lang] || selectedAnnounce.desc.en}</p>
             <button className="btn btn-primary w-full" style={{ justifyContent: 'center' }} onClick={() => setSelectedAnnounce(null)}>Close</button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
-      {selectedAnnounce && selectedAnnounce.id === 'subscribe-widget' && (
+      {selectedAnnounce && selectedAnnounce.id === 'subscribe-widget' && ReactDOM.createPortal(
         <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }}>
           <div className="card" style={{ maxWidth: 420, width: '100%', padding: 24, position: 'relative' }}>
             <button 
@@ -2746,7 +2753,8 @@ export function AnnouncementsScreen() {
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )
