@@ -59,6 +59,9 @@ export default function LandingPage() {
   }
 
   useEffect(() => {
+    // Skip auto-redirect if ?guest=1 is in the URL (used by landing page QR code)
+    const isGuest = new URLSearchParams(window.location.search).get('guest') === '1'
+    if (isGuest) return
     if (window.localStorage.getItem('official_id')) {
       navigate('/dashboard/official')
     } else if (window.localStorage.getItem('citizen_email') || window.localStorage.getItem('citizen_phone')) {
