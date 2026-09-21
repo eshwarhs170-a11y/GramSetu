@@ -305,7 +305,7 @@ export const districtsOfKarnataka = [
     ]
   },
   {
-    name: "Tumakuru",
+    name: "Tumkuru",
     taluks: [
       { name: "Chiknayakanhalli" },
       { name: "Gubbi" },
@@ -315,7 +315,7 @@ export const districtsOfKarnataka = [
       { name: "Pavagada" },
       { name: "Sira" },
       { name: "Tiptur" },
-      { name: "Tumakuru" },
+      { name: "Tumkuru" },
       { name: "Turuvekere" },
     ]
   },
