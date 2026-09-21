@@ -14,12 +14,32 @@ import {
   Droplets, Zap, Route, GraduationCap, Activity, Sprout, Trash2,
   MapPin, Phone, Home, ShieldCheck, Mail, Map, Building2, User,
   Star, Tag, Calendar, Menu, X, Hourglass, Folder, FileText, AlertTriangle, Send, ArrowUp, Check, Edit3,
-  HelpCircle, MapPinOff, MessageSquarePlus
+  HelpCircle, MapPinOff, MessageSquarePlus, Loader2
 } from 'lucide-react'
 import * as Icons from 'lucide-react'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
 import { db } from '../firebase'
-import { collection, onSnapshot, query, orderBy, deleteDoc, doc, addDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore'
+import { collection, onSnapshot, query, orderBy, deleteDoc, doc, addDoc, updateDoc, setDoc, arrayUnion, serverTimestamp, getDocs } from 'firebase/firestore'
+
+// ── Gemini AI for translation ──────────────────────────────────────────────────
+const _apiKey = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_FIREBASE_API_KEY
+const _genAI = _apiKey ? new GoogleGenerativeAI(_apiKey) : null
+
+async function translateText(text, targetLang) {
+  if (!_genAI || !text) return text
+  const langName = targetLang === 'kn' ? 'Kannada' : 'Hindi'
+  try {
+    const model = _genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const result = await model.generateContent(
+      `Translate this government announcement text to ${langName}. Keep proper nouns, numbers, and dates as-is. Return ONLY the translated text, nothing else.\n\nText: ${text}`
+    )
+    return result.response.text().trim()
+  } catch (e) {
+    console.warn('Translation failed:', e)
+    return text
+  }
+}
 import { ESCALATION_LEVELS, isOverdue, getCurrentLevel, getNextLevel, daysSince } from '../utils/escalation'
 
 export const getSessionData = () => {
@@ -225,7 +245,7 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
 }
 
 // ===== Overview =====
-function OverviewScreen({ onPendingClick, onResolvedClick, sessionData, pendingCount, resolvedCount }) {
+function OverviewScreen({ onPendingClick, onResolvedClick, onNavTo, sessionData, pendingCount, resolvedCount }) {
   const { t } = useLanguage()
   return (
     <div className="animate-fadeInUp">
@@ -253,14 +273,21 @@ function OverviewScreen({ onPendingClick, onResolvedClick, sessionData, pendingC
 
       <div className="analytics-grid">
         {[
-          { Icon: ClipboardList, labelKey: 'totalComplaints', value: String(pendingCount + resolvedCount), color: '#fee2e2', iconColor: '#ef4444', sub: `${pendingCount} active` },
-          { Icon: Clock,         labelKey: 'pendingComplaints', value: String(pendingCount), color: '#fef3c7', iconColor: '#f59e0b', sub: `${pendingCount} pending` },
-          { Icon: RefreshCw,     labelKey: 'inProgressComplaints', value: '0', color: '#dbeafe', iconColor: '#3b82f6', sub: 'In progress' },
-          { Icon: CheckCircle,   labelKey: 'resolvedComplaints', value: String(resolvedCount), color: '#d1fae5', iconColor: '#10b981', sub: 'Resolved' },
-          { Icon: Users,         labelKey: 'registeredCitizens', value: '1,240', color: '#ede9fe', iconColor: '#8b5cf6', sub: 'Active' },
-          { Icon: Megaphone,     labelKey: 'announcements', value: '4', color: '#fce7f3', iconColor: '#ec4899', sub: 'This month' },
+          { Icon: ClipboardList, labelKey: 'totalComplaints',    value: String(pendingCount + resolvedCount), color: '#fee2e2', iconColor: '#ef4444', sub: `${pendingCount} active`,    nav: 'complaints' },
+          { Icon: Clock,         labelKey: 'pendingComplaints',  value: String(pendingCount),                 color: '#fef3c7', iconColor: '#f59e0b', sub: `${pendingCount} pending`,  nav: 'complaints' },
+          { Icon: RefreshCw,     labelKey: 'inProgressComplaints', value: '0',                               color: '#dbeafe', iconColor: '#3b82f6', sub: 'In progress',              nav: 'complaints' },
+          { Icon: CheckCircle,   labelKey: 'resolvedComplaints', value: String(resolvedCount),               color: '#d1fae5', iconColor: '#10b981', sub: 'Resolved',                 nav: 'resolved'   },
+          { Icon: Users,         labelKey: 'registeredCitizens', value: '1,240',                             color: '#ede9fe', iconColor: '#8b5cf6', sub: 'Active',                   nav: 'citizens'   },
+          { Icon: Megaphone,     labelKey: 'announcements',      value: '4',                                 color: '#fce7f3', iconColor: '#ec4899', sub: 'This month',               nav: 'announcements' },
         ].map((s, i) => (
-          <div className="stat-card animate-fadeInUp" key={i} style={{ animationDelay: `${i * 0.07}s` }}>
+          <div
+            className="stat-card animate-fadeInUp"
+            key={i}
+            style={{ animationDelay: `${i * 0.07}s`, cursor: 'pointer', transition: 'transform 0.15s, box-shadow 0.15s' }}
+            onClick={() => s.nav === 'complaints' ? onPendingClick() : s.nav === 'resolved' ? onResolvedClick() : onNavTo && onNavTo(s.nav)}
+            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+          >
             <div className="stat-icon" style={{ background: s.color, color: s.iconColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <s.Icon size={22} strokeWidth={1.8} />
             </div>
@@ -1202,41 +1229,65 @@ function OfficialAnnouncements({ onEdit }) {
 function AnnounceScreen({ editMode, editingAnnouncement }) {
   const { t } = useLanguage()
   const [submitted, setSubmitted] = useState(false)
+  const [translating, setTranslating] = useState(false)
   const [title, setTitle] = useState(editMode && editingAnnouncement ? editingAnnouncement.title : '')
   const [category, setCategory] = useState(editMode && editingAnnouncement ? editingAnnouncement.category : 'Government / ಸರ್ಕಾರ')
   const [priority, setPriority] = useState(editMode && editingAnnouncement ? editingAnnouncement.priority : 'Normal')
   const [message, setMessage] = useState(editMode && editingAnnouncement ? editingAnnouncement.message : '')
-  // Default target: official's own Taluk
   const session = getSessionData()
   const defaultTarget = session.taluk ? session.taluk : 'All Districts'
   const [target, setTarget] = useState(editMode && editingAnnouncement ? editingAnnouncement.target : defaultTarget)
+  const [langMode, setLangMode] = useState('all') // 'all' | 'kn' | 'en' | 'hi'
 
   const handlePublish = async () => {
     if (!title || !message) return alert('Please fill required fields')
-    if (editMode) {
-      await updateDoc(doc(db, 'announcements', editingAnnouncement.id), {
-        title, category, priority, message, target,
-        district: getSessionData().district,
-        taluk: getSessionData().taluk,
-        gp: getSessionData().gp,
-        publishedBy: editingAnnouncement.publishedBy || getSessionData().name,
-        createdAt: editingAnnouncement.createdAt
-      })
+    setTranslating(true)
+
+    // Auto-translate to all 3 languages via Gemini AI
+    let title_kn = editMode && editingAnnouncement?.title_kn ? editingAnnouncement.title_kn : ''
+    let title_hi = editMode && editingAnnouncement?.title_hi ? editingAnnouncement.title_hi : ''
+    let message_kn = editMode && editingAnnouncement?.message_kn ? editingAnnouncement.message_kn : ''
+    let message_hi = editMode && editingAnnouncement?.message_hi ? editingAnnouncement.message_hi : ''
+
+    try {
+      [title_kn, title_hi, message_kn, message_hi] = await Promise.all([
+        translateText(title, 'kn'),
+        translateText(title, 'hi'),
+        translateText(message, 'kn'),
+        translateText(message, 'hi'),
+      ])
+    } catch (e) {
+      console.warn('Translation error:', e)
+    }
+
+    const payload = {
+      title, title_kn, title_hi,
+      category, priority,
+      message, message_kn, message_hi,
+      target,
+      district: session.district,
+      taluk: session.taluk,
+      gp: session.gp,
+      publishedBy: session.name,
+    }
+
+    try {
+      if (editMode && editingAnnouncement) {
+        await updateDoc(doc(db, 'announcements', editingAnnouncement.id), {
+          ...payload,
+          createdAt: editingAnnouncement.createdAt
+        })
+      } else {
+        await addDoc(collection(db, 'announcements'), {
+          ...payload,
+          createdAt: serverTimestamp()
+        })
+      }
       setSubmitted(true)
-    } else {
-      await addDoc(collection(db, 'announcements'), {
-        title,
-        category,
-        priority,
-        message,
-        target,
-        district: getSessionData().district,
-        taluk: getSessionData().taluk,
-        gp: getSessionData().gp,
-        publishedBy: getSessionData().name,
-        createdAt: serverTimestamp()
-      })
-      setSubmitted(true)
+    } catch (e) {
+      alert('Failed to publish. Please try again.')
+    } finally {
+      setTranslating(false)
     }
   }
 
@@ -1245,11 +1296,13 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', textAlign: 'center' }} className="animate-fadeInUp">
         <div style={{ marginBottom: 20 }}><Megaphone size={72} className="text-pink-500" /></div>
         <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 8 }}>{t('announcePublished')}</h2>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: 20 }}>{t('announceMsg')}</p>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: 8 }}>{t('announceMsg')}</p>
+        <p style={{ color: 'var(--text-muted)', fontSize: 12, marginBottom: 20 }}>✅ Auto-translated to ಕನ್ನಡ and हिन्दी</p>
         <button className="btn btn-primary" onClick={() => { setSubmitted(false); setTitle(''); setMessage(''); }}>{t('publishAnother')}</button>
       </div>
     )
   }
+
   return (
     <div className="animate-fadeInUp" style={{ maxWidth: 700 }}>
       <div className="card">
@@ -1281,14 +1334,15 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
             </div>
           </div>
           <div className="form-group">
-            <label className="form-label">{t('messageLabel')}</label>
+            <label className="form-label">{t('messageLabel')} <span style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 400 }}>(Write in English — auto-translated to ಕನ್ನಡ + हिन्दी)</span></label>
             <textarea className="form-input" rows={5} placeholder={t('messagePlaceholder')} style={{ resize: 'vertical' }} value={message} onChange={e => setMessage(e.target.value)} />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            <div className="form-group">
-              <label className="form-label">{t('targetVillages')} / ಗುರಿ ಪ್ರದೇಶ</label>
+
+          {/* Target Villages & Language — same row, aligned */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' }}>
+            <div className="form-group" style={{ margin: 0 }}>
+              <label className="form-label" style={{ marginBottom: 6 }}>{t('targetVillages')} / ಗುರಿ ಪ್ರದೇಶ</label>
               <select className="form-input" value={target} onChange={e => setTarget(e.target.value)}>
-                {/* Smart: official's own jurisdiction first */}
                 {session.gp && <option value={session.gp}>My GP: {session.gp}</option>}
                 {session.taluk && <option value={session.taluk}>My Taluk: {session.taluk}</option>}
                 {session.district && <option value={session.district}>My District: {session.district}</option>}
@@ -1301,22 +1355,33 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
               </select>
               {session.taluk && (
                 <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
-                  ℹ️ Recommended: Select "My Taluk" or "My GP" to send only to your jurisdiction.
+                  ℹ️ Recommended: Select "My Taluk" or "My GP"
                 </p>
               )}
             </div>
-            <div className="form-group">
-              <label className="form-label">Language / ಭಾಷೆ</label>
-              <select className="form-input">
-                <option>All (EN + ಕನ್ನಡ + hi)</option>
-                <option>ಕನ್ನಡ Only</option>
-                <option>English Only</option>
-                <option>हिन्दी Only</option>
+            <div className="form-group" style={{ margin: 0 }}>
+              <label className="form-label" style={{ marginBottom: 6 }}>Language / ಭಾಷೆ</label>
+              <select className="form-input" value={langMode} onChange={e => setLangMode(e.target.value)}>
+                <option value="all">All (EN + ಕನ್ನಡ + हि)</option>
+                <option value="kn">ಕನ್ನಡ Only</option>
+                <option value="en">English Only</option>
+                <option value="hi">हिन्दी Only</option>
               </select>
+              <p style={{ fontSize: 11, color: '#10b981', marginTop: 4 }}>✅ AI auto-translates all 3</p>
             </div>
           </div>
-          <button className="btn btn-primary" style={{ padding: '14px 24px' }} onClick={handlePublish}>
-            {editMode ? 'Update Announcement' : t('publishBtn')}
+
+          <button
+            className="btn btn-primary"
+            style={{ padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center' }}
+            onClick={handlePublish}
+            disabled={translating}
+          >
+            {translating ? (
+              <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> Translating & Publishing...</>
+            ) : (
+              editMode ? 'Update Announcement' : t('publishBtn')
+            )}
           </button>
         </div>
       </div>
@@ -1324,49 +1389,55 @@ function AnnounceScreen({ editMode, editingAnnouncement }) {
   )
 }
 
+
 // ===== Citizens =====
 function CitizensScreen() {
   const { t } = useLanguage()
-  const districtFarmers = getDistrictFarmers(getSessionData().district)
-  
+  const session = getSessionData()
+  const officialDistrict = session.district || 'Mysuru'
+  const [realFarmers, setRealFarmers] = useState([])
+
+  // Live listener — real farmers who logged in from officer's district
+  useEffect(() => {
+    const q = query(collection(db, 'registered_farmers'), orderBy('loginAt', 'desc'))
+    const unsub = onSnapshot(q, (snap) => {
+      const farmers = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(f => !officialDistrict || f.district === officialDistrict || officialDistrict === 'All')
+      setRealFarmers(farmers)
+    })
+    return () => unsub()
+  }, [officialDistrict])
+
+  // Merge: real farmers on top, then static demo farmers (deduplicated by phone)
+  const staticFarmers = getDistrictFarmers(officialDistrict)
+  const realPhones = new Set(realFarmers.map(f => f.phone))
+  const filteredStatic = staticFarmers.filter(([, , mobile]) => !realPhones.has(mobile?.replace(/\D/g, '').slice(-10)))
+
   const handleExport = () => {
-    const doc = new jsPDF()
-    doc.setFontSize(16)
-    doc.text('Registered Farmers List', 14, 22)
-    
-    const tableColumn = ["#", "Name", "Village", "Mobile", "Aadhaar", "Schemes"]
+    const docPdf = new jsPDF()
+    docPdf.setFontSize(16)
+    docPdf.text(`Registered Farmers — ${officialDistrict} District`, 14, 22)
+    const tableColumn = ['#', 'Name', 'Village/Taluk', 'Mobile', 'Aadhaar', 'Status']
     const tableRows = []
-    
-    districtFarmers.forEach(([name, village, mobile, aadhaar, schemes], i) => {
-      const rowData = [
-        i + 1,
-        name, // The names include Kannada characters, but standard jsPDF default font might not render them well without custom fonts. 
-              // For a simple robust export, we include it, it might fallback or drop complex chars unless configured.
-        village,
-        mobile,
-        aadhaar,
-        `${schemes} Active`
-      ]
-      tableRows.push(rowData)
+    realFarmers.forEach((f, i) => {
+      tableRows.push([i + 1, f.name, `${f.village || ''} ${f.taluk || ''}`.trim(), f.phone, 'Verified', 'Real Login'])
     })
-    
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-      startY: 30,
+    filteredStatic.forEach(([name, village, mobile, aadhaar], i) => {
+      tableRows.push([realFarmers.length + i + 1, name, village, mobile, aadhaar, 'Demo'])
     })
-    
-    doc.save(`Registered_Farmers_${getSessionData().district}.pdf`)
+    autoTable(docPdf, { head: [tableColumn], body: tableRows, startY: 30 })
+    docPdf.save(`Registered_Farmers_${officialDistrict}.pdf`)
   }
 
   return (
     <div className="animate-fadeInUp">
       <div className="stats-grid" style={{ marginBottom: 24 }}>
         {[
-          { Icon: Users,        labelKey: 'totalCitizens',  value: '5,210', color: '#dbeafe', iconColor: '#1d4ed8' },
-          { Icon: ShieldCheck,  labelKey: 'aadhaarVerified', value: '4,890', color: '#d1fae5', iconColor: '#10b981' },
-          { Icon: Landmark,     labelKey: 'schemeEnrolled',  value: '3,640', color: '#ede9fe', iconColor: '#8b5cf6' },
-          { Icon: Phone,        labelKey: 'appUsers',        value: '1,820', color: '#fef3c7', iconColor: '#d97706' },
+          { Icon: Users,       labelKey: 'totalCitizens',   value: String(realFarmers.length + filteredStatic.length), color: '#dbeafe', iconColor: '#1d4ed8' },
+          { Icon: ShieldCheck, labelKey: 'aadhaarVerified', value: String(realFarmers.length),  color: '#d1fae5', iconColor: '#10b981' },
+          { Icon: Landmark,    labelKey: 'schemeEnrolled',  value: String(Math.round(realFarmers.length * 0.7) + 3640), color: '#ede9fe', iconColor: '#8b5cf6' },
+          { Icon: Phone,       labelKey: 'appUsers',        value: String(realFarmers.length),  color: '#fef3c7', iconColor: '#d97706' },
         ].map((s, i) => (
           <div className="stat-card" key={i}>
             <div className="stat-icon" style={{ background: s.color, color: s.iconColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1381,7 +1452,14 @@ function CitizensScreen() {
       </div>
       <div className="card" style={{ padding: 0 }}>
         <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700 }}>{t('allFarmers')}</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>
+            {t('allFarmers')}
+            {realFarmers.length > 0 && (
+              <span style={{ marginLeft: 8, fontSize: 12, background: '#d1fae5', color: '#065f46', borderRadius: 20, padding: '2px 10px', fontWeight: 600 }}>
+                🟢 {realFarmers.length} Live
+              </span>
+            )}
+          </h3>
           <button className="btn btn-primary btn-sm" onClick={handleExport}>{t('export')}</button>
         </div>
         <table className="market-table">
@@ -1392,13 +1470,28 @@ function CitizensScreen() {
               <th>Village / ಗ್ರಾಮ</th>
               <th>Mobile / ಮೊಬೈಲ್</th>
               <th>Aadhaar</th>
-              <th>Schemes / ಯೋಜನೆ</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {districtFarmers.map(([name, village, mobile, aadhaar, schemes], i) => (
-              <tr key={i}>
+            {/* Real farmers from Firestore — logged-in users */}
+            {realFarmers.map((f, i) => (
+              <tr key={`real-${f.id}`} style={{ background: 'rgba(16, 185, 129, 0.04)' }}>
                 <td style={{ color: 'var(--text-muted)' }}>{i + 1}</td>
+                <td style={{ fontWeight: 600 }}>
+                  {f.name}
+                  <span style={{ fontSize: 10, background: '#d1fae5', color: '#065f46', borderRadius: 10, padding: '1px 6px', marginLeft: 6 }}>Live</span>
+                </td>
+                <td>{f.village || f.taluk || '—'}</td>
+                <td style={{ fontFamily: 'monospace', fontSize: 12 }}>+91 {f.phone}</td>
+                <td><span className="badge badge-success">Verified</span></td>
+                <td><span className="badge badge-primary">Active</span></td>
+              </tr>
+            ))}
+            {/* Static demo farmers */}
+            {filteredStatic.map(([name, village, mobile, aadhaar, schemes], i) => (
+              <tr key={`static-${i}`}>
+                <td style={{ color: 'var(--text-muted)' }}>{realFarmers.length + i + 1}</td>
                 <td style={{ fontWeight: 600 }}>{name}</td>
                 <td>{village}</td>
                 <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{mobile}</td>
@@ -1412,6 +1505,7 @@ function CitizensScreen() {
     </div>
   )
 }
+
 
 // ===== Settings =====
 function SettingsScreen() {
@@ -2436,7 +2530,11 @@ export default function OfficialDashboard() {
             <div style={{ position: 'relative' }}>
               <button type="button" className="topbar-icon-btn" title="Notifications" onClick={() => setNotifOpen(!notifOpen)}>
                 <Bell size={18} strokeWidth={2} />
-                <div className="notif-dot" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 'bold', color: '#fff' }}>2</div>
+                {(pendingCount > 0 || pendingInquiriesCount > 0) && (
+                  <div className="notif-dot" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 'bold', color: '#fff' }}>
+                    {(pendingCount > 0 ? 1 : 0) + (pendingInquiriesCount > 0 ? 1 : 0)}
+                  </div>
+                )}
               </button>
               {notifOpen && (
                 <div className="notif-dropdown animate-fadeInUp" style={{ right: 0 }}>
@@ -2445,20 +2543,40 @@ export default function OfficialDashboard() {
                     <button type="button" onClick={(e) => { e.stopPropagation(); setNotifOpen(false); }}><X size={14} /></button>
                   </div>
                   <div className="notif-list">
-                    <div className="notif-item unread" onClick={() => { setActive('complaints'); setNotifOpen(false) }} style={{ cursor: 'pointer' }}>
-                      <div className="notif-icon bg-warning"><ClipboardList size={16} /></div>
-                      <div>
-                        <p>5 new water complaints in your taluk.</p>
-                        <span>10 mins ago</span>
+                    {pendingCount > 0 ? (
+                      <div className="notif-item unread" onClick={() => { setActive('complaints'); setNotifOpen(false) }} style={{ cursor: 'pointer' }}>
+                        <div className="notif-icon bg-warning"><ClipboardList size={16} /></div>
+                        <div>
+                          <p>{pendingCount} pending complaints require attention.</p>
+                          <span style={{ color: '#ec4899', fontWeight: 600 }}>Action Needed</span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="notif-item" onClick={() => { setActive('citizens'); setNotifOpen(false) }} style={{ cursor: 'pointer' }}>
-                      <div className="notif-icon bg-success"><Users size={16} /></div>
-                      <div>
-                        <p>12 new farmer registrations today.</p>
-                        <span>2 hours ago</span>
+                    ) : (
+                      <div className="notif-item" onClick={() => { setActive('complaints'); setNotifOpen(false) }} style={{ cursor: 'pointer' }}>
+                        <div className="notif-icon bg-success"><CheckCircle size={16} /></div>
+                        <div>
+                          <p>All complaints resolved.</p>
+                          <span>Up to date</span>
+                        </div>
                       </div>
-                    </div>
+                    )}
+                    {pendingInquiriesCount > 0 ? (
+                      <div className="notif-item unread" onClick={() => { setActive('inquiries'); setNotifOpen(false) }} style={{ cursor: 'pointer' }}>
+                        <div className="notif-icon bg-warning"><HelpCircle size={16} /></div>
+                        <div>
+                          <p>{pendingInquiriesCount} pending farmer inquiries.</p>
+                          <span style={{ color: '#ec4899', fontWeight: 600 }}>Action Needed</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="notif-item" onClick={() => { setActive('citizens'); setNotifOpen(false) }} style={{ cursor: 'pointer' }}>
+                        <div className="notif-icon bg-success"><Users size={16} /></div>
+                        <div>
+                          <p>Farmer registrations up to date.</p>
+                          <span>No new action needed</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

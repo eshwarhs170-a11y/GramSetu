@@ -590,12 +590,15 @@ export async function processVoiceCommand(transcript, lang = 'en') {
   if (instantAnswer) return { type: 'chat', response: instantAnswer };
 
   // ── 2. NAVIGATION COMMANDS ────────────────────────────────────────────────
+  const isOfficial = typeof window !== 'undefined' && window.localStorage.getItem('official_loggedIn') === 'true';
+  const dashRoute = isOfficial ? '/dashboard/official' : '/dashboard/villager';
+
   const navCommands = [
     { triggers: ['home', 'ಮನೆ', 'ಮುಖಪುಟ', 'ghar', 'होम'], payload: '/', msgEn: 'Going to home page.', msgKn: 'ಮುಖಪುಟಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.', msgHi: 'होम पेज पर जा रहा हूँ।' },
-    { triggers: ['dashboard', 'ಡ್ಯಾಶ್ಬೋರ್ಡ್', 'डैशबोर्ड'], payload: '/dashboard/villager', msgEn: 'Opening dashboard.', msgKn: 'ಡ್ಯಾಶ್ಬೋರ್ಡ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'डैशबोर्ड खोल रहा हूँ।' },
-    { triggers: ['complaint', 'ದೂರು', 'shikayat', 'शिकायत'], payload: '/dashboard/villager', tab: 'complaints', msgEn: 'Opening complaints section.', msgKn: 'ದೂರು ವಿಭಾಗ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'शिकायत अनुभाग खोल रहा हूँ।' },
-    { triggers: ['market', 'apmc', 'ಮಾರುಕಟ್ಟೆ', 'बाजार'], payload: '/dashboard/villager', tab: 'market', msgEn: 'Opening APMC market prices.', msgKn: 'APMC ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'APMC बाजार भाव खोल रहा हूँ।' },
-    { triggers: ['scheme', 'yojana', 'ಯೋಜನೆ', 'योजना', 'subsidy'], payload: '/dashboard/villager', tab: 'schemes', msgEn: 'Opening Government Schemes.', msgKn: 'ಸರ್ಕಾರಿ ಯೋಜನೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'सरकारी योजनाएं खोल रहा हूँ।' },
+    { triggers: ['dashboard', 'ಡ್ಯಾಶ್ಬೋರ್ಡ್', 'डैशबोर्ड'], payload: dashRoute, msgEn: 'Opening dashboard.', msgKn: 'ಡ್ಯಾಶ್ಬೋರ್ಡ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'डैशबोर्ड खोल रहा हूँ।' },
+    { triggers: ['complaint', 'ದೂರು', 'shikayat', 'शिकायत'], payload: dashRoute, tab: 'complaints', msgEn: 'Opening complaints section.', msgKn: 'ದೂರು ವಿಭಾಗ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'शिकायत अनुभाग खोल रहा हूँ।' },
+    { triggers: ['market', 'apmc', 'ಮಾರುಕಟ್ಟೆ', 'बाजार'], payload: dashRoute, tab: 'market', msgEn: 'Opening APMC market prices.', msgKn: 'APMC ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'APMC बाजार भाव खोल रहा हूँ।' },
+    { triggers: ['scheme', 'yojana', 'ಯೋಜನೆ', 'योजना', 'subsidy'], payload: dashRoute, tab: 'schemes', msgEn: 'Opening Government Schemes.', msgKn: 'ಸರ್ಕಾರಿ ಯೋಜನೆ ತೆರೆಯಲಾಗುತ್ತಿದೆ.', msgHi: 'सरकारी योजनाएं खोल रहा हूँ।' },
     { triggers: ['login', 'ಲಾಗಿನ್', 'register', 'नोंದणी'], payload: '/login/villager', msgEn: 'Going to login page.', msgKn: 'ಲಾಗಿನ್ ಪುಟಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.', msgHi: 'लॉगिन पेज पर जा रहा हूँ।' },
   ];
 
