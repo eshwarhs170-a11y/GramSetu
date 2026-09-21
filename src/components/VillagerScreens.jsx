@@ -187,7 +187,7 @@ const normalizeDistrict = (d) => {
     'Chikkaballapura': 'Chikkaballapur', 'Bengaluru': 'Bengaluru Urban',
     'Davangere': 'Davanagere', 'Dharwar': 'Dharwad', 'Gulbarga': 'Kalaburagi',
     'Bijapur': 'Vijayapura', 'Bellary': 'Ballari', 'Belgaum': 'Belagavi',
-    'Shimoga': 'Shivamogga', 'Tumkur': 'Tumakuru', 'Dakshin Kannada': 'Dakshina Kannada',
+    'Shimoga': 'Shivamogga', 'Tumkur': 'Tumkuru', 'Tumakuru': 'Tumkuru', 'Dakshin Kannada': 'Dakshina Kannada',
   }
   return aliases[d] || d
 }
@@ -3721,8 +3721,9 @@ export function ComplaintStatusScreen({ setActive }) {
     if (!d) return ''
     const s = cleanStr(d)
     const aliases = {
-      'tumkur': 'tumakuru',
-      'tumakuru': 'tumakuru',
+      'tumkur': 'tumkuru',
+      'tumakuru': 'tumkuru',
+      'tumkuru': 'tumkuru',
       'mysore': 'mysuru',
       'mysuru': 'mysuru',
       'shimoga': 'shivamogga',

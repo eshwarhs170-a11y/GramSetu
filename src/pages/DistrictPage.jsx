@@ -88,7 +88,21 @@ export default function DistrictPage() {
   const [selectedCropInfo, setSelectedCropInfo] = useState(null)
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false)
   
-  const district = districtData[id]
+  // Normalize district name spelling variants (e.g. Tumakuru → Tumkuru, Mysore → Mysuru)
+  const districtAliases = {
+    'Tumakuru': 'Tumkuru', 'Tumkur': 'Tumkuru',
+    'Mysore': 'Mysuru',
+    'Shimoga': 'Shivamogga',
+    'Bellary': 'Ballari',
+    'Belgaum': 'Belagavi',
+    'Gulbarga': 'Kalaburagi',
+    'Bijapur': 'Vijayapura',
+    'Davangere': 'Davanagere',
+    'Dharwar': 'Dharwad',
+    'Chikkaballapura': 'Chikkaballapur',
+  }
+  const normalizedId = districtAliases[id] || id
+  const district = districtData[normalizedId]
 
   if (!district) {
     return (
@@ -253,11 +267,11 @@ export default function DistrictPage() {
       </div>
  
       {/* ── MAJOR CROPS SECTION ── */}
-      {districtCropsMap[id] && (
+      {districtCropsMap[normalizedId] && (
         <div className="district-content-container" style={{ marginTop: 64 }}>
-          <h2 style={{ color: '#fff', fontSize: 28, fontWeight: 800, marginBottom: 24 }}>Major Crops in {id}</h2>
+          <h2 style={{ color: '#fff', fontSize: 28, fontWeight: 800, marginBottom: 24 }}>Major Crops in {normalizedId}</h2>
           <div className="crops-grid">
-            {districtCropsMap[id].map((crop, idx) => (
+            {districtCropsMap[normalizedId].map((crop, idx) => (
               <div 
                 key={idx} 
                 style={{ 
