@@ -1528,7 +1528,15 @@ export function SchemesScreen() {
               >
                 <div style={{ position: 'relative', height: 160, overflow: 'hidden' }}>
                   <img
-                    src={s.img || 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'}
+                    src={
+                      s.img || 
+                      (s.category === 'Agriculture' ? 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&q=80' : 
+                       s.category === 'Finance' ? 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80' :
+                       s.category === 'Health' ? 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=600&q=80' :
+                       s.category === 'Scholarship' ? 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&q=80' :
+                       s.category === 'Women Empowerment' || s.category === 'Women' ? 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=600&q=80' :
+                       'https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600&q=80')
+                    }
                     alt={getLangText(s.title)}
                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80'; }}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -1575,8 +1583,7 @@ export function SchemesScreen() {
                     {getLangText(s.desc)}
                   </p>
 
-                  {/* Highlights Pill Box */}
-                  {s.benefits && (
+                  {/* Highlights Pill Box - Only show if data actually exists */}\n                  {(s.benefits?.subsidyPercent || s.benefits?.maxLimit) && (
                     <div style={{
                       background: 'var(--bg-main)',
                       padding: '8px 12px',
