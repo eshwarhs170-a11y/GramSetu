@@ -365,9 +365,9 @@ export function HomeScreen({ setActive }) {
               </div>
             ))}
           </div>
-        </div>,
-        document.body
+        </div>
       )}
+
 
       {/* Dynamic Profile Selector in Home Screen */}
       <div className="card" style={{ marginBottom: 20, padding: '16px 20px' }}>
@@ -603,8 +603,7 @@ export function HomeScreen({ setActive }) {
               </div>
             ))}
           </div>
-        </div>,
-        document.body
+        </div>
       )}
 
       {/* ── Crop Doctor Quick Action ── */}
@@ -1836,8 +1835,8 @@ export function SchemesScreen() {
               </div>
             ))}
           </div>
-        </div>,
-        document.body
+        </div>
+
       )}
 
       {/* ============================================================ */}
@@ -1894,8 +1893,8 @@ export function SchemesScreen() {
               </div>
             ))}
           </div>
-        </div>,
-        document.body
+        </div>
+
       )}
 
       {/* ============================================================ */}
@@ -1949,8 +1948,8 @@ export function SchemesScreen() {
               </div>
             ))}
           </div>
-        </div>,
-        document.body
+        </div>
+
       )}
 
       {/* ============================================================ */}
@@ -2030,8 +2029,8 @@ export function SchemesScreen() {
               ))}
             </div>
           </div>
-        </div>,
-        document.body
+        </div>
+
       )}
 
       {/* ============================================================ */}
