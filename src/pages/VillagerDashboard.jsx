@@ -19,11 +19,33 @@ import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
 import { playLoudNotificationChime } from '../utils/audioAlert'
 
 export default function VillagerDashboard({ defaultTab = 'home' }) {
-  const [active, setActive] = useState(defaultTab)
+  const [activeTab, _setActive] = useState(defaultTab)
+
+  const setActive = (tab) => {
+    if (tab === activeTab) return
+    window.history.pushState({ tab }, '')
+    _setActive(tab)
+  }
+
+  useEffect(() => {
+    window.history.replaceState({ tab: defaultTab || 'home' }, '')
+    const handlePopState = (e) => {
+      if (e.state && e.state.tab) {
+        _setActive(e.state.tab)
+      } else {
+        _setActive(defaultTab || 'home')
+      }
+    }
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [defaultTab])
+  
+  const active = activeTab
 
   useEffect(() => {
     if (defaultTab) {
-      setActive(defaultTab)
+      _setActive(defaultTab)
+      window.history.replaceState({ tab: defaultTab }, '')
     }
   }, [defaultTab])
   const [sidebarOpen, setSidebarOpen] = useState(false)

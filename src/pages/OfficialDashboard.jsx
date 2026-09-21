@@ -2329,7 +2329,28 @@ const pageMeta = {
 
 // ===== Main Dashboard =====
 export default function OfficialDashboard() {
-  const [active, setActive] = useState('overview')
+  const [activeTab, _setActive] = useState('overview')
+
+  const setActive = (tab) => {
+    if (tab === activeTab) return
+    window.history.pushState({ tab }, '')
+    _setActive(tab)
+  }
+
+  useEffect(() => {
+    window.history.replaceState({ tab: 'overview' }, '')
+    const handlePopState = (e) => {
+      if (e.state && e.state.tab) {
+        _setActive(e.state.tab)
+      } else {
+        _setActive('overview')
+      }
+    }
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+  
+  const active = activeTab
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [editingAnnouncement, setEditingAnnouncement] = useState(null)
