@@ -129,7 +129,7 @@ export const districtCropsMap = {
   "Raichur": ["Paddy", "Cotton", "Tur", "Maize", "Jowar", "Bengal gram", "Groundnut", "Sunflower", "Chilli", "Wheat"],
   "Ramanagara": ["Ragi", "Mango", "Coconut", "Tomato", "Banana", "Paddy", "Maize", "Groundnut", "Mulberry", "Tamarind"],
   "Shivamogga": ["Paddy", "Arecanut", "Maize", "Coconut", "Sugarcane", "Ragi", "Ginger", "Black pepper", "Banana", "Turmeric"],
-  "Tumakuru": ["Ragi", "Groundnut", "Coconut", "Maize", "Paddy", "Tur", "Sunflower", "Jowar", "Silk Cocoon", "Tomato"],
+  "Tumkuru": ["Ragi", "Groundnut", "Coconut", "Maize", "Paddy", "Tur", "Sunflower", "Jowar", "Silk Cocoon", "Tomato"],
   "Udupi": ["Paddy", "Arecanut", "Coconut", "Cashew", "Black pepper", "Banana", "Pineapple", "Ginger", "Turmeric", "Cocoa"],
   "Uttara Kannada": ["Arecanut", "Paddy", "Coconut", "Cashew", "Black pepper", "Cardamom", "Maize", "Mango", "Banana", "Turmeric"],
   "Vijayapura": ["Jowar", "Tur", "Bengal gram", "Maize", "Sunflower", "Groundnut", "Wheat", "Cotton", "Chilli", "Soybean"],
