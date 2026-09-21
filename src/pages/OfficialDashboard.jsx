@@ -2430,7 +2430,7 @@ export default function OfficialDashboard() {
 
   const renderScreen = () => {
     switch (active) {
-      case 'overview':   return <OverviewScreen onPendingClick={handlePendingClick} onResolvedClick={handleResolvedClick} sessionData={sessionData} pendingCount={pendingCount} resolvedCount={resolvedCount} />
+      case 'overview':   return <OverviewScreen onPendingClick={handlePendingClick} onResolvedClick={handleResolvedClick} onNavTo={setActive} sessionData={sessionData} pendingCount={pendingCount} resolvedCount={resolvedCount} />
       case 'complaints': return <ComplaintsScreen resolved={false} filter={complaintFilter} />
       case 'resolved':   return <ComplaintsScreen resolved={true} />
       case 'inquiries':  return <FarmerInquiriesScreen sessionData={sessionData} />
@@ -2440,7 +2440,7 @@ export default function OfficialDashboard() {
       case 'analytics':  return <AnalyticsScreen sessionData={sessionData} pendingCount={pendingCount} resolvedCount={resolvedCount} />
       case 'citizens':   return <CitizensScreen />
       case 'settings':   return <SettingsScreen />
-      default:           return <OverviewScreen sessionData={sessionData} pendingCount={pendingCount} resolvedCount={resolvedCount} />
+      default:           return <OverviewScreen onNavTo={setActive} sessionData={sessionData} pendingCount={pendingCount} resolvedCount={resolvedCount} />
     }
   }
 
