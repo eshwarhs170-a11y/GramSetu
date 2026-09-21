@@ -12,7 +12,9 @@ export default function MagicLogin() {
 
   useEffect(() => {
     const role = params.get('role') || 'villager';
-    const name = params.get('name') || (role === 'official' ? 'S. R. Patil' : 'Ramappa Gowda');
+    const rawName = params.get('name') || (role === 'official' ? 'S. R. Patil' : 'Ramappa Gowda');
+    // Strip any parenthetical suffix like "(PDO Mysuru)" from official names
+    const name = role === 'official' ? rawName.replace(/\s*\(.*?\)\s*/g, '').trim() : rawName;
     const district = params.get('district') || 'Mysuru';
     const taluk = params.get('taluk') || (district === 'Kodagu' ? 'Madikeri' : 'Mysuru');
     const gp = params.get('gp') || (district === 'Kodagu' ? 'Suntikoppa' : 'Varuna');
