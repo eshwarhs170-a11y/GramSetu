@@ -49,7 +49,7 @@ const CARDS = [
   {
     id: 'pdo',
     role: 'official',
-    name: 'S. R. Patil (PDO Mysuru)',
+    name: 'S. R. Patil',
     district: 'Mysuru',
     taluk: 'Mysuru',
     gp: '',
@@ -58,12 +58,12 @@ const CARDS = [
     idNum: 'KA-MYS-PDO-2026-042',
     phone: '9448012345',
     label: 'Govt Official · ಅಧಿಕಾರಿ',
-    kannadaName: 'ಎಸ್. ಆರ್. ಪಾಟೀಲ್ (ಪಿಡಿಒ ಮೈಸೂರು)',
+    kannadaName: 'ಎಸ್. ಆರ್. ಪಾಟೀಲ್',
     icon: Landmark,
     themeColor: '#4f46e5',
     accentColor: '#6366f1',
     borderColor: '#818cf8',
-    desc: 'Scan to experience GramSetu as PDO Mysuru (Govt Official)',
+    desc: 'Scan to experience GramSetu as S. R. Patil (Govt Official)',
   },
 ];
 

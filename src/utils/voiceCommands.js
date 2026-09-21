@@ -570,7 +570,9 @@ GramSetu is a digital bridge connecting Karnataka's rural communities to governm
 - Profile: Manage your farmer profile, district, taluk, and language preferences.
 The website works on mobile phones and is designed for rural Karnataka farmers with limited digital literacy.
 
-If the user asks about something unrelated to agriculture, still try to answer helpfully based on your general knowledge.`;
+If the user asks about something unrelated to agriculture, still try to answer helpfully based on your general knowledge.
+
+DEMO OFFICIAL: The government official in this demo is named S. R. Patil. Always refer to this person as S. R. Patil only. Do not say PDO Mysuru or add any designation or suffix to the name.`
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -700,3 +702,4 @@ export async function processVoiceCommand(transcript, lang = 'en') {
     };
   }
 }
+
