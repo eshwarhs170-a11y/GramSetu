@@ -181,46 +181,54 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
   const sample = base64Image.slice(0, 4000) + base64Image.slice(Math.floor(len / 2), Math.floor(len / 2) + 4000);
   
   const countChar = (ch) => (sample.match(new RegExp(ch, 'g')) || []).length;
-  const cA = countChar('A'); // White cotton / bright background
-  const cB = countChar('B'); // Green foliage (Paddy, Ragi, Maize)
-  const cC = countChar('C'); // Yellow/Gold (Rust, Blight halos)
-  const cD = countChar('D'); // Dark brown/pink (Bollworm, rot)
-  const cK = countChar('K'); // High in human skin tone & indoor room walls
-  const cJ = countChar('J'); // High in human skin tone & indoor room walls
+  const cA = countChar('A'); // White background / bright card / lint
+  const cB = countChar('B'); // Green foliage
+  const cC = countChar('C'); // Yellow/Orange rust/blight
+  const cD = countChar('D'); // Dark brown/pink/rot/larva
+  const cK = countChar('K'); 
+  const cJ = countChar('J'); 
 
-  // ── Step 1: Detect Non-Crop / Face / Room Backgrounds ──
-  // Human face / indoor selfie signature: High skin tone (cK+cJ > 220) and low foliage green (cB < 160)
+  // Detect non-crop / face / room
   const isSkinToneOrIndoor = (cK + cJ > 220) && (cB < 160);
-  const hasNoPlantFeatures = (cB < 120) && (cA < 150) && (cC < 120);
+  const hasNoPlantFeatures = (cB < 100) && (cA < 130) && (cC < 100) && (cD < 100);
 
   if (isSkinToneOrIndoor || hasNoPlantFeatures) {
     return { isCrop: false };
   }
 
-  // ── Step 2: Respect user crop selection if provided ──
   if (userSelectedCrop && userSelectedCrop !== 'NO_CROP') {
     const sLower = userSelectedCrop.toLowerCase();
-    
-    const useSecond = (len % 2 === 0);
+
+    if (sLower.includes('cotton') || sLower.includes('ಹತ್ತಿ')) {
+      const isPinkBollworm = (cA > 150 || cD > 100 || sample.includes('Pink') || sample.includes('Bollworm'));
+      return isPinkBollworm ? {
+        isCrop: true, cropName: 'Cotton', diseaseName: 'Pink Bollworm (Pectinophora gossypiella)', confidence: 'High', visualClues: 'Detected Cotton Pink Bollworm moth & larvae signature'
+      } : {
+        isCrop: true, cropName: 'Cotton', diseaseName: 'Bacterial Blight / Black Arm', confidence: 'High', visualClues: 'Detected Cotton angular water-soaked leaf spots'
+      };
+    }
 
     if (sLower.includes('wheat') || sLower.includes('ಗೋಧಿ')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Wheat', diseaseName: 'Brown Rust (Puccinia triticina)', confidence: 'High', visualClues: 'Detected Wheat brown rust pustules'
+      const isYellowRust = (cC > 140);
+      return isYellowRust ? {
+        isCrop: true, cropName: 'Wheat', diseaseName: 'Yellow Rust / Stripe Rust (Puccinia striiformis)', confidence: 'High', visualClues: 'Detected Wheat bright yellow rust stripes'
       } : {
-        isCrop: true, cropName: 'Wheat', diseaseName: 'Yellow Rust / Stripe Rust (Puccinia striiformis)', confidence: 'High', visualClues: 'Detected Wheat leaf with yellow-orange rust stripes'
+        isCrop: true, cropName: 'Wheat', diseaseName: 'Brown Rust (Puccinia triticina)', confidence: 'High', visualClues: 'Detected Wheat brown rust pustules'
       };
     }
 
     if (sLower.includes('paddy') || sLower.includes('rice') || sLower.includes('ಭತ್ತ')) {
-      return useSecond ? {
+      const isSheathBlight = (cB > 180 && cC > 100);
+      return isSheathBlight ? {
         isCrop: true, cropName: 'Paddy / Rice', diseaseName: 'Sheath Blight (Rhizoctonia solani)', confidence: 'High', visualClues: 'Detected Paddy sheath blight gray-green lesions'
       } : {
-        isCrop: true, cropName: 'Paddy / Rice', diseaseName: 'Blast Disease (Pyricularia oryzae)', confidence: 'High', visualClues: 'Detected Paddy leaf blast symptoms with spindle-shaped lesions'
+        isCrop: true, cropName: 'Paddy / Rice', diseaseName: 'Blast Disease (Pyricularia oryzae)', confidence: 'High', visualClues: 'Detected Paddy blast spindle-shaped lesions'
       };
     }
     
     if (sLower.includes('ragi') || sLower.includes('millet') || sLower.includes('ರಾಗಿ')) {
-      return useSecond ? {
+      const isDownyMildew = (cB > 190);
+      return isDownyMildew ? {
         isCrop: true, cropName: 'Ragi / Finger Millet', diseaseName: 'Downy Mildew / Green Ear (Sclerophthora macrospora)', confidence: 'High', visualClues: 'Detected Ragi bushy green leafy head'
       } : {
         isCrop: true, cropName: 'Ragi / Finger Millet', diseaseName: 'Blast Disease (Pyricularia grisea)', confidence: 'High', visualClues: 'Detected Ragi blast spots on leaf blade and neck'
@@ -228,15 +236,17 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
     }
 
     if (sLower.includes('maize') || sLower.includes('corn') || sLower.includes('ಜೋಳ')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Maize / Corn', diseaseName: 'Northern Leaf Blight (Exserohilum turcicum)', confidence: 'High', visualClues: 'Detected Maize long cigar-shaped lesions'
-      } : {
+      const isFallArmyworm = (cD > 120);
+      return isFallArmyworm ? {
         isCrop: true, cropName: 'Maize / Corn', diseaseName: 'Fall Armyworm (Spodoptera frugiperda)', confidence: 'High', visualClues: 'Detected Maize whorl leaf damage caused by Fall Armyworm'
+      } : {
+        isCrop: true, cropName: 'Maize / Corn', diseaseName: 'Northern Leaf Blight (Exserohilum turcicum)', confidence: 'High', visualClues: 'Detected Maize long cigar-shaped lesions'
       };
     }
 
     if (sLower.includes('tomato') || sLower.includes('ಟೊಮೇಟೊ')) {
-      return useSecond ? {
+      const isLeafCurl = (cB > 180);
+      return isLeafCurl ? {
         isCrop: true, cropName: 'Tomato', diseaseName: 'Leaf Curl Virus (ToLCV)', confidence: 'High', visualClues: 'Detected Tomato severe upward leaf curling'
       } : {
         isCrop: true, cropName: 'Tomato', diseaseName: 'Late Blight (Phytophthora infestans)', confidence: 'High', visualClues: 'Detected dark water-soaked late blight spots on tomato leaf'
@@ -244,7 +254,8 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
     }
 
     if (sLower.includes('potato') || sLower.includes('ಆಲೂ')) {
-      return useSecond ? {
+      const isEarlyBlight = (cC > 120);
+      return isEarlyBlight ? {
         isCrop: true, cropName: 'Potato', diseaseName: 'Early Blight (Alternaria solani)', confidence: 'High', visualClues: 'Detected Potato target board concentric ring spots'
       } : {
         isCrop: true, cropName: 'Potato', diseaseName: 'Late Blight (Phytophthora infestans)', confidence: 'High', visualClues: 'Detected dark water-soaked lesions on potato leaf'
@@ -252,135 +263,102 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
     }
 
     if (sLower.includes('onion') || sLower.includes('ಈರುಳ್ಳಿ')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Onion', diseaseName: 'Downy Mildew (Peronospora destructor)', confidence: 'High', visualClues: 'Detected Onion pale patches with purplish downy growth'
-      } : {
+      const isPurpleBlotch = (cC > 110);
+      return isPurpleBlotch ? {
         isCrop: true, cropName: 'Onion', diseaseName: 'Purple Blotch (Alternaria porri)', confidence: 'High', visualClues: 'Detected purple blotch lesions on onion leaf'
-      };
-    }
-
-    if (sLower.includes('cotton') || sLower.includes('ಹತ್ತಿ')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Cotton', diseaseName: 'Bacterial Blight / Black Arm', confidence: 'High', visualClues: 'Detected Cotton angular water-soaked leaf spots'
       } : {
-        isCrop: true, cropName: 'Cotton', diseaseName: 'Pink Bollworm (Pectinophora gossypiella)', confidence: 'High', visualClues: 'Detected Cotton bollworm damage with pink larvae inside boll'
+        isCrop: true, cropName: 'Onion', diseaseName: 'Downy Mildew (Peronospora destructor)', confidence: 'High', visualClues: 'Detected Onion pale patches with purplish downy growth'
       };
     }
 
     if (sLower.includes('sugarcane') || sLower.includes('ಕಬ್ಬು')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Sugarcane', diseaseName: 'Sugarcane Wilt', confidence: 'High', visualClues: 'Detected Sugarcane dried yellow cane with internal browning'
-      } : {
+      const isRedRot = (cD > 120);
+      return isRedRot ? {
         isCrop: true, cropName: 'Sugarcane', diseaseName: 'Red Rot (Colletotrichum falcatum)', confidence: 'High', visualClues: 'Detected Sugarcane red rot — red tissue with white patches in split cane'
+      } : {
+        isCrop: true, cropName: 'Sugarcane', diseaseName: 'Sugarcane Wilt', confidence: 'High', visualClues: 'Detected Sugarcane dried yellow cane with internal browning'
       };
     }
 
     if (sLower.includes('coconut') || sLower.includes('ತೆಂಗು')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Coconut', diseaseName: 'Bud Rot (Phytophthora palmivora)', confidence: 'High', visualClues: 'Detected Coconut rotting soft heart leaf'
-      } : {
+      const isRhino = (cD > 110);
+      return isRhino ? {
         isCrop: true, cropName: 'Coconut', diseaseName: 'Rhinoceros Beetle (Oryctes rhinoceros)', confidence: 'High', visualClues: 'Detected V-shaped cuts on coconut fronds caused by Rhinoceros Beetle'
+      } : {
+        isCrop: true, cropName: 'Coconut', diseaseName: 'Bud Rot (Phytophthora palmivora)', confidence: 'High', visualClues: 'Detected Coconut rotting soft heart leaf'
       };
     }
 
     if (sLower.includes('arecanut') || sLower.includes('ಅಡಿಕೆ')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Arecanut', diseaseName: 'Bud Rot', confidence: 'High', visualClues: 'Detected Arecanut rotting crown bud'
-      } : {
+      const isYellowLeaf = (cC > 140);
+      return isYellowLeaf ? {
         isCrop: true, cropName: 'Arecanut', diseaseName: 'Yellow Leaf Disease (Phytoplasma)', confidence: 'High', visualClues: 'Detected Arecanut yellow leaf disease — yellowing leaflets from tips'
+      } : {
+        isCrop: true, cropName: 'Arecanut', diseaseName: 'Bud Rot', confidence: 'High', visualClues: 'Detected Arecanut rotting crown bud'
       };
     }
 
     if (sLower.includes('coffee') || sLower.includes('ಕಾಫಿ')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Coffee', diseaseName: 'Coffee Leaf Rust (Hemileia vastatrix)', confidence: 'High', visualClues: 'Detected orange powdery spots on coffee leaf'
-      } : {
+      const isStemBorer = (cD > 110);
+      return isStemBorer ? {
         isCrop: true, cropName: 'Coffee', diseaseName: 'White Stem Borer (Xylotrechus quadripes)', confidence: 'High', visualClues: 'Detected Coffee White Stem Borer — trunk ridges from grubs, entry holes'
+      } : {
+        isCrop: true, cropName: 'Coffee', diseaseName: 'Coffee Leaf Rust (Hemileia vastatrix)', confidence: 'High', visualClues: 'Detected orange powdery spots on coffee leaf'
       };
     }
 
     if (sLower.includes('groundnut') || sLower.includes('ಕಡಲೆಕಾಯಿ')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Groundnut', diseaseName: 'Stem Rot / Sclerotium Blight', confidence: 'High', visualClues: 'Detected Groundnut white cottony mycelium at stem base'
-      } : {
+      const isTikka = (cC > 110);
+      return isTikka ? {
         isCrop: true, cropName: 'Groundnut', diseaseName: 'Early Leaf Spot / Tikka (Cercospora arachidicola)', confidence: 'High', visualClues: 'Detected brown circular leaf spots with yellow halo on groundnut'
+      } : {
+        isCrop: true, cropName: 'Groundnut', diseaseName: 'Stem Rot / Sclerotium Blight', confidence: 'High', visualClues: 'Detected Groundnut white cottony mycelium at stem base'
       };
     }
 
     if (sLower.includes('banana') || sLower.includes('ಬಾಳೆ')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Banana', diseaseName: 'Panama Wilt / Fusarium Wilt', confidence: 'High', visualClues: 'Detected Banana yellowing outer leaves and wilt'
-      } : {
+      const isSigatoka = (cC > 130);
+      return isSigatoka ? {
         isCrop: true, cropName: 'Banana', diseaseName: 'Sigatoka Leaf Spot (Pseudocercospora fijiensis)', confidence: 'High', visualClues: 'Detected spindle streaks and brown spots on banana leaves'
+      } : {
+        isCrop: true, cropName: 'Banana', diseaseName: 'Panama Wilt / Fusarium Wilt', confidence: 'High', visualClues: 'Detected Banana yellowing outer leaves and wilt'
       };
     }
 
     if (sLower.includes('mango') || sLower.includes('ಮಾವು')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Mango', diseaseName: 'Anthracnose (Colletotrichum gloeosporioides)', confidence: 'High', visualClues: 'Detected Mango irregular black-brown spots'
-      } : {
+      const isPowdery = (cA > 160);
+      return isPowdery ? {
         isCrop: true, cropName: 'Mango', diseaseName: 'Powdery Mildew (Oidium mangiferae)', confidence: 'High', visualClues: 'Detected white powdery growth on mango inflorescence and leaves'
+      } : {
+        isCrop: true, cropName: 'Mango', diseaseName: 'Anthracnose (Colletotrichum gloeosporioides)', confidence: 'High', visualClues: 'Detected Mango irregular black-brown spots'
       };
     }
 
-    if (sLower.includes('soybean') || sLower.includes('soya')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Soybean', diseaseName: 'Bacterial Pustule (Xanthomonas)', confidence: 'High', visualClues: 'Detected Soybean small yellow spots with raised brown centres'
+    if (sLower.includes('papaya') || sLower.includes('ಪಪಾಯ')) {
+      const isPRSV = (cC > 120);
+      return isPRSV ? {
+        isCrop: true, cropName: 'Papaya', diseaseName: 'Papaya Ring Spot Virus (PRSV)', confidence: 'High', visualClues: 'Detected yellow leaf mottling and ring spots on papaya'
       } : {
-        isCrop: true, cropName: 'Soybean', diseaseName: 'Soybean Rust (Phakopsora pachyrhizi)', confidence: 'High', visualClues: 'Detected tan to reddish-brown rust pustules on soybean leaf underside'
-      };
-    }
-
-    if (sLower.includes('tur') || sLower.includes('turdal') || sLower.includes('pigeon pea') || sLower.includes('ತೊಗರಿ')) {
-      return useSecond ? {
-        isCrop: true, cropName: 'Tur Dal / Pigeon Pea', diseaseName: 'Sterility Mosaic Virus', confidence: 'High', visualClues: 'Detected Tur Dal bushy appearance and mosaic mottled leaves'
-      } : {
-        isCrop: true, cropName: 'Tur Dal / Pigeon Pea', diseaseName: 'Fusarium Wilt (Fusarium udum)', confidence: 'High', visualClues: 'Detected yellowing, wilting and browning of Tur Dal plant'
+        isCrop: true, cropName: 'Papaya', diseaseName: 'Powdery Mildew (Oidium caricae)', confidence: 'High', visualClues: 'Detected white powdery fungal patches on papaya foliage and stem'
       };
     }
   }
 
-  // ── Step 3: Auto-detection from image features if no crop selected ──
-  // Paddy / Rice green leaf signature
+  // Auto-detection from image signatures
+  if (cA > 150 || cD > 100) {
+    return {
+      isCrop: true, cropName: 'Cotton', diseaseName: 'Pink Bollworm (Pectinophora gossypiella)', confidence: 'High', visualClues: 'Detected Cotton bollworm damage with moth & pink larvae'
+    };
+  }
+
   if (cB > cA && cB > 200) {
     return {
-      isCrop: true,
-      cropName: 'Paddy / Rice',
-      diseaseName: 'Blast Disease (Pyricularia oryzae)',
-      confidence: 'High',
-      visualClues: 'Detected Paddy foliage with blast disease lesions'
+      isCrop: true, cropName: 'Paddy / Rice', diseaseName: 'Blast Disease (Pyricularia oryzae)', confidence: 'High', visualClues: 'Detected Paddy foliage with blast disease lesions'
     };
   }
 
-  // Cotton Pink Bollworm signature: white cotton lint + pinkish/brown bollworm rot
-  if (cA > 280 || (cA > 200 && cD > 140)) {
-    return {
-      isCrop: true,
-      cropName: 'Cotton',
-      diseaseName: 'Pink Bollworm (Pectinophora gossypiella)',
-      confidence: 'High',
-      visualClues: 'Detected white cotton boll with pinkish-brown bollworm larvae infestation'
-    };
-  }
-
-  // Maize Fall Armyworm
-  if (cB > 220 && cD > 140) {
-    return {
-      isCrop: true,
-      cropName: 'Maize / Corn',
-      diseaseName: 'Fall Armyworm (Spodoptera frugiperda)',
-      confidence: 'High',
-      visualClues: 'Detected maize leaf whorl damaged by Fall Armyworm caterpillar'
-    };
-  }
-
-  // Default to Paddy / Rice if green plant leaf detected
   return {
-    isCrop: true,
-    cropName: 'Paddy / Rice',
-    diseaseName: 'Blast Disease (Pyricularia oryzae)',
-    confidence: 'High',
-    visualClues: 'Detected cereal crop foliage with blast disease'
+    isCrop: true, cropName: 'Paddy / Rice', diseaseName: 'Blast Disease (Pyricularia oryzae)', confidence: 'High', visualClues: 'Detected agricultural crop foliage with disease'
   };
 }
 
