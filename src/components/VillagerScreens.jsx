@@ -2180,6 +2180,7 @@ export function MarketScreen() {
       return {
         ...crop,
         price: live.price,
+        unit: live.unit || crop.unit,
         change: delta > 0 ? '+₹' + Math.round(delta).toLocaleString('en-IN') : delta < 0 ? '-₹' + Math.round(Math.abs(delta)).toLocaleString('en-IN') : crop.change,
         trend: delta > 0 ? 'up' : delta < 0 ? 'down' : crop.trend,
         market: live.market || crop.market,
