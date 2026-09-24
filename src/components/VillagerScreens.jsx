@@ -966,27 +966,10 @@ export function SchemesScreen() {
       .finally(() => setLoadingSchemes(false))
   }, [])
 
-  // Sync selectedScheme with browser URL hash history (allows native browser Back button)
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#scheme-')) {
-        const schemeId = hash.replace('#scheme-', '');
-        const found = schemes.find(s => s.id === schemeId);
-        if (found) {
-          setSelectedScheme(found);
-          return;
-        }
-      }
-      setSelectedScheme(null);
-    };
-
-    // Run once on load to support direct linking
-    handleHashChange();
-
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [schemes]);
+  // NOTE: We intentionally do NOT use window.location.hash or window.history.back()
+  // for scheme detail navigation because those fire popstate/hashchange events that
+  // VillagerDashboard's own history listener intercepts, causing it to switch to the
+  // home tab. Instead, selectedScheme is managed purely as local React state.
 
   // Text to Speech for Accessibility
   const handleToggleVoice = (scheme) => {
@@ -1144,11 +1127,9 @@ export function SchemesScreen() {
               window.speechSynthesis.cancel()
               setIsSpeaking(false)
             }
-            if (window.location.hash.startsWith('#scheme-')) {
-              window.history.back();
-            } else {
-              setSelectedScheme(null);
-            }
+            // Directly reset state – do NOT use window.history.back() as it would
+            // trigger VillagerDashboard's popstate handler and navigate away from schemes.
+            setSelectedScheme(null);
           }}
           className="btn btn-outline"
           style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, borderRadius: 10, padding: '8px 16px', fontWeight: 600 }}
@@ -1305,7 +1286,7 @@ export function SchemesScreen() {
         {/* Action Buttons */}
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', borderTop: '1px solid var(--border-light)', paddingTop: 24 }}>
           <a
-            href={selectedScheme.applyLink || 'https://sevasindhuservices.karnataka.gov.in/'}
+            href={selectedScheme.applyLink || 'https://serviceonline.gov.in/'}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary"
@@ -1741,9 +1722,9 @@ export function SchemesScreen() {
                   )}
 
                   {/* Action Buttons */}
-                  <div style={{ display: 'flex', gap: 8, marginTop: selectedScheme && selectedScheme.id === s.id ? 16 : 'auto' }}>
+                  <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
                     <a
-                      href={s.applyLink || 'https://sevasindhuservices.karnataka.gov.in/'}
+                      href={s.applyLink || 'https://serviceonline.gov.in/'}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-primary btn-sm"
@@ -1754,7 +1735,9 @@ export function SchemesScreen() {
                     <button
                       className="btn btn-outline btn-sm"
                       onClick={() => {
-                        window.location.hash = 'scheme-' + s.id;
+                        // Set state directly – avoid hash/history manipulation
+                        // which would conflict with VillagerDashboard's popstate handler
+                        setSelectedScheme(s);
                       }}
                       style={{ fontSize: 13 }}
                     >

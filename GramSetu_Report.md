@@ -19,6 +19,8 @@ GramSetu eliminates bureaucratic friction and language barriers by delivering go
 
 Unlike typical e-governance portals that assume digital literacy and English proficiency, GramSetu is built ground-up for accessibility, offline resilience, and local-language interaction — making government services reachable at the fingertip of every farmer and villager in Karnataka.
 
+![image](https://github.com/eshwarhs170-a11y/GramSetu/blob/main/public/app-image/gramsetu-img.png?raw=true)
+
 ---
 
 ## Key Features
