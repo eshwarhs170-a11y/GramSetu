@@ -966,10 +966,21 @@ export function SchemesScreen() {
       .finally(() => setLoadingSchemes(false))
   }, [])
 
-  // NOTE: We intentionally do NOT use window.location.hash or window.history.back()
-  // for scheme detail navigation because those fire popstate/hashchange events that
-  // VillagerDashboard's own history listener intercepts, causing it to switch to the
-  // home tab. Instead, selectedScheme is managed purely as local React state.
+  // Browser Back button support for scheme detail view.
+  // When Details is clicked we push { tab:'schemes', schemeId } to history.
+  // VillagerDashboard's popstate sees tab:'schemes' and is a no-op (already on schemes).
+  // This handler catches the popstate and closes the detail, staying on the schemes list.
+  useEffect(() => {
+    const handlePopState = (e) => {
+      // If we're currently showing a scheme detail, close it.
+      // We check selectedScheme via a ref to avoid stale closure issues.
+      setSelectedScheme(null);
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Text to Speech for Accessibility
   const handleToggleVoice = (scheme) => {
@@ -1127,9 +1138,10 @@ export function SchemesScreen() {
               window.speechSynthesis.cancel()
               setIsSpeaking(false)
             }
-            // Directly reset state – do NOT use window.history.back() as it would
-            // trigger VillagerDashboard's popstate handler and navigate away from schemes.
-            setSelectedScheme(null);
+            // Use history.back() — the Details button pushed a { tab:'schemes', schemeId }
+            // entry, so back() lands on { tab:'schemes' } which VillagerDashboard treats
+            // as a no-op, and our popstate listener above closes the detail view.
+            window.history.back();
           }}
           className="btn btn-outline"
           style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, borderRadius: 10, padding: '8px 16px', fontWeight: 600 }}
@@ -1735,8 +1747,10 @@ export function SchemesScreen() {
                     <button
                       className="btn btn-outline btn-sm"
                       onClick={() => {
-                        // Set state directly – avoid hash/history manipulation
-                        // which would conflict with VillagerDashboard's popstate handler
+                        // Push a history entry so the browser Back button works correctly.
+                        // VillagerDashboard's popstate will see tab:'schemes' (already active
+                        // → no-op), and SchemesScreen's popstate listener closes the detail.
+                        window.history.pushState({ tab: 'schemes', schemeId: s.id }, '');
                         setSelectedScheme(s);
                       }}
                       style={{ fontSize: 13 }}
