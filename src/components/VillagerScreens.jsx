@@ -201,7 +201,8 @@ export function HomeScreen({ setActive }) {
   const [livePrices, setLivePrices] = useState(districtPricesMap['Mysuru'] || BASELINE_PRICES)
   const [lastUpdated, setLastUpdated] = useState(new Date())
   const [priceFlash, setPriceFlash] = useState({})
-  const [priceSource, setPriceSource] = useState('district') // 'live' | 'baseline' | 'district'
+  const [priceSource, setPriceSource] = useState('district') // 'live' | 'district'
+  const [priceFailReason, setPriceFailReason] = useState('') // why live data failed
   const [loadingPrices, setLoadingPrices] = useState(true)
   const [selectedCropInfo, setSelectedCropInfo] = useState(null)
   const navigate = useNavigate()
@@ -239,24 +240,34 @@ export function HomeScreen({ setActive }) {
       if (forceApi) clearPriceCache()
       const liveData = await fetchLivePrices(userDistrict)
       if (liveData && liveData.length > 0) {
-        // Filter to crops relevant to the user's district
+        const hasActual = liveData.some(p => p.status === 'ACTUAL')
         const districtCrops = districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || []
         const districtCropNames = new Set(districtCrops.map(c => c.crop.split('(')[0].trim().toLowerCase()))
-        // Prefer live prices for crops in this district; show all live data if no district match
         const filtered = liveData.filter(c => districtCropNames.size === 0 || districtCropNames.has(c.crop.split('(')[0].trim().toLowerCase()))
         const finalPrices = filtered.length > 0 ? filtered : liveData.slice(0, 10)
         setLivePrices(finalPrices)
-        setPriceSource('live')
+        if (hasActual) {
+          setPriceSource('live')
+          setPriceFailReason('')
+        } else {
+          setPriceSource('district')
+          const hr = new Date().getHours()
+          const dy = new Date().getDay()
+          setPriceFailReason(dy === 0 ? 'Sunday — APMC markets closed' : hr < 15 ? "Today's prices not published yet (APMC reports after 3 PM)" : 'No AGMARKNET data today — showing estimates')
+        }
       } else {
-        // API returned nothing (market closed / no data today) — use static district map
         const distData = districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || BASELINE_PRICES
         setLivePrices(distData)
         setPriceSource('district')
+        const hr = new Date().getHours()
+        const dy = new Date().getDay()
+        setPriceFailReason(dy === 0 ? 'Sunday — APMC markets closed' : hr < 15 ? "Today's prices not published yet (APMC reports after 3 PM)" : 'No APMC data today — using district estimates')
       }
     } catch (err) {
       const distData = districtPricesMap[normalizeDistrict(userDistrict)] || districtPricesMap['Mysuru'] || BASELINE_PRICES
       setLivePrices(distData)
       setPriceSource('district')
+      setPriceFailReason('API unavailable — showing district estimates')
     }
     setLastUpdated(new Date())
     setLoadingPrices(false)
@@ -799,9 +810,9 @@ export function HomeScreen({ setActive }) {
               {loadingPrices ? (
                 <span style={{ fontSize: 11, color: 'var(--text-muted)' }}><Hourglass className="inline mr-1 text-amber-500" size={16} /> Fetching...</span>
               ) : (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: priceSource === 'live' ? 'var(--success)' : 'var(--text-muted)', fontWeight: 600 }}>
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: priceSource === 'live' ? 'var(--success)' : '#aaa', display: 'inline-block', animation: priceSource === 'live' ? 'pulse 1.5s infinite' : 'none' }} />
-                  {priceSource === 'live' ? 'LIVE · AGMARKNET' : 'MSP Baseline'}
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: priceSource === 'live' ? 'var(--success)' : '#b45309', fontWeight: 600 }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: priceSource === 'live' ? 'var(--success)' : '#f59e0b', display: 'inline-block', animation: priceSource === 'live' ? 'pulse 1.5s infinite' : 'none' }} />
+                  {priceSource === 'live' ? 'LIVE · AGMARKNET' : (priceFailReason || 'Using district estimates')}
                 </span>
               )}
               <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
