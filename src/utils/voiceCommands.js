@@ -392,43 +392,45 @@ Analyze this image with maximum accuracy. The image may be a real field photo, a
 
 CRITICAL RULE 0: MANDATORY OCR & PRINTED TEXT DETECTION (HIGHEST PRIORITY)
 First, examine the image for ANY printed text, text banner, caption, card title, or overlay label:
-- Especially look for black rectangular overlays at the bottom containing white bold text (e.g., "Ragi (Finger Millet) Blast", "Ragi (Finger Millet) Downy Mildew", "Paddy / Rice Blast", "Paddy / Rice Sheath Blight", "Maize Fall Armyworm", "Maize Northern Leaf Blight", "Tomato Late Blight", "Tomato Leaf Curl Virus", "Arecanut Yellow Leaf Disease", "Arecanut Bud Rot", "Coffee White Stem Borer", "Coffee Leaf Rust", "Banana Fusarium Wilt", "Banana Sigatoka Leaf Spot", "Mango Anthracnose", "Mango Powdery Mildew", "Groundnut Early Leaf Spot", "Groundnut Stem Rot", "Wheat Yellow Rust", "Wheat Brown Rust", "Potato Late Blight", "Potato Early Blight", "Papaya Ring Spot Virus", "Papaya Powdery Mildew", "Onion Purple Blotch", "Onion Downy Mildew", "Cotton Pink Bollworm", "Cotton Bacterial Blight", "Sugarcane Red Rot", "Sugarcane Wilt", "Coconut Rhinoceros Beetle", "Coconut Bud Rot").
-- IF ANY PRINTED CROP OR DISEASE NAME IS VISIBLE IN THE IMAGE (IN FULL OR PARTIAL), YOU MUST USE THAT EXACT TEXT TO DETERMINE cropName AND diseaseName. DO NOT IGNORE PRINTED LABELS!
+- Look for black rectangular overlays at the bottom containing white bold text (e.g., "Ragi (Finger Millet) Blast", "Paddy / Rice Sheath Blight", "Groundnut Early Leaf Spot", "Potato Early Blight", "Papaya Ring Spot Virus", "Cotton Pink Bollworm", "Sugarcane Red Rot", etc.).
+- IF ANY PRINTED CROP OR DISEASE NAME IS VISIBLE IN THE IMAGE (IN FULL OR PARTIAL), YOU MUST USE THAT EXACT TEXT TO DETERMINE cropName AND diseaseName.
 
-CRITICAL RULE 1: STRICT 2-DISEASE RESTRICTION PER CROP
-You MUST focus ONLY on the 2 reference diseases for each crop listed below. DO NOT return any 3rd or unlisted disease for any crop:
-1. Ragi (Finger Millet) -> Blast OR Downy Mildew / Green Ear
-2. Paddy / Rice -> Blast Disease OR Sheath Blight
-3. Maize / Corn -> Fall Armyworm OR Northern Leaf Blight
-4. Tomato -> Late Blight OR Leaf Curl Virus
-5. Arecanut -> Yellow Leaf Disease OR Bud Rot
-6. Coffee -> White Stem Borer OR Leaf Rust
-7. Banana -> Fusarium Wilt (Panama) OR Sigatoka Leaf Spot
-8. Mango -> Anthracnose OR Powdery Mildew
-9. Groundnut -> Early Leaf Spot OR Stem Rot
-10. Wheat -> Yellow Rust OR Brown Rust
-11. Potato -> Late Blight OR Early Blight
-12. Papaya -> Ring Spot Virus OR Powdery Mildew
-13. Onion -> Purple Blotch OR Downy Mildew
-14. Cotton -> Pink Bollworm OR Bacterial Blight
-15. Sugarcane -> Red Rot OR Sugarcane Wilt
-16. Coconut -> Rhinoceros Beetle OR Bud Rot
+CRITICAL RULE 1: HIGH PRIORITY REFERENCE CARDS (32 PRIMARY DISEASES)
+Prioritize recognizing these 32 primary reference card diseases for the 16 key crops:
+- Ragi / Finger Millet -> Blast OR Downy Mildew / Green Ear
+- Paddy / Rice -> Blast Disease OR Sheath Blight
+- Maize / Corn -> Fall Armyworm OR Northern Leaf Blight
+- Tomato -> Late Blight OR Leaf Curl Virus
+- Arecanut -> Yellow Leaf Disease OR Bud Rot
+- Coffee -> White Stem Borer OR Leaf Rust
+- Banana -> Fusarium Wilt (Panama) OR Sigatoka Leaf Spot
+- Mango -> Anthracnose OR Powdery Mildew
+- Groundnut -> Early Leaf Spot OR Stem Rot
+- Wheat -> Yellow Rust OR Brown Rust
+- Potato -> Late Blight OR Early Blight
+- Papaya -> Ring Spot Virus OR Powdery Mildew
+- Onion -> Purple Blotch OR Downy Mildew
+- Cotton -> Pink Bollworm OR Bacterial Blight
+- Sugarcane -> Red Rot OR Sugarcane Wilt
+- Coconut -> Rhinoceros Beetle OR Bud Rot
 
-CRITICAL RULE 2: STRICT FAILURE & REJECTION RULE
-If you CANNOT identify the crop or disease with confidence, or if the image is blurry, non-agricultural, or unclear:
-DO NOT GUESS any random or unrelated disease! Return: {"isCrop": false, "reason": "Unable to identify crop or disease clearly. Please scan again."}
+CRITICAL RULE 2: FULL SUPPORT FOR ALL CROP DISEASES & PESTS
+If the image shows another real disease or pest of the crop (e.g. Brown Plant Hopper in Rice, Early Blight in Tomato, Anthracnose in Chilli, Bacterial Wilt, Smut, Rust, Fruit Borer, Mites, Thrips, etc.), YOU MUST DETECT THE CROP AND IDENTIFY THAT DISEASE ACCURATELY! Do NOT reject or ignore valid agricultural crop diseases.
 
-${userSelectedCrop && userSelectedCrop !== 'NO_CROP' && userSelectedCrop !== 'AUTO_DETECT' ? `USER SELECTED CROP: "${userSelectedCrop}" — prioritize identifying this crop's exact reference disease.` : 'AUTO-DETECT MODE: Identify the crop and reference disease.'}
+CRITICAL RULE 3: NON-CROP REJECTION
+Reject ONLY if the entire image is clearly non-agricultural with NO plant/leaf/crop content (e.g. human selfie with no plants, indoor furniture with no plants, vehicles, roads). Return: {"isCrop": false, "reason": "Not a crop image"}
+
+${userSelectedCrop && userSelectedCrop !== 'NO_CROP' && userSelectedCrop !== 'AUTO_DETECT' ? `USER SELECTED CROP: "${userSelectedCrop}" — prioritize identifying this crop's disease.` : 'AUTO-DETECT MODE: Identify the crop and disease.'}
 
 Respond ONLY with a JSON object:
-If not crop or uncertain: {"isCrop": false, "reason": "Unable to identify crop or disease clearly"}
-If crop identified: {"isCrop": true, "cropName": "exact crop name", "diseaseName": "exact disease name", "confidence": "High"}`;
+If not crop: {"isCrop": false, "reason": "Not a crop or plant image"}
+If crop: {"isCrop": true, "cropName": "exact crop name", "diseaseName": "exact disease name", "confidence": "High|Medium|Low"}`;
 
 
 
   // 1. Try Gemini Vision API models
   if (genAI) {
-    const modelsToTry = ['gemini-3.6-flash', 'gemini-2.5-flash-latest', 'gemini-1.5-flash-002'];
+    const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash-exp'];
     for (const modelName of modelsToTry) {
       try {
         const model = genAI.getGenerativeModel({ model: modelName });
