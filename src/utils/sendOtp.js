@@ -11,7 +11,8 @@ let emailjsInitialized = false
 
 async function sendViaApi(email, otp) {
   const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), 2000)
+  // Increase timeout to 12s so Gmail SMTP via Nodemailer has sufficient time to complete TLS connection
+  const timeoutId = setTimeout(() => controller.abort(), 12000)
 
   try {
     const res = await fetch('/api/send-otp', {

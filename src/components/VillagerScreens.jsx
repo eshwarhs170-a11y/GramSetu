@@ -182,7 +182,7 @@ const notifyComplaintListeners = () => {
   }
 }
 
-const normalizeDistrict = (d) => {
+export const normalizeDistrict = (d) => {
   const aliases = {
     'Chikkaballapura': 'Chikkaballapur', 'Bengaluru': 'Bengaluru Urban',
     'Davangere': 'Davanagere', 'Dharwar': 'Dharwad', 'Gulbarga': 'Kalaburagi',
@@ -2060,6 +2060,7 @@ export function MarketScreen() {
   const [searchTerm, setSearchTerm] = useState('')
   const [viewMode, setViewMode] = useState('district') // 'district' or 'all'
   const [categoryTab, setCategoryTab] = useState('crop') // 'crop' | 'vegetable' | 'fruit'
+  const [unitMode, setUnitMode] = useState('quintal') // 'quintal' or 'kg'
   const [livePriceOverlay, setLivePriceOverlay] = useState(null) // map: cropName -> live price object
   const [priceDataSource, setPriceDataSource] = useState('static') // 'live' | 'static'
   const [priceLastUpdated, setPriceLastUpdated] = useState(null)
@@ -2167,6 +2168,58 @@ export function MarketScreen() {
   // District name aliases (handles spelling variants from login data)
   // normalizeDistrict is now at the top of the file
 
+
+  // Convert raw per-quintal price to per-kg mathematically when unitMode is 'kg'
+  const convertPriceRow = (p, mode) => {
+    if (mode !== 'kg') return p
+    const rawVal = parseFloat(String(p.price).replace(/[^0-9.]/g, ''))
+    if (isNaN(rawVal)) return p
+
+    let factor = 100 // 1 quintal = 100 kg
+    let newUnit = 'per kg'
+
+    if ((p.unit || '').includes('tonne')) {
+      factor = 1000
+      newUnit = 'per kg'
+    } else if ((p.unit || '').includes('nut')) {
+      factor = 100
+      newUnit = 'per nut'
+    }
+
+    const kgPriceNum = Math.round(rawVal / factor)
+    const kgPriceStr = '₹' + kgPriceNum.toLocaleString('en-IN')
+
+    let newMin = p.min
+    let newMax = p.max
+    if (p.min && p.max) {
+      const rawMin = parseFloat(String(p.min).replace(/[^0-9.]/g, ''))
+      const rawMax = parseFloat(String(p.max).replace(/[^0-9.]/g, ''))
+      if (!isNaN(rawMin) && !isNaN(rawMax)) {
+        newMin = '₹' + Math.round(rawMin / factor).toLocaleString('en-IN')
+        newMax = '₹' + Math.round(rawMax / factor).toLocaleString('en-IN')
+      }
+    }
+
+    let newChange = p.change
+    if (p.change && p.change !== '-') {
+      const rawChange = parseFloat(String(p.change).replace(/[^0-9.]/g, ''))
+      if (!isNaN(rawChange)) {
+        const kgChange = Math.round(rawChange / factor)
+        const sign = String(p.change).includes('-') ? '-' : '+'
+        newChange = `${sign}₹${kgChange}`
+      }
+    }
+
+    return {
+      ...p,
+      price: kgPriceStr,
+      unit: newUnit,
+      min: newMin,
+      max: newMax,
+      change: newChange
+    }
+  }
+
   // Merge live API data on top of static prices
   const applyLiveOverlay = (crops) => {
     if (!livePriceOverlay) return crops
@@ -2201,12 +2254,14 @@ export function MarketScreen() {
     ? applyLiveOverlay(BASELINE_PRICES.filter(p => p.type === categoryTab))
     : sourcePrices
 
-  const filteredPrices = allPricesWithTypes
+  const rawFilteredPrices = allPricesWithTypes
     .map(normalizePriceRow)
     .filter(p =>
       p.crop.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (p.market || '').toLowerCase().includes(searchTerm.toLowerCase())
     )
+
+  const filteredPrices = rawFilteredPrices.map(p => convertPriceRow(p, unitMode))
 
   const highlightPrices = viewMode === 'all' ? applyLiveOverlay(karnatakaPopularCrops) : sourcePrices
 
@@ -2222,16 +2277,17 @@ export function MarketScreen() {
   const calculateEstimate = (e) => {
     e.preventDefault()
     if (!landArea || isNaN(landArea)) return
-    const priceEntry = filteredPrices.find(p => p.crop === selectedCrop)
-    const rawPrice = priceEntry ? parseFloat(String(priceEntry.price).replace(/[₹,]/g, '')) : 3000
-    const cropKey = priceEntry?.cropKey || selectedCrop.split('(')[0].trim()
+    const rawEntry = rawFilteredPrices.find(p => p.crop === selectedCrop)
+    const rawPrice = rawEntry ? parseFloat(String(rawEntry.price).replace(/[₹,]/g, '')) : 3000
+    const cropKey = rawEntry?.cropKey || selectedCrop.split('(')[0].trim()
     const yieldPerAcre = {
       'Ragi': 12, 'Arecanut': 8, 'Jowar': 15, 'Maize': 22, 'Sugarcane': 35,
       'Paddy': 18, 'Coffee': 6, 'Tomato': 80, 'Groundnut': 10, 'Tur': 8,
     }[cropKey] || 10
     const estYield = (parseFloat(landArea) * yieldPerAcre).toFixed(1)
     const estRevenue = Math.round(estYield * rawPrice)
-    setCalcResult({ yield: estYield, revenue: estRevenue.toLocaleString('en-IN'), priceUsed: priceEntry?.price || '₹3,000' })
+    const displayEntry = filteredPrices.find(p => p.crop === selectedCrop)
+    setCalcResult({ yield: estYield, revenue: estRevenue.toLocaleString('en-IN'), priceUsed: displayEntry ? `${displayEntry.price} (${displayEntry.unit})` : '₹3,000' })
   }
 
   return (
@@ -2392,8 +2448,39 @@ export function MarketScreen() {
               : viewMode === 'district' ? `🌾 ${normalizeDistrict(userDistrict)} District Crops` : '🌾 Famous Karnataka Crops'}
           </div>
           
-          {/* View Mode Toggle */}
-          <div style={{ display: 'flex', background: 'var(--bg-card-alt)', borderRadius: 'var(--radius-md)', padding: 4, border: '1px solid var(--border-light)' }}>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+            {/* Unit Toggle Mode: Per Quintal vs Per Kg */}
+            <div style={{ display: 'flex', background: 'var(--bg-card-alt)', borderRadius: 'var(--radius-md)', padding: 3, border: '1px solid var(--border-light)' }}>
+              <button
+                type="button"
+                onClick={() => setUnitMode('quintal')}
+                style={{
+                  padding: '7px 14px', fontSize: 12, fontWeight: 700, border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer', transition: 'all 0.2s',
+                  background: unitMode === 'quintal' ? 'var(--primary)' : 'transparent',
+                  color: unitMode === 'quintal' ? '#fff' : 'var(--text-secondary)',
+                  boxShadow: unitMode === 'quintal' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',
+                  display: 'flex', alignItems: 'center', gap: 4
+                }}
+              >
+                🌾 {lang === 'kn' ? 'ಕ್ವಿಂಟಾಲ್ (100kg)' : 'Per Quintal'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setUnitMode('kg')}
+                style={{
+                  padding: '7px 14px', fontSize: 12, fontWeight: 700, border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer', transition: 'all 0.2s',
+                  background: unitMode === 'kg' ? 'var(--primary)' : 'transparent',
+                  color: unitMode === 'kg' ? '#fff' : 'var(--text-secondary)',
+                  boxShadow: unitMode === 'kg' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',
+                  display: 'flex', alignItems: 'center', gap: 4
+                }}
+              >
+                ⚖️ {lang === 'kn' ? 'ಪ್ರತಿ kg' : 'Per Kg'}
+              </button>
+            </div>
+
+            {/* View Mode Toggle */}
+            <div style={{ display: 'flex', background: 'var(--bg-card-alt)', borderRadius: 'var(--radius-md)', padding: 4, border: '1px solid var(--border-light)' }}>
             <button
               onClick={() => setViewMode('district')}
               style={{
@@ -2446,10 +2533,11 @@ export function MarketScreen() {
             type="text" 
             className="form-input" 
             placeholder="Search crop or APMC..." 
-            style={{ maxWidth: 260, padding: '8px 14px', fontSize: 14 }}
+            style={{ maxWidth: 220, padding: '7px 12px', fontSize: 13 }}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
           />
+          </div>
         </div>
 
         {/* CROP GRID */}

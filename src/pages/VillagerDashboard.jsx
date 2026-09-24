@@ -8,7 +8,7 @@ import { useVoice } from '../context/VoiceContext'
 import {
   HomeScreen, SchemesScreen, MarketScreen, AnnouncementsScreen,
   ComplaintScreen, ComplaintStatusScreen, ProfileScreen,
-  WeatherScreen, EmergencySOSScreen, TutorialsScreen
+  WeatherScreen, EmergencySOSScreen, TutorialsScreen, normalizeDistrict
 } from '../components/VillagerScreens'
 import CropScanner from '../components/CropScanner'
 import { Menu, Search, Bell, X, AlertTriangle, IndianRupee, LayoutDashboard, Landmark, Microscope, ClipboardList, User, Wheat } from 'lucide-react'
@@ -72,16 +72,55 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
 
   useEffect(() => {
     const mountTime = new Date()
+    const userDistrict = window.localStorage.getItem('citizen_district') || 'Mysuru'
+
+    const isAlertRelevantToDistrict = (alert, district) => {
+      if (!district) return true
+      const normUserDist = (normalizeDistrict ? normalizeDistrict(district) : district).toLowerCase()
+
+      // 1. If alert specifies a target district explicitly
+      if (alert.district) {
+        const alertDist = (normalizeDistrict ? normalizeDistrict(alert.district) : alert.district).toLowerCase()
+        return alertDist === normUserDist || alertDist === 'all'
+      }
+
+      // 2. Parse text for district/APMC mentions
+      const text = ((alert.title || '') + ' ' + (alert.message || '')).toLowerCase()
+
+      const allDistricts = [
+        'bagalkot', 'ballari', 'belagavi', 'bengaluru rural', 'bengaluru urban', 'bidar',
+        'chamarajanagar', 'chikkaballapur', 'chikkamagaluru', 'chitradurga', 'davanagere',
+        'dharwad', 'gadag', 'hassan', 'haveri', 'kalaburagi', 'kodagu', 'kolar', 'koppal',
+        'mandya', 'mysuru', 'mysore', 'raichur', 'ramanagara', 'shivamogga', 'tumakuru',
+        'udupi', 'uttara kannada', 'vijayapura', 'yadgir', 'vijayanagara'
+      ]
+
+      const mentionedDistricts = allDistricts.filter(d => text.includes(d))
+
+      if (mentionedDistricts.length > 0) {
+        const matchesUser = mentionedDistricts.some(d =>
+          d === normUserDist ||
+          (normUserDist === 'mysuru' && d === 'mysore') ||
+          (normUserDist === 'mysore' && d === 'mysuru')
+        )
+        if (!matchesUser) return false
+      }
+
+      return true
+    }
+
     const q = query(collection(db, 'demoAlerts'), orderBy('createdAt', 'desc'))
     const unsubscribe = onSnapshot(q, (snapshot) => {
       if (!snapshot.empty) {
         const latestDoc = snapshot.docs[0]
         const latest = latestDoc.data()
         if (latest.createdAt && latest.createdAt.toDate() > mountTime && latest.type === 'MARKET_BOOM') {
-          if (window.sessionStorage.getItem('last_alert_id') !== latestDoc.id) {
-            window.sessionStorage.setItem('last_alert_id', latestDoc.id)
-            setMarketAlert(latest)
-            playLoudNotificationChime()
+          if (isAlertRelevantToDistrict(latest, userDistrict)) {
+            if (window.sessionStorage.getItem('last_alert_id') !== latestDoc.id) {
+              window.sessionStorage.setItem('last_alert_id', latestDoc.id)
+              setMarketAlert(latest)
+              playLoudNotificationChime()
+            }
           }
         }
       }

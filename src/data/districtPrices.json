@@ -2279,7 +2279,7 @@
       "trend": "up",
       "change": "+₹50",
       "img": "/crops/Cardamom.jpg",
-      "unit": "per kg",
+      "unit": "per quintal",
       "date": "28 Jul 2026",
       "status": "ESTIMATED"
     },
@@ -3651,7 +3651,7 @@
       "trend": "up",
       "change": "+₹50",
       "img": "/crops/Cardamom.jpg",
-      "unit": "per kg",
+      "unit": "per quintal",
       "date": "28 Jul 2026",
       "status": "ESTIMATED"
     },
