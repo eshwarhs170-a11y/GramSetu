@@ -84,31 +84,70 @@ export default function DemoPresenterHub() {
         : 'radial-gradient(ellipse at top, #f0fdf4 0%, #f8fafc 100%)',
       color: isDark ? '#f8fafc' : '#0f172a',
       fontFamily: "'Inter', sans-serif",
-      padding: '32px 20px',
+      padding: '20px 16px',
       boxSizing: 'border-box',
       transition: 'all 0.3s ease',
     }}>
+      <style>
+        {`
+          @media (max-width: 768px) {
+            .demo-header-container {
+              flex-direction: column;
+              align-items: flex-start !important;
+            }
+            .demo-header-left {
+              flex-direction: column;
+              align-items: flex-start !important;
+              gap: 12px !important;
+            }
+            .demo-header-title {
+              font-size: 1.4rem !important;
+              flex-wrap: wrap;
+            }
+            .demo-header-buttons {
+              flex-wrap: wrap;
+              width: 100%;
+              margin-top: 10px;
+            }
+            .demo-action-btn {
+              flex: 1 1 calc(50% - 10px);
+              justify-content: center;
+              padding: 10px !important;
+            }
+            .demo-grid-container {
+              grid-template-columns: 1fr !important;
+            }
+            .demo-phase-card {
+              padding: 20px !important;
+            }
+            .demo-cheatsheet-grid {
+              grid-template-columns: 1fr !important;
+            }
+          }
+        `}
+      </style>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         
         {/* Header Bar */}
-        <div style={{
+        <div className="demo-header-container" style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: 16,
           marginBottom: 36,
-          padding: '20px 24px',
+          padding: '20px',
           borderRadius: '24px',
           background: isDark ? 'rgba(15, 23, 42, 0.75)' : 'rgba(255, 255, 255, 0.85)',
           border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
           backdropFilter: 'blur(16px)',
           boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.4)' : '0 10px 30px rgba(0,0,0,0.05)',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div className="demo-header-left" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <div style={{
               width: 50,
               height: 50,
+              minWidth: 50,
               borderRadius: 14,
               background: 'linear-gradient(135deg, #22c55e, #16a34a)',
               display: 'flex',
@@ -123,16 +162,12 @@ export default function DemoPresenterHub() {
             </div>
 
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div className="demo-header-title" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <h1 style={{
                   margin: 0,
                   fontSize: '1.7rem',
                   fontWeight: 800,
-                  background: isDark
-                    ? 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)'
-                    : 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
+                  color: isDark ? '#ffffff' : '#0f172a',
                 }}>
                   Presenter Control Hub
                 </h1>
@@ -145,19 +180,21 @@ export default function DemoPresenterHub() {
                   fontSize: '0.72rem',
                   fontWeight: 800,
                   letterSpacing: '0.05em',
+                  whiteSpace: 'nowrap',
                 }}>
                   CONFIDENTIAL · DEMO ONLY
                 </span>
               </div>
-              <p style={{ margin: '2px 0 0', color: isDark ? '#64748b' : '#94a3b8', fontSize: '0.85rem' }}>
+              <p style={{ margin: '6px 0 0', color: isDark ? '#64748b' : '#94a3b8', fontSize: '0.85rem', lineHeight: 1.4 }}>
                 Your private dashboard to control and launch all 4 Open Day demonstration phases
               </p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="demo-header-buttons" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <button
               onClick={triggerMarketBoom}
+              className="demo-action-btn"
               style={{
                 background: 'linear-gradient(135deg, rgba(245,158,11,0.2), rgba(217,119,6,0.3))',
                 border: '1px solid rgba(245,158,11,0.5)',
@@ -173,10 +210,11 @@ export default function DemoPresenterHub() {
               }}
             >
               <Activity size={16} />
-              <span>Mass Market Boom Alert</span>
+              <span>Market Alert</span>
             </button>
             <button
               onClick={playLoudNotificationChime}
+              className="demo-action-btn"
               style={{
                 background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
                 border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.08)',
@@ -192,7 +230,7 @@ export default function DemoPresenterHub() {
               }}
             >
               <Volume2 size={16} color="#22c55e" />
-              <span>Test 2s Chime</span>
+              <span>Test Chime</span>
             </button>
 
             <button
@@ -208,6 +246,7 @@ export default function DemoPresenterHub() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
+                flexShrink: 0,
               }}
             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
@@ -215,6 +254,7 @@ export default function DemoPresenterHub() {
 
             <a
               href="/"
+              className="demo-action-btn"
               style={{
                 background: '#22c55e',
                 color: '#fff',
@@ -225,19 +265,20 @@ export default function DemoPresenterHub() {
                 fontWeight: 700,
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: 6,
               }}
             >
               <Home size={15} />
-              <span>Main Website</span>
+              <span>Website</span>
             </a>
           </div>
         </div>
 
         {/* 4 Phases Master Cards Grid */}
-        <div style={{
+        <div className="demo-grid-container" style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: 24,
           marginBottom: 36,
         }}>
@@ -246,6 +287,7 @@ export default function DemoPresenterHub() {
             return (
               <div
                 key={p.phase}
+                className="demo-phase-card"
                 style={{
                   background: isDark ? 'rgba(15, 23, 42, 0.75)' : 'rgba(255, 255, 255, 0.9)',
                   border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.06)',
@@ -272,7 +314,7 @@ export default function DemoPresenterHub() {
                 }}
               >
                 {/* Header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
                   <div style={{
                     width: 44,
                     height: 44,
@@ -381,7 +423,7 @@ export default function DemoPresenterHub() {
           background: isDark ? 'rgba(15, 23, 42, 0.7)' : 'rgba(255, 255, 255, 0.85)',
           border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)',
           borderRadius: 24,
-          padding: '24px 28px',
+          padding: '24px',
           backdropFilter: 'blur(12px)',
         }}>
           <h3 style={{ margin: '0 0 14px', fontSize: '1.1rem', fontWeight: 800, color: isDark ? '#fff' : '#0f172a', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -389,7 +431,7 @@ export default function DemoPresenterHub() {
             3-Minute Live Demo Walkthrough Formula
           </h3>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 16 }}>
+          <div className="demo-cheatsheet-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 16 }}>
             {[
               { step: '1. Voice AI', action: 'Open /demo/voice and ask "ಇಂದು ತೆಂಗಿನ ಬೆಲೆ ಏನು?" — watch waves bounce and Kannada audio speak.' },
               { step: '2. Distribute QRs', action: 'Hand out the 3 printed QR cards to evaluators. One is Ramappa (Mysuru) and one is Kaveri (Kodagu).' },
