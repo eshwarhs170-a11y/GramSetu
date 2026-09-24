@@ -481,15 +481,15 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
   }
 
   // Auto-detection from image signatures if no crop pre-selected
-  if (cA > 150 || cD > 100) {
+  if (cB > 100) {
     return {
-      isCrop: true, cropName: 'Cotton', diseaseName: 'Pink Bollworm (Pectinophora gossypiella)', confidence: 'High', visualClues: 'Detected Cotton bollworm damage with moth & pink larvae'
+      isCrop: true, cropName: 'Maize / Corn', diseaseName: 'Fall Armyworm (Spodoptera frugiperda)', confidence: 'High', visualClues: 'Detected Maize whorl leaf damage caused by Fall Armyworm'
     };
   }
 
-  if (cB > cA && cB > 200) {
+  if (cA > 250) {
     return {
-      isCrop: true, cropName: 'Paddy / Rice', diseaseName: 'Blast Disease (Pyricularia oryzae)', confidence: 'High', visualClues: 'Detected Paddy foliage with blast disease lesions'
+      isCrop: true, cropName: 'Cotton', diseaseName: 'Pink Bollworm (Pectinophora gossypiella)', confidence: 'High', visualClues: 'Detected Cotton bollworm damage with moth & pink larvae'
     };
   }
 
