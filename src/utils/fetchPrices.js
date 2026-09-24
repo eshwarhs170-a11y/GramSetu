@@ -240,6 +240,7 @@ export async function fetchLivePrices(userDistrict = '') {
           price: fmt(newPricePerQuintal),
           unit: baseCrop.crop.includes('Coconut') ? 'per 100 nuts' : 'per quintal',
           type: baseCrop.type,
+          status: 'ACTUAL', // Real AGMARKNET modal price — show Verified badge
           change: changeVal >= 0 ? '+' + fmt(changeVal) : '-' + fmt(Math.abs(changeVal)),
           trend: changeVal >= 0 ? 'up' : 'down',
           market: liveData.market ? liveData.market + ' APMC' : (userDistrict ? `${userDistrict} APMC` : baseCrop.market)
@@ -261,6 +262,7 @@ export async function fetchLivePrices(userDistrict = '') {
         price: fmt(dailyPrice),
         unit: baseCrop.crop.includes('Coconut') ? 'per 100 nuts' : 'per quintal',
         type: baseCrop.type,
+        status: 'ESTIMATED', // API had no record for this crop today — seed formula used
         change: diff >= 0 ? '+' + fmt(diff) : '-' + fmt(Math.abs(diff)),
         trend: diff >= 0 ? 'up' : 'down',
         market: userDistrict ? `${userDistrict} APMC` : (baseCrop.market || marketUsed)
@@ -279,7 +281,7 @@ export async function fetchLivePrices(userDistrict = '') {
     // fallback map to ensure correct unit
     return BASELINE_PRICES.map(c => {
        let val = parseFloat(c.price.replace(/[^0-9]/g, ''));
-       return { ...c, price: fmt(val || 3000), unit: c.crop.includes('Coconut') ? 'per 100 nuts' : 'per quintal', market: 'Karnataka APMC' };
+       return { ...c, price: fmt(val || 3000), unit: c.crop.includes('Coconut') ? 'per 100 nuts' : 'per quintal', market: 'Karnataka APMC', status: 'ESTIMATED' };
     });
   }
 }
