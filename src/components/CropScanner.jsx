@@ -387,7 +387,7 @@ export default function CropScanner() {
       }
     }
     // Return the first disease for this crop as best match
-    return cropMatches[0];
+    return null;
   };
 
   // ── Capture a frame from the live camera video ──

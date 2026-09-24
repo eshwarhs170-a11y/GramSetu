@@ -395,58 +395,34 @@ First, examine the image for ANY printed text, text banner, caption, card title,
 - Especially look for black rectangular overlays at the bottom containing white bold text (e.g., "Ragi (Finger Millet) Blast", "Ragi (Finger Millet) Downy Mildew", "Paddy / Rice Blast", "Paddy / Rice Sheath Blight", "Maize Fall Armyworm", "Maize Northern Leaf Blight", "Tomato Late Blight", "Tomato Leaf Curl Virus", "Arecanut Yellow Leaf Disease", "Arecanut Bud Rot", "Coffee White Stem Borer", "Coffee Leaf Rust", "Banana Fusarium Wilt", "Banana Sigatoka Leaf Spot", "Mango Anthracnose", "Mango Powdery Mildew", "Groundnut Early Leaf Spot", "Groundnut Stem Rot", "Wheat Yellow Rust", "Wheat Brown Rust", "Potato Late Blight", "Potato Early Blight", "Papaya Ring Spot Virus", "Papaya Powdery Mildew", "Onion Purple Blotch", "Onion Downy Mildew", "Cotton Pink Bollworm", "Cotton Bacterial Blight", "Sugarcane Red Rot", "Sugarcane Wilt", "Coconut Rhinoceros Beetle", "Coconut Bud Rot").
 - IF ANY PRINTED CROP OR DISEASE NAME IS VISIBLE IN THE IMAGE (IN FULL OR PARTIAL), YOU MUST USE THAT EXACT TEXT TO DETERMINE cropName AND diseaseName. DO NOT IGNORE PRINTED LABELS!
 
-CRITICAL RULE 1: NON-CROP REJECTION
-Reject ONLY if the entire image is clearly non-agricultural with NO plant/leaf/crop/disease content:
-- A human selfie or face portrait with no plants
-- Entirely indoor furniture scene with no plants
-- Vehicles, roads, or building facades without vegetation
--> Return: {"isCrop": false, "reason": "Not a crop or plant image"}
+CRITICAL RULE 1: STRICT 2-DISEASE RESTRICTION PER CROP
+You MUST focus ONLY on the 2 reference diseases for each crop listed below. DO NOT return any 3rd or unlisted disease for any crop:
+1. Ragi (Finger Millet) -> Blast OR Downy Mildew / Green Ear
+2. Paddy / Rice -> Blast Disease OR Sheath Blight
+3. Maize / Corn -> Fall Armyworm OR Northern Leaf Blight
+4. Tomato -> Late Blight OR Leaf Curl Virus
+5. Arecanut -> Yellow Leaf Disease OR Bud Rot
+6. Coffee -> White Stem Borer OR Leaf Rust
+7. Banana -> Fusarium Wilt (Panama) OR Sigatoka Leaf Spot
+8. Mango -> Anthracnose OR Powdery Mildew
+9. Groundnut -> Early Leaf Spot OR Stem Rot
+10. Wheat -> Yellow Rust OR Brown Rust
+11. Potato -> Late Blight OR Early Blight
+12. Papaya -> Ring Spot Virus OR Powdery Mildew
+13. Onion -> Purple Blotch OR Downy Mildew
+14. Cotton -> Pink Bollworm OR Bacterial Blight
+15. Sugarcane -> Red Rot OR Sugarcane Wilt
+16. Coconut -> Rhinoceros Beetle OR Bud Rot
 
-ALWAYS ACCEPT as isCrop:true:
-- Photos of printed cards, flashcards, textbook figures, slides, extension posters, or reference sheets showing crop diseases.
-- Field photos, leaves, stems, roots, fruits, fronds, or bark.
+CRITICAL RULE 2: STRICT FAILURE & REJECTION RULE
+If you CANNOT identify the crop or disease with confidence, or if the image is blurry, non-agricultural, or unclear:
+DO NOT GUESS any random or unrelated disease! Return: {"isCrop": false, "reason": "Unable to identify crop or disease clearly. Please scan again."}
 
-CRITICAL RULE 2: 32 REFERENCE CREDIT-CARD CROP DISEASE VISUAL PATTERNS
-If text is missing or partially covered, match these 32 exact visual patterns from the official reference collection:
-
-1. Ragi (Finger Millet) Blast — Dark brown/black finger millet head rot & blast lesions on narrow leaves
-2. Ragi (Finger Millet) Downy Mildew — Bright green bushy/leafy ear head (green ear disease)
-3. Paddy / Rice Blast — Green leaf blade with diamond/spindle-shaped pale spots with brown borders
-4. Paddy / Rice Sheath Blight — Grayish-green oval water-soaked lesions on rice leaf sheath/stem
-5. Maize Fall Armyworm — Green maize foliage eaten ragged with caterpillar whorl feeding damage
-6. Maize Northern Leaf Blight — Long grayish-tan cigar-shaped necrotic stripes along maize leaf
-7. Tomato Late Blight — Yellow/brown water-soaked rotting tomato leaf tip with dark necrosis
-8. Tomato Leaf Curl Virus — Severe pale green upward leaf curling & puckered bushy tomato foliage
-9. Arecanut Yellow Leaf Disease — Arecanut palm fronds turning bright yellow with orange speckles from tips
-10. Arecanut Bud Rot — Tall Arecanut palm forest with brown rotting crown buds & leafless tops
-11. Coffee White Stem Borer — Black and white patterned beetle (Xylotrechus quadripes) on green leaf
-12. Coffee Leaf Rust — Orange-yellow powdery spore rust spots on leaf underside & bare branch dieback
-13. Banana Fusarium Wilt (Panama) — Banana tree pseudostem & outer fronds turning yellow and wilting
-14. Banana Sigatoka Leaf Spot — Large banana leaf blade with bright yellow streaks & brown necrotic spots
-15. Mango Anthracnose — Dark brown/black irregular necrotic spots scattered over green mango leaf
-16. Mango Powdery Mildew — White fuzzy powdery bloom coating pinkish-purple mango flower panicle
-17. Groundnut Early Leaf Spot — Small dark brown circular spots with bright yellow halos on groundnut leaflets
-18. Groundnut Stem Rot — White cottony fungal threads & brown rotting stem base near soil line
-19. Wheat Yellow Rust — Bright yellow/orange pustule stripes running along green wheat leaf blade
-20. Wheat Brown Rust — Scattered orange-brown rust pustule dots across green wheat leaf surface
-21. Potato Late Blight — Water-soaked brown dark spot on green potato leaf margin
-22. Potato Early Blight — Dark brown target-board concentric ring spots on potato leaf
-23. Papaya Ring Spot Virus — Deeply lobed yellowing papaya leaf with distinct green ring spots & mosaic
-24. Papaya Powdery Mildew — Green papaya fruits & trunk with white powdery fungal coating
-25. Onion Purple Blotch — Purple-gray elliptical blotches with yellow border on hollow onion leaves
-26. Onion Downy Mildew — Light tan/gray papery dried lesions on tubular onion leaf tip
-27. Cotton Pink Bollworm — Pink caterpillar larva shown next to adult moth & white cotton boll
-28. Cotton Bacterial Blight — Angular dark brown/black water-soaked spots on green cotton leaf
-29. Sugarcane Red Rot — Split sugarcane stalk showing internal reddened tissue with white cross patches
-30. Sugarcane Wilt — Dried yellow brown sugarcane field with wilted hollow stalks
-31. Coconut Rhinoceros Beetle — Coconut palm with V-shaped or wedge frond cuts & black horned beetle
-32. Coconut Bud Rot — Young coconut palm with central spear leaf collapsing & rotting brown
-
-${userSelectedCrop && userSelectedCrop !== 'NO_CROP' && userSelectedCrop !== 'AUTO_DETECT' ? `USER SELECTED CROP: "${userSelectedCrop}" — prioritize identifying this crop's disease.` : 'AUTO-DETECT MODE: Identify the crop and disease.'}
+${userSelectedCrop && userSelectedCrop !== 'NO_CROP' && userSelectedCrop !== 'AUTO_DETECT' ? `USER SELECTED CROP: "${userSelectedCrop}" — prioritize identifying this crop's exact reference disease.` : 'AUTO-DETECT MODE: Identify the crop and reference disease.'}
 
 Respond ONLY with a JSON object:
-If not crop: {"isCrop": false, "reason": "Not a crop or plant image"}
-If crop: {"isCrop": true, "cropName": "exact crop name", "diseaseName": "exact disease name", "confidence": "High|Medium|Low"}`;
+If not crop or uncertain: {"isCrop": false, "reason": "Unable to identify crop or disease clearly"}
+If crop identified: {"isCrop": true, "cropName": "exact crop name", "diseaseName": "exact disease name", "confidence": "High"}`;
 
 
 
