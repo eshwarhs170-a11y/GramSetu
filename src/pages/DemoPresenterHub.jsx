@@ -11,16 +11,7 @@ import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const PHASES = [
-  {
-    phase: 'Phase 1',
-    title: 'Siri for Farmers (AI Voice Assistant)',
-    route: '/demo/voice',
-    icon: Mic,
-    color: '#22c55e',
-    badge: 'INTERACTIVE AUDIO',
-    desc: 'Full-screen speech recognition in Kannada, English & Hindi with dynamic mirrored audio visualizer waves.',
-    talkingPoint: 'Show judges hands-free voice commands ("What is GramSetu?", "ಇಂದು ತೆಂಗಿನ ಬೆಲೆ ಏನು?").',
-  },
+
   {
     phase: 'Phase 2',
     title: 'Live Escalation Race (Big Screen Monitor)',
@@ -433,7 +424,7 @@ export default function DemoPresenterHub() {
 
           <div className="demo-cheatsheet-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 16 }}>
             {[
-              { step: '1. Voice AI', action: 'Open /demo/voice and ask "ಇಂದು ತೆಂಗಿನ ಬೆಲೆ ಏನು?" — watch waves bounce and Kannada audio speak.' },
+
               { step: '2. Distribute QRs', action: 'Hand out the 3 printed QR cards to evaluators. One is Ramappa (Mysuru) and one is Kaveri (Kodagu).' },
               { step: '3. Submit & Chime', action: 'Have Ramappa submit a complaint on his phone. Your laptop on /demo/dashboard will loudly CHIME for 2s.' },
               { step: '4. State Heatmap', action: 'Show /demo/map on the big TV — Mysuru district will pulse red with radar sonar alerts.' },

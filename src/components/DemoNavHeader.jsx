@@ -7,7 +7,6 @@ import {
 import { playLoudNotificationChime } from '../utils/audioAlert';
 
 const PHASES = [
-  { to: '/demo/voice',     label: 'Phase 1 · Voice AI',       shortLabel: '1. Voice AI',    icon: Mic,      color: '#22c55e' },
   { to: '/demo/dashboard', label: 'Phase 2 · Live Monitor',    shortLabel: '2. Monitor',     icon: Activity, color: '#ef4444' },
   { to: '/demo/qr-cards',  label: 'Phase 3 · Magic QR Passes', shortLabel: '3. QR Passes',   icon: QrCode,   color: '#3b82f6' },
   { to: '/demo/map',       label: 'Phase 4 · State Heatmap',   shortLabel: '4. Heatmap',     icon: Map,      color: '#f59e0b' },
