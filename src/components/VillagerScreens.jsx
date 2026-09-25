@@ -372,7 +372,9 @@ export function HomeScreen({ setActive }) {
                     onError={e => { e.currentTarget.src = '/crops/Paddy.jpg'; }}
                   />
                 </div>
-                <span style={{ fontSize: 11, fontWeight: 600, textAlign: 'center', color: 'var(--text-main)', maxWidth: 88, lineHeight: 1.3 }}>{crop}</span>
+                <span style={{ fontSize: 11, fontWeight: 600, textAlign: 'center', color: 'var(--text-main)', maxWidth: 88, lineHeight: 1.3 }}>
+                  {lang === 'kn' && cropMeta[crop]?.kn ? cropMeta[crop].kn : crop}
+                </span>
               </div>
             ))}
           </div>
