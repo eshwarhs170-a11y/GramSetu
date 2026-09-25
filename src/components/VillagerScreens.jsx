@@ -507,117 +507,169 @@ export function HomeScreen({ setActive }) {
               <GraduationCap className="inline mr-1 text-purple-500" size={16} /> {lang === 'kn' ? 'ಎಲ್ಲಾ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ವೀಕ್ಷಿಸಿ' : 'View All Scholarships'} <ArrowRight className="inline ml-1" size={14} />
             </button>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
-            {[
+          {/* Dynamic deadline status helper — auto-updates based on today's date */}
+          {(() => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const getDeadlineStatus = (deadlineStr, openDateStr) => {
+              if (!deadlineStr) return { label: 'Check Website', color: '#64748b', bg: '#f1f5f9', icon: '🔗' };
+              const dl = new Date(deadlineStr);
+              dl.setHours(0, 0, 0, 0);
+              const daysLeft = Math.ceil((dl - today) / (1000 * 60 * 60 * 24));
+
+              if (openDateStr) {
+                const openDate = new Date(openDateStr);
+                if (today < openDate) return { label: `Opens ${openDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`, color: '#7c3aed', bg: '#f5f3ff', icon: '🔔' };
+              }
+              if (daysLeft < 0) return { label: 'Deadline Passed — Reference Only', color: '#dc2626', bg: '#fee2e2', icon: '❌' };
+              if (daysLeft <= 15) return { label: `Closing Soon — ${daysLeft}d left`, color: '#d97706', bg: '#fef9c3', icon: '⚠️' };
+              return { label: `Open — ${dl.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`, color: '#16a34a', bg: '#dcfce7', icon: '✅' };
+            };
+
+            const scholarships = [
               {
-                title: lang === 'kn' ? 'ಕರ್ನಾಟಕ ರಾಜ್ಯ ವಿದ್ಯಾರ್ಥಿವೇತನ (SSP)' : 'Karnataka SSP Scholarships (SC/ST/OBC/Farmers)',
+                title: lang === 'kn' ? 'ಕರ್ನಾಟಕ SSW ವಿದ್ಯಾರ್ಥಿವೇತನ (SC/ST/OBC/ರೈತರು)' : 'Karnataka SSW Scholarships (SC/ST/OBC/Farmers)',
                 classReq: lang === 'kn' ? '೮ ರಿಂದ ೧೨ನೇ / ಪದವಿ / ಪಿಜಿ' : '8th–12th / UG / PG',
                 incomeLimit: lang === 'kn' ? '₹2.5 ಲಕ್ಷ/ವರ್ಷ' : '₹2.5 Lakh/year',
+                deadline: '2026-10-31',
                 link: 'https://ssp.postmatric.karnataka.gov.in/'
               },
               {
                 title: lang === 'kn' ? 'ರಾಷ್ಟ್ರೀಯ ಮೀನ್ಸ್-ಕಮ್-ಮೆರಿಟ್ (NMMSS)' : 'National Means-cum-Merit (NMMSS)',
                 classReq: lang === 'kn' ? '೮ ರಿಂದ ೧೨ನೇ ತರಗತಿ' : '8th–12th Class',
                 incomeLimit: lang === 'kn' ? '₹3.5 ಲಕ್ಷ/ವರ್ಷ' : '₹3.5 Lakh/year',
+                deadline: '2026-10-31',
                 link: 'https://scholarships.gov.in/'
               },
               {
-                title: lang === 'kn' ? 'ಎಐಸಿಟಿಇ ಪ್ರಗತಿ ಹೆಣ್ಣುಮಕ್ಕಳ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'AICTE Pragati Scholarship for Girls',
+                title: lang === 'kn' ? 'AICTE ಪ್ರಗತಿ ಹೆಣ್ಣುಮಕ್ಕಳ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'AICTE Pragati Scholarship for Girls',
                 classReq: lang === 'kn' ? 'ಡಿಪ್ಲೊಮಾ / ತಾಂತ್ರಿಕ ಪದವಿ (BE)' : 'Diploma / UG (Technical)',
                 incomeLimit: lang === 'kn' ? '₹8.0 ಲಕ್ಷ/ವರ್ಷ' : '₹8.0 Lakh/year',
+                deadline: '2025-03-31',
                 link: 'https://scholarships.gov.in/'
               },
               {
                 title: lang === 'kn' ? 'ಪಿಎಂ-ಯಶಸ್ವಿ ಯೋಜನೆ (PM-YASASVI)' : 'PM-YASASVI Scholarship Scheme',
                 classReq: lang === 'kn' ? '೯ ರಿಂದ ೧೨ನೇ / ಪದವಿ' : '9th–12th / UG',
                 incomeLimit: lang === 'kn' ? '₹2.5 ಲಕ್ಷ/ವರ್ಷ' : '₹2.5 Lakh/year',
-                link: 'https://yet.nta.ac.in/'
+                deadline: '2026-10-31',
+                link: 'https://scholarships.gov.in/'
               },
               {
                 title: lang === 'kn' ? 'ಪಿಎಂ-ಯುಎಸ್‌ಪಿ ಸೆಂಟ್ರಲ್ ಸೆಕ್ಟರ್ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'PM-USP Central Sector Scholarship',
                 classReq: lang === 'kn' ? '೧೨ನೇ ಉತ್ತೀರ್ಣ / ಪದವಿ / ಪಿಜಿ' : '12th Pass / UG / PG',
                 incomeLimit: lang === 'kn' ? '₹4.5 ಲಕ್ಷ/ವರ್ಷ' : '₹4.5 Lakh/year',
+                deadline: '2026-10-31',
                 link: 'https://scholarships.gov.in/'
               },
               {
-                title: lang === 'kn' ? 'ಪಿಎಂ ಸ್ಕಾಲರ್‌ಶಿಪ್ ಯೋಜನೆ (PMSS)' : 'PM Scholarship Scheme (PMSS)',
+                title: lang === 'kn' ? 'ಪಿಎಂ ಸ್ಕಾಲರ್‌ಶಿಪ್ ಯೋಜನೆ (PMSS) — ರಕ್ಷಣಾ ಪಡೆ' : 'PM Scholarship Scheme (PMSS) — Ex-Servicemen',
                 classReq: lang === 'kn' ? 'ವೃತ್ತಿಪರ ಪದವಿಗಳು (BE, MBBS)' : 'Professional UG (BE, MBBS)',
                 incomeLimit: lang === 'kn' ? 'ಮಾಜಿ ಸೈನಿಕರ ಮಕ್ಕಳಿಗೆ' : 'Ex-Servicemen Wards',
-                link: 'https://scholarships.gov.in/'
+                deadline: '2026-12-31',
+                link: 'https://ksb.gov.in/'
               },
               {
-                title: lang === 'kn' ? 'ಮೆಟ್ರಿಕ್ ನಂತರದ ಎಸ್‌ಸಿ/ಎಸ್‌ಟಿ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'Post-Matric SC/ST Scholarship',
+                title: lang === 'kn' ? 'ಮೆಟ್ರಿಕ್ ನಂತರದ SC/ST ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'Post-Matric SC/ST Scholarship',
                 classReq: lang === 'kn' ? '೧೧ನೇ / ೧೨ನೇ / ಪದವಿ / ಪಿಜಿ' : '11th / 12th / UG / PG',
-                incomeLimit: lang === 'kn' ? '₹೨.೫ ಲಕ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ (Below ₹2.5L)' : 'Below ₹2.5 Lakh/year',
+                incomeLimit: lang === 'kn' ? '₹2.5 ಲಕ್ಷಕ್ಕಿಂತ ಕಡಿಮೆ' : 'Below ₹2.5 Lakh/year',
+                deadline: '2025-03-31',
                 link: 'https://scholarships.gov.in/'
               },
               {
-                title: lang === 'kn' ? 'ರಿಲಯನ್ಸ್ ಫೌಂಡೇಶನ್ / AICTE ಸ್ವನಾಥ್ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'Reliance Foundation / AICTE Swanath Scheme',
-                classReq: lang === 'kn' ? 'ಪದವಿ / ಡಿಪ್ಲೊಮಾ / ಎಂಜಿನಿಯರಿಂಗ್' : 'UG Degree / Diploma / Tech',
-                incomeLimit: lang === 'kn' ? '₹೮.೦ ಲಕ್ಷಕ್ಕಿಂತ ಹೆಚ್ಚು/ಯಾವುದೇ ಆದಾಯ ಮಿತಿಯಿಲ್ಲ (Above ₹8.0L / Open)' : 'Above ₹8.0 Lakh / Open to All',
-                link: 'https://www.reliancefoundation.org/'
+                title: lang === 'kn' ? 'AICTE ಸ್ವನಾಥ್ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'AICTE Swanath Scholarship',
+                classReq: lang === 'kn' ? 'ಪದವಿ / ಡಿಪ್ಲೊಮಾ / ತಾಂತ್ರಿಕ' : 'UG Degree / Diploma / Tech',
+                incomeLimit: lang === 'kn' ? '₹8.0 ಲಕ್ಷ ಮೀರದ / ಅನಾಥರಿಗೆ ಮುಕ್ತ' : 'Above ₹8.0 Lakh / Open to Orphans',
+                deadline: '2026-10-31',
+                link: 'https://scholarships.gov.in/'
               },
               {
-                title: lang === 'kn' ? 'ಇನ್‌ಸ್ಪೈರ್ ವಿದ್ಯಾರ್ಥಿವೇತನ (SHE)' : 'INSPIRE Scholarship for Higher Education (SHE)',
+                title: lang === 'kn' ? 'INSPIRE ಉನ್ನತ ಶಿಕ್ಷಣ ವಿದ್ಯಾರ್ಥಿವೇತನ (SHE)' : 'INSPIRE Scholarship for Higher Education (SHE)',
                 classReq: lang === 'kn' ? 'ಮೂಲ ವಿಜ್ಞಾನ UG/PG' : 'Basic/Natural Sciences UG/PG',
                 incomeLimit: lang === 'kn' ? 'ಮೆರಿಟ್ ಆಧಾರ — ₹80,000/ವರ್ಷ' : 'Merit-based — ₹80,000/year',
+                deadline: '2026-11-01',
+                openDate: '2026-11-01',
                 link: 'https://online-inspire.gov.in/'
               },
               {
-                title: lang === 'kn' ? 'AICTE ಸಕ್ಷಮ್ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'AICTE Saksham Scholarship (Differently-Abled)',
+                title: lang === 'kn' ? 'AICTE ಸಕ್ಷಮ್ ವಿದ್ಯಾರ್ಥಿವೇತನ (ವಿಕಲಚೇತನ)' : 'AICTE Saksham Scholarship (Differently-Abled)',
                 classReq: lang === 'kn' ? 'ತಾಂತ್ರಿಕ ಡಿಪ್ಲೊಮಾ / ಪದವಿ' : 'Technical Diploma / UG Degree',
-                incomeLimit: lang === 'kn' ? '₹8.0 ಲಕ್ಷ/ವರ್ಷ — ₹50,000/ವರ್ಷ' : '₹8.0 Lakh/year — ₹50,000/year award',
+                incomeLimit: lang === 'kn' ? '₹8.0 ಲಕ್ಷ/ವರ್ಷ — ₹50,000/ವರ್ಷ ಪ್ರಶಸ್ತಿ' : '₹8.0 Lakh/year — ₹50,000/year award',
+                deadline: '2024-12-31',
                 link: 'https://scholarships.gov.in/'
               },
               {
-                title: lang === 'kn' ? 'PG ಅಧ್ಯಯನಕ್ಕೆ ರಾಷ್ಟ್ರೀಯ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'National Fellowship for PG Studies (UGC)',
+                title: lang === 'kn' ? 'PG ಅಧ್ಯಯನಕ್ಕೆ ರಾಷ್ಟ್ರೀಯ ಫೆಲೋಶಿಪ್ (UGC)' : 'National Fellowship for PG Studies (UGC)',
                 classReq: lang === 'kn' ? 'ಸ್ನಾತಕೋತ್ತರ (PG)' : 'Postgraduate (PG)',
                 incomeLimit: lang === 'kn' ? 'ಮೆರಿಟ್ ಆಧಾರ — ₹15,000/ತಿಂಗಳು' : 'Merit-based — ₹15,000/month',
+                deadline: '2025-01-31',
                 link: 'https://scholarships.gov.in/'
               },
               {
                 title: lang === 'kn' ? 'ಮೌಲಾನಾ ಆಜಾದ್ ರಾಷ್ಟ್ರೀಯ ಫೆಲೋಶಿಪ್ (MANF)' : 'Maulana Azad National Fellowship (MANF)',
                 classReq: lang === 'kn' ? 'ಅಲ್ಪಸಂಖ್ಯಾತ ಸಂಶೋಧನಾ ವಿದ್ಯಾರ್ಥಿಗಳು (M.Phil/PhD)' : 'Minority Research Scholars (M.Phil/PhD)',
                 incomeLimit: lang === 'kn' ? 'UGC ನಿಯಮಗಳ ಪ್ರಕಾರ' : 'As per UGC norms',
+                deadline: null,
+                openDate: '2027-01-01',
                 link: 'https://scholarships.gov.in/'
               },
               {
-                title: lang === 'kn' ? 'ಎಚ್‌ಡಿಎಫ್‌ಸಿ ಬ್ಯಾಂಕ್ ಪರಿವರ್ತನ್ ECSS' : 'HDFC Bank Parivartan ECSS Scholarship',
+                title: lang === 'kn' ? 'HDFC ಬ್ಯಾಂಕ್ ಪರಿವರ್ತನ್ ECSS ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'HDFC Bank Parivartan ECSS Scholarship',
                 classReq: lang === 'kn' ? '6ನೇ ತರಗತಿಯಿಂದ ಸ್ನಾತಕೋತ್ತರ' : 'Class 6 to Postgraduate',
-                incomeLimit: lang === 'kn' ? '₹2.5 ಲಕ್ಷ/ವರ್ಷ — ₹75,000 ವರೆಗೆ' : '₹2.5 Lakh/year — up to ₹75,000 award',
+                incomeLimit: lang === 'kn' ? '₹2.5 ಲಕ್ಷ/ವರ್ಷ — ₹75,000 ವರೆಗೆ ಪ್ರಶಸ್ತಿ' : '₹2.5 Lakh/year — up to ₹75,000 award',
+                deadline: '2026-10-31',
                 link: 'https://www.buddy4study.com/'
               },
               {
                 title: lang === 'kn' ? 'SBI ಫೌಂಡೇಶನ್ ಆಶಾ ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'SBI Foundation Asha Scholarship',
                 classReq: lang === 'kn' ? '6ನೇ ತರಗತಿಯಿಂದ ಪದವಿ' : 'Class 6 to Undergraduate',
                 incomeLimit: lang === 'kn' ? '₹3.0 ಲಕ್ಷ/ವರ್ಷ — ₹15,000 ರಿಂದ ₹5,00,000' : '₹3.0 Lakh/year — ₹15,000 to ₹5,00,000 award',
+                deadline: '2026-09-19',
                 link: 'https://www.buddy4study.com/'
-              }
-            ].map((sch, sIdx) => (
-              <div key={sIdx} style={{ background: 'var(--bg-main)', borderRadius: 12, padding: 16, border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 2px 6px rgba(0,0,0,0.04)' }}>
-                <div>
-                  <h5 style={{ fontSize: 14, fontWeight: 700, margin: '0 0 10px 0', color: 'var(--text-primary)', lineHeight: 1.3 }}>{sch.title}</h5>
-                  <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 6px 0', fontWeight: 500 }}>
-                    <strong><BookOpen className="inline mr-1 text-blue-500" size={16} /> Class:</strong> {sch.classReq}
-                  </p>
-                  <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 14px 0', fontWeight: 500 }}>
-                    <strong><IndianRupee className="inline mr-1 text-emerald-500" size={16} /> Family Income Limit:</strong> {sch.incomeLimit}
-                  </p>
-                </div>
-                <a
-                  href={sch.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary btn-sm"
-                  style={{ width: '100%', justifyContent: 'center', fontSize: 12, padding: '8px 12px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, fontWeight: 600, borderRadius: 8 }}
-                >
-                  View Scholarship →
-                </a>
+              },
+            ];
+
+            return (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
+                {scholarships.map((sch, sIdx) => {
+                  const status = getDeadlineStatus(sch.deadline, sch.openDate);
+                  const isPassed = status.icon === '❌';
+                  return (
+                    <div key={sIdx} style={{ background: 'var(--bg-main)', borderRadius: 12, padding: 16, border: `1px solid ${isPassed ? '#fca5a5' : 'var(--border-light)'}`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 2px 6px rgba(0,0,0,0.04)', opacity: isPassed ? 0.82 : 1 }}>
+                      <div>
+                        {/* Dynamic deadline badge */}
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: status.bg, color: status.color, fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 20, marginBottom: 8, border: `1px solid ${status.color}30` }}>
+                          <span>{status.icon}</span>
+                          <span>{status.label}</span>
+                        </div>
+                        <h5 style={{ fontSize: 14, fontWeight: 700, margin: '0 0 10px 0', color: 'var(--text-primary)', lineHeight: 1.3 }}>{sch.title}</h5>
+                        <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 6px 0', fontWeight: 500 }}>
+                          <strong><BookOpen className="inline mr-1 text-blue-500" size={14} />{lang === 'kn' ? 'ತರಗತಿ:' : 'Class:'}</strong> {sch.classReq}
+                        </p>
+                        <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 14px 0', fontWeight: 500 }}>
+                          <strong><IndianRupee className="inline mr-1 text-emerald-500" size={14} />{lang === 'kn' ? 'ಆದಾಯ ಮಿತಿ:' : 'Income Limit:'}</strong> {sch.incomeLimit}
+                        </p>
+                      </div>
+                      <a
+                        href={sch.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-primary btn-sm"
+                        style={{ width: '100%', justifyContent: 'center', fontSize: 12, padding: '8px 12px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, fontWeight: 600, borderRadius: 8, background: isPassed ? '#64748b' : undefined }}
+                      >
+                        {isPassed ? (lang === 'kn' ? 'ವಿವರ ನೋಡಿ (ಮೊದಲ ದಿನಾಂಕ ಮೀರಿದೆ)' : 'View Details (Deadline Passed)') : (lang === 'kn' ? 'ಈಗ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ →' : 'Apply Now →')}
+                      </a>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
+            );
+          })()}
         </div>
       )}
+
+
 
       {/* ── Crop Doctor Quick Action ── */}
       <div
