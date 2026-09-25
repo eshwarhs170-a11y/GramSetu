@@ -17,6 +17,30 @@ const db = getFirestore(app);
 
 const scholarships = [
   {
+    id: 'raitha-vidya-nidhi',
+    titleEn: 'Mukhyamantri Raitha Vidya Nidhi (Farmers Children)',
+    titleKn: 'ಮುಖ್ಯಮಂತ್ರಿ ರೈತ ವಿದ್ಯಾನಿಧಿ (ರೈತರ ಮಕ್ಕಳಿಗೆ)',
+    classReqEn: 'Class 8th to PG / Professional',
+    classReqKn: '೮ನೇ ತರಗತಿಯಿಂದ ಸ್ನಾತಕೋತ್ತರ / ವೃತ್ತಿಪರ',
+    incomeLimitEn: 'Farmers with FRUITS ID',
+    incomeLimitKn: 'ಫ್ರೂಟ್ಸ್ (FRUITS) ಐಡಿ ಹೊಂದಿರುವ ರೈತರು',
+    deadline: '2026-10-31',
+    openDate: null,
+    link: 'https://ssp.postmatric.karnataka.gov.in/'
+  },
+  {
+    id: 'lic-golden-jubilee',
+    titleEn: 'LIC Golden Jubilee Scholarship',
+    titleKn: 'ಎಲ್ಐಸಿ ಸುವರ್ಣ ಮಹೋತ್ಸವ ವಿದ್ಯಾರ್ಥಿವೇತನ',
+    classReqEn: '10th/12th Pass pursuing UG/Diploma',
+    classReqKn: '೧೦ನೇ/೧೨ನೇ ಉತ್ತೀರ್ಣರಾಗಿರುವ ಪದವಿ/ಡಿಪ್ಲೊಮಾ ವಿದ್ಯಾರ್ಥಿಗಳು',
+    incomeLimitEn: '₹2.5 Lakh/year',
+    incomeLimitKn: '₹2.5 ಲಕ್ಷ/ವರ್ಷ',
+    deadline: '2026-12-31',
+    openDate: null,
+    link: 'https://licindia.in/'
+  },
+  {
     id: 'ssp-karnataka',
     titleEn: 'Karnataka SSW Scholarships (SC/ST/OBC/Farmers)',
     titleKn: 'ಕರ್ನಾಟಕ SSW ವಿದ್ಯಾರ್ಥಿವೇತನ (SC/ST/OBC/ರೈತರು)',
@@ -27,6 +51,102 @@ const scholarships = [
     deadline: '2026-10-31',
     openDate: null,
     link: 'https://ssp.postmatric.karnataka.gov.in/'
+  },
+  {
+    id: 'bcwd-vidyasiri',
+    titleEn: 'BCWD Vidyasiri (Food & Accommodation)',
+    titleKn: 'ಬಿಸಿಡಬ್ಲ್ಯೂಡಿ ವಿದ್ಯಾಸಿರಿ (ಊಟ ಮತ್ತು ವಸತಿ)',
+    classReqEn: 'Post-Matric (PUC/Degree/PG)',
+    classReqKn: 'ಮೆಟ್ರಿಕ್ ನಂತರದ (PUC/ಪದವಿ/ಪಿಜಿ)',
+    incomeLimitEn: '₹2.5 Lakh/year',
+    incomeLimitKn: '₹2.5 ಲಕ್ಷ/ವರ್ಷ',
+    deadline: '2026-11-30',
+    openDate: null,
+    link: 'https://ssp.postmatric.karnataka.gov.in/'
+  },
+  {
+    id: 'vidyadhan',
+    titleEn: 'Vidyadhan Scholarship Program',
+    titleKn: 'ವಿದ್ಯಾಧನ್ ವಿದ್ಯಾರ್ಥಿವೇತನ ಕಾರ್ಯಕ್ರಮ',
+    classReqEn: '10th Pass pursuing 11th/12th',
+    classReqKn: '೧೦ನೇ ಉತ್ತೀರ್ಣ (೧೧/೧೨ನೇ ತರಗತಿ)',
+    incomeLimitEn: '₹2 Lakh/year',
+    incomeLimitKn: '₹2 ಲಕ್ಷ/ವರ್ಷ',
+    deadline: '2026-07-15',
+    openDate: null,
+    link: 'https://www.vidyadhan.org/'
+  },
+  {
+    id: 'prabhuddha-overseas',
+    titleEn: 'Prabhuddha Overseas Scholarship (SC/ST)',
+    titleKn: 'ಪ್ರಬುದ್ಧ ಸಾಗರೋತ್ತರ ವಿದ್ಯಾರ್ಥಿವೇತನ (SC/ST)',
+    classReqEn: 'UG/PG/PhD Abroad',
+    classReqKn: 'ವಿದೇಶದಲ್ಲಿ ಪದವಿ/ಸ್ನಾತಕೋತ್ತರ/ಪಿಎಚ್‌ಡಿ',
+    incomeLimitEn: '₹8 Lakh/year',
+    incomeLimitKn: '₹8 ಲಕ್ಷ/ವರ್ಷ',
+    deadline: '2026-09-30',
+    openDate: null,
+    link: 'https://ssp.postmatric.karnataka.gov.in/'
+  },
+  {
+    id: 'colgate-keep-smiling',
+    titleEn: 'Keep India Smiling Foundational Scholarship',
+    titleKn: 'ಕೀಪ್ ಇಂಡಿಯಾ ಸ್ಮೈಲಿಂಗ್ ವಿದ್ಯಾರ್ಥಿವೇತನ (Colgate)',
+    classReqEn: 'Class 11 to UG',
+    classReqKn: '೧೧ನೇ ತರಗತಿಯಿಂದ ಪದವಿ',
+    incomeLimitEn: '₹5 Lakh/year',
+    incomeLimitKn: '₹5 ಲಕ್ಷ/ವರ್ಷ',
+    deadline: '2026-12-31',
+    openDate: null,
+    link: 'https://www.buddy4study.com/'
+  },
+  {
+    id: 'loreal-women-science',
+    titleEn: "L'Oréal India For Young Women In Science",
+    titleKn: 'ಲೋರಿಯಲ್ ಇಂಡಿಯಾ ಯಂಗ್ ವುಮೆನ್ ಇನ್ ಸೈನ್ಸ್',
+    classReqEn: '12th Pass (Science) girls',
+    classReqKn: '೧೨ನೇ ಉತ್ತೀರ್ಣ (ವಿಜ್ಞಾನ) ವಿದ್ಯಾರ್ಥಿನಿಯರು',
+    incomeLimitEn: '₹6 Lakh/year',
+    incomeLimitKn: '₹6 ಲಕ್ಷ/ವರ್ಷ',
+    deadline: '2026-10-15',
+    openDate: null,
+    link: 'https://www.buddy4study.com/'
+  },
+  {
+    id: 'santoor-women',
+    titleEn: "Santoor Women's Scholarship",
+    titleKn: 'ಸಂತೂರ್ ಮಹಿಳಾ ವಿದ್ಯಾರ್ಥಿವೇತನ',
+    classReqEn: '12th Pass (Govt School) girls',
+    classReqKn: '೧೨ನೇ ಉತ್ತೀರ್ಣ (ಸರ್ಕಾರಿ ಶಾಲೆ) ವಿದ್ಯಾರ್ಥಿನಿಯರು',
+    incomeLimitEn: 'Preference to lower income',
+    incomeLimitKn: 'ಕಡಿಮೆ ಆದಾಯದವರಿಗೆ ಆದ್ಯತೆ',
+    deadline: '2026-09-15',
+    openDate: null,
+    link: 'https://www.santoorscholarships.com/'
+  },
+  {
+    id: 'pre-matric-minority',
+    titleEn: 'Pre-Matric Scholarship for Minorities',
+    titleKn: 'ಅಲ್ಪಸಂಖ್ಯಾತರಿಗೆ ಮೆಟ್ರಿಕ್ ಪೂರ್ವ ವಿದ್ಯಾರ್ಥಿವೇತನ',
+    classReqEn: 'Class 1 to 10',
+    classReqKn: '೧ ರಿಂದ ೧೦ನೇ ತರಗತಿ',
+    incomeLimitEn: '₹1 Lakh/year',
+    incomeLimitKn: '₹1 ಲಕ್ಷ/ವರ್ಷ',
+    deadline: '2026-10-31',
+    openDate: null,
+    link: 'https://scholarships.gov.in/'
+  },
+  {
+    id: 'jk-tyre-shiksha',
+    titleEn: 'JK Tyre Shiksha Sarthi Scholarship',
+    titleKn: 'ಜೆಕೆ ಟೈರ್ ಶಿಕ್ಷಾ ಸಾರಥಿ (ಚಾಲಕರ ಮಕ್ಕಳಿಗೆ)',
+    classReqEn: 'UG/Diploma (Daughters of CV drivers)',
+    classReqKn: 'ಪದವಿ/ಡಿಪ್ಲೊಮಾ (ಚಾಲಕರ ಹೆಣ್ಣುಮಕ್ಕಳಿಗೆ)',
+    incomeLimitEn: 'No strict limit',
+    incomeLimitKn: 'ನಿರ್ದಿಷ್ಟ ಮಿತಿಯಿಲ್ಲ',
+    deadline: '2026-11-30',
+    openDate: null,
+    link: 'https://www.buddy4study.com/'
   },
   {
     id: 'nmmss',
