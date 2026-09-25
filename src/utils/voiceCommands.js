@@ -506,8 +506,8 @@ Analyze this image with maximum accuracy. The image may be a real field photo, a
 
 CRITICAL RULE 0: MANDATORY OCR & PRINTED TEXT DETECTION (HIGHEST PRIORITY)
 First, examine the image for ANY printed text, text banner, caption, card title, or overlay label:
-- Look for black rectangular overlays at the bottom containing white bold text (e.g., "Ragi (Finger Millet) Blast", "Paddy / Rice Sheath Blight", "Groundnut Early Leaf Spot", "Potato Early Blight", "Papaya Ring Spot Virus", "Cotton Pink Bollworm", "Sugarcane Red Rot", etc.).
-- IF ANY PRINTED CROP OR DISEASE NAME IS VISIBLE IN THE IMAGE (IN FULL OR PARTIAL), YOU MUST USE THAT EXACT TEXT TO DETERMINE cropName AND diseaseName.
+- Look for black rectangular overlays at the bottom containing white bold text (e.g., "Ragi (Finger Millet) Blast", "Paddy / Rice Sheath Blight", "Groundnut Early Leaf Spot", "Potato Early Blight", "Papaya Ring Spot Virus", "Cotton Pink Bollworm", "Sugarcane Red Rot", "Maize Northern Leaf Blight", etc.).
+- IF ANY PRINTED CROP OR DISEASE NAME IS VISIBLE IN THE IMAGE (IN FULL OR PARTIAL), YOU MUST USE THAT EXACT TEXT TO DETERMINE cropName AND diseaseName AND INCLUDE IT IN THE 'printedText' JSON FIELD.
 
 CRITICAL RULE 1: HIGH PRIORITY REFERENCE CARDS (32 PRIMARY DISEASES)
 Prioritize recognizing these 32 primary reference card diseases for the 16 key crops:
@@ -538,7 +538,7 @@ ${userSelectedCrop && userSelectedCrop !== 'NO_CROP' && userSelectedCrop !== 'AU
 
 Respond ONLY with a JSON object:
 If not crop: {"isCrop": false, "reason": "Not a crop or plant image"}
-If crop: {"isCrop": true, "cropName": "exact crop name", "diseaseName": "exact disease name", "confidence": "High|Medium|Low"}`;
+If crop: {"isCrop": true, "cropName": "exact crop name", "diseaseName": "exact disease name", "printedText": "any exact printed text found", "confidence": "High|Medium|Low"}`;
 
 
 

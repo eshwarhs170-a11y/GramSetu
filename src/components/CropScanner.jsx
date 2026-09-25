@@ -492,8 +492,8 @@ export default function CropScanner() {
             : '🌿 Not a crop image! The AI detected that this is not an agricultural crop (e.g. human face, indoor room, or everyday object). Please point the camera at a diseased crop leaf, fruit, or disease chart.');
           return;
         } else {
-          // AI identified a crop — match to our database
-          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName, selectedCrop);
+          // AI identified a crop — match to our database (diseaseHint or OCR overrides visual guess)
+          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName, selectedCrop, diseaseHint || visionData.printedText);
           finalResult = matched;
         }
       } else {
@@ -587,8 +587,8 @@ export default function CropScanner() {
             : '🌿 Not a crop image! The AI detected that this is not an agricultural crop (e.g. human face, indoor room, or everyday object). Please upload a diseased crop photo or disease guide chart.');
           return;
         } else {
-          // diseaseHint overrides AI guess - highest priority
-          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName, selectedCrop, diseaseHint);
+          // diseaseHint overrides AI guess - highest priority. If OCR found text, that takes precedence over visual guess too.
+          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName, selectedCrop, diseaseHint || visionData.printedText);
           finalResult = matched;
         }
       }
