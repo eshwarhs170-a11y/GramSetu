@@ -19,7 +19,27 @@ export default function CropScanner() {
   const { speak, stopSpeaking, isSpeaking } = useVoice();
 
   // ── Page flow: 'home' | 'scanner' | 'result' | 'qa' ──
-  const [page, setPage] = useState('home');
+  const [page, _setPage] = useState('home');
+
+  const setPage = (newPage) => {
+    if (newPage === page) return;
+    if (newPage !== 'home') {
+      window.history.pushState({ tab: 'crop-doctor', cropPage: newPage }, '');
+    } else {
+      window.history.pushState({ tab: 'crop-doctor', cropPage: 'home' }, '');
+    }
+    _setPage(newPage);
+  };
+
+  useEffect(() => {
+    const handlePopState = (e) => {
+      if (e.state && e.state.tab === 'crop-doctor') {
+        _setPage(e.state.cropPage || 'home');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Scanner state
   const [stream, setStream] = useState(null);
@@ -27,6 +47,7 @@ export default function CropScanner() {
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState(null);
   const [selectedCrop, setSelectedCrop] = useState('NO_CROP');
+  const [diseaseHint, setDiseaseHint] = useState(''); // Optional: user-known disease name → highest priority match
   const [scanPhase, setScanPhase] = useState('idle');
   const [notCropMsg, setNotCropMsg] = useState(null);
   const [scanProgress, setScanProgress] = useState(0);
@@ -109,7 +130,31 @@ export default function CropScanner() {
   useEffect(() => () => stopSpeaking(), [stopSpeaking]);
 
   // ── Helper: fuzzy-match AI crop/disease name to our CROP_DISEASES database ──
-  const matchAiToDatabase = (cropName, diseaseName, userSelectedCrop = null) => {
+  const matchAiToDatabase = (cropName, diseaseName, userSelectedCrop = null, userDiseaseHint = '') => {
+    // ── RULE 0 (HIGHEST PRIORITY): User typed a disease name → direct DB lookup ──
+    // This covers all 32 diseases from the 4 reference card images
+    if (userDiseaseHint && userDiseaseHint.trim().length > 2) {
+      const hintLower = userDiseaseHint.trim().toLowerCase();
+      const cropPool = (userSelectedCrop && userSelectedCrop !== 'NO_CROP')
+        ? CROP_DISEASES.filter(d => d.crop === userSelectedCrop)
+        : CROP_DISEASES;
+      // Direct substring match first
+      let hintMatch = cropPool.find(d => d.disease.toLowerCase().includes(hintLower));
+      // Word-by-word match if no direct hit
+      if (!hintMatch) {
+        const words = hintLower.split(/\s+/).filter(w => w.length > 3);
+        hintMatch = cropPool.find(d => words.some(w => d.disease.toLowerCase().includes(w)));
+      }
+      // Widen to entire DB if still no match
+      if (!hintMatch) {
+        hintMatch = CROP_DISEASES.find(d => d.disease.toLowerCase().includes(hintLower));
+        if (!hintMatch) {
+          const words = hintLower.split(/\s+/).filter(w => w.length > 3);
+          hintMatch = CROP_DISEASES.find(d => words.some(w => d.disease.toLowerCase().includes(w)));
+        }
+      }
+      if (hintMatch) return hintMatch;
+    }
     // If AUTO_DETECT or not specified, use AI identified crop
     const effectiveCrop = (userSelectedCrop && userSelectedCrop !== 'NO_CROP' && userSelectedCrop !== 'AUTO_DETECT')
       ? userSelectedCrop
@@ -542,7 +587,8 @@ export default function CropScanner() {
             : '🌿 Not a crop image! The AI detected that this is not an agricultural crop (e.g. human face, indoor room, or everyday object). Please upload a diseased crop photo or disease guide chart.');
           return;
         } else {
-          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName, selectedCrop);
+          // diseaseHint overrides AI guess - highest priority
+          const matched = matchAiToDatabase(visionData.cropName, visionData.diseaseName, selectedCrop, diseaseHint);
           finalResult = matched;
         }
       }
@@ -593,6 +639,7 @@ export default function CropScanner() {
     setPan({ x: 0, y: 0 }); currentPan.current = { x: 0, y: 0 };
     setNotCropMsg(null); setTranslatedRemedy(null); setTranslatedPrevention(null); setTranslatedOrganicTip(null); setTranslatedFertilizer(null); setTranslatedKeyTakeaways(null); setIsTranslating(false);
     setZoomLevel(1);
+    setDiseaseHint('');
     setPage('home');
   };
 
@@ -868,6 +915,45 @@ export default function CropScanner() {
                 </option>
               ))}
             </select>
+
+            {/* Step 1.5 � Optional disease name hint (HIGHEST PRIORITY � covers all 32 reference card diseases) */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 12, fontWeight: 700, color: '#4b7a5c', display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                <Tag size={13} color="#f59e0b" />
+                {lang === 'kn' ? '??? 1.5 � ???? ????? ??????????? ???? ???? (??????)' : 'Step 1.5 � Know the disease? Type it for 100% accuracy (optional)'}
+              </label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type="text"
+                  value={diseaseHint}
+                  onChange={e => setDiseaseHint(e.target.value)}
+                  placeholder={lang === 'kn' ? '???: Fall Armyworm, Blast, Late Blight, Sheath Blight...' : 'e.g. Fall Armyworm, Blast, Late Blight, Leaf Curl...'}
+                  style={{
+                    width: '100%', padding: '11px 40px 11px 14px', borderRadius: 11, fontSize: 13, fontWeight: 600,
+                    border: 2px solid ,
+                    background: diseaseHint.trim() ? '#fffbeb' : '#f8fafc',
+                    color: '#1a2e1f', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s'
+                  }}
+                  onFocus={e => e.target.style.borderColor = '#f59e0b'}
+                  onBlur={e => e.target.style.borderColor = diseaseHint.trim() ? '#f59e0b' : '#d1e8db'}
+                />
+                {diseaseHint.trim() && (
+                  <button onClick={() => setDiseaseHint('')} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', fontSize: 16, padding: 0, display: 'flex', alignItems: 'center' }}>?</button>
+                )}
+              </div>
+              {diseaseHint.trim() ? (
+                <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#f59e0b', flexShrink: 0 }} />
+                  <span style={{ fontSize: 11, color: '#92400e', fontWeight: 700 }}>
+                    {lang === 'kn' ? "" � ??? ??????? ?????? ???????????? ? : "" will be matched with HIGHEST priority ?}
+                  </span>
+                </div>
+              ) : (
+                <p style={{ margin: '4px 0 0', fontSize: 10, color: '#94a3b8', fontWeight: 500 }}>
+                  {lang === 'kn' ? '???? ??????? AI ????? ????? ?????????' : 'Leave blank for AI auto-detection'}
+                </p>
+              )}
+            </div>
 
             <button
               onClick={() => { if (selectedCrop !== 'NO_CROP') setPage('scanner'); }}
