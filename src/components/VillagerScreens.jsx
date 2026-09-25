@@ -4741,6 +4741,13 @@ export function EmergencySOSScreen() {
       ]
     },
     {
+      title: 'Animal & Veterinary',
+      color: '#d97706',
+      items: [
+        { title: 'Pashu Sanjeevini (Vet)', num: '1962', icon: PhoneCall, color: '#d97706' }
+      ]
+    },
+    {
       title: 'Support & Assistance',
       color: '#db2777',
       items: [
