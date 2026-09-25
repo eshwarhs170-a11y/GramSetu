@@ -192,9 +192,12 @@ function analyzeImageFeatures(base64Image, userSelectedCrop) {
   const isSkinToneOrIndoor = (cK + cJ > 220) && (cB < 160);
   const hasNoPlantFeatures = (cB < 100) && (cA < 130) && (cC < 100) && (cD < 100);
 
-  if (isSkinToneOrIndoor || hasNoPlantFeatures) {
-    return { isCrop: false };
-  }
+  // Bypass the random character counting rejection for base64 strings
+  // since base64 characters do not map to actual colors in compressed JPEGs.
+  // We will assume it's a crop image to prevent false rejections during demo fallback.
+  // if (isSkinToneOrIndoor || hasNoPlantFeatures) {
+  //   return { isCrop: false };
+  // }
 
   if (userSelectedCrop && userSelectedCrop !== 'NO_CROP') {
     const sLower = userSelectedCrop.toLowerCase();

@@ -59,6 +59,50 @@ export default function CropScanner() {
   const [translatedFertilizer, setTranslatedFertilizer] = useState(null);
   const [translatedKeyTakeaways, setTranslatedKeyTakeaways] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
+  const [acres, setAcres] = useState(1);
+
+  // Helper to calculate dosage based on acres
+  const calculateDosage = (remedyText, acres) => {
+    if (!remedyText) return [];
+    const regex = /([\d.]+)\s*(mL\/L|g\/L|ml\/litre|g\/litre|grams? per litre|ml per litre|kg\/ha|g\/ha|L\/ha)/gi;
+    let matches = [];
+    let match;
+    while ((match = regex.exec(remedyText)) !== null) {
+      const val = parseFloat(match[1]);
+      const unit = match[2].toLowerCase();
+      let totalWater = acres * 200; // 200 L per acre is standard
+      let totalChemical = 0;
+      let totalUnit = '';
+
+      if (unit.includes('ml/l') || unit.includes('ml per') || unit.includes('ml/litre')) {
+        totalChemical = val * totalWater;
+        totalUnit = totalChemical >= 1000 ? `${(totalChemical/1000).toFixed(1)} L` : `${Math.round(totalChemical)} mL`;
+      } else if (unit.includes('g/l') || unit.includes('gram') || unit.includes('g/litre')) {
+        totalChemical = val * totalWater;
+        totalUnit = totalChemical >= 1000 ? `${(totalChemical/1000).toFixed(1)} kg` : `${Math.round(totalChemical)} g`;
+      } else if (unit.includes('kg/ha')) {
+        totalChemical = (val / 2.47) * acres;
+        totalUnit = totalChemical < 1 ? `${Math.round(totalChemical * 1000)} g` : `${totalChemical.toFixed(1)} kg`;
+        totalWater = 0;
+      } else if (unit.includes('g/ha')) {
+        totalChemical = (val / 2.47) * acres;
+        totalUnit = `${Math.round(totalChemical)} g`;
+        totalWater = 0;
+      } else if (unit.includes('l/ha')) {
+        totalChemical = (val / 2.47) * acres;
+        totalUnit = totalChemical < 1 ? `${Math.round(totalChemical * 1000)} mL` : `${totalChemical.toFixed(1)} L`;
+        totalWater = 0;
+      }
+      
+      if (totalChemical > 0) {
+        // Prevent exact duplicates if multiple text variations map to the same rate
+        if (!matches.find(m => m.rate === match[0])) {
+          matches.push({ rate: match[0], total: totalUnit, water: totalWater > 0 ? `${totalWater} L water` : '' });
+        }
+      }
+    }
+    return matches;
+  };
 
   // Image upload & panning
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -1604,6 +1648,52 @@ export default function CropScanner() {
                         ? (result.remedyHi || result.remedy)
                         : result.remedy}
                     </p>
+
+                    {/* Interactive Dosage Calculator */}
+                    <div style={{ marginTop: 14, background: '#f8fafc', borderRadius: 12, padding: '14px', border: '1px solid #e2e8f0' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <FlaskConical size={16} color="#0369a1" />
+                          <span style={{ fontSize: 13, fontWeight: 800, color: '#0369a1' }}>
+                            {lang === 'kn' ? 'ಸ್ಮಾರ್ಟ್ ಪ್ರಮಾಣ ಲೆಕ್ಕಾಚಾರ' : lang === 'hi' ? 'खुराक कैलकुलेटर' : 'Smart Dosage Calculator'}
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#fff', border: '1px solid #cbd5e1', borderRadius: 8, padding: '4px 8px' }}>
+                          <label style={{ fontSize: 12, fontWeight: 700, color: '#475569' }}>
+                            {lang === 'kn' ? 'ಎಕರೆಗಳು:' : lang === 'hi' ? 'एकड़:' : 'Acres:'}
+                          </label>
+                          <input
+                            type="number"
+                            min="0.1"
+                            step="0.1"
+                            value={acres}
+                            onChange={(e) => setAcres(parseFloat(e.target.value) || 0)}
+                            style={{ width: 50, border: 'none', background: 'transparent', outline: 'none', fontSize: 14, fontWeight: 800, color: '#1a2e1f', textAlign: 'center' }}
+                          />
+                        </div>
+                      </div>
+                      
+                      {calculateDosage(result.remedy, acres).length > 0 ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                          {calculateDosage(result.remedy, acres).map((dos, i) => (
+                            <div key={i} style={{ background: '#fff', borderRadius: 8, padding: '10px 12px', border: '1px solid #d1e8db', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                              <div>
+                                <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, marginBottom: 2 }}>{lang === 'kn' ? 'ಸೂಚಿತ ದರ:' : 'Recommended Rate:'} {dos.rate}</div>
+                                <div style={{ fontSize: 14, fontWeight: 900, color: '#1a7c4a' }}>
+                                  <span style={{ color: '#0f172a' }}>{lang === 'kn' ? 'ಒಟ್ಟು:' : 'Total:'} </span>
+                                  {dos.total} {dos.water && <span style={{ color: '#0284c7', fontSize: 12 }}>+ {dos.water}</span>}
+                                </div>
+                              </div>
+                              <Droplets size={20} color="#0284c7" style={{ opacity: 0.5 }} />
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div style={{ fontSize: 12, color: '#64748b', fontWeight: 500, fontStyle: 'italic' }}>
+                          {lang === 'kn' ? 'ಈ ಪರಿಹಾರಕ್ಕೆ ನಿಖರ ಪ್ರಮಾಣ ಅನ್ವಯಿಸುವುದಿಲ್ಲ ಅಥವಾ ಲಭ್ಯವಿಲ್ಲ.' : 'Standard dosage calculation not available for this treatment.'}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Prevention & Cultural Control */}
