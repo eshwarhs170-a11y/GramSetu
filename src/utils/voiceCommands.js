@@ -138,7 +138,7 @@ function withTimeout(promise, ms, fallback) {
 // ─────────────────────────────────────────────────────────────────────────────
 export async function callGemini(prompt, systemInstruction) {
   if (!genAI) return null;
-  const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-pro'];
+  const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest'];
   
   for (const modelName of modelsToTry) {
     let retries = 2;
@@ -547,7 +547,7 @@ If crop: {"isCrop": true, "cropName": "exact crop name", "diseaseName": "exact d
 
   // 1. Try Gemini Vision API models
   if (genAI) {
-    const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash-exp'];
+    const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
     for (const modelName of modelsToTry) {
       try {
         const model = genAI.getGenerativeModel({ model: modelName });
@@ -579,7 +579,7 @@ export async function callGeminiTranslate(text, targetLang) {
   if (!genAI || !text) return null;
   const langName = targetLang === 'kn' ? 'Kannada' : targetLang === 'hi' ? 'Hindi' : 'English';
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     const prompt = `Translate the following agricultural advisory text into ${langName}. Keep technical terms like chemical names as-is. Return ONLY the translated text, no explanation:\n\n${text}`;
     const resultPromise = model.generateContent(prompt).then(r => r.response.text());
     const translated = await withTimeout(resultPromise, 10000, null);

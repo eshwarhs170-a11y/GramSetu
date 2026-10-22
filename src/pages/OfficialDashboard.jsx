@@ -21,6 +21,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 
 import { db } from '../firebase'
 import { collection, onSnapshot, query, orderBy, deleteDoc, doc, addDoc, updateDoc, setDoc, arrayUnion, serverTimestamp, getDocs } from 'firebase/firestore'
+import { generateOfficialNoticePDF } from '../utils/generateOfficialNoticePDF'
 
 // ── Gemini AI for translation ──────────────────────────────────────────────────
 const _apiKey = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_FIREBASE_API_KEY
@@ -30,7 +31,7 @@ async function translateText(text, targetLang) {
   if (!_genAI || !text) return text
   const langName = targetLang === 'kn' ? 'Kannada' : 'Hindi'
   try {
-    const model = _genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = _genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
     const result = await model.generateContent(
       `Translate this government announcement text to ${langName}. Keep proper nouns, numbers, and dates as-is. Return ONLY the translated text, nothing else.\n\nText: ${text}`
     )

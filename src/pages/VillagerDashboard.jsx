@@ -11,6 +11,7 @@ import {
   WeatherScreen, EmergencySOSScreen, TutorialsScreen, normalizeDistrict
 } from '../components/VillagerScreens'
 import CropScanner from '../components/CropScanner'
+import SoilHealthDoctor from '../components/SoilHealthDoctor'
 import { Menu, Search, Bell, X, AlertTriangle, IndianRupee, LayoutDashboard, Landmark, Microscope, ClipboardList, User, Wheat } from 'lucide-react'
 import FarmerInquiryModal from '../components/FarmerInquiryModal'
 
@@ -163,6 +164,7 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
     sos:           { titleKey: 'sosTitle',       subKey: 'sosSub' },
     tutorials:     { titleKey: 'tutorialTitle',  subKey: 'tutorialSub' },
     'crop-doctor': { titleKey: 'sNavCropDoctor', subKey: 'dashSub' },
+    'soil-health': { titleKey: 'sNavSoilHealth', subKey: 'dashSub' },
     inquiry:       { titleKey: 'askQuestionOrReport', subKey: 'dashSub' },
   }
   const page = pageMeta[active] || pageMeta.home
@@ -180,6 +182,7 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
       case 'sos':           return <EmergencySOSScreen />
       case 'tutorials':     return <TutorialsScreen />
       case 'crop-doctor':   return <CropScanner />
+      case 'soil-health':   return <SoilHealthDoctor />
       case 'inquiry':       return <FarmerInquiryModal isPage={true} defaultCategory={inquiryCategory} onClose={() => setActive('home')} />
       default:              return <HomeScreen />
     }

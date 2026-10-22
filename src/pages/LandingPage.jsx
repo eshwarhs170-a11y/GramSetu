@@ -528,6 +528,24 @@ export default function LandingPage() {
               tag: 'Taluk Auto-Escalation · 8 Categories'
             },
             {
+              id: 'crop-doctor',
+              img: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=700&q=80',
+              badge: 'Visual AI Diagnostic',
+              badgeColor: '#059669',
+              title: 'Crop Doctor (AI Disease Diagnosis)',
+              desc: 'Point your camera at damaged crop leaves to detect Ragi blast, Koleroga, Coffee rust and 15+ Karnataka crop diseases with instant remedies.',
+              tag: 'Instant AI Diagnosis · Organic & Chemical Cures'
+            },
+            {
+              id: 'soil-health',
+              img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=700&q=80',
+              badge: 'Precision NPK & PDF',
+              badgeColor: '#7c3aed',
+              title: 'Soil Health Doctor & NPK Dosage',
+              desc: 'Scientific fertilizer dosage calculator for Urea, DAP, and MOP tailored to Karnataka soil profiles with official downloadable Soil Health Card PDF.',
+              tag: 'NPK Calculator · Soil Health Card PDF'
+            },
+            {
               id: 'districts',
               img: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?w=700&q=80',
               fallback: '/district-images/mysuru_mysore_palace.jpg',

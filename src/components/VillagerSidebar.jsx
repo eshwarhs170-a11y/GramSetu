@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext'
 import {
   LayoutDashboard, Landmark, TrendingUp, Megaphone,
   ClipboardList, SearchCheck, UserCircle, Wheat,
-  X, LogOut, ChevronRight, Cloud, ShieldAlert, PlayCircle, Camera, HelpCircle
+  X, LogOut, ChevronRight, Cloud, ShieldAlert, PlayCircle, Camera, HelpCircle, FlaskConical
 } from 'lucide-react'
 
 export default function VillagerSidebar({ active, setActive, sidebarOpen, setSidebarOpen }) {
@@ -51,6 +51,7 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
     { id: 'market',        icon: TrendingUp,      labelKey: 'sNavMarket' },
     { id: 'weather',       icon: Cloud,           labelKey: 'sNavWeather' },
     { id: 'crop-doctor',   icon: Camera,          labelKey: 'sNavCropDoctor' },
+    { id: 'soil-health',   icon: FlaskConical,    labelKey: 'sNavSoilHealth' },
     { id: 'sos',           icon: ShieldAlert,     labelKey: 'sNavSOS' },
     { id: 'tutorials',     icon: PlayCircle,      labelKey: 'sNavTutorials' },
     { id: 'announcements', icon: Megaphone,        labelKey: 'sNavAnnounce' },

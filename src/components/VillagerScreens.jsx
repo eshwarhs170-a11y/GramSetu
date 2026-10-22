@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import MapPicker from './MapPicker'
@@ -79,6 +79,9 @@ import {
   Zap
 } from 'lucide-react'
 import { useLanguage, Trans } from '../context/LanguageContext'
+import { callGemini } from '../utils/voiceCommands'
+import LiveBuyerMarketplace from './LiveBuyerMarketplace'
+import DistrictRskContactCard from './DistrictRskContactCard'
 
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
@@ -206,6 +209,9 @@ export function HomeScreen({ setActive }) {
   const [loadingPrices, setLoadingPrices] = useState(true)
   const [selectedCropInfo, setSelectedCropInfo] = useState(null)
   const [scholarshipsData, setScholarshipsData] = useState([])
+  const [aiSchemeResult, setAiSchemeResult] = useState(null)
+  const [aiSchemeLoading, setAiSchemeLoading] = useState(false)
+  const aiSchemeRef = useRef(false)
   const navigate = useNavigate()
 
   // Flash a row green/red when its price changes
@@ -591,6 +597,112 @@ export function HomeScreen({ setActive }) {
 
 
 
+      {/* ── AI Scheme Eligibility Checker ── */}
+      {roleMode === 'farmer' && (
+        <div className="animate-fadeInUp card" style={{ marginBottom: 20, padding: 0, border: '1.5px solid rgba(79,70,229,0.25)', overflow: 'hidden' }}>
+          <div style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 8, padding: 6, display: 'flex', alignItems: 'center' }}>
+              <Sparkles size={18} color="#fbbf24" />
+            </div>
+            <div>
+              <h4 style={{ margin: 0, fontSize: 14, fontWeight: 800, color: '#fff' }}>AI Scheme Eligibility Check</h4>
+              <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Powered by Gemini AI · 30-second analysis</p>
+            </div>
+          </div>
+          <div style={{ padding: '16px 20px' }}>
+            {!aiSchemeResult ? (
+              <>
+                <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 14, lineHeight: 1.5 }}>
+                  {lang === 'kn'
+                    ? 'ನಿಮ್ಮ ಜಮೀನು, ಆದಾಯ, ಮತ್ತು ಜಿಲ್ಲೆ ಆಧಾರದ ಮೇಲೆ ಯಾವ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳಿಗೆ ಅರ್ಹರಿದ್ದೀರಿ ಎಂದು AI ತಿಳಿಸುತ್ತದೆ.'
+                    : 'Let Gemini AI analyse your profile and tell you exactly which government schemes you qualify for right now.'}
+                </p>
+                <button
+                  onClick={async () => {
+                    if (aiSchemeRef.current) return;
+                    aiSchemeRef.current = true;
+                    setAiSchemeLoading(true);
+                    const name = window.localStorage.getItem('citizen_name') || userName;
+                    const land = window.localStorage.getItem('citizen_land') || '2';
+                    const income = window.localStorage.getItem('citizen_income') || '1,20,000';
+                    const caste = window.localStorage.getItem('citizen_caste') || 'OBC';
+                    const prompt = `You are a Karnataka government scheme advisor. A farmer named ${name} lives in ${userDistrict}, ${userTaluk}, Karnataka. Land: ${land} acres. Annual income: ₹${income}. Category: ${caste}. Today's date: ${new Date().toLocaleDateString('en-IN')}.
+
+Based on this profile, list the TOP 5 government schemes they are eligible for right now. For each scheme provide:
+1. Scheme Name (exact official name)
+2. Benefit amount or type
+3. Key eligibility match reason (1 sentence)
+4. How to apply (1 sentence)
+
+Format as JSON array: [{"name":"...","benefit":"...","reason":"...","apply":"...","category":"Central|State"}].
+Return ONLY the JSON array, no markdown, no explanation.`;
+                    try {
+                      const res = await callGemini(prompt);
+                      if (res) {
+                        const match = res.match(/\[[\s\S]*\]/);
+                        if (match) setAiSchemeResult(JSON.parse(match[0]));
+                        else setAiSchemeResult([{name: 'PM-KISAN', benefit: '₹6,000/year', reason: 'Small/marginal farmer in Karnataka', apply: 'Visit pmkisan.gov.in or your local Krishi Vigyan Kendra', category: 'Central'}]);
+                      }
+                    } catch(e) {
+                      setAiSchemeResult([{name: 'PM-KISAN', benefit: '₹6,000/year', reason: 'Small/marginal farmer in Karnataka', apply: 'Visit pmkisan.gov.in or your local Krishi Vigyan Kendra', category: 'Central'}]);
+                    }
+                    setAiSchemeLoading(false);
+                    aiSchemeRef.current = false;
+                  }}
+                  disabled={aiSchemeLoading}
+                  style={{
+                    background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                    color: '#fff', border: 'none', borderRadius: 10,
+                    padding: '10px 20px', fontSize: 13, fontWeight: 700,
+                    cursor: aiSchemeLoading ? 'not-allowed' : 'pointer',
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    opacity: aiSchemeLoading ? 0.7 : 1, transition: 'all 0.2s',
+                    boxShadow: '0 4px 12px rgba(79,70,229,0.3)'
+                  }}
+                >
+                  {aiSchemeLoading ? (
+                    <><RefreshCw size={15} style={{ animation: 'spin 1s linear infinite' }} /> Analysing your profile...</>
+                  ) : (
+                    <><Sparkles size={15} /> {lang === 'kn' ? 'ಅರ್ಹತೆ ಪರೀಕ್ಷಿಸಿ' : 'Check My Eligibility'}</>
+                  )}
+                </button>
+              </>
+            ) : (
+              <>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>✅ {aiSchemeResult.length} schemes found for {userDistrict}:</p>
+                  <button onClick={() => { setAiSchemeResult(null); }} style={{ fontSize: 11, color: 'var(--primary)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>↻ Re-check</button>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {aiSchemeResult.map((scheme, idx) => (
+                    <div key={idx} style={{ background: 'var(--bg-main)', borderRadius: 10, padding: '12px 14px', border: '1px solid var(--border-light)', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                      <div style={{ width: 28, height: 28, borderRadius: 7, background: scheme.category === 'Central' ? '#dbeafe' : '#dcfce7', color: scheme.category === 'Central' ? '#1d4ed8' : '#15803d', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Landmark size={14} />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 4 }}>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{scheme.name}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: scheme.category === 'Central' ? '#dbeafe' : '#dcfce7', color: scheme.category === 'Central' ? '#1d4ed8' : '#15803d' }}>{scheme.category}</span>
+                        </div>
+                        <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--success)', margin: '2px 0' }}>Benefit: {scheme.benefit}</p>
+                        <p style={{ fontSize: 11, color: 'var(--text-secondary)', margin: '2px 0', lineHeight: 1.4 }}>{scheme.reason}</p>
+                        <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '4px 0 0 0', fontStyle: 'italic' }}>Apply: {scheme.apply}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setActive && setActive('schemes')}
+                  style={{ marginTop: 14, width: '100%', background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                >
+                  <ArrowRight size={14} /> View All Schemes & Apply
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ── Crop Doctor Quick Action ── */}
       <div
         className="animate-fadeInUp"
@@ -649,7 +761,57 @@ export function HomeScreen({ setActive }) {
         </div>
       </div>
 
+      {/* ── Soil Health Quick Action ── */}
+      <div
+        className="animate-fadeInUp"
+        onClick={() => setActive ? setActive('soil-health') : null}
+        style={{
+          cursor: 'pointer',
+          background: 'linear-gradient(135deg, #78350f 0%, #92400e 50%, #b45309 100%)',
+          borderRadius: 18,
+          padding: '16px 20px',
+          marginBottom: 20,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 16,
+          boxShadow: '0 8px 24px rgba(120,53,15,0.25), 0 2px 6px rgba(0,0,0,0.06)',
+          border: '1px solid rgba(251,191,36,0.3)',
+          transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(120,53,15,0.38)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(120,53,15,0.25)'; }}
+      >
+        <div style={{
+          background: 'rgba(251,191,36,0.18)',
+          borderRadius: 12, padding: '10px',
+          border: '1.5px solid rgba(251,191,36,0.35)',
+          flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: '#fbbf24'
+        }}>
+          <Sprout size={24} strokeWidth={2.2} />
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', marginBottom: 2 }}>
+            {lang === 'kn' ? 'ಮಣ್ಣಿನ ಆರೋಗ್ಯ & NPK ಕ್ಯಾಲ್ಕ್ಯುಲೇಟರ್' : 'Soil Health & NPK Calculator'}
+          </div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>
+            {lang === 'kn' ? 'ಮಣ್ಣಿನ ಪ್ರಕಾರ, ಬೆಳೆ ಮತ್ತು ಎಕರೆ ಆಧಾರದ ಮೇಲೆ ಗೊಬ್ಬರ ಲೆಕ್ಕ ಹಾಕಿ' : 'Calculate precise fertilizer dosage by soil type, crop & acreage'}
+          </div>
+        </div>
+        <div style={{
+          width: 32, height: 32, borderRadius: 8,
+          background: 'rgba(255, 255, 255, 0.12)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: '#fbbf24', flexShrink: 0
+        }}>
+          <ArrowRight size={16} />
+        </div>
+      </div>
+
       {/* ── Farmer Inquiry & Missing Village Banner Card ── */}
+
       <div 
         className="animate-fadeInUp card inquiry-feature-card" 
         style={{
@@ -1843,6 +2005,9 @@ export function SchemesScreen() {
             </p>
           </div>
 
+          {/* District-Specific Local RSK Agronomist Contact Card */}
+          <DistrictRskContactCard initialDistrict={userDistrict} />
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 18 }}>
             {agriAdvisoryAndCenters.map((adv, idx) => (
               <div className="card" key={idx} style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -2039,6 +2204,7 @@ export function MarketScreen() {
   const [priceDataSource, setPriceDataSource] = useState('static') // 'live' | 'static'
   const [priceLastUpdated, setPriceLastUpdated] = useState(null)
   const [loadingLive, setLoadingLive] = useState(true)
+  const [marketSection, setMarketSection] = useState('apmc') // 'apmc' | 'liveBuyers'
 
   const userDistrict = window.localStorage.getItem('citizen_district') || 'Mysuru'
 
@@ -2266,7 +2432,78 @@ export function MarketScreen() {
 
   return (
     <div className="animate-fadeInUp">
-      {/* Hero Banner */}
+      {/* Market Navigation Mode Switcher: APMC Mandi Rates vs Live Buyers & Direct Sell */}
+      <div style={{
+        display: 'flex',
+        gap: 12,
+        background: 'var(--bg-card, #fff)',
+        padding: '6px 8px',
+        borderRadius: 14,
+        border: '1.5px solid var(--border-light, #e2e8f0)',
+        marginBottom: 20,
+        boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+        width: 'fit-content'
+      }}>
+        <button
+          onClick={() => setMarketSection('apmc')}
+          style={{
+            padding: '10px 20px',
+            borderRadius: 10,
+            border: 'none',
+            fontWeight: 800,
+            fontSize: 14,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            transition: 'all 0.2s',
+            background: marketSection === 'apmc' ? 'linear-gradient(135deg, #059669, #047857)' : 'transparent',
+            color: marketSection === 'apmc' ? '#fff' : 'var(--text-secondary, #64748b)',
+            boxShadow: marketSection === 'apmc' ? '0 4px 12px rgba(5,150,105,0.3)' : 'none'
+          }}
+        >
+          <span>🌾</span>
+          <span>{lang === 'kn' ? 'ಎಪಿಎಂಸಿ ಮಂಡಿ ದರಗಳು' : 'APMC Mandi Prices'}</span>
+        </button>
+
+        <button
+          onClick={() => setMarketSection('liveBuyers')}
+          style={{
+            padding: '10px 20px',
+            borderRadius: 10,
+            border: 'none',
+            fontWeight: 800,
+            fontSize: 14,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            transition: 'all 0.2s',
+            background: marketSection === 'liveBuyers' ? 'linear-gradient(135deg, #2563eb, #1d4ed8)' : 'transparent',
+            color: marketSection === 'liveBuyers' ? '#fff' : 'var(--text-secondary, #64748b)',
+            boxShadow: marketSection === 'liveBuyers' ? '0 4px 12px rgba(37,99,235,0.3)' : 'none'
+          }}
+        >
+          <span>🤝</span>
+          <span>{lang === 'kn' ? 'ನೇರ ಖರೀದಿದಾರರು & ಮಾರಾಟ' : 'Live Buyers & Direct Sell'}</span>
+          <span style={{
+            background: marketSection === 'liveBuyers' ? 'rgba(255,255,255,0.25)' : '#dbeafe',
+            color: marketSection === 'liveBuyers' ? '#fff' : '#1e40af',
+            fontSize: 10,
+            fontWeight: 800,
+            padding: '2px 7px',
+            borderRadius: 999
+          }}>
+            0% Comm.
+          </span>
+        </button>
+      </div>
+
+      {marketSection === 'liveBuyers' ? (
+        <LiveBuyerMarketplace currentDistrict={userDistrict} />
+      ) : (
+        <>
+          {/* Hero Banner */}
       <div style={{
         background: 'linear-gradient(135deg, #064e3b 0%, #047857 50%, #059669 100%)',
         borderRadius: 20,
@@ -2621,6 +2858,8 @@ export function MarketScreen() {
           </div>
         )}
       </div>
+        </>
+      )}
     </div>
   )
 }
@@ -4678,6 +4917,106 @@ export function WeatherScreen() {
             )
           })}
         </div>
+      </div>
+      {/* ── AI Weather-based Crop Advisory ── */}
+      <WeatherCropAdvisory
+        district={district}
+        currentTemp={currentTemp}
+        currentHumidity={currentHumidity}
+        rainChance={todayForecast?.rain || '0%'}
+        condition={currentConditionStr}
+        lang={lang}
+      />
+    </div>
+  )
+}
+
+function WeatherCropAdvisory({ district, currentTemp, currentHumidity, rainChance, condition, lang }) {
+  const [advisory, setAdvisory] = React.useState(null)
+  const [loading, setLoading] = React.useState(false)
+  const loadingRef = React.useRef(false)
+
+  const fetchAdvisory = async () => {
+    if (loadingRef.current) return
+    loadingRef.current = true
+    setLoading(true)
+    const prompt = `You are an expert Karnataka agricultural scientist. Current weather in ${district}: Temperature: ${currentTemp}°C, Humidity: ${currentHumidity}%, Rain probability: ${rainChance}, Condition: ${condition}. Today: ${new Date().toLocaleDateString('en-IN')}.
+
+Give practical farming advisory for Karnataka farmers with this weather. Provide:
+1. Top 3 crop-specific actions to take TODAY (specific, actionable)
+2. What to AVOID in this weather
+3. Best time to irrigate/spray
+
+Format as JSON: {"actions":["...","...","..."],"avoid":"...","bestTime":"...","weatherSummary":"..."}.
+Return ONLY the JSON object.`
+    try {
+      const res = await callGemini(prompt)
+      if (res) {
+        const match = res.match(/\{[\s\S]*\}/)
+        if (match) setAdvisory(JSON.parse(match[0]))
+        else setAdvisory({ actions: ['Monitor crops for moisture stress', 'Check irrigation systems', 'Apply foliar nutrients early morning'], avoid: 'Avoid spraying pesticides when rain is likely', bestTime: 'Early morning (6-8 AM) for spraying', weatherSummary: `${condition} conditions in ${district}` })
+      }
+    } catch(e) {
+      setAdvisory({ actions: ['Monitor crops for moisture stress', 'Check irrigation systems', 'Apply foliar nutrients early morning'], avoid: 'Avoid spraying pesticides when rain is likely', bestTime: 'Early morning (6-8 AM) for spraying', weatherSummary: `${condition} conditions in ${district}` })
+    }
+    setLoading(false)
+    loadingRef.current = false
+  }
+
+  return (
+    <div className="card" style={{ marginTop: 20, padding: 0, border: '1.5px solid rgba(6,182,212,0.3)', overflow: 'hidden' }}>
+      <div style={{ background: 'linear-gradient(135deg, #0891b2 0%, #0284c7 100%)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 8, padding: 6, display: 'flex', alignItems: 'center' }}>
+          <Sparkles size={18} color="#fbbf24" />
+        </div>
+        <div>
+          <h4 style={{ margin: 0, fontSize: 14, fontWeight: 800, color: '#fff' }}>AI Weather-Based Crop Advisory</h4>
+          <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Gemini AI · Based on live {district} weather</p>
+        </div>
+      </div>
+      <div style={{ padding: '16px 20px' }}>
+        {!advisory ? (
+          <button
+            onClick={fetchAdvisory}
+            disabled={loading}
+            style={{
+              background: 'linear-gradient(135deg, #0891b2, #0284c7)',
+              color: '#fff', border: 'none', borderRadius: 10,
+              padding: '10px 20px', fontSize: 13, fontWeight: 700,
+              cursor: loading ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center', gap: 8,
+              opacity: loading ? 0.7 : 1,
+              boxShadow: '0 4px 12px rgba(8,145,178,0.3)'
+            }}
+          >
+            {loading
+              ? <><RefreshCw size={15} style={{ animation: 'spin 1s linear infinite' }} /> Analysing weather...</>
+              : <><Sparkles size={15} /> {lang === 'kn' ? 'ಹವಾಮಾನ ಸಲಹೆ ಪಡೆಯಿರಿ' : 'Get Farming Advisory'}</>
+            }
+          </button>
+        ) : (
+          <>
+            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 14, fontStyle: 'italic' }}>{advisory.weatherSummary}</p>
+            <div style={{ marginBottom: 14 }}>
+              <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8 }}>✅ Actions for Today:</p>
+              {advisory.actions.map((a, i) => (
+                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
+                  <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#dcfce7', color: '#15803d', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800, flexShrink: 0 }}>{i+1}</div>
+                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>{a}</p>
+                </div>
+              ))}
+            </div>
+            <div style={{ background: '#fef9c3', borderRadius: 8, padding: '10px 12px', marginBottom: 10, border: '1px solid #fde047' }}>
+              <p style={{ fontSize: 12, fontWeight: 700, color: '#854d0e', margin: '0 0 2px 0' }}>⚠️ Avoid:</p>
+              <p style={{ fontSize: 12, color: '#92400e', margin: 0 }}>{advisory.avoid}</p>
+            </div>
+            <div style={{ background: '#dbeafe', borderRadius: 8, padding: '10px 12px', border: '1px solid #93c5fd' }}>
+              <p style={{ fontSize: 12, fontWeight: 700, color: '#1e40af', margin: '0 0 2px 0' }}>🕐 Best Time:</p>
+              <p style={{ fontSize: 12, color: '#1d4ed8', margin: 0 }}>{advisory.bestTime}</p>
+            </div>
+            <button onClick={() => setAdvisory(null)} style={{ marginTop: 12, fontSize: 11, color: 'var(--primary)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>↻ Refresh Advisory</button>
+          </>
+        )}
       </div>
     </div>
   )

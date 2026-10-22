@@ -93,6 +93,7 @@ const translations = {
  sNavWeather: 'Weather',
  sNavSOS: 'Emergency SOS',
  sNavCropDoctor: 'Crop Doctor',
+  sNavSoilHealth: 'Soil Health & NPK',
  sNavWaterTank: 'Water Tank',
  sNavTutorials: 'Digital Tutorials',
 
@@ -372,6 +373,7 @@ const translations = {
  sNavWeather: 'ಹವಾಮಾನ',
  sNavSOS: 'ತುರ್ತು SOS',
  sNavCropDoctor: 'ಬೆಳೆ ವೈದ್ಯ',
+  sNavSoilHealth: 'ಮಣ್ಣು ಪರೀಕ್ಷೆ & NPK',
  sNavWaterTank: 'ನೀರಿನ ತೊಟ್ಟಿ',
  sNavTutorials: 'ಡಿಜಿಟಲ್ ಟ್ಯುಟೋರಿಯಲ್ಸ್',
  sNavOverview: 'ಅವಲೋಕನ',
@@ -641,6 +643,7 @@ const translations = {
  sNavWeather: 'मौसम',
  sNavSOS: 'आपातकाल SOS',
  sNavCropDoctor: 'फसल डॉक्टर',
+  sNavSoilHealth: 'मृदा स्वास्थ्य और NPK',
  sNavWaterTank: 'पानी टंकी',
  sNavTutorials: 'डिजिटल ट्यूटोरियल',
  sNavOverview: 'अवलोकन',

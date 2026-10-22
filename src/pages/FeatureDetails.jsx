@@ -199,6 +199,74 @@ const featureData = {
     ctaKn: '31 ಜಿಲ್ಲೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ',
     ctaHi: '31 जिलों को एक्सप्लोर करें',
     ctaLink: '/#district-explorer'
+  },
+  'crop-doctor': {
+    badgeEn: 'AI Visual Diagnostics',
+    badgeKn: 'AI ದೃಶ್ಯ ರೋಗ ಪತ್ತೆ',
+    badgeHi: 'एआई दृश्य निदान',
+    badgeColor: '#059669',
+    titleEn: 'Crop Doctor (AI Disease Diagnosis)',
+    titleKn: 'ಬೆಳೆ ವೈದ್ಯ (AI ರೋಗ ಪತ್ತೆ & ಪರಿಹಾರ)',
+    titleHi: 'फसल डॉक्टर (एआई रोग निदान एवं उपचार)',
+    descEn: 'Instant plant disease detection using computer vision. Upload or scan any crop leaf photo to identify bacterial, fungal, or pest infestations with organic and chemical remedies.',
+    descKn: 'ನಿಮ್ಮ ಮೊಬೈಲ್ ಕ್ಯಾಮೆರಾದಿಂದ ಎಲೆಯ ಫೋಟೋ ತೆಗೆದು ತಕ್ಷಣವೇ ರೋಗ, ಕೀಟ ಬಾಧೆ ಪತ್ತೆ ಮಾಡಿ ಹಾಗೂ ಸಾವಯವ ಮತ್ತು ರಾಸಾಯನಿಕ ಪರಿಹಾರಗಳನ್ನು ಪಡೆಯಿರಿ.',
+    descHi: 'पत्ती की तस्वीर से फसल के रोगों और कीटों का तुरंत पता लगाएं और जैविक एवं रासायनिक उपचार पाएं।',
+    image: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=1200&q=80',
+    details: [
+      {
+        en: 'Instant Visual AI: Scans Ragi blast, Areca Koleroga, Coffee rust, Paddy blight, and 15+ Karnataka crops.',
+        kn: 'ತತ್ಕ್ಷಣದ AI ವಿಶ್ಲೇಷಣೆ: ರಾಗಿ ಬೆಂಕಿ ರೋಗ, ಅಡಿಕೆ ಕೊಳೆ ರೋಗ, ಕಾಫಿ ತುಕ್ಕು ಮತ್ತು ಭತ್ತದ ರೋಗಗಳನ್ನು ನಿಖರವಾಗಿ ಪತ್ತೆ ಮಾಡುತ್ತದೆ.',
+        hi: 'तुरंत एआई विश्लेषण: रागी, सुपारी, धान और कॉफी के 15+ प्रमुख रोगों की पहचान।'
+      },
+      {
+        en: 'Bilingual Agronomic Treatment: Organic (Neem, Jeevamrutha, Trichoderma) and UAS-recommended chemical dosages.',
+        kn: 'ದ್ವಿಭಾಷಾ ಚಿಕಿತ್ಸಾ ಮಾಹಿತಿ: ಬೇವಿನ ಎಣ್ಣೆ, ಜೀವಾಮೃತ, ಟ್ರೈಕೋಡರ್ಮಾ ಮತ್ತು ಕೃಷಿ ವಿವಿ ಶಿಫಾರಸು ಮಾಡಿದ ಔಷಧಿ ಪ್ರಮಾಣ.',
+        hi: 'जैविक और रासायनिक समाधान: नीम तेल, जीवामृत और कृषि विश्वविद्यालय अनुशंसित कीटनाशक।'
+      },
+      {
+        en: 'RSK & KVK Contact Integration: Direct dial local Raitha Samparka Kendra agronomists for field verification.',
+        kn: 'ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರ ಸಂಪರ್ಕ: ಪರಿಶೀಲನೆಗಾಗಿ ಹತ್ತಿರದ ಕೃಷಿ ಅಧಿಕಾರಿಗಳ ನೇರ ಫೋನ್ ಸಂಖ್ಯೆಗಳು.',
+        hi: 'रैथा संपर्क केंद्र संपर्क: कृषि अधिकारियों से सीधा संपर्क करें।'
+      }
+    ],
+    ctaEn: 'Launch Crop Doctor Scanner',
+    ctaKn: 'ಬೆಳೆ ವೈದ್ಯ ಸ್ಕ್ಯಾನರ್ ಪ್ರಾರಂಭಿಸಿ',
+    ctaHi: 'फसल डॉक्टर स्कैनर खोलें',
+    ctaLink: '/crop-doctor'
+  },
+  'soil-health': {
+    badgeEn: 'Precision NPK & Soil Card',
+    badgeKn: 'ನಿಖರವಾದ NPK ಗೊಬ್ಬರ ಲೆಕ್ಕಾಚಾರ',
+    badgeHi: 'सटीक एनपीके उर्वरक कैलकुलेटर',
+    badgeColor: '#7c3aed',
+    titleEn: 'Soil Health Doctor & Soil Card PDF',
+    titleKn: 'ಮಣ್ಣಿನ ಆರೋಗ್ಯ ಕಾರ್ಡ್ & NPK ಕ್ಯಾಲ್ಕ್ಯುಲೇಟರ್',
+    titleHi: 'मृदा स्वास्थ्य कार्ड एवं एनपीके कैलकुलेटर',
+    descEn: 'Scientific NPK and micro-nutrient dosage calculator tailored to Karnataka soil profiles (Red sandy, Laterite, Black cotton, Alluvial). Export professional Soil Health Card PDFs.',
+    descKn: 'ಕರ್ನಾಟಕದ ಕೆಂಪು, ಕಪ್ಪು, ಜಂಬಿಟ್ಟಿಗೆ ಮಣ್ಣಿನ ಪ್ರಕಾರ, ಬೆಳೆ ಮತ್ತು ಎಕರೆ ಆಧಾರದ ಮೇಲೆ ಯೂರಿಯಾ, ಡಿಎಪಿ, ಎಂಒಪಿ ಚೀಲಗಳ ನಿಖರ ಲೆಕ್ಕಾಚಾರ ಮತ್ತು PDF ಕಾರ್ಡ್ ಡೌನ್‌ಲೋಡ್.',
+    descHi: 'कर्नाटक की विभिन्न मिट्टियों के अनुसार यूरिया, डीएपी और पोटाश की सटीक मात्रा की गणना करें और मृदा स्वास्थ्य कार्ड डाउनलोड करें।',
+    image: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200&q=80',
+    details: [
+      {
+        en: 'Commercial Fertilizer Precision: Auto-calculates Urea, DAP, MOP bags avoiding over-fertilization costs.',
+        kn: 'ರಸಗೊಬ್ಬರಗಳ ನಿಖರ ಚೀಲಗಳು: ಯೂರಿಯಾ, ಡಿಎಪಿ ಮತ್ತು ಎಂಒಪಿ ಎಷ್ಟು ಚೀಲ ಬೇಕು ಎಂದು ನಿಖರವಾಗಿ ತಿಳಿಯಿರಿ.',
+        hi: 'उर्वरक की सटीक बोरियां: यूरिया, डीएपी और एमओपी की आवश्यकता अनुसार गणना।'
+      },
+      {
+        en: 'Soil Conditioning & Organic Inputs: Recommends FYM tonnes, Neem cake, PSB packets, and Agricultural Lime.',
+        kn: 'ಸಾವಯವ ತಿದ್ದುಪಡಿ: ಕಾಂಪೋಸ್ಟ್ ಗೊಬ್ಬರ, ಬೇವಿನ ಹಿಂಡಿ, ಜೈವಿಕ ಗೊಬ್ಬರ ಮತ್ತು ಸುಣ್ಣದ ನಿಖರ ಪ್ರಮಾಣ.',
+        hi: 'जैविक खाद एवं सुधारक: गोबर की खाद, नीम खली और चूने की अनुशंसित मात्रा।'
+      },
+      {
+        en: 'Official PDF Soil Health Card: Export print-ready reports with RSK advisory instructions and timestamps.',
+        kn: 'ಅಧಿಕೃತ PDF ಮಣ್ಣಿನ ಕಾರ್ಡ್: ಮುದ್ರಣ ಮಾಡಿಕೊಳ್ಳಬಹುದಾದ ಸುಂದರ ಮಣ್ಣಿನ ಆರೋಗ್ಯ ಪತ್ರಿಕೆ.',
+        hi: 'प्रिंट करने योग्य मृदा कार्ड: आधिकारिक पीडीएफ रिपोर्ट डाउनलोड करें।'
+      }
+    ],
+    ctaEn: 'Calculate Soil Fertilizer Now',
+    ctaKn: 'ಗೊಬ್ಬರದ ಲೆಕ್ಕ ಹಾಕಿ & PDF ಪಡೆಯಿರಿ',
+    ctaHi: 'उर्वरक की गणना करें और कार्ड लें',
+    ctaLink: '/soil-health'
   }
 }
 

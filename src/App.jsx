@@ -44,6 +44,7 @@ function App() {
         <Route path="/dashboard/official/*" element={<OfficialDashboard />} />
         <Route path="/feature/:id" element={<FeatureDetails />} />
         <Route path="/crop-doctor" element={<VillagerDashboard defaultTab="crop-doctor" />} />
+        <Route path="/soil-health" element={<VillagerDashboard defaultTab="soil-health" />} />
         <Route path="/demo" element={<DemoPresenterHub />} />
         <Route path="/demo/voice" element={<DemoVoicePage />} />
         <Route path="/demo/dashboard" element={<DemoEventDashboard />} />
