@@ -12,6 +12,7 @@ import {
   ArrowRight, Wheat, Users, Star, MapPin, Landmark, Globe, MessageCircle, Share2, Mail, Phone, ExternalLink, Building2, GraduationCap, X, Check, Copyright, HelpCircle, MapPinOff
 } from 'lucide-react'
 import FarmerInquiryModal from '../components/FarmerInquiryModal'
+import InstallAppButton from '../components/InstallAppButton'
 
 // ── District Knowledge Base ──────────────────────────────────
 
@@ -204,6 +205,7 @@ export default function LandingPage() {
         <div className="landing-nav-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <LanguageSwitcher variant="topbar-style" />
           <ThemeToggle />
+          <InstallAppButton variant="nav" />
           <button
             onClick={() => { setInquiryCategory('question'); setInquiryModalOpen(true); }}
             className="landing-btn-helpdesk hover-lift"
@@ -343,6 +345,7 @@ export default function LandingPage() {
             >
               {selectedRole === 'farmer' ? t('ctaVillager') : t('ctaOfficial')} <ArrowRight size={16} />
             </button>
+            <InstallAppButton variant="hero" />
           </div>
         </div>
 

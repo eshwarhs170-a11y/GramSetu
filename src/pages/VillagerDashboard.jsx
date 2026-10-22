@@ -14,6 +14,7 @@ import CropScanner from '../components/CropScanner'
 import SoilHealthDoctor from '../components/SoilHealthDoctor'
 import { Menu, Search, Bell, X, AlertTriangle, IndianRupee, LayoutDashboard, Landmark, Microscope, ClipboardList, User, Wheat } from 'lucide-react'
 import FarmerInquiryModal from '../components/FarmerInquiryModal'
+import InstallAppButton from '../components/InstallAppButton'
 
 import { db } from '../firebase'
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
@@ -289,6 +290,7 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
           <div className="topbar-actions">
             <LanguageSwitcher variant="topbar-style" />
             <ThemeToggle />
+            <InstallAppButton variant="nav" />
 
             <button className="topbar-icon-btn" title="Search" onClick={() => setSearchOpen(true)}>
               <Search size={18} strokeWidth={2} />
