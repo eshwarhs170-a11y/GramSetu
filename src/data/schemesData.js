@@ -1,3 +1,5 @@
+import { scholarshipSchemes } from './scholarshipsData.js';
+
 export const kaSchemes = [
   // ==========================================
   // AGRICULTURE & ALLIED
@@ -599,13 +601,527 @@ export const kaSchemes = [
       kn: 'ಗ್ರಾಮೀಣ ಮಹಿಳೆಯರನ್ನು ಸ್ವಸಹಾಯ ಸಂಘಗಳಾಗಿ (SHG) ಸಂಘಟಿಸಿ ₹25,000 ಸುತ್ತು ನಿಧಿ ಹಾಗೂ ಶೂನ್ಯ ಬಡ್ಡಿದರದ ಆರ್ಥಿಕ ನೆರವು ನೀಡಿ ಸಬಲೀಕರಣಗೊಳಿಸುವ ಯೋಜನೆ.', 
       hi: 'ग्रामीण महिलाओं के स्वयं सहायता समूहों (SHG) को ₹25,000 रिवाल्विंग फंड और कम ब्याज वाले सूक्ष्म ऋण प्रदान करना।' 
     },
+    eligibility: {
+      en: 'Rural women aged 18 to 60 forming a registered SHG with at least 15 members from BPL/economically backward families.',
+      kn: 'ಬಿಪಿಎಲ್ ಕುಟುಂಬಗಳ 18 ರಿಂದ 60 ವರ್ಷ ವಯಸ್ಸಿನ ಕನಿಷ್ಠ 15 ಮಹಿಳೆಯರನ್ನು ಒಳಗೊಂಡ ನೋಂದಾಯಿತ ಸ್ವಸಹಾಯ ಸಂಘಗಳು.',
+      hi: 'बीपीएल परिवारों की 18-60 वर्ष आयु की महिलाओं का 15 सदस्यीय पंजीकृत स्वयं सहायता समूह।'
+    },
+    exclusions: {
+      en: 'Defaulter groups or members currently employed in full-time government service.',
+      kn: 'ಸರ್ಕಾರಿ ನೌಕರರು ಅಥವಾ ಹಿಂದಿನ ಸಾಲ ಸುಸ್ತಿ ಮಾಡಿದ ಸಂಘಗಳು.',
+      hi: 'डिफॉल्टर समूह या नियमित सरकारी कर्मचारी।'
+    },
+    benefits: {
+      subsidyPercent: 'Revolving fund grant of ₹25,000 + Zero-interest bank loans up to ₹3,00,000 for SHG',
+      maxLimit: 'Up to ₹3,00,000 at 0% to 4% interest per group',
+      mode: 'Bank loan linked to Stree Shakti / Sanjeevini NRLM',
+      interestSubvention: 'Zero interest for prompt repayments'
+    },
+    documents: {
+      en: 'SHG Registration Certificate, Bank Account Details, Member Aadhaar & Ration Cards, Resolution Book.',
+      kn: 'ಸಂಘದ ನೋಂದಣಿ ಪತ್ರ, ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್, ಸದಸ್ಯರ ಆಧಾರ್ ಕಾರ್ಡ್, ನಿರ್ಣಯ ಪುಸ್ತಕ.',
+      hi: 'समूह पंजीकरण पत्र, बैंक पासबुक, सदस्यों के आधार व राशन कार्ड।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'SHG Formation & Grading', kn: 'ಸಂಘ ರಚನೆ & ಗ್ರೇಡಿಂಗ್', hi: 'समूह गठन' }, desc: { en: 'Form SHG through Gram Panchayat Anganwadi worker or CDPO office.', kn: 'ಅಂಗನವಾಡಿ ಕಾರ್ಯಕರ್ತೆ ಅಥವಾ ಸಿಡಿಪಿಒ ಕಚೇರಿ ಮೂಲಕ ಸಂಘ ರಚಿಸಿ.', hi: 'आंगनबाड़ी या सीडीपीओ के माध्यम से समूह गठित करें।' } },
+      { step: 2, title: { en: 'Revolving Fund Release', kn: 'ಸುತ್ತು ನಿಧಿ ಬಿಡುಗಡೆ', hi: 'निधि आवंटन' }, desc: { en: 'Receive ₹25,000 government revolving seed capital.', kn: 'ಸಂಘದ ಉಳಿತಾಯ ಆಧಾರದ ಮೇಲೆ ₹25,000 ಸರ್ಕಾರಿ ಸುತ್ತು ನಿಧಿ ಪಡೆಯಿರಿ.', hi: '₹25,000 का सरकारी रिवाल्विंग फंड प्राप्त करें।' } },
+      { step: 3, title: { en: 'Bank Loan Linkage', kn: 'ಬ್ಯಾಂಕ್ ಸಾಲ ಜೋಡಣೆ', hi: 'बैंक ऋण' }, desc: { en: 'Avail subsidized micro-enterprise loan for sheep, poultry, or tailoring.', kn: 'ಕುರಿ ಸಾಕಾಣಿಕೆ, ಹೈನುಗಾರಿಕೆ ಅಥವಾ ಹೊಲಿಗೆ ಯಂತ್ರಕ್ಕಾಗಿ ಬಡ್ಡಿರಹಿತ ಸಾಲ ಪಡೆಯಿರಿ.', hi: 'लघु उद्यमों हेतु शून्य ब्याज पर बैंक ऋण प्राप्त करें।' } }
+    ],
+    timeline: '30 Days post SHG grading',
     img: '/schemes/stree-shakti.jpg',
     badge: { en: 'SHG Loan @ 0%', kn: 'ಶೂನ್ಯ ಬಡ್ಡಿ ಸಾಲ', hi: '0% ब्याज ऋण' },
     badgeClass: 'badge-info',
     ministry: { en: 'Women & Child Development Dept., Karnataka', kn: 'ಮಹಿಳಾ ಮತ್ತು ಮಕ್ಕಳ ಕಲ್ಯಾಣ ಇಲಾಖೆ', hi: 'महिला एवं बाल विकास विभाग' },
     applyLink: 'https://dwcd.karnataka.gov.in/',
     trackerUrl: 'https://dwcd.karnataka.gov.in/'
-  }
+  },
+
+  // ==========================================
+  // KARNATAKA GUARANTEE & EXTRA GOVT SCHEMES
+  // ==========================================
+  {
+    id: 'yuva-nidhi',
+    category: 'Finance',
+    level: 'State',
+    beneficiary: ['Youth/Agri-Startups', 'Students'],
+    objective: 'Income Support',
+    stage: 'All-Season',
+    districtSpecific: ['All'],
+    title: { en: 'Yuva Nidhi Scheme (Unemployment Allowance)', kn: 'ಯುವ ನಿಧಿ ಯೋಜನೆ (ನಿರುದ್ಯೋಗ ಭತ್ಯೆ)', hi: 'युवा निधि योजना (बेरोजगारी भत्ता)' },
+    desc: { 
+      en: 'Flagship Karnataka 5th Guarantee providing ₹3,000 per month for unemployed Graduates and ₹1,500 per month for unemployed Diploma holders for up to 2 years via Direct Benefit Transfer.', 
+      kn: 'ಪದವಿ ಪಡೆದು 6 ತಿಂಗಳಾದರೂ ಉದ್ಯೋಗ ದೊರೆಯದ ಯುವಕ-ಯುವತಿಯರಿಗೆ ಮಾಸಿಕ ₹3,000 ಮತ್ತು ಡಿಪ್ಲೊಮಾ ಪದವೀಧರರಿಗೆ ಮಾಸಿಕ ₹1,500 ನಿರುದ್ಯೋಗ ಭತ್ಯೆ ನೀಡುವ ರಾಜ್ಯ ಸರ್ಕಾರದ ಗ್ಯಾರಂಟಿ ಯೋಜನೆ.', 
+      hi: 'बेरोजगार स्नातकों को ₹3,000/माह और डिप्लोमा धारकों को ₹1,500/माह की वित्तीय सहायता 2 वर्ष तक सीधे बैंक खाते में।' 
+    },
+    eligibility: {
+      en: 'Karnataka domicile students passing Degree or Diploma who remain unemployed for minimum 6 months from graduation date and not enrolled in higher education.',
+      kn: 'ಕರ್ನಾಟಕದಲ್ಲಿ ಪದವಿ ಅಥವಾ ಡಿಪ್ಲೊಮಾ ಮುಗಿಸಿ ಕನಿಷ್ಠ 6 ತಿಂಗಳು ಕಳೆದರೂ ಉದ್ಯೋಗ ಸಿಗದ ಮತ್ತು ಉನ್ನತ ಶಿಕ್ಷಣಕ್ಕೆ ದಾಖಲಾಗದ ರಾಜ್ಯದ ನಿವಾಸಿಗಳು.',
+      hi: 'कर्नाटक के निवासी जिन्होंने डिग्री या डिप्लोमा पूरा किया हो और कम से कम 6 माह से बेरोजगार हों।'
+    },
+    exclusions: {
+      en: 'Employed in Govt/Private sector, drawing benefits from any apprentice stipend, or paying income tax.',
+      kn: 'ಸರ್ಕಾರಿ ಅಥವಾ ಖಾಸಗಿ ನೌಕರರು, ಅಪ್ರೆಂಟಿಸ್ ಸ್ಟೈಪೆಂಡ್ ಪಡೆಯುತ್ತಿರುವವರು ಅಥವಾ ಆದಾಯ ತೆರಿಗೆದಾರರು.',
+      hi: 'सरकारी/निजी नौकरी करने वाले या प्रशिक्षु वजीफा पाने वाले युवा।'
+    },
+    benefits: {
+      subsidyPercent: '100% Monthly DBT Allowance',
+      maxLimit: '₹3,000 / month (Degree) | ₹1,500 / month (Diploma) for up to 24 months',
+      mode: 'Aadhaar-seeded Direct Benefit Transfer (DBT)',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Degree / Diploma Certificate & Marks Cards, Karnataka Domicile Certificate, Aadhaar Card, Bank Passbook, Self-Declaration of unemployment.',
+      kn: 'ಪದವಿ/ಡಿಪ್ಲೊಮಾ ಅಂಕಪಟ್ಟಿ, ಕರ್ನಾಟಕ ವಾಸಸ್ಥಳ ದೃಢೀಕರಣ, ಆಧಾರ್ ಕಾರ್ಡ್, ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್, ನಿರುದ್ಯೋಗ ಸ್ವಯಂ ಘೋಷಣೆ.',
+      hi: 'डिग्री/डिप्लोमा प्रमाण पत्र, कर्नाटक अधिवास प्रमाण पत्र, आधार कार्ड, बैंक पासबुक, बेरोजगारी स्व-घोषणा पत्र।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Seva Sindhu Registration', kn: 'ಸೇವಾ ಸಿಂಧು ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ನೋಂದಣಿ', hi: 'सेवा सिंधु पर पंजीकरण' }, desc: { en: 'Apply online on Seva Sindhu or via Gram One / Karnataka One center.', kn: 'ಸೇವಾ ಸಿಂಧು ಅಥವಾ ಹತ್ತಿರದ ಗ್ರಾಮ ಒನ್ ಕೇಂದ್ರದಲ್ಲಿ ಆಧಾರ್ ಮೂಲಕ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ.', hi: 'सेवा सिंधु या ग्राम वन केंद्र पर ऑनलाइन आवेदन करें।' } },
+      { step: 2, title: { en: 'University & Nadakacheri Verification', kn: 'ವಿಶ್ವವಿದ್ಯಾಲಯ & ನಾಡಕಚೇರಿ ಪರಿಶೀಲನೆ', hi: 'दस्तावेज सत्यापन' }, desc: { en: 'Automated verification with university graduation database and PF/ESIC records.', kn: 'ವಿಶ್ವವಿದ್ಯಾಲಯದ ಫಲಿತಾಂಶ ಹಾಗೂ ಪಿಎಫ್/ಇಎಸ್‌ಐಸಿ ಡೇಟಾಬೇಸ್ ಮೂಲಕ ಪರಿಶೀಲನೆ.', hi: 'विश्वविद्यालय और ईपीएफओ डेटाबेस से स्वचालित सत्यापन।' } },
+      { step: 3, title: { en: 'Monthly DBT Disbursement', kn: 'ಮಾಸಿಕ ನಗದು ಜಮೆ', hi: 'मासिक डीबीटी भुगतान' }, desc: { en: 'Direct allowance credited to Aadhaar-linked bank account every month.', kn: 'ಪ್ರತಿ ತಿಂಗಳೂ ಆಧಾರ್ ಜೋಡಿತ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ನೇರ ಹಣ ಜಮೆ.', hi: 'हर महीने सीधे बैंक खाते में भत्ते का अंतरण।' } }
+    ],
+    timeline: '15 Days for verification & approval',
+    img: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80',
+    badge: { en: '₹3,000 / Month', kn: '₹೩,೦೦೦ / ತಿಂಗಳಿಗೆ', hi: '₹3,000 / माह' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Dept. of Skill Development & Livelihood, Karnataka', kn: 'ಕೌಶಲ್ಯಾಭಿವೃದ್ಧಿ ಮತ್ತು ಜೀವನೋಪಾಯ ಇಲಾಖೆ', hi: 'कौशल विकास एवं आजीविका विभाग' },
+    applyLink: 'https://sevasindhuservices.karnataka.gov.in/',
+    trackerUrl: 'https://sevasindhuservices.karnataka.gov.in/'
+  },
+  {
+    id: 'gruha-jyothi',
+    category: 'Finance',
+    level: 'State',
+    beneficiary: ['Small/Marginal Farmers', 'Women', 'All Landholders'],
+    objective: 'Income Support',
+    stage: 'All-Season',
+    districtSpecific: ['All'],
+    title: { en: 'Gruha Jyothi Scheme (Free Domestic Power)', kn: 'ಗೃಹ ಜ್ಯೋತಿ ಯೋಜನೆ (ಉಚಿತ ಗೃಹ ವಿದ್ಯುತ್)', hi: 'गृह ज्योति योजना (मुफ्त घरेलू बिजली)' },
+    desc: { 
+      en: 'Karnataka government guarantee providing up to 200 units of zero-bill domestic electricity every month to all residential households based on average historical consumption plus 10%.', 
+      kn: 'ರಾಜ್ಯದ ಎಲ್ಲಾ ಗೃಹಬಳಕೆ ವಿದ್ಯುತ್ ಗ್ರಾಹಕರಿಗೆ ಮಾಸಿಕ 200 ಯೂನಿಟ್‌ವರೆಗೆ ಉಚಿತ ವಿದ್ಯುತ್ ಒದಗಿಸುವ ಜನಪ್ರಿಯ ಗ್ಯಾರಂಟಿ ಯೋಜನೆ.', 
+      hi: 'कर्नाटक के सभी घरेलू बिजली उपभोक्ताओं को प्रतिमाह 200 यूनिट तक मुफ्त बिजली (शून्य बिजली बिल)।' 
+    },
+    eligibility: {
+      en: 'All domestic/residential electricity consumers in Karnataka with active ESCOM connection (BESCOM, MESCOM, HESCOM, GESCOM, CESC).',
+      kn: 'ಕರ್ನಾಟಕದ ಎಲ್ಲಾ ಎಸ್ಕಾಂಗಳ (ಬೆಸ್ಕಾಂ, ಮೆಸ್ಕಾಂ, ಹೆಸ್ಕಾಂ, ಜೆಸ್ಕಾಂ, ಸಿಇಎಸ್‌ಸಿ) ಗೃಹಬಳಕೆ ವಿದ್ಯುತ್ ಮೀಟರ್ ಹೊಂದಿರುವ ಗ್ರಾಹಕರು.',
+      hi: 'कर्नाटक के सभी घरेलू बिजली मीटर कनेक्शन धारक।'
+    },
+    exclusions: {
+      en: 'Commercial connections, industrial power, non-domestic agricultural pump meters under separate schemes.',
+      kn: 'ವಾಣಿಜ್ಯ ಮತ್ತು ಕೈಗಾರಿಕಾ ಸಂಪರ್ಕಗಳು, ಕೃಷಿ ಪಂಪ್‌ಸೆಟ್‌ಗಳು (ಕೃಷಿ ಪಂಪ್‌ಸೆಟ್‌ಗಳಿಗೆ ಈಗಾಗಲೇ ಪ್ರತ್ಯೇಕ ಉಚಿತ ವಿದ್ಯುತ್ ನೀಡಲಾಗಿದೆ).',
+      hi: 'व्यावसायिक एवं औद्योगिक बिजली कनेक्शन।'
+    },
+    benefits: {
+      subsidyPercent: '100% Free electricity up to 200 units',
+      maxLimit: 'Up to 200 units/month (Average usage + 10% entitlement)',
+      mode: 'Zero Bill directly delivered by ESCOM meter reader',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Electricity Account ID (Account ID from Bill), Aadhaar Card, Consumer Name matching Aadhaar.',
+      kn: 'ವಿದ್ಯುತ್ ಬಿಲ್‌ನ ಅಕೌಂಟ್ ಐಡಿ (Account ID), ಆಧಾರ್ ಕಾರ್ಡ್, ಆಧಾರ್ ಲಿಂಕ್ ಆದ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ.',
+      hi: 'बिजली बिल की खाता संख्या (Account ID), आधार कार्ड।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Seva Sindhu Linking', kn: 'ಖಾತೆ ಸಂಖ್ಯೆ ಜೋಡಣೆ', hi: 'खाता लिंक' }, desc: { en: 'Link Account ID with Aadhaar on Seva Sindhu Gruha Jyothi portal.', kn: 'ಸೇವಾ ಸಿಂಧು ಗೃಹ ಜ್ಯೋತಿ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ವಿದ್ಯುತ್ ಅಕೌಂಟ್ ಐಡಿ ಮತ್ತು ಆಧಾರ್ ಜೋಡಿಸಿ.', hi: 'सेवा सिंधु पोर्टल पर बिजली बिल खाता आईडी और आधार लिंक करें।' } },
+      { step: 2, title: { en: 'Entitlement Calculation', kn: 'ಅರ್ಹತಾ ಯೂನಿಟ್ ಲೆಕ್ಕಾಚಾರ', hi: 'पात्रता निर्धारण' }, desc: { en: 'System computes average annual consumption + 10% bonus units.', kn: 'ಹಿಂದಿನ 1 ವರ್ಷದ ಸರಾಸರಿ ಬಳಕೆ + 10% ಉಚಿತ ಯೂನಿಟ್‌ಗಳನ್ನು ಲೆಕ್ಕಹಾಕಲಾಗುತ್ತದೆ.', hi: 'पिछले 1 वर्ष की औसत खपत + 10% के आधार पर मासिक कोटा तय।' } },
+      { step: 3, title: { en: 'Zero Bill Issue', kn: 'ಶೂನ್ಯ ಬಿಲ್ ವಿತರಣೆ', hi: 'शून्य बिल जारी' }, desc: { en: 'Meter reader delivers Zero Electricity Bill monthly.', kn: 'ಪ್ರತಿ ತಿಂಗಳು ಶೂನ್ಯ ಮೊತ್ತದ ಬಿಲ್ ಗ್ರಾಹಕರಿಗೆ ವಿತರಣೆಯಾಗುತ್ತದೆ.', hi: 'प्रतिमाह शून्य राशि का बिजली बिल प्राप्त होता है।' } }
+    ],
+    timeline: 'Immediate registration; Bill subsidy from subsequent billing cycle',
+    img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600&q=80',
+    badge: { en: 'Up to 200 Units Free', kn: '೨೦೦ ಯೂನಿಟ್ ಉಚಿತ', hi: '200 यूनिट मुफ्त' },
+    badgeClass: 'badge-primary',
+    ministry: { en: 'Energy Department, Govt of Karnataka', kn: 'ಇಂಧನ ಇಲಾಖೆ, ಕರ್ನಾಟಕ ಸರ್ಕಾರ', hi: 'ऊर्जा विभाग, कर्नाटक सरकार' },
+    applyLink: 'https://sevasindhugs.karnataka.gov.in/gruhajyothi/',
+    trackerUrl: 'https://sevasindhugs.karnataka.gov.in/'
+  },
+  {
+    id: 'shakti-scheme',
+    category: 'Women',
+    level: 'State',
+    beneficiary: ['Women Farmers', 'Women', 'Students'],
+    objective: 'Income Support',
+    stage: 'All-Season',
+    districtSpecific: ['All'],
+    title: { en: 'Shakti Scheme (Free Bus Transit for Women)', kn: 'ಶಕ್ತಿ ಯೋಜನೆ (ಮಹಿಳೆಯರಿಗೆ ಉಚಿತ ಬಸ್ ಪ್ರಯಾಣ)', hi: 'शक्ति योजना (महिलाओं के लिए मुफ्त बस यात्रा)' },
+    desc: { 
+      en: 'Karnataka government flagship scheme offering 100% free road transport bus travel to all domicile women, girls, and transgender persons across KSRTC, BMTC, NWKRTC, and KKRTC state-run buses.', 
+      kn: 'ರಾಜ್ಯದ ಎಲ್ಲಾ ಮಹಿಳೆಯರು, ವಿದ್ಯಾರ್ಥಿನಿಯರು ಹಾಗೂ ತೃತೀಯ ಲಿಂಗಿಗಳಿಗೆ ಕೆಎಸ್‌ಆರ್‌ಟಿಸಿ, ಬಿಎಂಟಿಸಿ, ಈಶಾನ್ಯ ಮತ್ತು ವಾಯವ್ಯ ಸಾರಿಗೆ ಬಸ್‌ಗಳಲ್ಲಿ ಸಂಪೂರ್ಣ ಉಚಿತ ಪ್ರಯಾಣ ಸೌಲಭ್ಯ.', 
+      hi: 'कर्नाटक की सभी महिलाओं और छात्राओं के लिए राज्य परिवहन बसों (KSRTC/BMTC) में 100% मुफ्त बस यात्रा।' 
+    },
+    eligibility: {
+      en: 'All women, girl students, and transgender residents of Karnataka holding any state-issued photo ID (Aadhaar, Voter ID, Ration Card, Driving License).',
+      kn: 'ಕರ್ನಾಟಕದಲ್ಲಿ ವಾಸಿಸುವ ಎಲ್ಲಾ ಮಹಿಳೆಯರು, ವಿದ್ಯಾರ್ಥಿನಿಯರು (ಆಧಾರ್, ವೋಟರ್ ಐಡಿ, ಪಡಿತರ ಚೀಟಿ ಹೊಂದಿರುವವರು).',
+      hi: 'कर्नाटक की सभी स्थायी निवासी महिलाएं और छात्राएं।'
+    },
+    exclusions: {
+      en: 'AC luxury buses (Airavat, Flybus, Rajahamsa, Ambari) and interstate route portions beyond Karnataka borders.',
+      kn: 'ಐಷಾರಾಮಿ ಎಸಿ ಬಸ್‌ಗಳು (ಐರಾವತ, ಅಂಬಾರಿ) ಮತ್ತು ಹೊರರಾಜ್ಯದ ಗಡಿ ಮೀರಿದ ಪ್ರಯಾಣಕ್ಕೆ ಅನ್ವಯಿಸುವುದಿಲ್ಲ.',
+      hi: 'एसी/लक्जरी बसें (ऐरावत, अंबाती) और राज्य की सीमाओं के बाहर की यात्रा।'
+    },
+    benefits: {
+      subsidyPercent: '100% Fare Waiver (Zero Ticket Cost)',
+      maxLimit: 'Unlimited daily and monthly bus travel across Karnataka',
+      mode: 'Zero Fare Physical / Smart Card Ticket issued by bus conductor',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Aadhaar Card or Karnataka Government issued ID showing Karnataka address.',
+      kn: 'ಕರ್ನಾಟಕ ವಿಳಾಸವಿರುವ ಆಧಾರ್ ಕಾರ್ಡ್, ಮತದಾರರ ಗುರುತಿನ ಚೀಟಿ ಅಥವಾ ಶಾಲಾ-ಕಾಲೇಜು ಐಡಿ.',
+      hi: 'कर्नाटक का पता दर्शाने वाला आधार कार्ड या मतदाता पहचान पत्र।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Board Bus & Show ID', kn: 'ಬಸ್ ಹತ್ತಿ ಗುರುತಿನ ಚೀಟಿ ತೋರಿಸಿ', hi: 'पहचान पत्र दिखाएं' }, desc: { en: 'Show Aadhaar or domicile photo ID to bus conductor upon boarding.', kn: 'ಬಸ್ ಹತ್ತಿದಾಗ ನಿರ್ವಾಹಕರಿಗೆ ಆಧಾರ್ ಕಾರ್ಡ್ ತೋರಿಸಿ.', hi: 'बस में चढ़ते समय परिचालक को आधार कार्ड दिखाएं।' } },
+      { step: 2, title: { en: 'Zero-Fare Ticket Issued', kn: 'ಶೂನ್ಯ ಶುಲ್ಕದ ಟಿಕೆಟ್ ಪಡೆಯಿರಿ', hi: 'शून्य टिकट जारी' }, desc: { en: 'Conductor issues computerized Zero-Fare Shakti ticket instantly.', kn: 'ನಿರ್ವಾಹಕರು ತಕ್ಷಣವೇ ಶೂನ್ಯ ಮೊತ್ತದ ಶಕ್ತಿ ಟಿಕೆಟ್ ನೀಡುತ್ತಾರೆ.', hi: 'कंडक्टर तुरंत शून्य टिकट जारी करता है।' } }
+    ],
+    timeline: 'Instant — Valid every day on all ordinary / express buses',
+    img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&q=80',
+    badge: { en: '100% Free Travel', kn: 'ಉಚಿತ ಬಸ್ ಪ್ರಯಾಣ', hi: 'मुफ्त यात्रा' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Transport Department, Govt of Karnataka', kn: 'ಸಾರಿಗೆ ಇಲಾಖೆ, ಕರ್ನಾಟಕ ಸರ್ಕಾರ', hi: 'परिवहन विभाग, कर्नाटक सरकार' },
+    applyLink: 'https://transport.karnataka.gov.in/',
+    trackerUrl: 'https://transport.karnataka.gov.in/'
+  },
+  {
+    id: 'anna-bhagya',
+    category: 'Finance',
+    level: 'State',
+    beneficiary: ['Small/Marginal Farmers', 'Women', 'All Landholders'],
+    objective: 'Income Support',
+    stage: 'All-Season',
+    districtSpecific: ['All'],
+    title: { en: 'Anna Bhagya Scheme (Food Security & DBT)', kn: 'ಅನ್ನ ಭಾಗ್ಯ ಯೋಜನೆ (ಉಚಿತ ಅಕ್ಕಿ & ನಗದು ವರ್ಗಾವಣೆ)', hi: 'अन्न भाग्य योजना (मुफ्त खाद्यान्न व डीबीटी)' },
+    desc: { 
+      en: 'Guarantees 10 kg of food grains per person per month for BPL and Antyodaya households (5 kg free rice + ₹170 cash DBT per head for remaining 5 kg directly into bank accounts).', 
+      kn: 'ರಾಜ್ಯದ ಬಿಪಿಎಲ್ ಮತ್ತು ಅಂತ್ಯೋದಯ ಪಡಿತರ ಚೀಟಿದಾರರಿಗೆ ಪ್ರತಿ ಸದಸ್ಯರಿಗೆ ತಲಾ 10 ಕೆಜಿ ಆಹಾರ ಧಾನ್ಯ (5 ಕೆಜಿ ಉಚಿತ ಅಕ್ಕಿ + 5 ಕೆಜಿ ಬದಲಿಗೆ ಪ್ರತಿ ವ್ಯಕ್ತಿಗೆ ₹170 ನೇರ ನಗದು ವರ್ಗಾವಣೆ).', 
+      hi: 'बीपीएल परिवारों को प्रतिमाह प्रति व्यक्ति 10 किग्रा खाद्यान्न (5 किग्रा मुफ्त चावल + 5 किग्रा के बदले ₹170 प्रति व्यक्ति डीबीटी कैश)।' 
+    },
+    eligibility: {
+      en: 'All active BPL and Antyodaya (AAY) ration cardholders in Karnataka linked with Aadhaar.',
+      kn: 'ಕರ್ನಾಟಕದ ಎಲ್ಲಾ ಸಕ್ರಿಯ ಬಿಪಿಎಲ್ ಮತ್ತು ಅಂತ್ಯೋದಯ (AAY) ಪಡಿತರ ಚೀಟಿ ಹೊಂದಿರುವ ಕುಟುಂಬಗಳು.',
+      hi: 'कर्नाटक के सभी सक्रिय बीपीएल एवं अंत्योदय राशन कार्ड धारक।'
+    },
+    exclusions: {
+      en: 'APL cardholders, government servants, and income tax paying families.',
+      kn: 'ಎಪಿಎಲ್ ಕಾರ್ಡ್‌ದಾರರು, ಸರ್ಕಾರಿ ನೌಕರರು ಮತ್ತು ಆದಾಯ ತೆರಿಗೆದಾರರು.',
+      hi: 'एपीएल कार्ड धारक एवं आयकर दाता।'
+    },
+    benefits: {
+      subsidyPercent: '100% Free Foodgrain + Direct DBT Cash',
+      maxLimit: '5 kg free food grains + ₹170 per person DBT monthly',
+      mode: 'Fair Price Shop (Ration Shop) distribution + NPCI Bank DBT',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'BPL / Antyodaya Ration Card, Aadhaar Card seeded with bank account.',
+      kn: 'ಬಿಪಿಎಲ್ ಅಥವಾ ಅಂತ್ಯೋದಯ ಪಡಿತರ ಚೀಟಿ, ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ಜೋಡಣೆಯಾದ ಆಧಾರ್ ಸಂಖ್ಯೆ.',
+      hi: 'बीपीएल/अंत्योदय राशन कार्ड, आधार लिंक बैंक खाता।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Biometric Authentication', kn: 'ಬಯೋಮೆಟ್ರಿಕ್ ದೃಢೀಕರಣ', hi: 'बायोमेट्रिक सत्यापन' }, desc: { en: 'Collect monthly 5kg free rice at nearest Fair Price Shop using thumbprint.', kn: 'ನ್ಯಾಯಬೆಲೆ ಅಂಗಡಿಯಲ್ಲಿ ಹೆಬ್ಬೆಟ್ಟು ಗುರುತು ನೀಡಿ 5 ಕೆಜಿ ಉಚಿತ ಅಕ್ಕಿ ಪಡೆಯಿರಿ.', hi: 'उचित मूल्य की दुकान पर बायोमेट्रिक देकर मुफ्त चावल प्राप्त करें।' } },
+      { step: 2, title: { en: 'DBT Credit for 5kg Cash', kn: 'ನಗದು ಜಮೆ', hi: 'डीबीटी नकद हस्तांतरण' }, desc: { en: 'Additional ₹170/person credited directly to card head bank account.', kn: 'ಉಳಿದ 5 ಕೆಜಿಯ ಹಣ ₹170 ಪ್ರತಿ ವ್ಯಕ್ತಿಗೆ ನೇರವಾಗಿ ಯಜಮಾನಿಯ ಖಾತೆಗೆ ಜಮೆ.', hi: 'अतिरिक्त 5 किग्रा का ₹170 प्रति सदस्य सीधे बैंक में ट्रांसफर।' } }
+    ],
+    timeline: 'Monthly recurring distribution',
+    img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80',
+    badge: { en: '10kg / ₹170 DBT', kn: '೧೦ ಕೆಜಿ / ₹೧೭೦ DBT', hi: '10 किग्रा / ₹170 डीबीटी' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Food, Civil Supplies & Consumer Affairs Dept, Karnataka', kn: 'ಆಹಾರ, ನಾಗರಿಕ ಸರಬರಾಜು ಮತ್ತು ಗ್ರಾಹಕರ ವ್ಯವಹಾರಗಳ ಇಲಾಖೆ', hi: 'खाद्य एवं नागरिक आपूर्ति विभाग' },
+    applyLink: 'https://ahara.kar.nic.in/',
+    trackerUrl: 'https://ahara.kar.nic.in/'
+  },
+  {
+    id: 'ksheera-dhare',
+    category: 'Agriculture',
+    level: 'State',
+    beneficiary: ['Small/Marginal Farmers', 'Women Farmers', 'Large Landholders'],
+    objective: 'Income Support',
+    stage: 'All-Season',
+    districtSpecific: ['All'],
+    title: { en: 'Ksheera Dhare (Milk Incentive Scheme - ₹5/Litre)', kn: 'ಕ್ಷೀರ ಧಾರೆ ಯೋಜನೆ (ಹಾಲಿನ ಪ್ರೋತ್ಸಾಹಧನ ₹೫/ಲೀಟರ್)', hi: 'क्षीर धारा योजना (दूध प्रोत्साहन ₹5/लीटर)' },
+    desc: { 
+      en: 'Karnataka state direct cash incentive providing ₹5 per litre directly into the bank accounts of dairy farmers supplying milk to registered KMF (Nandini) Milk Producers Cooperative Societies (MPCS).', 
+      kn: 'ಕೆಎಂಎಫ್ (ನಂದಿನಿ) ಹಾಲು ಉತ್ಪಾದಕರ ಸಹಕಾರ ಸಂಘಗಳಿಗೆ ನಿತ್ಯ ಹಾಲು ಪೂರೈಸುವ ರೈತರಿಗೆ ಲೀಟರ್‌ಗೆ ₹5 ನೇರ ಪ್ರೋತ್ಸಾಹಧನ ನೀಡುವ ರಾಜ್ಯ ಸರ್ಕಾರದ ಮಹತ್ವದ ಹೈನುಗಾರಿಕೆ ಯೋಜನೆ.', 
+      hi: 'केएमएफ (नंदिनी) दुग्ध उत्पादक सहकारी समितियों को दूध आपूर्ति करने वाले किसानों को ₹5 प्रति लीटर का सीधा बैंक प्रोत्साहन।' 
+    },
+    eligibility: {
+      en: 'All dairy farmers in Karnataka who pour milk regularly to primary Milk Producers Cooperative Societies (MPCS) affiliated to KMF District Milk Unions.',
+      kn: 'ಕರ್ನಾಟಕದ ಜಿಲ್ಲಾ ಹಾಲು ಒಕ್ಕೂಟಗಳ ವ್ಯಾಪ್ತಿಯ ಪ್ರಾಥಮಿಕ ಹಾಲು ಉತ್ಪಾದಕರ ಸಹಕಾರ ಸಂಘಗಳಿಗೆ ಹಾಲು ಪೂರೈಸುವ ಎಲ್ಲಾ ರೈತರು.',
+      hi: 'केएमएफ से संबद्ध प्राथमिक दुग्ध सहकारी समितियों के सदस्य किसान।'
+    },
+    exclusions: {
+      en: 'Private milk vendorship not linked to official KMF/Nandini cooperative societies.',
+      kn: 'ಖಾಸಗಿ ಡೇರಿಗಳಿಗೆ ಅಥವಾ ಹೊರಗಡೆ ಮಾರಾಟ ಮಾಡುವ ಹಾಲು.',
+      hi: 'निजी डेयरियों को दूध बेचने वाले उत्पादक।'
+    },
+    benefits: {
+      subsidyPercent: 'Direct Incentive of ₹5.00 per litre',
+      maxLimit: 'Paid on 100% of milk poured (Average ₹3,000 to ₹15,000/month per farmer)',
+      mode: 'Monthly Direct Benefit Transfer (DBT) to Aadhaar-linked Bank Account',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'MPCS Member Passbook / Producer Code, Aadhaar Card, Active Bank Passbook linked to NPCI.',
+      kn: 'ಹಾಲು ಸಂಘದ ಸದಸ್ಯತ್ವ ಪಾಸ್‌ಬುಕ್ / ಕೋಡ್, ಆಧಾರ್ ಕಾರ್ಡ್, ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್.',
+      hi: 'दुग्ध समिति का सदस्य पासबुक, आधार कार्ड, बैंक पासबुक।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Daily Milk Pouring & Measurement', kn: 'ಹಾಲು ಪೂರೈಕೆ & ಫ್ಯಾಟ್ ಪರೀಕ್ಷೆ', hi: 'दूध आपूर्ति व मापन' }, desc: { en: 'Pour milk daily at village MPCS; automatic FAT/SNF testing records volume in AMCU.', kn: 'ಗ್ರಾಮದ ಹಾಲು ಸಂಘಕ್ಕೆ ಹಾಲು ಹಾಕಿ; ಎಎಂಸಿಯು ಯಂತ್ರದಲ್ಲಿ ತೂಕ ಹಾಗೂ ಫ್ಯಾಟ್ ದಾಖಲಾಗುತ್ತದೆ.', hi: 'गांव की दुग्ध समिति में दूध मापें और फैट की पर्ची प्राप्त करें।' } },
+      { step: 2, title: { en: 'Society Data Sync to KMF', kn: 'ಕೆಎಂಎಫ್ ಡೇಟಾ ಜೋಡಣೆ', hi: 'डेटा समन्वय' }, desc: { en: 'Litre totals are synchronized with Ksheera Dhare government portal.', kn: 'ಮಾಸಿಕ ಪೂರೈಸಿದ ಹಾಲಿನ ಪ್ರಮಾಣವನ್ನು ಕ್ಷೀರಧಾರೆ ಪೋರ್ಟಲ್‌ಗೆ ರವಾನಿಸಲಾಗುತ್ತದೆ.', hi: 'मासिक दूध मात्रा का विवरण सरकारी पोर्टल पर अपडेट होता है।' } },
+      { step: 3, title: { en: 'DBT Cash Credit', kn: 'ನೇರ ಹಣ ಜಮೆ', hi: 'खाते में भुगतान' }, desc: { en: '₹5/litre credited directly to farmer account by Karnataka Animal Husbandry Dept.', kn: 'ಲೀಟರ್‌ಗೆ ₹5 ರಂತೆ ಒಟ್ಟು ಮೊತ್ತ ನೇರವಾಗಿ ರೈತರ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ಜಮೆ.', hi: '₹5 प्रति लीटर की दर से राशि सीधे बैंक खाते में ट्रांसफर।' } }
+    ],
+    timeline: 'Monthly recurring DBT payment',
+    img: 'https://images.unsplash.com/photo-1527153857715-3908f2ae5e81?w=600&q=80',
+    badge: { en: '₹5 / Litre Direct DBT', kn: '₹೫ / ಲೀಟರ್ ನೇರ DBT', hi: '₹5 / लीटर डीबीटी' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Dept. of Animal Husbandry & Fisheries, Karnataka & KMF', kn: 'ಪಶುಸಂಗೋಪನೆ ಮತ್ತು ಮೀನುಗಾರಿಕೆ ಇಲಾಖೆ & ಕೆಎಂಎಫ್', hi: 'पशुपालन विभाग, कर्नाटक एवं केएमएफ' },
+    applyLink: 'https://ahvs.karnataka.gov.in/',
+    trackerUrl: 'https://kmfnandini.coop/'
+  },
+  {
+    id: 'anugraha-scheme',
+    category: 'Agriculture',
+    level: 'State',
+    beneficiary: ['Small/Marginal Farmers', 'Women Farmers'],
+    objective: 'Crop Insurance',
+    stage: 'All-Season',
+    districtSpecific: ['All'],
+    title: { en: 'Anugraha Scheme (Livestock Accidental Death Relief)', kn: 'ಅನುಗ್ರಹ ಯೋಜನೆ (ಜಾನುವಾರು ಆಕಸ್ಮಿಕ ಸಾವು ಪರಿಹಾರ)', hi: 'अनुग्रह योजना (पशु आकस्मिक मृत्यु मुआवजा)' },
+    desc: { 
+      en: 'Provides prompt ex-gratia compensation of ₹10,000 for death of cattle/cow/bullocks and ₹5,000 for accidental death of sheep/goats, providing a safety net to rural livestock owners.', 
+      kn: 'ರೈತರ ಹಸು, ಎತ್ತು, ಎಮ್ಮೆಗಳು ಆಕಸ್ಮಿಕವಾಗಿ ಮರಣ ಹೊಂದಿದರೆ ₹10,000 ಹಾಗೂ ಕುರಿ/ಮೇಕೆಗಳು ಮೃತಪಟ್ಟರೆ ₹5,000 ತಕ್ಷಣದ ಆರ್ಥಿಕ ಪರಿಹಾರ ನೀಡುವ ರಾಜ್ಯ ಸರ್ಕಾರದ ಯೋಜನೆ.', 
+      hi: 'गाय, बैल या भैंस की आकस्मिक मृत्यु पर ₹10,000 और भेड़/बकरी की मृत्यु पर ₹5,000 का त्वरित सरकारी मुआवजा।' 
+    },
+    eligibility: {
+      en: 'All farmers and shepherds residing in Karnataka rearing cattle, buffaloes, sheep, or goats holding valid ear-tags or certified by government veterinary officer.',
+      kn: 'ಕರ್ನಾಟಕದ ಎಲ್ಲಾ ಸಣ್ಣ ರೈತರು ಮತ್ತು ಕುರಿಗಾಹಿಗಳು (ಸರ್ಕಾರಿ ಪಶು ವೈದ್ಯಾಧಿಕಾರಿಗಳಿಂದ ತಪಾಸಣೆಗೊಳಪಟ್ಟ ಜಾನುವಾರುಗಳು).',
+      hi: 'कर्नाटक के सभी किसान व पशुपालक।'
+    },
+    exclusions: {
+      en: 'Natural old age mortality without post-mortem report or commercial slaughter.',
+      kn: 'ಸ್ವಾಭಾವಿಕ ಮುಪ್ಪು ಸಾವು ಅಥವಾ ವಧೆ ಮಾಡಿದ ಜಾನುವಾರುಗಳಿಗೆ ಅನ್ವಯಿಸುವುದಿಲ್ಲ.',
+      hi: 'प्राकृतिक वृद्धावस्था या वध के मामले।'
+    },
+    benefits: {
+      subsidyPercent: '100% Direct Cash Compensation',
+      maxLimit: '₹10,000 for Cow/Bull/Buffalo | ₹5,000 for Sheep/Goat (up to 3 per owner)',
+      mode: 'DBT payment to livestock owner bank account',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Post-Mortem Report from Veterinary Officer, Ear Tag photo of deceased animal, Aadhaar Card, Bank Passbook, FIR copy in accident cases.',
+      kn: 'ಪಶುವೈದ್ಯಾಧಿಕಾರಿಯ ಮರಣೋತ್ತರ ಪರೀಕ್ಷಾ ವರದಿ (ಪಿಎಂ ರಿಪೋರ್ಟ್), ಇಯರ್ ಟ್ಯಾಗ್ ಫೋಟೋ, ಆಧಾರ್ ಕಾರ್ಡ್, ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್.',
+      hi: 'पशु चिकित्सक की पोस्टमार्टम रिपोर्ट, कान के टैग का फोटो, आधार, बैंक पासबुक।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Intimation to Veterinary Hospital', kn: 'ಪಶು ಆಸ್ಪತ್ರೆಗೆ ಮಾಹಿತಿ', hi: 'पशु अस्पताल में सूचना' }, desc: { en: 'Inform local Veterinary Assistant Surgeon (VAS) within 24 hours of animal death.', kn: 'ಜಾನುವಾರು ಮೃತಪಟ್ಟ 24 ಗಂಟೆಯೊಳಗೆ ಸ್ಥಳೀಯ ಪಶು ಆಸ್ಪತ್ರೆಗೆ ಮಾಹಿತಿ ನೀಡಿ.', hi: 'पशु की मृत्यु के 24 घंटे के भीतर निकटतम पशु चिकित्सालय को सूचित करें।' } },
+      { step: 2, title: { en: 'Post-Mortem & Geotagging', kn: 'ಮರಣೋತ್ತರ ಪರೀಕ್ಷೆ', hi: 'पोस्टमार्टम व फोटो' }, desc: { en: 'Doctor visits spot, performs post-mortem, and takes geotagged photographs.', kn: 'ಪಶು ವೈದ್ಯಾಧಿಕಾರಿ ಸ್ಥಳಕ್ಕೆ ಭೇಟಿ ನೀಡಿ ಮರಣೋತ್ತರ ಪರೀಕ್ಷೆ ನಡೆಸಿ ವರದಿ ಸಿದ್ಧಪಡಿಸುತ್ತಾರೆ.', hi: 'पशु चिकित्सक द्वारा मौके पर पोस्टमार्टम और जीपीएस फोटो अपलोड।' } },
+      { step: 3, title: { en: 'Direct Compensation Transfer', kn: 'ಖಾತೆಗೆ ಪರಿಹಾರ ಜಮೆ', hi: 'सीधे खाते में मुआवजा' }, desc: { en: 'Compensation credited directly to farmer bank account within 15 days.', kn: '15 ದಿನಗಳೊಳಗೆ ರೈತರ ಖಾತೆಗೆ ನೇರವಾಗಿ ₹10,000 ಅಥವಾ ₹5,000 ಜಮೆ.', hi: '15 दिनों के भीतर किसान के बैंक खाते में मुआवजा राशि ट्रांसफर।' } }
+    ],
+    timeline: '15 Days post post-mortem report',
+    img: 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=600&q=80',
+    badge: { en: '₹10,000 Cattle Relief', kn: '₹೧೦,೦೦೦ ಪರಿಹಾರ', hi: '₹10,000 मुआवजा' },
+    badgeClass: 'badge-primary',
+    ministry: { en: 'Dept. of Animal Husbandry & Veterinary Services, Karnataka', kn: 'ಪಶುಸಂಗೋಪನೆ ಮತ್ತು ಪಶುವೈದ್ಯಕೀಯ ಸೇವಾ ಇಲಾಖೆ', hi: 'पशुपालन एवं पशु चिकित्सा सेवा विभाग' },
+    applyLink: 'https://ahvs.karnataka.gov.in/',
+    trackerUrl: 'https://ahvs.karnataka.gov.in/'
+  },
+  {
+    id: 'ganga-kalyana',
+    category: 'Agriculture',
+    level: 'State',
+    beneficiary: ['Small/Marginal Farmers', 'Women Farmers'],
+    objective: 'Water Conservation',
+    stage: 'Pre-Harvest',
+    districtSpecific: ['All'],
+    title: { en: 'Ganga Kalyana Scheme (Free Irrigation Borewells)', kn: 'ಗಂಗಾ ಕಲ್ಯಾಣ ಯೋಜನೆ (ಉಚಿತ ಕೊಳವೆಬಾವಿ & ಪಂಪ್‌ಸೆಟ್)', hi: 'गंगा कल्याण योजना (मुफ्त सिंचाई बोरवेल)' },
+    desc: { 
+      en: 'Flagship Karnataka welfare scheme providing 100% subsidized individual or community borewell drilling, submersible pump sets, energization, and PVC pipeline installation for small/marginal farmers.', 
+      kn: 'ಸಣ್ಣ ಮತ್ತು ಅತಿ ಸಣ್ಣ ರೈತರಿಗೆ ಕೃಷಿ ನೀರಾವರಿಗಾಗಿ ಸಂಪೂರ್ಣ ಉಚಿತ ಕೊಳವೆಬಾವಿ ಕೊರೆಯಿಸಿ, ಸಬ್‌ಮರ್ಸಿಬಲ್ ಪಂಪ್‌ಸೆಟ್, ವಿದ್ಯುತ್ ಸಂಪರ್ಕ ಹಾಗೂ ಪೈಪ್‌ಲೈನ್ ಒದಗಿಸುವ ಯೋಜನೆ.', 
+      hi: 'छोटे व सीमांत किसानों को 100% सब्सिडी पर मुफ्त बोरवेल खनन, पंपसेट, बिजली कनेक्शन और पाइपलाइन स्थापना।' 
+    },
+    eligibility: {
+      en: 'Small/Marginal farmers belonging to SC, ST, and Backward Classes (Cat 1, 2A, 2B, 3A, 3B) having 1.20 to 5.00 acres of agricultural land.',
+      kn: 'ಪರಿಶಿಷ್ಟ ಜಾತಿ, ಪರಿಶಿಷ್ಟ ಪಂಗಡ ಹಾಗೂ ಹಿಂದುಳಿದ ವರ್ಗಗಳ 1.20 ರಿಂದ 5 ಎಕರೆ ಕೃಷಿ ಜಮೀನು ಹೊಂದಿರುವ ಸಣ್ಣ ಮತ್ತು ಅತಿ ಸಣ್ಣ ರೈತರು.',
+      hi: 'एससी, एसटी और पिछड़ा वर्ग के 1.2 से 5 एकड़ कृषि भूमि वाले किसान।'
+    },
+    exclusions: {
+      en: 'Farmers who previously availed borewell subsidy or land situated in categorized groundwater over-exploited zones without recharge.',
+      kn: 'ಹಿಂದೆ ಗಂಗಾ ಕಲ್ಯಾಣ ಸೌಲಭ್ಯ ಪಡೆದವರು ಅಥವಾ ಅಂತರ್ಜಲ ಅತೀವ ಶೋಷಿತ ಪ್ರದೇಶದಲ್ಲಿ ಜಮೀನಿರುವವರು.',
+      hi: 'पहले गंगा कल्याण लाभ प्राप्त किसान या अति-शोषित भूजल क्षेत्र।'
+    },
+    benefits: {
+      subsidyPercent: '100% Free Complete Turnkey Package',
+      maxLimit: 'Up to ₹3,50,000 per borewell installation + pump + power line',
+      mode: 'Turnkey execution via Corporation approved drilling rigs and KPTCL energization',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Land RTC (Pahani), Caste Certificate (RD Number), Income Certificate (Family Income < ₹2.0 Lakh), Small Farmer Certificate from Tahsildar, Aadhaar Card.',
+      kn: 'ಪಹಣಿ (RTC), ಜಾತಿ ಪ್ರಮಾಣಪತ್ರ (RD ಸಂಖ್ಯೆ), ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ (< ₹2.0 ಲಕ್ಷ), ಸಣ್ಣ ರೈತರ ದೃಢೀಕರಣ ಪತ್ರ, ಆಧಾರ್ ಕಾರ್ಡ್.',
+      hi: 'भूमि दस्तावेज (RTC), जाति प्रमाण पत्र, आय प्रमाण पत्र, छोटे किसान का प्रमाण पत्र, आधार कार्ड।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Seva Sindhu Online Application', kn: 'ಸೇವಾ ಸಿಂಧುವಿನಲ್ಲಿ ಅರ್ಜಿ', hi: 'ऑनलाइन आवेदन' }, desc: { en: 'Apply online on Seva Sindhu choosing concerned development corporation (D. Devaraj Urs, Ambedkar, Valmiki).', kn: 'ಸೇವಾ ಸಿಂಧು ಅಥವಾ ಕರ್ನಾಟಕ ಒನ್ ಮೂಲಕ ಆಯಾ ಅಭಿವೃದ್ಧಿ ನಿಗಮಕ್ಕೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ.', hi: 'सेवा सिंधु के माध्यम से संबंधित विकास निगम को आवेदन करें।' } },
+      { step: 2, title: { en: 'Hydrogeologist Survey', kn: 'ಅಂತರ್ಜಲ ತಜ್ಞರ ಸ್ಥಳ ಪರಿಶೀಲನೆ', hi: 'भूजल वैज्ञानिक सर्वेक्षण' }, desc: { en: 'Groundwater scientist inspects farm and marks successful water point.', kn: 'ಸರ್ಕಾರಿ ಜಿಯಾಲಜಿಸ್ಟ್ ಜಮೀನಿಗೆ ಭೇಟಿ ನೀಡಿ ಕೊಳವೆಬಾವಿ ಪಾಯಿಂಟ್ ಗುರುತಿಸುತ್ತಾರೆ.', hi: 'सरकारी भूवैज्ञानिक द्वारा खेत पर वाटर पॉइंट का चिह्नीकरण।' } },
+      { step: 3, title: { en: 'Drilling & Electrification', kn: 'ಕೊಳವೆಬಾವಿ ಕೊರೆಯುವಿಕೆ & ವಿದ್ಯುತ್ ಸಂಪರ್ಕ', hi: 'खनन व विद्युतीकरण' }, desc: { en: 'Government contractor completes drilling, pump installation, and ESCOM power connection free of cost.', kn: 'ನಿಗಮದ ವತಿಯಿಂದ ಉಚಿತವಾಗಿ ಬೋರ್‌ವೆಲ್ ಕೊರೆದು, ಪಂಪ್ ಹಾಗೂ ವಿದ್ಯುತ್ ಸಂಪರ್ಕ ಕಲ್ಪಿಸಲಾಗುತ್ತದೆ.', hi: 'ठेकेदार द्वारा बोरवेल खनन, पंप स्थापना व बिजली कनेक्शन मुफ्त में पूर्ण।' } }
+    ],
+    timeline: '60 - 90 Days from committee selection',
+    img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80',
+    badge: { en: '100% Free Borewell', kn: 'ಉಚಿತ ಕೊಳವೆಬಾವಿ', hi: '100% मुफ्त बोरवेल' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Social Welfare & Backward Classes Dept, Karnataka', kn: 'ಸಮಾಜ ಕಲ್ಯಾಣ ಹಾಗೂ ಹಿಂದುಳಿದ ವರ್ಗಗಳ ಕಲ್ಯಾಣ ಇಲಾಖೆ', hi: 'समाज कल्याण एवं पिछड़ा वर्ग विभाग' },
+    applyLink: 'https://kmdc.karnataka.gov.in/en',
+    trackerUrl: 'https://sevasindhuservices.karnataka.gov.in/'
+  },
+  {
+    id: 'krishi-yantra-dhare',
+    category: 'Agriculture',
+    level: 'State',
+    beneficiary: ['Small/Marginal Farmers', 'Tenant Farmers', 'Women Farmers'],
+    objective: 'Mechanization',
+    stage: 'Harvesting',
+    districtSpecific: ['All'],
+    title: { en: 'Krishi Yantra Dhare (Custom Hiring Centres)', kn: 'ಕೃಷಿ ಯಂತ್ರ ಧಾರೆ (ಬಾಡಿಗೆ ಆಧಾರಿತ ಕೃಷಿ ಯಂತ್ರೋಪಕರಣ ಕೇಂದ್ರ)', hi: 'कृषि यंत्र धारे (कस्टम हायरिंग केंद्र)' },
+    desc: { 
+      en: 'Karnataka government network of 1,000+ Hobli-level Custom Hiring Service Centres (CHSC) providing modern tractors, combine harvesters, rotavators, and weeders at 50% to 75% subsidized hourly hire charges to small and marginal farmers.', 
+      kn: 'ದುಬಾರಿ ಯಂತ್ರಗಳನ್ನು ಕೊಳ್ಳಲಾಗದ ಸಣ್ಣ ಮತ್ತು ಅತಿ ಸಣ್ಣ ರೈತರಿಗೆ ಹೋಬಳಿ ಮಟ್ಟದ ಕೇಂದ್ರಗಳಲ್ಲಿ ಟ್ರ್ಯಾಕ್ಟರ್, ಕಟಾವು ಯಂತ್ರ, ರೋಟವೇಟರ್‌ಗಳನ್ನು ಮಾರುಕಟ್ಟೆ ದರಕ್ಕಿಂತ 50% ರಿಯಾಯಿತಿ ಬಾಡಿಗೆ ದರದಲ್ಲಿ ಒದಗಿಸುವ ಯೋಜನೆ.', 
+      hi: 'छोटे किसानों को ट्रैक्टर, हार्वेस्टर, रोटावेटर जैसे आधुनिक उपकरण बाजार से 50-75% सस्ती किराए दरों पर उपलब्ध कराना।' 
+    },
+    eligibility: {
+      en: 'All farmers across Karnataka holding agricultural land or tenant farmer certificates; priority given to small and marginal farmers.',
+      kn: 'ಕರ್ನಾಟಕದ ಎಲ್ಲಾ ಸಣ್ಣ, ಅತಿ ಸಣ್ಣ ಮತ್ತು ಗೇಣಿ ರೈತರು (ಪಹಣಿ ಅಥವಾ ಕೃಷಿ ಗುರುತಿನ ಚೀಟಿ ಹೊಂದಿರುವವರು).',
+      hi: 'कर्नाटक के सभी किसान व बटाईदार।'
+    },
+    exclusions: {
+      en: 'Commercial industrial earthmoving works outside agriculture.',
+      kn: 'ಕೃಷಿಯೇತರ ವಾಣಿಜ್ಯ ಮತ್ತು ರಿಯಲ್ ಎಸ್ಟೇಟ್ ಕಾಮಗಾರಿಗಳು.',
+      hi: 'गैर-कृषि वाणिज्यिक कार्य।'
+    },
+    benefits: {
+      subsidyPercent: '50% to 75% Subsidized Hourly Hire Tariffs',
+      maxLimit: 'Savings up to ₹8,000 to ₹15,000 per crop season per farmer',
+      mode: 'On-demand equipment booking with verified operator',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Land RTC / FRUITS FID number, Aadhaar Card, Mobile Number for SMS booking.',
+      kn: 'ಪಹಣಿ (RTC), ಫ್ರೂಟ್ಸ್ ಐಡಿ (FID), ಆಧಾರ್ ಕಾರ್ಡ್, ಮೊಬೈಲ್ ಸಂಖ್ಯೆ.',
+      hi: 'भूमि RTC, FRUITS आईडी, आधार कार्ड।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Call Nearest CHSC Center', kn: 'ಹತ್ತಿರದ ಕೇಂದ್ರಕ್ಕೆ ಕರೆ ಮಾಡಿ', hi: 'निकटतम केंद्र पर संपर्क' }, desc: { en: 'Book required implement (Tractor, Harvester, Digger) at Hobli RSK / CHSC center.', kn: 'ಹೋಬಳಿಯ ಕೃಷಿ ಯಂತ್ರ ಧಾರೆ ಕೇಂದ್ರ ಅಥವಾ ಆರ್‌ಎಸ್‌ಕೆಗೆ ಭೇಟಿ ನೀಡಿ ಬುಕ್ ಮಾಡಿ.', hi: 'होबली केंद्र या मोबाइल ऐप पर आवश्यक कृषि उपकरण बुक करें।' } },
+      { step: 2, title: { en: 'Operator Deployment to Field', kn: 'ಜಮೀನಿಗೆ ಯಂತ್ರ ಆಗಮನ', hi: 'खेत पर मशीन की डिलीवरी' }, desc: { en: 'Trained technician operates implement at farmer\'s field with digital meter.', kn: 'ತರಬೇತಿ ಪಡೆದ ಆಪರೇಟರ್ ಯಂತ್ರದೊಂದಿಗೆ ಜಮೀನಿಗೆ ಬಂದು ಕೆಲಸ ನಿರ್ವಹಿಸುತ್ತಾರೆ.', hi: 'प्रशिक्षित ऑपरेटर डिजिटल मीटर के साथ खेत पर काम करता है।' } },
+      { step: 3, title: { en: 'Subsidized Fee Payment', kn: 'ರಿಯಾಯಿತಿ ಬಾಡಿಗೆ ಪಾವತಿ', hi: 'रियायती किराए का भुगतान' }, desc: { en: 'Pay officially notified government subsidized hourly tariff and get printed receipt.', kn: 'ಸರ್ಕಾರ ನಿಗದಿಪಡಿಸಿದ ರಿಯಾಯಿತಿ ದರವನ್ನು ಪಾವತಿಸಿ ರಸೀದಿ ಪಡೆಯಿರಿ.', hi: 'सरकारी रियायती दर पर भुगतान कर रसीद प्राप्त करें।' } }
+    ],
+    timeline: 'Service on date of scheduled booking',
+    img: 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80',
+    badge: { en: '50% Discount Hire', kn: '೫೦% ರಿಯಾಯಿತಿ ಬಾಡಿಗೆ', hi: '50% छूट किराया' },
+    badgeClass: 'badge-warning',
+    ministry: { en: 'Dept. of Agriculture, Govt of Karnataka', kn: 'ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ ಸರ್ಕಾರ', hi: 'कृषि विभाग, कर्नाटक सरकार' },
+    applyLink: 'https://raitamitra.karnataka.gov.in/',
+    trackerUrl: 'https://raitamitra.karnataka.gov.in/'
+  },
+  {
+    id: 'pmksy-micro-irrigation',
+    category: 'Agriculture',
+    level: 'Central',
+    beneficiary: ['Small/Marginal Farmers', 'Large Landholders', 'Women Farmers'],
+    objective: 'Water Conservation',
+    stage: 'Pre-Harvest',
+    districtSpecific: ['All'],
+    title: { en: 'Pradhan Mantri Krishi Sinchayee Yojana (PMKSY - Drip & Sprinkler)', kn: 'ಪ್ರಧಾನ ಮಂತ್ರಿ ಕೃಷಿ ಸಿಂಚಾಯಿ ಯೋಜನೆ (ಹನಿ ಮತ್ತು ತುಂತುರು ನೀರಾವರಿ)', hi: 'प्रधानमंत्री कृषि सिंचाई योजना (ड्रिप एवं स्प्रिंकलर)' },
+    desc: { 
+      en: 'Provides 75% to 90% direct subsidy for installing micro-irrigation systems (Drip and Sprinkler) on farmland, saving up to 60% water and increasing crop yields significantly.', 
+      kn: 'ರೈತರ ಜಮೀನಿನಲ್ಲಿ ಹನಿ ನೀರಾವರಿ ಹಾಗೂ ತುಂತುರು ನೀರಾವರಿ ಘಟಕಗಳನ್ನು ಅಳವಡಿಸಲು ಶೇ 75% ರಿಂದ 90% ವರೆಗೆ ಭಾರಿ ಸಹಾಯಧನ ನೀಡುವ ಕೇಂದ್ರ ಮತ್ತು ರಾಜ್ಯ ಜಂಟಿ ಯೋಜನೆ.', 
+      hi: 'खेत में ड्रिप और स्प्रिंकलर सिंचाई प्रणाली लगाने पर 75% से 90% तक सब्सिडी।' 
+    },
+    eligibility: {
+      en: 'All farmers possessing cultivable land with a dedicated water source (well, borewell, or farm pond). SC/ST get 90% subsidy, General get 75%.',
+      kn: 'ಸ್ವಂತ ನೀರಾವರಿ ಮೂಲ (ಬಾವಿ, ಬೋರ್‌ವೆಲ್, ಹೊಂಡ) ಹೊಂದಿರುವ ಎಲ್ಲಾ ರೈತರು. ಎಸ್‌ಸಿ/ಎಸ್‌ಟಿ ರೈತರಿಗೆ ಶೇ 90%, ಸಾಮಾನ್ಯ ರೈತರಿಗೆ ಶೇ 75% ಸಬ್ಸಿಡಿ.',
+      hi: 'सिंचाई का साधन रखने वाले सभी किसान (एससी/एसटी हेतु 90%, सामान्य हेतु 75% सब्सिडी)।'
+    },
+    exclusions: {
+      en: 'Farmers who availed micro-irrigation subsidy on the same land survey number within the last 5 years.',
+      kn: 'ಕಳೆದ 5 ವರ್ಷಗಳಲ್ಲಿ ಅದೇ ಸರ್ವೆ ನಂಬರ್‌ಗೆ ಹನಿ ನೀರಾವರಿ ಸೌಲಭ್ಯ ಪಡೆದವರು.',
+      hi: 'पिछले 5 वर्षों में समान भूमि पर ड्रिप सब्सिडी ले चुके किसान।'
+    },
+    benefits: {
+      subsidyPercent: '90% Subsidy for SC/ST | 75% Subsidy for General Farmers',
+      maxLimit: 'Up to ₹1,00,000 per hectare (Maximum 5 hectares)',
+      mode: 'Direct supply and installation by empanelled BIS-certified drip companies (Jain, Netafim, EPC)',
+      interestSubvention: 'N/A'
+    },
+    documents: {
+      en: 'Land RTC (Pahani), Water and Electricity Certificate / Borewell photo, Aadhaar Card, Caste Certificate, FRUITS ID, Farm sketch.',
+      kn: 'ಪಹಣಿ (RTC), ನೀರಿನ ಮೂಲ ದೃಢೀಕರಣ ಪತ್ರ, ಆಧಾರ್ ಕಾರ್ಡ್, ಜಾತಿ ಪ್ರಮಾಣಪತ್ರ, ಫ್ರೂಟ್ಸ್ ಐಡಿ.',
+      hi: 'भूमि दस्तावेज, जल स्रोत प्रमाण, आधार कार्ड, जाति प्रमाण पत्र, FRUITS आईडी।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Online Application at RSK', kn: 'ಆರ್‌ಎಸ್‌ಕೆಯಲ್ಲಿ ಅರ್ಜಿ ಸಲ್ಲಿಕೆ', hi: 'आरएसके पर आवेदन' }, desc: { en: 'Submit application along with land sketch and water source certificate at RSK.', kn: 'ಹತ್ತಿರದ ರೈತ ಸಂಪರ್ಕ ಕೇಂದ್ರದಲ್ಲಿ ದಾಖಲೆಗಳೊಂದಿಗೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ.', hi: 'रायथा संपर्क केंद्र पर आवेदन और खेत का नक्शा जमा करें।' } },
+      { step: 2, title: { en: 'Company Site Survey & Design', kn: 'ಕಂಪನಿ ಇಂಜಿನಿಯರ್ ಸಮೀಕ್ಷೆ', hi: 'साइट सर्वेक्षण' }, desc: { en: 'Registered micro-irrigation engineer surveys pressure and prepares technical design.', kn: 'ನೋಂದಾಯಿತ ಕಂಪನಿ ಇಂಜಿನಿಯರ್ ಜಮೀನು ಪರಿಶೀಲಿಸಿ ಪೈಪ್‌ಲೈನ್ ವಿನ್ಯಾಸ ರೂಪಿಸುತ್ತಾರೆ.', hi: 'इंजीनियर द्वारा खेत का सर्वेक्षण और ड्रिप डिजाइन तैयार करना।' } },
+      { step: 3, title: { en: 'Installation & Inspection', kn: 'ಅಳವಡಿಕೆ & ಜಂಟಿ ತಪಾಸಣೆ', hi: 'स्थापना व सत्यापन' }, desc: { en: 'Complete turnkey installation of filters, mainline, and drippers followed by GPS audit.', kn: 'ಫಿಲ್ಟರ್, ಮುಖ್ಯ ಪೈಪ್ ಮತ್ತು ಡ್ರಿಪ್ ಲೈನ್‌ಗಳ ಅಳವಡಿಕೆ ಹಾಗೂ ಅಧಿಕಾರಿಗಳ ಅಂತಿಮ ತಪಾಸಣೆ.', hi: 'ड्रिप व फिल्टर की स्थापना के बाद सरकारी टीम द्वारा जीपीएस सत्यापन।' } }
+    ],
+    timeline: '30 - 45 Days from application',
+    img: 'https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=600&q=80',
+    badge: { en: 'Up to 90% Subsidy', kn: '೯೦% ಸಹಾಯಧನ', hi: '90% सब्सिडी' },
+    badgeClass: 'badge-success',
+    ministry: { en: 'Dept. of Horticulture & Agriculture, Karnataka', kn: 'ತೋಟಗಾರಿಕೆ ಮತ್ತು ಕೃಷಿ ಇಲಾಖೆ, ಕರ್ನಾಟಕ', hi: 'बागवानी एवं कृषि विभाग, कर्नाटक' },
+    applyLink: 'https://horticulturedir.karnataka.gov.in/',
+    trackerUrl: 'https://pmksy.gov.in/'
+  },
+  {
+    id: 'matsya-sampada',
+    category: 'Agriculture',
+    level: 'Central',
+    beneficiary: ['Youth/Agri-Startups', 'Small/Marginal Farmers', 'Women Farmers'],
+    objective: 'Post-Harvest',
+    stage: 'All-Season',
+    districtSpecific: ['All'],
+    title: { en: 'Pradhan Mantri Matsya Sampada Yojana (PMMSY - Fisheries)', kn: 'ಪ್ರಧಾನ ಮಂತ್ರಿ ಮತ್ಸ್ಯ ಸಂಪದ ಯೋಜನೆ (ಮೀನುಗಾರಿಕೆ & ಜಲಕೃಷಿ)', hi: 'प्रधानमंत्री मत्स्य संपदा योजना (मत्स्य पालन)' },
+    desc: { 
+      en: 'Provides 40% to 60% capital financial subsidy for construction of new fish ponds, biofloc units, recirculating aquaculture systems (RAS), fingerling stocking, and refrigerated three-wheelers.', 
+      kn: 'ಹೊಸ ಮೀನು ಕೃಷಿ ಹೊಂಡ ನಿರ್ಮಾಣ, ಬಯೋಫ್ಲೋಕ್ ಘಟಕ, ಮರಿ ಮೀನು ಸಂಗ್ರಹಣೆ ಹಾಗೂ ಮೀನು ಸಾಗಾಣಿಕೆ ವಾಹನಗಳ ಖರೀದಿಗೆ ಶೇ 40% ರಿಂದ 60% ವರೆಗೆ ಸಹಾಯಧನ ನೀಡುವ ಯೋಜನೆ.', 
+      hi: 'मछली पालन तालाब निर्माण, बायोफ्लॉक यूनिट, मछली बीज और परिवहन वाहनों पर 40% से 60% तक सरकारी सब्सिडी।' 
+    },
+    eligibility: {
+      en: 'Individual fish farmers, SHGs, JLGs, fisheries cooperatives, and rural youth having at least 0.5 acre land with water access.',
+      kn: 'ಕನಿಷ್ಠ 0.5 ಎಕರೆ ಜಮೀನು ಮತ್ತು ನೀರು ಹೊಂದಿರುವ ರೈತರು, ಯುವಕರು, ಮೀನುಗಾರರ ಸಹಕಾರ ಸಂಘಗಳು.',
+      hi: 'कम से कम 0.5 एकड़ भूमि और पानी की सुविधा रखने वाले किसान व युवा।'
+    },
+    exclusions: {
+      en: 'Unregistered fishing on disputed water bodies.',
+      kn: 'ವಿವಾದಿತ ಜಲಮೂಲಗಳು ಅಥವಾ ಅನಧಿಕೃತ ಪ್ರದೇಶಗಳು.',
+      hi: 'अनाधिकृत या विवादित जल निकाय।'
+    },
+    benefits: {
+      subsidyPercent: '60% for SC/ST/Women | 40% for General Category',
+      maxLimit: 'Up to ₹4,20,000 for 1-hectare pond construction + fingerlings + feed package',
+      mode: 'DBT bank subsidy linked to project progress milestones',
+      interestSubvention: 'KCC Fisheries loan at 4% interest'
+    },
+    documents: {
+      en: 'Land RTC / Lease Deed, Water source test report, Detailed Project Report (DPR), Aadhaar, Bank Passbook, Caste Certificate.',
+      kn: 'ಪಹಣಿ ಅಥವಾ ಗುತ್ತಿಗೆ ಪತ್ರ, ನೀರಿನ ಗುಣಮಟ್ಟ ವರದಿ, ಯೋಜನಾ ವರದಿ (DPR), ಆಧಾರ್ ಕಾರ್ಡ್, ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್.',
+      hi: 'भूमि RTC/लीज दस्तावेज, डीपीआर, आधार कार्ड, बैंक पासबुक।'
+    },
+    processSteps: [
+      { step: 1, title: { en: 'Submit DPR to District Fisheries Office', kn: 'ಜಿಲ್ಲಾ ಮೀನುಗಾರಿಕೆ ಇಲಾಖೆಗೆ ಡಿಪಿಆರ್', hi: 'डीपीआर जमा करें' }, desc: { en: 'Submit project report and application to Assistant Director of Fisheries (ADF).', kn: 'ಸಹಾಯಕ ಮೀನುಗಾರಿಕೆ ನಿರ್ದೇಶಕರ (ADF) ಕಚೇರಿಗೆ ಯೋಜನಾ ವರದಿ ಸಲ್ಲಿಸಿ.', hi: 'सहायक मत्स्य निदेशक कार्यालय में प्रोजेक्ट रिपोर्ट जमा करें।' } },
+      { step: 2, title: { en: 'Technical Sanction & Work Order', kn: 'ತಾಂತ್ರಿಕ ಮಂಜೂರಾತಿ', hi: 'तकनीकी स्वीकृति' }, desc: { en: 'District Level Committee sanctions subsidy quote and issues work order.', kn: 'ಜಿಲ್ಲಾ ಸಮಿತಿಯು ಪರಿಶೀಲಿಸಿ ಕಾಮಗಾರಿಗೆ ಅಧಿಕೃತ ಅನುಮೋದನೆ ನೀಡುತ್ತದೆ.', hi: 'जिला समिति द्वारा मूल्यांकन के बाद कार्य आदेश जारी।' } },
+      { step: 3, title: { en: 'Construction & Staged DBT', kn: 'ನಿರ್ಮಾಣ & ಹಂತವಾರು ಹಣ ಬಿಡುಗಡೆ', hi: 'निर्माण व अनुदान' }, desc: { en: 'Complete pond construction; subsidy released in 2 instalments post field verification.', kn: 'ಹೊಂಡ ನಿರ್ಮಾಣದ ನಂತರ ಪರಿಶೀಲನೆ ನಡೆಸಿ 2 ಕಂತುಗಳಲ್ಲಿ ಸಹಾಯಧನ ಜಮೆ.', hi: 'तालाब निर्माण के बाद भौतिक निरीक्षण और 2 किस्तों में सब्सिडी का भुगतान।' } }
+    ],
+    timeline: '45 Days for district committee approval',
+    img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80',
+    badge: { en: '60% Fisheries Grant', kn: '೬೦% ಮೀನುಗಾರಿಕೆ ಸಬ್ಸಿಡಿ', hi: '60% सब्सिडी' },
+    badgeClass: 'badge-primary',
+    ministry: { en: 'Dept. of Fisheries, Ministry of Fisheries GoI & Karnataka', kn: 'ಮೀನುಗಾರಿಕೆ ಇಲಾಖೆ, ಭಾರತ ಸರ್ಕಾರ & ಕರ್ನಾಟಕ', hi: 'मत्स्य पालन विभाग, भारत सरकार व कर्नाटक' },
+    applyLink: 'https://pmmsy.dof.gov.in/',
+    trackerUrl: 'https://pmmsy.dof.gov.in/'
+  },
+
+  // ==========================================
+  // SCHOLARSHIPS INTEGRATION
+  // ==========================================
+  ...scholarshipSchemes
 ];
 
 // ============================================================

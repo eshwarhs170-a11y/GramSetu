@@ -82,6 +82,7 @@ import { useLanguage, Trans } from '../context/LanguageContext'
 import { callGemini } from '../utils/voiceCommands'
 import LiveBuyerMarketplace from './LiveBuyerMarketplace'
 import DistrictRskContactCard from './DistrictRskContactCard'
+import { defaultScholarshipsList } from '../data/scholarshipsData'
 
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
@@ -208,7 +209,7 @@ export function HomeScreen({ setActive }) {
   const [priceFailReason, setPriceFailReason] = useState('') // why live data failed
   const [loadingPrices, setLoadingPrices] = useState(true)
   const [selectedCropInfo, setSelectedCropInfo] = useState(null)
-  const [scholarshipsData, setScholarshipsData] = useState([])
+  const [scholarshipsData, setScholarshipsData] = useState(defaultScholarshipsList)
   const [aiSchemeResult, setAiSchemeResult] = useState(null)
   const [aiSchemeLoading, setAiSchemeLoading] = useState(false)
   const aiSchemeRef = useRef(false)
@@ -313,13 +314,22 @@ export function HomeScreen({ setActive }) {
     const fetchScholarships = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'scholarships'))
-        const data = []
+        const firestoreData = []
         querySnapshot.forEach((doc) => {
-          data.push({ id: doc.id, ...doc.data() })
+          firestoreData.push({ id: doc.id, ...doc.data() })
         })
-        setScholarshipsData(data)
+        if (firestoreData.length > 0) {
+          // Merge: Firestore records first, then append local ones not already present
+          const merged = [...firestoreData]
+          defaultScholarshipsList.forEach(local => {
+            if (!merged.some(m => m.id === local.id)) merged.push(local)
+          })
+          setScholarshipsData(merged)
+        }
+        // If Firestore is empty or fails, local defaultScholarshipsList is already in state
       } catch (e) {
         console.error("Error fetching scholarships: ", e)
+        // Keep defaultScholarshipsList already set as fallback
       }
     }
     fetchScholarships()
