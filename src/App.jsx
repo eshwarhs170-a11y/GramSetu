@@ -16,6 +16,7 @@ import GenerateQRCards from './pages/GenerateQRCards'
 import LiveHeatmap from './pages/LiveHeatmap'
 import DemoPresenterHub from './pages/DemoPresenterHub'
 import CropScanner from './components/CropScanner'
+import OfflineIndicator from './components/OfflineIndicator'
 
 function App() {
   const navigate = useNavigate()
@@ -34,6 +35,7 @@ function App() {
 
   return (
     <VoiceProvider>
+      <OfflineIndicator />
       <VoiceAssistantWidget />
       <Routes>
         <Route path="/" element={<LandingPage />} />

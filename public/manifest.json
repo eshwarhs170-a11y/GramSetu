@@ -1,0 +1,22 @@
+{
+  "short_name": "GramSetu",
+  "name": "GramSetu — ಗ್ರಾಮೀಣ ಸೇತು ಕರ್ನಾಟಕ",
+  "description": "Connecting rural citizens to government schemes, live mandi prices, direct buyers, and localized agriculture advisory.",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/?pwa=1",
+  "background_color": "#064e3b",
+  "theme_color": "#16a34a",
+  "display": "standalone",
+  "orientation": "portrait-primary"
+}
