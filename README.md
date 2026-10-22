@@ -1,138 +1,104 @@
-<div align="center">
+# 🌾 GramSetu (ಗ್ರಾಮ ಸೇತು) — Village Bridge
 
-```
- ██████╗ ██████╗  █████╗ ███╗   ███╗    ███████╗███████╗████████╗██╗   ██╗
-██╔════╝ ██╔══██╗██╔══██╗████╗ ████║    ██╔════╝██╔════╝╚══██╔══╝██║   ██║
-██║  ███╗██████╔╝███████║██╔████╔██║    ███████╗█████╗     ██║   ██║   ██║
-██║   ██║██╔══██╗██╔══██║██║╚██╔╝██║    ╚════██║██╔══╝     ██║   ██║   ██║
-╚██████╔╝██║  ██║██║  ██║██║ ╚═╝ ██║    ███████╗███████╗   ██║   ╚██████╔╝
- ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝    ╚══════╝╚══════╝   ╚═╝    ╚═════╝
-```
+> **A Civic-Tech & Agri-Intelligence Platform for Karnataka's Rural Citizens**  
+> Developed by **Team Eclipse**
 
-### **ಗ್ರಾಮ ಸೇತು — Village Bridge**
-*The official digital gateway connecting Karnataka's rural citizens to government*
-
-[![Live Site](https://img.shields.io/badge/Live_Site-gram--setu--one.vercel.app-22c55e?style=for-the-badge&logo=vercel&logoColor=white)](https://gram-setu-one.vercel.app)
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
-[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
-[![Firebase](https://img.shields.io/badge/Firebase-Firestore_%26_Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
-[![Google Gemini AI](https://img.shields.io/badge/Gemini_AI-Voice_%26_Vision-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
-
-</div>
+[![Live Demo](https://img.shields.io/badge/Live_Site-gram--setu--one.vercel.app-22c55e?style=for-the-badge&logo=vercel&logoColor=white)](https://gram-setu-one.vercel.app)
+[![PWA Ready](https://img.shields.io/badge/PWA-Offline_Ready-orange?style=for-the-badge&logo=pwa&logoColor=white)](#offline--low-internet-resilience)
+[![Tech Stack](https://img.shields.io/badge/React_19_+_Vite_8-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![AI Powered](https://img.shields.io/badge/Google_Gemini_AI-2.5_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 
 ---
 
-## What is GramSetu?
+## 📌 Overview
 
-**GramSetu** (*ಗ್ರಾಮ ಸೇತು* · *Village Bridge*) is a civic-tech web platform designed to bridge the digital and administrative divide for Karnataka's **6+ crore rural citizens and farmers (ರೈತರು)**. 
-
-Built with accessibility, voice-first interaction, AI crop disease scanning, and real-time grievance escalation at its core, GramSetu eliminates bureaucratic friction and language barriers through an intuitive digital interface.
+**GramSetu** is an accessible, multilingual digital platform built to bridge the gap between Karnataka's rural citizens and government services. It provides farmers with real-time APMC mandi prices, direct buyer connections, AI crop disease diagnostics, precision soil health calculations, and automated grievance redressal.
 
 ---
 
-## Key Features & Innovations
+## 🚀 Key Features
 
-### Crop Doctor — AI Crop Disease Scanner (ಬೆಳೆ ವೈದ್ಯ)
-- **Instant Vision Recognition:** Uses Google Gemini Vision AI to identify diseased crops and plant pathogens from live camera feeds, uploaded photos, and printed or photocopied sheets.
-- **Karnataka Crop Database:** Full coverage for major crops including Paddy, Ragi, Maize, Cotton, Tomato, Potato, Onion, Sugarcane, Arecanut, Coffee, Banana, Mango, Groundnut, Wheat, and Jowar.
-- **Actionable Diagnostic Reports:** Provides disease severity ratings, chemical spray dosages, fertilizer plans, organic farming tips, key takeaways, and direct links to eligible government compensation schemes (e.g., PMFBY, Raitha Siri).
-- **Automatic Kannada Translation:** Instantly translates remedies and chemical instructions into Kannada.
+### 1. 🤝 Live Buyers & Direct Farmgate Selling (0% Commission)
+- Connects farmers directly with verified FPOs, millers, and wholesale buyers across Karnataka.
+- Bypasses middlemen with one-tap **📞 Call Buyer** and **💬 WhatsApp Direct** buttons.
+- **"+ Sell My Produce"**: Farmers can post their harvest (crop, quantity in quintals, expected price, and phone number) to receive direct purchase offers.
 
-### GramSetu AI Voice Assistant (ಧ್ವನಿ ಸಹಾಯಕ)
-- **Multilingual Speech-to-Speech:** Native recognition and synthesis for **Kannada (`kn-IN`)**, **English (`en-IN`)**, and **Hindi (`hi-IN`)**.
-- **Voice-Powered Navigation:** Hands-free voice commands to navigate the platform (*"Take me to login"*, *"Open APMC prices"*).
-- **Domain-Specific AI Advice:** Answers questions regarding Karnataka crop prices, MSP, and government subsidies powered by Google Gemini AI with automatic multi-model fallback.
-- **Dynamic Waveform Visualizer:** Centered mirrored frequency spectrum visualizer rendered via the Web Audio API.
+### 2. 🧪 Soil Health Doctor & NPK Calculator
+- Calculates exact commercial fertilizer bag requirements (**Urea 45kg**, **DAP 50kg**, **MOP 50kg**) based on Karnataka soil profiles (Red sandy, Laterite, Black cotton, Alluvial), crop, and acreage.
+- Recommends organic inputs (compost, neem cake, bio-fertilizers, and lime).
+- **Gemini AI Soil Advisor**: Generates personalized soil microbiome and moisture management tips.
+- **Downloadable PDF Soil Card**: Exports a print-ready bilingual Soil Health Card.
 
-### Smart Grievance Escalation & Location-Scoped Tracking
-- **Location-Scoped View:** Filters grievances by **My Taluk (Default)**, **My District**, and **All Karnataka** so farmers view local issues relevant to their administration.
-- **Photo-Verified Evidence:** Camera capture with client-side compression saves evidence directly to Firestore for official inspection.
-- **Geographic & Departmental Isolation:** Complaints are strictly routed by District, Taluk, and Gram Panchayat to ensure relevant line officers handle them.
-- **4-Tier SLA Auto-Escalation:**
-  $$\text{PDO (GP)} \xrightarrow{7\text{ days}} \text{Taluk Panchayat (EO)} \xrightarrow{14\text{ days}} \text{Zilla Panchayat (CEO)} \xrightarrow{21\text{ days}} \text{RDPR Commissioner}$$
-- **Real-Time Citizen Tracking:** Status history, official response logs, and resolution timestamps updated live.
+### 3. 🔬 Crop Doctor (AI Visual Disease Scanner)
+- Uses computer vision (Google Gemini AI) to detect crop diseases (Ragi blast, Arecanut Koleroga, Coffee rust, Paddy blight, etc.) from leaf photos.
+- Delivers dual remedies: organic treatments (Neem oil, Jeevamrutha, Trichoderma) and university-approved chemical dosages.
 
-### Live APMC Market Intelligence
-- **District-Specific Feeds:** Real-time prices for Copra, Paddy, Arecanut, Ragi, Maize, Cotton, Turmeric, Tomato & more across all 31 Karnataka districts.
-- **Micro-Tick Fluctuations:** Simulates active intraday trading movements with color-coded flash indicators.
+### 4. 🏛️ Verified 31-District RSK Agronomist Directory
+- Gives farmers direct phone numbers for their **local Raitha Samparka Kendra (RSK) office**, **designated senior agronomist mobile**, and **ICAR Krishi Vigyan Kendra (KVK)** across all 31 Karnataka districts.
 
-### Comprehensive Scheme & Scholarship Discovery
-- **Agricultural & Social Schemes:** Browse Central & Karnataka State schemes (*PM-KISAN, Raitha Siri, Krishi Bhagya, PM Fasal Bima Yojana, Ganga Kalyana, Vidyasiri, Raita Vidyanidhi*).
-- **Scholarship Finder:** Income and eligibility based discovery for student scholarships (SSP, Buddy4Study, HDFC Parivartan, Reliance, MANF, AICTE Saksham).
-- **Text-to-Speech:** Listen to scheme guidelines and eligibility criteria spoken aloud in the selected language.
+### 5. 🌾 Live APMC Mandi Intelligence & Yield Estimator
+- Daily modal prices, trends, and MSP baselines for 20+ crops across 31 district markets.
+- Built-in crop yield and revenue calculator per acre.
 
-### Farmer Helpdesk & Question Submission (ರೈತ ಸಹಾಯವಾಣಿ & ಪ್ರಶ್ನೆ ಸಲ್ಲಿಕೆ)
-- **Direct Citizen Inquiries & Questioning:** Villagers and farmers can ask questions on state/central schemes, crop advisories, subsidy disbursement, or submit missing village and panchayat information.
-- **Intelligent Inquiry Categorization:** Multi-category filing (`question`, `missing_village`, `missing_scheme`, `app_issue`, `other`) with real-time district and taluk geo-tagging.
-- **Automated Tracking Tickets:** Generates unique tracking tickets (e.g., `GS-INQ-849201`) saved in Firestore for live status monitoring (`pending` ➔ `in_review` ➔ `resolved`).
-- **Official Resolution Hub:** Line officers and PDOs receive incoming citizen questions in their dedicated official dashboard inbox to respond, resolve, and update village data.
-- **Accessible Dark/Light Modal:** Designed with dynamic theme tokens, instant bilingual (Kannada & English) toggles, and intuitive mobile ergonomics.
+### 6. 📜 30+ Government Schemes & AI Eligibility Checker
+- Interactive directory of Central & State schemes (*PM-KISAN, Raitha Siri, Gruha Lakshmi, Krishi Bhagya, PMFBY, SSP Scholarships*).
+- AI Eligibility Checker determines scheme fit based on landholding, caste, district, and annual income.
 
-### Emergency SOS & Rural Weather Insights
-- **One-Tap Emergency SOS:** Instant emergency alert broadcast for urgent rural, agricultural, or health crises.
-- **Karnataka Agro-Weather:** Location-specific weather forecasts and agricultural advisories.
+### 7. ⚖️ Grievance Filing with 4-Tier Auto-Escalation
+- Citizens file civic or agricultural complaints with photo proof.
+- Auto-escalation matrix if issues remain unresolved:
+  $$\text{Gram Panchayat (PDO)} \xrightarrow{7\text{ days}} \text{Taluk (EO)} \xrightarrow{14\text{ days}} \text{Zilla (CEO)} \xrightarrow{21\text{ days}} \text{RDPR Commissioner}$$
+
+### 8. 🌦️ AI Weather-Based Crop Advisory
+- Live weather forecasts (temperature, humidity, rain probability) paired with daily actionable farm tasks and risk alerts from Gemini AI.
 
 ---
 
-## Explore Karnataka
+## 📶 Offline & Low-Internet Resilience
 
-- **31 District Hubs:** Interactive showcases covering local agriculture, heritage, cultural identity, and administration for every Karnataka district.
-- **High-Performance Image Cache:** Over 170 locally cached cultural landmarks and agricultural assets.
+GramSetu is specifically engineered for rural areas with weak 2G or intermittent mobile networks:
+
+- **PWA (Installable App):** Farmers can tap the prominent **Install App** button to install GramSetu directly on Android or iOS home screens.
+- **Service Worker Caching (`sw.js`):** The app shell and core assets are cached locally, loading in **< 300ms** even without an active internet connection.
+- **Embedded Local Datasets:** Schemes, crop disease remedies, fertilizer calculators, and RSK phone numbers are stored on the device and work **100% offline**.
+- **Offline Indicator:** Automatically detects network drops and informs the user of active offline tools.
+- **GSM Voice Fallback:** Critical RSK agronomist and emergency contacts support standard cellular voice dialing that works on basic 2G voice towers.
 
 ---
 
-## Tech Stack
+## 🛠️ Technology Stack
 
-| Layer | Technology / Service |
+| Component | Technology |
 |---|---|
-| **Frontend Framework** | [React 19](https://react.dev) + [Vite 8](https://vitejs.dev) |
-| **Routing** | [React Router DOM v7](https://reactrouter.com) |
-| **Realtime Database** | [Google Cloud Firestore](https://firebase.google.com/docs/firestore) |
-| **Authentication** | [Firebase Auth](https://firebase.google.com/docs/auth) + Magic QR Tokenless Bypass |
-| **Artificial Intelligence** | [Google Generative AI (Gemini Flash & Vision)](https://ai.google.dev/) |
-| **Voice & Speech** | Web Speech API (`webkitSpeechRecognition` + `SpeechSynthesis`) |
-| **Audio Synthesis** | Web Audio API (OscillatorNode two-tone alert chimes) |
-| **Icons & Visuals** | [Lucide React](https://lucide.dev) |
-| **QR Code Engine** | `qrcode.react` (High-density SVG vectors) |
-| **PDF Generation** | `jspdf` + `jspdf-autotable` |
-| **Hosting & CI/CD** | [Vercel](https://vercel.com) |
+| **Frontend** | React 19, Vite 8, React Router v7 |
+| **Styling & Icons** | Vanilla CSS Design System, Lucide React |
+| **Offline & PWA** | Service Worker (`sw.js`), Web App Manifest (`manifest.json`) |
+| **Artificial Intelligence** | Google Gemini 2.5 Flash & Vision AI |
+| **Database & Auth** | Google Firebase Firestore & Firebase Auth |
+| **PDF Generation** | jsPDF, jspdf-autotable |
+| **Languages Supported** | Kannada (ಕನ್ನಡ), English, Hindi (हिन्दी) |
 
 ---
 
-## Application Routes
+## 💻 Quick Start & Local Setup
 
-| Route | Purpose | Audience |
-|---|---|---|
-| `/` | Landing Page & Overview | Public |
-| `/district/:id` | Karnataka District Explorer | Public |
-| `/crop-doctor` | Crop Disease AI Scanner | Public / Farmers |
-| `/login/villager` | Citizen OTP / Email Login | Villagers & Farmers |
-| `/login/official` | Administrative Department Login | Govt Officials |
-| `/dashboard/villager/*` | Citizen Dashboard (Schemes, APMC, Complaints, SOS) | Logged-in Villagers |
-| `/dashboard/official/*` | Line Department & PDO Management Dashboard | Logged-in Officials |
-| `/demo/qr-cards` | Printable Magic QR Passes (A4 / A5 layout) | Open Day / Evaluators |
-| `/demo/dashboard` | Big Screen Real-Time Complaint Monitor + Audio Chimes | Presentation Displays |
-| `/demo/voice` | Standalone GramSetu AI Voice Assistant Demonstration | All |
-| `/presentation.html` | Interactive 8-Slide EEC-2026 Presentation Deck & PDF Exporter | Evaluators / Reviewers |
-| `/magic-login` | Tokenless instant role-playing entry point | QR Code Scanners |
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
 
----
-
-## Local Development Setup
-
-### 1. Clone the Repository
+### 1. Clone the repository
 ```bash
 git clone https://github.com/eshwarhs170-a11y/GramSetu.git
 cd GramSetu
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
 ```bash
 npm install
 ```
 
-### 3. Configure Environment Variables
-Create a `.env` file in the root directory:
+### 3. Setup environment variables
+Create a `.env` file in the project root:
 ```env
 VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
@@ -140,38 +106,31 @@ VITE_FIREBASE_PROJECT_ID=your_project_id
 VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
-VITE_GEMINI_API_KEY=your_google_gemini_api_key
+VITE_GEMINI_API_KEY=your_gemini_api_key
 ```
 
-### 4. Start Development Server
+### 4. Run the development server
 ```bash
 npm run dev
 ```
 Open **`http://localhost:5173`** in your browser.
 
----
-
-## Multilingual Support
-
-GramSetu supports instant language switching across the entire platform:
-
-| Language | Native Script | Coverage |
-|---|---|---|
-| **English** | Latin (`en`) | 100% UI strings, schemes, navigation & voice |
-| **Kannada** | ಕನ್ನಡ (`kn`) | 100% UI strings, APMC names, schemes, complaints & voice |
-| **Hindi** | हिन्दी (`hi`) | 100% UI strings, schemes & text-to-speech |
+### 5. Build for production
+```bash
+npm run build
+```
 
 ---
 
-## Authors & Team
+## 👥 Team Eclipse
 
-Built for Karnataka's rural empowerment at **Marvel Open Day 2026**.
-
-* **GitHub:** [@eshwarhs170-a11y](https://github.com/eshwarhs170-a11y)
-* **Live Deployment:** [gram-setu-one.vercel.app](https://gram-setu-one.vercel.app)
+- **Project:** GramSetu (ಗ್ರಾಮ ಸೇತು)
+- **GitHub:** [@eshwarhs170-a11y](https://github.com/eshwarhs170-a11y)
+- **Repository:** [https://github.com/eshwarhs170-a11y/GramSetu](https://github.com/eshwarhs170-a11y/GramSetu)
+- **Live Deployment:** [gram-setu-one.vercel.app](https://gram-setu-one.vercel.app)
 
 ---
 
-## License
+## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
