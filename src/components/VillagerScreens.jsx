@@ -608,35 +608,94 @@ export function HomeScreen({ setActive }) {
 
 
       {/* ── AI Scheme Eligibility Checker ── */}
-      {roleMode === 'farmer' && (
-        <div className="animate-fadeInUp card" style={{ marginBottom: 20, padding: 0, border: '1.5px solid rgba(79,70,229,0.25)', overflow: 'hidden' }}>
-          <div style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 8, padding: 6, display: 'flex', alignItems: 'center' }}>
-              <Sparkles size={18} color="#fbbf24" />
+      {roleMode === 'farmer' && (() => {
+        const profileLand   = window.localStorage.getItem('citizen_land');
+        const profileIncome = window.localStorage.getItem('citizen_income');
+        const profileCaste  = window.localStorage.getItem('citizen_caste');
+        const isProfileComplete = !!(profileLand && profileIncome && profileCaste);
+
+        return (
+          <div className="animate-fadeInUp card" style={{ marginBottom: 20, padding: 0, border: '1.5px solid rgba(79,70,229,0.25)', overflow: 'hidden' }}>
+            <div style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 8, padding: 6, display: 'flex', alignItems: 'center' }}>
+                <Sparkles size={18} color="#fbbf24" />
+              </div>
+              <div>
+                <h4 style={{ margin: 0, fontSize: 14, fontWeight: 800, color: '#fff' }}>AI Scheme Eligibility Check</h4>
+                <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Powered by Gemini AI · Based on your profile</p>
+              </div>
             </div>
-            <div>
-              <h4 style={{ margin: 0, fontSize: 14, fontWeight: 800, color: '#fff' }}>AI Scheme Eligibility Check</h4>
-              <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Powered by Gemini AI · 30-second analysis</p>
-            </div>
-          </div>
-          <div style={{ padding: '16px 20px' }}>
-            {!aiSchemeResult ? (
-              <>
-                <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 14, lineHeight: 1.5 }}>
-                  {lang === 'kn'
-                    ? 'ನಿಮ್ಮ ಜಮೀನು, ಆದಾಯ, ಮತ್ತು ಜಿಲ್ಲೆ ಆಧಾರದ ಮೇಲೆ ಯಾವ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳಿಗೆ ಅರ್ಹರಿದ್ದೀರಿ ಎಂದು AI ತಿಳಿಸುತ್ತದೆ.'
-                    : 'Let Gemini AI analyse your profile and tell you exactly which government schemes you qualify for right now.'}
-                </p>
-                <button
-                  onClick={async () => {
-                    if (aiSchemeRef.current) return;
-                    aiSchemeRef.current = true;
-                    setAiSchemeLoading(true);
-                    const name = window.localStorage.getItem('citizen_name') || userName;
-                    const land = window.localStorage.getItem('citizen_land') || '2';
-                    const income = window.localStorage.getItem('citizen_income') || '1,20,000';
-                    const caste = window.localStorage.getItem('citizen_caste') || 'OBC';
-                    const prompt = `You are a Karnataka government scheme advisor. A farmer named ${name} lives in ${userDistrict}, ${userTaluk}, Karnataka. Land: ${land} acres. Annual income: ₹${income}. Category: ${caste}. Today's date: ${new Date().toLocaleDateString('en-IN')}.
+            <div style={{ padding: '16px 20px' }}>
+              {!isProfileComplete ? (
+                /* ── Profile incomplete: block and guide ── */
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 12, padding: '8px 0 4px' }}>
+                  <div style={{ width: 52, height: 52, borderRadius: '50%', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ fontSize: 26 }}>📋</span>
+                  </div>
+                  <div>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', margin: '0 0 6px' }}>
+                      {lang === 'kn' ? 'ಮೊದಲು ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಭರ್ತಿ ಮಾಡಿ' : 'Complete Your Profile First'}
+                    </p>
+                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '0 0 4px', lineHeight: 1.5 }}>
+                      {lang === 'kn'
+                        ? 'AI ಅರ್ಹತೆ ಪರೀಕ್ಷೆ ನಿಮ್ಮ ಜಮೀನಿನ ವಿಸ್ತೀರ್ಣ, ವಾರ್ಷಿಕ ಆದಾಯ ಮತ್ತು ಜಾತಿ/ವರ್ಗ ಮಾಹಿತಿ ಆಧರಿಸಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ.'
+                        : 'The AI needs your land size, annual income, and caste/category to find schemes you genuinely qualify for.'}
+                    </p>
+                    <p style={{ fontSize: 11, color: '#d97706', fontWeight: 600, margin: 0 }}>
+                      {lang === 'kn'
+                        ? '⚠️ ಈ ಮಾಹಿತಿ ಇಲ್ಲದಿದ್ದರೆ ಫಲಿತಾಂಶ ತಪ್ಪಾಗುತ್ತದೆ'
+                        : '⚠️ Without this, results would be inaccurate guesswork'}
+                    </p>
+                  </div>
+                  <div style={{ display: 'flex', gap: 6, marginTop: 4, fontSize: 11, color: 'var(--text-muted)', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    {[
+                      { icon: '🌾', label: lang === 'kn' ? 'ಜಮೀನು (ಎಕರೆ)' : 'Land size (acres)', done: !!profileLand },
+                      { icon: '💰', label: lang === 'kn' ? 'ವಾರ್ಷಿಕ ಆದಾಯ' : 'Annual income', done: !!profileIncome },
+                      { icon: '🪪', label: lang === 'kn' ? 'ಜಾತಿ / ವರ್ಗ' : 'Caste / Category', done: !!profileCaste },
+                    ].map(item => (
+                      <span key={item.label} style={{ background: item.done ? '#dcfce7' : '#fee2e2', color: item.done ? '#15803d' : '#dc2626', borderRadius: 20, padding: '3px 10px', fontWeight: 600 }}>
+                        {item.icon} {item.label} {item.done ? '✓' : '✗'}
+                      </span>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setActive && setActive('profile')}
+                    style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px 22px', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 4px 12px rgba(79,70,229,0.3)', marginTop: 4 }}
+                  >
+                    <span>👤</span> {lang === 'kn' ? 'ಪ್ರೊಫೈಲ್ ಭರ್ತಿ ಮಾಡಿ →' : 'Fill My Profile →'}
+                  </button>
+                </div>
+              ) : !aiSchemeResult ? (
+                /* ── Profile complete: show check button with disclaimer ── */
+                <>
+                  <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 10, padding: '10px 14px', marginBottom: 14, display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                    <span style={{ fontSize: 16, flexShrink: 0 }}>✅</span>
+                    <div>
+                      <p style={{ fontSize: 12, fontWeight: 700, color: '#15803d', margin: '0 0 2px' }}>
+                        {lang === 'kn' ? 'ಪ್ರೊಫೈಲ್ ಸಿದ್ಧವಾಗಿದೆ' : 'Profile Ready'}
+                      </p>
+                      <p style={{ fontSize: 11, color: '#166534', margin: 0, lineHeight: 1.4 }}>
+                        {lang === 'kn'
+                          ? `ಜಮೀನು: ${profileLand} ಎಕರೆ · ಆದಾಯ: ₹${profileIncome}/ವರ್ಷ · ವರ್ಗ: ${profileCaste} · ಜಿಲ್ಲೆ: ${userDistrict}`
+                          : `Land: ${profileLand} acres · Income: ₹${profileIncome}/yr · Category: ${profileCaste} · District: ${userDistrict}`}
+                      </p>
+                    </div>
+                  </div>
+                  <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, padding: '8px 12px', marginBottom: 14, fontSize: 11, color: '#92400e' }}>
+                    ⚠️ {lang === 'kn'
+                      ? 'ಈ ಫಲಿತಾಂಶಗಳು ನೀವು ಸ್ವಯಂ ನೀಡಿದ ಮಾಹಿತಿ ಆಧಾರಿತ. ಅಂತಿಮ ಅರ್ಹತೆ ಸರ್ಕಾರಿ ದಾಖಲೆಗಳ ಮೂಲಕ ಪರಿಶೀಲಿಸಬೇಕು.'
+                      : 'Results are based on self-declared profile data. Official eligibility must be verified through government documents at the concerned office.'}
+                  </div>
+                  <button
+                    onClick={async () => {
+                      if (aiSchemeRef.current) return;
+                      aiSchemeRef.current = true;
+                      setAiSchemeLoading(true);
+                      const name   = window.localStorage.getItem('citizen_name') || userName;
+                      const land   = profileLand;
+                      const income = profileIncome;
+                      const caste  = profileCaste;
+                      const prompt = `You are a Karnataka government scheme advisor. A farmer named ${name} lives in ${userDistrict}, ${userTaluk}, Karnataka. Land: ${land} acres. Annual income: ₹${income}. Category: ${caste}. Today's date: ${new Date().toLocaleDateString('en-IN')}.
 
 Based on this profile, list the TOP 5 government schemes they are eligible for right now. For each scheme provide:
 1. Scheme Name (exact official name)
@@ -646,72 +705,78 @@ Based on this profile, list the TOP 5 government schemes they are eligible for r
 
 Format as JSON array: [{"name":"...","benefit":"...","reason":"...","apply":"...","category":"Central|State"}].
 Return ONLY the JSON array, no markdown, no explanation.`;
-                    try {
-                      const res = await callGemini(prompt);
-                      if (res) {
-                        const match = res.match(/\[[\s\S]*\]/);
-                        if (match) setAiSchemeResult(JSON.parse(match[0]));
-                        else setAiSchemeResult([{name: 'PM-KISAN', benefit: '₹6,000/year', reason: 'Small/marginal farmer in Karnataka', apply: 'Visit pmkisan.gov.in or your local Krishi Vigyan Kendra', category: 'Central'}]);
+                      try {
+                        const res = await callGemini(prompt);
+                        if (res) {
+                          const match = res.match(/\[[\s\S]*\]/);
+                          if (match) setAiSchemeResult(JSON.parse(match[0]));
+                          else setAiSchemeResult([{name: 'PM-KISAN', benefit: '₹6,000/year', reason: 'Small/marginal farmer in Karnataka', apply: 'Visit pmkisan.gov.in or your local RSK center', category: 'Central'}]);
+                        }
+                      } catch(e) {
+                        setAiSchemeResult([{name: 'PM-KISAN', benefit: '₹6,000/year', reason: 'Small/marginal farmer in Karnataka', apply: 'Visit pmkisan.gov.in or your local RSK center', category: 'Central'}]);
                       }
-                    } catch(e) {
-                      setAiSchemeResult([{name: 'PM-KISAN', benefit: '₹6,000/year', reason: 'Small/marginal farmer in Karnataka', apply: 'Visit pmkisan.gov.in or your local Krishi Vigyan Kendra', category: 'Central'}]);
-                    }
-                    setAiSchemeLoading(false);
-                    aiSchemeRef.current = false;
-                  }}
-                  disabled={aiSchemeLoading}
-                  style={{
-                    background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-                    color: '#fff', border: 'none', borderRadius: 10,
-                    padding: '10px 20px', fontSize: 13, fontWeight: 700,
-                    cursor: aiSchemeLoading ? 'not-allowed' : 'pointer',
-                    display: 'flex', alignItems: 'center', gap: 8,
-                    opacity: aiSchemeLoading ? 0.7 : 1, transition: 'all 0.2s',
-                    boxShadow: '0 4px 12px rgba(79,70,229,0.3)'
-                  }}
-                >
-                  {aiSchemeLoading ? (
-                    <><RefreshCw size={15} style={{ animation: 'spin 1s linear infinite' }} /> Analysing your profile...</>
-                  ) : (
-                    <><Sparkles size={15} /> {lang === 'kn' ? 'ಅರ್ಹತೆ ಪರೀಕ್ಷಿಸಿ' : 'Check My Eligibility'}</>
-                  )}
-                </button>
-              </>
-            ) : (
-              <>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>✅ {aiSchemeResult.length} schemes found for {userDistrict}:</p>
-                  <button onClick={() => { setAiSchemeResult(null); }} style={{ fontSize: 11, color: 'var(--primary)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>↻ Re-check</button>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {aiSchemeResult.map((scheme, idx) => (
-                    <div key={idx} style={{ background: 'var(--bg-main)', borderRadius: 10, padding: '12px 14px', border: '1px solid var(--border-light)', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                      <div style={{ width: 28, height: 28, borderRadius: 7, background: scheme.category === 'Central' ? '#dbeafe' : '#dcfce7', color: scheme.category === 'Central' ? '#1d4ed8' : '#15803d', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <Landmark size={14} />
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 4 }}>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{scheme.name}</span>
-                          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: scheme.category === 'Central' ? '#dbeafe' : '#dcfce7', color: scheme.category === 'Central' ? '#1d4ed8' : '#15803d' }}>{scheme.category}</span>
+                      setAiSchemeLoading(false);
+                      aiSchemeRef.current = false;
+                    }}
+                    disabled={aiSchemeLoading}
+                    style={{
+                      background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                      color: '#fff', border: 'none', borderRadius: 10,
+                      padding: '10px 20px', fontSize: 13, fontWeight: 700,
+                      cursor: aiSchemeLoading ? 'not-allowed' : 'pointer',
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      opacity: aiSchemeLoading ? 0.7 : 1, transition: 'all 0.2s',
+                      boxShadow: '0 4px 12px rgba(79,70,229,0.3)'
+                    }}
+                  >
+                    {aiSchemeLoading ? (
+                      <><RefreshCw size={15} style={{ animation: 'spin 1s linear infinite' }} /> {lang === 'kn' ? 'ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ...' : 'Analysing your profile...'}</>
+                    ) : (
+                      <><Sparkles size={15} /> {lang === 'kn' ? 'ಅರ್ಹತೆ ಪರೀಕ್ಷಿಸಿ' : 'Check My Eligibility'}</>
+                    )}
+                  </button>
+                </>
+              ) : (
+                /* ── Results view ── */
+                <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>✅ {aiSchemeResult.length} schemes found for {userDistrict}:</p>
+                    <button onClick={() => { setAiSchemeResult(null); }} style={{ fontSize: 11, color: 'var(--primary)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>↻ Re-check</button>
+                  </div>
+                  <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, padding: '7px 12px', marginBottom: 12, fontSize: 11, color: '#92400e' }}>
+                    ⚠️ {lang === 'kn' ? 'ಈ ಫಲಿತಾಂಶಗಳು ಸ್ವಯಂ ಮಾಹಿತಿ ಆಧಾರಿತ. ಅರ್ಜಿ ಸಲ್ಲಿಸುವ ಮೊದಲು ಸಂಬಂಧಪಟ್ಟ ಕಚೇರಿಯಲ್ಲಿ ದಾಖಲೆ ಪರಿಶೀಲಿಸಿ.' : 'Based on self-declared data. Verify documents at the concerned office before applying.'}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {aiSchemeResult.map((scheme, idx) => (
+                      <div key={idx} style={{ background: 'var(--bg-main)', borderRadius: 10, padding: '12px 14px', border: '1px solid var(--border-light)', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                        <div style={{ width: 28, height: 28, borderRadius: 7, background: scheme.category === 'Central' ? '#dbeafe' : '#dcfce7', color: scheme.category === 'Central' ? '#1d4ed8' : '#15803d', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <Landmark size={14} />
                         </div>
-                        <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--success)', margin: '2px 0' }}>Benefit: {scheme.benefit}</p>
-                        <p style={{ fontSize: 11, color: 'var(--text-secondary)', margin: '2px 0', lineHeight: 1.4 }}>{scheme.reason}</p>
-                        <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '4px 0 0 0', fontStyle: 'italic' }}>Apply: {scheme.apply}</p>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 4 }}>
+                            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{scheme.name}</span>
+                            <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: scheme.category === 'Central' ? '#dbeafe' : '#dcfce7', color: scheme.category === 'Central' ? '#1d4ed8' : '#15803d' }}>{scheme.category}</span>
+                          </div>
+                          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--success)', margin: '2px 0' }}>Benefit: {scheme.benefit}</p>
+                          <p style={{ fontSize: 11, color: 'var(--text-secondary)', margin: '2px 0', lineHeight: 1.4 }}>{scheme.reason}</p>
+                          <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '4px 0 0 0', fontStyle: 'italic' }}>Apply: {scheme.apply}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  onClick={() => setActive && setActive('schemes')}
-                  style={{ marginTop: 14, width: '100%', background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
-                >
-                  <ArrowRight size={14} /> View All Schemes & Apply
-                </button>
-              </>
-            )}
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setActive && setActive('schemes')}
+                    style={{ marginTop: 14, width: '100%', background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                  >
+                    <ArrowRight size={14} /> View All Schemes & Apply
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
+
 
       {/* ── Crop Doctor Quick Action ── */}
       <div
