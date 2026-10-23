@@ -226,6 +226,7 @@ export default function VoiceAssistantWidget() {
       {/* ── FAB Button ── */}
       <button
         onClick={toggleListening}
+        className="voice-fab-btn"
         title={ui.tapHint}
         style={{
           width: 58, height: 58, borderRadius: '50%',

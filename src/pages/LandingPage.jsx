@@ -178,7 +178,7 @@ export default function LandingPage() {
       {/* ── NAV ── */}
       <nav className="landing-top-nav" style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '14px 16px', background: isDark ? '#0f172a' : '#fff',
+        padding: '12px 16px', background: isDark ? '#0f172a' : '#fff',
         borderBottom: `1px solid ${isDark ? '#1e293b' : '#e5e7eb'}`,
         position: 'sticky', top: 0, zIndex: 100,
         boxShadow: isDark ? '0 1px 12px rgba(0,0,0,0.4)' : '0 1px 12px rgba(0,0,0,0.06)'
@@ -186,11 +186,11 @@ export default function LandingPage() {
         <div
           className="landing-nav-left"
           onClick={handleLogoSecretTap}
-          style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', userSelect: 'none' }}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', userSelect: 'none', flexShrink: 0 }}
           title="Triple tap for Demo Hub"
         >
           <div style={{
-            width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+            width: 36, height: 36, borderRadius: 10, flexShrink: 0,
             background: 'linear-gradient(135deg, #16a34a, #15803d)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: '0 4px 12px rgba(22,163,74,0.3)'
@@ -198,23 +198,24 @@ export default function LandingPage() {
             <Wheat size={20} color="#fff" strokeWidth={2} />
           </div>
           <div>
-            <div className="landing-nav-title" style={{ fontWeight: 800, fontSize: 18, color: isDark ? '#f8fafc' : '#111827', lineHeight: 1.1 }}>{t('appName')}</div>
+            <div className="landing-nav-title" style={{ fontWeight: 800, fontSize: 17, color: isDark ? '#f8fafc' : '#111827', lineHeight: 1.1 }}>{t('appName')}</div>
             <div className="landing-nav-subtitle" style={{ fontSize: 11, color: isDark ? '#94a3b8' : '#6b7280' }}>{t('appSubtitle')}</div>
           </div>
         </div>
-        <div className="landing-nav-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className="landing-nav-right" style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
           <LanguageSwitcher variant="topbar-style" />
           <ThemeToggle />
           <InstallAppButton variant="nav" />
           <button
             onClick={() => { setInquiryCategory('question'); setInquiryModalOpen(true); }}
             className="landing-btn-helpdesk hover-lift"
+            title={lang === 'kn' ? 'ಸಹಾಯವಾಣಿ' : 'Helpdesk'}
             style={{
               background: isDark ? 'rgba(34, 197, 94, 0.15)' : 'rgba(22, 163, 74, 0.1)',
               color: isDark ? '#4ade80' : '#15803d',
               border: `1px solid ${isDark ? 'rgba(74, 222, 128, 0.3)' : 'rgba(22, 163, 74, 0.25)'}`,
               borderRadius: 10,
-              padding: '9px 13px',
+              padding: '8px 12px',
               fontWeight: 700,
               fontSize: 13,
               cursor: 'pointer',
@@ -225,7 +226,7 @@ export default function LandingPage() {
             }}
           >
             <HelpCircle size={15} strokeWidth={2.2} />
-            <span>{lang === 'kn' ? 'ಸಹಾಯವಾಣಿ' : 'Helpdesk'}</span>
+            <span className="landing-btn-helpdesk-text">{lang === 'kn' ? 'ಸಹಾಯವಾಣಿ' : 'Helpdesk'}</span>
           </button>
           <button
             onClick={() => navigate('/login/villager')}
@@ -233,12 +234,17 @@ export default function LandingPage() {
             style={{
               background: 'linear-gradient(135deg, #16a34a, #15803d)',
               color: '#fff', border: 'none', borderRadius: 10,
-              padding: '10px 16px', fontWeight: 700, fontSize: 14,
+              padding: '9px 15px', fontWeight: 800, fontSize: 13.5,
               cursor: 'pointer', boxShadow: '0 4px 12px rgba(22,163,74,0.3)',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4
             }}
           >
-            Login →
+            <span>{lang === 'kn' ? 'ಲಾಗಿನ್' : 'Login'}</span>
+            <ArrowRight size={14} />
           </button>
         </div>
       </nav>
@@ -247,24 +253,24 @@ export default function LandingPage() {
       <section className="landing-hero-section" style={{
         display: 'flex', alignItems: 'center', flexWrap: 'wrap',
         background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0d4b2f 100%)',
-        position: 'relative', overflow: 'hidden', padding: '60px 24px', gap: 32
+        position: 'relative', overflow: 'hidden', padding: '50px 20px', gap: 32
       }}>
         {/* Decorative orbs */}
         <div style={{ position: 'absolute', top: -80, left: -80, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -100, right: -80, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(22,163,74,0.25) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Left content */}
-        <div className="animate-fade-in" style={{ flex: '1 1 280px', maxWidth: 580, position: 'relative', zIndex: 1 }}>
+        <div className="animate-fade-in hero-left-content" style={{ flex: '1 1 280px', maxWidth: 580, position: 'relative', zIndex: 1 }}>
           <div className="pulse-green" style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             background: 'rgba(22,163,74,0.15)', border: '1px solid rgba(22,163,74,0.3)',
-            borderRadius: 50, padding: '6px 16px', marginBottom: 28
+            borderRadius: 50, padding: '6px 16px', marginBottom: 24
           }}>
             <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 6px #4ade80' }} />
             <span style={{ color: '#86efac', fontSize: 13, fontWeight: 600 }}>{t('heroAvailable')}</span>
           </div>
 
-          <h2 style={{ fontSize: 'clamp(30px, 6vw, 52px)', fontWeight: 900, lineHeight: 1.12, color: '#fff', marginBottom: 16, letterSpacing: -1 }}>
+          <h2 style={{ fontSize: 'clamp(28px, 6vw, 52px)', fontWeight: 900, lineHeight: 1.15, color: '#fff', marginBottom: 16, letterSpacing: -0.5 }}>
             {t('heroTitle1')}{' '}
             <span style={{ background: 'linear-gradient(90deg, #4ade80, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               {t('heroTitle2')}
@@ -272,29 +278,30 @@ export default function LandingPage() {
             {t('heroTitle3')}
           </h2>
 
-          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, marginBottom: 24, maxWidth: 460 }}>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65, marginBottom: 24, maxWidth: 460 }}>
             {t('heroDesc')}
           </p>
 
           {/* Stats row */}
-          <div style={{ display: 'flex', gap: 24, marginBottom: 28, flexWrap: 'wrap' }}>
+          <div className="hero-stats-row" style={{ display: 'flex', gap: 24, marginBottom: 26, flexWrap: 'wrap' }}>
             {[
               { val: t('stat1Val'), label: t('stat1Label') },
               { val: t('stat2Val'), label: t('stat2Label') },
               { val: t('stat3Val'), label: t('stat3Label') },
             ].map((s, i) => (
-              <div key={i} className="hover-lift" style={{ cursor: 'default' }}>
-                <div style={{ fontSize: 26, fontWeight: 900, color: '#fff' }}>{s.val}</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 500, marginTop: 2 }}>{s.label}</div>
+              <div key={i} className="hover-lift hero-stat-item" style={{ cursor: 'default' }}>
+                <div style={{ fontSize: 24, fontWeight: 900, color: '#fff' }}>{s.val}</div>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 500, marginTop: 2 }}>{s.label}</div>
               </div>
             ))}
           </div>
 
           {/* Role Selector */}
-          <div style={{
-            display: 'inline-flex', background: 'rgba(255,255,255,0.08)',
+          <div className="hero-role-selector" style={{
+            display: 'flex', background: 'rgba(255,255,255,0.08)',
             borderRadius: 14, padding: 4, marginBottom: 20,
-            border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)'
+            border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)',
+            maxWidth: 380, width: '100%', boxSizing: 'border-box'
           }}>
             {[
               { id: 'farmer',   Icon: Wheat,     label: 'Farmer / Student' },
@@ -305,39 +312,43 @@ export default function LandingPage() {
                 <button
                   key={role.id}
                   onClick={() => setSelectedRole(role.id)}
+                  className="hero-role-btn"
                   style={{
-                    padding: '10px 22px', borderRadius: 10, fontWeight: 700, fontSize: 14,
+                    flex: 1,
+                    padding: '10px 12px', borderRadius: 10, fontWeight: 700, fontSize: 13,
                     cursor: 'pointer', transition: 'all 0.25s ease', border: 'none',
-                    display: 'flex', alignItems: 'center', gap: 7,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    whiteSpace: 'nowrap',
                     background: selectedRole === role.id
                       ? (role.id === 'farmer'
                           ? 'linear-gradient(135deg, #16a34a, #15803d)'
                           : 'linear-gradient(135deg, #3b82f6, #2563eb)')
                       : 'transparent',
-                    color: selectedRole === role.id ? '#fff' : 'rgba(255,255,255,0.6)',
+                    color: selectedRole === role.id ? '#fff' : 'rgba(255,255,255,0.7)',
                     boxShadow: selectedRole === role.id ? '0 4px 16px rgba(0,0,0,0.3)' : 'none',
                     transform: selectedRole === role.id ? 'scale(1.02)' : 'scale(1)'
                   }}
                 >
                   <RoleIcon size={15} strokeWidth={2} />
-                  {role.label}
+                  <span>{role.label}</span>
                 </button>
               )
             })}
           </div>
 
           {/* CTA button */}
-          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+          <div className="hero-cta-group" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', width: '100%', maxWidth: 440 }}>
             <button
               onClick={() => navigate(selectedRole === 'farmer' ? '/login/villager' : '/login/official')}
-              className="hover-lift"
+              className="hover-lift hero-login-cta"
               style={{
+                flex: '1 1 180px',
                 background: selectedRole === 'farmer'
                   ? 'linear-gradient(135deg, #16a34a, #15803d)'
                   : 'linear-gradient(135deg, #3b82f6, #2563eb)',
                 color: '#fff', border: 'none', borderRadius: 12,
-                padding: '14px 32px', fontWeight: 700, fontSize: 15,
-                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8,
+                padding: '14px 20px', fontWeight: 700, fontSize: 14.5,
+                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                 boxShadow: selectedRole === 'farmer'
                   ? '0 8px 24px rgba(22,163,74,0.4)'
                   : '0 8px 24px rgba(59,130,246,0.4)'
@@ -345,7 +356,7 @@ export default function LandingPage() {
             >
               {selectedRole === 'farmer' ? t('ctaVillager') : t('ctaOfficial')} <ArrowRight size={16} />
             </button>
-            <InstallAppButton variant="hero" />
+            <InstallAppButton variant="hero" style={{ flex: '1 1 180px', justifyContent: 'center' }} />
           </div>
         </div>
 

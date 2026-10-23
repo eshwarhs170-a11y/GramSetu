@@ -1864,3 +1864,176 @@ input, textarea, select { font-family: inherit; outline: none; }
     flex: 0 0 auto !important;
   }
 }
+
+/* ===== COMPREHENSIVE MOBILE UI & HEADER SPACING RULES ===== */
+
+/* Prevent horizontal overflow on mobile screens */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+/* Landing Page Nav Responsive Rules */
+.landing-top-nav {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  max-width: 100vw !important;
+}
+
+@media (max-width: 640px) {
+  .landing-top-nav {
+    padding: 10px 12px !important;
+  }
+
+  .landing-nav-subtitle {
+    display: none !important;
+  }
+
+  .landing-nav-title {
+    font-size: 16px !important;
+  }
+
+  .landing-nav-left {
+    gap: 6px !important;
+  }
+
+  .landing-nav-right {
+    gap: 5px !important;
+  }
+
+  /* In mobile topnav, hide long text labels */
+  .landing-btn-helpdesk-text,
+  .install-app-btn-text {
+    display: none !important;
+  }
+
+  .landing-btn-helpdesk {
+    padding: 7px 9px !important;
+    min-width: 34px !important;
+    height: 34px !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+  }
+
+  /* On small mobile screens (< 520px), hide duplicate install app button in top nav so Login button has max priority & space */
+  .landing-top-nav .install-app-btn-nav {
+    display: none !important;
+  }
+
+  /* Login button must ALWAYS be 100% visible and prominent */
+  .landing-btn-login {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 7px 12px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Hero Section Spacing */
+  .landing-hero-section {
+    padding: 36px 16px 70px !important;
+    gap: 24px !important;
+  }
+
+  .landing-hero-section h2 {
+    font-size: 30px !important;
+    line-height: 1.15 !important;
+    margin-bottom: 14px !important;
+  }
+
+  .landing-hero-section p {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Stats row wrapping */
+  .hero-stats-row {
+    gap: 16px !important;
+    margin-bottom: 22px !important;
+  }
+
+  .hero-stat-item div:first-child {
+    font-size: 22px !important;
+  }
+
+  .hero-stat-item div:last-child {
+    font-size: 11px !important;
+  }
+
+  /* Role selector: 100% visible, no text cutoff */
+  .hero-role-selector {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    margin-bottom: 18px !important;
+  }
+
+  .hero-role-btn {
+    flex: 1 1 0 !important;
+    padding: 10px 8px !important;
+    font-size: 12.5px !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+
+  .hero-role-btn span {
+    font-size: 12px !important;
+  }
+
+  /* Hero CTA buttons: stack full width with easy touch target */
+  .hero-cta-group {
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .hero-login-cta,
+  .hero-cta-group > * {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    justify-content: center !important;
+    padding: 14px 18px !important;
+    font-size: 14.5px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Floating voice assistant widget safe positioning on mobile */
+  .voice-fab-wrapper {
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 14px !important;
+  }
+
+  .voice-fab-btn {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  /* Modal Dialogs on Mobile */
+  .modal-overlay {
+    padding: 10px !important;
+    align-items: center !important;
+    padding-top: 0 !important;
+  }
+
+  .modal-content {
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: 94vh !important;
+    border-radius: 16px !important;
+    margin: 0 !important;
+  }
+}
+
+/* Voice typing pulse keyframe */
+@keyframes voicePulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  70% { transform: scale(1.04); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}

@@ -113,14 +113,14 @@ export default function InstallAppButton({ variant = 'nav', style = {} }) {
     <>
       <button
         onClick={handleInstallClick}
-        className="hover-lift"
+        className="hover-lift install-app-btn-nav"
         title="Install GramSetu as an offline app"
         style={{
           background: 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)',
           color: '#fff',
           border: 'none',
           borderRadius: 10,
-          padding: '8px 14px',
+          padding: '8px 12px',
           fontWeight: 800,
           fontSize: 13,
           cursor: 'pointer',
@@ -133,7 +133,7 @@ export default function InstallAppButton({ variant = 'nav', style = {} }) {
         }}
       >
         <Download size={15} strokeWidth={2.4} />
-        <span>{lang === 'kn' ? 'ಆ್ಯಪ್ ಇನ್‌ಸ್ಟಾಲ್' : 'Install App'}</span>
+        <span className="install-app-btn-text">{lang === 'kn' ? 'ಆ್ಯಪ್ ಇನ್‌ಸ್ಟಾಲ್' : 'Install App'}</span>
       </button>
 
       {showIosGuide && <IosInstallModal onClose={() => setShowIosGuide(false)} lang={lang} />}

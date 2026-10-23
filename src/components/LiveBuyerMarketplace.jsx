@@ -5,6 +5,7 @@ import {
   Store, Phone, MessageSquare, CheckCircle, ShieldCheck, MapPin,
   Clock, IndianRupee, PlusCircle, Search, Filter, ArrowUpRight, Sparkles, X, User
 } from 'lucide-react';
+import VoiceTypingButton from './VoiceTypingButton';
 
 export default function LiveBuyerMarketplace({ currentDistrict = 'Mysuru' }) {
   const { lang } = useLanguage();
@@ -634,11 +635,14 @@ export default function LiveBuyerMarketplace({ currentDistrict = 'Mysuru' }) {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
                 <div>
-                  <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary, #0f172a)', display: 'block', marginBottom: 4 }}>
-                    Farmer Name / ಹೆಸರು *
-                  </label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                    <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary, #0f172a)' }}>
+                      Farmer Name / ಹೆಸರು *
+                    </label>
+                    <VoiceTypingButton value={newFarmerName} onTranscript={setNewFarmerName} compact />
+                  </div>
                   <input
                     type="text"
                     value={newFarmerName}
@@ -646,15 +650,19 @@ export default function LiveBuyerMarketplace({ currentDistrict = 'Mysuru' }) {
                     required
                     style={{
                       width: '100%', padding: '10px 12px', borderRadius: 8,
-                      border: '1.5px solid var(--border-light, #cbd5e1)', fontSize: 13
+                      border: '1.5px solid var(--border-light, #cbd5e1)', fontSize: 13,
+                      boxSizing: 'border-box'
                     }}
                   />
                 </div>
 
                 <div>
-                  <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary, #0f172a)', display: 'block', marginBottom: 4 }}>
-                    Contact Phone *
-                  </label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                    <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary, #0f172a)' }}>
+                      Contact Phone *
+                    </label>
+                    <VoiceTypingButton value={newPhone} onTranscript={val => setNewPhone(val.replace(/\D/g, '').slice(0, 10))} compact />
+                  </div>
                   <input
                     type="tel"
                     placeholder="+91 98..."
@@ -663,16 +671,20 @@ export default function LiveBuyerMarketplace({ currentDistrict = 'Mysuru' }) {
                     required
                     style={{
                       width: '100%', padding: '10px 12px', borderRadius: 8,
-                      border: '1.5px solid var(--border-light, #cbd5e1)', fontSize: 13
+                      border: '1.5px solid var(--border-light, #cbd5e1)', fontSize: 13,
+                      boxSizing: 'border-box'
                     }}
                   />
                 </div>
               </div>
 
               <div>
-                <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary, #0f172a)', display: 'block', marginBottom: 4 }}>
-                  Village / Taluk
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                  <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary, #0f172a)' }}>
+                    Village / Taluk
+                  </label>
+                  <VoiceTypingButton value={newVillage} onTranscript={setNewVillage} compact />
+                </div>
                 <input
                   type="text"
                   placeholder="e.g. Bannur Hobli, T. Narasipura"
@@ -680,15 +692,19 @@ export default function LiveBuyerMarketplace({ currentDistrict = 'Mysuru' }) {
                   onChange={e => setNewVillage(e.target.value)}
                   style={{
                     width: '100%', padding: '10px 12px', borderRadius: 8,
-                    border: '1.5px solid var(--border-light, #cbd5e1)', fontSize: 13
+                    border: '1.5px solid var(--border-light, #cbd5e1)', fontSize: 13,
+                    boxSizing: 'border-box'
                   }}
                 />
               </div>
 
               <div>
-                <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary, #0f172a)', display: 'block', marginBottom: 4 }}>
-                  Special Quality Notes / ಗುಣಮಟ್ಟ ವಿವರ
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                  <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary, #0f172a)' }}>
+                    Special Quality Notes / ಗುಣಮಟ್ಟ ವಿವರ
+                  </label>
+                  <VoiceTypingButton value={newNotes} onTranscript={setNewNotes} />
+                </div>
                 <textarea
                   rows={2}
                   placeholder="e.g. Organic certified, moisture < 12%, stored in clean bags"
@@ -696,7 +712,8 @@ export default function LiveBuyerMarketplace({ currentDistrict = 'Mysuru' }) {
                   onChange={e => setNewNotes(e.target.value)}
                   style={{
                     width: '100%', padding: '10px 12px', borderRadius: 8,
-                    border: '1.5px solid var(--border-light, #cbd5e1)', fontSize: 13, resize: 'none'
+                    border: '1.5px solid var(--border-light, #cbd5e1)', fontSize: 13, resize: 'none',
+                    boxSizing: 'border-box'
                   }}
                 />
               </div>

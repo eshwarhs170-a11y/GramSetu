@@ -9,6 +9,7 @@ import { useTheme } from '../context/ThemeContext'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import { db } from '../firebase'
 import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore'
+import VoiceTypingButton from './VoiceTypingButton'
 
 export default function FarmerInquiryModal({
   isOpen,
@@ -674,9 +675,12 @@ export default function FarmerInquiryModal({
               {/* Farmer Contact Details */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px', marginBottom: '16px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
-                    {lang === 'kn' ? 'ನಿಮ್ಮ ಹೆಸರು / Farmer Name *' : 'Farmer / Citizen Name *'}
-                  </label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 700, color: T.textSub }}>
+                      {lang === 'kn' ? 'ನಿಮ್ಮ ಹೆಸರು / Farmer Name *' : 'Farmer / Citizen Name *'}
+                    </label>
+                    <VoiceTypingButton value={name} onTranscript={setName} compact />
+                  </div>
                   <div style={{ position: 'relative' }}>
                     <User size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                     <input
@@ -701,9 +705,12 @@ export default function FarmerInquiryModal({
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
-                    {lang === 'kn' ? 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ / Phone Number *' : 'Mobile Number (For resolution SMS) *'}
-                  </label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 700, color: T.textSub }}>
+                      {lang === 'kn' ? 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ / Phone Number *' : 'Mobile Number (For resolution SMS) *'}
+                    </label>
+                    <VoiceTypingButton value={phone} onTranscript={val => setPhone(val.replace(/\D/g, '').slice(0, 10))} compact />
+                  </div>
                   <div style={{ position: 'relative' }}>
                     <Phone size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                     <input
@@ -787,9 +794,12 @@ export default function FarmerInquiryModal({
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
-                    {lang === 'kn' ? 'ಗ್ರಾಮ ಪಂಚಾಯತಿ / GP (ಐಚ್ಛಿಕ)' : 'Gram Panchayat (Optional)'}
-                  </label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 700, color: T.textSub }}>
+                      {lang === 'kn' ? 'ಗ್ರಾಮ ಪಂಚಾಯತಿ / GP' : 'Gram Panchayat'}
+                    </label>
+                    <VoiceTypingButton value={gp} onTranscript={setGp} compact />
+                  </div>
                   <input
                     type="text"
                     placeholder={lang === 'kn' ? 'ಉದಾ: ಬಿಳಿಕೆರೆ ಜಿ.ಪಿ' : 'e.g. Bilikere GP'}
@@ -812,11 +822,14 @@ export default function FarmerInquiryModal({
 
               {/* Village Name Specific Field */}
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: category === 'missing_village' ? (isDark ? '#4ade80' : '#16a34a') : T.textSub }}>
-                  {category === 'missing_village'
-                    ? (lang === 'kn' ? 'ಸೇರಿಸಬೇಕಾದ ಗ್ರಾಮ / ಮಜರೆ ಹೆಸರು *' : 'Missing Village / Hamlet / Area Name *')
-                    : (lang === 'kn' ? 'ನಿಮ್ಮ ಗ್ರಾಮ / ಪ್ರದೇಶ ಹೆಸರು' : 'Village / Area Name')}
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: category === 'missing_village' ? (isDark ? '#4ade80' : '#16a34a') : T.textSub }}>
+                    {category === 'missing_village'
+                      ? (lang === 'kn' ? 'ಸೇರಿಸಬೇಕಾದ ಗ್ರಾಮ / ಮಜರೆ ಹೆಸರು *' : 'Missing Village / Hamlet / Area Name *')
+                      : (lang === 'kn' ? 'ನಿಮ್ಮ ಗ್ರಾಮ / ಪ್ರದೇಶ ಹೆಸರು' : 'Village / Area Name')}
+                  </label>
+                  <VoiceTypingButton value={villageName} onTranscript={setVillageName} compact />
+                </div>
                 <div style={{ position: 'relative' }}>
                   <MapPin size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: category === 'missing_village' ? (isDark ? '#4ade80' : '#16a34a') : T.textMuted }} />
                   <input
@@ -842,9 +855,12 @@ export default function FarmerInquiryModal({
 
               {/* Subject */}
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
-                  {lang === 'kn' ? 'ವಿಷಯ / Subject *' : 'Subject / Summary *'}
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: T.textSub }}>
+                    {lang === 'kn' ? 'ವಿಷಯ / Subject *' : 'Subject / Summary *'}
+                  </label>
+                  <VoiceTypingButton value={subject} onTranscript={setSubject} compact />
+                </div>
                 <input
                   type="text"
                   required
@@ -867,9 +883,12 @@ export default function FarmerInquiryModal({
 
               {/* Description */}
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: T.textSub }}>
-                  {lang === 'kn' ? 'ಪೂರ್ಣ ವಿವರಗಳು ಅಥವಾ ಪ್ರಶ್ನೆ *' : 'Full Details / Description / Question *'}
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: T.textSub }}>
+                    {lang === 'kn' ? 'ಪೂರ್ಣ ವಿವರಗಳು ಅಥವಾ ಪ್ರಶ್ನೆ *' : 'Full Details / Description / Question *'}
+                  </label>
+                  <VoiceTypingButton value={description} onTranscript={setDescription} />
+                </div>
                 <textarea
                   required
                   rows={4}

@@ -76,3 +76,35 @@ export function playTacticalRadarChime() {
     console.warn('Tactical Radar Audio error:', err);
   }
 }
+
+/**
+ * Soft high-frequency chime/click for mic activation and deactivation
+ */
+export function playSoftMicBeep(isStart = true) {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    const startFreq = isStart ? 880 : 587;
+    const endFreq = isStart ? 1174 : 392;
+
+    osc.frequency.setValueAtTime(startFreq, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(endFreq, ctx.currentTime + 0.08);
+
+    gain.gain.setValueAtTime(0.01, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.12);
+  } catch {
+    // ignore
+  }
+}

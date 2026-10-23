@@ -88,6 +88,7 @@ import { db } from '../firebase'
 import { collection, getDocs, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore'
 import { transliterateWord } from '../utils/transliterate'
 import Confetti from './Confetti'
+import VoiceTypingButton from './VoiceTypingButton'
 import { fetchLivePrices, BASELINE_PRICES, clearPriceCache } from '../utils/fetchPrices'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import { fetchWeatherForLocation, formatForecastData } from '../utils/fetchWeather'
@@ -1671,9 +1672,12 @@ export function SchemesScreen() {
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   className="form-input"
-                  style={{ width: '100%', padding: '10px 14px 10px 36px', borderRadius: 10 }}
+                  style={{ width: '100%', padding: '10px 52px 10px 36px', borderRadius: 10, boxSizing: 'border-box' }}
                 />
-                <Search size={16} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--text-muted)' }} />
+                <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <div style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)' }}>
+                  <VoiceTypingButton value={searchQuery} onTranscript={setSearchQuery} inline />
+                </div>
               </div>
 
               <div style={{ minWidth: 160 }}>
@@ -2815,14 +2819,46 @@ export function MarketScreen() {
               </button>
             ))}
           </div>
-          <input 
-            type="text" 
-            className="form-input" 
-            placeholder="Search crop or APMC..." 
-            style={{ maxWidth: 220, padding: '7px 12px', fontSize: 13 }}
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <input 
+              type="text" 
+              className="form-input" 
+              placeholder={lang === 'kn' ? 'ಬೆಳೆ ಅಥವಾ APMC ಹುಡುಕಿ...' : 'Search crop or APMC...'} 
+              style={{ maxWidth: 240, padding: '7px 46px 7px 12px', fontSize: 13, boxSizing: 'border-box' }}
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+            <div style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)' }}>
+              <VoiceTypingButton value={searchTerm} onTranscript={setSearchTerm} inline />
+            </div>
+          </div>
+          </div>
+        </div>
+
+        {/* Wholesale APMC vs Retail clarification banner */}
+        <div style={{
+          padding: '10px 14px',
+          background: 'rgba(59, 130, 246, 0.08)',
+          border: '1px solid rgba(59, 130, 246, 0.22)',
+          borderRadius: 12,
+          fontSize: 12.5,
+          color: 'var(--text-secondary, #334155)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          marginBottom: 20
+        }}>
+          <span style={{ fontSize: 18, flexShrink: 0 }}>ℹ️</span>
+          <div style={{ lineHeight: 1.45 }}>
+            {lang === 'kn' ? (
+              <>
+                <strong>ಎಪಿಎಂಸಿ ಸಗಟು ಹರಾಜು ದರಗಳು (Wholesale Mandi Rates):</strong> ಈ ದರಗಳು ರೈತರು ಮಂಡಿಗಳಲ್ಲಿ ನೇರವಾಗಿ ಪಡೆಯುವ ಸಗಟು ಬೆಲೆಗಳಾಗಿವೆ. ಚಿಲ್ಲರೆ ಹಣ್ಣಿನ ಅಂಗಡಿ/ಸೂಪರ್‌ಮಾರ್ಕೆಟ್‌ಗಳಲ್ಲಿ ಸಾರಿಗೆ ಮತ್ತು ಮಾರಾಟ ವೆಚ್ಚ ಸೇರಿ ಬೆಲೆ ಹೆಚ್ಚಿರುತ್ತದೆ (ಉದಾ: ಸೇಬು ₹170–₹220/kg).
+              </>
+            ) : (
+              <>
+                <strong>Official APMC Mandi Wholesale Rates:</strong> These modal prices reflect bulk auction rates received by farmers at mandis. Retail consumer fruit & vegetable shop prices are typically 40%–100% higher due to transport, cold storage, and retail margins (e.g. Apples ₹170–₹220/kg).
+              </>
+            )}
           </div>
         </div>
 
@@ -3691,7 +3727,10 @@ export function ComplaintScreen({ setActive }) {
               </div>
               <div style={{ display: 'flex', gap: 14 }}>
                 <div className="form-group" style={{ flex: 1, minWidth: 0 }}>
-                  <label className="form-label" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('complaintLocation')} / ಸ್ಥಳ</label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label className="form-label" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('complaintLocation')} / ಸ್ಥಳ</label>
+                    <VoiceTypingButton compact value={location} onTranscript={setLocation} />
+                  </div>
                   <input className="form-input" placeholder="ಉದಾ: ವಾರ್ಡ್ 3"
                     value={location} onChange={e => setLocation(e.target.value)} />
                 </div>
