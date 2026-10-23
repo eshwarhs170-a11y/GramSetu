@@ -22,13 +22,17 @@ function App() {
   const navigate = useNavigate()
 
   // Secret shortcuts for presenter:
-  // 1) Ctrl + Shift + A (or O) -> Direct instant login to Admin / Official Dashboard (/dashboard/official)
-  // 2) Ctrl + Shift + D -> Jumps to Presenter Demo Hub (/demo)
+  // 1) Ctrl + Shift + A (or O) -> Direct instant login to Admin / Official Dashboard
+  // 2) Ctrl + Shift + V -> Direct instant login to Villager / Farmer Dashboard
+  // 3) Ctrl + Shift + D -> Jumps to Presenter Demo Hub (/demo)
   useEffect(() => {
     const handleKeyDown = (e) => {
       // Admin / Official shortcut: Ctrl + Shift + A or Ctrl + Shift + O
       if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a' || e.key === 'O' || e.key === 'o')) {
         e.preventDefault()
+        // Clear any villager session first
+        window.localStorage.removeItem('citizen_email')
+        window.localStorage.removeItem('citizen_phone')
         window.localStorage.setItem('official_name', 'S. R. Patil')
         window.localStorage.setItem('official_district', 'Mysuru')
         window.localStorage.setItem('official_taluk', 'Mysuru')
@@ -40,6 +44,25 @@ function App() {
         window.localStorage.setItem('official_loggedIn', 'true')
         window.dispatchEvent(new Event('profileUpdate'))
         window.location.replace('/dashboard/official')
+        return
+      }
+
+      // Villager / Farmer shortcut: Ctrl + Shift + V
+      if (e.ctrlKey && e.shiftKey && (e.key === 'V' || e.key === 'v')) {
+        e.preventDefault()
+        // Clear official session first
+        window.localStorage.removeItem('official_id')
+        window.localStorage.removeItem('official_loggedIn')
+        window.localStorage.setItem('citizen_name', 'Ramappa Gowda')
+        window.localStorage.setItem('citizen_district', 'Mysuru')
+        window.localStorage.setItem('citizen_taluk', 'Mysuru Taluk')
+        window.localStorage.setItem('citizen_gp', 'Varuna')
+        window.localStorage.setItem('citizen_village', 'Varuna Village')
+        window.localStorage.setItem('citizen_phone', '9845123456')
+        window.localStorage.setItem('citizen_email', 'ramappa.gowda@gramsetu.in')
+        window.localStorage.setItem('citizen_area_type', 'rural')
+        window.dispatchEvent(new Event('profileUpdate'))
+        window.location.replace('/dashboard/villager')
         return
       }
 
