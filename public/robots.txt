@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gram-setu-one.vercel.app/sitemap.xml

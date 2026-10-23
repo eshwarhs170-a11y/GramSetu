@@ -43,6 +43,11 @@ scratch/
 
 # Temporary data / output files
 *.txt
+!public/robots.txt
+*.pdf
+*.pptx
+*.bak
+presentation.html
 old_*.json
 bbmp*.json
 bbmp*.html
@@ -54,3 +59,4 @@ wiki_wards.html
 
 # Dist build (local only)
 dist/
+
