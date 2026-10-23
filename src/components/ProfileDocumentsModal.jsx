@@ -24,7 +24,8 @@ export default function ProfileDocumentsModal({
   onClose,
   defaultTab = 'schemes',
   onSaved,
-  onNavigateFullProfile
+  onNavigateFullProfile,
+  inline = false
 }) {
   const { lang } = useLanguage()
   const [activeTab, setActiveTab] = useState(defaultTab) // 'schemes' | 'scholarships'
@@ -174,40 +175,26 @@ export default function ProfileDocumentsModal({
   const farmerDocsReadyCount = Object.values(farmerDocs).filter(Boolean).length
   const studentDocsReadyCount = Object.values(studentDocs).filter(Boolean).length
 
-  return (
+  if (!isOpen) return null
+
+  const innerCard = (
     <div
+      className="animate-fadeInUp"
       style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 99999,
-        background: 'rgba(15, 23, 42, 0.75)',
-        backdropFilter: 'blur(8px)',
+        background: 'var(--bg-card, #ffffff)',
+        color: 'var(--text-primary, #0f172a)',
+        borderRadius: 20,
+        width: '100%',
+        maxWidth: inline ? '100%' : 720,
+        maxHeight: inline ? 'none' : 'calc(100vh - 48px)',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '16px',
-        overflowY: 'auto'
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose()
+        flexDirection: 'column',
+        boxShadow: inline ? '0 8px 30px rgba(0, 0, 0, 0.08)' : '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
+        border: '1.5px solid var(--border-light, #e2e8f0)',
+        overflow: 'hidden',
+        margin: inline ? '0' : 'auto'
       }}
     >
-      <div
-        className="animate-fadeInUp"
-        style={{
-          background: 'var(--bg-card, #ffffff)',
-          color: 'var(--text-primary, #0f172a)',
-          borderRadius: 20,
-          width: '100%',
-          maxWidth: 720,
-          maxHeight: '90vh',
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
-          border: '1px solid var(--border-light, #e2e8f0)',
-          overflow: 'hidden'
-        }}
-      >
         {/* Modal Header */}
         <div
           style={{
@@ -354,7 +341,7 @@ export default function ProfileDocumentsModal({
         </div>
 
         {/* Modal Body / Scrollable Content */}
-        <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1 }}>
+        <div style={{ padding: '20px 24px', overflowY: inline ? 'visible' : 'auto', flex: 1 }}>
           {saveSuccess && (
             <div
               className="animate-fadeInUp"
@@ -1080,6 +1067,31 @@ export default function ProfileDocumentsModal({
           )}
         </div>
       </div>
+  )
+
+  if (inline) {
+    return innerCard
+  }
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 99999,
+        background: 'rgba(15, 23, 42, 0.75)',
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        padding: '24px 16px',
+        overflowY: 'auto'
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+    >
+      {innerCard}
     </div>
   )
 }

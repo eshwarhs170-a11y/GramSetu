@@ -299,6 +299,26 @@ export default function LiveBuyerMarketplace({ currentDistrict = 'Mysuru' }) {
             ))}
           </div>
 
+          {/* Official Verification Notice */}
+          <div style={{
+            background: '#f0fdf4',
+            border: '1px solid #86efac',
+            borderRadius: 12,
+            padding: '12px 16px',
+            marginBottom: 16,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10
+          }}>
+            <ShieldCheck size={20} color="#15803d" style={{ flexShrink: 0 }} />
+            <div style={{ fontSize: 13, color: '#166534', lineHeight: 1.4 }}>
+              <strong>{lang === 'kn' ? 'ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಅಧಿಕೃತ ಎಪಿಎಂಸಿ & ಸಹಕಾರಿ ಸಂಸ್ಥೆಗಳ ನೇರ ಸಂಪರ್ಕ' : 'Verified Karnataka APMC & Cooperative Federation Procurement Desks'}</strong>
+              <div style={{ fontSize: 12, color: '#15803d', marginTop: 2 }}>
+                {lang === 'kn' ? 'ಎಲ್ಲಾ ಖರೀದಿ ಕೇಂದ್ರಗಳು ಮತ್ತು ಸಹಾಯವಾಣಿ ಸಂಖ್ಯೆಗಳು ಅಧಿಕೃತ ಎಪಿಎಂಸಿ ಯಾರ್ಡ್ ಮತ್ತು ಕೃಷಿ ಇಲಾಖೆ ಕಚೇರಿಗಳ ಸಂಖ್ಯೆಗಳಾಗಿವೆ.' : 'All contact numbers are official, verifiable Government APMC yard offices, FPOs, and cooperative federation desks.'}
+              </div>
+            </div>
+          </div>
+
           {/* Buyers Grid */}
           <div style={{
             display: 'grid',
@@ -381,6 +401,14 @@ export default function LiveBuyerMarketplace({ currentDistrict = 'Mysuru' }) {
                 {/* Terms */}
                 <div style={{ fontSize: 11, color: 'var(--text-secondary, #475569)', lineHeight: 1.4 }}>
                   <strong>Payment:</strong> {lang === 'kn' ? b.paymentModeKn : b.paymentModeEn}
+                </div>
+
+                {/* Official Contact Info */}
+                <div style={{ fontSize: 12, color: 'var(--text-secondary, #475569)', background: 'rgba(2, 132, 199, 0.05)', padding: '8px 10px', borderRadius: 8, border: '1px solid rgba(2, 132, 199, 0.15)' }}>
+                  <div><strong>Official Desk:</strong> <a href={`tel:${b.phone}`} style={{ color: '#0284c7', textDecoration: 'none', fontWeight: 700 }}>{b.phone}</a></div>
+                  {b.helpline && (
+                    <div style={{ fontSize: 11, color: '#0369a1', marginTop: 2 }}><strong>Helpline:</strong> {b.helpline}</div>
+                  )}
                 </div>
 
                 {/* Direct Action Buttons */}

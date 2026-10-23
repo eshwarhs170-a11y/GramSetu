@@ -1014,6 +1014,7 @@ export function SchemesScreen() {
   const [scholarshipFormSubmitted, setScholarshipFormSubmitted] = useState(false)
   const [showDocModal, setShowDocModal] = useState(false)
   const [docModalTab, setDocModalTab] = useState('schemes')
+  const [docModalLocation, setDocModalLocation] = useState('card')
 
   const [schemes, setSchemes] = useState(kaSchemes)
   const [loadingSchemes, setLoadingSchemes] = useState(true)
@@ -1432,7 +1433,8 @@ export function SchemesScreen() {
               <button
                 onClick={() => {
                   setDocModalTab(categoryFilter === 'Scholarship' ? 'scholarships' : 'schemes')
-                  setShowDocModal(true)
+                  setDocModalLocation('banner')
+                  setShowDocModal(prev => (docModalLocation === 'banner' ? !prev : true))
                 }}
                 className="btn"
                 style={{
@@ -1480,6 +1482,22 @@ export function SchemesScreen() {
 
         </div>
       </div>
+
+      {/* ── Inline Vault opened from Top Banner (pops up right here!) ── */}
+      {showDocModal && docModalLocation === 'banner' && (
+        <div className="animate-fadeInUp" style={{ marginBottom: 20 }}>
+          <ProfileDocumentsModal
+            inline={true}
+            isOpen={true}
+            defaultTab={docModalTab}
+            onClose={() => setShowDocModal(false)}
+            onSaved={() => {
+              setShowDocModal(false)
+              setEligibilityResult(null)
+            }}
+          />
+        </div>
+      )}
 
       {/* Main Feature Tabs */}
       <div style={{
@@ -1650,7 +1668,8 @@ export function SchemesScreen() {
                         type="button"
                         onClick={() => {
                           setDocModalTab(eligibilityTab === 'farmer' ? 'schemes' : 'scholarships');
-                          setShowDocModal(true);
+                          setDocModalLocation('card');
+                          setShowDocModal(prev => (docModalLocation === 'card' ? !prev : true));
                         }}
                         style={{
                           background: eligibilityTab === 'farmer' ? 'linear-gradient(135deg, #15803d, #16a34a)' : 'linear-gradient(135deg, #6d28d9, #7c3aed)',
@@ -1660,8 +1679,24 @@ export function SchemesScreen() {
                           boxShadow: '0 4px 14px rgba(0,0,0,0.15)', marginTop: 8
                         }}
                       >
-                        <Edit3 size={15} /> {lang === 'kn' ? 'ಪ್ರೊಫೈಲ್ & ದಾಖಲೆಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ →' : 'Fill Profile & Required Documents →'}
+                        <Edit3 size={15} /> {showDocModal && docModalLocation === 'card' ? (lang === 'kn' ? '▲ ನಮೂನೆ ಮುಚ್ಚಿ' : '▲ Close Form') : (lang === 'kn' ? 'ಪ್ರೊಫೈಲ್ & ದಾಖಲೆಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ →' : 'Fill Profile & Required Documents →')}
                       </button>
+
+                      {/* Pops up right here in the card! */}
+                      {showDocModal && docModalLocation === 'card' && (
+                        <div style={{ width: '100%', marginTop: 16, textAlign: 'left' }}>
+                          <ProfileDocumentsModal
+                            inline={true}
+                            isOpen={true}
+                            defaultTab={docModalTab}
+                            onClose={() => setShowDocModal(false)}
+                            onSaved={() => {
+                              setShowDocModal(false);
+                              setEligibilityResult(null);
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                   );
                 }
@@ -1689,7 +1724,8 @@ export function SchemesScreen() {
                           type="button"
                           onClick={() => {
                             setDocModalTab(eligibilityTab === 'farmer' ? 'schemes' : 'scholarships');
-                            setShowDocModal(true);
+                            setDocModalLocation('card');
+                            setShowDocModal(prev => (docModalLocation === 'card' ? !prev : true));
                           }}
                           style={{
                             fontSize: 12, fontWeight: 700,
@@ -1699,9 +1735,25 @@ export function SchemesScreen() {
                             borderRadius: 8, padding: '6px 12px', cursor: 'pointer'
                           }}
                         >
-                          ✏️ {lang === 'kn' ? 'ದಾಖಲೆ ಬದಲಾಯಿಸಿ' : 'Update Docs'}
+                          ✏️ {showDocModal && docModalLocation === 'card' ? (lang === 'kn' ? 'ಮುಚ್ಚಿ' : 'Close') : (lang === 'kn' ? 'ದಾಖಲೆ ಬದಲಾಯಿಸಿ' : 'Update Docs')}
                         </button>
                       </div>
+
+                      {/* Pops up right here below summary pill! */}
+                      {showDocModal && docModalLocation === 'card' && (
+                        <div style={{ width: '100%', marginBottom: 16, textAlign: 'left' }}>
+                          <ProfileDocumentsModal
+                            inline={true}
+                            isOpen={true}
+                            defaultTab={docModalTab}
+                            onClose={() => setShowDocModal(false)}
+                            onSaved={() => {
+                              setShowDocModal(false);
+                              setEligibilityResult(null);
+                            }}
+                          />
+                        </div>
+                      )}
 
                       <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, padding: '10px 14px', marginBottom: 16, fontSize: 12, color: '#92400e', display: 'flex', alignItems: 'center', gap: 8 }}>
                         <ShieldCheck size={16} color="#d97706" style={{ flexShrink: 0 }} />
@@ -2455,12 +2507,7 @@ export function SchemesScreen() {
 
       )}
 
-      {/* ── Eligibility & Required Documents Modal ── */}
-      <ProfileDocumentsModal
-        isOpen={showDocModal}
-        defaultTab={docModalTab}
-        onClose={() => setShowDocModal(false)}
-      />
+
     </div>
   )
 }
