@@ -199,9 +199,11 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
           </div>
         </div>
         <button
+          type="button"
           className="sidebar-close-btn"
           onClick={() => setSidebarOpen(false)}
           aria-label="Close Sidebar"
+          title="Close Sidebar"
         >
           <X size={18} strokeWidth={2.5} />
         </button>
@@ -2362,7 +2364,7 @@ export default function OfficialDashboard() {
   }, [])
   
   const active = activeTab
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(() => typeof window !== 'undefined' ? window.innerWidth > 768 : true)
   const [editMode, setEditMode] = useState(false)
   const [editingAnnouncement, setEditingAnnouncement] = useState(null)
   const { speak } = useVoice()
@@ -2477,8 +2479,11 @@ export default function OfficialDashboard() {
   }
 
   useEffect(() => {
-    if (sidebarOpen) document.body.style.overflow = 'hidden'
-    else document.body.style.overflow = ''
+    if (sidebarOpen && typeof window !== 'undefined' && window.innerWidth <= 768) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
     return () => { document.body.style.overflow = '' }
   }, [sidebarOpen])
 
@@ -2529,7 +2534,12 @@ export default function OfficialDashboard() {
     <div className={`app-layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
       <OfficialSidebar 
         active={active} 
-        setActive={(id) => { setActive(id); setSidebarOpen(false); }} 
+        setActive={(id) => { 
+          setActive(id); 
+          if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+            setSidebarOpen(false); 
+          }
+        }} 
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         sessionData={sessionData}

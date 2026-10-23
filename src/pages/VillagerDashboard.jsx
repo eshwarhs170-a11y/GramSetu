@@ -50,7 +50,8 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
       window.history.replaceState({ tab: defaultTab }, '')
     }
   }, [defaultTab])
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const [sidebarOpen, setSidebarOpen] = useState(() => typeof window !== 'undefined' ? window.innerWidth > 768 : true)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [notifOpen, setNotifOpen] = useState(false)
@@ -200,7 +201,7 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
   }, [])
 
   useEffect(() => {
-    if (sidebarOpen) {
+    if (sidebarOpen && typeof window !== 'undefined' && window.innerWidth <= 768) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
@@ -227,7 +228,9 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
         active={active}
         setActive={(pageId) => {
           setActive(pageId)
-          setSidebarOpen(false)
+          if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+            setSidebarOpen(false)
+          }
         }}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}

@@ -83,9 +83,11 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
           </div>
         </div>
         <button
+          type="button"
           className="sidebar-close-btn"
           onClick={() => setSidebarOpen(false)}
           aria-label="Close Sidebar"
+          title="Close Sidebar"
         >
           <X size={18} strokeWidth={2.5} />
         </button>
