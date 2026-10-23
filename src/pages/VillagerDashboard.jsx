@@ -277,9 +277,11 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
             </button>
 
             <div className="topbar-brand" onClick={() => setActive('home')} style={{ cursor: 'pointer' }}>
-              <div className="topbar-brand-icon">
-                <Wheat size={18} color="#fff" />
-              </div>
+              <img 
+                src="/logo.png" 
+                alt="GramSetu" 
+                style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'contain', flexShrink: 0 }} 
+              />
               <div className="topbar-brand-text">
                 GramSetu
               </div>

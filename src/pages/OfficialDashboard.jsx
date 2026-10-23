@@ -185,9 +185,14 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
           style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', userSelect: 'none' }}
           title="Triple tap for Demo Hub"
         >
-          <div className="sidebar-logo-icon" style={{ background: '#3b82f6', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Landmark size={20} strokeWidth={2} />
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="GramSetu" 
+            style={{ 
+              width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+              objectFit: 'contain'
+            }} 
+          />
           <div className="sidebar-logo-text">
             <h2>{t('appName')}</h2>
             <p>ಅಧಿಕಾರಿ ಪೋರ್ಟಲ್</p>

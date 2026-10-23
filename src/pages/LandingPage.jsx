@@ -189,14 +189,15 @@ export default function LandingPage() {
           style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', userSelect: 'none', flexShrink: 0 }}
           title="Triple tap for Demo Hub"
         >
-          <div style={{
-            width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-            background: 'linear-gradient(135deg, #16a34a, #15803d)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 12px rgba(22,163,74,0.3)'
-          }}>
-            <Wheat size={20} color="#fff" strokeWidth={2} />
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="GramSetu" 
+            style={{ 
+              width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 2px 6px rgba(22,163,74,0.3))'
+            }} 
+          />
           <div>
             <div className="landing-nav-title" style={{ fontWeight: 800, fontSize: 17, color: isDark ? '#f8fafc' : '#111827', lineHeight: 1.1 }}>{t('appName')}</div>
             <div className="landing-nav-subtitle" style={{ fontSize: 11, color: isDark ? '#94a3b8' : '#6b7280' }}>{t('appSubtitle')}</div>
@@ -680,9 +681,11 @@ export default function LandingPage() {
             content: 'GramSetu is a unified digital gateway designed to connect rural citizens and farmers with Karnataka government services, APMC daily market prices, and secure grievance registration.'
           })} style={{ cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #16a34a, #15803d)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Wheat size={20} color="#fff" />
-              </div>
+              <img 
+                src="/logo.png" 
+                alt="GramSetu" 
+                style={{ width: 38, height: 38, borderRadius: 10, objectFit: 'contain' }} 
+              />
               <div>
                 <div style={{ fontWeight: 800, fontSize: 18 }}>{t('appName')}</div>
                 <div style={{ color: '#4ade80', fontSize: 11, fontWeight: 600, letterSpacing: 0.5 }}>KARNATAKA GOVT. INITIATIVE</div>

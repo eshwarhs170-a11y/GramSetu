@@ -21,9 +21,29 @@ import OfflineIndicator from './components/OfflineIndicator'
 function App() {
   const navigate = useNavigate()
 
-  // Secret shortcut for presenter: Ctrl + Shift + D jumps to /demo
+  // Secret shortcuts for presenter:
+  // 1) Ctrl + Shift + A (or O) -> Direct instant login to Admin / Official Dashboard (/dashboard/official)
+  // 2) Ctrl + Shift + D -> Jumps to Presenter Demo Hub (/demo)
   useEffect(() => {
     const handleKeyDown = (e) => {
+      // Admin / Official shortcut: Ctrl + Shift + A or Ctrl + Shift + O
+      if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a' || e.key === 'O' || e.key === 'o')) {
+        e.preventDefault()
+        window.localStorage.setItem('official_name', 'S. R. Patil')
+        window.localStorage.setItem('official_district', 'Mysuru')
+        window.localStorage.setItem('official_taluk', 'Mysuru')
+        window.localStorage.setItem('official_gp', 'Varuna')
+        window.localStorage.setItem('official_department', 'Rural Development & Panchayat Raj')
+        window.localStorage.setItem('official_email', 'pdo.mysuru@karnataka.gov.in')
+        window.localStorage.setItem('official_id', 'KA-MYS-PDO-2026-042')
+        window.localStorage.setItem('official_phone', '9845123456')
+        window.localStorage.setItem('official_loggedIn', 'true')
+        window.dispatchEvent(new Event('profileUpdate'))
+        window.location.replace('/dashboard/official')
+        return
+      }
+
+      // Demo Hub shortcut: Ctrl + Shift + D
       if (e.ctrlKey && e.shiftKey && (e.key === 'D' || e.key === 'd')) {
         e.preventDefault()
         navigate('/demo')

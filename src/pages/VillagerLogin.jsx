@@ -291,9 +291,11 @@ export default function VillagerLogin() {
         <div className="login-visual-overlay">
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-              <div className="landing-logo-icon" style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Wheat size={22} strokeWidth={2} />
-              </div>
+              <img 
+                src="/logo.png" 
+                alt="GramSetu" 
+                style={{ width: 42, height: 42, borderRadius: 10, objectFit: 'contain', flexShrink: 0 }} 
+              />
               <div>
                 <div style={{ fontWeight: 700, color: '#fff', fontSize: 18 }}>{t('appName')}</div>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>Karnataka | ಕರ್ನಾಟಕ</div>

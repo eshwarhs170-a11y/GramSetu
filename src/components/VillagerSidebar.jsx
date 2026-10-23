@@ -69,9 +69,14 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
           style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', userSelect: 'none' }}
           title="Triple tap for Demo Hub"
         >
-          <div className="sidebar-logo-icon">
-            <Wheat size={22} strokeWidth={2} />
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="GramSetu" 
+            style={{ 
+              width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+              objectFit: 'contain'
+            }} 
+          />
           <div className="sidebar-logo-text">
             <h2>{t('appName')}</h2>
             <p>ಕರ್ನಾಟಕ ಸರ್ಕಾರ</p>

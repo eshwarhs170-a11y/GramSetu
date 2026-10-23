@@ -348,14 +348,11 @@ export default function FeatureDetails() {
             onClick={() => navigate('/')}
             style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', minWidth: 0 }}
           >
-            <div style={{
-              width: 34, height: 34, borderRadius: 8, flexShrink: 0,
-              background: 'linear-gradient(135deg, #16a34a, #15803d)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 4px 12px rgba(22,163,74,0.3)'
-            }}>
-              <Wheat size={18} color="#fff" strokeWidth={2} />
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="GramSetu" 
+              style={{ width: 34, height: 34, borderRadius: 8, objectFit: 'contain', flexShrink: 0 }} 
+            />
             <div style={{ overflow: 'hidden' }}>
               <div style={{ fontWeight: 800, fontSize: 16, color: '#111827', lineHeight: 1.1, whiteSpace: 'nowrap' }}>
                 {t('appName')}
