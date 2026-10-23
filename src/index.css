@@ -1558,7 +1558,8 @@ input, textarea, select { font-family: inherit; outline: none; }
 /* ── Voice FAB: lift above mobile bottom nav ── */
 @media (max-width: 768px) {
   .voice-fab-wrapper {
-    bottom: 80px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 16px !important;
   }
 }
 /* ══════════════════════════════════════════
@@ -1626,16 +1627,38 @@ input, textarea, select { font-family: inherit; outline: none; }
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
-    min-width: 0 !important;
+    min-width: max-content !important;
+    flex-shrink: 0 !important;
   }
 
-  /* ── Right: all 4 icons grouped together with equal uniform spacing ── */
+  .topbar-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: max-content !important;
+    flex-shrink: 0 !important;
+    overflow: visible !important;
+  }
+
+  .topbar-brand-text {
+    font-size: 16.5px !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    max-width: none !important;
+    flex-shrink: 0 !important;
+    padding-right: 4px !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  /* ── Right: all icons grouped together with equal uniform spacing ── */
   .topbar-actions {
     margin-left: auto !important;
     flex: 0 0 auto !important;
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important; /* Uniform equal gap between Globe, Theme, Search, Bell */
+    gap: 3px !important;
   }
 
   /* Hide language text and chevron on mobile */
@@ -1648,9 +1671,9 @@ input, textarea, select { font-family: inherit; outline: none; }
   .lang-dropdown-container.topbar-style .lang-dropdown-trigger,
   .topbar-icon-btn {
     padding: 0 !important;
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1661,17 +1684,8 @@ input, textarea, select { font-family: inherit; outline: none; }
   
   .lang-dropdown-container.topbar-style .lang-dropdown-trigger svg:first-child,
   .topbar-icon-btn svg {
-    width: 20px !important;
-    height: 20px !important;
-  }
-
-  /* Hide profile icon on mobile */
-  .topbar-actions > button:last-child {
-    display: none !important;
-  }
-
-  .topbar-brand-text {
-    font-size: 16px;
+    width: 18px !important;
+    height: 18px !important;
   }
 
   .topbar-badge {
@@ -1842,26 +1856,31 @@ input, textarea, select { font-family: inherit; outline: none; }
 /* ===== TOPBAR MOBILE: prevent Globe/GramSetu title overlap ===== */
 @media (max-width: 768px) {
   .topbar-left {
-    flex: 0 1 auto !important;
-    min-width: 0 !important;
-    max-width: calc(100% - 190px) !important;
+    flex: 0 0 auto !important;
+    min-width: max-content !important;
+    max-width: none !important;
+    flex-shrink: 0 !important;
   }
 
   .topbar-brand {
-    min-width: 0;
-    overflow: hidden;
+    min-width: max-content !important;
+    overflow: visible !important;
+    flex-shrink: 0 !important;
   }
 
   .topbar-brand-text {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 110px;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    max-width: none !important;
+    flex-shrink: 0 !important;
+    padding-right: 4px !important;
   }
 
   .topbar-actions {
     margin-left: auto !important;
     flex: 0 0 auto !important;
+    gap: 3px !important;
   }
 }
 
@@ -2004,10 +2023,10 @@ html, body {
     box-sizing: border-box !important;
   }
 
-  /* Floating voice assistant widget safe positioning on mobile */
+  /* Floating voice assistant widget safe positioning on mobile (lift above bottom nav) */
   .voice-fab-wrapper {
-    bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
-    right: 14px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 16px !important;
   }
 
   .voice-fab-btn {
