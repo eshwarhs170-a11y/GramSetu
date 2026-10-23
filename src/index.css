@@ -322,11 +322,34 @@ input, textarea, select { font-family: inherit; outline: none; }
   transition: var(--transition-slow);
 }
 .sidebar-logo {
-  padding: 24px 20px;
+  padding: 20px 16px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.sidebar-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+  margin-left: auto;
+}
+.sidebar-close-btn:hover {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  border-color: rgba(255,255,255,0.35);
 }
 .sidebar-logo-icon {
   width: 40px;
