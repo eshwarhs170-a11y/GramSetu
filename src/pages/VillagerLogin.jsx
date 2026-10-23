@@ -517,7 +517,12 @@ export default function VillagerLogin() {
                 </>
               )}
 
-              <button className="btn w-full" type="submit" disabled={loading || !name || !email || !phone} style={{ background: '#16a34a', color: '#fff', padding: '14px', justifyContent: 'center' }}>
+              <button 
+                className="btn w-full" 
+                type="submit" 
+                disabled={loading || !name || !email || !phone || !areaType || (areaType === 'rural' && (!gp || !village)) || (areaType === 'urban' && (!urbanBody || !ward))}
+                style={{ background: '#16a34a', color: '#fff', padding: '14px', justifyContent: 'center' }}
+              >
                 {loading ? 'Sending OTP...' : 'Send OTP to Email'}
               </button>
             </form>

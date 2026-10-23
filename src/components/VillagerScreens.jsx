@@ -6062,7 +6062,7 @@ export function TutorialsScreen() {
       color: '#7c3aed',
       title: lang === 'kn' ? 'ಫೋನ್‌ಪೇ / GPay ಬಳಸುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'फोनपे / GPay का उपयोग कैसे करें?' : 'How to use PhonePe / Google Pay?',
       desc: lang === 'kn' ? 'UPI ಮೂಲಕ ಸುರಕ್ಷಿತವಾಗಿ ಹಣ ಕಳುಹಿಸಿ' : lang === 'hi' ? 'UPI से सुरक्षित पैसे भेजें' : 'Send money securely via UPI',
-      videoId: lang === 'kn' ? 'C17ztmHEQGw' : lang === 'hi' ? 'TrSI511zR-U' : 'EsmAFKKfwDQ'
+      videoId: lang === 'kn' ? 'mhNAZxKFiLs' : lang === 'hi' ? 'zfLXwOEAOP8' : 'Fhzh7kEkEVw'
     },
     {
       id: 'sir',
@@ -6071,7 +6071,7 @@ export function TutorialsScreen() {
       color: '#0369a1',
       title: lang === 'kn' ? 'ಚುನಾವಣಾ ಆಯೋಗದ SIR ಫಾರ್ಮ್' : lang === 'hi' ? 'चुनाव आयोग SIR फॉर्म' : 'Election Commission SIR Form',
       desc: lang === 'kn' ? 'SIR (Voter) ಫಾರ್ಮ್ ತುಂಬುವುದು ಹೇಗೆ' : lang === 'hi' ? 'SIR (Voter) फॉर्म कैसे भरें' : 'How to fill the Enumeration (SIR) form',
-      videoId: lang === 'kn' ? 'r17iw80YRog' : lang === 'hi' ? 'OMtQPtYFBfQ' : '517So_qusUE'
+      videoId: lang === 'kn' ? 'Q9q3IKhMY_Q' : lang === 'hi' ? 'Q9q3IKhMY_Q' : 'wbGjdP-mWqE'
     },
     {
       id: 'market',
@@ -6080,7 +6080,7 @@ export function TutorialsScreen() {
       color: '#16a34a',
       title: lang === 'kn' ? 'ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ನೋಡುವುದು' : lang === 'hi' ? 'बाजार भाव कैसे देखें' : 'Check Market Prices (APMC)',
       desc: lang === 'kn' ? 'APMC ಬೆಳೆ ಬೆಲೆ ನೋಡಿ' : lang === 'hi' ? 'APMC फसल कीमत देखें' : 'Check daily APMC crop prices',
-      videoId: lang === 'kn' ? 'NUmn690WdPU' : lang === 'hi' ? 'Z3c9nqnpo3s' : '6-dpn_sUQ1U'
+      videoId: lang === 'kn' ? 'nnpIkkFOATE' : lang === 'hi' ? 'nnpIkkFOATE' : 'e0drBFa3jXc'
     }
   ]
 
@@ -6093,7 +6093,7 @@ export function TutorialsScreen() {
       color: '#7c3aed',
       title: lang === 'kn' ? 'ಕರ್ನಾಟಕ SSP ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಜಿ' : lang === 'hi' ? 'कर्नाटक SSP छात्रवृत्ति ऑनलाइन आवेदन' : 'Karnataka SSP Scholarship Step-by-Step',
       desc: lang === 'kn' ? 'SSP ಐಡಿ ರಚನೆ, ಇ-ದೃಢೀಕರಣ ಮತ್ತು ಅರ್ಜಿ ಸಲ್ಲಿಸುವ ಹಂತಗಳು' : lang === 'hi' ? 'SSP आईडी निर्माण और ई-सत्यापन गाइड' : 'Complete SSP ID creation, e-Attestation & post-matric application',
-      videoId: lang === 'kn' ? 'y2s6c2QZ5pM' : lang === 'hi' ? 'TrSI511zR-U' : '86P0h4NfRcw'
+      videoId: lang === 'kn' ? 'cHpO9E_FayI' : lang === 'hi' ? 'cHpO9E_FayI' : 'Q9q3IKhMY_Q'
     },
     {
       id: 'raitha_vidya_nidhi',
@@ -6102,7 +6102,7 @@ export function TutorialsScreen() {
       color: '#15803d',
       title: lang === 'kn' ? 'ಸಿಎಂ ರೈತ ವಿದ್ಯಾ ನಿಧಿ ಸ್ಕಾಲರ್‌ಶಿಪ್' : lang === 'hi' ? 'सीएम किसान छात्रवृत्ति योजना' : 'CM Raitha Vidya Nidhi Application',
       desc: lang === 'kn' ? 'ರೈತರ ಮಕ್ಕಳಿಗೆ ₹2,000 - ₹11,000 ನೇರ DBT ನೆರವು' : lang === 'hi' ? 'किसान बच्चों के लिए छात्रवृत्ति' : 'Direct cash transfer for farmer children studying Class 8 to PG',
-      videoId: lang === 'kn' ? 'XlQZ8Y_x4wM' : lang === 'hi' ? 'yOqTKYqMXa8' : 'XlQZ8Y_x4wM'
+      videoId: lang === 'kn' ? '8sczrETJuWY' : lang === 'hi' ? '8sczrETJuWY' : 'Q9q3IKhMY_Q'
     },
     {
       id: 'yuva_nidhi',
@@ -6111,7 +6111,7 @@ export function TutorialsScreen() {
       color: '#ea580c',
       title: lang === 'kn' ? 'ಯುವ ನಿಧಿ ಮಾಸಿಕ ₹3,000 ನಿರುದ್ಯೋಗ ಭತ್ಯೆ' : lang === 'hi' ? 'युवा निधि योजना आवेदन' : 'Yuva Nidhi Monthly Allowance (₹3,000/mo)',
       desc: lang === 'kn' ? 'ಪದವೀಧರರು & ಡಿಪ್ಲೊಮಾ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಸೇವಾಸಿಂಧು ಅರ್ಜಿ' : lang === 'hi' ? 'बेरोजगारी भत्ता सेवा सिंधु पोर्टल' : 'Application guide on Seva Sindhu for graduates & diploma holders',
-      videoId: lang === 'kn' ? 'j6r2FvM2m3E' : lang === 'hi' ? 'x01ab9Zb5LM' : 'j6r2FvM2m3E'
+      videoId: lang === 'kn' ? '8sczrETJuWY' : lang === 'hi' ? '8sczrETJuWY' : 'Fhzh7kEkEVw'
     },
     {
       id: 'gruha_lakshmi',
@@ -6120,7 +6120,7 @@ export function TutorialsScreen() {
       color: '#db2777',
       title: lang === 'kn' ? 'ಗೃಹಲಕ್ಷ್ಮಿ & ಅನ್ನಭಾಗ್ಯ DBT ಹಣ ಜಮೆ ನೋಡಿ' : lang === 'hi' ? 'गृह लक्ष्मी डीबीटी स्थिति जांचें' : 'Gruha Lakshmi & Anna Bhagya DBT Status',
       desc: lang === 'kn' ? 'ಕರ್ನಾಟಕ DBT ಮೊಬೈಲ್ ಆ್ಯಪ್‌ನಲ್ಲಿ ಹಣ ಬಂದಿದೆಯೇ ಪರಿಶೀಲಿಸಿ' : lang === 'hi' ? 'डीबीटी मोबाइल ऐप पर स्थिति जांचें' : 'Check monthly ₹2,000 transfer status via Karnataka DBT App',
-      videoId: lang === 'kn' ? 'bE1uF4F5d6k' : lang === 'hi' ? 'HaTYq8B6sac' : 'bE1uF4F5d6k'
+      videoId: lang === 'kn' ? 'FlRDiJbc2EU' : lang === 'hi' ? 'FlRDiJbc2EU' : 'bA2KJI6Lc-Y'
     },
     {
       id: 'pm_kisan_ekyc',
@@ -6129,7 +6129,7 @@ export function TutorialsScreen() {
       color: '#16a34a',
       title: lang === 'kn' ? 'ಪಿಎಂ ಕಿಸಾನ್ 19ನೇ ಕಂತು & ಮೊಬೈಲ್ ಇ-ಕೆವೈಸಿ' : lang === 'hi' ? 'पीएम किसान ई-केवाईसी कैसे करें' : 'PM-Kisan 19th Installment e-KYC on Mobile',
       desc: lang === 'kn' ? 'ಮುಖ ಪರಿಶೀಲನೆ ಅಥವಾ ಆಧಾರ್ ಒಟಿಪಿ ಮೂಲಕ ಇ-ಕೆವೈಸಿ ಮುಗಿಸಿ' : lang === 'hi' ? 'फेस स्कैन या ओटीपी से ई-केवाईसी' : 'Instant facial recognition / OTP e-KYC on PM Kisan app',
-      videoId: lang === 'kn' ? '3uQ_m9LpUvM' : lang === 'hi' ? 'OMtQPtYFBfQ' : '3uQ_m9LpUvM'
+      videoId: lang === 'kn' ? 'OLzVKwrjZK0' : lang === 'hi' ? 'OLzVKwrjZK0' : 'e0drBFa3jXc'
     },
     {
       id: 'digilocker',
@@ -6138,7 +6138,7 @@ export function TutorialsScreen() {
       color: '#0284c7',
       title: lang === 'kn' ? 'ಡಿಜಿಲಾಕರ್ ಬಳಸುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'DigiLocker का उपयोग कैसे करें?' : 'How to use DigiLocker?',
       desc: lang === 'kn' ? 'ಡಿಜಿಟಲ್ ದಾಖಲೆಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿಡಿ' : lang === 'hi' ? 'डिजिटल दस्तावेज़ सुरक्षित रखें' : 'Store & access documents digitally',
-      videoId: lang === 'kn' ? 'v6QTnODGJZc' : lang === 'hi' ? 'x01ab9Zb5LM' : 'LRMOwN4LYvc'
+      videoId: lang === 'kn' ? 'sBg4fO4IPtA' : lang === 'hi' ? 'sBg4fO4IPtA' : 'Fhzh7kEkEVw'
     },
     {
       id: 'bhoomi',
@@ -6147,7 +6147,7 @@ export function TutorialsScreen() {
       color: '#b45309',
       title: lang === 'kn' ? 'ಭೂಮಿ - ಆರ್‌ಟಿಸಿ ಆನ್‌ಲೈನ್ ನೋಡುವುದು' : lang === 'hi' ? 'भूमि पोर्टल - RTC ऑनलाइन देखें' : 'Bhoomi – Check Land Records (RTC)',
       desc: lang === 'kn' ? 'ನಿಮ್ಮ ಜಮೀನಿನ ದಾಖಲೆ ಆನ್‌ಲೈನ್ ನೋಡಿ' : lang === 'hi' ? 'अपनी जमीन के कागज़ ऑनलाइन देखें' : 'Check your land ownership records online',
-      videoId: lang === 'kn' ? 'LnU7vFyud9g' : lang === 'hi' ? 'oKjRX-BU240' : 'oKjRX-BU240'
+      videoId: lang === 'kn' ? 'nnpIkkFOATE' : lang === 'hi' ? 'nnpIkkFOATE' : 'e0drBFa3jXc'
     },
     {
       id: 'fasal_bima',
@@ -6156,7 +6156,7 @@ export function TutorialsScreen() {
       color: '#15803d',
       title: lang === 'kn' ? 'ಪಿಎಂ ಫಸಲ್ ಬಿಮಾ ಯೋಜನೆ' : lang === 'hi' ? 'PM फसल बीमा योजना' : 'PM Fasal Bima Yojana',
       desc: lang === 'kn' ? 'ಬೆಳೆ ನಷ್ಟಕ್ಕೆ ವಿಮಾ ಸಂರಕ್ಷಣೆ ಪಡೆಯಿರಿ' : lang === 'hi' ? 'फसल नुकसान पर बीमा सुरक्षा पाएं' : 'Get crop insurance for losses',
-      videoId: lang === 'kn' ? 'qTvb-K80Tkw' : lang === 'hi' ? 'yOqTKYqMXa8' : 'Y0gSsi4AOcI'
+      videoId: lang === 'kn' ? 'k8iAEil7swg' : lang === 'hi' ? 'k8iAEil7swg' : 'wbGjdP-mWqE'
     },
     {
       id: 'aadhaar',
@@ -6165,7 +6165,7 @@ export function TutorialsScreen() {
       color: '#7c3aed',
       title: lang === 'kn' ? 'ಆಧಾರ್ ಅನ್ನು ಬ್ಯಾಂಕ್‌ಗೆ ಜೋಡಿಸುವುದು' : lang === 'hi' ? 'आधार को बैंक से लिंक करें' : 'Link Aadhaar to Bank Account',
       desc: lang === 'kn' ? 'DBT ಸಬ್ಸಿಡಿ ನೇರ ಖಾತೆಗೆ ಬರಲಿ' : lang === 'hi' ? 'DBT सब्सिडी सीधे खाते में पाएं' : 'Get DBT subsidies directly in your account',
-      videoId: lang === 'kn' ? '6mMhaUJdel4' : lang === 'hi' ? 'HaTYq8B6sac' : 'RH3YIUP1Ykc'
+      videoId: lang === 'kn' ? '3qpuSQGedNc' : lang === 'hi' ? '3qpuSQGedNc' : 'e0drBFa3jXc'
     },
     {
       id: 'mgnrega',
@@ -6174,7 +6174,7 @@ export function TutorialsScreen() {
       color: '#dc2626',
       title: lang === 'kn' ? 'ಮನರೇಗಾ - ಜಾಬ್ ಕಾರ್ಡ್ & ಪಾವತಿ' : lang === 'hi' ? 'मनरेगा - जॉब कार्ड और भुगतान' : 'MGNREGA – Job Card & Payments',
       desc: lang === 'kn' ? 'ಮನರೇಗಾ ಕೆಲಸ ಮತ್ತು ಪಾವತಿ ಮಾಹಿತಿ' : lang === 'hi' ? 'मनरेगा काम और भुगतान जानकारी' : 'Check MGNREGA work status & wages',
-      videoId: lang === 'kn' ? '1tKcGPFjX0U' : lang === 'hi' ? '-435xZcTUhs' : 'H6NPHJCVFoo'
+      videoId: lang === 'kn' ? '20rOGxznsRs' : lang === 'hi' ? '20rOGxznsRs' : 'e0drBFa3jXc'
     },
     {
       id: 'kcc',
@@ -6183,7 +6183,7 @@ export function TutorialsScreen() {
       color: '#0369a1',
       title: lang === 'kn' ? 'ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಅರ್ಜಿ' : lang === 'hi' ? 'किसान क्रेडिट कार्ड आवेदन' : 'Apply for Kisan Credit Card',
       desc: lang === 'kn' ? 'ಕಡಿಮೆ ಬಡ್ಡಿ ದರದಲ್ಲಿ ರೈತ ಸಾಲ' : lang === 'hi' ? 'कम ब्याज दर पर किसान ऋण' : 'Get low-interest agricultural loans',
-      videoId: lang === 'kn' ? '2tAtVJveZ4c' : lang === 'hi' ? '4Yb7jT2KpE4' : 'mhfoNdk-fOo'
+      videoId: lang === 'kn' ? '3ZDmrsQemZ0' : lang === 'hi' ? '3ZDmrsQemZ0' : 'wbGjdP-mWqE'
     }
   ]
 
