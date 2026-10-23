@@ -39,7 +39,6 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
       return
     }
     setActive('home')
-    setSidebarOpen(false)
     logoTapTimer.current = setTimeout(() => {
       logoTapCount.current = 0
     }, 1200)
@@ -111,7 +110,6 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
               className={`nav-item ${active === item.id ? 'active' : ''}`}
               onClick={() => {
                 setActive(item.id)
-                setSidebarOpen(false)
               }}
             >
               <Icon size={18} strokeWidth={1.8} style={{ flexShrink: 0 }} />

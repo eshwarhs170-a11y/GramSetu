@@ -226,12 +226,7 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
     <div className={`app-layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
       <VillagerSidebar
         active={active}
-        setActive={(pageId) => {
-          setActive(pageId)
-          if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-            setSidebarOpen(false)
-          }
-        }}
+        setActive={setActive}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
       />

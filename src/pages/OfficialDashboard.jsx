@@ -158,7 +158,6 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
       return
     }
     setActive('overview')
-    setSidebarOpen(false)
     logoTapTimer.current = setTimeout(() => {
       logoTapCount.current = 0
     }, 1200)
@@ -2534,12 +2533,7 @@ export default function OfficialDashboard() {
     <div className={`app-layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
       <OfficialSidebar 
         active={active} 
-        setActive={(id) => { 
-          setActive(id); 
-          if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-            setSidebarOpen(false); 
-          }
-        }} 
+        setActive={setActive} 
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         sessionData={sessionData}
