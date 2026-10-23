@@ -1465,45 +1465,47 @@ function CitizensScreen() {
           </h3>
           <button className="btn btn-primary btn-sm" onClick={handleExport}>{t('export')}</button>
         </div>
-        <table className="market-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name / ಹೆಸರು</th>
-              <th>Village / ಗ್ರಾಮ</th>
-              <th>Mobile / ಮೊಬೈಲ್</th>
-              <th>Aadhaar</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Real farmers from Firestore — logged-in users */}
-            {realFarmers.map((f, i) => (
-              <tr key={`real-${f.id}`} style={{ background: 'rgba(16, 185, 129, 0.04)' }}>
-                <td style={{ color: 'var(--text-muted)' }}>{i + 1}</td>
-                <td style={{ fontWeight: 600 }}>
-                  {f.name}
-                  <span style={{ fontSize: 10, background: '#d1fae5', color: '#065f46', borderRadius: 10, padding: '1px 6px', marginLeft: 6 }}>Live</span>
-                </td>
-                <td>{f.village || f.taluk || '—'}</td>
-                <td style={{ fontFamily: 'monospace', fontSize: 12 }}>+91 {f.phone}</td>
-                <td><span className="badge badge-success">Verified</span></td>
-                <td><span className="badge badge-primary">Active</span></td>
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', width: '100%' }}>
+          <table className="market-table" style={{ width: '100%', minWidth: 620 }}>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name / ಹೆಸರು</th>
+                <th>Village / ಗ್ರಾಮ</th>
+                <th>Mobile / ಮೊಬೈಲ್</th>
+                <th>Aadhaar</th>
+                <th>Status</th>
               </tr>
-            ))}
-            {/* Static demo farmers */}
-            {filteredStatic.map(([name, village, mobile, aadhaar, schemes], i) => (
-              <tr key={`static-${i}`}>
-                <td style={{ color: 'var(--text-muted)' }}>{realFarmers.length + i + 1}</td>
-                <td style={{ fontWeight: 600 }}>{name}</td>
-                <td>{village}</td>
-                <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{mobile}</td>
-                <td><span className={`badge ${aadhaar === 'Verified' ? 'badge-success' : 'badge-warning'}`}>{aadhaar}</span></td>
-                <td><span className="badge badge-primary">{schemes} Active</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {/* Real farmers from Firestore — logged-in users */}
+              {realFarmers.map((f, i) => (
+                <tr key={`real-${f.id}`} style={{ background: 'rgba(16, 185, 129, 0.04)' }}>
+                  <td style={{ color: 'var(--text-muted)' }}>{i + 1}</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {f.name}
+                    <span style={{ fontSize: 10, background: '#d1fae5', color: '#065f46', borderRadius: 10, padding: '1px 6px', marginLeft: 6 }}>Live</span>
+                  </td>
+                  <td>{f.village || f.taluk || '—'}</td>
+                  <td style={{ fontFamily: 'monospace', fontSize: 12 }}>+91 {f.phone}</td>
+                  <td><span className="badge badge-success">Verified</span></td>
+                  <td><span className="badge badge-primary">Active</span></td>
+                </tr>
+              ))}
+              {/* Static demo farmers */}
+              {filteredStatic.map(([name, village, mobile, aadhaar, schemes], i) => (
+                <tr key={`static-${i}`}>
+                  <td style={{ color: 'var(--text-muted)' }}>{realFarmers.length + i + 1}</td>
+                  <td style={{ fontWeight: 600 }}>{name}</td>
+                  <td>{village}</td>
+                  <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{mobile}</td>
+                  <td><span className={`badge ${aadhaar === 'Verified' ? 'badge-success' : 'badge-warning'}`}>{aadhaar}</span></td>
+                  <td><span className="badge badge-primary">{schemes} Active</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

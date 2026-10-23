@@ -12,12 +12,19 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Email and OTP are required' });
   }
 
+  const gmailUser = (process.env.GMAIL_USER || '').trim().replace(/['"]/g, '');
+  const gmailPass = (process.env.GMAIL_APP_PASSWORD || '').trim().replace(/['"]/g, '');
+
+  if (!gmailUser || !gmailPass) {
+    return res.status(500).json({ error: 'Server email credentials are not configured.' });
+  }
+
   // Create Gmail SMTP transporter using App Password
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
+      user: gmailUser,
+      pass: gmailPass,
     },
   });
 
@@ -50,6 +57,7 @@ export default async function handler(req, res) {
             👆 Click icon or double-click code to copy
           </span>
         </div>
+      </div>
       
       <p style="color: #666; font-size: 14px;">This code is valid until ${expiryTime}.</p>
       <p style="color: #888; font-size: 12px; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">

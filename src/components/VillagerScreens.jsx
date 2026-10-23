@@ -90,6 +90,7 @@ import { transliterateWord } from '../utils/transliterate'
 import Confetti from './Confetti'
 import VoiceTypingButton from './VoiceTypingButton'
 import ProfileDocumentsModal from './ProfileDocumentsModal'
+import { evaluateGovernmentEligibility } from '../utils/schemeEvaluator'
 import { fetchLivePrices, BASELINE_PRICES, clearPriceCache } from '../utils/fetchPrices'
 import { districtsOfKarnataka } from '../data/karnatakaTaluks'
 import { fetchWeatherForLocation, formatForecastData } from '../utils/fetchWeather'
@@ -614,377 +615,6 @@ export function HomeScreen({ setActive }) {
 
 
 
-      {/* ── AI Scheme Eligibility Checker ── */}
-      {roleMode === 'farmer' && (() => {
-        const profileLand   = window.localStorage.getItem('citizen_land');
-        const profileIncome = window.localStorage.getItem('citizen_income');
-        const profileCaste  = window.localStorage.getItem('citizen_caste');
-        const isProfileComplete = !!(profileLand && profileIncome && profileCaste);
-
-        return (
-          <div className="animate-fadeInUp card" style={{ marginBottom: 20, padding: 0, border: '1.5px solid rgba(79,70,229,0.25)', overflow: 'hidden' }}>
-            <div style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 8, padding: 6, display: 'flex', alignItems: 'center' }}>
-                <Sparkles size={18} color="#fbbf24" />
-              </div>
-              <div>
-                <h4 style={{ margin: 0, fontSize: 14, fontWeight: 800, color: '#fff' }}>AI Scheme Eligibility Check</h4>
-                <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Powered by Gemini AI · Based on your profile</p>
-              </div>
-            </div>
-            <div style={{ padding: '16px 20px' }}>
-              {!isProfileComplete ? (
-                /* ── Profile incomplete: block and guide ── */
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 12, padding: '8px 0 4px' }}>
-                  <div style={{ width: 52, height: 52, borderRadius: '50%', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ fontSize: 26 }}>📋</span>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', margin: '0 0 6px' }}>
-                      {lang === 'kn' ? 'ಮೊದಲು ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಭರ್ತಿ ಮಾಡಿ' : 'Complete Your Profile First'}
-                    </p>
-                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '0 0 4px', lineHeight: 1.5 }}>
-                      {lang === 'kn'
-                        ? 'AI ಅರ್ಹತೆ ಪರೀಕ್ಷೆ ನಿಮ್ಮ ಜಮೀನಿನ ವಿಸ್ತೀರ್ಣ, ವಾರ್ಷಿಕ ಆದಾಯ ಮತ್ತು ಜಾತಿ/ವರ್ಗ ಮಾಹಿತಿ ಆಧರಿಸಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ.'
-                        : 'The AI needs your land size, annual income, and caste/category to find schemes you genuinely qualify for.'}
-                    </p>
-                    <p style={{ fontSize: 11, color: '#d97706', fontWeight: 600, margin: 0 }}>
-                      {lang === 'kn'
-                        ? '⚠️ ಈ ಮಾಹಿತಿ ಇಲ್ಲದಿದ್ದರೆ ಫಲಿತಾಂಶ ತಪ್ಪಾಗುತ್ತದೆ'
-                        : '⚠️ Without this, results would be inaccurate guesswork'}
-                    </p>
-                  </div>
-                  <div style={{ display: 'flex', gap: 6, marginTop: 4, fontSize: 11, color: 'var(--text-muted)', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    {[
-                      { icon: '🌾', label: lang === 'kn' ? 'ಜಮೀನು (ಎಕರೆ)' : 'Land size (acres)', done: !!profileLand },
-                      { icon: '💰', label: lang === 'kn' ? 'ವಾರ್ಷಿಕ ಆದಾಯ' : 'Annual income', done: !!profileIncome },
-                      { icon: '🪪', label: lang === 'kn' ? 'ಜಾತಿ / ವರ್ಗ' : 'Caste / Category', done: !!profileCaste },
-                    ].map(item => (
-                      <span key={item.label} style={{ background: item.done ? '#dcfce7' : '#fee2e2', color: item.done ? '#15803d' : '#dc2626', borderRadius: 20, padding: '3px 10px', fontWeight: 600 }}>
-                        {item.icon} {item.label} {item.done ? '✓' : '✗'}
-                      </span>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => {
-                      setProfileModalTab('schemes');
-                      setShowProfileModal(true);
-                    }}
-                    style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px 22px', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 4px 12px rgba(79,70,229,0.3)', marginTop: 4 }}
-                  >
-                    <span>📋</span> {lang === 'kn' ? 'ಪ್ರೊಫೈಲ್ & ದಾಖಲೆಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ →' : 'Fill Profile & Required Documents →'}
-                  </button>
-                </div>
-              ) : !aiSchemeResult ? (
-                /* ── Profile complete: show check button with disclaimer ── */
-                <>
-                  <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 10, padding: '10px 14px', marginBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                      <span style={{ fontSize: 16, flexShrink: 0 }}>✅</span>
-                      <div>
-                        <p style={{ fontSize: 12, fontWeight: 700, color: '#15803d', margin: '0 0 2px' }}>
-                          {lang === 'kn' ? 'ಪ್ರೊಫೈಲ್ ಸಿದ್ಧವಾಗಿದೆ' : 'Profile Ready'}
-                        </p>
-                        <p style={{ fontSize: 11, color: '#166534', margin: 0, lineHeight: 1.4 }}>
-                          {lang === 'kn'
-                            ? `ಜಮೀನು: ${profileLand} ಎಕರೆ · ಆದಾಯ: ₹${profileIncome}/ವರ್ಷ · ವರ್ಗ: ${profileCaste} · ಜಿಲ್ಲೆ: ${userDistrict}`
-                            : `Land: ${profileLand} acres · Income: ₹${profileIncome}/yr · Category: ${profileCaste} · District: ${userDistrict}`}
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setProfileModalTab('schemes');
-                        setShowProfileModal(true);
-                      }}
-                      style={{ fontSize: 11, color: '#15803d', fontWeight: 700, background: '#dcfce7', border: '1px solid #86efac', borderRadius: 6, padding: '4px 10px', cursor: 'pointer' }}
-                    >
-                      ✏️ {lang === 'kn' ? 'ದಾಖಲೆ ಬದಲಾಯಿಸಿ' : 'Update Docs'}
-                    </button>
-                  </div>
-                  <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, padding: '8px 12px', marginBottom: 14, fontSize: 11, color: '#92400e' }}>
-                    ⚠️ {lang === 'kn'
-                      ? 'ಈ ಫಲಿತಾಂಶಗಳು ನೀವು ಸ್ವಯಂ ನೀಡಿದ ಮಾಹಿತಿ ಆಧಾರಿತ. ಅಂತಿಮ ಅರ್ಹತೆ ಸರ್ಕಾರಿ ದಾಖಲೆಗಳ ಮೂಲಕ ಪರಿಶೀಲಿಸಬೇಕು.'
-                      : 'Results are based on self-declared profile data. Official eligibility must be verified through government documents at the concerned office.'}
-                  </div>
-                  <button
-                    onClick={async () => {
-                      if (aiSchemeRef.current) return;
-                      aiSchemeRef.current = true;
-                      setAiSchemeLoading(true);
-                      const name   = window.localStorage.getItem('citizen_name') || userName;
-                      const land   = profileLand;
-                      const income = profileIncome;
-                      const caste  = profileCaste;
-                      const prompt = `You are a Karnataka government scheme advisor. A farmer named ${name} lives in ${userDistrict}, ${userTaluk}, Karnataka. Land: ${land} acres. Annual income: ₹${income}. Category: ${caste}. Today's date: ${new Date().toLocaleDateString('en-IN')}.
-
-Based on this profile, list the TOP 5 government schemes they are eligible for right now. For each scheme provide:
-1. Scheme Name (exact official name)
-2. Benefit amount or type
-3. Key eligibility match reason (1 sentence)
-4. How to apply (1 sentence)
-
-Format as JSON array: [{"name":"...","benefit":"...","reason":"...","apply":"...","category":"Central|State"}].
-Return ONLY the JSON array, no markdown, no explanation.`;
-                      try {
-                        const res = await callGemini(prompt);
-                        if (res) {
-                          const match = res.match(/\[[\s\S]*\]/);
-                          if (match) setAiSchemeResult(JSON.parse(match[0]));
-                          else setAiSchemeResult([{name: 'PM-KISAN', benefit: '₹6,000/year', reason: 'Small/marginal farmer in Karnataka', apply: 'Visit pmkisan.gov.in or your local RSK center', category: 'Central'}]);
-                        }
-                      } catch(e) {
-                        setAiSchemeResult([{name: 'PM-KISAN', benefit: '₹6,000/year', reason: 'Small/marginal farmer in Karnataka', apply: 'Visit pmkisan.gov.in or your local RSK center', category: 'Central'}]);
-                      }
-                      setAiSchemeLoading(false);
-                      aiSchemeRef.current = false;
-                    }}
-                    disabled={aiSchemeLoading}
-                    style={{
-                      background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-                      color: '#fff', border: 'none', borderRadius: 10,
-                      padding: '10px 20px', fontSize: 13, fontWeight: 700,
-                      cursor: aiSchemeLoading ? 'not-allowed' : 'pointer',
-                      display: 'flex', alignItems: 'center', gap: 8,
-                      opacity: aiSchemeLoading ? 0.7 : 1, transition: 'all 0.2s',
-                      boxShadow: '0 4px 12px rgba(79,70,229,0.3)'
-                    }}
-                  >
-                    {aiSchemeLoading ? (
-                      <><RefreshCw size={15} style={{ animation: 'spin 1s linear infinite' }} /> {lang === 'kn' ? 'ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ...' : 'Analysing your profile...'}</>
-                    ) : (
-                      <><Sparkles size={15} /> {lang === 'kn' ? 'ಅರ್ಹತೆ ಪರೀಕ್ಷಿಸಿ' : 'Check My Eligibility'}</>
-                    )}
-                  </button>
-                </>
-              ) : (
-                /* ── Results view ── */
-                <>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>✅ {aiSchemeResult.length} schemes found for {userDistrict}:</p>
-                    <button onClick={() => { setAiSchemeResult(null); }} style={{ fontSize: 11, color: 'var(--primary)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>↻ Re-check</button>
-                  </div>
-                  <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, padding: '7px 12px', marginBottom: 12, fontSize: 11, color: '#92400e' }}>
-                    ⚠️ {lang === 'kn' ? 'ಈ ಫಲಿತಾಂಶಗಳು ಸ್ವಯಂ ಮಾಹಿತಿ ಆಧಾರಿತ. ಅರ್ಜಿ ಸಲ್ಲಿಸುವ ಮೊದಲು ಸಂಬಂಧಪಟ್ಟ ಕಚೇರಿಯಲ್ಲಿ ದಾಖಲೆ ಪರಿಶೀಲಿಸಿ.' : 'Based on self-declared data. Verify documents at the concerned office before applying.'}
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {aiSchemeResult.map((scheme, idx) => (
-                      <div key={idx} style={{ background: 'var(--bg-main)', borderRadius: 10, padding: '12px 14px', border: '1px solid var(--border-light)', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                        <div style={{ width: 28, height: 28, borderRadius: 7, background: scheme.category === 'Central' ? '#dbeafe' : '#dcfce7', color: scheme.category === 'Central' ? '#1d4ed8' : '#15803d', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Landmark size={14} />
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 4 }}>
-                            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{scheme.name}</span>
-                            <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: scheme.category === 'Central' ? '#dbeafe' : '#dcfce7', color: scheme.category === 'Central' ? '#1d4ed8' : '#15803d' }}>{scheme.category}</span>
-                          </div>
-                          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--success)', margin: '2px 0' }}>Benefit: {scheme.benefit}</p>
-                          <p style={{ fontSize: 11, color: 'var(--text-secondary)', margin: '2px 0', lineHeight: 1.4 }}>{scheme.reason}</p>
-                          <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '4px 0 0 0', fontStyle: 'italic' }}>Apply: {scheme.apply}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setActive && setActive('schemes')}
-                    style={{ marginTop: 14, width: '100%', background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
-                  >
-                    <ArrowRight size={14} /> View All Schemes & Apply
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* ── AI Scholarship Eligibility Checker ── */}
-      {roleMode === 'student' && (() => {
-        const studentLevel   = window.localStorage.getItem('student_level');
-        const studentMarks   = window.localStorage.getItem('student_marks_percent');
-        const profileIncome  = window.localStorage.getItem('citizen_income');
-        const profileCaste   = window.localStorage.getItem('citizen_caste');
-        const studentCollege = window.localStorage.getItem('student_college');
-        const parentOcc      = window.localStorage.getItem('student_parent_occ');
-        const isStudentProfileComplete = !!(studentLevel && studentMarks && profileIncome && profileCaste);
-
-        return (
-          <div className="animate-fadeInUp card" style={{ marginBottom: 20, padding: 0, border: '1.5px solid rgba(124,58,237,0.25)', overflow: 'hidden' }}>
-            <div style={{ background: 'linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 8, padding: 6, display: 'flex', alignItems: 'center' }}>
-                <GraduationCap size={20} color="#fbbf24" />
-              </div>
-              <div>
-                <h4 style={{ margin: 0, fontSize: 14, fontWeight: 800, color: '#fff' }}>
-                  {lang === 'kn' ? 'AI ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಹತಾ ಪರೀಕ್ಷೆ' : 'AI Scholarship Eligibility Check'}
-                </h4>
-                <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Powered by Gemini AI · Based on your academic profile</p>
-              </div>
-            </div>
-            <div style={{ padding: '16px 20px' }}>
-              {!isStudentProfileComplete ? (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 12, padding: '8px 0 4px' }}>
-                  <div style={{ width: 52, height: 52, borderRadius: '50%', background: '#f5f3ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ fontSize: 26 }}>🎓</span>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', margin: '0 0 6px' }}>
-                      {lang === 'kn' ? 'ಮೊದಲು ನಿಮ್ಮ ವಿದ್ಯಾರ್ಥಿ ಪ್ರೊಫೈಲ್ ಭರ್ತಿ ಮಾಡಿ' : 'Complete Your Student Profile First'}
-                    </p>
-                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '0 0 4px', lineHeight: 1.5 }}>
-                      {lang === 'kn'
-                        ? 'AI ಅರ್ಹತೆ ಪರೀಕ್ಷೆಗೆ ನಿಮ್ಮ ತರಗತಿ/ಶಿಕ್ಷಣ ಹಂತ, ಅಂಕಗಳ ಶೇಕಡಾವಾರು, ಕುಟುಂಬ ಆದಾಯ ಮತ್ತು ಜಾತಿ ವಿವರಗಳು ಅಗತ್ಯ.'
-                        : 'The AI needs your class/degree level, marks %, annual family income, and category to find matching scholarships.'}
-                    </p>
-                    <p style={{ fontSize: 11, color: '#7c3aed', fontWeight: 600, margin: 0 }}>
-                      {lang === 'kn'
-                        ? '⚠️ ಈ ಮಾಹಿತಿ ಇಲ್ಲದಿದ್ದರೆ ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಹತೆ ತಿಳಿಯಲು ಸಾಧ್ಯವಿಲ್ಲ'
-                        : '⚠️ Without this, scholarship results would be inaccurate guesswork'}
-                    </p>
-                  </div>
-                  <div style={{ display: 'flex', gap: 6, marginTop: 4, fontSize: 11, color: 'var(--text-muted)', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    {[
-                      { icon: '🎓', label: lang === 'kn' ? 'ತರಗತಿ/ಹಂತ' : 'Education Level', done: !!studentLevel },
-                      { icon: '📊', label: lang === 'kn' ? 'ಅಂಕಗಳು %' : 'Marks %', done: !!studentMarks },
-                      { icon: '💰', label: lang === 'kn' ? 'ಕುಟುಂಬ ಆದಾಯ' : 'Family Income', done: !!profileIncome },
-                      { icon: '🪪', label: lang === 'kn' ? 'ಜಾತಿ / ವರ್ಗ' : 'Category / Caste', done: !!profileCaste },
-                    ].map(item => (
-                      <span key={item.label} style={{ background: item.done ? '#ede9fe' : '#fee2e2', color: item.done ? '#6d28d9' : '#dc2626', borderRadius: 20, padding: '3px 10px', fontWeight: 600 }}>
-                        {item.icon} {item.label} {item.done ? '✓' : '✗'}
-                      </span>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => {
-                      setProfileModalTab('scholarships');
-                      setShowProfileModal(true);
-                    }}
-                    style={{ background: 'linear-gradient(135deg, #6d28d9, #7c3aed)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px 22px', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 4px 12px rgba(124,58,237,0.3)', marginTop: 4 }}
-                  >
-                    <span>🎓</span> {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿ ಪ್ರೊಫೈಲ್ & ದಾಖಲೆ ಭರ್ತಿ ಮಾಡಿ →' : 'Fill Student Profile & Documents →'}
-                  </button>
-                </div>
-              ) : !aiScholarshipResult ? (
-                <>
-                  <div style={{ background: '#f5f3ff', border: '1px solid #c4b5fd', borderRadius: 10, padding: '10px 14px', marginBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                      <span style={{ fontSize: 16, flexShrink: 0 }}>✅</span>
-                      <div>
-                        <p style={{ fontSize: 12, fontWeight: 700, color: '#6d28d9', margin: '0 0 2px' }}>
-                          {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿ ಪ್ರೊಫೈಲ್ ಸಿದ್ಧವಾಗಿದೆ' : 'Student Profile Ready'}
-                        </p>
-                        <p style={{ fontSize: 11, color: '#5b21b6', margin: 0, lineHeight: 1.4 }}>
-                          {lang === 'kn'
-                            ? `ಹಂತ: ${studentLevel} · ಅಂಕಗಳು: ${studentMarks}% · ಆದಾಯ: ₹${profileIncome}/ವರ್ಷ · ವರ್ಗ: ${profileCaste} · ಪೋಷಕರು: ${parentOcc || 'ಕೃಷಿಕ'}`
-                            : `Level: ${studentLevel} · Marks: ${studentMarks}% · Income: ₹${profileIncome}/yr · Caste: ${profileCaste} · Parent: ${parentOcc || 'Farmer'}`}
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setProfileModalTab('scholarships');
-                        setShowProfileModal(true);
-                      }}
-                      style={{ fontSize: 11, color: '#6d28d9', fontWeight: 700, background: '#ede9fe', border: '1px solid #c4b5fd', borderRadius: 6, padding: '4px 10px', cursor: 'pointer' }}
-                    >
-                      ✏️ {lang === 'kn' ? 'ದಾಖಲೆ ಬದಲಾಯಿಸಿ' : 'Update Docs'}
-                    </button>
-                  </div>
-                  <button
-                    onClick={async () => {
-                      if (aiScholarshipRef.current) return;
-                      aiScholarshipRef.current = true;
-                      setAiScholarshipLoading(true);
-                      const name   = window.localStorage.getItem('citizen_name') || userName;
-                      const prompt = `You are a Karnataka Student Scholarship Advisor. A student named ${name} studies in Karnataka.
-Current Level: ${studentLevel}
-Previous Year Marks: ${studentMarks}%
-Annual Family Income: ₹${profileIncome}
-Social Category: ${profileCaste}
-Parent Occupation: ${parentOcc || 'Farmer'}
-College/Institution: ${studentCollege || 'Karnataka College'}
-
-Evaluate top scholarships they qualify for in Karnataka (e.g., SSP Post-Matric, CM Raitha Vidya Nidhi, BCWD Vidyasiri, Kittur Rani Chennamma, SKDRDP Sujnananidhi, Jindal, Minority Post-Matric).
-Provide top 5 eligible scholarships formatted as JSON array:
-[{"name":"...","benefit":"...","reason":"...","apply":"...","category":"State|Central|Charitable"}].
-Return ONLY the JSON array, no markdown, no explanation.`;
-                      try {
-                        const res = await callGemini(prompt);
-                        if (res) {
-                          const match = res.match(/\[[\s\S]*\]/);
-                          if (match) setAiScholarshipResult(JSON.parse(match[0]));
-                          else setAiScholarshipResult([
-                            { name: 'CM Raitha Vidya Nidhi', benefit: '₹2,000 - ₹11,000/year', reason: 'Ward of farmer in Karnataka pursuing higher education', apply: 'Apply on ssp.postmatric.karnataka.gov.in using FRUITS FID', category: 'State' },
-                            { name: 'Karnataka SSP Post-Matric', benefit: 'Full tuition waiver + maintenance', reason: 'Eligible based on category and income criteria', apply: 'Register on SSP Karnataka Portal', category: 'State' }
-                          ]);
-                        }
-                      } catch(e) {
-                        setAiScholarshipResult([
-                          { name: 'CM Raitha Vidya Nidhi', benefit: '₹2,000 - ₹11,000/year', reason: 'Ward of farmer in Karnataka pursuing higher education', apply: 'Apply on ssp.postmatric.karnataka.gov.in using FRUITS FID', category: 'State' },
-                          { name: 'Karnataka SSP Post-Matric', benefit: 'Full tuition waiver + maintenance', reason: 'Eligible based on category and income criteria', apply: 'Register on SSP Karnataka Portal', category: 'State' }
-                        ]);
-                      }
-                      setAiScholarshipLoading(false);
-                      aiScholarshipRef.current = false;
-                    }}
-                    disabled={aiScholarshipLoading}
-                    style={{
-                      background: 'linear-gradient(135deg, #6d28d9, #7c3aed)',
-                      color: '#fff', border: 'none', borderRadius: 10,
-                      padding: '10px 20px', fontSize: 13, fontWeight: 700,
-                      cursor: aiScholarshipLoading ? 'not-allowed' : 'pointer',
-                      display: 'flex', alignItems: 'center', gap: 8,
-                      opacity: aiScholarshipLoading ? 0.7 : 1, transition: 'all 0.2s',
-                      boxShadow: '0 4px 12px rgba(109,40,217,0.3)'
-                    }}
-                  >
-                    {aiScholarshipLoading ? (
-                      <><RefreshCw size={15} style={{ animation: 'spin 1s linear infinite' }} /> {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿವೇತನ ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ...' : 'Analysing scholarships...'}</>
-                    ) : (
-                      <><Sparkles size={15} /> {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಹತೆ ಪರೀಕ್ಷಿಸಿ' : 'Check My Scholarship Eligibility'}</>
-                    )}
-                  </button>
-                </>
-              ) : (
-                <>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
-                      🎓 {aiScholarshipResult.length} {lang === 'kn' ? 'ಅರ್ಹ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳು ಕಂಡುಬಂದಿವೆ:' : 'scholarships found for you:'}
-                    </p>
-                    <button onClick={() => { setAiScholarshipResult(null); }} style={{ fontSize: 11, color: '#7c3aed', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>↻ Re-check</button>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {aiScholarshipResult.map((sch, idx) => (
-                      <div key={idx} style={{ background: 'var(--bg-main)', borderRadius: 10, padding: '12px 14px', border: '1px solid var(--border-light)', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                        <div style={{ width: 28, height: 28, borderRadius: 7, background: '#ede9fe', color: '#6d28d9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <GraduationCap size={15} />
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 4 }}>
-                            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{sch.name}</span>
-                            <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: '#ede9fe', color: '#6d28d9' }}>{sch.category}</span>
-                          </div>
-                          <p style={{ fontSize: 12, fontWeight: 600, color: '#16a34a', margin: '2px 0' }}>Award: {sch.benefit}</p>
-                          <p style={{ fontSize: 11, color: 'var(--text-secondary)', margin: '2px 0', lineHeight: 1.4 }}>{sch.reason}</p>
-                          <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '4px 0 0 0', fontStyle: 'italic' }}>Apply: {sch.apply}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setActive && setActive('schemes')}
-                    style={{ marginTop: 14, width: '100%', background: 'linear-gradient(135deg, #6d28d9, #7c3aed)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
-                  >
-                    <ArrowRight size={14} /> {lang === 'kn' ? 'ಎಲ್ಲಾ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳನ್ನು ನೋಡಿ' : 'View All Scholarships & Apply'}
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        );
-      })()}
-
-
       {/* ── Crop Doctor Quick Action ── */}
       <div
         className="animate-fadeInUp"
@@ -1373,6 +1003,9 @@ export function SchemesScreen() {
   const [objectiveFilter, setObjectiveFilter] = useState('All')
   const [stageFilter, setStageFilter] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
+  const [eligibilityTab, setEligibilityTab] = useState('farmer') // 'farmer' | 'student'
+  const [eligibilityResult, setEligibilityResult] = useState(null)
+  const [eligibilityLoading, setEligibilityLoading] = useState(false)
   const [openFaq, setOpenFaq] = useState(null)
 
   // Smart Scholarship Finder Form State
@@ -1906,6 +1539,317 @@ export function SchemesScreen() {
       {/* ============================================================ */}
       {activeTab === 'directory' && (
         <>
+          {/* ── AI & Smart Government Schemes & Scholarship Eligibility Checker ── */}
+          <div className="animate-fadeInUp card" style={{ marginBottom: 24, padding: 0, border: '1.5px solid rgba(79,70,229,0.3)', overflow: 'hidden', boxShadow: '0 4px 20px rgba(79,70,229,0.08)' }}>
+            <div style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)', padding: '16px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ background: 'rgba(255,255,255,0.18)', borderRadius: 10, padding: 8, display: 'flex', alignItems: 'center' }}>
+                  <Sparkles size={20} color="#fbbf24" />
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: '#fff' }}>
+                    {lang === 'kn' ? 'AI & ಸರ್ಕಾರಿ ಯೋಜನೆಗಳ ಅರ್ಹತಾ ಪರೀಕ್ಷೆ' : 'AI & Govt Schemes / Scholarship Eligibility Check'}
+                  </h3>
+                  <p style={{ margin: 0, fontSize: 12, color: 'rgba(255,255,255,0.85)' }}>
+                    {lang === 'kn' ? 'ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಮತ್ತು ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಅಧಿಕೃತ ನಿಯಮಾವಳಿ ಆಧಾರಿತ' : 'Instant official Karnataka & Central scheme criteria evaluation'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Mode Toggle: Farmer vs Student */}
+              <div style={{ display: 'flex', background: 'rgba(0,0,0,0.2)', padding: 3, borderRadius: 10, gap: 4 }}>
+                <button
+                  type="button"
+                  onClick={() => { setEligibilityTab('farmer'); setEligibilityResult(null); }}
+                  style={{
+                    background: eligibilityTab === 'farmer' ? '#fff' : 'transparent',
+                    color: eligibilityTab === 'farmer' ? '#4f46e5' : '#fff',
+                    border: 'none', borderRadius: 8, padding: '6px 14px',
+                    fontSize: 12, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s',
+                    display: 'flex', alignItems: 'center', gap: 6
+                  }}
+                >
+                  <Sprout size={14} /> {lang === 'kn' ? 'ರೈತ ಯೋಜನೆಗಳು' : 'Farmer Schemes'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setEligibilityTab('student'); setEligibilityResult(null); }}
+                  style={{
+                    background: eligibilityTab === 'student' ? '#fff' : 'transparent',
+                    color: eligibilityTab === 'student' ? '#7c3aed' : '#fff',
+                    border: 'none', borderRadius: 8, padding: '6px 14px',
+                    fontSize: 12, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s',
+                    display: 'flex', alignItems: 'center', gap: 6
+                  }}
+                >
+                  <GraduationCap size={14} /> {lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿವೇತನ' : 'Scholarships'}
+                </button>
+              </div>
+            </div>
+
+            <div style={{ padding: '20px 22px' }}>
+              {(() => {
+                const profileLand   = window.localStorage.getItem('citizen_land') || '';
+                const profileIncome = window.localStorage.getItem('citizen_income') || '';
+                const profileCaste  = window.localStorage.getItem('citizen_caste') || '';
+                const userDistrict  = window.localStorage.getItem('citizen_district') || 'Karnataka';
+                const userTaluk     = window.localStorage.getItem('citizen_taluk') || '';
+                const userName      = window.localStorage.getItem('citizen_name') || 'Citizen';
+
+                const studentLevel   = window.localStorage.getItem('student_level') || '';
+                const studentMarks   = window.localStorage.getItem('student_marks_percent') || '';
+                const parentOcc      = window.localStorage.getItem('student_parent_occ') || 'Farmer';
+                const studentCollege = window.localStorage.getItem('student_college') || '';
+
+                const isFarmerComplete  = !!(profileLand && profileIncome && profileCaste);
+                const isStudentComplete = !!(studentLevel && studentMarks && profileIncome && profileCaste);
+
+                const isComplete = eligibilityTab === 'farmer' ? isFarmerComplete : isStudentComplete;
+
+                if (!isComplete) {
+                  return (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 12, padding: '12px 0 8px' }}>
+                      <div style={{ width: 54, height: 54, borderRadius: '50%', background: eligibilityTab === 'farmer' ? '#fef3c7' : '#ede9fe', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ fontSize: 26 }}>{eligibilityTab === 'farmer' ? '🌾' : '🎓'}</span>
+                      </div>
+                      <div>
+                        <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', margin: '0 0 6px' }}>
+                          {lang === 'kn'
+                            ? (eligibilityTab === 'farmer' ? 'ಮೊದಲು ನಿಮ್ಮ ಜಮೀನು & ಪ್ರೊಫೈಲ್ ದಾಖಲೆಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ' : 'ಮೊದಲು ವಿದ್ಯಾರ್ಥಿ ಪ್ರೊಫೈಲ್ ವಿವರಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ')
+                            : (eligibilityTab === 'farmer' ? 'Complete Your Land & Profile Details First' : 'Complete Your Academic Profile Details First')}
+                        </h4>
+                        <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 4px', maxWidth: 520, lineHeight: 1.5 }}>
+                          {lang === 'kn'
+                            ? (eligibilityTab === 'farmer' ? 'ಸರ್ಕಾರಿ ಯೋಜನೆಗಳ ಅರ್ಹತೆಗೆ ಜಮೀನಿನ ವಿಸ್ತೀರ್ಣ (ಎಕರೆ), ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯ ಮತ್ತು ಜಾತಿ ವಿವರಗಳು ಅಗತ್ಯ.' : 'ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಹತೆಗೆ ಶಿಕ್ಷಣ ಹಂತ, ಅಂಕಗಳ %, ಕುಟುಂಬ ಆದಾಯ ಮತ್ತು ಜಾತಿ ವಿವರಗಳು ಅಗತ್ಯ.')
+                            : (eligibilityTab === 'farmer' ? 'Official eligibility criteria require verified land size, annual family income, and category/caste to prevent false results.' : 'Official scholarship criteria require education level, marks percentage, family income, and category.')}
+                        </p>
+                      </div>
+
+                      <div style={{ display: 'flex', gap: 8, marginTop: 4, fontSize: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {eligibilityTab === 'farmer' ? [
+                          { icon: '🌾', label: lang === 'kn' ? 'ಜಮೀನು (ಎಕರೆ)' : 'Land (acres)', done: !!profileLand },
+                          { icon: '💰', label: lang === 'kn' ? 'ವಾರ್ಷಿಕ ಆದಾಯ' : 'Annual Income', done: !!profileIncome },
+                          { icon: '🪪', label: lang === 'kn' ? 'ಜಾತಿ / ವರ್ಗ' : 'Category / Caste', done: !!profileCaste },
+                        ].map(item => (
+                          <span key={item.label} style={{ background: item.done ? '#dcfce7' : '#fee2e2', color: item.done ? '#15803d' : '#dc2626', borderRadius: 20, padding: '4px 12px', fontWeight: 600 }}>
+                            {item.icon} {item.label} {item.done ? '✓' : '✗'}
+                          </span>
+                        )) : [
+                          { icon: '🎓', label: lang === 'kn' ? 'ತರಗತಿ/ಹಂತ' : 'Education Level', done: !!studentLevel },
+                          { icon: '📊', label: lang === 'kn' ? 'ಅಂಕಗಳು %' : 'Marks %', done: !!studentMarks },
+                          { icon: '💰', label: lang === 'kn' ? 'ಕುಟುಂಬ ಆದಾಯ' : 'Family Income', done: !!profileIncome },
+                          { icon: '🪪', label: lang === 'kn' ? 'ಜಾತಿ / ವರ್ಗ' : 'Category / Caste', done: !!profileCaste },
+                        ].map(item => (
+                          <span key={item.label} style={{ background: item.done ? '#ede9fe' : '#fee2e2', color: item.done ? '#6d28d9' : '#dc2626', borderRadius: 20, padding: '4px 12px', fontWeight: 600 }}>
+                            {item.icon} {item.label} {item.done ? '✓' : '✗'}
+                          </span>
+                        ))}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDocModalTab(eligibilityTab === 'farmer' ? 'schemes' : 'scholarships');
+                          setShowDocModal(true);
+                        }}
+                        style={{
+                          background: eligibilityTab === 'farmer' ? 'linear-gradient(135deg, #15803d, #16a34a)' : 'linear-gradient(135deg, #6d28d9, #7c3aed)',
+                          color: '#fff', border: 'none', borderRadius: 10,
+                          padding: '11px 24px', fontSize: 13, fontWeight: 700,
+                          cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8,
+                          boxShadow: '0 4px 14px rgba(0,0,0,0.15)', marginTop: 8
+                        }}
+                      >
+                        <Edit3 size={15} /> {lang === 'kn' ? 'ಪ್ರೊಫೈಲ್ & ದಾಖಲೆಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ →' : 'Fill Profile & Required Documents →'}
+                      </button>
+                    </div>
+                  );
+                }
+
+                if (!eligibilityResult) {
+                  return (
+                    <div>
+                      {/* Summary Pill */}
+                      <div style={{ background: eligibilityTab === 'farmer' ? '#f0fdf4' : '#f5f3ff', border: `1px solid ${eligibilityTab === 'farmer' ? '#86efac' : '#c4b5fd'}`, borderRadius: 10, padding: '12px 16px', marginBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <CheckCircle2 size={18} color={eligibilityTab === 'farmer' ? '#15803d' : '#6d28d9'} />
+                          <div>
+                            <p style={{ fontSize: 13, fontWeight: 700, color: eligibilityTab === 'farmer' ? '#15803d' : '#6d28d9', margin: '0 0 2px' }}>
+                              {eligibilityTab === 'farmer' ? (lang === 'kn' ? 'ರೈತ ಪ್ರೊಫೈಲ್ ಸಿದ್ಧವಾಗಿದೆ' : 'Farmer Profile Ready') : (lang === 'kn' ? 'ವಿದ್ಯಾರ್ಥಿ ಪ್ರೊಫೈಲ್ ಸಿದ್ಧವಾಗಿದೆ' : 'Student Profile Ready')}
+                            </p>
+                            <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0, lineHeight: 1.4 }}>
+                              {eligibilityTab === 'farmer'
+                                ? `ಜಮೀನು: ${profileLand} ಎಕರೆ · ವಾರ್ಷಿಕ ಆದಾಯ: ₹${Number(profileIncome).toLocaleString('en-IN')} · ವರ್ಗ: ${profileCaste} · ಜಿಲ್ಲೆ: ${userDistrict}`
+                                : `ಶಿಕ್ಷಣ ಹಂತ: ${studentLevel} · ಅಂಕಗಳು: ${studentMarks}% · ಆದಾಯ: ₹${Number(profileIncome).toLocaleString('en-IN')} · ವರ್ಗ: ${profileCaste} · ಪೋಷಕರು: ${parentOcc}`}
+                            </p>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setDocModalTab(eligibilityTab === 'farmer' ? 'schemes' : 'scholarships');
+                            setShowDocModal(true);
+                          }}
+                          style={{
+                            fontSize: 12, fontWeight: 700,
+                            color: eligibilityTab === 'farmer' ? '#15803d' : '#6d28d9',
+                            background: eligibilityTab === 'farmer' ? '#dcfce7' : '#ede9fe',
+                            border: `1px solid ${eligibilityTab === 'farmer' ? '#86efac' : '#c4b5fd'}`,
+                            borderRadius: 8, padding: '6px 12px', cursor: 'pointer'
+                          }}
+                        >
+                          ✏️ {lang === 'kn' ? 'ದಾಖಲೆ ಬದಲಾಯಿಸಿ' : 'Update Docs'}
+                        </button>
+                      </div>
+
+                      <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, padding: '10px 14px', marginBottom: 16, fontSize: 12, color: '#92400e', display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <ShieldCheck size={16} color="#d97706" style={{ flexShrink: 0 }} />
+                        <span>
+                          {lang === 'kn'
+                            ? 'ಫಲಿತಾಂಶಗಳು ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಅಧಿಕೃತ ನಿಯಮಗಳು ಮತ್ತು ಸಬ್ಸಿಡಿ ಕೋಷ್ಟಕಗಳ ಆಧಾರದ ಮೇಲೆ ನಿಖರವಾಗಿ ನಿರ್ಧರಿಸಲಾಗುತ್ತದೆ.'
+                            : 'Results are calculated against official Karnataka & Central Government eligibility tables and subsidy thresholds.'}
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          setEligibilityLoading(true);
+                          const base = evaluateGovernmentEligibility({
+                            mode: eligibilityTab,
+                            land: profileLand,
+                            income: profileIncome,
+                            caste: profileCaste,
+                            district: userDistrict,
+                            studentLevel,
+                            studentMarks,
+                            parentOcc
+                          });
+
+                          try {
+                            const prompt = eligibilityTab === 'farmer'
+                              ? `You are a Karnataka govt schemes expert. Farmer named ${userName} in ${userDistrict}, ${userTaluk}, land: ${profileLand} acres, income: ₹${profileIncome}, category: ${profileCaste}. List top 5 eligible schemes with exact benefits as JSON array: [{"name":"...","benefit":"...","reason":"...","apply":"...","category":"Central|State","link":"..."}]`
+                              : `You are a Karnataka scholarship advisor. Student named ${userName} in ${userDistrict}, level: ${studentLevel}, marks: ${studentMarks}%, income: ₹${profileIncome}, category: ${profileCaste}, parent: ${parentOcc}. List top 5 eligible scholarships as JSON array: [{"name":"...","benefit":"...","reason":"...","apply":"...","category":"State|Central|Charitable","link":"..."}]`;
+                            const res = await callGemini(prompt).catch(() => null);
+                            if (res) {
+                              const match = res.match(/\[[\s\S]*\]/);
+                              if (match) {
+                                const parsed = JSON.parse(match[0]);
+                                if (Array.isArray(parsed) && parsed.length > 0) {
+                                  setEligibilityResult(parsed);
+                                  setEligibilityLoading(false);
+                                  return;
+                                }
+                              }
+                            }
+                          } catch (err) {
+                            // cleanly fallback to base
+                          }
+                          setEligibilityResult(base);
+                          setEligibilityLoading(false);
+                        }}
+                        disabled={eligibilityLoading}
+                        style={{
+                          background: eligibilityTab === 'farmer' ? 'linear-gradient(135deg, #15803d, #16a34a)' : 'linear-gradient(135deg, #6d28d9, #7c3aed)',
+                          color: '#fff', border: 'none', borderRadius: 10,
+                          padding: '12px 26px', fontSize: 14, fontWeight: 700,
+                          cursor: eligibilityLoading ? 'not-allowed' : 'pointer',
+                          display: 'flex', alignItems: 'center', gap: 8,
+                          boxShadow: '0 4px 14px rgba(0,0,0,0.15)',
+                          opacity: eligibilityLoading ? 0.7 : 1
+                        }}
+                      >
+                        {eligibilityLoading ? (
+                          <><RefreshCw size={16} style={{ animation: 'spin 1s linear infinite' }} /> {lang === 'kn' ? 'ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...' : 'Analysing Eligibility...'}</>
+                        ) : (
+                          <><Sparkles size={16} /> {eligibilityTab === 'farmer' ? (lang === 'kn' ? 'ನನ್ನ ಅರ್ಹ ಯೋಜನೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ' : 'Check My Scheme Eligibility') : (lang === 'kn' ? 'ನನ್ನ ಅರ್ಹ ವಿದ್ಯಾರ್ಥಿವೇತನ ಪರಿಶೀಲಿಸಿ' : 'Check My Scholarship Eligibility')}</>
+                        )}
+                      </button>
+                    </div>
+                  );
+                }
+
+                // Show Results View
+                return (
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                      <div>
+                        <h4 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 2px' }}>
+                          ✅ {eligibilityResult.length} {eligibilityTab === 'farmer' ? (lang === 'kn' ? 'ಅರ್ಹ ಯೋಜನೆಗಳು ಲಭ್ಯವಿವೆ' : 'Eligible Schemes Found for You') : (lang === 'kn' ? 'ಅರ್ಹ ವಿದ್ಯಾರ್ಥಿವೇತನಗಳು ಲಭ್ಯವಿವೆ' : 'Eligible Scholarships Found for You')}
+                        </h4>
+                        <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0 }}>
+                          {lang === 'kn' ? `${userDistrict} ಜಿಲ್ಲೆ · ${profileCaste} ವರ್ಗ · ₹${Number(profileIncome).toLocaleString('en-IN')} ವಾರ್ಷಿಕ ಆದಾಯ` : `${userDistrict} District · ${profileCaste} Category · ₹${Number(profileIncome).toLocaleString('en-IN')} Annual Income`}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setEligibilityResult(null)}
+                        style={{ fontSize: 12, color: 'var(--primary)', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}
+                      >
+                        ↻ {lang === 'kn' ? 'ಮತ್ತೆ ಪರಿಶೀಲಿಸಿ' : 'Re-check'}
+                      </button>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 14 }}>
+                      {eligibilityResult.map((item, idx) => (
+                        <div
+                          key={idx}
+                          style={{
+                            background: 'var(--bg-main)',
+                            borderRadius: 12,
+                            padding: '16px',
+                            border: '1.5px solid var(--border-light)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            gap: 12
+                          }}
+                        >
+                          <div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
+                              <h5 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: 'var(--text-primary)' }}>{item.name}</h5>
+                              <span style={{
+                                fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 20,
+                                background: item.category === 'Central' ? '#dbeafe' : item.category === 'State' ? '#dcfce7' : '#ede9fe',
+                                color: item.category === 'Central' ? '#1d4ed8' : item.category === 'State' ? '#15803d' : '#6d28d9',
+                                flexShrink: 0
+                              }}>
+                                {item.category}
+                              </span>
+                            </div>
+
+                            <p style={{ fontSize: 13, fontWeight: 700, color: '#16a34a', margin: '0 0 6px 0' }}>
+                              🎁 {item.benefit}
+                            </p>
+                            <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '0 0 6px 0', lineHeight: 1.4 }}>
+                              <strong>Eligibility Reason:</strong> {item.reason}
+                            </p>
+                            <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: 0, fontStyle: 'italic' }}>
+                              <strong>How to Apply:</strong> {item.apply}
+                            </p>
+                          </div>
+
+                          <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+                            <a
+                              href={item.link || 'https://serviceonline.gov.in'}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn btn-primary btn-sm"
+                              style={{ flex: 1, justifyContent: 'center', fontSize: 12, padding: '8px 12px', textDecoration: 'none', borderRadius: 8, fontWeight: 600 }}
+                            >
+                              Official Portal ↗
+                            </a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+
             {/* Search Input, Category & Government Level Filter */}
           <div className="card" style={{ padding: '18px 20px', marginBottom: 24, borderRadius: 16 }}>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -6062,16 +6006,16 @@ export function TutorialsScreen() {
       color: '#7c3aed',
       title: lang === 'kn' ? 'ಫೋನ್‌ಪೇ / GPay ಬಳಸುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'फोनपे / GPay का उपयोग कैसे करें?' : 'How to use PhonePe / Google Pay?',
       desc: lang === 'kn' ? 'UPI ಮೂಲಕ ಸುರಕ್ಷಿತವಾಗಿ ಹಣ ಕಳುಹಿಸಿ' : lang === 'hi' ? 'UPI से सुरक्षित पैसे भेजें' : 'Send money securely via UPI',
-      videoId: lang === 'kn' ? 'mhNAZxKFiLs' : lang === 'hi' ? 'zfLXwOEAOP8' : 'Fhzh7kEkEVw'
+      videoId: lang === 'kn' ? 'C17ztmHEQGw' : lang === 'hi' ? 'T8BJag0KzOM' : 'iI2NaN_QVTI'
     },
     {
       id: 'sir',
       cat: 'schemes',
       icon: FileText,
       color: '#0369a1',
-      title: lang === 'kn' ? 'ಚುನಾವಣಾ ಆಯೋಗದ SIR ಫಾರ್ಮ್' : lang === 'hi' ? 'चुनाव आयोग SIR फॉर्म' : 'Election Commission SIR Form',
-      desc: lang === 'kn' ? 'SIR (Voter) ಫಾರ್ಮ್ ತುಂಬುವುದು ಹೇಗೆ' : lang === 'hi' ? 'SIR (Voter) फॉर्म कैसे भरें' : 'How to fill the Enumeration (SIR) form',
-      videoId: lang === 'kn' ? 'Q9q3IKhMY_Q' : lang === 'hi' ? 'Q9q3IKhMY_Q' : 'wbGjdP-mWqE'
+      title: lang === 'kn' ? 'ಚುನಾವಣಾ ಆಯೋಗದ SIR / ಹೊಸ ವೋಟರ್ ಐಡಿ' : lang === 'hi' ? 'चुनाव आयोग नया वोटर आईडी ऑनलाइन आवेदन' : 'New Voter ID Card Online Application',
+      desc: lang === 'kn' ? 'ಆನ್‌ಲೈನ್‌ನಲ್ಲಿ ಹೊಸ ವೋಟರ್ ಐಡಿಗೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ' : lang === 'hi' ? 'नया वोटर आईडी कार्ड ऑनलाइन बनाएं' : 'Step-by-step new voter ID registration guide',
+      videoId: lang === 'kn' ? 'drUTVki6OGo' : lang === 'hi' ? 'HnUpFrBlNmA' : 'GUJUCqhw8Ek'
     },
     {
       id: 'market',
@@ -6080,7 +6024,7 @@ export function TutorialsScreen() {
       color: '#16a34a',
       title: lang === 'kn' ? 'ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ನೋಡುವುದು' : lang === 'hi' ? 'बाजार भाव कैसे देखें' : 'Check Market Prices (APMC)',
       desc: lang === 'kn' ? 'APMC ಬೆಳೆ ಬೆಲೆ ನೋಡಿ' : lang === 'hi' ? 'APMC फसल कीमत देखें' : 'Check daily APMC crop prices',
-      videoId: lang === 'kn' ? 'nnpIkkFOATE' : lang === 'hi' ? 'nnpIkkFOATE' : 'e0drBFa3jXc'
+      videoId: lang === 'kn' ? 'NUmn690WdPU' : lang === 'hi' ? 'r07a7QC2cJc' : 'ZU7c-uOFP2o'
     }
   ]
 
@@ -6091,9 +6035,9 @@ export function TutorialsScreen() {
       cat: 'scholarships',
       icon: GraduationCap,
       color: '#7c3aed',
-      title: lang === 'kn' ? 'ಕರ್ನಾಟಕ SSP ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಜಿ' : lang === 'hi' ? 'कर्नाटक SSP छात्रवृत्ति ऑनलाइन आवेदन' : 'Karnataka SSP Scholarship Step-by-Step',
+      title: lang === 'kn' ? 'ಕರ್ನಾಟಕ SSP ವಿದ್ಯಾರ್ಥಿವೇತನ ಅರ್ಜಿ' : lang === 'hi' ? 'ಕರ್ನಾಟಕ SSP छात्रवृत्ति ऑनलाइन आवेदन' : 'Karnataka SSP Scholarship Step-by-Step',
       desc: lang === 'kn' ? 'SSP ಐಡಿ ರಚನೆ, ಇ-ದೃಢೀಕರಣ ಮತ್ತು ಅರ್ಜಿ ಸಲ್ಲಿಸುವ ಹಂತಗಳು' : lang === 'hi' ? 'SSP आईडी निर्माण और ई-सत्यापन गाइड' : 'Complete SSP ID creation, e-Attestation & post-matric application',
-      videoId: lang === 'kn' ? 'cHpO9E_FayI' : lang === 'hi' ? 'cHpO9E_FayI' : 'Q9q3IKhMY_Q'
+      videoId: lang === 'kn' ? '74LzspPpo0o' : lang === 'hi' ? 'JoY7uM58uyk' : 'JoY7uM58uyk'
     },
     {
       id: 'raitha_vidya_nidhi',
@@ -6102,7 +6046,7 @@ export function TutorialsScreen() {
       color: '#15803d',
       title: lang === 'kn' ? 'ಸಿಎಂ ರೈತ ವಿದ್ಯಾ ನಿಧಿ ಸ್ಕಾಲರ್‌ಶಿಪ್' : lang === 'hi' ? 'सीएम किसान छात्रवृत्ति योजना' : 'CM Raitha Vidya Nidhi Application',
       desc: lang === 'kn' ? 'ರೈತರ ಮಕ್ಕಳಿಗೆ ₹2,000 - ₹11,000 ನೇರ DBT ನೆರವು' : lang === 'hi' ? 'किसान बच्चों के लिए छात्रवृत्ति' : 'Direct cash transfer for farmer children studying Class 8 to PG',
-      videoId: lang === 'kn' ? '8sczrETJuWY' : lang === 'hi' ? '8sczrETJuWY' : 'Q9q3IKhMY_Q'
+      videoId: lang === 'kn' ? 'Rb_8_MLOzSM' : lang === 'hi' ? 'f5lvGmA3scU' : '8sF4vPp7usk'
     },
     {
       id: 'yuva_nidhi',
@@ -6111,7 +6055,7 @@ export function TutorialsScreen() {
       color: '#ea580c',
       title: lang === 'kn' ? 'ಯುವ ನಿಧಿ ಮಾಸಿಕ ₹3,000 ನಿರುದ್ಯೋಗ ಭತ್ಯೆ' : lang === 'hi' ? 'युवा निधि योजना आवेदन' : 'Yuva Nidhi Monthly Allowance (₹3,000/mo)',
       desc: lang === 'kn' ? 'ಪದವೀಧರರು & ಡಿಪ್ಲೊಮಾ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಸೇವಾಸಿಂಧು ಅರ್ಜಿ' : lang === 'hi' ? 'बेरोजगारी भत्ता सेवा सिंधु पोर्टल' : 'Application guide on Seva Sindhu for graduates & diploma holders',
-      videoId: lang === 'kn' ? '8sczrETJuWY' : lang === 'hi' ? '8sczrETJuWY' : 'Fhzh7kEkEVw'
+      videoId: lang === 'kn' ? '8sczrETJuWY' : lang === 'hi' ? 'JWrDZXvmcA4' : '_oyB3x8GomI'
     },
     {
       id: 'gruha_lakshmi',
@@ -6120,7 +6064,7 @@ export function TutorialsScreen() {
       color: '#db2777',
       title: lang === 'kn' ? 'ಗೃಹಲಕ್ಷ್ಮಿ & ಅನ್ನಭಾಗ್ಯ DBT ಹಣ ಜಮೆ ನೋಡಿ' : lang === 'hi' ? 'गृह लक्ष्मी डीबीटी स्थिति जांचें' : 'Gruha Lakshmi & Anna Bhagya DBT Status',
       desc: lang === 'kn' ? 'ಕರ್ನಾಟಕ DBT ಮೊಬೈಲ್ ಆ್ಯಪ್‌ನಲ್ಲಿ ಹಣ ಬಂದಿದೆಯೇ ಪರಿಶೀಲಿಸಿ' : lang === 'hi' ? 'डीबीटी मोबाइल ऐप पर स्थिति जांचें' : 'Check monthly ₹2,000 transfer status via Karnataka DBT App',
-      videoId: lang === 'kn' ? 'FlRDiJbc2EU' : lang === 'hi' ? 'FlRDiJbc2EU' : 'bA2KJI6Lc-Y'
+      videoId: lang === 'kn' ? 'FlRDiJbc2EU' : lang === 'hi' ? 'JHZ6jYDY-yQ' : 'bA2KJI6Lc-Y'
     },
     {
       id: 'pm_kisan_ekyc',
@@ -6129,7 +6073,7 @@ export function TutorialsScreen() {
       color: '#16a34a',
       title: lang === 'kn' ? 'ಪಿಎಂ ಕಿಸಾನ್ 19ನೇ ಕಂತು & ಮೊಬೈಲ್ ಇ-ಕೆವೈಸಿ' : lang === 'hi' ? 'पीएम किसान ई-केवाईसी कैसे करें' : 'PM-Kisan 19th Installment e-KYC on Mobile',
       desc: lang === 'kn' ? 'ಮುಖ ಪರಿಶೀಲನೆ ಅಥವಾ ಆಧಾರ್ ಒಟಿಪಿ ಮೂಲಕ ಇ-ಕೆವೈಸಿ ಮುಗಿಸಿ' : lang === 'hi' ? 'फेस स्कैन या ओटीपी से ई-केवाईसी' : 'Instant facial recognition / OTP e-KYC on PM Kisan app',
-      videoId: lang === 'kn' ? 'OLzVKwrjZK0' : lang === 'hi' ? 'OLzVKwrjZK0' : 'e0drBFa3jXc'
+      videoId: lang === 'kn' ? 'EA8N-DC-2XY' : lang === 'hi' ? 'LEGQkfy_PfI' : 'QNnAGHHYGz8'
     },
     {
       id: 'digilocker',
@@ -6138,7 +6082,7 @@ export function TutorialsScreen() {
       color: '#0284c7',
       title: lang === 'kn' ? 'ಡಿಜಿಲಾಕರ್ ಬಳಸುವುದು ಹೇಗೆ?' : lang === 'hi' ? 'DigiLocker का उपयोग कैसे करें?' : 'How to use DigiLocker?',
       desc: lang === 'kn' ? 'ಡಿಜಿಟಲ್ ದಾಖಲೆಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿಡಿ' : lang === 'hi' ? 'डिजिटल दस्तावेज़ सुरक्षित रखें' : 'Store & access documents digitally',
-      videoId: lang === 'kn' ? 'sBg4fO4IPtA' : lang === 'hi' ? 'sBg4fO4IPtA' : 'Fhzh7kEkEVw'
+      videoId: lang === 'kn' ? 'sBg4fO4IPtA' : lang === 'hi' ? 'rJ0TzxDggCg' : 'LRMOwN4LYvc'
     },
     {
       id: 'bhoomi',
@@ -6147,7 +6091,7 @@ export function TutorialsScreen() {
       color: '#b45309',
       title: lang === 'kn' ? 'ಭೂಮಿ - ಆರ್‌ಟಿಸಿ ಆನ್‌ಲೈನ್ ನೋಡುವುದು' : lang === 'hi' ? 'भूमि पोर्टल - RTC ऑनलाइन देखें' : 'Bhoomi – Check Land Records (RTC)',
       desc: lang === 'kn' ? 'ನಿಮ್ಮ ಜಮೀನಿನ ದಾಖಲೆ ಆನ್‌ಲೈನ್ ನೋಡಿ' : lang === 'hi' ? 'अपनी जमीन के कागज़ ऑनलाइन देखें' : 'Check your land ownership records online',
-      videoId: lang === 'kn' ? 'nnpIkkFOATE' : lang === 'hi' ? 'nnpIkkFOATE' : 'e0drBFa3jXc'
+      videoId: lang === 'kn' ? 'nnpIkkFOATE' : lang === 'hi' ? 'kt8igNwH4Ws' : 'kt8igNwH4Ws'
     },
     {
       id: 'fasal_bima',
@@ -6156,7 +6100,7 @@ export function TutorialsScreen() {
       color: '#15803d',
       title: lang === 'kn' ? 'ಪಿಎಂ ಫಸಲ್ ಬಿಮಾ ಯೋಜನೆ' : lang === 'hi' ? 'PM फसल बीमा योजना' : 'PM Fasal Bima Yojana',
       desc: lang === 'kn' ? 'ಬೆಳೆ ನಷ್ಟಕ್ಕೆ ವಿಮಾ ಸಂರಕ್ಷಣೆ ಪಡೆಯಿರಿ' : lang === 'hi' ? 'फसल नुकसान पर बीमा सुरक्षा पाएं' : 'Get crop insurance for losses',
-      videoId: lang === 'kn' ? 'k8iAEil7swg' : lang === 'hi' ? 'k8iAEil7swg' : 'wbGjdP-mWqE'
+      videoId: lang === 'kn' ? 'k8iAEil7swg' : lang === 'hi' ? 'LHy6gfFwHiE' : 'HH86mthMpvg'
     },
     {
       id: 'aadhaar',
@@ -6165,7 +6109,7 @@ export function TutorialsScreen() {
       color: '#7c3aed',
       title: lang === 'kn' ? 'ಆಧಾರ್ ಅನ್ನು ಬ್ಯಾಂಕ್‌ಗೆ ಜೋಡಿಸುವುದು' : lang === 'hi' ? 'आधार को बैंक से लिंक करें' : 'Link Aadhaar to Bank Account',
       desc: lang === 'kn' ? 'DBT ಸಬ್ಸಿಡಿ ನೇರ ಖಾತೆಗೆ ಬರಲಿ' : lang === 'hi' ? 'DBT सब्सिडी सीधे खाते में पाएं' : 'Get DBT subsidies directly in your account',
-      videoId: lang === 'kn' ? '3qpuSQGedNc' : lang === 'hi' ? '3qpuSQGedNc' : 'e0drBFa3jXc'
+      videoId: lang === 'kn' ? '3qpuSQGedNc' : lang === 'hi' ? 'dBdpEsqsfac' : 'Ccv1zeReNyc'
     },
     {
       id: 'mgnrega',
@@ -6174,7 +6118,7 @@ export function TutorialsScreen() {
       color: '#dc2626',
       title: lang === 'kn' ? 'ಮನರೇಗಾ - ಜಾಬ್ ಕಾರ್ಡ್ & ಪಾವತಿ' : lang === 'hi' ? 'मनरेगा - जॉब कार्ड और भुगतान' : 'MGNREGA – Job Card & Payments',
       desc: lang === 'kn' ? 'ಮನರೇಗಾ ಕೆಲಸ ಮತ್ತು ಪಾವತಿ ಮಾಹಿತಿ' : lang === 'hi' ? 'मनरेगा काम और भुगतान जानकारी' : 'Check MGNREGA work status & wages',
-      videoId: lang === 'kn' ? '20rOGxznsRs' : lang === 'hi' ? '20rOGxznsRs' : 'e0drBFa3jXc'
+      videoId: lang === 'kn' ? '20rOGxznsRs' : lang === 'hi' ? 'lZe-9vk-aa8' : 'nDWwLn45zzA'
     },
     {
       id: 'kcc',
@@ -6183,7 +6127,7 @@ export function TutorialsScreen() {
       color: '#0369a1',
       title: lang === 'kn' ? 'ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಅರ್ಜಿ' : lang === 'hi' ? 'किसान क्रेडिट कार्ड आवेदन' : 'Apply for Kisan Credit Card',
       desc: lang === 'kn' ? 'ಕಡಿಮೆ ಬಡ್ಡಿ ದರದಲ್ಲಿ ರೈತ ಸಾಲ' : lang === 'hi' ? 'कम ब्याज दर पर किसान ऋण' : 'Get low-interest agricultural loans',
-      videoId: lang === 'kn' ? '3ZDmrsQemZ0' : lang === 'hi' ? '3ZDmrsQemZ0' : 'wbGjdP-mWqE'
+      videoId: lang === 'kn' ? '3ZDmrsQemZ0' : lang === 'hi' ? '4Yb7jT2KpE4' : 'wvBrF_mtEuM'
     }
   ]
 

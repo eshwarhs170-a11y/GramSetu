@@ -174,13 +174,40 @@ export default function VillagerLogin() {
 
   // ── OTP send ───────────────────────────────────────────────────
   const handleSendOtp = async (e) => {
-    e.preventDefault()
-    const ruralOk = areaType === 'rural' && gp && village
-    const urbanOk = areaType === 'urban' && urbanBody && ward
-    if (!name.trim() || !phone || !district || !taluk || !areaType || (!ruralOk && !urbanOk)) {
-      setErrorMsg('Please fill in all required fields including your location.')
+    if (e) e.preventDefault()
+    if (!name.trim()) {
+      setErrorMsg(lang === 'kn' ? 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರನ್ನು ನಮೂದಿಸಿ' : 'Please enter your full name.')
       return
     }
+    if (!email.trim() || !email.includes('@')) {
+      setErrorMsg(lang === 'kn' ? 'ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ' : 'Please enter a valid email address.')
+      return
+    }
+    if (!phone || phone.length < 10) {
+      setErrorMsg(lang === 'kn' ? 'ದಯವಿಟ್ಟು 10 ಅಂಕಿಗಳ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ' : 'Please enter a valid 10-digit mobile number.')
+      return
+    }
+    if (!district) {
+      setErrorMsg(lang === 'kn' ? 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ಜಿಲ್ಲೆಯನ್ನು ಆಯ್ಕೆ ಮಾಡಿ' : 'Please select your District.')
+      return
+    }
+    if (!taluk) {
+      setErrorMsg(lang === 'kn' ? 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ತಾಲೂಕನ್ನು ಆಯ್ಕೆ ಮಾಡಿ' : 'Please select your Taluk.')
+      return
+    }
+    if (!areaType) {
+      setErrorMsg(lang === 'kn' ? 'ದಯವಿಟ್ಟು ಪ್ರದೇಶದ ಪ್ರಕಾರ (ಗ್ರಾಮೀಣ ಅಥವಾ ನಗರ) ಆಯ್ಕೆ ಮಾಡಿ' : 'Please select Area Type (Rural or Urban).')
+      return
+    }
+    if (areaType === 'rural' && (!gp || !village)) {
+      setErrorMsg(lang === 'kn' ? 'ದಯವಿಟ್ಟು ಗ್ರಾಮ ಪಂಚಾಯತ್ ಮತ್ತು ಗ್ರಾಮವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ' : 'Please select your Gram Panchayat and Village.')
+      return
+    }
+    if (areaType === 'urban' && (!urbanBody || !ward)) {
+      setErrorMsg(lang === 'kn' ? 'ದಯವಿಟ್ಟು ನಗರ ಸ್ಥಳೀಯ ಸಂಸ್ಥೆ ಮತ್ತು ವಾರ್ಡ್ ಆಯ್ಕೆ ಮಾಡಿ' : 'Please select your Urban Local Body and Ward.')
+      return
+    }
+
     setLoading(true)
     setErrorMsg('')
     
@@ -520,8 +547,8 @@ export default function VillagerLogin() {
               <button 
                 className="btn w-full" 
                 type="submit" 
-                disabled={loading || !name || !email || !phone || !areaType || (areaType === 'rural' && (!gp || !village)) || (areaType === 'urban' && (!urbanBody || !ward))}
-                style={{ background: '#16a34a', color: '#fff', padding: '14px', justifyContent: 'center' }}
+                disabled={loading}
+                style={{ background: '#16a34a', color: '#fff', padding: '14px', justifyContent: 'center', fontWeight: 700 }}
               >
                 {loading ? 'Sending OTP...' : 'Send OTP to Email'}
               </button>
@@ -531,13 +558,17 @@ export default function VillagerLogin() {
           {/* ── STEP 2: OTP Verification ── */}
           {step === 2 && (
             <form className="login-form" onSubmit={handleVerifyOtp}>
+              <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#15803d', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Mail size={16} />
+                <span>OTP sent to <strong>{email}</strong></span>
+              </div>
               <div className="form-group">
                 <label className="form-label">6-digit OTP / 6 ಅಂಕಿ OTP</label>
                 <input className="form-input" type="text" placeholder="123456" value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} style={{ fontSize: 24, letterSpacing: 12, textAlign: 'center' }} required autoFocus />
                 <div className="otp-hint" style={{ color: '#065f46', display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <div>OTP expires in 10 minutes</div>
-                  <div style={{ fontSize: 12, color: '#f59e0b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
-                    <AlertTriangle size={12} /> Note: The OTP email might go to your Spam/Junk folder
+                  <div style={{ fontSize: 12, color: '#d97706', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                    <AlertTriangle size={12} /> Note: Please check your Spam / Junk folder if not in inbox
                   </div>
                 </div>
               </div>
@@ -549,13 +580,24 @@ export default function VillagerLogin() {
               >
                 {loading ? 'Verifying...' : <><ShieldCheck size={15} style={{ marginRight: 6 }} />Verify & Login</>}
               </button>
-              <button
-                type="button"
-                style={{ textAlign: 'center', color: 'var(--primary)', fontSize: 14, fontWeight: 600, display: 'block', width: '100%', marginTop: 12, background: 'transparent', border: 'none', cursor: 'pointer' }}
-                onClick={() => { setStep(1); setOtpSentAlert(false); setOtp(''); }}
-              >
-                <ArrowLeft size={14} style={{ marginRight: 4 }} /> Change Details
-              </button>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14 }}>
+                <button
+                  type="button"
+                  style={{ color: '#16a34a', fontSize: 13, fontWeight: 600, background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px 0' }}
+                  onClick={() => handleSendOtp()}
+                  disabled={loading}
+                >
+                  ↻ Resend OTP
+                </button>
+                <button
+                  type="button"
+                  style={{ color: 'var(--text-secondary)', fontSize: 13, fontWeight: 500, background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px 0', display: 'flex', alignItems: 'center', gap: 4 }}
+                  onClick={() => { setStep(1); setOtpSentAlert(false); setOtp(''); }}
+                >
+                  <ArrowLeft size={13} /> Edit Details
+                </button>
+              </div>
             </form>
           )}
 
