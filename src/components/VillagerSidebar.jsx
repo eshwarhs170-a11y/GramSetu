@@ -6,6 +6,7 @@ import {
   ClipboardList, SearchCheck, UserCircle, Wheat,
   X, LogOut, ChevronRight, Cloud, ShieldAlert, PlayCircle, Camera, HelpCircle, FlaskConical
 } from 'lucide-react'
+import InstallAppButton from './InstallAppButton'
 
 export default function VillagerSidebar({ active, setActive, sidebarOpen, setSidebarOpen }) {
   const navigate = useNavigate()
@@ -126,6 +127,7 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
       </nav>
 
       <div className="sidebar-footer">
+        <InstallAppButton variant="hero" style={{ marginBottom: 10, width: '100%', justifyContent: 'center', padding: '10px 14px', fontSize: 13 }} />
         <button className="logout-btn" onClick={() => {
           // Keep identity data for form pre-fill on next login
           // Only mark as logged out — don't clear name/district/taluk

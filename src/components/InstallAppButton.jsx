@@ -63,18 +63,7 @@ export default function InstallAppButton({ variant = 'nav', style = {} }) {
   };
 
   if (isInstalled) {
-    return (
-      <div style={{
-        display: 'inline-flex', alignItems: 'center', gap: 6,
-        padding: '6px 12px', borderRadius: 10,
-        background: 'rgba(22,163,74,0.15)', color: '#16a34a',
-        fontSize: 12, fontWeight: 700, border: '1px solid rgba(22,163,74,0.3)',
-        ...style
-      }}>
-        <CheckCircle2 size={15} />
-        <span>{lang === 'kn' ? 'ಆ್ಯಪ್ ಇನ್‌ಸ್ಟಾಲ್ ಆಗಿದೆ' : 'App Installed'}</span>
-      </div>
-    );
+    return null;
   }
 
   if (variant === 'hero') {

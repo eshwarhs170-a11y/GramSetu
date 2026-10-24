@@ -1703,7 +1703,12 @@ input, textarea, select { font-family: inherit; outline: none; }
     flex: 0 0 auto !important;
     display: flex !important;
     align-items: center !important;
-    gap: 3px !important;
+    gap: 4px !important;
+  }
+
+  /* Hide install app button in mobile topbar to avoid crowding — available in mobile sidebar drawer */
+  .install-app-btn-nav {
+    display: none !important;
   }
 
   /* Hide language text and chevron on mobile */
@@ -1712,9 +1717,10 @@ input, textarea, select { font-family: inherit; outline: none; }
     display: none !important;
   }
   
-  /* Equal sized icon buttons (Globe, Theme, Search, Bell) */
+  /* Equal sized icon buttons (Globe, Theme, Search, Bell, Profile) */
   .lang-dropdown-container.topbar-style .lang-dropdown-trigger,
-  .topbar-icon-btn {
+  .topbar-icon-btn,
+  .theme-toggle-btn {
     padding: 0 !important;
     width: 32px !important;
     height: 32px !important;
@@ -1725,10 +1731,12 @@ input, textarea, select { font-family: inherit; outline: none; }
     border: none !important;
     background: transparent !important;
     border-radius: 8px !important;
+    flex-shrink: 0 !important;
   }
   
   .lang-dropdown-container.topbar-style .lang-dropdown-trigger svg:first-child,
-  .topbar-icon-btn svg {
+  .topbar-icon-btn svg,
+  .theme-toggle-btn svg {
     width: 18px !important;
     height: 18px !important;
   }
@@ -1925,7 +1933,7 @@ input, textarea, select { font-family: inherit; outline: none; }
   .topbar-actions {
     margin-left: auto !important;
     flex: 0 0 auto !important;
-    gap: 3px !important;
+    gap: 4px !important;
   }
 }
 

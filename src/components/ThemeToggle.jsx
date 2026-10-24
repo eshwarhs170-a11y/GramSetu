@@ -1,17 +1,18 @@
 import { Sun, Moon } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 
-export default function ThemeToggle({ style = {} }) {
+export default function ThemeToggle({ style = {}, className = '' }) {
   const { theme, toggleTheme } = useTheme()
   const isDark = theme === 'dark'
 
   return (
     <button
       onClick={toggleTheme}
+      className={`topbar-icon-btn theme-toggle-btn ${className}`}
       title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        width: 36, height: 36,
+        width: 32, height: 32,
         borderRadius: '50%',
         border: isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.15)',
         cursor: 'pointer',
