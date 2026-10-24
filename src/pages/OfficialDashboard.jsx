@@ -201,10 +201,27 @@ function OfficialSidebar({ active, setActive, sidebarOpen, setSidebarOpen, sessi
           type="button"
           className="sidebar-close-btn"
           onClick={() => setSidebarOpen(false)}
-          aria-label="Close Sidebar"
-          title="Close Sidebar"
+          aria-label="Cancel / Close Sidebar"
+          title="Cancel / Close Sidebar"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '6px 12px',
+            width: 'auto',
+            height: 'auto',
+            borderRadius: 8,
+            background: 'rgba(239, 68, 68, 0.2)',
+            border: '1.5px solid rgba(239, 68, 68, 0.45)',
+            color: '#fca5a5',
+            fontSize: 12,
+            fontWeight: 700,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
         >
-          <X size={18} strokeWidth={2.5} />
+          <X size={15} strokeWidth={2.5} />
+          <span>Cancel</span>
         </button>
       </div>
       <div className="sidebar-user">
@@ -2540,7 +2557,7 @@ export default function OfficialDashboard() {
         pendingInquiryCount={pendingInquiriesCount}
         newComplaintsCount={pendingCount}
       />
-      {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={() => setSidebarOpen(false)} />}
+      {sidebarOpen && <div className="sidebar-overlay-mobile" style={{ pointerEvents: 'none' }} />}
       <div className="main-content">
         <header className="topbar">
           <div className="topbar-left">

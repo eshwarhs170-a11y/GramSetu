@@ -72,6 +72,7 @@ import {
   Ticket,
   Trash2,
   TrendingUp,
+  User,
   Volume2,
   Wheat,
   Wind,
@@ -4906,8 +4907,9 @@ export function ProfileScreen() {
   const handleDistrictChange = (distName) => {
     setEditDistrict(distName)
     const found = districtsOfKarnataka.find(d => d.name === distName)
-    if (found && found.taluks.length > 0) {
-      setEditTaluk(found.taluks[0])
+    if (found && found.taluks && found.taluks.length > 0) {
+      const firstTaluk = found.taluks[0]
+      setEditTaluk(typeof firstTaluk === 'object' ? firstTaluk.name : firstTaluk)
     }
   }
 
@@ -4921,7 +4923,7 @@ export function ProfileScreen() {
 
     if (sName) setUserName(sName)
     if (sDist) setUserDistrict(sDist)
-    if (sTaluk) setUserTaluk(sTaluk)
+    if (sTaluk && sTaluk !== '[object Object]') setUserTaluk(sTaluk)
     if (sGp) setUserGp(sGp)
     if (sVillage) setUserVillage(sVillage)
     if (sPhone) setUserPhone(sPhone.startsWith('+91') ? sPhone : '+91 ' + sPhone.slice(0, 5) + ' ' + sPhone.slice(5))
@@ -4977,7 +4979,7 @@ export function ProfileScreen() {
   const startEditing = () => {
     setEditName(userName)
     setEditDistrict(userDistrict || 'Mysuru')
-    setEditTaluk(userTaluk || 'Mysuru')
+    setEditTaluk(typeof userTaluk === 'object' ? userTaluk?.name : (userTaluk && userTaluk !== '[object Object]' ? userTaluk : 'Mysuru'))
     setEditGp(userGp)
     setEditVillage(userVillage)
     setEditPhone(userPhone.replace('+91 ', '').replace(/\s+/g, ''))
@@ -4987,16 +4989,18 @@ export function ProfileScreen() {
   const handleSave = (e) => {
     e.preventDefault()
     
+    const resolvedTaluk = typeof editTaluk === 'object' ? editTaluk?.name : editTaluk
+
     window.localStorage.setItem('citizen_name', editName)
     window.localStorage.setItem('citizen_district', editDistrict)
-    window.localStorage.setItem('citizen_taluk', editTaluk)
+    window.localStorage.setItem('citizen_taluk', resolvedTaluk || '')
     window.localStorage.setItem('citizen_gp', editGp)
     window.localStorage.setItem('citizen_village', editVillage)
     window.localStorage.setItem('citizen_phone', editPhone)
 
     setUserName(editName)
     setUserDistrict(editDistrict)
-    setUserTaluk(editTaluk)
+    setUserTaluk(resolvedTaluk || '')
     setUserGp(editGp)
     setUserVillage(editVillage)
     setUserPhone('+91 ' + editPhone.slice(0, 5) + ' ' + editPhone.slice(5))
@@ -5057,13 +5061,16 @@ export function ProfileScreen() {
             <label className="form-label">Taluk / ತಾಲೂಕು</label>
             <select 
               className="form-input" 
-              value={editTaluk} 
+              value={typeof editTaluk === 'object' ? editTaluk?.name : editTaluk} 
               onChange={e => setEditTaluk(e.target.value)} 
               required
             >
-              {activeDistrictObj?.taluks?.map(tOption => (
-                <option key={tOption} value={tOption}>{tOption}</option>
-              ))}
+              {activeDistrictObj?.taluks?.map(tOption => {
+                const talukName = typeof tOption === 'object' ? tOption.name : tOption
+                return (
+                  <option key={talukName} value={talukName}>{talukName}</option>
+                )
+              })}
             </select>
           </div>
         </div>
@@ -5148,7 +5155,7 @@ export function ProfileScreen() {
                 </span>
               </div>
               <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, margin: '4px 0 2px 0' }}>
-                {userVillage ? `${userVillage}, ` : ''}{userGp ? `${userGp} GP, ` : ''}{userTaluk ? `${userTaluk}, ` : ''}{userDistrict ? `${userDistrict}, Karnataka` : 'Karnataka'}
+                {userVillage ? `${userVillage}, ` : ''}{userGp ? `${userGp} GP, ` : ''}{userTaluk && userTaluk !== '[object Object]' ? `${typeof userTaluk === 'object' ? userTaluk.name : userTaluk}, ` : ''}{userDistrict ? `${userDistrict}, Karnataka` : 'Karnataka'}
               </p>
               <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12, margin: 0 }}>
                 📱 {userPhone || '+91 —'}
@@ -5600,7 +5607,7 @@ export function ProfileScreen() {
             [Phone,     t('mobile'),                    userPhone || '—'],
             [Home,      'Village / ಹಳ್ಳಿ',              userVillage || '—'],
             [Building2, 'Gram Panchayat / ಗ್ರಾ.ಪಂ.',     userGp || '—'],
-            [Map,       t('taluk'),                     userTaluk || '—'],
+            [Map,       t('taluk'),                     typeof userTaluk === 'object' ? userTaluk?.name : (userTaluk && userTaluk !== '[object Object]' ? userTaluk : '—')],
             [Building2, t('district'),                  userDistrict ? userDistrict + ', Karnataka' : '—'],
           ].map(([Icon, label, val]) => (
             <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0', borderBottom: '1px solid var(--border-light)' }}>

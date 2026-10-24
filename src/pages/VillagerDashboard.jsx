@@ -51,7 +51,21 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
     }
   }, [defaultTab])
 
-  const [sidebarOpen, setSidebarOpen] = useState(() => typeof window !== 'undefined' ? window.innerWidth > 768 : true)
+  const [sidebarOpen, _setSidebarOpen] = useState(() => {
+    const saved = typeof window !== 'undefined' ? window.localStorage.getItem('villager_sidebar_open') : null
+    if (saved !== null) return saved === 'true'
+    return true
+  })
+
+  const setSidebarOpen = (val) => {
+    _setSidebarOpen(prev => {
+      const nextVal = typeof val === 'function' ? val(prev) : val
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('villager_sidebar_open', String(nextVal))
+      }
+      return nextVal
+    })
+  }
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [notifOpen, setNotifOpen] = useState(false)
@@ -200,16 +214,6 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
     return () => window.removeEventListener('profileUpdate', handleUpdate)
   }, [])
 
-  useEffect(() => {
-    if (sidebarOpen && typeof window !== 'undefined' && window.innerWidth <= 768) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [sidebarOpen])
 
   useEffect(() => {
     const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'))
@@ -231,7 +235,8 @@ export default function VillagerDashboard({ defaultTab = 'home' }) {
         setSidebarOpen={setSidebarOpen}
       />
 
-      {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={() => setSidebarOpen(false)} />}
+      {/* Only closes if Cancel button or hamburger button is clicked */}
+      {sidebarOpen && <div className="sidebar-overlay-mobile" style={{ pointerEvents: 'none' }} />}
 
       {marketAlert && (
         <div style={{

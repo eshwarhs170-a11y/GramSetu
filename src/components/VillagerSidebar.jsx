@@ -6,11 +6,10 @@ import {
   ClipboardList, SearchCheck, UserCircle, Wheat,
   X, LogOut, ChevronRight, Cloud, ShieldAlert, PlayCircle, Camera, HelpCircle, FlaskConical
 } from 'lucide-react'
-import InstallAppButton from './InstallAppButton'
 
 export default function VillagerSidebar({ active, setActive, sidebarOpen, setSidebarOpen }) {
   const navigate = useNavigate()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
 
   // Reactive profile state — updates whenever user saves profile
   const [storedName,     setStoredName]     = useState(window.localStorage.getItem('citizen_name')     || 'ರಾಮಪ್ಪ ಗೌಡ')
@@ -86,10 +85,27 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
           type="button"
           className="sidebar-close-btn"
           onClick={() => setSidebarOpen(false)}
-          aria-label="Close Sidebar"
-          title="Close Sidebar"
+          aria-label="Cancel / Close Sidebar"
+          title="Cancel / Close Sidebar"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '6px 12px',
+            width: 'auto',
+            height: 'auto',
+            borderRadius: 8,
+            background: 'rgba(239, 68, 68, 0.2)',
+            border: '1.5px solid rgba(239, 68, 68, 0.45)',
+            color: '#fca5a5',
+            fontSize: 12,
+            fontWeight: 700,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
         >
-          <X size={18} strokeWidth={2.5} />
+          <X size={15} strokeWidth={2.5} />
+          <span>{lang === 'kn' ? 'ರದ್ದು' : 'Cancel'}</span>
         </button>
       </div>
 
@@ -127,7 +143,6 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
       </nav>
 
       <div className="sidebar-footer">
-        <InstallAppButton variant="hero" style={{ marginBottom: 10, width: '100%', justifyContent: 'center', padding: '10px 14px', fontSize: 13 }} />
         <button className="logout-btn" onClick={() => {
           // Keep identity data for form pre-fill on next login
           // Only mark as logged out — don't clear name/district/taluk
