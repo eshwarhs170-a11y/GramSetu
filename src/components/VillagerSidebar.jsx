@@ -85,27 +85,10 @@ export default function VillagerSidebar({ active, setActive, sidebarOpen, setSid
           type="button"
           className="sidebar-close-btn"
           onClick={() => setSidebarOpen(false)}
-          aria-label="Cancel / Close Sidebar"
-          title="Cancel / Close Sidebar"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            padding: '6px 12px',
-            width: 'auto',
-            height: 'auto',
-            borderRadius: 8,
-            background: 'rgba(239, 68, 68, 0.2)',
-            border: '1.5px solid rgba(239, 68, 68, 0.45)',
-            color: '#fca5a5',
-            fontSize: 12,
-            fontWeight: 700,
-            cursor: 'pointer',
-            transition: 'all 0.2s ease'
-          }}
+          aria-label="Close Sidebar"
+          title="Close Sidebar"
         >
-          <X size={15} strokeWidth={2.5} />
-          <span>{lang === 'kn' ? 'ರದ್ದು' : 'Cancel'}</span>
+          <X size={18} strokeWidth={2.5} />
         </button>
       </div>
 
