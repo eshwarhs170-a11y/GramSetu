@@ -284,8 +284,6 @@ function OverviewScreen({ onPendingClick, onResolvedClick, onNavTo, sessionData,
           { Icon: Clock,         labelKey: 'pendingComplaints',  value: String(pendingCount),                 color: '#fef3c7', iconColor: '#f59e0b', sub: `${pendingCount} pending`,  nav: 'complaints' },
           { Icon: RefreshCw,     labelKey: 'inProgressComplaints', value: '0',                               color: '#dbeafe', iconColor: '#3b82f6', sub: 'In progress',              nav: 'complaints' },
           { Icon: CheckCircle,   labelKey: 'resolvedComplaints', value: String(resolvedCount),               color: '#d1fae5', iconColor: '#10b981', sub: 'Resolved',                 nav: 'resolved'   },
-          { Icon: Users,         labelKey: 'registeredCitizens', value: '1,240',                             color: '#ede9fe', iconColor: '#8b5cf6', sub: 'Active',                   nav: 'citizens'   },
-          { Icon: Megaphone,     labelKey: 'announcements',      value: '4',                                 color: '#fce7f3', iconColor: '#ec4899', sub: 'This month',               nav: 'announcements' },
         ].map((s, i) => (
           <div
             className="stat-card animate-fadeInUp"
@@ -369,12 +367,12 @@ function AnalyticsScreen({ sessionData, pendingCount, resolvedCount }) {
         </h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 12 }}>
           {[
-            { cat: 'Water', count: Math.floor((pendingCount+resolvedCount)*0.3) || 32, color: '#3b82f6', Icon: Droplets },
-            { cat: 'Electricity', count: Math.floor((pendingCount+resolvedCount)*0.25) || 28, color: '#f59e0b', Icon: Zap },
-            { cat: 'Roads', count: Math.floor((pendingCount+resolvedCount)*0.2) || 24, color: '#ef4444', Icon: Route },
-            { cat: 'Ration/PDS', count: Math.floor((pendingCount+resolvedCount)*0.1) || 18, color: '#10b981', Icon: ClipboardList },
-            { cat: 'Agriculture', count: Math.floor((pendingCount+resolvedCount)*0.1) || 15, color: '#8b5cf6', Icon: Sprout },
-            { cat: 'Health/PHC', count: Math.floor((pendingCount+resolvedCount)*0.05) || 12, color: '#ec4899', Icon: Activity },
+            { cat: 'Water', count: Math.floor((pendingCount+resolvedCount)*0.3), color: '#3b82f6', Icon: Droplets },
+            { cat: 'Electricity', count: Math.floor((pendingCount+resolvedCount)*0.25), color: '#f59e0b', Icon: Zap },
+            { cat: 'Roads', count: Math.floor((pendingCount+resolvedCount)*0.2), color: '#ef4444', Icon: Route },
+            { cat: 'Ration/PDS', count: Math.floor((pendingCount+resolvedCount)*0.1), color: '#10b981', Icon: ClipboardList },
+            { cat: 'Agriculture', count: Math.floor((pendingCount+resolvedCount)*0.1), color: '#8b5cf6', Icon: Sprout },
+            { cat: 'Health/PHC', count: Math.floor((pendingCount+resolvedCount)*0.05), color: '#ec4899', Icon: Activity },
           ].map(s => (
             <div key={s.cat} style={{ background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', padding: 14, textAlign: 'center' }}>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 6, color: s.color }}>

@@ -6,9 +6,9 @@ import ThemeToggle from '../components/ThemeToggle'
 
 const featureData = {
   schemes: {
-    badgeEn: '30+ State & Central Schemes',
-    badgeKn: '30+ ರಾಜ್ಯ & ಕೇಂದ್ರ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು',
-    badgeHi: '30+ राज्य एवं केंद्र सरकारी योजनाएं',
+    badgeEn: 'State & Central Schemes',
+    badgeKn: 'ರಾಜ್ಯ & ಕೇಂದ್ರ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು',
+    badgeHi: 'राज्य एवं केंद्र सरकारी योजनाएं',
     badgeColor: '#16a34a',
     titleEn: 'Government Schemes & Scholarships',
     titleKn: 'ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು ಮತ್ತು ವಿದ್ಯಾರ್ಥಿವೇತನಗಳು',
@@ -53,7 +53,7 @@ const featureData = {
     titleKn: 'ನೈಜ ಸಮಯದ ಎಪಿಎಂಸಿ ಮಾರುಕಟ್ಟೆ ದರಗಳು',
     titleHi: 'वास्तविक समय एपीएमसी मंडी भाव',
     descEn: 'Get live daily mandi prices and MSP rates for Copra, Paddy, Arecanut, Ragi, Maize, Coffee, and Pulses across all 31 Karnataka districts.',
-    descKn: 'ಕೊಬ್ಬರಿ, ಭತ್ತ, ಅಡಿಕೆ, ರಾಗಿ, ಮೆಕ್ಕೆಜೋಳ ಮತ್ತು ಕಾಫಿ ಸೇರಿದಂತೆ 20+ ಪ್ರಮುಖ ಬೆಳೆಗಳ ಇಂದಿನ ಮಾರುಕಟ್ಟೆ ದರಗಳನ್ನು ತಕ್ಷಣವೇ ಪರಿಶೀಲಿಸಿ.',
+    descKn: 'ಕೊಬ್ಬರಿ, ಭತ್ತ, ಅಡಿಕೆ, ರಾಗಿ, ಮೆಕ್ಕೆಜೋಳ ಮತ್ತು ಕಾಫಿ ಸೇರಿದಂತೆ ಪ್ರಮುಖ ಬೆಳೆಗಳ ಇಂದಿನ ಮಾರುಕಟ್ಟೆ ದರಗಳನ್ನು ತಕ್ಷಣವೇ ಪರಿಶೀಲಿಸಿ.',
     descHi: 'कर्नाटक के सभी 31 जिलों में नारियल, धान, सुपारी, रागी और मक्का के आज के लाइव मंडी भाव जानें।',
     image: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=1200&q=80',
     details: [

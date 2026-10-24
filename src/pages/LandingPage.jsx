@@ -279,23 +279,9 @@ export default function LandingPage() {
             {t('heroTitle3')}
           </h2>
 
-          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65, marginBottom: 24, maxWidth: 460 }}>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65, marginBottom: 28, maxWidth: 460 }}>
             {t('heroDesc')}
           </p>
-
-          {/* Stats row */}
-          <div className="hero-stats-row" style={{ display: 'flex', gap: 24, marginBottom: 26, flexWrap: 'wrap' }}>
-            {[
-              { val: t('stat1Val'), label: t('stat1Label') },
-              { val: t('stat2Val'), label: t('stat2Label') },
-              { val: t('stat3Val'), label: t('stat3Label') },
-            ].map((s, i) => (
-              <div key={i} className="hover-lift hero-stat-item" style={{ cursor: 'default' }}>
-                <div style={{ fontSize: 24, fontWeight: 900, color: '#fff' }}>{s.val}</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 500, marginTop: 2 }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
 
           {/* Role Selector */}
           <div className="hero-role-selector" style={{
@@ -382,7 +368,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Floating stat card — users not scheme data */}
+          {/* Floating info card */}
           <div className="animate-float-reverse" style={{
             position: 'absolute', left: 20, top: 40,
             background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(16px)',
@@ -393,9 +379,9 @@ export default function LandingPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <Users size={18} color="#4ade80" />
               <div>
-                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 3 }}>Active Community</div>
-                <div style={{ fontSize: 18, fontWeight: 900, color: '#fff' }}>Growing Daily</div>
-                <div style={{ fontSize: 11, color: '#4ade80', fontWeight: 600 }}>↑ Citizens Online</div>
+                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 3 }}>Official Gateway</div>
+                <div style={{ fontSize: 18, fontWeight: 900, color: '#fff' }}>Karnataka Rural</div>
+                <div style={{ fontSize: 11, color: '#4ade80', fontWeight: 600 }}>Citizen Services</div>
               </div>
             </div>
           </div>
@@ -411,7 +397,7 @@ export default function LandingPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <Landmark size={20} color="#60a5fa" />
               <div>
-                <div style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>30+ Active Schemes</div>
+                <div style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>Government Schemes</div>
                 <div style={{ color: '#93c5fd', fontSize: 11 }}>PM Kisan · Raitha Siri · Gruha Lakshmi</div>
               </div>
             </div>
@@ -509,10 +495,10 @@ export default function LandingPage() {
             {
               id: 'schemes',
               img: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=700&q=80',
-              badge: '30+ Schemes',
+              badge: 'Government Schemes',
               badgeColor: '#16a34a',
               title: 'Government Schemes & Scholarships',
-              desc: 'Browse 30+ live schemes — PM Kisan, Raitha Siri, Gruha Lakshmi, Krishi Bhagya. Check eligibility in seconds and apply directly from your phone.',
+              desc: 'Browse live schemes — PM Kisan, Raitha Siri, Gruha Lakshmi, Krishi Bhagya. Check eligibility in seconds and apply directly from your phone.',
               tag: '₹6,000 PM Kisan · Raitha Siri ₹10,000/ha'
             },
             {
@@ -521,7 +507,7 @@ export default function LandingPage() {
               badge: 'Live APMC Rates',
               badgeColor: '#0369a1',
               title: 'Real-Time Market Prices (APMC)',
-              desc: 'Today\'s MSP and APMC rates for 20+ crops. Compare prices across markets — Bengaluru, Shimoga, Mysuru, Dharwad — and sell at the best rate.',
+              desc: 'Today\'s MSP and APMC rates for major crops. Compare prices across markets — Bengaluru, Shimoga, Mysuru, Dharwad — and sell at the best rate.',
               tag: 'Ragi ₹3,846/qtl · Areca ₹42,000/qtl'
             },
             {
@@ -548,7 +534,7 @@ export default function LandingPage() {
               badge: 'Visual AI Diagnostic',
               badgeColor: '#059669',
               title: 'Crop Doctor (AI Disease Diagnosis)',
-              desc: 'Point your camera at damaged crop leaves to detect Ragi blast, Koleroga, Coffee rust and 15+ Karnataka crop diseases with instant remedies.',
+              desc: 'Point your camera at damaged crop leaves to detect Ragi blast, Koleroga, Coffee rust and Karnataka crop diseases with instant remedies.',
               tag: 'Instant AI Diagnosis · Organic & Chemical Cures'
             },
             {
@@ -692,7 +678,7 @@ export default function LandingPage() {
               </div>
             </div>
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, lineHeight: 1.7, marginBottom: 24 }}>
-              Empowering Karnataka's 6 crore rural citizens with seamless digital access to schemes, APMC prices, and civic services.
+              Empowering Karnataka's rural citizens with seamless digital access to schemes, APMC prices, and civic services.
             </p>
             <div style={{ display: 'flex', gap: 16 }}>
               {[Globe, MessageCircle, Share2].map((Icon, idx) => (
