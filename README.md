@@ -1,7 +1,6 @@
 # 🌾 GramSetu (ಗ್ರಾಮ ಸೇತು) — Village Bridge
 
-> **A Civic-Tech & Agri-Intelligence Platform for Karnataka's Rural Citizens**  
-> Developed by **Team Eclipse**
+> **A Civic-Tech & Agri-Intelligence Platform for Karnataka's Rural Citizens**
 
 [![Live Demo](https://img.shields.io/badge/Live_Site-gram--setu--one.vercel.app-22c55e?style=for-the-badge&logo=vercel&logoColor=white)](https://gram-setu-one.vercel.app)
 [![PWA Ready](https://img.shields.io/badge/PWA-Offline_Ready-orange?style=for-the-badge&logo=pwa&logoColor=white)](#offline--low-internet-resilience)
@@ -119,18 +118,3 @@ Open **`http://localhost:5173`** in your browser.
 ```bash
 npm run build
 ```
-
----
-
-## 👥 Team Eclipse
-
-- **Project:** GramSetu (ಗ್ರಾಮ ಸೇತು)
-- **GitHub:** [@eshwarhs170-a11y](https://github.com/eshwarhs170-a11y)
-- **Repository:** [https://github.com/eshwarhs170-a11y/GramSetu](https://github.com/eshwarhs170-a11y/GramSetu)
-- **Live Deployment:** [gram-setu-one.vercel.app](https://gram-setu-one.vercel.app)
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
